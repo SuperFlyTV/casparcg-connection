@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"jsx": "react",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"target": "es5",
+		"sourceMap": false,
+		"removeComments": false,
+		"declaration": true
+	},
+	"exclude": [
+		"node_modules",
+		"tests",
+		"*___empty.ts"
+	]
+}

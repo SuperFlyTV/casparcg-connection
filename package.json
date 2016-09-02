@@ -1,0 +1,58 @@
+{
+  "name": "casparcg-connection",
+  "version": "0.6.0",
+  "description": "node.js Javascript/Typescript library for CasparCG connection and commands.",
+  "main": "js/index.js",
+  "typings": "js/index.d.ts",
+  "scripts": {
+    "postinstall": "typings install",
+    "prepublish": "npm run cleanbuild && npm run doc",
+    "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
+    "gulp": "gulp",
+    "build": "gulp build",
+    "cleanbuild": "gulp clean && gulp build",
+    "clean": "gulp clean",
+    "doc": "gulp typedoc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SuperFlyTV/casparcg-connection.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SuperFlyTV/casparcg-connection/issues"
+  },
+  "license": "GPLv3",
+  "author": "Jesper Stærkær @ SuperFly.tv",
+  "homepage": "http://superfly.tv",
+  "keywords": [
+    "casparcg",
+    "caspar",
+    "caspercg",
+    "amcp",
+    "socket",
+    "tcp",
+    "broadcast",
+    "graphics",
+    "superfly",
+    "connection",
+    "middleware",
+    "remote"
+  ],
+  "dependencies": {
+    "hap": "https://github.com/jesperstarkar/hap.git",
+    "xml2js": "^0.4.17"
+  },
+  "devDependencies": {
+    "del": "^2.2.1",
+    "gulp": "^3.9.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typedoc": "^2.0.0",
+    "gulp-typescript": "^2.10.0",
+    "gulp-watch": "^4.3.5",
+    "jasmine-ts": "0.0.3",
+    "tslint": "^3.13.0",
+    "typedoc": "^0.3.12",
+    "typescript": "^1.7.3",
+    "typings": "^1.3.1"
+  }
+}

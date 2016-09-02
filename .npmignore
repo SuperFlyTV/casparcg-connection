@@ -1,0 +1,7 @@
+*
+!js/
+!js/**/*.*
+!typings/
+!typings/casparcg-connection.d.ts
+!license.txt
+!readme.md

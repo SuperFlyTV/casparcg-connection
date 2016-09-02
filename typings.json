@@ -1,0 +1,8 @@
+{
+  "name": "casparcg-connection",
+  "globalDependencies": {
+    "jasmine": "registry:dt/jasmine#2.2.0+20160621224255",
+    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#bd269cad4cb2b495f940c7b6afc5825d568029be",
+    "xml2js": "registry:dt/xml2js#0.0.0+20160317120654"
+  }
+}
