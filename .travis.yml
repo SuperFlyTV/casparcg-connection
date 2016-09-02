@@ -1,8 +1,17 @@
-{
-  "language": "node_js",
-  "node_js": 6,
-  "before_install": [
-    "npm install -g gulp",
-  ],
-  "script": "gulp build && npm test"
-}
+language: node_js
+node_js:
+  - '6'
+before_install:
+  - npm install -g gulp
+install:
+  - npm install --ignore-scripts && typings install
+script:
+  - gulp build
+deploy:
+  provider: npm
+  on:
+    tags: true
+  email: jesper@superfly.tv
+  api_key:
+    - secure: >-
+        Dm9XHUZuorvWRcHJXQKn6oqKksu6wGDJDuCKB/GYzeS+zlewtWWitXH37WjpZQMZrJ1lPvzy0qtuTBVCUuoKxYUsH7Hk4Xm/L1e5K23CE3wALk/bOVqxXFWIDafGKRYhlHzhK3yDH4wK75Bstz8mbAmNuV41yh8GQJTwvPzj4i3TlMc7PEfPxkglh9l8REJz4866/oO9YnCejZ0SovL39KPoRb8j0T/9sM5XqZageUvj6oRfD9fFBcsOGN/vyFsek/V2MSDqOhZSFJgRirfLL5Ok2fGDg2B0N+Zb7mW63j3RUXwre8ye4qiuy8JAa7iP6eHP/bwZT035L8MLWzISRYTtfW52NUC1PijANUx00P3VKjThDA9QmWSn0ZAY8JexpChRzSVTxr/uHUJyR7VfPiOzxlAt3N5C06oBpC0MEJDm7WGmInHVL2qZOAjeAWrJ8lCXM2QXGQGeUn0rG4MCv0JJ+cbv4S/vSkmlDNXn08UKEDOkJwQQRVqPkq+hEdgxX0nCAUDjB3skZhaod4R30j50AWzjtGBUDUXTKn5HudjfbBHLf2jKMi6fSHGPv5boSf/1JnyHPh52eWtLJsoY1p1RbS1loZGuzhU3a2QV8LDSwoza3XylYLKdZKru924Vp5ODvSXQZWuWkfnxZkgDXw5uou6rhzgLfLUoJWkH5RI=
