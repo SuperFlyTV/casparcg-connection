@@ -9,8 +9,9 @@ script:
 - gulp build
 
 before_deploy:
-- zip -R tmp/js -x@.npmignore
-- zip -R tmp/src -x@.gitignore
+- mkdir tmp
+- zip -r tmp/js.zip ./ -x@.npmignore
+- zip -r tmp/src.zip ./ -x@.gitignore
 deploy:
 - provider: npm
   email: jesper@superfly.tv
