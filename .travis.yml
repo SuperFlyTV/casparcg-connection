@@ -8,14 +8,6 @@ install:
 script:
 - gulp build
 deploy:
-- provider: releases
-  api_key:
-    secure: aTsxwE6e4UYicYqI8FwfMFfMHCuRYi2iLwsAzuS0trTKd1KeO6wSfvXNRTYX+whA7Tj+cdgaH9qgBd9DDIe6fl4xpT3ffmxLz2SmQ3v3ecvW4KtqOk8rNeFytqUufdnlSN2ky6aiPr/zITBMFNhiw3Uqgd5RUZQ6pFYWQUGHKBgeiqVDcWoQpgsxxer9UlbjgoznsT1bB34PkLpVGaP1eNF79WJaU89mc0yETP4LvGti87DFB28Zs/anWKvpZ03KWvi+iL27EqnqLZAzhPqie+s7Us03PTbk3rFed2xpO8tCH7HoxEiTl5L8sgH4w+F/ZA9TC97k6NzmZK8vkVOxA/3QQcaFBBSXZPd1BwxP0LUJlmNgswyqpKY5hcbweTCBuOziGlQSZ7o3u01ABxu3QaonzAqz43jI3QhoKHgmGGZ+9UIqPFXX8Tfh1nhXQlCHkE9T8yCe3JjbX8j84G+4n2SSoWHTeMRoFyEv1JM+czyDqdb9xO8tEpj6FmstvCqL6+CN5ZeqFX77802FK8yuE6iJUby3gaktOC38FDkqrfWTvadRcJ0cDX7Cvrvxg4cx2VUXqub/ETR2A70C9GACGj0eUfwKJ4GIb2IOEuqHzy1ZzsgzMrNDz0Y3OEVIWcNNWmceMhu9k3usa8LdGvEfb6NqADcFmi0iRTz2A/DOX1Y=
-  file: js/**/**.*
-  skip_cleanup: true
-  overwrite: true
-  on:
-    tags: true
 - provider: npm
   email: "jesper@superfly.tv"
   key:
