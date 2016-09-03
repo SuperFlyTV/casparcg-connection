@@ -18,6 +18,9 @@ var connection = new CasparCG();
 connection.play(1, 1, 'amb');
 ```
 
+##Documentation
+Visit [https://superflytv.github.io/casparcg-connection/](https://superflytv.github.io/casparcg-connection/) for API documentation
+
 ##About
 
 Created and published by [SuperFly.tv](http://superfly.tv)
