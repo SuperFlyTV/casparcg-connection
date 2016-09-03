@@ -59,6 +59,7 @@ gulp.task("typedoc", function() {
             out: 'docs',
             readme: 'none',
             gaID: 'UA-83648715-1',
+            disableOutputCheck: true,
             ignoreCompilerErrors: true,
 		}))
 	;
