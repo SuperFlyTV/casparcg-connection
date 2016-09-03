@@ -14,8 +14,8 @@ node.js Javascript/TypeScript library for CasparCG connection and commands.
 ```javascript
 const {CasparCG} = require('casparcg-connection');
 
-var con = new CasparCG();
-con.play(1, 1, 'amb');
+var connection = new CasparCG();
+connection.play(1, 1, 'amb');
 ```
 
 ##About
@@ -23,5 +23,5 @@ con.play(1, 1, 'amb');
 Created and published by [SuperFly.tv](http://superfly.tv)
 
 ## Acknowledgement:
+- Many thanks to SVT for the CasparCG project
 - Inspired by https://github.com/respectTheCode/node-caspar-cg
-- Thanks to SVT for CasparCG

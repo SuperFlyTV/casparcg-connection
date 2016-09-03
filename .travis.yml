@@ -17,3 +17,11 @@ deploy:
     tags: true
     repo: SuperFlyTV/casparcg-connection
     branch: master
+notifications:
+  email:
+    recipients:
+    - jesper@superfly.tv
+    on_success: change
+    on_failure: change
+  slack:
+    secure: PxnHmC0x/AgoeJXZGuwNtkNX+eYx4IXkhzNIojWNkdnjldr4aCyfQYLmZjXorcm1Nc/AWnzGvA/KJ/+gU1zekaV/GAeCK1HHWt4ER2El3r5BidXJxCaIL7iE1PpsTdRRAgrdJmilJZv/gsmAksPPe4dg+QVv1F8DFlhLUxuQFubFTr8TP/jUHHnB2VcviFaQI0rl3sxnVsEKdtBEoQfl1oiKE6peBzHkQ0KF6FapGiCxttr/KcfJJJWjrWMjjPpyTQtTa40/QtYyPKIJmqzd5rfwxhGnaMsnOk3YwcLniqNA8xnNxuQ4NorOgUsVLVlyDzDuFz3/DU2L78htjw2rOzv2oXVTI5ied8gQTtnOJhFPIW/SQ1tXQZEVqn0xQ+0qcZIveep8AAF+OAwXjQBYYad54LZUXlOskr4YuiTsSO5gwuRTLI+WvPNDT+KZ+3mEq/iEIPnBDzyiXHzLLDruczuYelV9+oWLFSrh+N7+2M2I1HOtJ0XHIn25QYdUVoj4fJsaWVI1LIOWoayG9fJXUHgqcm0lUtQng9Mnde21EDpoQ0FP1l7T4gVKbUpElpNY5niOoPBiusT7NScl81NrzfhEwAywYXLhbDzFgaTMTENV1JYgvzyJqeoVO2zl2uUwz63higz6/+CX44z3kk98IWLWLD9Uf0DYmluP+Unz4us=
