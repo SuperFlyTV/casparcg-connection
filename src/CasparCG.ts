@@ -656,29 +656,31 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	 * 
 	 */
 	private _onSocketError(error: Error): void {
-		// error callback
-		if (this.onError) {
-			this.onError(error);
-		}
-
-		// re-emit socket's error if CasparCG has listener
-		if (this.listenerCount("error") > 0) {
-			this.fire("error", error);
-		}
+		this._log(error);
 	}
 
 	/**
 	 * 
 	 */
 	private _log(args: any): void {
-		if (this.onLog) {
-			this.onLog(args);
-		}
-
 		if (args instanceof Error) {
 			console.error(args);
-		} else if (this.debug) {
+			if (this.onError) {
+				this.onError(args);
+
+				// re-emit error if there's any listener
+				if (this.listenerCount("error") > 0) {
+					this.fire("error", args);
+				}
+				return;
+			}
+		}
+
+		if (this.debug) {
 			console.log(args);
+		}
+		if (this.onLog) {
+			this.onLog(args);
 		}
 		this.fire(LogEvent.LOG, new LogEvent(args));
 	}
