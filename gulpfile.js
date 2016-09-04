@@ -49,10 +49,10 @@ gulp.task('dist', function () {
   return gulp.src(['js', 'js/**/*.**', 'license', 'readme.md'], {base: '.'})
         .pipe(zip('casparcg-connection-js.zip'))
         .pipe(gulp.dest('tmp'));
-  /*return gulp.src('**/**/**.*', {base: '.'})
-        .pipe(gitignore())
-        .pipe(zip('casparcg-connection-src.zip'))
-        .pipe(gulp.dest('tmp'));*/
+  //return gulp.src('**/**/**.*', {base: '.'})
+  //      .pipe(gitignore())
+  //      .pipe(zip('casparcg-connection-src.zip'))
+  //      .pipe(gulp.dest('tmp'));
 });
 
 //dfault
