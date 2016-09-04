@@ -12,8 +12,10 @@ import AbstractLayerCommand = CommandNS.AbstractLayerCommand;
 import AbstractLayerWithFallbackCommand = CommandNS.AbstractLayerWithFallbackCommand;
 import AbstractLayerWithCgFallbackCommand = CommandNS.AbstractLayerWithCgFallbackCommand;
 // Param NS
-import {Param as ParamNS, optional, required} from "./ParamSignature";
+import {Param as ParamNS} from "./ParamSignature";
 import Param = ParamNS.Param;
+import required = ParamNS.Required;
+import optional = ParamNS.Optional;
 import ParamSignature = ParamNS.ParamSignature;
 // Validation NS
 import {Validation as ValidationNS} from "./ParamValidators";

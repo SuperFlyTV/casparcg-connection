@@ -2,42 +2,42 @@ import {Validation} from "./ParamValidators";
 import IValidator = Validation.IValidator;
 import AbstractValidator = Validation.AbstractValidator;
 
-/**
- * 
- */
-export class optional {
-
-	/**
-	 * 
-	 */
-	static valueOf(): boolean {
-		return false;
-	}
-}
-
-/**
- *  
- */
-export class required {
-
-	/**
-	 * 
-	 */
-	static valueOf(): boolean {
-		return true;
-	}
-}
 
 /**
  * 
  */
 export namespace Param {
+	/**
+	 * 
+	 */
+	export class Optional {
+
+		/**
+		 * 
+		 */
+		static valueOf(): boolean {
+			return false;
+		}
+	}
+
+	/**
+	 *  
+	 */
+	export class Required {
+
+		/**
+		 * 
+		 */
+		static valueOf(): boolean {
+			return true;
+		}
+	}
 
 	/**
 	 * 
 	 */
 	export interface IParamSignature {
-		required: (required|optional);
+		required: (Required|Optional);
 		name: string;
 		key: string;
 		validation: IValidator;
@@ -73,7 +73,7 @@ export namespace Param {
 		/**
 		 * 
 		 */
-		constructor(public required: (required|optional),
+		constructor(public required: (Required|Optional),
 					public name: string,
 					public key: string,
 					validation: (IValidator|Object)) {

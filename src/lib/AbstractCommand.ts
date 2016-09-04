@@ -1,5 +1,7 @@
 // Param NS
-import {Param as ParamNS, optional, required} from "./ParamSignature";
+import {Param as ParamNS} from "./ParamSignature";
+import optional = ParamNS.Optional;
+import required = ParamNS.Required;
 import Payload = ParamNS.Payload;
 import PayloadVO = ParamNS.PayloadVO;
 import Param = ParamNS.Param;
@@ -278,7 +280,7 @@ export namespace Command {
 		get payload(): PayloadVO{
 			return this._payload;
 		}
-	
+
 		/**
 		 * 
 		 */
