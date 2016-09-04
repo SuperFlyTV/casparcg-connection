@@ -4,3 +4,4 @@ node_modules/
 typings/
 js/
 tmp/
+wallaby.js

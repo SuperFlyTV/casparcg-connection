@@ -46,13 +46,13 @@ gulp.task('clean', function () {
 
 //dist zip
 gulp.task('dist', function () {
-  gulp.src(['js', 'js/**/*.**', 'license', 'readme.md'], {base: '.'})
+  return gulp.src(['js', 'js/**/*.**', 'license', 'readme.md'], {base: '.'})
         .pipe(zip('casparcg-connection-js.zip'))
         .pipe(gulp.dest('tmp'));
-  return gulp.src('**/**/**.*', {base: '.'})
+  /*return gulp.src('**/**/**.*', {base: '.'})
         .pipe(gitignore())
         .pipe(zip('casparcg-connection-src.zip'))
-        .pipe(gulp.dest('tmp'));
+        .pipe(gulp.dest('tmp'));*/
 });
 
 //dfault

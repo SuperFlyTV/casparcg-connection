@@ -170,24 +170,21 @@ describe("CasparCG", () => {
 			expect(CasparCGSocket.prototype.connect).not.toHaveBeenCalled();
 		});
 
-		it("should stop reconnecting if autoReconnect-option changes during reconnect attempts", () => {
-			fail();
+		xit("should stop reconnecting if autoReconnect-option changes during reconnect attempts", () => {
+			fail("test not implemented yet");
 		});
 
-		it("should change pace if autoReconnectInterval-option changes during reconnect attempts", () => {
-			fail();
+		xit("should change pace if autoReconnectInterval-option changes during reconnect attempts", () => {
+			fail("test not implemented yet");
 		});
 
-		it("should [do the right thing] if autoReconnectAttempts-option changes during reconnect attempts", () => {
-			fail();
+		xit("should [do the right thing] if autoReconnectAttempts-option changes during reconnect attempts", () => {
+			fail("test not implemented yet");
 		});
 	});
 	describe("events and logging", () => {
-		it("should log", () => {
-			fail();
-
-			// private _onSocketConnectionChange(isConnected:
-
+		xit("should log", () => {
+			fail("test not implemented yet");
 		});
 	});
 });
