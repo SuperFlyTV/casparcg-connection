@@ -250,6 +250,17 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 
 
 
+		/*	100 [action] - Information about an event.
+			101 [action] - Information about an event. A line of data is being returned.
+			200 [command] OK	- The command has been executed and several lines of data (seperated by \r\n) are being returned (terminated with an additional \r\n)
+			201 [command] OK	- The command has been executed and data (terminated by \r\n) is being returned.
+			202 [command] OK	- The command has been executed.
+			400 ERROR	- Command not understood
+			401 [command] ERROR	- Illegal video_channel
+			402 [command] ERROR	- Parameter missing
+			403 [command] ERROR	- Illegal parameter
+			404 [command] ERROR	- Media file not found*/
+
 		// fail?
 		if (code >= 400 && code <= 599) {
 			this._currentCommand.response.raw = responseString;

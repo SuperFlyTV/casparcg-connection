@@ -70,16 +70,11 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The main object to interact with. <code>CasparCG</code> allows for flexible configuration, re-configuration and events/callbacks.</p>
+						<p>The main object and entrypoint for all interactions. <code>CasparCG</code> allows for flexible configuration, re-configuration and events/callbacks.
+						It implements all <a href="../modules/amcp.html">AMCP</a> commands as high-level methods with convenient interfaces.</p>
 					</div>
 					<p>There is a single <a href="casparcgsocket.html">CasparCGSocket</a> pr. <code>CasparCG</code> object.
-					Implements all <a href="../modules/amcp.html">AMCP</a> commands as high-level methods with convenient interfaces.</p>
-					<p><code>CasparCG</code> should be the only public interface to interact directly with.</p>
-					<dl class="tsd-comment-tags">
-						<dt>todo</dt>
-						<dd><p>remove =undefined; initializations once object.assign is in place</p>
-						</dd>
-					</dl>
+					<code>CasparCG</code> should be the only public interface to interact directly with.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -322,26 +317,43 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L398">CasparCG.ts:398</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L382">CasparCG.ts:382</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>If the constructor gets called with no parameters, all properties of the CasparCG object will match all default properties defined by <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.</p>
 								</div>
+								<pre><code>var con = <span class="hljs-keyword">new</span> CasparCG();
+<span class="hljs-comment">// host = 127.0.0.1, port = 5250, autoConnect = true ...</span>
+
+con.play(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">"amb"</span>);
+<span class="hljs-comment">// you can interact with the server, but you have no knowledge of the conenction status until the onConnect event- or callback gets invoked</span>
+<span class="hljs-comment">// the `PlayCommand` will however be queued and fired when the connection gets established</span>
+con.close();
+</code></pre>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="casparcg.html" class="tsd-signature-type">CasparCG</a></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L410">CasparCG.ts:410</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L403">CasparCG.ts:403</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>If the constructor gets called with no parameters, all properties of the CasparCG object will match all default properties defined by <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.</p>
+									<p>Set host/port directly in constructor:</p>
 								</div>
+								<pre><code>var con = <span class="hljs-keyword">new</span> CasparCG(<span class="hljs-string">"192.168.0.1"</span>, <span class="hljs-number">5251</span>);
+<span class="hljs-comment">// host = 192.168.0.1, port = 5251, autoConnect = true ...</span>
+
+<span class="hljs-comment">// change parameters after the constructor</span>
+con.debug = <span class="hljs-literal">true</span>;
+
+con.play(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">"amb"</span>);
+con.close();
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -367,13 +379,40 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L411">CasparCG.ts:411</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L419">CasparCG.ts:419</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>If the constructor gets called with no parameters, all properties of the CasparCG object will match all default properties defined by <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.</p>
+									<p>Callbacks and events after constructor:</p>
 								</div>
+								<pre><code><span class="hljs-keyword">var</span> con = <span class="hljs-keyword">new</span> CasparCG({host: <span class="hljs-string">"192.168.0.1"</span>, autoConnect: <span class="hljs-literal">false</span>});
+<span class="hljs-comment">// host = 192.168.0.1, port = 5250, autoConnect = false ...</span>
+
+<span class="hljs-comment">// add onLog callback after constructor</span>
+con.onLog = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">logMessage</span>)</span>{ <span class="hljs-built_in">console</span>.log(logMessage); };
+
+<span class="hljs-comment">// add eventlistener to the conenction event before connecting</span>
+con.on(CasparCGSocketStausEvent.CONNECTED, onConnection(event));
+
+con.connect();
+</code></pre><p>Callback in constructor:</p>
+								<pre><code>var con = <span class="hljs-keyword">new</span> CasparCG({<span class="hljs-string">host:</span> <span class="hljs-string">"192.168.0.1"</span>, <span class="hljs-string">onConnect:</span> onConnectedCallback});
+<span class="hljs-comment">// Connection callbacks can be set in the constructor and will be registered before autoConnect invokes.</span>
+<span class="hljs-comment">// This ensures that you recieve all callbacks</span>
+</code></pre><p>Inline function synstax:</p>
+								<pre><code><span class="hljs-keyword">var</span> con = <span class="hljs-keyword">new</span> CasparCG({host: <span class="hljs-string">"192.168.0.1"</span>, onConnect: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">connected</span>) </span>{
+<span class="hljs-comment">// do something once we get online</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Are we conencted?"</span>, connected)
+}
+});
+</code></pre><p>Inline fat arrow synstax:</p>
+								<pre><code>var con = <span class="hljs-keyword">new</span> CasparCG({<span class="hljs-attribute">host</span>: <span class="hljs-string">"192.168.0.1"</span>, <span class="hljs-attribute">onConnect</span>: <span class="hljs-function"><span class="hljs-params">(connected)</span> =&gt;</span> {
+<span class="hljs-regexp">//</span> <span class="hljs-keyword">do</span> something once we get online
+<span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Are we conencted?"</span>, connected)
+}
+});
+</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -400,7 +439,7 @@
 					<div class="tsd-signature tsd-kind-icon">_command<wbr>Queue<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L342">CasparCG.ts:342</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L326">CasparCG.ts:326</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -410,7 +449,7 @@
 					<div class="tsd-signature tsd-kind-icon">_connected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L338">CasparCG.ts:338</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L322">CasparCG.ts:322</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -420,7 +459,7 @@
 					<div class="tsd-signature tsd-kind-icon">_current<wbr>Command<span class="tsd-signature-symbol">:</span> <a href="../interfaces/command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L343">CasparCG.ts:343</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L327">CasparCG.ts:327</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -430,7 +469,7 @@
 					<div class="tsd-signature tsd-kind-icon">_host<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L339">CasparCG.ts:339</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L323">CasparCG.ts:323</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -440,7 +479,7 @@
 					<div class="tsd-signature tsd-kind-icon">_port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L340">CasparCG.ts:340</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L324">CasparCG.ts:324</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -450,7 +489,7 @@
 					<div class="tsd-signature tsd-kind-icon">_socket<span class="tsd-signature-symbol">:</span> <a href="casparcgsocket.html" class="tsd-signature-type">CasparCGSocket</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L341">CasparCG.ts:341</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L325">CasparCG.ts:325</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -461,7 +500,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoconnect">autoConnect</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L348">CasparCG.ts:348</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L332">CasparCG.ts:332</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -477,7 +516,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoreconnect">autoReconnect</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L353">CasparCG.ts:353</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L337">CasparCG.ts:337</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -493,7 +532,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoreconnectattempts">autoReconnectAttempts</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L363">CasparCG.ts:363</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L347">CasparCG.ts:347</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -509,7 +548,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoreconnectinterval">autoReconnectInterval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L358">CasparCG.ts:358</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L342">CasparCG.ts:342</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -525,7 +564,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#debug">debug</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L368">CasparCG.ts:368</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L352">CasparCG.ts:352</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -541,7 +580,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onconnected">onConnected</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L388">CasparCG.ts:388</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L372">CasparCG.ts:372</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -557,7 +596,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onconnectionchanged">onConnectionChanged</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L383">CasparCG.ts:383</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L367">CasparCG.ts:367</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -573,7 +612,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onconnectionstatus">onConnectionStatus</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L378">CasparCG.ts:378</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L362">CasparCG.ts:362</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -591,7 +630,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#ondisconnected">onDisconnected</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L393">CasparCG.ts:393</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L377">CasparCG.ts:377</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -607,7 +646,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onerror">onError</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L398">CasparCG.ts:398</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L382">CasparCG.ts:382</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -625,7 +664,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onlog">onLog</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L373">CasparCG.ts:373</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L357">CasparCG.ts:357</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -682,7 +721,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L601">CasparCG.ts:601</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L651">CasparCG.ts:651</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -699,7 +738,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L552">CasparCG.ts:552</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L602">CasparCG.ts:602</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -716,7 +755,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L559">CasparCG.ts:559</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L609">CasparCG.ts:609</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></h4>
@@ -734,7 +773,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L502">CasparCG.ts:502</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L552">CasparCG.ts:552</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -748,7 +787,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L511">CasparCG.ts:511</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L561">CasparCG.ts:561</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -778,7 +817,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L527">CasparCG.ts:527</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L577">CasparCG.ts:577</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -792,7 +831,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L536">CasparCG.ts:536</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L586">CasparCG.ts:586</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -824,7 +863,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L433">CasparCG.ts:433</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L483">CasparCG.ts:483</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -850,7 +889,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L695">CasparCG.ts:695</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L745">CasparCG.ts:745</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -873,7 +912,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L684">CasparCG.ts:684</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L734">CasparCG.ts:734</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -896,7 +935,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L623">CasparCG.ts:623</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L673">CasparCG.ts:673</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -919,7 +958,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L608">CasparCG.ts:608</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L658">CasparCG.ts:658</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -942,7 +981,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L566">CasparCG.ts:566</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L616">CasparCG.ts:616</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -965,7 +1004,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L671">CasparCG.ts:671</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L721">CasparCG.ts:721</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -988,7 +1027,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1327">CasparCG.ts:1327</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1377">CasparCG.ts:1377</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1154,7 +1193,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#bye">bye</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1691">CasparCG.ts:1691</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1741">CasparCG.ts:1741</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1176,7 +1215,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1310">CasparCG.ts:1310</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1360">CasparCG.ts:1360</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1240,7 +1279,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cgadd">cgAdd</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L768">CasparCG.ts:768</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L818">CasparCG.ts:818</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1284,7 +1323,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cgclear">cgClear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L803">CasparCG.ts:803</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L853">CasparCG.ts:853</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1316,7 +1355,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cginfo">cgInfo</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1548">CasparCG.ts:1548</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1598">CasparCG.ts:1598</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1356,7 +1395,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cginvoke">cgInvoke</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L817">CasparCG.ts:817</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L867">CasparCG.ts:867</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1389,7 +1428,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cgnext">cgNext</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L789">CasparCG.ts:789</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L839">CasparCG.ts:839</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1424,7 +1463,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cgplay">cgPlay</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L775">CasparCG.ts:775</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L825">CasparCG.ts:825</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1459,7 +1498,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cgremove">cgRemove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L796">CasparCG.ts:796</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L846">CasparCG.ts:846</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1494,7 +1533,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cgstop">cgStop</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L782">CasparCG.ts:782</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L832">CasparCG.ts:832</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1529,7 +1568,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cgupdate">cgUpdate</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L810">CasparCG.ts:810</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L860">CasparCG.ts:860</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1567,7 +1606,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#channelgrid">channelGrid</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1373">CasparCG.ts:1373</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1423">CasparCG.ts:1423</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1590,7 +1629,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cinf">cinf</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1443">CasparCG.ts:1443</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1493">CasparCG.ts:1493</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1619,7 +1658,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#clear">clear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1302">CasparCG.ts:1302</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1352">CasparCG.ts:1352</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1651,7 +1690,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#cls">cls</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1450">CasparCG.ts:1450</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1500">CasparCG.ts:1500</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1674,7 +1713,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/icasparcgconnection.html">ICasparCGConnection</a>.<a href="../interfaces/icasparcgconnection.html#connect">connect</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L480">CasparCG.ts:480</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L530">CasparCG.ts:530</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1706,7 +1745,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#datalist">dataList</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1401">CasparCG.ts:1401</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1451">CasparCG.ts:1451</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1729,7 +1768,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#dataremove">dataRemove</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1408">CasparCG.ts:1408</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1458">CasparCG.ts:1458</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1758,7 +1797,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#dataretrieve">dataRetrieve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1394">CasparCG.ts:1394</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1444">CasparCG.ts:1444</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1787,7 +1826,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#datastore">dataStore</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1387">CasparCG.ts:1387</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1437">CasparCG.ts:1437</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1819,7 +1858,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#diag">diag</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1615">CasparCG.ts:1615</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1665">CasparCG.ts:1665</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1842,7 +1881,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/icasparcgconnection.html">ICasparCGConnection</a>.<a href="../interfaces/icasparcgconnection.html#disconnect">disconnect</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L493">CasparCG.ts:493</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L543">CasparCG.ts:543</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1866,7 +1905,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/icasparcgconnection.html">ICasparCGConnection</a>.<a href="../interfaces/icasparcgconnection.html#do">do</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L640">CasparCG.ts:640</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L690">CasparCG.ts:690</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1890,7 +1929,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L641">CasparCG.ts:641</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L691">CasparCG.ts:691</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1972,7 +2011,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#fls">fls</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1457">CasparCG.ts:1457</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1507">CasparCG.ts:1507</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1995,7 +2034,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getcommands">getCommands</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1638">CasparCG.ts:1638</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1688">CasparCG.ts:1688</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2019,7 +2058,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getconsumers">getConsumers</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1684">CasparCG.ts:1684</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1734">CasparCG.ts:1734</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2061,7 +2100,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusanchor">getMixerStatusAnchor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1094">CasparCG.ts:1094</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1144">CasparCG.ts:1144</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2093,7 +2132,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusblend">getMixerStatusBlend</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L894">CasparCG.ts:894</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L944">CasparCG.ts:944</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2125,7 +2164,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusbrightness">getMixerStatusBrightness</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L944">CasparCG.ts:944</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L994">CasparCG.ts:994</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2157,7 +2196,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatuschroma">getMixerStatusChroma</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L867">CasparCG.ts:867</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L917">CasparCG.ts:917</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2189,7 +2228,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusclip">getMixerStatusClip</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1069">CasparCG.ts:1069</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1119">CasparCG.ts:1119</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2221,7 +2260,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatuscontrast">getMixerStatusContrast</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L994">CasparCG.ts:994</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1044">CasparCG.ts:1044</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2253,7 +2292,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatuscrop">getMixerStatusCrop</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1119">CasparCG.ts:1119</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1169">CasparCG.ts:1169</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2285,7 +2324,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusfill">getMixerStatusFill</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1044">CasparCG.ts:1044</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1094">CasparCG.ts:1094</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2317,7 +2356,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatuskeyer">getMixerStatusKeyer</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L840">CasparCG.ts:840</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L890">CasparCG.ts:890</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2349,7 +2388,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatuslevels">getMixerStatusLevels</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1019">CasparCG.ts:1019</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1069">CasparCG.ts:1069</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2380,7 +2419,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1240">CasparCG.ts:1240</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1290">CasparCG.ts:1290</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2409,7 +2448,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusmipmap">getMixerStatusMipmap</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1192">CasparCG.ts:1192</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1242">CasparCG.ts:1242</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2441,7 +2480,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusopacity">getMixerStatusOpacity</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L919">CasparCG.ts:919</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L969">CasparCG.ts:969</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2473,7 +2512,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusperspective">getMixerStatusPerspective</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1169">CasparCG.ts:1169</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1219">CasparCG.ts:1219</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2505,7 +2544,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusrotation">getMixerStatusRotation</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1144">CasparCG.ts:1144</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1194">CasparCG.ts:1194</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2537,7 +2576,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatussaturation">getMixerStatusSaturation</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L969">CasparCG.ts:969</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1019">CasparCG.ts:1019</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2569,7 +2608,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusstraightalphaoutput">getMixerStatusStraightAlphaOutput</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1263">CasparCG.ts:1263</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1313">CasparCG.ts:1313</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2601,7 +2640,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getmixerstatusvolume">getMixerStatusVolume</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1217">CasparCG.ts:1217</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1267">CasparCG.ts:1267</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2633,7 +2672,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#getproducers">getProducers</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1661">CasparCG.ts:1661</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1711">CasparCG.ts:1711</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2657,7 +2696,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#glgc">glGC</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1380">CasparCG.ts:1380</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1430">CasparCG.ts:1430</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2680,7 +2719,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#glinfo">glInfo</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1564">CasparCG.ts:1564</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1614">CasparCG.ts:1614</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2704,7 +2743,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1622">CasparCG.ts:1622</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1672">CasparCG.ts:1672</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2717,7 +2756,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1623">CasparCG.ts:1623</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1673">CasparCG.ts:1673</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2731,7 +2770,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1624">CasparCG.ts:1624</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1674">CasparCG.ts:1674</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2756,7 +2795,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1668">CasparCG.ts:1668</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1718">CasparCG.ts:1718</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2769,7 +2808,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1669">CasparCG.ts:1669</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1719">CasparCG.ts:1719</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2783,7 +2822,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1670">CasparCG.ts:1670</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1720">CasparCG.ts:1720</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2808,7 +2847,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1645">CasparCG.ts:1645</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1695">CasparCG.ts:1695</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2821,7 +2860,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1646">CasparCG.ts:1646</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1696">CasparCG.ts:1696</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2835,7 +2874,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1647">CasparCG.ts:1647</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1697">CasparCG.ts:1697</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2859,7 +2898,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#info">info</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1479">CasparCG.ts:1479</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1529">CasparCG.ts:1529</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2892,7 +2931,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#infoconfig">infoConfig</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1493">CasparCG.ts:1493</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1543">CasparCG.ts:1543</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2915,7 +2954,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#infodelay">infoDelay</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1535">CasparCG.ts:1535</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1585">CasparCG.ts:1585</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2947,7 +2986,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#infopaths">infoPaths</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1500">CasparCG.ts:1500</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1550">CasparCG.ts:1550</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2970,7 +3009,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#infoqueues">infoQueues</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1521">CasparCG.ts:1521</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1571">CasparCG.ts:1571</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2993,7 +3032,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#infoserver">infoServer</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1514">CasparCG.ts:1514</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1564">CasparCG.ts:1564</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3016,7 +3055,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#infosystem">infoSystem</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1507">CasparCG.ts:1507</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1557">CasparCG.ts:1557</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3039,7 +3078,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#infotemplate">infoTemplate</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1486">CasparCG.ts:1486</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1536">CasparCG.ts:1536</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3068,7 +3107,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#infothreads">infoThreads</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1528">CasparCG.ts:1528</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1578">CasparCG.ts:1578</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3091,7 +3130,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#kill">kill</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1698">CasparCG.ts:1698</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1748">CasparCG.ts:1748</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3162,7 +3201,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#load">load</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L731">CasparCG.ts:731</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L781">CasparCG.ts:781</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3224,7 +3263,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#loadbg">loadbg</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L724">CasparCG.ts:724</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L774">CasparCG.ts:774</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3286,7 +3325,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1364">CasparCG.ts:1364</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1414">CasparCG.ts:1414</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3311,7 +3350,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1365">CasparCG.ts:1365</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1415">CasparCG.ts:1415</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3341,7 +3380,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#logcalltrace">logCalltrace</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1602">CasparCG.ts:1602</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1652">CasparCG.ts:1652</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3370,7 +3409,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1592">CasparCG.ts:1592</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1642">CasparCG.ts:1642</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3394,7 +3433,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1593">CasparCG.ts:1593</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1643">CasparCG.ts:1643</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3421,7 +3460,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#logcommunication">logCommunication</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1608">CasparCG.ts:1608</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1658">CasparCG.ts:1658</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3450,7 +3489,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1571">CasparCG.ts:1571</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1621">CasparCG.ts:1621</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3473,7 +3512,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1575">CasparCG.ts:1575</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1625">CasparCG.ts:1625</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3508,7 +3547,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1076">CasparCG.ts:1076</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1126">CasparCG.ts:1126</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3530,7 +3569,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1077">CasparCG.ts:1077</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1127">CasparCG.ts:1127</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3562,7 +3601,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1078">CasparCG.ts:1078</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1128">CasparCG.ts:1128</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3595,7 +3634,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixeranchor">mixerAnchor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1079">CasparCG.ts:1079</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1129">CasparCG.ts:1129</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3637,7 +3676,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixeranchordeferred">mixerAnchorDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1087">CasparCG.ts:1087</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1137">CasparCG.ts:1137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3683,7 +3722,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L874">CasparCG.ts:874</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L924">CasparCG.ts:924</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3705,7 +3744,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L875">CasparCG.ts:875</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L925">CasparCG.ts:925</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3728,7 +3767,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L876">CasparCG.ts:876</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L926">CasparCG.ts:926</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3752,7 +3791,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerblend">mixerBlend</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L877">CasparCG.ts:877</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L927">CasparCG.ts:927</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3785,7 +3824,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L885">CasparCG.ts:885</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L935">CasparCG.ts:935</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3810,7 +3849,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L886">CasparCG.ts:886</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L936">CasparCG.ts:936</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3842,7 +3881,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L926">CasparCG.ts:926</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L976">CasparCG.ts:976</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -3864,7 +3903,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L927">CasparCG.ts:927</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L977">CasparCG.ts:977</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3893,7 +3932,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L928">CasparCG.ts:928</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L978">CasparCG.ts:978</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3923,7 +3962,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerbrightness">mixerBrightness</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L929">CasparCG.ts:929</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L979">CasparCG.ts:979</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -3962,7 +4001,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerbrightnessdeferred">mixerBrightnessDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L937">CasparCG.ts:937</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L987">CasparCG.ts:987</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4005,7 +4044,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L847">CasparCG.ts:847</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L897">CasparCG.ts:897</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4027,7 +4066,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L848">CasparCG.ts:848</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L898">CasparCG.ts:898</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4065,7 +4104,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L849">CasparCG.ts:849</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L899">CasparCG.ts:899</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4104,7 +4143,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerchroma">mixerChroma</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L850">CasparCG.ts:850</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L900">CasparCG.ts:900</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4152,7 +4191,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L858">CasparCG.ts:858</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L908">CasparCG.ts:908</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4192,7 +4231,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L859">CasparCG.ts:859</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L909">CasparCG.ts:909</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4237,7 +4276,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerclear">mixerClear</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1295">CasparCG.ts:1295</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1345">CasparCG.ts:1345</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4271,7 +4310,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1051">CasparCG.ts:1051</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1101">CasparCG.ts:1101</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4293,7 +4332,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1052">CasparCG.ts:1052</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1102">CasparCG.ts:1102</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4331,7 +4370,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1053">CasparCG.ts:1053</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1103">CasparCG.ts:1103</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4370,7 +4409,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerclip">mixerClip</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1054">CasparCG.ts:1054</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1104">CasparCG.ts:1104</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4418,7 +4457,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerclipdeferred">mixerClipDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1062">CasparCG.ts:1062</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1112">CasparCG.ts:1112</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4468,7 +4507,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixercommit">mixerCommit</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1288">CasparCG.ts:1288</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1338">CasparCG.ts:1338</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4499,7 +4538,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L976">CasparCG.ts:976</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1026">CasparCG.ts:1026</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4521,7 +4560,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L977">CasparCG.ts:977</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1027">CasparCG.ts:1027</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4550,7 +4589,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L978">CasparCG.ts:978</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1028">CasparCG.ts:1028</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4579,7 +4618,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L979">CasparCG.ts:979</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1029">CasparCG.ts:1029</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4618,7 +4657,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixercontrastdeferred">mixerContrastDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L987">CasparCG.ts:987</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1037">CasparCG.ts:1037</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4661,7 +4700,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1101">CasparCG.ts:1101</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1151">CasparCG.ts:1151</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4683,7 +4722,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1102">CasparCG.ts:1102</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1152">CasparCG.ts:1152</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4721,7 +4760,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1103">CasparCG.ts:1103</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1153">CasparCG.ts:1153</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4760,7 +4799,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixercrop">mixerCrop</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1104">CasparCG.ts:1104</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1154">CasparCG.ts:1154</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4808,7 +4847,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixercropdeferred">mixerCropDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1112">CasparCG.ts:1112</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1162">CasparCG.ts:1162</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4860,7 +4899,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1026">CasparCG.ts:1026</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1076">CasparCG.ts:1076</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -4882,7 +4921,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1027">CasparCG.ts:1027</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1077">CasparCG.ts:1077</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4920,7 +4959,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1028">CasparCG.ts:1028</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1078">CasparCG.ts:1078</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -4959,7 +4998,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerfill">mixerFill</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1029">CasparCG.ts:1029</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1079">CasparCG.ts:1079</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5007,7 +5046,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerfilldeferred">mixerFillDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1037">CasparCG.ts:1037</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1087">CasparCG.ts:1087</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5053,7 +5092,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1270">CasparCG.ts:1270</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1320">CasparCG.ts:1320</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5084,7 +5123,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1271">CasparCG.ts:1271</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1321">CasparCG.ts:1321</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5111,7 +5150,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixergrid">mixerGrid</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1272">CasparCG.ts:1272</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1322">CasparCG.ts:1322</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5147,7 +5186,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixergriddeferred">mixerGridDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1280">CasparCG.ts:1280</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1330">CasparCG.ts:1330</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5185,7 +5224,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L824">CasparCG.ts:824</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L874">CasparCG.ts:874</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5208,7 +5247,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerkeyer">mixerKeyer</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L825">CasparCG.ts:825</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L875">CasparCG.ts:875</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5241,7 +5280,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerkeyerdeferred">mixerKeyerDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L833">CasparCG.ts:833</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L883">CasparCG.ts:883</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5278,7 +5317,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1001">CasparCG.ts:1001</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1051">CasparCG.ts:1051</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5300,7 +5339,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1002">CasparCG.ts:1002</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1052">CasparCG.ts:1052</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5341,7 +5380,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1003">CasparCG.ts:1003</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1053">CasparCG.ts:1053</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5383,7 +5422,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerlevels">mixerLevels</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1004">CasparCG.ts:1004</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1054">CasparCG.ts:1054</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5434,7 +5473,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerlevelsdeferred">mixerLevelsDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1012">CasparCG.ts:1012</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1062">CasparCG.ts:1062</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5487,7 +5526,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1224">CasparCG.ts:1224</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1274">CasparCG.ts:1274</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5507,7 +5546,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixermastervolume">mixerMastervolume</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1225">CasparCG.ts:1225</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1275">CasparCG.ts:1275</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5537,7 +5576,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixermastervolumedeferred">mixerMastervolumeDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1233">CasparCG.ts:1233</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1283">CasparCG.ts:1283</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5569,7 +5608,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1176">CasparCG.ts:1176</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1226">CasparCG.ts:1226</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5592,7 +5631,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixermipmap">mixerMipmap</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1177">CasparCG.ts:1177</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1227">CasparCG.ts:1227</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5625,7 +5664,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixermipmapdeferred">mixerMipmapDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1185">CasparCG.ts:1185</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1235">CasparCG.ts:1235</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5662,7 +5701,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L901">CasparCG.ts:901</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L951">CasparCG.ts:951</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5684,7 +5723,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L902">CasparCG.ts:902</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L952">CasparCG.ts:952</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5713,7 +5752,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L903">CasparCG.ts:903</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L953">CasparCG.ts:953</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5743,7 +5782,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixeropacity">mixerOpacity</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L904">CasparCG.ts:904</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L954">CasparCG.ts:954</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5782,7 +5821,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixeropacitydeferred">mixerOpacityDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L912">CasparCG.ts:912</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L962">CasparCG.ts:962</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5825,7 +5864,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1151">CasparCG.ts:1151</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1201">CasparCG.ts:1201</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -5847,7 +5886,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1152">CasparCG.ts:1152</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1202">CasparCG.ts:1202</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5897,7 +5936,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1153">CasparCG.ts:1153</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1203">CasparCG.ts:1203</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5948,7 +5987,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerperspective">mixerPerspective</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1154">CasparCG.ts:1154</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1204">CasparCG.ts:1204</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6007,7 +6046,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1162">CasparCG.ts:1162</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1212">CasparCG.ts:1212</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6074,7 +6113,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1126">CasparCG.ts:1126</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1176">CasparCG.ts:1176</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6096,7 +6135,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1127">CasparCG.ts:1127</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1177">CasparCG.ts:1177</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6125,7 +6164,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1128">CasparCG.ts:1128</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1178">CasparCG.ts:1178</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6155,7 +6194,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerrotation">mixerRotation</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1129">CasparCG.ts:1129</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1179">CasparCG.ts:1179</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6194,7 +6233,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerrotationdeferred">mixerRotationDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1137">CasparCG.ts:1137</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1187">CasparCG.ts:1187</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6237,7 +6276,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L951">CasparCG.ts:951</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1001">CasparCG.ts:1001</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6259,7 +6298,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L952">CasparCG.ts:952</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1002">CasparCG.ts:1002</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6288,7 +6327,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L953">CasparCG.ts:953</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1003">CasparCG.ts:1003</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6318,7 +6357,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixersaturation">mixerSaturation</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L954">CasparCG.ts:954</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1004">CasparCG.ts:1004</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6357,7 +6396,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixersaturationdeferred">mixerSaturationDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L962">CasparCG.ts:962</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1012">CasparCG.ts:1012</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6398,7 +6437,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1247">CasparCG.ts:1247</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1297">CasparCG.ts:1297</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6421,7 +6460,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerstraightalphaoutput">mixerStraightAlphaOutput</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1248">CasparCG.ts:1248</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1298">CasparCG.ts:1298</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6454,7 +6493,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixerstraightalphaoutputdeferred">mixerStraightAlphaOutputDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1256">CasparCG.ts:1256</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1306">CasparCG.ts:1306</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6491,7 +6530,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1199">CasparCG.ts:1199</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1249">CasparCG.ts:1249</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6513,7 +6552,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1200">CasparCG.ts:1200</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1250">CasparCG.ts:1250</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6542,7 +6581,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1201">CasparCG.ts:1201</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1251">CasparCG.ts:1251</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6572,7 +6611,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixervolume">mixerVolume</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1202">CasparCG.ts:1202</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1252">CasparCG.ts:1252</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6611,7 +6650,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#mixervolumedeferred">mixerVolumeDeferred</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1210">CasparCG.ts:1210</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1260">CasparCG.ts:1260</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6762,7 +6801,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#pause">pause</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L747">CasparCG.ts:747</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L797">CasparCG.ts:797</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6794,7 +6833,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L738">CasparCG.ts:738</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L788">CasparCG.ts:788</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6817,7 +6856,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#play">play</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L739">CasparCG.ts:739</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L789">CasparCG.ts:789</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6874,7 +6913,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#print">print</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1345">CasparCG.ts:1345</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1395">CasparCG.ts:1395</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6902,7 +6941,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1338">CasparCG.ts:1338</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1388">CasparCG.ts:1388</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -6991,7 +7030,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#restart">restart</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1705">CasparCG.ts:1705</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1755">CasparCG.ts:1755</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7014,7 +7053,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#resume">resume</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L754">CasparCG.ts:754</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L804">CasparCG.ts:804</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7045,7 +7084,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1353">CasparCG.ts:1353</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1403">CasparCG.ts:1403</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7127,7 +7166,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#stop">stop</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L761">CasparCG.ts:761</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L811">CasparCG.ts:811</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7158,7 +7197,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1318">CasparCG.ts:1318</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1368">CasparCG.ts:1368</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7186,7 +7225,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#templatehostinfo">templateHostInfo</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1557">CasparCG.ts:1557</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1607">CasparCG.ts:1607</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7219,7 +7258,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#thumbnailgenerate">thumbnailGenerate</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1429">CasparCG.ts:1429</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1479">CasparCG.ts:1479</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7248,7 +7287,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#thumbnailgenerateall">thumbnailGenerateAll</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1436">CasparCG.ts:1436</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1486">CasparCG.ts:1486</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7271,7 +7310,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#thumbnaillist">thumbnailList</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1415">CasparCG.ts:1415</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1465">CasparCG.ts:1465</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7294,7 +7333,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#thumbnailretrieve">thumbnailRetrieve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1422">CasparCG.ts:1422</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1472">CasparCG.ts:1472</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7323,7 +7362,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#tls">tls</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1464">CasparCG.ts:1464</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1514">CasparCG.ts:1514</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -7346,7 +7385,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/casparcgprotocols.v2_1.amcp.html">AMCP</a>.<a href="../interfaces/casparcgprotocols.v2_1.amcp.html#version">version</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1471">CasparCG.ts:1471</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L1521">CasparCG.ts:1521</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

@@ -111,19 +111,6 @@ repo.register_command(			L"Query Commands",		L"HELP PRODUCER",				help_producer_
 repo.register_command(			L"Query Commands",		L"HELP CONSUMER",				help_consumer_describer,			help_consumer_command,			0);
 */
 
-
-
-/*100 [action] - Information about an event.
-101 [action] - Information about an event. A line of data is being returned.
-200 [command] OK	- The command has been executed and several lines of data (seperated by \r\n) are being returned (terminated with an additional \r\n)
-201 [command] OK	- The command has been executed and data (terminated by \r\n) is being returned.
-202 [command] OK	- The command has been executed.
-400 ERROR	- Command not understood
-401 [command] ERROR	- Illegal video_channel
-402 [command] ERROR	- Parameter missing
-403 [command] ERROR	- Illegal parameter
-404 [command] ERROR	- Media file not found*/
-
 /**
  * CasparCG Protocols
  */
@@ -325,14 +312,11 @@ export interface ICasparCGConnection {
 }
 
 /**
- * The main object to interact with. `CasparCG` allows for flexible configuration, re-configuration and events/callbacks.
+ * The main object and entrypoint for all interactions. `CasparCG` allows for flexible configuration, re-configuration and events/callbacks.
+ * It implements all [[AMCP]] commands as high-level methods with convenient interfaces.
  * 
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object. 
- * Implements all [[AMCP]] commands as high-level methods with convenient interfaces.
- * 
  * `CasparCG` should be the only public interface to interact directly with.
- * 
- * @todo	remove =undefined; initializations once object.assign is in place
  */
 export class CasparCG extends EventEmitter implements ICasparCGConnection, IConnectionOptions, CasparCGProtocols.v2_1.AMCP {
 	private _connected: boolean = false;
@@ -399,16 +383,82 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 
 	/**
 	 * If the constructor gets called with no parameters, all properties of the CasparCG object will match all default properties defined by [[IConnectionOptions]].
+	 * 
+	 ```
+	 var con = new CasparCG(); 	
+	 // host = 127.0.0.1, port = 5250, autoConnect = true ...
+	 
+	  con.play(1, 1, "amb");		
+	  // you can interact with the server, but you have no knowledge of the conenction status until the onConnect event- or callback gets invoked
+	 // the `PlayCommand` will however be queued and fired when the connection gets established
+	 con.close();
+	 ```
 	 *  
 	 * @param host		Defaults to `IConnectionOptions.host`
 	 * @param port		Defaults to `IConnectionOptions.host`
 	 * @param options	An object with combination of properties defined by `IConnectionOptions`. All properties not explicitly set will fall back to the defaults defined by `IConnectionOptions`. 
 	 *
 	 * All callbacks including [[onConnected]] will be set prior trying to establish connection, so the `CasparCG` object will give back all events even if [[CasparCG.autoConnect]] is `true`.
-	 * 
 	 */
 	public constructor();
+	/**
+	 * Set host/port directly in constructor:
+	 * 
+	 ```
+	 var con = new CasparCG("192.168.0.1", 5251);	
+	 // host = 192.168.0.1, port = 5251, autoConnect = true ...
+
+	 // change parameters after the constructor
+	 con.debug = true;
+	 
+	 con.play(1, 1, "amb");
+	 con.close();
+	 ```
+	 *
+	 */
 	public constructor(host?: string, port?: number);
+	/**
+	 * Callbacks and events after constructor:
+	 * 
+	 ```
+	 var con = new CasparCG({host: "192.168.0.1", autoConnect: false});	
+	 // host = 192.168.0.1, port = 5250, autoConnect = false ...
+	 
+	 // add onLog callback after constructor
+	 con.onLog = function(logMessage){ console.log(logMessage); };						
+	 
+	 // add eventlistener to the conenction event before connecting
+	 con.on(CasparCGSocketStausEvent.CONNECTED, onConnection(event));		
+	 
+	 con.connect();
+	 ```
+	 * Callback in constructor:
+	 * 
+	 ```
+	 var con = new CasparCG({host: "192.168.0.1", onConnect: onConnectedCallback});	
+	 // Connection callbacks can be set in the constructor and will be registered before autoConnect invokes. 
+	 // This ensures that you recieve all callbacks
+	 ```
+	 * Inline function synstax:
+	 * 
+	 ```
+	 var con = new CasparCG({host: "192.168.0.1", onConnect: function(connected) {
+		 	// do something once we get online
+		 	console.log("Are we conencted?", connected)
+	 	}
+	});	
+	 ```
+	 * Inline fat arrow synstax:
+	 * 
+	 ```
+	 var con = new CasparCG({host: "192.168.0.1", onConnect: (connected) => {
+		 	// do something once we get online
+		 	console.log("Are we conencted?", connected)
+	 	}
+	});	
+	 ```
+	 *
+	 */
 	public constructor(options?: IConnectionOptions);
 	public constructor(hostOrOptions?: any, port?: number) {
 		super();
