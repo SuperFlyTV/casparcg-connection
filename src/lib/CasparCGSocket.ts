@@ -220,19 +220,6 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		return command;
 	}
 
-	 // @todo: ELLER bare async/promise ftw
-
-	// @todo køhåndtering
-	// legg til i kø
-	// hvis noe i kø -> send
-		// forvent svar
-			// svar
-				// riktig
-					// hvis mer i kø: send
-				// feil
-					// håndter
-					// hvis mer i kø: send
-
 	/**
 	 * @todo:::
 	 */
@@ -255,7 +242,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		let responseString: string = data.toString();
 		let code: number = parseInt(responseString.substr(0, 3), 10);
 
-		if(!(this._currentCommand.response instanceof AMCPResponse)) {
+		if (!(this._currentCommand.response instanceof AMCPResponse)) {
 			this._currentCommand.response = new AMCPResponse();
 		}
 
@@ -265,9 +252,9 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 
 		// fail?
 		if (code >= 400 && code <= 599) {
-		 this._currentCommand.response.raw = responseString;
-		 this._currentCommand.response.code = code;
-		 this._currentCommand.status =  IAMCPStatus.Failed;
+			this._currentCommand.response.raw = responseString;
+			this._currentCommand.response.code = code;
+			this._currentCommand.status =  IAMCPStatus.Failed;
 		}
 		// success?
 		if (code > 0 && code < 400) {
@@ -276,14 +263,12 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 
 			// ???????????
 
-		 this._currentCommand.response.raw = responseString;
-		 this._currentCommand.response.code = code;
-		 this._currentCommand.status =  IAMCPStatus.Suceeded;
+			this._currentCommand.response.raw = responseString;
+			this._currentCommand.response.code = code;
+			this._currentCommand.status =  IAMCPStatus.Suceeded;
 		}
 
 		this.fire(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(this._currentCommand));
-		delete this._currentCommand;
-
 	}
 
 	/**

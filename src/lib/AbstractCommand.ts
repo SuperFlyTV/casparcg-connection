@@ -81,6 +81,7 @@ export namespace Command {
 		payload: PayloadVO;
 		response: IAMCPResponse;
 		status: IAMCPStatus;
+		id: string;
 	}
 
 	/**
@@ -98,7 +99,7 @@ export namespace Command {
 	export interface IAMCPCommand extends IAMCPCommandData {
 		validateParams(): boolean;
 		serialize(): IAMCPCommandVO;
-		populate(cmdVo: IAMCPCommandVO): void;
+		populate(cmdVo: IAMCPCommandVO, id: string): void;
 		protocol: Array<IParamSignature>;
 		protocolLogic: Array<IProtocolLogic>;
 		onStatusChanged: ICommandStatusCallback;
@@ -127,6 +128,7 @@ export namespace Command {
 		private _status: IAMCPStatus = IAMCPStatus.New;
 		protected _channel: number;
 		protected _layer: number;
+		protected _id: string;
 		protected _payload: PayloadVO = {};
 		protected _stringParamsArray: Array<string>;
 		protected _objectParams: Param;
@@ -276,6 +278,13 @@ export namespace Command {
 		get payload(): PayloadVO{
 			return this._payload;
 		}
+	
+		/**
+		 * 
+		 */
+		get id(): string{
+			return this._id;
+		}
 
 		/**
 		 * 
@@ -390,10 +399,11 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		populate(cmdVo: IAMCPCommandVO): void {
+		populate(cmdVo: IAMCPCommandVO, id): void {
 			this._stringParamsArray = cmdVo._stringParamsArray;
 			this._objectParams = cmdVo._objectParams;
 			this.response = cmdVo.response;
+			this._id = id;
 		}
 
 		/**

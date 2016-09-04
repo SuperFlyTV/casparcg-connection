@@ -46,14 +46,14 @@ export namespace AMCPUtil {
 	/**
 	 * 
 	 */
-	export function deSerialize(cmd: IAMCPCommandVO): IAMCPCommand {
+	export function deSerialize(cmd: IAMCPCommandVO, id: string): IAMCPCommand {
 
 		// errror: commandstatus -1 //invalid command
 
 		// @todo: error handling much?????? (callback??????)
 		let command: IAMCPCommand = Object.create(AMCP[cmd._commandName]["prototype"]);
 		command.constructor.call(command, cmd._objectParams);
-		command.populate(cmd);
+		command.populate(cmd, id);
 		return command;
 	}
 }
