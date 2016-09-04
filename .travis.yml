@@ -7,11 +7,8 @@ install:
 - npm install --ignore-scripts && typings install
 script:
 - gulp build
-
 before_deploy:
-- mkdir tmp
-- zip -r tmp/js.zip ./ -x@.npmignore
-- zip -r tmp/src.zip ./ -x@.gitignore
+- gulp dist
 deploy:
 - provider: npm
   email: jesper@superfly.tv

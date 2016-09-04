@@ -2,9 +2,11 @@
 var gulp        = require('gulp'),
     typescript  = require('typescript'),
     ts          = require('gulp-typescript'),
-	sourcemaps  = require('gulp-sourcemaps'),
+	  sourcemaps  = require('gulp-sourcemaps'),
     del         = require('del'),
-    typedoc     = require('gulp-typedoc'); 
+    typedoc     = require('gulp-typedoc'),
+    zip         = require('gulp-zip'),
+    gitignore   = require('gulp-gitignore');
 
 var project = ts.createProject('tsconfig.json', {typescript: typescript});
 var DIST_DIR = 'js/';
@@ -40,6 +42,17 @@ gulp.task('clean', function () {
   return del([
     'js/**/*' 
   ]);
+});
+
+//dist zip
+gulp.task('dist', function () {
+  gulp.src(['js', 'js/**/*.**', 'license', 'readme.md'], {base: '.'})
+        .pipe(zip('casparcg-connection-js.zip'))
+        .pipe(gulp.dest('tmp'));
+  return gulp.src('**/**/**.*', {base: '.'})
+        .pipe(gitignore())
+        .pipe(zip('casparcg-connection-src.zip'))
+        .pipe(gulp.dest('tmp'));
 });
 
 //dfault
