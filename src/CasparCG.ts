@@ -347,37 +347,37 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	public autoReconnectAttempts: number = undefined;
 
 	/**
-	 * All logging should be printed to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].  
+	 * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].  
 	 */
 	public debug: boolean = undefined;
 
 	/**
-	 * @todo	Add documentation
+	 * Callback for all logging. 
 	 */
 	public onLog: IStringCallback = undefined;
 
 	/**
-	 * @todo	Add documentation
+	 * Callback for all status updates from the `CasparCGSocket`. 
 	 */
 	public onConnectionStatus: ISocketStatusCallback = undefined;
 
 	/**
-	 * `connected` changed status between `true` and `false` or vice versa.
+	 * Callback for status updates from the `CasparCGSocket` if the `connected` property changes value.
 	 */
 	public onConnectionChanged: IBooleanCallback = undefined;
 
 	/**
-	 * `connected` was set to `true`.
+	 * Callback for status updates from the `CasparCGSocket` if the `connected` property is set to `true`.
 	 */
 	public onConnected: IBooleanCallback = undefined;
 
 	/**
-	 * `connected` was set to `false`.
+	 * Callback for status updates from the `CasparCGSocket` if the `connected` property is set to `false`.
 	 */
 	public onDisconnected: IBooleanCallback = undefined;
 
 	/**
-	 * @todo	Add documentation
+	 * Callback for general errors
 	 */
 	public onError: IErrorCallback = undefined;
 
@@ -408,7 +408,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	 var con = new CasparCG("192.168.0.1", 5251);	
 	 // host = 192.168.0.1, port = 5251, autoConnect = true ...
 
-	 // change parameters after the constructor
+	 // change properties after the constructor
 	 con.debug = true;
 	 
 	 con.play(1, 1, "amb");
@@ -439,20 +439,20 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	 // Connection callbacks can be set in the constructor and will be registered before autoConnect invokes. 
 	 // This ensures that you recieve all callbacks
 	 ```
-	 * Inline function synstax:
+	 * Inline function syntax:
 	 * 
 	 ```
 	 var con = new CasparCG({host: "192.168.0.1", onConnect: function(connected) {
-		 	// do something once we get online
+		 	// do something once we get connected
 		 	console.log("Are we conencted?", connected)
 	 	}
 	});	
 	 ```
-	 * Inline fat arrow synstax:
+	 * Inline fat arrow syntax:
 	 * 
 	 ```
 	 var con = new CasparCG({host: "192.168.0.1", onConnect: (connected) => {
-		 	// do something once we get online
+		 	// do something once we get connected
 		 	console.log("Are we conencted?", connected)
 	 	}
 	});	
