@@ -305,6 +305,7 @@ export interface ICasparCGConnection {
 	connected: boolean;
 	connectionStatus: SocketState;
 	commandQueue: Array<IAMCPCommand>;
+	removeQueuedCommand(id: string): boolean;
 	connect(options?: IConnectionOptions): void;
 	disconnect(): void;
 	do(command: IAMCPCommand): IAMCPCommand;
@@ -728,6 +729,21 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 		}
 
 		return command;
+	}
+
+	/**
+	 * @todo: document
+	 */
+	public removeQueuedCommand(id: string): boolean {
+		let removed: Array<IAMCPCommand>;
+		for (let i: number = 0; i <= this._commandQueue.length; i++) {
+			let o: IAMCPCommand = this._commandQueue[i];
+			if (o.id === id) {
+				removed = this._commandQueue.splice(i, 1);
+				break;
+			}
+		}
+		return typeof Object.prototype.toString.call( removed ) === "[object Array]" && removed.length > 0;
 	}
 
 	/**
