@@ -13,7 +13,7 @@ import {Param as ParamNS} from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
 // Event NS
-import {BaseEvent, CasparCGSocketStausEvent, CasparCGSocketCommandEvent, LogEvent} from "./lib/event/Events";
+import {BaseEvent, CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, LogEvent} from "./lib/event/Events";
 // Callback NS
 import {Callback as CallbackNS} from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
@@ -429,7 +429,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	 con.onLog = function(logMessage){ console.log(logMessage); };						
 	 
 	 // add eventlistener to the conenction event before connecting
-	 con.on(CasparCGSocketStausEvent.CONNECTED, onConnection(event));		
+	 con.on(CasparCGSocketStatusEvent.CONNECTED, onConnection(event));		
 	 
 	 con.connect();
 	 ```
@@ -516,7 +516,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
 		this.setParent(this._socket);
 		this._socket.on("error", (error) => this._onSocketError(error));
-		this.on(CasparCGSocketStausEvent.STATUS, (event) => this._onSocketStatusChange(event));
+		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketCommandEvent.RESPONSE, (command) => this._handleCommandResponse(command));
 
 		// inherit log method
@@ -614,7 +614,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	/**
 	 * 
 	 */
-	private _onSocketStatusChange(socketStatus: CasparCGSocketStausEvent): void {
+	private _onSocketStatusChange(socketStatus: CasparCGSocketStatusEvent): void {
 		let connected = (socketStatus.valueOf() &  SocketState.connected) === SocketState.connected;
 
 		if (this.onConnectionStatus) {
@@ -623,13 +623,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 
 		if (connected !== this._connected) {
 			this._connected = connected;
-			this.fire(CasparCGSocketStausEvent.STATUS_CHANGED, socketStatus);
+			this.fire(CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
 
 			if (this.onConnectionChanged) {
 				this.onConnectionChanged(this._connected);
 			}
 			if (this._connected) {
-				this.fire(CasparCGSocketStausEvent.CONNECTED, socketStatus);
+				this.fire(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
 				if (this.onConnected) {
 					this.onConnected(this._connected);
 				}
@@ -638,7 +638,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 
 			}
 			if (!this._connected) {
-				this.fire(CasparCGSocketStausEvent.DISCONNECTED, socketStatus);
+				this.fire(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
 				if (this.onDisconnected) {
 					this.onDisconnected(this._connected);
 				}
@@ -739,6 +739,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 		for (let i: number = 0; i < this._commandQueue.length; i++) {
 			let o: IAMCPCommand = this._commandQueue[i];
 			if (o.id === id) {
+
+				// @todo: what happens if the removed command is the currentCommand?
+
 				removed = this._commandQueue.splice(i, 1);
 				break;
 			}

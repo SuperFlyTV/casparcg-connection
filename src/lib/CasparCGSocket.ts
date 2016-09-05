@@ -8,7 +8,7 @@ import IAMCPResponse = CommandNS.IAMCPResponse;
 import AMCPResponse = CommandNS.AMCPResponse;
 import IAMCPStatus = CommandNS.IAMCPStatus;
 // Event NS
-import {CasparCGSocketStausEvent, CasparCGSocketCommandEvent} from "./event/Events";
+import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent} from "./event/Events";
 // Callback NSIAMCPResponse
 import {Callback as CallbackNS} from "./global/Callback";
 import IResponseCallback = CallbackNS.IResponseCallback;
@@ -175,7 +175,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	public set socketStatus(statusMask: SocketState){
 		if (this._socketStatus !== statusMask) {
 			this._socketStatus = statusMask;
-			this.fire(CasparCGSocketStausEvent.STATUS, new CasparCGSocketStausEvent(this._socketStatus));
+			this.fire(CasparCGSocketStatusEvent.STATUS, new CasparCGSocketStatusEvent(this._socketStatus));
 		}
 	}
 
