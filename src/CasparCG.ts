@@ -736,7 +736,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	 */
 	public removeQueuedCommand(id: string): boolean {
 		let removed: Array<IAMCPCommand>;
-		for (let i: number = 0; i <= this._commandQueue.length; i++) {
+		for (let i: number = 0; i < this._commandQueue.length; i++) {
 			let o: IAMCPCommand = this._commandQueue[i];
 			if (o.id === id) {
 				removed = this._commandQueue.splice(i, 1);
