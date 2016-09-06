@@ -50,7 +50,7 @@ export class ConnectionOptions implements IConnectionOptions {
 	public autoReconnect: boolean = true;
 	public autoReconnectInterval: number = 1000;
 	public autoReconnectAttempts: number = Infinity;
-	public queueMode: Options.QueueMode = Options.QueueMode.SALVO;
+	public queueMode: Options.QueueMode = Options.QueueMode.SEQUENTIAL;	// @todo: change tol SALVO once server has command UIDs
 	public debug: boolean = false;
 	public onLog: IStringCallback = undefined;
 	public onConnectionStatus: ISocketStatusCallback = undefined;
