@@ -10,12 +10,13 @@ import {Command as CommandNS} from "./lib/AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
 import isIAMCPCommand = CommandNS.isIAMCPCommand;
 import IAMCPStatus = CommandNS.IAMCPStatus;
+import AMCPResponse = CommandNS.AMCPResponse;
 // Param NS
 import {Param as ParamNS} from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
 // Event NS
-import {BaseEvent, CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, LogEvent} from "./lib/event/Events";
+import {BaseEvent, CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
 // Callback NS
 import {Callback as CallbackNS} from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
@@ -326,8 +327,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _host: string;
 	private _port: number;
 	private _socket: CasparCGSocket;
-	private _commandQueue: Array<IAMCPCommand> = new Array<IAMCPCommand>();
-	private _currentCommand: IAMCPCommand;
+	private _queuedCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
+	private _activeCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 
 	/**
 	 * Try to connect upon creation.
@@ -470,7 +471,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public constructor(options?: IConnectionOptions);
 	public constructor(hostOrOptions?: any, port?: number) {
 		super();
-
 		let options: ConnectionOptions = new ConnectionOptions(hostOrOptions, port);
 
 		// if both options and port specified, port overrides options
@@ -525,7 +525,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.setParent(this._socket);
 		this._socket.on("error", (error) => this._onSocketError(error));
 		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
-		this.on(CasparCGSocketCommandEvent.RESPONSE, (command) => this._handleCommandResponse(command));
+		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
@@ -641,9 +641,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				if (this.onConnected) {
 					this.onConnected(this._connected);
 				}
-
 				this._expediteCommand();
-
 			}
 			if (!this._connected) {
 				this.fire(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
@@ -658,7 +656,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	public get commandQueue(): Array<IAMCPCommand> {
-		return this._commandQueue;
+		return this._queuedCommands;
 	}
 
 	/**
@@ -722,20 +720,17 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			return null;
 		}
 
-		return this._queueCommand(command);
+		return this._addQueuedCommand(command);
 	}
 
 
 	/**
 	 * 
 	 */
-	private _queueCommand(command: IAMCPCommand): IAMCPCommand {
-		this._commandQueue.push(command);
+	private _addQueuedCommand(command: IAMCPCommand): IAMCPCommand {
+		this._queuedCommands.push(command);
 		command.status = IAMCPStatus.Queued;
-		if (!this._currentCommand) {
-			this._expediteCommand();
-		}
-
+		this._expediteCommand();
 		return command;
 	}
 
@@ -744,13 +739,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public removeQueuedCommand(id: string): boolean {
 		let removed: Array<IAMCPCommand>;
-		for (let i: number = 0; i < this._commandQueue.length; i++) {
-			let o: IAMCPCommand = this._commandQueue[i];
+		for (let i: number = 0; i < this._queuedCommands.length; i++) {
+			let o: IAMCPCommand = this._queuedCommands[i];
 			if (o.id === id) {
 
 				// @todo: what happens if the removed command is the currentCommand?
 
-				removed = this._commandQueue.splice(i, 1);
+				removed = this._queuedCommands.splice(i, 1);
 				break;
 			}
 		}
@@ -760,37 +755,73 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * 
 	 */
-	private _handleCommandResponse(command: IAMCPCommand): void {
-		// @todo: handle check if command._id matches currentCommand._id;
+	private _handleSocketResponse(responseString: string): void {
+		let code: number = parseInt(responseString.substr(0, 3), 10);
 
-		// param below
-		// true if valid, handle if not
-		this._expediteCommand(true);
+		/*100 [action] - Information about an event.
+		101 [action] - Information about an event. A line of data is being returned.
+		200 [command] OK	- The command has been executed and several lines of data (seperated by \r\n) are being returned (terminated with an additional \r\n)
+		201 [command] OK	- The command has been executed and data (terminated by \r\n) is being returned.
+		202 [command] OK	- The command has been executed.
+		400 ERROR	- Command not understood
+		401 [command] ERROR	- Illegal video_channel
+		402 [command] ERROR	- Parameter missing
+		403 [command] ERROR	- Illegal parameter
+		404 [command] ERROR	- Media file not found*/
+
+		let currentCommand: IAMCPCommand = this._activeCommands.shift();
+		if (!(currentCommand.response instanceof AMCPResponse)) {
+			currentCommand.response = new AMCPResponse();
+		}
+
+		// valid?
+
+		// fail?
+		if (code >= 400 && code <= 599) {
+			currentCommand.response.raw = responseString;
+			currentCommand.response.code = code;
+			currentCommand.status =  IAMCPStatus.Failed;
+		}
+		// success?
+		if (code > 0 && code < 400) {
+			// valid success???
+
+			currentCommand.response.raw = responseString;
+			currentCommand.response.code = code;
+			currentCommand.status =  IAMCPStatus.Suceeded;
+		}
+
+		this.fire(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
+		this._expediteCommand();
 	}
 
 	/**
 	 * 
 	 */
-	private _expediteCommand(forceNext: boolean = false): void {
+	private _expediteCommand(): void {
 		if (this.connected) {
 
-			if (!forceNext && this._currentCommand) {
-				// @todo add TTL for cleanup on stuck commands
-				return;
+			// @todo add TTL for cleanup on stuck commands
+
+			// salvo mode
+			if (this.queueMode === QueueMode.SALVO) {
+				if (this._queuedCommands.length > 0) {
+					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
+					this._activeCommands.push(nextCommand);
+					this._socket.executeCommand(nextCommand);
+				}
 			}
 
-			if (forceNext) {
-				delete this._currentCommand;
-			}
-
-			if (this._commandQueue.length > 0) {
-				let nextCommand: IAMCPCommand = this._commandQueue.shift();
-				this._currentCommand = nextCommand;
-				this._socket.executeCommand(nextCommand);
+			// sequential mode
+			if (this.queueMode === QueueMode.SEQUENTIAL) {
+				if (this._queuedCommands.length > 0 && this._activeCommands.length === 0) {
+					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
+					this._activeCommands.push(nextCommand);
+					this._socket.executeCommand(nextCommand);
+				}
 			}
 		}
 	}
-
 
 
 				///*********************////

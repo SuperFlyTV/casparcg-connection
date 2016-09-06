@@ -25,4 +25,26 @@ export namespace Event {
 
 		static RESPONSE = "casparcgsocketcommandeventresponse";
 	}
+
+	/**
+	 * 
+	 */
+	export class CasparCGSocketResponseEvent extends BaseEventNS.BaseEvent {
+
+		/**
+		 * 
+		 */
+		constructor(public response: string) {
+			super({response});
+		}
+
+		/**
+		 * 
+		 */
+		valueOf(): string {
+			return this.response;
+		}
+
+		static RESPONSE = "casparcgsocketresponseeventresponse";
+	}
 }
