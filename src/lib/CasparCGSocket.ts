@@ -237,15 +237,15 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	private _onData(data: Buffer) {
 		let raw: string = data.toString();
-		let splits: Array<string> = raw.match(/[\s\S]+?\r\n(?=[1-4][0-9]{2}\s{1})/g);
 
-		if (splits && splits.length > 0) {
-			splits.forEach((i) => {
+		console.log("RAW", raw);
+		
+
+		raw.split(/(?:^|\r\n)(?=[1-4]{1}[0-9]{2})|\r\n$/).forEach((i) => {
+			if (i.length > 0) {
 				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(i));
-			});
-		}else {
-			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(raw));
-		}
+			}
+		});
 	}
 
 	/**
