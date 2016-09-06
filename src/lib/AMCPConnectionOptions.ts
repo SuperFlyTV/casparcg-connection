@@ -9,6 +9,20 @@ import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
 /**
  * 
  */
+export namespace Options {
+
+	/**
+	 * 
+	 */
+	export enum QueueMode  {
+		SALVO = 1,
+		SEQUENTIAL = 2
+	}
+}
+
+/**
+ * 
+ */
 export interface IConnectionOptions {
 	host?: string;
 	port?: number;
@@ -16,6 +30,7 @@ export interface IConnectionOptions {
 	autoReconnect?: boolean;
 	autoReconnectInterval?: number;
 	autoReconnectAttempts?: number;
+	queueMode?: Options.QueueMode;
 	debug?: boolean;
 	onLog?: IStringCallback;
 	onConnectionStatus?: ISocketStatusCallback;
@@ -35,13 +50,14 @@ export class ConnectionOptions implements IConnectionOptions {
 	public autoReconnect: boolean = true;
 	public autoReconnectInterval: number = 1000;
 	public autoReconnectAttempts: number = Infinity;
+	public queueMode: Options.QueueMode = Options.QueueMode.SALVO;
 	public debug: boolean = false;
-	public onLog: IStringCallback = null;
-	public onConnectionStatus: ISocketStatusCallback = null;
-	public onConnectionChanged: IBooleanCallback = null;
-	public onConnected: IBooleanCallback = null;
-	public onDisconnected: IBooleanCallback = null;
-	public onError: IErrorCallback = null;
+	public onLog: IStringCallback = undefined;
+	public onConnectionStatus: ISocketStatusCallback = undefined;
+	public onConnectionChanged: IBooleanCallback;
+	public onConnected: IBooleanCallback = undefined;
+	public onDisconnected: IBooleanCallback = undefined;
+	public onError: IErrorCallback = undefined;
 
 	/**
 	 * 

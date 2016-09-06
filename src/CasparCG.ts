@@ -2,7 +2,9 @@ import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
 import {AMCP} from "./lib/AMCP";
 import {Enum} from "./lib/ServerStateEnum";
-import {IConnectionOptions, ConnectionOptions} from "./lib/AMCPConnectionOptions";
+import {IConnectionOptions, ConnectionOptions, Options as OptionsNS} from "./lib/AMCPConnectionOptions";
+// Options NS
+import QueueMode = OptionsNS.QueueMode;
 // Command NS
 import {Command as CommandNS} from "./lib/AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
@@ -319,7 +321,7 @@ export interface ICasparCGConnection {
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object. 
  * `CasparCG` should be the only public interface to interact directly with.
  */
-export class CasparCG extends EventEmitter implements ICasparCGConnection, IConnectionOptions, CasparCGProtocols.v2_1.AMCP {
+export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
 	private _connected: boolean = false;
 	private _host: string;
 	private _port: number;
@@ -346,6 +348,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	 * Max number of attempts of connection during reconnection. This value resets once the reconnection is over (either in case of successfully reconnecting, changed connection properties such as `host` or `port` or by being manually cancelled). 
 	 */
 	public autoReconnectAttempts: number = undefined;
+
+	/**b
+	 * @todo: document  
+	 */
+	public queueMode: QueueMode = undefined;
 
 	/**
 	 * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].  
@@ -486,9 +493,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 		for (let key in options) {
 
 			// @todo: object.assign
-			if (!options.hasOwnProperty(key)) {
+			if (!options.hasOwnProperty(key)) {		// @todo: ????
 				continue;
-}
+			}
+
 			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
 				// only update new options
 				if (this[key] !== options[key]) {
