@@ -1,13 +1,13 @@
 {
   "name": "casparcg-connection",
-  "version": "0.8.1",
+  "version": "0.8.0",
   "description": "node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
   "scripts": {
     "postinstall": "typings install",
     "prepublish": "npm run cleanbuild && npm run doc",
-    "preversion": "npm run doc",
+    "postversion": "npm run doc",
     "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
     "gulp": "gulp",
     "build": "gulp build",
