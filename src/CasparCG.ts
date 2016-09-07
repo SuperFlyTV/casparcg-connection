@@ -332,7 +332,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _autoReconnectAttempts: number;
 	private _socket: CasparCGSocket;
 	private _queuedCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
-	private _activeCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
+	private _sentCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 
 	/**
 	 * Try to connect upon creation.
@@ -798,9 +798,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		for (let i: number = 0; i < this._queuedCommands.length; i++) {
 			let o: IAMCPCommand = this._queuedCommands[i];
 			if (o.id === id) {
-
-				// @todo: what happens if the removed command is the currentCommand?
-
 				removed = this._queuedCommands.splice(i, 1);
 				break;
 			}
@@ -825,7 +822,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		403 [command] ERROR	- Illegal parameter
 		404 [command] ERROR	- Media file not found*/
 
-		let currentCommand: IAMCPCommand = this._activeCommands.shift();
+		let currentCommand: IAMCPCommand = this._sentCommands.shift();
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
 		}
@@ -863,16 +860,16 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			if (this.queueMode === QueueMode.SALVO) {
 				if (this._queuedCommands.length > 0) {
 					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
-					this._activeCommands.push(nextCommand);
+					this._sentCommands.push(nextCommand);
 					this._socket.executeCommand(nextCommand);
 				}
 			}
 
 			// sequential mode
 			if (this.queueMode === QueueMode.SEQUENTIAL) {
-				if (this._queuedCommands.length > 0 && this._activeCommands.length === 0) {
+				if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
 					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
-					this._activeCommands.push(nextCommand);
+					this._sentCommands.push(nextCommand);
 					this._socket.executeCommand(nextCommand);
 				}
 			}
