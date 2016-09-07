@@ -285,7 +285,7 @@ export namespace Command {
 		 * 
 		 */
 		get id(): string{
-			return this._id;
+			return this._id || (new Date().getTime() + Math.random() * 100).toString();
 		}
 
 		/**
@@ -623,33 +623,33 @@ export namespace Command {
 		 * 
 		 */
 		get channel(): number{
-	return this._channel ||  -1;
+			return this._channel ||  -1;
 		}
 
 		/**
 		 * 
 		 */
 		get layer(): number{
-	return this._layer ||  -1;
+			return this._layer ||  -1;
 		}
 
 		/**
 		 * 
 		 */
 		get address(): string{
-	let address: string;
+			let address: string;
 
-	if (this.channel) {
-	address = this.channel.toString();
-	}else {
-	return null;
-				// @todo throw???
-	}
-	if (this.layer && (this.layer > -1)) {
-	address = `${address}-${this.layer}`;
-	}
+			if (this.channel) {
+				address = this.channel.toString();
+			}else {
+				return null;
+						// @todo throw???
+			}
+			if (this.layer && (this.layer > -1)) {
+				address = `${address}-${this.layer}`;
+			}
 
-	return address;
+			return address;
 		}
 	}
 
@@ -691,19 +691,19 @@ export namespace Command {
 		 * 
 		 */
 		get address(): string{
-	let address: string;
+			let address: string;
 
-	if (this.channel) {
-	address = this.channel.toString();
-	}else {
-	return null;
-				// @todo throw???
-	}
-	if (this.layer && (this.layer > -1)) {
-	address = `${address}-${this.layer}`;
-	}
+			if (this.channel) {
+				address = this.channel.toString();
+			}else {
+				return null;
+						// @todo throw???
+			}
+			if (this.layer && (this.layer > -1)) {
+				address = `${address}-${this.layer}`;
+			}
 
-	return address;
+			return address;
 		}
 	}
 
