@@ -1,6 +1,6 @@
 {
   "name": "casparcg-connection",
-  "version": "0.7.10",
+  "version": "0.8.0",
   "description": "node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
