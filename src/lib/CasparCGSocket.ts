@@ -81,6 +81,27 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	/**
 	 * 
 	 */
+	public set autoReconnect(autoReconnect: boolean) {
+		this._autoReconnect = autoReconnect;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnectInterval(autoReconnectInterval: number) {
+		this._reconnectDelay = autoReconnectInterval;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnectAttempts(autoReconnectAttempts: number) {
+		this._reconnectAttempts = autoReconnectAttempts;
+	}
+
+	/**
+	 * 
+	 */
 	public connect(): void {
 		this.socketStatus |= SocketState.connectionAttempt;	// toggles triedConnection on
 		this.socketStatus &= ~SocketState.lostConnection;	// toggles triedConnection on

@@ -305,6 +305,7 @@ export namespace CasparCGProtocols {
  * CasparCG Interface
  */
 export interface ICasparCGConnection {
+	connectionOptions: ConnectionOptions;
 	connected: boolean;
 	connectionStatus: SocketState;
 	commandQueue: Array<IAMCPCommand>;
@@ -323,9 +324,12 @@ export interface ICasparCGConnection {
  * `CasparCG` should be the only public interface to interact directly with.
  */
 export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
-	private _connected: boolean = false;
+	private _connected: boolean;
 	private _host: string;
 	private _port: number;
+	private _autoReconnect: boolean;
+	private _autoReconnectInterval: number;
+	private _autoReconnectAttempts: number;
 	private _socket: CasparCGSocket;
 	private _queuedCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 	private _activeCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
@@ -335,20 +339,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public autoConnect: boolean = undefined;
 
-	/**
-	 * Try to reconnect in case of unintentionally loss of connection, or in case of failed connection in the first place.
-	 */
-	public autoReconnect: boolean = undefined;
-
-	/**
-	 * Timeout in milliseconds between each connection attempt during reconnection.
-	 */
-	public autoReconnectInterval: number = undefined;
-
-	/**
-	 * Max number of attempts of connection during reconnection. This value resets once the reconnection is over (either in case of successfully reconnecting, changed connection properties such as `host` or `port` or by being manually cancelled). 
-	 */
-	public autoReconnectAttempts: number = undefined;
 
 	/**b
 	 * @todo: document  
@@ -603,6 +593,72 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				}
 			}
 		}
+	}
+
+	/**
+	 * Try to reconnect in case of unintentionally loss of connection, or in case of failed connection in the first place.
+	 */
+	public get autoReconnect(): boolean {
+		return this._autoReconnect;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnect(autoReconnect: boolean) {
+		this._autoReconnect = autoReconnect;
+		if (this._socket) {
+			this._socket.autoReconnect = this._autoReconnect;
+		}
+	}
+
+	/**
+	 * Timeout in milliseconds between each connection attempt during reconnection.
+	 */
+	public get autoReconnectInterval(): number {
+		return this._autoReconnectInterval;
+	}
+
+
+	/**
+	 * 
+	 */
+	public set autoReconnectInterval(autoReconnectInterval: number) {
+		this._autoReconnectInterval = autoReconnectInterval;
+		if (this._socket) {
+			this._socket.autoReconnectInterval = this._autoReconnectInterval;
+		}
+	}
+	/**
+	 * Max number of attempts of connection during reconnection. This value resets once the reconnection is over (either in case of successfully reconnecting, changed connection properties such as `host` or `port` or by being manually cancelled). 
+	 */
+	public get autoReconnectAttempts(): number {
+		return this._autoReconnectAttempts;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnectAttempts(autoReconnectAttempts: number) {
+		this._autoReconnectAttempts = autoReconnectAttempts;
+		if (this._socket) {
+			this._socket.autoReconnectAttempts = this._autoReconnectAttempts;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public get connectionOptions(): ConnectionOptions {
+		let options: ConnectionOptions = new ConnectionOptions();
+
+		for (let key in options) {
+			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
+				options[key] = this[key];
+			}
+		}
+
+		return options;
 	}
 
 	/**
