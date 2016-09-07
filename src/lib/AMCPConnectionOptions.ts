@@ -15,8 +15,9 @@ export namespace Options {
 	 * 
 	 */
 	export enum QueueMode  {
-		SALVO = 1,
-		SEQUENTIAL = 2
+		SALVO 		= 1,
+		SEQUENTIAL 	= 2,
+		SMART 		= 3
 	}
 }
 
@@ -50,7 +51,7 @@ export class ConnectionOptions implements IConnectionOptions {
 	public autoReconnect: boolean = true;
 	public autoReconnectInterval: number = 1000;
 	public autoReconnectAttempts: number = Infinity;
-	public queueMode: Options.QueueMode = Options.QueueMode.SEQUENTIAL;	// @todo: change tol SALVO once server has command UIDs
+	public queueMode: Options.QueueMode = Options.QueueMode.SEQUENTIAL;	// @todo: change to SALVO once server has command UIDs https://github.com/CasparCG/Server/issues/475
 	public debug: boolean = false;
 	public onLog: IStringCallback = undefined;
 	public onConnectionStatus: ISocketStatusCallback = undefined;

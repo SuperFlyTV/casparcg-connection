@@ -1,4 +1,5 @@
 import * as net from "net";
+import * as _ from "highland";
 import {EventEmitter} from "hap";
 import {IConnectionOptions, ConnectionOptions} from "./AMCPConnectionOptions";
 // Command NS
@@ -57,6 +58,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _reconnectInterval: NodeJS.Timer;
 	private _socketStatus: SocketState = SocketState.unconfigured;
 
+	private _mem: string = "";
+
 	/**
 	 * 
 	 */
@@ -68,13 +71,13 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		this._autoReconnect = autoReconnect;
 		this._reconnectAttempts = autoReconnectAttempts;
 		this._client = new net.Socket();
-		this._client.setEncoding("utf-8");
 		this._client.on("lookup", () => this._onLookup());
 		this._client.on("connect", () => this._onConnected());
-		this._client.on("data", (data: Buffer) => this._onData(data));
 		this._client.on("error", (error: Error) => this._onError(error));
 		this._client.on("drain", () => this._onDrain());
 		this._client.on("close", (hadError: boolean) => this._onClose(hadError));
+
+		_(this._client).splitBy(/(?=\r\n)/).each((i) => this._parseResponseGroups(i));
 		this.socketStatus = SocketState.configured;
 	}
 
@@ -256,17 +259,26 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	/**
 	 * 
 	 */
-	private _onData(data: Buffer) {
-		let raw: string = data.toString();
-
-		console.log("RAW", raw);
-		
-
-		raw.split(/(?:^|\r\n)(?=[1-4]{1}[0-9]{2})|\r\n$/).forEach((i) => {
-			if (i.length > 0) {
-				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(i));
+	private _parseResponseGroups(i: string): void {
+		i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
+		if (i.slice(0, 3) === "200") {
+			this._mem = i;
+		} else if (this._mem.slice(0, 3) === "200") {
+			if (i !== "\r\n") {
+				this._mem += "\r\n" + i;
+			} else {
+				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._mem));
+				this._mem = "";
 			}
-		});
+		} else if (i.slice(0, 3) === "201") {
+			this._mem = i;
+		} else if (this._mem.slice(0, 3) === "201") {
+			this._mem += "\r\n" + i;
+			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._mem));
+			this._mem = "";
+		} else {
+			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(i));
+		}
 	}
 
 	/**
