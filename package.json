@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "typings install",
     "prepublish": "npm run cleanbuild && npm run doc",
-    "postversion": "npm run doc",
+    "postversion": "npm run test && npm run doc",
     "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
     "gulp": "gulp",
     "build": "gulp build",
