@@ -1,5 +1,7 @@
 import {EventEmitter} from "hap";
-import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
+import {CasparCGSocket, SocketState, AMCP as AMCPNS} from "./lib/CasparCGSocket";
+// AMCPNS
+import CasparCGSocketResponse = AMCPNS.CasparCGSocketResponse;
 import {AMCP} from "./lib/AMCP";
 import {Enum} from "./lib/ServerStateEnum";
 import {IConnectionOptions, ConnectionOptions, Options as OptionsNS} from "./lib/AMCPConnectionOptions";
@@ -808,8 +810,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * 
 	 */
-	private _handleSocketResponse(responseString: string): void {
-		let code: number = parseInt(responseString.substr(0, 3), 10);
+	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
 
 		/*100 [action] - Information about an event.
 		101 [action] - Information about an event. A line of data is being returned.
@@ -830,17 +831,17 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		// valid?
 
 		// fail?
-		if (code >= 400 && code <= 599) {
-			currentCommand.response.raw = responseString;
-			currentCommand.response.code = code;
+		if (socketResponse.statusCode >= 400 && socketResponse.statusCode <= 599) {
+			currentCommand.response.raw = socketResponse.responseString;
+			currentCommand.response.code = socketResponse.statusCode;
 			currentCommand.status =  IAMCPStatus.Failed;
 		}
 		// success?
-		if (code > 0 && code < 400) {
+		if (socketResponse.statusCode > 0 && socketResponse.statusCode < 400) {
 			// valid success???
 
-			currentCommand.response.raw = responseString;
-			currentCommand.response.code = code;
+			currentCommand.response.raw = socketResponse.responseString;
+			currentCommand.response.code = socketResponse.statusCode;
 			currentCommand.status =  IAMCPStatus.Suceeded;
 		}
 

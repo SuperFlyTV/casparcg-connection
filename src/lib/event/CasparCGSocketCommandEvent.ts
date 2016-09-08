@@ -1,6 +1,9 @@
 import {Event as BaseEventNS} from "./BaseEvent";
 import {Command as CommandNS} from "../AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
+import {AMCP as AMCPNS} from "../CasparCGSocket";
+// AMCPNS
+import CasparCGSocketResponse = AMCPNS.CasparCGSocketResponse;
 
 export namespace Event {
 
@@ -34,14 +37,14 @@ export namespace Event {
 		/**
 		 * 
 		 */
-		constructor(public response: string) {
+		constructor(public response: CasparCGSocketResponse) {
 			super({response});
 		}
 
 		/**
 		 * 
 		 */
-		valueOf(): string {
+		valueOf(): CasparCGSocketResponse {
 			return this.response;
 		}
 
