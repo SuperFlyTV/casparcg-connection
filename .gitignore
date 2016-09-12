@@ -1,7 +1,7 @@
 .git/
 .vscode/
 node_modules/
-typings/
-js/
-tmp/
+/typings
+/js
+/tmp
 wallaby.js

@@ -6,7 +6,7 @@ export namespace Event {
 	/**
 	 * 
 	 */
-	export class CasparCGSocketStausEvent extends BaseEventNS.BaseEvent {
+	export class CasparCGSocketStatusEvent extends BaseEventNS.BaseEvent {
 
 		/**
 		 * 

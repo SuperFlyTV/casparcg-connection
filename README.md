@@ -21,10 +21,10 @@ CasparCG is an open source graphics- and video server for broadcast and streamin
 
 ##Example
 ```javascript
-const {CasparCG} = require('casparcg-connection');
+const {CasparCG} = require("casparcg-connection");
 
 var connection = new CasparCG();
-connection.play(1, 1, 'amb');
+connection.play(1, 1, "amb");
 ```
 
 ##Documentation

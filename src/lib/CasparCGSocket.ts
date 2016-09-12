@@ -1,4 +1,5 @@
 import * as net from "net";
+import * as _ from "highland";
 import {EventEmitter} from "hap";
 import {IConnectionOptions, ConnectionOptions} from "./AMCPConnectionOptions";
 // Command NS
@@ -8,7 +9,7 @@ import IAMCPResponse = CommandNS.IAMCPResponse;
 import AMCPResponse = CommandNS.AMCPResponse;
 import IAMCPStatus = CommandNS.IAMCPStatus;
 // Event NS
-import {CasparCGSocketStausEvent, CasparCGSocketCommandEvent} from "./event/Events";
+import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent} from "./event/Events";
 // Callback NSIAMCPResponse
 import {Callback as CallbackNS} from "./global/Callback";
 import IResponseCallback = CallbackNS.IResponseCallback;
@@ -56,8 +57,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _reconnectAttempt: number = 0;
 	private _reconnectInterval: NodeJS.Timer;
 	private _socketStatus: SocketState = SocketState.unconfigured;
-	private _currentCommand: IAMCPCommand;
 
+	private _mem: string = "";
 
 	/**
 	 * 
@@ -70,14 +71,35 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		this._autoReconnect = autoReconnect;
 		this._reconnectAttempts = autoReconnectAttempts;
 		this._client = new net.Socket();
-		this._client.setEncoding("utf-8");
 		this._client.on("lookup", () => this._onLookup());
 		this._client.on("connect", () => this._onConnected());
-		this._client.on("data", (data: Buffer) => this._onData(data));
 		this._client.on("error", (error: Error) => this._onError(error));
 		this._client.on("drain", () => this._onDrain());
 		this._client.on("close", (hadError: boolean) => this._onClose(hadError));
+
+		_(this._client)["splitBy"](/(?=\r\n)/).each((i) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
 		this.socketStatus = SocketState.configured;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnect(autoReconnect: boolean) {
+		this._autoReconnect = autoReconnect;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnectInterval(autoReconnectInterval: number) {
+		this._reconnectDelay = autoReconnectInterval;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnectAttempts(autoReconnectAttempts: number) {
+		this._reconnectAttempts = autoReconnectAttempts;
 	}
 
 	/**
@@ -175,7 +197,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	public set socketStatus(statusMask: SocketState){
 		if (this._socketStatus !== statusMask) {
 			this._socketStatus = statusMask;
-			this.fire(CasparCGSocketStausEvent.STATUS, new CasparCGSocketStausEvent(this._socketStatus));
+			this.fire(CasparCGSocketStatusEvent.STATUS, new CasparCGSocketStatusEvent(this._socketStatus));
 		}
 	}
 
@@ -205,7 +227,6 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 * 
 	 */
 	public executeCommand(command: IAMCPCommand): IAMCPCommand {
-		this._currentCommand = command;
 		let commandString: string = command.constructor["commandString"] + (command.address ? " " + command.address : "");
 		for (let i in command.payload) {
 			let payload: Payload = command.payload[i];
@@ -238,48 +259,26 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	/**
 	 * 
 	 */
-	private _onData(data: Buffer) {
-		let responseString: string = data.toString();
-		let code: number = parseInt(responseString.substr(0, 3), 10);
-
-		if (!(this._currentCommand.response instanceof AMCPResponse)) {
-			this._currentCommand.response = new AMCPResponse();
+	private _parseResponseGroups(i: string): void {
+		i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
+		if (i.slice(0, 3) === "200") {
+			this._mem = i;
+		} else if (this._mem.slice(0, 3) === "200") {
+			if (i !== "\r\n") {
+				this._mem += "\r\n" + i;
+			} else {
+				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._mem));
+				this._mem = "";
+			}
+		} else if (i.slice(0, 3) === "201") {
+			this._mem = i;
+		} else if (this._mem.slice(0, 3) === "201") {
+			this._mem += "\r\n" + i;
+			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._mem));
+			this._mem = "";
+		} else {
+			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(i));
 		}
-
-		// valid?
-
-
-
-		/*	100 [action] - Information about an event.
-			101 [action] - Information about an event. A line of data is being returned.
-			200 [command] OK	- The command has been executed and several lines of data (seperated by \r\n) are being returned (terminated with an additional \r\n)
-			201 [command] OK	- The command has been executed and data (terminated by \r\n) is being returned.
-			202 [command] OK	- The command has been executed.
-			400 ERROR	- Command not understood
-			401 [command] ERROR	- Illegal video_channel
-			402 [command] ERROR	- Parameter missing
-			403 [command] ERROR	- Illegal parameter
-			404 [command] ERROR	- Media file not found*/
-
-		// fail?
-		if (code >= 400 && code <= 599) {
-			this._currentCommand.response.raw = responseString;
-			this._currentCommand.response.code = code;
-			this._currentCommand.status =  IAMCPStatus.Failed;
-		}
-		// success?
-		if (code > 0 && code < 400) {
-			// valid success???
-
-
-			// ???????????
-
-			this._currentCommand.response.raw = responseString;
-			this._currentCommand.response.code = code;
-			this._currentCommand.status =  IAMCPStatus.Suceeded;
-		}
-
-		this.fire(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(this._currentCommand));
 	}
 
 	/**

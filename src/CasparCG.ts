@@ -2,18 +2,21 @@ import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
 import {AMCP} from "./lib/AMCP";
 import {Enum} from "./lib/ServerStateEnum";
-import {IConnectionOptions, ConnectionOptions} from "./lib/AMCPConnectionOptions";
+import {IConnectionOptions, ConnectionOptions, Options as OptionsNS} from "./lib/AMCPConnectionOptions";
+// Options NS
+import QueueMode = OptionsNS.QueueMode;
 // Command NS
 import {Command as CommandNS} from "./lib/AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
 import isIAMCPCommand = CommandNS.isIAMCPCommand;
 import IAMCPStatus = CommandNS.IAMCPStatus;
+import AMCPResponse = CommandNS.AMCPResponse;
 // Param NS
 import {Param as ParamNS} from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
 // Event NS
-import {BaseEvent, CasparCGSocketStausEvent, CasparCGSocketCommandEvent, LogEvent} from "./lib/event/Events";
+import {BaseEvent, CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
 // Callback NS
 import {Callback as CallbackNS} from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
@@ -302,9 +305,11 @@ export namespace CasparCGProtocols {
  * CasparCG Interface
  */
 export interface ICasparCGConnection {
+	connectionOptions: ConnectionOptions;
 	connected: boolean;
 	connectionStatus: SocketState;
 	commandQueue: Array<IAMCPCommand>;
+	removeQueuedCommand(id: string): boolean;
 	connect(options?: IConnectionOptions): void;
 	disconnect(): void;
 	do(command: IAMCPCommand): IAMCPCommand;
@@ -318,33 +323,27 @@ export interface ICasparCGConnection {
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object. 
  * `CasparCG` should be the only public interface to interact directly with.
  */
-export class CasparCG extends EventEmitter implements ICasparCGConnection, IConnectionOptions, CasparCGProtocols.v2_1.AMCP {
-	private _connected: boolean = false;
+export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
+	private _connected: boolean;
 	private _host: string;
 	private _port: number;
+	private _autoReconnect: boolean;
+	private _autoReconnectInterval: number;
+	private _autoReconnectAttempts: number;
 	private _socket: CasparCGSocket;
-	private _commandQueue: Array<IAMCPCommand> = new Array<IAMCPCommand>();
-	private _currentCommand: IAMCPCommand;
+	private _queuedCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
+	private _sentCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 
 	/**
 	 * Try to connect upon creation.
 	 */
 	public autoConnect: boolean = undefined;
 
-	/**
-	 * Try to reconnect in case of unintentionally loss of connection, or in case of failed connection in the first place.
-	 */
-	public autoReconnect: boolean = undefined;
 
-	/**
-	 * Timeout in milliseconds between each connection attempt during reconnection.
+	/**b
+	 * @todo: document  
 	 */
-	public autoReconnectInterval: number = undefined;
-
-	/**
-	 * Max number of attempts of connection during reconnection. This value resets once the reconnection is over (either in case of successfully reconnecting, changed connection properties such as `host` or `port` or by being manually cancelled). 
-	 */
-	public autoReconnectAttempts: number = undefined;
+	public queueMode: QueueMode = undefined;
 
 	/**
 	 * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].  
@@ -428,7 +427,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	 con.onLog = function(logMessage){ console.log(logMessage); };						
 	 
 	 // add eventlistener to the conenction event before connecting
-	 con.on(CasparCGSocketStausEvent.CONNECTED, onConnection(event));		
+	 con.on(CasparCGSocketStatusEvent.CONNECTED, onConnection(event));		
 	 
 	 con.connect();
 	 ```
@@ -462,7 +461,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	public constructor(options?: IConnectionOptions);
 	public constructor(hostOrOptions?: any, port?: number) {
 		super();
-
 		let options: ConnectionOptions = new ConnectionOptions(hostOrOptions, port);
 
 		// if both options and port specified, port overrides options
@@ -485,9 +483,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 		for (let key in options) {
 
 			// @todo: object.assign
-			if (!options.hasOwnProperty(key)) {
+			if (!options.hasOwnProperty(key)) {		// @todo: ????
 				continue;
-}
+			}
+
 			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
 				// only update new options
 				if (this[key] !== options[key]) {
@@ -515,8 +514,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
 		this.setParent(this._socket);
 		this._socket.on("error", (error) => this._onSocketError(error));
-		this.on(CasparCGSocketStausEvent.STATUS, (event) => this._onSocketStatusChange(event));
-		this.on(CasparCGSocketCommandEvent.RESPONSE, (command) => this._handleCommandResponse(command));
+		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
+		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
@@ -597,6 +596,72 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	}
 
 	/**
+	 * Try to reconnect in case of unintentionally loss of connection, or in case of failed connection in the first place.
+	 */
+	public get autoReconnect(): boolean {
+		return this._autoReconnect;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnect(autoReconnect: boolean) {
+		this._autoReconnect = autoReconnect;
+		if (this._socket) {
+			this._socket.autoReconnect = this._autoReconnect;
+		}
+	}
+
+	/**
+	 * Timeout in milliseconds between each connection attempt during reconnection.
+	 */
+	public get autoReconnectInterval(): number {
+		return this._autoReconnectInterval;
+	}
+
+
+	/**
+	 * 
+	 */
+	public set autoReconnectInterval(autoReconnectInterval: number) {
+		this._autoReconnectInterval = autoReconnectInterval;
+		if (this._socket) {
+			this._socket.autoReconnectInterval = this._autoReconnectInterval;
+		}
+	}
+	/**
+	 * Max number of attempts of connection during reconnection. This value resets once the reconnection is over (either in case of successfully reconnecting, changed connection properties such as `host` or `port` or by being manually cancelled). 
+	 */
+	public get autoReconnectAttempts(): number {
+		return this._autoReconnectAttempts;
+	}
+
+	/**
+	 * 
+	 */
+	public set autoReconnectAttempts(autoReconnectAttempts: number) {
+		this._autoReconnectAttempts = autoReconnectAttempts;
+		if (this._socket) {
+			this._socket.autoReconnectAttempts = this._autoReconnectAttempts;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public get connectionOptions(): ConnectionOptions {
+		let options: ConnectionOptions = new ConnectionOptions();
+
+		for (let key in options) {
+			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
+				options[key] = this[key];
+			}
+		}
+
+		return options;
+	}
+
+	/**
 	 * 
 	 */
 	public get connected(): boolean{
@@ -613,7 +678,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	/**
 	 * 
 	 */
-	private _onSocketStatusChange(socketStatus: CasparCGSocketStausEvent): void {
+	private _onSocketStatusChange(socketStatus: CasparCGSocketStatusEvent): void {
 		let connected = (socketStatus.valueOf() &  SocketState.connected) === SocketState.connected;
 
 		if (this.onConnectionStatus) {
@@ -622,22 +687,20 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 
 		if (connected !== this._connected) {
 			this._connected = connected;
-			this.fire(CasparCGSocketStausEvent.STATUS_CHANGED, socketStatus);
+			this.fire(CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
 
 			if (this.onConnectionChanged) {
 				this.onConnectionChanged(this._connected);
 			}
 			if (this._connected) {
-				this.fire(CasparCGSocketStausEvent.CONNECTED, socketStatus);
+				this.fire(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
 				if (this.onConnected) {
 					this.onConnected(this._connected);
 				}
-
 				this._expediteCommand();
-
 			}
 			if (!this._connected) {
-				this.fire(CasparCGSocketStausEvent.DISCONNECTED, socketStatus);
+				this.fire(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
 				if (this.onDisconnected) {
 					this.onDisconnected(this._connected);
 				}
@@ -649,7 +712,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 	 * 
 	 */
 	public get commandQueue(): Array<IAMCPCommand> {
-		return this._commandQueue;
+		return this._queuedCommands;
 	}
 
 	/**
@@ -713,57 +776,105 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, IConn
 			return null;
 		}
 
-		return this._queueCommand(command);
+		return this._addQueuedCommand(command);
 	}
 
 
 	/**
 	 * 
 	 */
-	private _queueCommand(command: IAMCPCommand): IAMCPCommand {
-		this._commandQueue.push(command);
+	private _addQueuedCommand(command: IAMCPCommand): IAMCPCommand {
+		this._queuedCommands.push(command);
 		command.status = IAMCPStatus.Queued;
-		if (!this._currentCommand) {
-			this._expediteCommand();
-		}
-
+		this._expediteCommand();
 		return command;
 	}
 
 	/**
-	 * 
+	 * @todo: document
 	 */
-	private _handleCommandResponse(command: IAMCPCommand): void {
-		// @todo: handle check if command._id matches currentCommand._id;
-
-		// param below
-		// true if valid, handle if not
-		this._expediteCommand(true);
+	public removeQueuedCommand(id: string): boolean {
+		let removed: Array<IAMCPCommand>;
+		for (let i: number = 0; i < this._queuedCommands.length; i++) {
+			let o: IAMCPCommand = this._queuedCommands[i];
+			if (o.id === id) {
+				removed = this._queuedCommands.splice(i, 1);
+				break;
+			}
+		}
+		return typeof Object.prototype.toString.call( removed ) === "[object Array]" && removed.length > 0;
 	}
 
 	/**
 	 * 
 	 */
-	private _expediteCommand(forceNext: boolean = false): void {
+	private _handleSocketResponse(responseString: string): void {
+		let code: number = parseInt(responseString.substr(0, 3), 10);
+
+		/*100 [action] - Information about an event.
+		101 [action] - Information about an event. A line of data is being returned.
+		200 [command] OK	- The command has been executed and several lines of data (seperated by \r\n) are being returned (terminated with an additional \r\n)
+		201 [command] OK	- The command has been executed and data (terminated by \r\n) is being returned.
+		202 [command] OK	- The command has been executed.
+		400 ERROR	- Command not understood
+		401 [command] ERROR	- Illegal video_channel
+		402 [command] ERROR	- Parameter missing
+		403 [command] ERROR	- Illegal parameter
+		404 [command] ERROR	- Media file not found*/
+
+		let currentCommand: IAMCPCommand = this._sentCommands.shift();
+		if (!(currentCommand.response instanceof AMCPResponse)) {
+			currentCommand.response = new AMCPResponse();
+		}
+
+		// valid?
+
+		// fail?
+		if (code >= 400 && code <= 599) {
+			currentCommand.response.raw = responseString;
+			currentCommand.response.code = code;
+			currentCommand.status =  IAMCPStatus.Failed;
+		}
+		// success?
+		if (code > 0 && code < 400) {
+			// valid success???
+
+			currentCommand.response.raw = responseString;
+			currentCommand.response.code = code;
+			currentCommand.status =  IAMCPStatus.Suceeded;
+		}
+
+		this.fire(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
+		this._expediteCommand();
+	}
+
+	/**
+	 * 
+	 */
+	private _expediteCommand(): void {
 		if (this.connected) {
 
-			if (!forceNext && this._currentCommand) {
-				// @todo add TTL for cleanup on stuck commands
-				return;
+			// @todo add TTL for cleanup on stuck commands
+
+			// salvo mode
+			if (this.queueMode === QueueMode.SALVO) {
+				if (this._queuedCommands.length > 0) {
+					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
+					this._sentCommands.push(nextCommand);
+					this._socket.executeCommand(nextCommand);
+				}
 			}
 
-			if (forceNext) {
-				delete this._currentCommand;
-			}
-
-			if (this._commandQueue.length > 0) {
-				let nextCommand: IAMCPCommand = this._commandQueue.shift();
-				this._currentCommand = nextCommand;
-				this._socket.executeCommand(nextCommand);
+			// sequential mode
+			if (this.queueMode === QueueMode.SEQUENTIAL) {
+				if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
+					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
+					this._sentCommands.push(nextCommand);
+					this._socket.executeCommand(nextCommand);
+				}
 			}
 		}
 	}
-
 
 
 				///*********************////

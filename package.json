@@ -1,12 +1,13 @@
 {
   "name": "casparcg-connection",
-  "version": "0.7.10",
+  "version": "0.8.2",
   "description": "node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
   "scripts": {
     "postinstall": "typings install",
     "prepublish": "npm run cleanbuild && npm run doc",
+    "postversion": "npm run doc",
     "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
     "gulp": "gulp",
     "build": "gulp build",
@@ -41,7 +42,8 @@
   "dependencies": {
     "hap": "https://github.com/jesperstarkar/hap.git",
     "osc-min": "^1.1.1",
-    "xml2js": "^0.4.17"
+    "xml2js": "^0.4.17",
+    "highland": "^3.0.0-beta.3"
   },
   "devDependencies": {
     "del": "^2.2.1",

@@ -2,7 +2,6 @@ import {Param as ParamNS} from "./ParamSignature";
 import ParamData = ParamNS.ParamData;
 import {Enum} from "./ServerStateEnum";
 import AbstractEnum = Enum.AbstractEnum;
-import {parseString} from "xml2js";
 
 export namespace Validation {
 	/**
