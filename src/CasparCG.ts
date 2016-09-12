@@ -1,5 +1,6 @@
 import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
+import {OSCSocket} from "./lib/OSCSocket";
 import {AMCP} from "./lib/AMCP";
 import {Enum} from "./lib/ServerStateEnum";
 import {IConnectionOptions, ConnectionOptions, Options as OptionsNS} from "./lib/AMCPConnectionOptions";
@@ -331,6 +332,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _autoReconnectInterval: number;
 	private _autoReconnectAttempts: number;
 	private _socket: CasparCGSocket;
+	private _osc: OSCSocket;
 	private _queuedCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 	private _sentCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 
@@ -516,6 +518,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this._socket.on("error", (error) => this._onSocketError(error));
 		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
+
+		// create osc socket listener
+		this._osc = new OSCSocket(6250, true);
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);

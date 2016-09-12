@@ -32,7 +32,11 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
       let adress = element.address.split('/');
 
       if (adress[2] === 'stage') {
-        this.fire(OSCSocketEvent.newStageMessage, {'adress': element.adress, 'value': element.args});
+        this.fire(OSCSocketEvent.newStageMessage, {'adress': element.address, 'value': element.args});
+      } else if (adress[2] === 'mixer') {
+        this.fire(OSCSocketEvent.newMixerMessage, {'adress': element.address, 'value': element.args});
+      } else {
+        this.fire(OSCSocketEvent.newOutputMessage, {'adress': element.address, 'value': element.args});
       }
     }
   }
