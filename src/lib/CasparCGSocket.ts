@@ -2,6 +2,7 @@ import * as net from "net";
 import * as _ from "highland";
 import {EventEmitter} from "hap";
 import {IConnectionOptions, ConnectionOptions} from "./AMCPConnectionOptions";
+import {AMCPUtil} from "./AMCP";
 // Command NS
 import {Command as CommandNS} from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
@@ -58,7 +59,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _reconnectInterval: NodeJS.Timer;
 	private _socketStatus: SocketState = SocketState.unconfigured;
 
-	private _mem: string = "";
+	private _parsedResponse: AMCPUtil.CasparCGSocketResponse;
 
 	/**
 	 * 
@@ -77,7 +78,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		this._client.on("drain", () => this._onDrain());
 		this._client.on("close", (hadError: boolean) => this._onClose(hadError));
 
-		_(this._client)["splitBy"](/(?=\r\n)/).each((i) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
+		_(this._client)["splitBy"](/(?=\r\n)/).errors((error) => this._onError(error)).each((i) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
 		this.socketStatus = SocketState.configured;
 	}
 
@@ -261,23 +262,30 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	private _parseResponseGroups(i: string): void {
 		i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
-		if (i.slice(0, 3) === "200") {
-			this._mem = i;
-		} else if (this._mem.slice(0, 3) === "200") {
+		if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
+			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i);
+			return;
+		} else if (this._parsedResponse && this._parsedResponse.statusCode === 200) {
 			if (i !== "\r\n") {
-				this._mem += "\r\n" + i;
+				this._parsedResponse.items.push(i);
+				return;
 			} else {
-				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._mem));
-				this._mem = "";
+				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
+				this._parsedResponse = null;
+				return;
 			}
-		} else if (i.slice(0, 3) === "201") {
-			this._mem = i;
-		} else if (this._mem.slice(0, 3) === "201") {
-			this._mem += "\r\n" + i;
-			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._mem));
-			this._mem = "";
+		}
+		if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 201) {
+			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i);
+			return;
+		} else if (this._parsedResponse && this._parsedResponse.statusCode === 201) {
+			this._parsedResponse.items.push(i);
+			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
+			this._parsedResponse = null;
+			return;
 		} else {
-			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(i));
+			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(new AMCPUtil.CasparCGSocketResponse(i)));
+			return;
 		}
 	}
 
