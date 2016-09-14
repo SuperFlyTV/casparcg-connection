@@ -566,7 +566,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				let shouldReconnect = (this.connected ||  ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
 				this._createNewSocket();
 				if (shouldReconnect) {
-					//this.connect();
+					this.connect();
 				}
 			}
 		}
@@ -591,7 +591,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				let shouldReconnect = (this.connected ||  ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
 				this._createNewSocket();
 				if (shouldReconnect) {
-				//	this.connect();
+					this.connect();
 				}
 			}
 		}
@@ -811,10 +811,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
-
-
-		console.log("RESPONSE");
-		
 
 		/*100 [action] - Information about an event.
 		101 [action] - Information about an event. A line of data is being returned.
