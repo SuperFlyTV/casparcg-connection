@@ -261,25 +261,31 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 * 
 	 */
 	private _parseResponseGroups(i: string): void {
-
 		i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
 		if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
 			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i);
+			return;
 		} else if (this._parsedResponse && this._parsedResponse.statusCode === 200) {
 			if (i !== "\r\n") {
 				this._parsedResponse.items.push(i);
+				return;
 			} else {
 				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
 				this._parsedResponse = null;
+				return;
 			}
-		} if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 201) {
+		}
+		if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 201) {
 			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i);
+			return;
 		} else if (this._parsedResponse && this._parsedResponse.statusCode === 201) {
 			this._parsedResponse.items.push(i);
 			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
 			this._parsedResponse = null;
+			return;
 		} else {
 			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(new AMCPUtil.CasparCGSocketResponse(i)));
+			return;
 		}
 	}
 
