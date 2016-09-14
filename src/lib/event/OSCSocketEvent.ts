@@ -4,12 +4,13 @@ export namespace Event {
 
   export class OSCSocketEvent extends BaseEventNS.BaseEvent {
 
-    constructor(public adress: string, public value: Object) {
-      super({adress: adress, value: value})
+    constructor(address: string, values: Object) {
+      super({address: address, value: values})
     }
 
     static newOutputMessage = 'oscsocketeventnewoutputmessage';
     static newStageMessage = 'oscsocketeventnewstagemessage';
     static newMixerMessage = 'oscsocketeventnewmixermessage';
+    static newDiagMessage = 'oscsocketeventnewdiagmessage';
   }
 }

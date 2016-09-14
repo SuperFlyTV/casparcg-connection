@@ -5,3 +5,4 @@ node_modules/
 /js
 /tmp
 wallaby.js
+npm-debug.log

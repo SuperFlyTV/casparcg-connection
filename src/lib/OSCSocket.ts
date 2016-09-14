@@ -11,17 +11,17 @@ export interface IOscSocket {
 }
 
 export class OSCSocket extends EventEmitter implements IOscSocket {
-  private _socket = udp.createSocket('udp4', this._onReceivedCallback);
+  private _socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
 
-  public listening = false;
-  public port = 6250;
+  private _listening = false;
+  private _port = 6250;
 
   public constructor(port: number, autolisten: boolean) {
     super();
-    this.port = port;
+    this._port = port;
     if (autolisten) {
-      this._socket.bind(this.port);
-      this.listening = true;
+      this._socket.bind(this._port);
+      this._listening = true;
     }
   }
 
@@ -31,13 +31,37 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
     for (let element of bundle.elements) {
       let adress = element.address.split('/');
 
-      if (adress[2] === 'stage') {
+      if (adress[3] === 'stage') {
         this.fire(OSCSocketEvent.newStageMessage, new OSCSocketEvent(element.address, element.args));
-      } else if (adress[2] === 'mixer') {
+      } else if (adress[3] === 'mixer') {
         this.fire(OSCSocketEvent.newMixerMessage, new OSCSocketEvent(element.address, element.args));
+      } else if (adress[1] === 'diag') {
+        this.fire(OSCSocketEvent.newDiagMessage, new OSCSocketEvent(element.address, element.args));
       } else {
         this.fire(OSCSocketEvent.newOutputMessage, new OSCSocketEvent(element.address, element.args));
       }
     }
+  }
+
+  public set port(newPort: number) {
+    this._port = newPort;
+  }
+
+  public get port() {
+    return this._port;
+  }
+
+  public get listening() {
+    return this._listening;
+  }
+
+  public connect()
+  public connect(port?: number) {
+    if (port) this._port = port;
+    this._socket.bind(this._port);
+  }
+
+  public close() {
+    this._socket.close();
   }
 }
