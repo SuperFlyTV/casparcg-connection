@@ -104,6 +104,8 @@ export namespace Command {
 		populate(cmdVo: IAMCPCommandVO, id: string): void;
 		protocol: Array<IParamSignature>;
 		protocolLogic: Array<IProtocolLogic>;
+		resolve?: any;
+		reject?: any;
 		onStatusChanged: ICommandStatusCallback;
 	}
 
