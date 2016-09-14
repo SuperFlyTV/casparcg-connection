@@ -219,7 +219,7 @@ export namespace Validation {
 				if (arrayCast.indexOf(keywordCopy) > -1) {
 					return this._keyword;
 				}
-			}else if (typeof data === "object") {
+			}else if (typeof data === "object" && data !== null) {
 				let objectCast = data;
 				if (!this._caseSensitive) {
 					for (let key in objectCast) {
@@ -269,7 +269,7 @@ export namespace Validation {
 				if ((index = arrayCast.indexOf(this._keyword.toLowerCase())) > -1) {
 					data = parseInt(arrayCast[index + 1], 10);
 				}
-			}else if (typeof data === "object") {
+			}else if (typeof data === "object" && data !== null) {
 				let objectCast = data;
 				if (objectCast.hasOwnProperty(this._keyword)) {
 					(data = objectCast[this._keyword]) as number;
@@ -464,7 +464,7 @@ export namespace Validation {
 			let stringCast = data.toString();
 
 			// data is object: serialize
-			if (typeof data === "object") {
+			if (typeof data === "object" && data !== null) {
 				stringCast = JSON.stringify(data);
 			}
 
