@@ -1,8 +1,8 @@
 import {EventEmitter} from "hap";
-import {CasparCGSocket, SocketState, AMCP as AMCPNS} from "./lib/CasparCGSocket";
-// AMCPNS
-import CasparCGSocketResponse = AMCPNS.CasparCGSocketResponse;
-import {AMCP} from "./lib/AMCP";
+import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
+import {AMCP, AMCPUtil as AMCPUtilNS} from "./lib/AMCP";
+// AMCPUtilNS
+import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
 import {Enum} from "./lib/ServerStateEnum";
 import {IConnectionOptions, ConnectionOptions, Options as OptionsNS} from "./lib/AMCPConnectionOptions";
 // Options NS
@@ -566,7 +566,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				let shouldReconnect = (this.connected ||  ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
 				this._createNewSocket();
 				if (shouldReconnect) {
-					this.connect();
+					//this.connect();
 				}
 			}
 		}
@@ -591,7 +591,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				let shouldReconnect = (this.connected ||  ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
 				this._createNewSocket();
 				if (shouldReconnect) {
-					this.connect();
+				//	this.connect();
 				}
 			}
 		}
@@ -811,6 +811,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
+
+
+		console.log("RESPONSE");
+		
 
 		/*100 [action] - Information about an event.
 		101 [action] - Information about an event. A line of data is being returned.
