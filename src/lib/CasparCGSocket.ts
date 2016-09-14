@@ -2,6 +2,7 @@ import * as net from "net";
 import * as _ from "highland";
 import {EventEmitter} from "hap";
 import {IConnectionOptions, ConnectionOptions} from "./AMCPConnectionOptions";
+import {AMCPUtil} from "./AMCP";
 // Command NS
 import {Command as CommandNS} from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
@@ -46,41 +47,6 @@ export enum SocketState {
 /**
  * 
  */
-export namespace AMCP {
-	/**
-	 * 
-	 */
-	export class CasparCGSocketResponse {
-		public statusCode: number;
-		public responseString: string;
-		public items: Array<string> = new Array<string>();
-
-		/**
-		 * 
-		 */
-		constructor (responseString: string) {
-			this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString);
-			this.responseString = responseString;
-		}
-
-		/**
-		 * 
-		 */
-		static evaluateStatusCode(responseString: string): number {
-			let code: number = parseInt(responseString.substr(0, 3), 10);
-
-			if (code !== NaN) {
-				return code;
-			}
-
-			return null;
-		}
-	}
-}
-
-/**
- * 
- */
 export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _client: net.Socket;
 
@@ -93,7 +59,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _reconnectInterval: NodeJS.Timer;
 	private _socketStatus: SocketState = SocketState.unconfigured;
 
-	private _parsedResponse: AMCP.CasparCGSocketResponse;
+	private _parsedResponse: AMCPUtil.CasparCGSocketResponse;
 
 	/**
 	 * 
@@ -296,8 +262,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	private _parseResponseGroups(i: string): void {
 		i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
-		if (AMCP.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
-			this._parsedResponse = new AMCP.CasparCGSocketResponse(i);
+		if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
+			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i);
 		} else if (this._parsedResponse && this._parsedResponse.statusCode === 200) {
 			if (i !== "\r\n") {
 				this._parsedResponse.items.push(i);
@@ -305,14 +271,14 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
 				this._parsedResponse = null;
 			}
-		} if (AMCP.CasparCGSocketResponse.evaluateStatusCode(i) === 201) {
-			this._parsedResponse = new AMCP.CasparCGSocketResponse(i);
+		} if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 201) {
+			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i);
 		} else if (this._parsedResponse && this._parsedResponse.statusCode === 201) {
 			this._parsedResponse.items.push(i);
 			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
 			this._parsedResponse = null;
 		} else {
-			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(new AMCP.CasparCGSocketResponse(i)));
+			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(new AMCPUtil.CasparCGSocketResponse(i)));
 		}
 	}
 

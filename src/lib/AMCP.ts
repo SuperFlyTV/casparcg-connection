@@ -58,6 +58,36 @@ export namespace AMCPUtil {
 		command.populate(cmd, id);
 		return command;
 	}
+
+	/**
+	 * 
+	 */
+	export class CasparCGSocketResponse {
+		public statusCode: number;
+		public responseString: string;
+		public items: Array<string> = new Array<string>();
+
+		/**
+		 * 
+		 */
+		constructor (responseString: string) {
+			this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString);
+			this.responseString = responseString;
+		}
+
+		/**
+		 * 
+		 */
+		static evaluateStatusCode(responseString: string): number {
+			let code: number = parseInt(responseString.substr(0, 3), 10);
+
+			if (code !== NaN) {
+				return code;
+			}
+
+			return null;
+		}
+	}
 }
 
 /**
