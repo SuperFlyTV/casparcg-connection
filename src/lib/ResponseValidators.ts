@@ -23,7 +23,7 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
-			return false;
+			return null;
 		}
 	}
 

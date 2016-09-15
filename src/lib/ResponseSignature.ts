@@ -1,5 +1,10 @@
 import {Response as ResponseValidatorNS} from "./ResponseValidators";
+import IResponseValidator = ResponseValidatorNS.IResponseValidator;
 import StatusValidator = ResponseValidatorNS.StatusValidator;
+
+
+import {Response as ResponseParserNS} from "./ResponseParsers";
+import IResponseParser = ResponseParserNS.IResponseParser;
 
 /**
  * 
@@ -14,35 +19,7 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		constructor(public code: number = 202, public validator: ResponseValidator = StatusValidator, public parser: ResponseParser = null) {
-
-		}
-	}
-
-	/**
-	 * 
-	 */
-	export class ResponseValidator {
-
-
-		/**
-		 * 
-		 */
-		constructor() {
-
-		}
-	}
-
-	/**
-	 * 
-	 */
-	export class ResponseParser {
-
-
-		/**
-		 * 
-		 */
-		constructor() {
+		constructor(public code: number = 202, public validator: any  = StatusValidator, public parser: any = null) {
 
 		}
 	}

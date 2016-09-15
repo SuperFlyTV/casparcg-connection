@@ -140,7 +140,7 @@ export namespace Command {
 	export abstract class AbstractCommand implements IAMCPCommand {
 		response: IAMCPResponse = new AMCPResponse();
 		paramProtocol: Array<IParamSignature>;
-		responseProtocol: ResponseSignature;
+		responseProtocol: ResponseSignature = new ResponseSignature();
 		onStatusChanged: ICommandStatusCallback;
 		private _status: IAMCPStatus = IAMCPStatus.New;
 		protected _channel: number;
@@ -299,20 +299,22 @@ export namespace Command {
 				return false;
 			}
 			// data is valid
-			let validator: IResponseValidator = Object.create(this.responseProtocol.validator["prototype"]);
 			let validData: Object;
-			if ((validData = validator.resolve(response)) === false) {
-				return false;
+			if (this.responseProtocol.validator) { // @todo: typechecking ("class that implements....")
+				let validator: IResponseValidator = Object.create(this.responseProtocol.validator["prototype"]);
+				if ((validData = validator.resolve(response)) === false) {
+					return false;
+				}
 			}
 
 			// data gets parsed
-			let parser: IResponseParser = Object.create(this.responseProtocol.parser["prototype"]);
-			let parsedData: Object;
-
-			if ((parsedData = parser.parse(validData)) === false) {
-				return false;
+			let parsedData: Object = null;
+			if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
+				let parser: IResponseParser = Object.create(this.responseProtocol.parser["prototype"]);
+				if ((parsedData = parser.parse(validData)) === false) {
+					return false;
+				}
 			}
-
 			this.response.raw = response.responseString;
 			this.response.code = response.statusCode;
 			this.response.data = parsedData;

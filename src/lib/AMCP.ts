@@ -296,7 +296,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 * @todo: 201 response code, parsing???????
 	 */
 	export class CGInvokeCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -304,11 +304,13 @@ export namespace AMCP {
 			new ParamSignature(required, "flashLayer", "INVOKE", new PositiveNumberValidatorBetween(0)),
 			new ParamSignature(required, "method", null, new StringValidator())
 		);
+		responseProtocol = new ResponseSignature(201);
 	}
 }
 
 /**
  * IMixer
+ * @todo: switch 201/202 based on mode
  */
 export namespace AMCP {
 	/**
@@ -986,6 +988,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(required, "fileName", null, new DataNameValidator())
 		);
+		reponseProtocol = new ResponseSignature(201, DataValidator, DataParser);
 	}
 
 	/**
@@ -993,6 +996,7 @@ export namespace AMCP {
 	 */
 	export class DataListCommand extends AbstractCommand {
 		static commandString = "DATA LIST";
+		reponseProtocol = new ResponseSignature(200, ListValidator, DataListparser);
 	}
 
 	/**
@@ -1015,6 +1019,7 @@ export namespace AMCP {
 	 */
 	export class ThumbnailListCommand extends AbstractCommand {
 		static commandString = "THUMBNAIL LIST";
+		reponseProtocol = new ResponseSignature(200, ListValidator, PathParser);
 	}
 
 	/**
@@ -1025,6 +1030,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(required, "fileName", null, new ClipNameValidator())
 		);
+		reponseProtocol = new ResponseSignature(201, Base64validator, ThumbnailParser);
 	}
 
 	/**
@@ -1057,6 +1063,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(required, "fileName", null, new ClipNameValidator())
 		);
+		reponseProtocol = new ResponseSignature(200, ListValidator, CinfParser);
 	}
 
 	/**
@@ -1064,6 +1071,7 @@ export namespace AMCP {
 	 */
 	export class ClsCommand extends AbstractCommand {
 		static commandString = "CLS";
+		reponseProtocol = new ResponseSignature(200, ListValidator, PathParser);
 	}
 
 	/**
@@ -1071,6 +1079,7 @@ export namespace AMCP {
 	 */
 	export class FlsCommand extends AbstractCommand {
 		static commandString = "FLS";
+		reponseProtocol = new ResponseSignature(200, ListValidator, PathParser);
 	}
 
 	/**
@@ -1078,6 +1087,7 @@ export namespace AMCP {
 	 */
 	export class TlsCommand extends AbstractCommand {
 		static commandString = "TLS";
+		reponseProtocol = new ResponseSignature(200, ListValidator, PathParser);
 	}
 
 	/**
@@ -1088,6 +1098,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(optional, "component", null, new EnumValidator(Enum.Version))
 		);
+		reponseProtocol = new ResponseSignature(200, SomeThingValidator, Versionparser);
 	}
 
 	/**
@@ -1095,7 +1106,7 @@ export namespace AMCP {
 	 */
 	export class InfoCommand extends AbstractOrChannelOrLayerCommand {
 		static commandString = "INFO";
-		responseProtocol = new ResponseSignature(200, ListValidator, ChannelParser);
+		responseProtocol = new ResponseSignature(201, ListValidator, ChannelParser);
 	}
 
 	/**
@@ -1106,6 +1117,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(required, "template", null, new TemplateNameValidator())
 		);
+		reponseProtocol = new ResponseSignature(201, XMLValidator, InfoTemplateParser);
 	}
 
 	/**
@@ -1113,7 +1125,7 @@ export namespace AMCP {
 	 */
 	export class InfoConfigCommand extends AbstractCommand {
 		static commandString = "INFO CONFIG";
-		responseProtocol = new ResponseSignature(201, XMLValidator, ConfigParser);
+		responseProtocol = new ResponseSignature(201, XMLValidator, InfoConfigParser);
 	}
 
 	/**
@@ -1121,6 +1133,7 @@ export namespace AMCP {
 	 */
 	export class InfoPathsCommand extends AbstractCommand {
 		static commandString = "INFO PATHS";
+		reponseProtocol = new ResponseSignature(201, XMLValidator, InfoPathsParser);
 	}
 
 	/**
@@ -1128,6 +1141,7 @@ export namespace AMCP {
 	 */
 	export class InfoSystemCommand extends AbstractCommand {
 		static commandString = "INFO SYSTEM";
+		reponseProtocol = new ResponseSignature(201, XMLValidator, InfoSystemParser);
 	}
 
 	/**
@@ -1135,6 +1149,7 @@ export namespace AMCP {
 	 */
 	export class InfoServerCommand extends AbstractCommand {
 		static commandString = "INFO SERVER";
+		reponseProtocol = new ResponseSignature(201, XMLValidator, InfoServerParser);
 	}
 
 	/**
@@ -1142,6 +1157,7 @@ export namespace AMCP {
 	 */
 	export class InfoQueuesCommand extends AbstractCommand {
 		static commandString = "INFO QUEUES";
+		reponseProtocol = new ResponseSignature(201, XMLValidator, InfoQueuesParser);
 	}
 
 	/**
@@ -1149,6 +1165,7 @@ export namespace AMCP {
 	 */
 	export class InfoThreadsCommand extends AbstractCommand {
 		static commandString = "INFO THREADS";
+		reponseProtocol = new ResponseSignature(200, ListValidator, InfoThreadsParser);
 	}
 
 	/**
@@ -1159,6 +1176,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(required, "delay", null, new KeywordValidator("DELAY"))
 		);
+		reponseProtocol = new ResponseSignature(201, XMLValidator, InfoDelayParser);
 
 		/**
 		 * 
@@ -1170,7 +1188,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 * @todo: response validator/parser
 	 */
 	export class CGInfoCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -1179,6 +1197,7 @@ export namespace AMCP {
 			new ParamSignature(required, "info", null, new KeywordValidator("INFO")),
 			new ParamSignature(optional, "flashLayer", null, new PositiveNumberValidatorBetween(0))
 		);
+		reponseProtocol = new ResponseSignature(201);
 
 		/**
 		 * 
@@ -1194,6 +1213,7 @@ export namespace AMCP {
 	 */
 	export class GlInfoCommand extends AbstractCommand {
 		static commandString = "GL INFO";
+		reponseProtocol = new ResponseSignature(201, XMLValidator, GLParser);
 	}
 
 	/**
@@ -1228,13 +1248,15 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 * @todo: mixed mode!!!!
+	 * 202/201
 	 */
 	export class HelpCommand extends AbstractCommand {
 		static commandString = "HELP";
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(optional, "command", null, new EnumValidator(Enum.Command))
 		);
+		reponseProtocol = new ResponseSignature(200, ListValidator, HelpParser);
 	}
 
 	/**
@@ -1245,6 +1267,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(optional, "producer", null, new EnumValidator(Enum.Producer))
 		);
+		reponseProtocol = new ResponseSignature(200, ListValidator, HelpParser);
 	}
 
 	/**
@@ -1255,6 +1278,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(optional, "consumer", null, new EnumValidator(Enum.Consumer))
 		);
+		reponseProtocol = new ResponseSignature(200, ListValidator, HelpParser);
 	}
 }
 
@@ -1263,21 +1287,21 @@ export namespace AMCP {
  */
 export namespace AMCP {
 	/**
-	 * 
+	 * @todo: response
 	 */
 	export class ByeCommand extends AbstractCommand {
 		static commandString = "BYE";
 	}
 
 	/**
-	 * 
+	 * @todo: response
 	 */
 	export class KillCommand extends AbstractCommand {
 		static commandString = "KILL";
 	}
 
 	/**
-	 * 
+	 * @todo: response
 	 */
 	export class RestartCommand extends AbstractCommand {
 		static commandString = "RESTART";

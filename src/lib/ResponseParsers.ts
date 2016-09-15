@@ -40,7 +40,7 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			return {config: data, jsonData: JSON.stringify(data)};
+			return data;
 		}
 	}
 }
