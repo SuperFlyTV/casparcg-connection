@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>IAMCPResponse | casparcg-connection</title>
+	<title>IOscSocket | casparcg-connection</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,13 +57,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/command.html">Command</a>
-				</li>
-				<li>
-					<a href="command.iamcpresponse.html">IAMCPResponse</a>
+					<a href="ioscsocket.html">IOscSocket</a>
 				</li>
 			</ul>
-			<h1>Interface IAMCPResponse</h1>
+			<h1>Interface IOscSocket</h1>
 		</div>
 	</div>
 </header>
@@ -74,14 +71,14 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">IAMCPResponse</span>
+						<span class="target">IOscSocket</span>
 					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel">
 				<h3>Implemented by</h3>
 				<ul class="tsd-hierarchy">
-					<li><a href="../classes/command.amcpresponse.html" class="tsd-signature-type">AMCPResponse</a></li>
+					<li><a href="../classes/oscsocket.html" class="tsd-signature-type">OSCSocket</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -91,15 +88,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpresponse.html#code" class="tsd-kind-icon">code</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpresponse.html#data" class="tsd-kind-icon">data</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpresponse.html#raw" class="tsd-kind-icon">raw</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Methods</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="command.iamcpresponse.html#tostring" class="tsd-kind-icon">to<wbr>String</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ioscsocket.html#listening" class="tsd-kind-icon">listening</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="ioscsocket.html#port" class="tsd-kind-icon">port</a></li>
 							</ul>
 						</section>
 					</div>
@@ -108,54 +98,24 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="code" class="tsd-anchor"></a>
-					<h3>code</h3>
-					<div class="tsd-signature tsd-kind-icon">code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="listening" class="tsd-anchor"></a>
+					<h3>listening</h3>
+					<div class="tsd-signature tsd-kind-icon">listening<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/AbstractCommand.ts#L30">lib/AbstractCommand.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L9">lib/OSCSocket.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="data" class="tsd-anchor"></a>
-					<h3>data</h3>
-					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object</span></div>
+					<a name="port" class="tsd-anchor"></a>
+					<h3>port</h3>
+					<div class="tsd-signature tsd-kind-icon">port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/AbstractCommand.ts#L33">lib/AbstractCommand.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L10">lib/OSCSocket.ts:10</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="raw" class="tsd-anchor"></a>
-					<h3>raw</h3>
-					<div class="tsd-signature tsd-kind-icon">raw<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/AbstractCommand.ts#L31">lib/AbstractCommand.ts:31</a></li>
-						</ul>
-					</aside>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
-					<a name="tostring" class="tsd-anchor"></a>
-					<h3>to<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">to<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/AbstractCommand.ts#L32">lib/AbstractCommand.ts:32</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
 				</section>
 			</section>
 		</div>
@@ -165,103 +125,49 @@
 					<li class="globals  ">
 						<a href="../index.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/amcp.html">AMCP</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/amcputil.html">AMCPUtil</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/callback.html">Callback</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/casparcgprotocols.html">CasparCGProtocols</a>
-					</li>
-					<li class="current tsd-kind-module">
-						<a href="../modules/command.html">Command</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/enum.html">Enum</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/event.html">Event</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/options.html">Options</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/param.html">Param</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/protocol.html">Protocol</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="../modules/validation.html">Validation</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-module">
-						<a href="../enums/command.iamcpstatus.html" class="tsd-kind-icon">IAMCPStatus</a>
+					<li class=" tsd-kind-enum">
+						<a href="../enums/socketstate.html" class="tsd-kind-icon">Socket<wbr>State</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/command.amcpresponse.html" class="tsd-kind-icon">AMCPResponse</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/casparcg.html" class="tsd-kind-icon">CasparCG</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/command.abstractchannelcommand.html" class="tsd-kind-icon">Abstract<wbr>Channel<wbr>Command</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/casparcgsocket.html" class="tsd-kind-icon">CasparCGSocket</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/command.abstractchannelorlayercommand.html" class="tsd-kind-icon">Abstract<wbr>Channel<wbr>OrLayer<wbr>Command</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/connectionoptions.html" class="tsd-kind-icon">Connection<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/command.abstractcommand.html" class="tsd-kind-icon">Abstract<wbr>Command</a>
+					<li class=" tsd-kind-class">
+						<a href="../classes/oscsocket.html" class="tsd-kind-icon">OSCSocket</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/command.abstractlayercommand.html" class="tsd-kind-icon">Abstract<wbr>Layer<wbr>Command</a>
+					<li class=" tsd-kind-interface">
+						<a href="icasparcgconnection.html" class="tsd-kind-icon">ICasparCGConnection</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/command.abstractlayerwithcgfallbackcommand.html" class="tsd-kind-icon">Abstract<wbr>Layer<wbr>With<wbr>CgFallback<wbr>Command</a>
+					<li class=" tsd-kind-interface">
+						<a href="icasparcgsocket.html" class="tsd-kind-icon">ICasparCGSocket</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/command.abstractlayerwithfallbackcommand.html" class="tsd-kind-icon">Abstract<wbr>Layer<wbr>With<wbr>Fallback<wbr>Command</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/command.abstractorchannelorlayercommand.html" class="tsd-kind-icon">Abstract<wbr>OrChannel<wbr>OrLayer<wbr>Command</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="command.iamcpcommand.html" class="tsd-kind-icon">IAMCPCommand</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="command.iamcpcommanddata.html" class="tsd-kind-icon">IAMCPCommand<wbr>Data</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="command.iamcpcommandvo.html" class="tsd-kind-icon">IAMCPCommandVO</a>
+					<li class=" tsd-kind-interface">
+						<a href="iconnectionoptions.html" class="tsd-kind-icon">IConnection<wbr>Options</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="command.iamcpresponse.html" class="tsd-kind-icon">IAMCPResponse</a>
+					<li class="current tsd-kind-interface">
+						<a href="ioscsocket.html" class="tsd-kind-icon">IOsc<wbr>Socket</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="command.iamcpresponse.html#code" class="tsd-kind-icon">code</a>
+								<a href="ioscsocket.html#listening" class="tsd-kind-icon">listening</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="command.iamcpresponse.html#data" class="tsd-kind-icon">data</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="command.iamcpresponse.html#raw" class="tsd-kind-icon">raw</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="command.iamcpresponse.html#tostring" class="tsd-kind-icon">to<wbr>String</a>
+								<a href="ioscsocket.html#port" class="tsd-kind-icon">port</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="../modules/command.html#isiamcpcommand" class="tsd-kind-icon">isIAMCPCommand</a>
-					</li>
 				</ul>
 			</nav>
 		</div>

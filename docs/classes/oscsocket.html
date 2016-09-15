@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CasparCGSocket | casparcg-connection</title>
+	<title>OSCSocket | casparcg-connection</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -57,10 +57,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="casparcgsocket.html">CasparCGSocket</a>
+					<a href="oscsocket.html">OSCSocket</a>
 				</li>
 			</ul>
-			<h1>Class CasparCGSocket</h1>
+			<h1>Class OSCSocket</h1>
 		</div>
 	</div>
 </header>
@@ -74,7 +74,7 @@
 						<span class="tsd-signature-type">EventEmitter</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">CasparCGSocket</span>
+								<span class="target">OSCSocket</span>
 							</li>
 						</ul>
 					</li>
@@ -84,7 +84,7 @@
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
 					<li><span class="tsd-signature-type">EventEmitter</span></li>
-					<li><a href="../interfaces/icasparcgsocket.html" class="tsd-signature-type">ICasparCGSocket</a></li>
+					<li><a href="../interfaces/ioscsocket.html" class="tsd-signature-type">IOscSocket</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -94,76 +94,53 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="casparcgsocket.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="oscsocket.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_autoreconnect" class="tsd-kind-icon">_auto<wbr>Reconnect</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_client" class="tsd-kind-icon">_client</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_host" class="tsd-kind-icon">_host</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_parsedresponse" class="tsd-kind-icon">_parsed<wbr>Response</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_port" class="tsd-kind-icon">_port</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_reconnectattempt" class="tsd-kind-icon">_reconnect<wbr>Attempt</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_reconnectattempts" class="tsd-kind-icon">_reconnect<wbr>Attempts</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_reconnectdelay" class="tsd-kind-icon">_reconnect<wbr>Delay</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_reconnectinterval" class="tsd-kind-icon">_reconnect<wbr>Interval</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_socketstatus" class="tsd-kind-icon">_socket<wbr>Status</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#this" class="tsd-kind-icon">this</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="casparcgsocket.html#eventemitter" class="tsd-kind-icon">Event<wbr>Emitter</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="casparcgsocket.html#defaultmaxlisteners" class="tsd-kind-icon">default<wbr>Max<wbr>Listeners</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_listening" class="tsd-kind-icon">_listening</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_port" class="tsd-kind-icon">_port</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_socket" class="tsd-kind-icon">_socket</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#this" class="tsd-kind-icon">this</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="oscsocket.html#eventemitter" class="tsd-kind-icon">Event<wbr>Emitter</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="oscsocket.html#defaultmaxlisteners" class="tsd-kind-icon">default<wbr>Max<wbr>Listeners</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-set-signature tsd-parent-kind-class"><a href="casparcgsocket.html#autoreconnect" class="tsd-kind-icon">auto<wbr>Reconnect</a></li>
-								<li class="tsd-kind-set-signature tsd-parent-kind-class"><a href="casparcgsocket.html#autoreconnectattempts" class="tsd-kind-icon">auto<wbr>Reconnect<wbr>Attempts</a></li>
-								<li class="tsd-kind-set-signature tsd-parent-kind-class"><a href="casparcgsocket.html#autoreconnectinterval" class="tsd-kind-icon">auto<wbr>Reconnect<wbr>Interval</a></li>
-								<li class="tsd-kind-set-signature tsd-parent-kind-class"><a href="casparcgsocket.html#connected" class="tsd-kind-icon">connected</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="casparcgsocket.html#host" class="tsd-kind-icon">host</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="casparcgsocket.html#port" class="tsd-kind-icon">port</a></li>
-								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="casparcgsocket.html#socketstatus" class="tsd-kind-icon">socket<wbr>Status</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="oscsocket.html#listening" class="tsd-kind-icon">listening</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="oscsocket.html#port" class="tsd-kind-icon">port</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_autoreconnection" class="tsd-kind-icon">_auto<wbr>Reconnection</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_clearreconnectinterval" class="tsd-kind-icon">_clear<wbr>Reconnect<wbr>Interval</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_onclose" class="tsd-kind-icon">_on<wbr>Close</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_onconnected" class="tsd-kind-icon">_on<wbr>Connected</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_ondrain" class="tsd-kind-icon">_on<wbr>Drain</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_onerror" class="tsd-kind-icon">_on<wbr>Error</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_onlookup" class="tsd-kind-icon">_on<wbr>Lookup</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_parseresponsegroups" class="tsd-kind-icon">_parse<wbr>Response<wbr>Groups</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_startreconnection" class="tsd-kind-icon">_start<wbr>Reconnection</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#addchild" class="tsd-kind-icon">add<wbr>Child</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#addlistener" class="tsd-kind-icon">add<wbr>Listener</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#after" class="tsd-kind-icon">after</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#before" class="tsd-kind-icon">before</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="casparcgsocket.html#bubble" class="tsd-kind-icon">bubble</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="casparcgsocket.html#capture" class="tsd-kind-icon">capture</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="casparcgsocket.html#connect" class="tsd-kind-icon">connect</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="casparcgsocket.html#disconnect" class="tsd-kind-icon">disconnect</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="casparcgsocket.html#dispose" class="tsd-kind-icon">dispose</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="casparcgsocket.html#emit" class="tsd-kind-icon">emit</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="casparcgsocket.html#executecommand" class="tsd-kind-icon">execute<wbr>Command</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#fire" class="tsd-kind-icon">fire</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#getmaxlisteners" class="tsd-kind-icon">get<wbr>Max<wbr>Listeners</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#listenercount" class="tsd-kind-icon">listener<wbr>Count</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#listeners" class="tsd-kind-icon">listeners</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="casparcgsocket.html#log" class="tsd-kind-icon">log</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="casparcgsocket.html#on" class="tsd-kind-icon">on</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="casparcgsocket.html#once" class="tsd-kind-icon">once</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#onceafter" class="tsd-kind-icon">once<wbr>After</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#oncebefore" class="tsd-kind-icon">once<wbr>Before</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#removealllisteners" class="tsd-kind-icon">remove<wbr>All<wbr>Listeners</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="casparcgsocket.html#removelistener" class="tsd-kind-icon">remove<wbr>Listener</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#setmaxlisteners" class="tsd-kind-icon">set<wbr>Max<wbr>Listeners</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#setparent" class="tsd-kind-icon">set<wbr>Parent</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="casparcgsocket.html#listenercount-1" class="tsd-kind-icon">listener<wbr>Count</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_onreceivedcallback" class="tsd-kind-icon">_on<wbr>Received<wbr>Callback</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#addchild" class="tsd-kind-icon">add<wbr>Child</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#addlistener" class="tsd-kind-icon">add<wbr>Listener</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#after" class="tsd-kind-icon">after</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#before" class="tsd-kind-icon">before</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="oscsocket.html#bubble" class="tsd-kind-icon">bubble</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="oscsocket.html#capture" class="tsd-kind-icon">capture</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="oscsocket.html#close" class="tsd-kind-icon">close</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="oscsocket.html#connect" class="tsd-kind-icon">connect</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="oscsocket.html#emit" class="tsd-kind-icon">emit</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#fire" class="tsd-kind-icon">fire</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#getmaxlisteners" class="tsd-kind-icon">get<wbr>Max<wbr>Listeners</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#listenercount" class="tsd-kind-icon">listener<wbr>Count</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#listeners" class="tsd-kind-icon">listeners</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="oscsocket.html#on" class="tsd-kind-icon">on</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="oscsocket.html#once" class="tsd-kind-icon">once</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#onceafter" class="tsd-kind-icon">once<wbr>After</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#oncebefore" class="tsd-kind-icon">once<wbr>Before</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#removealllisteners" class="tsd-kind-icon">remove<wbr>All<wbr>Listeners</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="oscsocket.html#removelistener" class="tsd-kind-icon">remove<wbr>Listener</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#setmaxlisteners" class="tsd-kind-icon">set<wbr>Max<wbr>Listeners</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#setparent" class="tsd-kind-icon">set<wbr>Parent</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="oscsocket.html#listenercount-1" class="tsd-kind-icon">listener<wbr>Count</a></li>
 							</ul>
 						</section>
 					</div>
@@ -175,34 +152,25 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>CasparCGSocket<span class="tsd-signature-symbol">(</span>host<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, autoReconnect<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span>, autoReconnectInterval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, autoReconnectAttempts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="casparcgsocket.html" class="tsd-signature-type">CasparCGSocket</a></li>
+						<li class="tsd-signature tsd-kind-icon">new OSCSocket<span class="tsd-signature-symbol">(</span>port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, autolisten<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="oscsocket.html" class="tsd-signature-type">OSCSocket</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L62">lib/CasparCGSocket.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L17">lib/OSCSocket.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>host: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
 									<h5>port: <span class="tsd-signature-type">number</span></h5>
 								</li>
 								<li>
-									<h5>autoReconnect: <span class="tsd-signature-type">boolean</span></h5>
-								</li>
-								<li>
-									<h5>autoReconnectInterval: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>autoReconnectAttempts: <span class="tsd-signature-type">number</span></h5>
+									<h5>autolisten: <span class="tsd-signature-type">boolean</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="casparcgsocket.html" class="tsd-signature-type">CasparCGSocket</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="oscsocket.html" class="tsd-signature-type">OSCSocket</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -210,42 +178,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_autoreconnect" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _auto<wbr>Reconnect</h3>
-					<div class="tsd-signature tsd-kind-icon">_auto<wbr>Reconnect<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="_listening" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _listening</h3>
+					<div class="tsd-signature tsd-kind-icon">_listening<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L55">lib/CasparCGSocket.ts:55</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_client" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _client</h3>
-					<div class="tsd-signature tsd-kind-icon">_client<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Socket</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L51">lib/CasparCGSocket.ts:51</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_host" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _host</h3>
-					<div class="tsd-signature tsd-kind-icon">_host<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L53">lib/CasparCGSocket.ts:53</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_parsedresponse" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _parsed<wbr>Response</h3>
-					<div class="tsd-signature tsd-kind-icon">_parsed<wbr>Response<span class="tsd-signature-symbol">:</span> <a href="amcputil.casparcgsocketresponse.html" class="tsd-signature-type">CasparCGSocketResponse</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L62">lib/CasparCGSocket.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L16">lib/OSCSocket.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -255,57 +193,17 @@
 					<div class="tsd-signature tsd-kind-icon">_port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L54">lib/CasparCGSocket.ts:54</a></li>
+							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L17">lib/OSCSocket.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_reconnectattempt" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _reconnect<wbr>Attempt</h3>
-					<div class="tsd-signature tsd-kind-icon">_reconnect<wbr>Attempt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="_socket" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _socket</h3>
+					<div class="tsd-signature tsd-kind-icon">_socket<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Socket</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L58">lib/CasparCGSocket.ts:58</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_reconnectattempts" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _reconnect<wbr>Attempts</h3>
-					<div class="tsd-signature tsd-kind-icon">_reconnect<wbr>Attempts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L57">lib/CasparCGSocket.ts:57</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_reconnectdelay" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _reconnect<wbr>Delay</h3>
-					<div class="tsd-signature tsd-kind-icon">_reconnect<wbr>Delay<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L56">lib/CasparCGSocket.ts:56</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_reconnectinterval" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _reconnect<wbr>Interval</h3>
-					<div class="tsd-signature tsd-kind-icon">_reconnect<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Timer</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L59">lib/CasparCGSocket.ts:59</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="_socketstatus" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _socket<wbr>Status</h3>
-					<div class="tsd-signature tsd-kind-icon">_socket<wbr>Status<span class="tsd-signature-symbol">:</span> <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L60">lib/CasparCGSocket.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L14">lib/OSCSocket.ts:14</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -345,158 +243,49 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-set-signature tsd-parent-kind-class">
-					<a name="autoreconnect" class="tsd-anchor"></a>
-					<h3>auto<wbr>Reconnect</h3>
-					<ul class="tsd-signatures tsd-kind-set-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> autoReconnect<span class="tsd-signature-symbol">(</span>autoReconnect<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L88">lib/CasparCGSocket.ts:88</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>autoReconnect: <span class="tsd-signature-type">boolean</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-set-signature tsd-parent-kind-class">
-					<a name="autoreconnectattempts" class="tsd-anchor"></a>
-					<h3>auto<wbr>Reconnect<wbr>Attempts</h3>
-					<ul class="tsd-signatures tsd-kind-set-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> autoReconnectAttempts<span class="tsd-signature-symbol">(</span>autoReconnectAttempts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L102">lib/CasparCGSocket.ts:102</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>autoReconnectAttempts: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-set-signature tsd-parent-kind-class">
-					<a name="autoreconnectinterval" class="tsd-anchor"></a>
-					<h3>auto<wbr>Reconnect<wbr>Interval</h3>
-					<ul class="tsd-signatures tsd-kind-set-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> autoReconnectInterval<span class="tsd-signature-symbol">(</span>autoReconnectInterval<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L95">lib/CasparCGSocket.ts:95</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>autoReconnectInterval: <span class="tsd-signature-type">number</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-set-signature tsd-parent-kind-class">
-					<a name="connected" class="tsd-anchor"></a>
-					<h3>connected</h3>
-					<ul class="tsd-signatures tsd-kind-set-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> connected<span class="tsd-signature-symbol">(</span>connected<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L223">lib/CasparCGSocket.ts:223</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>connected: <span class="tsd-signature-type">boolean</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="host" class="tsd-anchor"></a>
-					<h3>host</h3>
+					<a name="listening" class="tsd-anchor"></a>
+					<h3>listening</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> host<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> listening<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L171">lib/CasparCGSocket.ts:171</a></li>
+									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L55">lib/OSCSocket.ts:55</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="port" class="tsd-anchor"></a>
-					<h3>port</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> port<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L181">lib/CasparCGSocket.ts:181</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
-					<a name="socketstatus" class="tsd-anchor"></a>
-					<h3>socket<wbr>Status</h3>
+					<a name="port" class="tsd-anchor"></a>
+					<h3>port</h3>
 					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> socketStatus<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></li>
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> socketStatus<span class="tsd-signature-symbol">(</span>statusMask<span class="tsd-signature-symbol">: </span><a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> port<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> port<span class="tsd-signature-symbol">(</span>newPort<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L191">lib/CasparCGSocket.ts:191</a></li>
+									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L51">lib/OSCSocket.ts:51</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 						</li>
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L198">lib/CasparCGSocket.ts:198</a></li>
+									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L47">lib/OSCSocket.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>statusMask: <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></h5>
+									<h5>newPort: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -507,193 +296,27 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_autoreconnection" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _auto<wbr>Reconnection</h3>
+					<a name="_onreceivedcallback" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _on<wbr>Received<wbr>Callback</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_auto<wbr>Reconnection<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">_on<wbr>Received<wbr>Callback<span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, rinfo<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L139">lib/CasparCGSocket.ts:139</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_clearreconnectinterval" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _clear<wbr>Reconnect<wbr>Interval</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_clear<wbr>Reconnect<wbr>Interval<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L159">lib/CasparCGSocket.ts:159</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_onclose" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _on<wbr>Close</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_on<wbr>Close<span class="tsd-signature-symbol">(</span>hadError<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L311">lib/CasparCGSocket.ts:311</a></li>
+									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L28">lib/OSCSocket.ts:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>hadError: <span class="tsd-signature-type">boolean</span></h5>
+									<h5>msg: <span class="tsd-signature-type">any</span></h5>
 								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_onconnected" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _on<wbr>Connected</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_on<wbr>Connected<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L255">lib/CasparCGSocket.ts:255</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_ondrain" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _on<wbr>Drain</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_on<wbr>Drain<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L303">lib/CasparCGSocket.ts:303</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>todo</dt>
-									<dd><p>:::</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_onerror" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _on<wbr>Error</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_on<wbr>Error<span class="tsd-signature-symbol">(</span>error<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L295">lib/CasparCGSocket.ts:295</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>todo</dt>
-									<dd><p>:::</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
 								<li>
-									<h5>error: <span class="tsd-signature-type">Error</span></h5>
+									<h5>rinfo: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_onlookup" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _on<wbr>Lookup</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_on<wbr>Lookup<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L248">lib/CasparCGSocket.ts:248</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>todo</dt>
-									<dd><p>:::</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_parseresponsegroups" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _parse<wbr>Response<wbr>Groups</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_parse<wbr>Response<wbr>Groups<span class="tsd-signature-symbol">(</span>i<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L263">lib/CasparCGSocket.ts:263</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>i: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
-					<a name="_startreconnection" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _start<wbr>Reconnection</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">_start<wbr>Reconnection<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L127">lib/CasparCGSocket.ts:127</a></li>
-								</ul>
-							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -858,56 +481,36 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="close" class="tsd-anchor"></a>
+					<h3>close</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">close<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L65">lib/OSCSocket.ts:65</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="connect" class="tsd-anchor"></a>
 					<h3>connect</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#connect">connect</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L109">lib/CasparCGSocket.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L59">lib/OSCSocket.ts:59</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="disconnect" class="tsd-anchor"></a>
-					<h3>disconnect</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">disconnect<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#disconnect">disconnect</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L118">lib/CasparCGSocket.ts:118</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="dispose" class="tsd-anchor"></a>
-					<h3>dispose</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">dispose<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#dispose">dispose</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L208">lib/CasparCGSocket.ts:208</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -936,30 +539,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="executecommand" class="tsd-anchor"></a>
-					<h3>execute<wbr>Command</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">execute<wbr>Command<span class="tsd-signature-symbol">(</span>command<span class="tsd-signature-symbol">: </span><a href="../interfaces/command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#executecommand">executeCommand</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L230">lib/CasparCGSocket.ts:230</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>command: <a href="../interfaces/command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -1053,30 +632,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Function</span><span class="tsd-signature-symbol">[]</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="log" class="tsd-anchor"></a>
-					<h3>log</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">log<span class="tsd-signature-symbol">(</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#log">log</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/CasparCGSocket.ts#L216">lib/CasparCGSocket.ts:216</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>args: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1335,186 +890,117 @@
 					<li class=" tsd-kind-class">
 						<a href="casparcg.html" class="tsd-kind-icon">CasparCG</a>
 					</li>
+					<li class=" tsd-kind-class">
+						<a href="casparcgsocket.html" class="tsd-kind-icon">CasparCGSocket</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="connectionoptions.html" class="tsd-kind-icon">Connection<wbr>Options</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="casparcgsocket.html" class="tsd-kind-icon">CasparCGSocket</a>
+						<a href="oscsocket.html" class="tsd-kind-icon">OSCSocket</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="casparcgsocket.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="oscsocket.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_autoreconnect" class="tsd-kind-icon">_auto<wbr>Reconnect</a>
+								<a href="oscsocket.html#_listening" class="tsd-kind-icon">_listening</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_client" class="tsd-kind-icon">_client</a>
+								<a href="oscsocket.html#_port" class="tsd-kind-icon">_port</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_host" class="tsd-kind-icon">_host</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_parsedresponse" class="tsd-kind-icon">_parsed<wbr>Response</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_port" class="tsd-kind-icon">_port</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_reconnectattempt" class="tsd-kind-icon">_reconnect<wbr>Attempt</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_reconnectattempts" class="tsd-kind-icon">_reconnect<wbr>Attempts</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_reconnectdelay" class="tsd-kind-icon">_reconnect<wbr>Delay</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_reconnectinterval" class="tsd-kind-icon">_reconnect<wbr>Interval</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_socketstatus" class="tsd-kind-icon">_socket<wbr>Status</a>
+								<a href="oscsocket.html#_socket" class="tsd-kind-icon">_socket</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#this" class="tsd-kind-icon">this</a>
+								<a href="oscsocket.html#this" class="tsd-kind-icon">this</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="casparcgsocket.html#eventemitter" class="tsd-kind-icon">Event<wbr>Emitter</a>
+								<a href="oscsocket.html#eventemitter" class="tsd-kind-icon">Event<wbr>Emitter</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="casparcgsocket.html#defaultmaxlisteners" class="tsd-kind-icon">default<wbr>Max<wbr>Listeners</a>
-							</li>
-							<li class=" tsd-kind-set-signature tsd-parent-kind-class">
-								<a href="casparcgsocket.html#autoreconnect" class="tsd-kind-icon">auto<wbr>Reconnect</a>
-							</li>
-							<li class=" tsd-kind-set-signature tsd-parent-kind-class">
-								<a href="casparcgsocket.html#autoreconnectattempts" class="tsd-kind-icon">auto<wbr>Reconnect<wbr>Attempts</a>
-							</li>
-							<li class=" tsd-kind-set-signature tsd-parent-kind-class">
-								<a href="casparcgsocket.html#autoreconnectinterval" class="tsd-kind-icon">auto<wbr>Reconnect<wbr>Interval</a>
-							</li>
-							<li class=" tsd-kind-set-signature tsd-parent-kind-class">
-								<a href="casparcgsocket.html#connected" class="tsd-kind-icon">connected</a>
+								<a href="oscsocket.html#defaultmaxlisteners" class="tsd-kind-icon">default<wbr>Max<wbr>Listeners</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="casparcgsocket.html#host" class="tsd-kind-icon">host</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="casparcgsocket.html#port" class="tsd-kind-icon">port</a>
+								<a href="oscsocket.html#listening" class="tsd-kind-icon">listening</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class">
-								<a href="casparcgsocket.html#socketstatus" class="tsd-kind-icon">socket<wbr>Status</a>
+								<a href="oscsocket.html#port" class="tsd-kind-icon">port</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_autoreconnection" class="tsd-kind-icon">_auto<wbr>Reconnection</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_clearreconnectinterval" class="tsd-kind-icon">_clear<wbr>Reconnect<wbr>Interval</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_onclose" class="tsd-kind-icon">_on<wbr>Close</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_onconnected" class="tsd-kind-icon">_on<wbr>Connected</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_ondrain" class="tsd-kind-icon">_on<wbr>Drain</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_onerror" class="tsd-kind-icon">_on<wbr>Error</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_onlookup" class="tsd-kind-icon">_on<wbr>Lookup</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_parseresponsegroups" class="tsd-kind-icon">_parse<wbr>Response<wbr>Groups</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
-								<a href="casparcgsocket.html#_startreconnection" class="tsd-kind-icon">_start<wbr>Reconnection</a>
+								<a href="oscsocket.html#_onreceivedcallback" class="tsd-kind-icon">_on<wbr>Received<wbr>Callback</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#addchild" class="tsd-kind-icon">add<wbr>Child</a>
+								<a href="oscsocket.html#addchild" class="tsd-kind-icon">add<wbr>Child</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#addlistener" class="tsd-kind-icon">add<wbr>Listener</a>
+								<a href="oscsocket.html#addlistener" class="tsd-kind-icon">add<wbr>Listener</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#after" class="tsd-kind-icon">after</a>
+								<a href="oscsocket.html#after" class="tsd-kind-icon">after</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#before" class="tsd-kind-icon">before</a>
+								<a href="oscsocket.html#before" class="tsd-kind-icon">before</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="casparcgsocket.html#bubble" class="tsd-kind-icon">bubble</a>
+								<a href="oscsocket.html#bubble" class="tsd-kind-icon">bubble</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-								<a href="casparcgsocket.html#capture" class="tsd-kind-icon">capture</a>
+								<a href="oscsocket.html#capture" class="tsd-kind-icon">capture</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="casparcgsocket.html#connect" class="tsd-kind-icon">connect</a>
+								<a href="oscsocket.html#close" class="tsd-kind-icon">close</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="casparcgsocket.html#disconnect" class="tsd-kind-icon">disconnect</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="casparcgsocket.html#dispose" class="tsd-kind-icon">dispose</a>
+								<a href="oscsocket.html#connect" class="tsd-kind-icon">connect</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-								<a href="casparcgsocket.html#emit" class="tsd-kind-icon">emit</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="casparcgsocket.html#executecommand" class="tsd-kind-icon">execute<wbr>Command</a>
+								<a href="oscsocket.html#emit" class="tsd-kind-icon">emit</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#fire" class="tsd-kind-icon">fire</a>
+								<a href="oscsocket.html#fire" class="tsd-kind-icon">fire</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#getmaxlisteners" class="tsd-kind-icon">get<wbr>Max<wbr>Listeners</a>
+								<a href="oscsocket.html#getmaxlisteners" class="tsd-kind-icon">get<wbr>Max<wbr>Listeners</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#listenercount" class="tsd-kind-icon">listener<wbr>Count</a>
+								<a href="oscsocket.html#listenercount" class="tsd-kind-icon">listener<wbr>Count</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#listeners" class="tsd-kind-icon">listeners</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="casparcgsocket.html#log" class="tsd-kind-icon">log</a>
+								<a href="oscsocket.html#listeners" class="tsd-kind-icon">listeners</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-								<a href="casparcgsocket.html#on" class="tsd-kind-icon">on</a>
+								<a href="oscsocket.html#on" class="tsd-kind-icon">on</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-								<a href="casparcgsocket.html#once" class="tsd-kind-icon">once</a>
+								<a href="oscsocket.html#once" class="tsd-kind-icon">once</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#onceafter" class="tsd-kind-icon">once<wbr>After</a>
+								<a href="oscsocket.html#onceafter" class="tsd-kind-icon">once<wbr>After</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#oncebefore" class="tsd-kind-icon">once<wbr>Before</a>
+								<a href="oscsocket.html#oncebefore" class="tsd-kind-icon">once<wbr>Before</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#removealllisteners" class="tsd-kind-icon">remove<wbr>All<wbr>Listeners</a>
+								<a href="oscsocket.html#removealllisteners" class="tsd-kind-icon">remove<wbr>All<wbr>Listeners</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-								<a href="casparcgsocket.html#removelistener" class="tsd-kind-icon">remove<wbr>Listener</a>
+								<a href="oscsocket.html#removelistener" class="tsd-kind-icon">remove<wbr>Listener</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#setmaxlisteners" class="tsd-kind-icon">set<wbr>Max<wbr>Listeners</a>
+								<a href="oscsocket.html#setmaxlisteners" class="tsd-kind-icon">set<wbr>Max<wbr>Listeners</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="casparcgsocket.html#setparent" class="tsd-kind-icon">set<wbr>Parent</a>
+								<a href="oscsocket.html#setparent" class="tsd-kind-icon">set<wbr>Parent</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
-								<a href="casparcgsocket.html#listenercount-1" class="tsd-kind-icon">listener<wbr>Count</a>
+								<a href="oscsocket.html#listenercount-1" class="tsd-kind-icon">listener<wbr>Count</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class">
-						<a href="connectionoptions.html" class="tsd-kind-icon">Connection<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-class">
-						<a href="oscsocket.html" class="tsd-kind-icon">OSCSocket</a>
-					</li>
 					<li class=" tsd-kind-interface">
 						<a href="../interfaces/icasparcgconnection.html" class="tsd-kind-icon">ICasparCGConnection</a>
 					</li>

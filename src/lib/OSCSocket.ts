@@ -28,6 +28,7 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
   private _onReceivedCallback(msg, rinfo): void {
     let bundle: any = osc.fromBuffer(msg);
 
+
     for (let element of bundle.elements) {
       let adress = element.address.split('/');
 

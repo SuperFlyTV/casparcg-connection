@@ -41,9 +41,9 @@
   ],
   "dependencies": {
     "hap": "https://github.com/jesperstarkar/hap.git",
-    "osc-min": "^1.1.1",
-    "xml2js": "^0.4.17",
-    "highland": "^3.0.0-beta.3"
+    "highland": "^3.0.0-beta.3",
+    "osc-min": "git+https://github.com/baltedewit/node-osc-min.git",
+    "xml2js": "^0.4.17"
   },
   "devDependencies": {
     "del": "^2.2.1",
