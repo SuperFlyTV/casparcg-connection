@@ -764,6 +764,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			command = commandOrString as IAMCPCommand;
 		}else if (typeof commandOrString === "string") {
 			if (AMCP.hasOwnProperty(commandOrString)) {
+
+				// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
+
+
+
 				// @todo: typechecking with fallback
 				command = Object.create(AMCP[commandOrString]["prototype"]);
 				// @todo: typechecking with fallback
@@ -814,40 +819,45 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
 
 
-		/*100 [action] - Information about an event.
+		/*
+		
+		100 [action] - Information about an event.
 		101 [action] - Information about an event. A line of data is being returned.
+		
 		200 [command] OK	- The command has been executed and several lines of data (seperated by \r\n) are being returned (terminated with an additional \r\n)
 		201 [command] OK	- The command has been executed and data (terminated by \r\n) is being returned.
 		202 [command] OK	- The command has been executed.
+		
 		400 ERROR	- Command not understood
 		401 [command] ERROR	- Illegal video_channel
 		402 [command] ERROR	- Parameter missing
 		403 [command] ERROR	- Illegal parameter
-		404 [command] ERROR	- Media file not found*/
+		404 [command] ERROR	- Media file not found
+		
+		500 FAILED	- Internal server error
+		501 [command] FAILED	- Internal server error
+		502 [command] FAILED	- Media file unreadable
+		
+		*/
 
+		// receive data & handle possible timeout first
+    		// parse incoming data & handle parsing errors (response code unknown, unexpected format)
+      			// create error object for response codes 400 to 502
+        			// reject with error object
+      			// create response object for response codes 200 to 202
+        			// resolve with response object
 
 		let currentCommand: IAMCPCommand = this._sentCommands.shift();
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
 		}
 
-		// valid?
-
-		// fail?
-		if (socketResponse.statusCode >= 400 && socketResponse.statusCode <= 599) {
-			currentCommand.response.raw = socketResponse.responseString;
-			currentCommand.response.code = socketResponse.statusCode;
-			currentCommand.status =  IAMCPStatus.Failed;
-			currentCommand.reject(currentCommand);
-		}
-		// success?
-		if (socketResponse.statusCode > 0 && socketResponse.statusCode < 400) {
-			// valid success???
-
-			currentCommand.response.raw = socketResponse.responseString;
-			currentCommand.response.code = socketResponse.statusCode;
+		if (currentCommand.validateResponse(socketResponse)) {
 			currentCommand.status =  IAMCPStatus.Suceeded;
 			currentCommand.resolve(currentCommand);
+		} else {
+			currentCommand.status =  IAMCPStatus.Failed;
+			currentCommand.reject(currentCommand);
 		}
 
 		this.fire(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
