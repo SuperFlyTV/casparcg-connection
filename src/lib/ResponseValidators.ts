@@ -1,3 +1,4 @@
+import {parseString as xmlParser} from "xml2js";
 import {AMCP, AMCPUtil as AMCPUtilNS} from "./AMCP";
 // AMCPUtilNS
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
@@ -22,8 +23,6 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
-			console.log("Status", response);
-
 			return false;
 		}
 	}
@@ -32,22 +31,40 @@ export namespace Response {
 	 * 
 	 */
 	export class XMLValidator implements IResponseValidator {
-		
+
 		/**
 		 * 
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
-			console.log("XML", response);
-			
-			return false;
+
+			let parseNumbers = function(str) {
+				if (!isNaN(str)) {
+					str = str % 1 === 0 ? parseInt(str, 10) : parseFloat(str);
+				}
+				return str;
+			};
+
+			let returnFalse;
+			let returnData;
+
+
+			xmlParser(
+				response.items[0].replace("\n", ""),
+				{async: false, trim: true, explicitArray: false, valueProcessors: [parseNumbers]},
+				(error, result) => {
+					returnFalse = error;
+					returnData = result;
+				});
+
+			return (returnFalse !== null) ? returnFalse : returnData;
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
 	export class ListValidator implements IResponseValidator {
-		
+
 		/**
 		 * 
 		 */

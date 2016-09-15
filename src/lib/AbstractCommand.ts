@@ -6,6 +6,8 @@ import {Response as ResponseNS} from "./ResponseSignature";
 import ResponseSignature = ResponseNS.ResponseSignature;
 import {Response as ResponseValidatorNS} from "./ResponseValidators";
 import IResponseValidator = ResponseValidatorNS.IResponseValidator;
+import {Response as ResponseParserNS} from "./ResponseParsers";
+import IResponseParser = ResponseParserNS.IResponseParser;
 // Param NS
 import {Param as ParamNS} from "./ParamSignature";
 import optional = ParamNS.Optional;
@@ -304,8 +306,9 @@ export namespace Command {
 			}
 
 			// data gets parsed
-			let parser: IResponseValidator = Object.create(this.responseProtocol.parser["prototype"]);
+			let parser: IResponseParser = Object.create(this.responseProtocol.parser["prototype"]);
 			let parsedData: Object;
+
 			if ((parsedData = parser.parse(validData)) === false) {
 				return false;
 			}

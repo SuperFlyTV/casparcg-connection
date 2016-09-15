@@ -16,9 +16,16 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
+			let result: Array<Object> = new Array<Object>();
+			let components: Array<string> = data.toString().split(/\s|,/);
 
-			console.log(data.toString());
-			
+			while (components.length > 0) {
+				result.push({channel: components.shift(), format: components.shift(), status: components.shift()});
+			}
+
+			if (result.length > 0) {
+				return result;
+			}
 
 			return null;
 		}
@@ -33,8 +40,7 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-
-			return null;
+			return {config: data, jsonData: JSON.stringify(data)};
 		}
 	}
 }
