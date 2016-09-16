@@ -335,7 +335,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _autoReconnectInterval: number;
 	private _autoReconnectAttempts: number;
 	private _socket: CasparCGSocket;
-	private _osc: OSCSocket = null;
+	private _oscListener: OSCSocket = null;
+	private _osc: number;
 	private _queuedCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 	private _sentCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 
@@ -483,26 +484,24 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		this._createNewSocket(options);
 
-		// create osc socket listener
-		if (options.osc) this._createOSCSocket(options);
-
 		if (this.autoConnect) {
 			this.connect();
 		}
 	}
 
-	private _createOSCSocket(options) {
-		this._osc = new OSCSocket(options.osc, true);
-		this._osc.on(OSCSocketEvent.newStageMessage, (event) => {
+	private _createOSCListener(options) {
+		this._oscListener = new OSCSocket(this.osc, this.host);
+
+		this._oscListener.on(OSCSocketEvent.newStageMessage, (event) => {
 			if (this.onStageMessage) this.onStageMessage(event.params.address, event.params.value);
 		});
-		this._osc.on(OSCSocketEvent.newMixerMessage, (event) => {
+		this._oscListener.on(OSCSocketEvent.newMixerMessage, (event) => {
 			if (this.onMixerMessage) this.onMixerMessage(event.params.address, event.params.value);
 		});
-		this._osc.on(OSCSocketEvent.newDiagMessage, (event) => {
+		this._oscListener.on(OSCSocketEvent.newDiagMessage, (event) => {
 			if (this.onDiagMessage) this.onDiagMessage(event.params.address, event.params.value);
 		});
-		this._osc.on(OSCSocketEvent.newOutputMessage, (event) => {
+		this._oscListener.on(OSCSocketEvent.newOutputMessage, (event) => {
 			if (this.onOutputMessage) this.onOutputMessage(event.params.address, event.params.value);
 		});
 	}
@@ -549,6 +548,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
 
+		console.log('create ocs?', options.osc)
+		if (this.osc) this._createOSCListener(options);
+
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
 	}
@@ -566,6 +568,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this._socket) {
 			this._socket.connect();
 		}
+		if (this.osc) {
+			this._oscListener.listen();
+		}
 	}
 
 	/**
@@ -574,6 +579,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public disconnect(): void {
 		if (this._socket) {
 			this._socket.disconnect();
+		}
+		if (this._oscListener) {
+			this._oscListener.close();
 		}
 	}
 
@@ -628,11 +636,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	}
 
 	public get osc(): number {
-		if (this._osc) return this._osc.port; // @todo
+		return this._osc; // @todo
 	}
 
 	public set osc(port: number) {
-		if (this._osc) this._osc.port = port;
+		if (this._osc !== port) {
+			this._osc = port;
+			if (this._oscListener) this._oscListener.port = port;
+		}
 	}
 
 	/**

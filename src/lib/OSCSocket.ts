@@ -8,6 +8,7 @@ import {OSCSocketEvent} from "./event/Events";
 export interface IOscSocket {
   listening: boolean;
   port: number;
+  address: string;
 }
 
 export class OSCSocket extends EventEmitter implements IOscSocket {
@@ -15,14 +16,12 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 
   private _listening = false;
   private _port = 6250;
+  private _address = '0.0.0.0';
 
-  public constructor(port: number, autolisten: boolean) {
+  public constructor(port: number, address?: string) {
     super();
     this._port = port;
-    if (autolisten) {
-      this._socket.bind(this._port);
-      this._listening = true;
-    }
+    if(address) this._address = address;
 
     this._socket.on('error', (error) => this._errorHandler(error));
   }
@@ -50,8 +49,30 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
     console.log(error);
   }
 
-  public set port(newPort: number) {
-    this._port = newPort;
+  public set address(address: string) {
+    if (this._address !== address) {
+      this._address = address;
+      if (this._listening === true) {
+        this._socket.close();
+        this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
+        this._socket.bind(this._port, this._address);
+      }
+    }
+  }
+
+  public get address() {
+    return this._address;
+  }
+
+  public set port(port: number) {
+    if (this._port !== port) {
+      this._port = port;
+      if (this._listening === true) {
+        this._socket.close();
+        this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
+        this._socket.bind(this._port, this._address);
+      }
+    }
   }
 
   public get port() {
@@ -62,13 +83,16 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
     return this._listening;
   }
 
-  public connect()
-  public connect(port?: number) {
+  public listen()
+  public listen(port?: number, address?: string) {
     if (port) this._port = port;
-    this._socket.bind(this._port);
+    if (address) this._address = address;
+    this._socket.bind(this._port, this._address);
+    this._listening = true;
   }
 
   public close() {
     this._socket.close();
+    this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
   }
 }
