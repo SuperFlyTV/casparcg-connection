@@ -96,7 +96,7 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
-			return null;
+			return response.items[0];
 		}
 	}
 
