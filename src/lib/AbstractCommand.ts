@@ -308,16 +308,15 @@ export namespace Command {
 			}
 
 			// data gets parsed
-			let parsedData: Object = null;
 			if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
 				let parser: IResponseParser = Object.create(this.responseProtocol.parser["prototype"]);
-				if ((parsedData = parser.parse(validData)) === false) {
+				if ((validData = parser.parse(validData)) === false) {
 					return false;
 				}
 			}
 			this.response.raw = response.responseString;
 			this.response.code = response.statusCode;
-			this.response.data = parsedData;
+			this.response.data = validData;
 			return true;
 		}
 

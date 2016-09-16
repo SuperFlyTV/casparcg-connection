@@ -78,4 +78,43 @@ export namespace Response {
 			return false;
 		}
 	}
+
+	/**
+	 * 
+	 */
+	export class DataValidator implements IResponseValidator {
+
+		/**
+		 * 
+		 */
+		public resolve(response: CasparCGSocketResponse): Object {
+			return null;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	export class Base64Validator implements IResponseValidator {
+
+		/**
+		 * 
+		 */
+		public resolve(response: CasparCGSocketResponse): Object {
+			return null;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	export class SomeThingValidator implements IResponseValidator {
+
+		/**
+		 * 
+		 */
+		public resolve(response: CasparCGSocketResponse): Object {
+			return null;
+		}
+	}
 }

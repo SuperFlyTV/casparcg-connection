@@ -4,9 +4,28 @@ import {Response as ResponseNS} from "./ResponseSignature";
 import {Response as ResponseValidatorNS} from "./ResponseValidators";
 import XMLValidator = ResponseValidatorNS.XMLValidator;
 import ListValidator = ResponseValidatorNS.ListValidator;
+import DataValidator = ResponseValidatorNS.DataValidator;
+import Base64Validator = ResponseValidatorNS.Base64Validator;
+import SomeThingValidator = ResponseValidatorNS.SomeThingValidator;
 import {Response as ResponseParserNS} from "./ResponseParsers";
 import ChannelParser = ResponseParserNS.ChannelParser;
 import ConfigParser = ResponseParserNS.ConfigParser;
+import HelpParser = ResponseParserNS.HelpParser;
+import GLParser = ResponseParserNS.GLParser;
+import InfoDelayParser = ResponseParserNS.InfoDelayParser;
+import InfoParser = ResponseParserNS.InfoParser;
+import InfoThreadsParser = ResponseParserNS.InfoThreadsParser;
+import InfoQueuesParser = ResponseParserNS.InfoQueuesParser;
+import InfoServerParser = ResponseParserNS.InfoServerParser;
+import InfoSystemParser = ResponseParserNS.InfoSystemParser;
+import InfoPathsParser = ResponseParserNS.InfoPathsParser;
+import InfoTemplateParser = ResponseParserNS.InfoTemplateParser;
+import VersionParser = ResponseParserNS.VersionParser;
+import PathParser = ResponseParserNS.PathParser;
+import CinfParser = ResponseParserNS.CinfParser;
+import DataParser = ResponseParserNS.DataParser;
+import DataListParser = ResponseParserNS.DataListParser;
+import ThumbnailParser = ResponseParserNS.ThumbnailParser;
 
 import ResponseSignature = ResponseNS.ResponseSignature;
 // Command NS
@@ -996,7 +1015,7 @@ export namespace AMCP {
 	 */
 	export class DataListCommand extends AbstractCommand {
 		static commandString = "DATA LIST";
-		reponseProtocol = new ResponseSignature(200, ListValidator, DataListparser);
+		reponseProtocol = new ResponseSignature(200, ListValidator, DataListParser);
 	}
 
 	/**
@@ -1030,7 +1049,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(required, "fileName", null, new ClipNameValidator())
 		);
-		reponseProtocol = new ResponseSignature(201, Base64validator, ThumbnailParser);
+		reponseProtocol = new ResponseSignature(201, Base64Validator, ThumbnailParser);
 	}
 
 	/**
@@ -1098,7 +1117,7 @@ export namespace AMCP {
 		paramProtocol = new Array<ParamSignature>(
 			new ParamSignature(optional, "component", null, new EnumValidator(Enum.Version))
 		);
-		reponseProtocol = new ResponseSignature(200, SomeThingValidator, Versionparser);
+		reponseProtocol = new ResponseSignature(200, SomeThingValidator, VersionParser);
 	}
 
 	/**
@@ -1106,7 +1125,7 @@ export namespace AMCP {
 	 */
 	export class InfoCommand extends AbstractOrChannelOrLayerCommand {
 		static commandString = "INFO";
-		responseProtocol = new ResponseSignature(201, ListValidator, ChannelParser);
+		responseProtocol = new ResponseSignature(200, ListValidator, ChannelParser);
 	}
 
 	/**
@@ -1125,7 +1144,7 @@ export namespace AMCP {
 	 */
 	export class InfoConfigCommand extends AbstractCommand {
 		static commandString = "INFO CONFIG";
-		responseProtocol = new ResponseSignature(201, XMLValidator, InfoConfigParser);
+		responseProtocol = new ResponseSignature(201, XMLValidator, ConfigParser);
 	}
 
 	/**
