@@ -183,7 +183,25 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			return data;
+			let arrayCast: Array<string> = [].concat(data);
+
+			return arrayCast.map((i) => {
+				let components: Array<string> = i.split(" ");
+
+				// is font
+				if (components.length === 2) {
+					return {name: components[1].replace("\"", ""), type: "font"};
+				 }
+
+				// is template
+				if (components.length === 4) {
+					return {name: components[0].replace("\"", ""), type: "template"};
+				}
+
+				// is media
+				return {name: components[0].replace("\"", ""), type: components[1].toLowerCase() === "movie" ? "video" : components[1].toLowerCase() === "still" ? "image" : components[1].toLowerCase()};
+
+			});
 		}
 	}
 
