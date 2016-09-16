@@ -47,7 +47,6 @@ export namespace Response {
 			let returnFalse;
 			let returnData;
 
-
 			xmlParser(
 				response.items[0].replace("\n", ""),
 				{async: false, trim: true, explicitArray: false, valueProcessors: [parseNumbers]},
@@ -56,7 +55,7 @@ export namespace Response {
 					returnData = result;
 				});
 
-			return (returnFalse !== null) ? returnFalse : returnData;
+			return (returnFalse !== null) ? false : returnData;
 		}
 	}
 
