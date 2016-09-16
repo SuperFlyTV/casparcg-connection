@@ -23,6 +23,8 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
       this._socket.bind(this._port);
       this._listening = true;
     }
+
+    this._socket.on('error', (error) => this._errorHandler(error));
   }
 
   private _onReceivedCallback(msg, rinfo): void {
@@ -42,6 +44,10 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
         this.fire(OSCSocketEvent.newOutputMessage, new OSCSocketEvent(element.address, element.args));
       }
     }
+  }
+
+  private _errorHandler(error): void {
+    console.log(error);
   }
 
   public set port(newPort: number) {

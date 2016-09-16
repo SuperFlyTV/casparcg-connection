@@ -7,7 +7,7 @@ describe("AMCPProtocol_v2_1", () => {
 	describe("basic signature", () => {
 
 		beforeAll((done) => {
-			this.instance = new CasparCG({host: "52.208.248.56", onConnected: (event) => done()});
+			this.instance = new CasparCG({host: "127.0.0.1", onConnected: (event) => done()});
 		});
 
 		afterAll(() => {

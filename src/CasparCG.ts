@@ -28,6 +28,7 @@ import IEventCallback = CallbackNS.IEventCallback;
 import IStringCallback = CallbackNS.IStringCallback;
 import IResponseCallback = CallbackNS.IResponseCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
+import IOSCCallback = CallbackNS.IOSCCallback;
 
 /*
 https://github.com/CasparCG/Server/commits/2.1.0/protocol/amcp/AMCPCommandsImpl.cpp
@@ -334,7 +335,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _autoReconnectInterval: number;
 	private _autoReconnectAttempts: number;
 	private _socket: CasparCGSocket;
-	private _osc: OSCSocket;
+	private _osc: OSCSocket = null;
 	private _queuedCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 	private _sentCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
 
@@ -353,6 +354,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].  
 	 */
 	public debug: boolean = undefined;
+
+	/*
+	 * Public callbacks for osc events
+	 */
+	public onStageMessage: IOSCCallback = undefined;
+	public onMixerMessage: IOSCCallback = undefined;
+	public onDiagMessage: IOSCCallback = undefined;
+	public onOutputMessage: IOSCCallback = undefined;
 
 	/**
 	 * Callback for all logging. 
@@ -474,9 +483,28 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		this._createNewSocket(options);
 
+		// create osc socket listener
+		if (options.osc) this._createOSCSocket(options);
+
 		if (this.autoConnect) {
 			this.connect();
 		}
+	}
+
+	private _createOSCSocket(options) {
+		this._osc = new OSCSocket(options.osc, true);
+		this._osc.on(OSCSocketEvent.newStageMessage, (event) => {
+			if (this.onStageMessage) this.onStageMessage(event.params.address, event.params.value);
+		});
+		this._osc.on(OSCSocketEvent.newMixerMessage, (event) => {
+			if (this.onMixerMessage) this.onMixerMessage(event.params.address, event.params.value);
+		});
+		this._osc.on(OSCSocketEvent.newDiagMessage, (event) => {
+			if (this.onDiagMessage) this.onDiagMessage(event.params.address, event.params.value);
+		});
+		this._osc.on(OSCSocketEvent.newOutputMessage, (event) => {
+			if (this.onOutputMessage) this.onOutputMessage(event.params.address, event.params.value);
+		});
 	}
 
 	/**
@@ -520,9 +548,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this._socket.on("error", (error) => this._onSocketError(error));
 		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
-
-		// create osc socket listener
-		this._osc = new OSCSocket(6250, true);
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
@@ -600,6 +625,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				}
 			}
 		}
+	}
+
+	public get osc(): number {
+		if (this._osc) return this._osc.port; // @todo
+	}
+
+	public set osc(port: number) {
+		if (this._osc) this._osc.port = port;
 	}
 
 	/**
