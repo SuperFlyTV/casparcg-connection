@@ -157,7 +157,7 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			return data;
+			return `data:image/png;base64,"+partialBase64${data}`;
 		}
 	}
 
