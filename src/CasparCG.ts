@@ -548,7 +548,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
 
-		console.log('create ocs?', options.osc)
 		if (this.osc) this._createOSCListener(options);
 
 		// inherit log method
