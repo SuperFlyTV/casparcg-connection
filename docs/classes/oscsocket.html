@@ -100,6 +100,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_address" class="tsd-kind-icon">_address</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_listening" class="tsd-kind-icon">_listening</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_port" class="tsd-kind-icon">_port</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_socket" class="tsd-kind-icon">_socket</a></li>
@@ -111,13 +112,15 @@
 						<section class="tsd-index-section ">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="oscsocket.html#listening" class="tsd-kind-icon">listening</a></li>
+								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="oscsocket.html#address" class="tsd-kind-icon">address</a></li>
 								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="oscsocket.html#port" class="tsd-kind-icon">port</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_createsocket" class="tsd-kind-icon">_create<wbr>Socket</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_errorhandler" class="tsd-kind-icon">_error<wbr>Handler</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="oscsocket.html#_onreceivedcallback" class="tsd-kind-icon">_on<wbr>Received<wbr>Callback</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#addchild" class="tsd-kind-icon">add<wbr>Child</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#addlistener" class="tsd-kind-icon">add<wbr>Listener</a></li>
@@ -126,10 +129,10 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="oscsocket.html#bubble" class="tsd-kind-icon">bubble</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="oscsocket.html#capture" class="tsd-kind-icon">capture</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="oscsocket.html#close" class="tsd-kind-icon">close</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="oscsocket.html#connect" class="tsd-kind-icon">connect</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="oscsocket.html#emit" class="tsd-kind-icon">emit</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#fire" class="tsd-kind-icon">fire</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#getmaxlisteners" class="tsd-kind-icon">get<wbr>Max<wbr>Listeners</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="oscsocket.html#listen" class="tsd-kind-icon">listen</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#listenercount" class="tsd-kind-icon">listener<wbr>Count</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="oscsocket.html#listeners" class="tsd-kind-icon">listeners</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="oscsocket.html#on" class="tsd-kind-icon">on</a></li>
@@ -152,13 +155,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new OSCSocket<span class="tsd-signature-symbol">(</span>port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, autolisten<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="oscsocket.html" class="tsd-signature-type">OSCSocket</a></li>
+						<li class="tsd-signature tsd-kind-icon">new OSCSocket<span class="tsd-signature-symbol">(</span>port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, address<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="oscsocket.html" class="tsd-signature-type">OSCSocket</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L17">lib/OSCSocket.ts:17</a></li>
+									<li>Defined in lib/OSCSocket.ts:23</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -167,7 +170,7 @@
 									<h5>port: <span class="tsd-signature-type">number</span></h5>
 								</li>
 								<li>
-									<h5>autolisten: <span class="tsd-signature-type">boolean</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> address: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="oscsocket.html" class="tsd-signature-type">OSCSocket</a></h4>
@@ -178,12 +181,22 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_address" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _address</h3>
+					<div class="tsd-signature tsd-kind-icon">_address<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in lib/OSCSocket.ts:22</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_listening" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _listening</h3>
 					<div class="tsd-signature tsd-kind-icon">_listening<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L16">lib/OSCSocket.ts:16</a></li>
+							<li>Defined in lib/OSCSocket.ts:20</li>
 						</ul>
 					</aside>
 				</section>
@@ -193,7 +206,7 @@
 					<div class="tsd-signature tsd-kind-icon">_port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L17">lib/OSCSocket.ts:17</a></li>
+							<li>Defined in lib/OSCSocket.ts:21</li>
 						</ul>
 					</aside>
 				</section>
@@ -203,7 +216,7 @@
 					<div class="tsd-signature tsd-kind-icon">_socket<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Socket</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L14">lib/OSCSocket.ts:14</a></li>
+							<li>Defined in lib/OSCSocket.ts:23</li>
 						</ul>
 					</aside>
 				</section>
@@ -214,7 +227,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from EventEmitter.this</p>
 						<ul>
-							<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:15</li>
+							<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:15</li>
 						</ul>
 					</aside>
 				</section>
@@ -225,7 +238,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from EventEmitter.EventEmitter</p>
 						<ul>
-							<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:430</li>
+							<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:430</li>
 						</ul>
 					</aside>
 				</section>
@@ -236,27 +249,42 @@
 					<aside class="tsd-sources">
 						<p>Inherited from EventEmitter.defaultMaxListeners</p>
 						<ul>
-							<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:432</li>
+							<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:432</li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="listening" class="tsd-anchor"></a>
-					<h3>listening</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> listening<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class">
+					<a name="address" class="tsd-anchor"></a>
+					<h3>address</h3>
+					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> address<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> address<span class="tsd-signature-symbol">(</span>address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L55">lib/OSCSocket.ts:55</a></li>
+									<li>Defined in lib/OSCSocket.ts:96</li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in lib/OSCSocket.ts:83</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>address: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -265,13 +293,13 @@
 					<h3>port</h3>
 					<ul class="tsd-signatures tsd-kind-accessor tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> port<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> port<span class="tsd-signature-symbol">(</span>newPort<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">set</span> port<span class="tsd-signature-symbol">(</span>port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L51">lib/OSCSocket.ts:51</a></li>
+									<li>Defined in lib/OSCSocket.ts:115</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -279,13 +307,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L47">lib/OSCSocket.ts:47</a></li>
+									<li>Defined in lib/OSCSocket.ts:103</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>newPort: <span class="tsd-signature-type">number</span></h5>
+									<h5>port: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -296,6 +324,46 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="_createsocket" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _create<wbr>Socket</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">_create<wbr>Socket<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in lib/OSCSocket.ts:39</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="_errorhandler" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _error<wbr>Handler</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">_error<wbr>Handler<span class="tsd-signature-symbol">(</span>error<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in lib/OSCSocket.ts:76</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>error: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
 					<a name="_onreceivedcallback" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _on<wbr>Received<wbr>Callback</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
@@ -305,7 +373,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L28">lib/OSCSocket.ts:28</a></li>
+									<li>Defined in lib/OSCSocket.ts:56</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -332,7 +400,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.addChild</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:4</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:4</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -356,7 +424,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.addListener</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:434</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:434</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -383,7 +451,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.after</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:5</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:5</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -410,7 +478,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.before</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:6</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:6</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -437,7 +505,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.bubble</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:7</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:7</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -464,7 +532,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.capture</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:8</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:8</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -490,27 +558,10 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L65">lib/OSCSocket.ts:65</a></li>
+									<li>Defined in lib/OSCSocket.ts:139</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="connect" class="tsd-anchor"></a>
-					<h3>connect</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/baltedewit/casparcg-connection/blob/osc-events/src/lib/OSCSocket.ts#L59">lib/OSCSocket.ts:59</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -526,7 +577,7 @@
 								<p>Inherited from EventEmitter.emit</p>
 								<p>Overwrites EventEmitter.emit</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:9</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:9</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -553,7 +604,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.fire</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:10</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:10</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -580,10 +631,27 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.getMaxListeners</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:440</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:440</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="listen" class="tsd-anchor"></a>
+					<h3>listen</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">listen<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in lib/OSCSocket.ts:122</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -598,7 +666,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.listenerCount</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:443</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:443</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -622,7 +690,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.listeners</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:441</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:441</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -647,7 +715,7 @@
 								<p>Inherited from EventEmitter.on</p>
 								<p>Overwrites EventEmitter.on</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:11</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:11</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -675,7 +743,7 @@
 								<p>Inherited from EventEmitter.once</p>
 								<p>Overwrites EventEmitter.once</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:12</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:12</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -702,7 +770,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.onceAfter</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:13</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:13</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -729,7 +797,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.onceBefore</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:14</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:14</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -756,7 +824,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.removeAllListeners</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:438</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:438</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -781,7 +849,7 @@
 								<p>Inherited from EventEmitter.removeListener</p>
 								<p>Overwrites EventEmitter.removeListener</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:15</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:15</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -808,7 +876,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.setMaxListeners</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:439</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:439</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -832,7 +900,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.setParent</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/node_modules/hap/typings/index.d.ts:16</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:16</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -856,7 +924,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from EventEmitter.listenerCount</p>
 								<ul>
-									<li>Defined in /mnt/14487B70487B4F8A/LinuxDocuments/casparcg-connection/typings/globals/node/index.d.ts:431</li>
+									<li>Defined in /Users/Jesper/Git/casparcgconnection/typings/globals/node/index.d.ts:431</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -905,6 +973,9 @@
 								<a href="oscsocket.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="oscsocket.html#_address" class="tsd-kind-icon">_address</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="oscsocket.html#_listening" class="tsd-kind-icon">_listening</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
@@ -922,11 +993,17 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
 								<a href="oscsocket.html#defaultmaxlisteners" class="tsd-kind-icon">default<wbr>Max<wbr>Listeners</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="oscsocket.html#listening" class="tsd-kind-icon">listening</a>
+							<li class=" tsd-kind-accessor tsd-parent-kind-class">
+								<a href="oscsocket.html#address" class="tsd-kind-icon">address</a>
 							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class">
 								<a href="oscsocket.html#port" class="tsd-kind-icon">port</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="oscsocket.html#_createsocket" class="tsd-kind-icon">_create<wbr>Socket</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="oscsocket.html#_errorhandler" class="tsd-kind-icon">_error<wbr>Handler</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="oscsocket.html#_onreceivedcallback" class="tsd-kind-icon">_on<wbr>Received<wbr>Callback</a>
@@ -952,9 +1029,6 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="oscsocket.html#close" class="tsd-kind-icon">close</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="oscsocket.html#connect" class="tsd-kind-icon">connect</a>
-							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
 								<a href="oscsocket.html#emit" class="tsd-kind-icon">emit</a>
 							</li>
@@ -963,6 +1037,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="oscsocket.html#getmaxlisteners" class="tsd-kind-icon">get<wbr>Max<wbr>Listeners</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="oscsocket.html#listen" class="tsd-kind-icon">listen</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="oscsocket.html#listenercount" class="tsd-kind-icon">listener<wbr>Count</a>
