@@ -20,10 +20,21 @@
     "url": "https://github.com/SuperFlyTV/casparcg-connection.git"
   },
   "bugs": {
-    "url": "https://github.com/SuperFlyTV/casparcg-connection/issues"
+    "url": "https://github.com/SuperFlyTV/casparcg-connection/issues",
+    "email": "info@superfly.tv"
   },
-  "license": "GPLv3",
-  "author": "Jesper Stærkær @ SuperFly.tv",
+  "license": "GPL-3.0",
+  "author": {
+    "name": "Jesper Stærkær",
+    "email": "jesper@superfly.tv",
+    "url": "https://github.com/jesperstarkar"
+  },
+  "contributors": [
+    {
+      "name": "Balte De Wit",
+      "url": "https://github.com/baltedewit"
+    }
+  ],
   "homepage": "http://superfly.tv",
   "keywords": [
     "casparcg",
@@ -32,12 +43,11 @@
     "amcp",
     "socket",
     "tcp",
+    "osc",
     "broadcast",
     "graphics",
-    "superfly",
     "connection",
-    "middleware",
-    "remote"
+    "middleware"
   ],
   "dependencies": {
     "hap": "https://github.com/jesperstarkar/hap.git",
