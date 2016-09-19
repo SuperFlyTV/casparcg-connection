@@ -396,27 +396,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 
 		this._createNewSocket(options);
+		this._createOSCListener();
 
 		if (this.autoConnect) {
 			this.connect();
 		}
-	}
-
-	private _createOSCListener(options) {
-		this._oscListener = new OSCSocket(this.osc, this.host);
-
-		this._oscListener.on(OSCSocketEvent.newStageMessage, (event) => {
-			if (this.onStageMessage) this.onStageMessage(event.params.address, event.params.value);
-		});
-		this._oscListener.on(OSCSocketEvent.newMixerMessage, (event) => {
-			if (this.onMixerMessage) this.onMixerMessage(event.params.address, event.params.value);
-		});
-		this._oscListener.on(OSCSocketEvent.newDiagMessage, (event) => {
-			if (this.onDiagMessage) this.onDiagMessage(event.params.address, event.params.value);
-		});
-		this._oscListener.on(OSCSocketEvent.newOutputMessage, (event) => {
-			if (this.onOutputMessage) this.onOutputMessage(event.params.address, event.params.value);
-		});
 	}
 
 	/**
@@ -461,10 +445,28 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
 
-		if (this.osc) this._createOSCListener(options);
-
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
+	}
+
+	/**
+	 * 
+	 */
+	private _createOSCListener() {
+		this._oscListener = new OSCSocket(this.osc, this.host);
+
+		this._oscListener.on(OSCSocketEvent.newStageMessage, (event) => {
+			if (this.onStageMessage) this.onStageMessage(event.params.address, event.params.value);
+		});
+		this._oscListener.on(OSCSocketEvent.newMixerMessage, (event) => {
+			if (this.onMixerMessage) this.onMixerMessage(event.params.address, event.params.value);
+		});
+		this._oscListener.on(OSCSocketEvent.newDiagMessage, (event) => {
+			if (this.onDiagMessage) this.onDiagMessage(event.params.address, event.params.value);
+		});
+		this._oscListener.on(OSCSocketEvent.newOutputMessage, (event) => {
+			if (this.onOutputMessage) this.onOutputMessage(event.params.address, event.params.value);
+		});
 	}
 
 	/**
@@ -547,10 +549,16 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public get osc(): number {
 		return this._osc; // @todo
 	}
 
+	/**
+	 * 
+	 */
 	public set osc(port: number) {
 		if (this._osc !== port) {
 			this._osc = port;

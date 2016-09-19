@@ -1,98 +1,146 @@
-import * as osc from 'osc-min';
-import * as udp from 'dgram';
+import * as osc from "osc-min";
+import * as udp from "dgram";
 
 import {EventEmitter} from "hap";
 import {IConnectionOptions, ConnectionOptions} from "./AMCPConnectionOptions";
 import {OSCSocketEvent} from "./event/Events";
 
+/**
+ * 
+ */
 export interface IOscSocket {
-  listening: boolean;
-  port: number;
-  address: string;
+	port: number;
+	address: string;
 }
 
+/**
+ * 
+ */
 export class OSCSocket extends EventEmitter implements IOscSocket {
-  private _socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
+	private _listening = false;
+	private _port = 6250;
+	private _address = "0.0.0.0";
+	private _socket: udp.Socket;
 
-  private _listening = false;
-  private _port = 6250;
-  private _address = '0.0.0.0';
+	/**
+	 * 
+	 */
+	public constructor(port: number, address?: string) {
+		super();
+		this._port = port;
+		if (address) this._address = address;
 
-  public constructor(port: number, address?: string) {
-    super();
-    this._port = port;
-    if(address) this._address = address;
+		this._createSocket();
+	}
 
-    this._socket.on('error', (error) => this._errorHandler(error));
-  }
+	/**
+	 * 
+	 */
+	private _createSocket(): void {
+		if (this._socket) {
+			this.close();
+		}
+		this._socket = udp.createSocket("udp4", (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
+		this._socket.on("error", (error) => this._errorHandler(error));
+		this._listening = true;
+		try {
+			this._socket.bind(this._port, this._address);
+		} catch (e) {
+			this._errorHandler(e);
+		}
+	}
 
-  private _onReceivedCallback(msg, rinfo): void {
-    let bundle: any = osc.fromBuffer(msg);
+	/**
+	 * 
+	 */
+	private _onReceivedCallback(msg, rinfo): void {
+		let bundle: any = osc.fromBuffer(msg);
 
+		for (let element of bundle.elements) {
+			let adress = element.address.split("/");
+			if (adress[3] === "stage") {
+				this.fire(OSCSocketEvent.newStageMessage, new OSCSocketEvent(element.address, element.args));
+			} else if (adress[3] === "mixer") {
+				this.fire(OSCSocketEvent.newMixerMessage, new OSCSocketEvent(element.address, element.args));
+			} else if (adress[1] === "diag") {
+				this.fire(OSCSocketEvent.newDiagMessage, new OSCSocketEvent(element.address, element.args));
+			} else {
+				this.fire(OSCSocketEvent.newOutputMessage, new OSCSocketEvent(element.address, element.args));
+			}
+		}
+	}
 
-    for (let element of bundle.elements) {
-      let adress = element.address.split('/');
+	/**
+	 * 
+	 */
+	private _errorHandler(error): void {
+		console.log("FOO", error);
+	}
 
-      if (adress[3] === 'stage') {
-        this.fire(OSCSocketEvent.newStageMessage, new OSCSocketEvent(element.address, element.args));
-      } else if (adress[3] === 'mixer') {
-        this.fire(OSCSocketEvent.newMixerMessage, new OSCSocketEvent(element.address, element.args));
-      } else if (adress[1] === 'diag') {
-        this.fire(OSCSocketEvent.newDiagMessage, new OSCSocketEvent(element.address, element.args));
-      } else {
-        this.fire(OSCSocketEvent.newOutputMessage, new OSCSocketEvent(element.address, element.args));
-      }
-    }
-  }
+	/**
+	 * 
+	 */
+	public set address(address: string) {
+		if (address && this._address !== address) {
+			this._address = address;
+			// recreates socket if address changes after creation
+			if	(this._socket) {
+				this._createSocket();
+			}
+		}
+	}
 
-  private _errorHandler(error): void {
-    console.log(error);
-  }
+	/**
+	 * 
+	 */
+	public get address() {
+		return this._address;
+	}
 
-  public set address(address: string) {
-    if (this._address !== address) {
-      this._address = address;
-      if (this._listening === true) {
-        this._socket.close();
-        this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
-        this._socket.bind(this._port, this._address);
-      }
-    }
-  }
+	/**
+	 * 
+	 */
+	public set port(port: number) {
+		if (port && this._port !== port) {
+			this._port = port;
+			if (this._socket) {
+				this._createSocket();
+			}
+		}
+	}
 
-  public get address() {
-    return this._address;
-  }
+	/**
+	 * 
+	 */
+	public get port() {
+		return this._port;
+	}
 
-  public set port(port: number) {
-    if (this._port !== port) {
-      this._port = port;
-      if (this._listening === true) {
-        this._socket.close();
-        this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
-        this._socket.bind(this._port, this._address);
-      }
-    }
-  }
+	/**
+	 * 
+	 */
+	public listen()
+	public listen(port?: number, address?: string) {
+		if (port && address) {
+			this.close();
+		}
 
-  public get port() {
-    return this._port;
-  }
+		this.port = port;
+		this.address = address;
 
-  public get listening() {
-    return this._listening;
-  }
+		if (!this._listening) {
+			this._socket.bind(this._port, this._address);
+		}
+	}
 
-  public listen()
-  public listen(port?: number, address?: string) {
-    if (port) this._port = port;
-    if (address) this._address = address;
-    this._socket.bind(this._port, this._address);
-    this._listening = true;
-  }
-
-  public close() {
-    this._socket.close();
-    this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
-  }
+	/**
+	 * 
+	 */
+	public close() {
+		if (this._socket) {
+			this._socket.close();
+			delete this._socket;
+			this._listening = false;
+		}
+	}
 }

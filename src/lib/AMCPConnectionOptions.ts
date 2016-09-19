@@ -53,7 +53,7 @@ export interface IConnectionOptions {
 export class ConnectionOptions implements IConnectionOptions {
 	public host: string = "localhost";
 	public port: number = 5250;
-	public osc: number = undefined;
+	public osc: number = 6250;
 	public autoConnect: boolean = true;
 	public autoReconnect: boolean = true;
 	public autoReconnectInterval: number = 1000;
