@@ -453,7 +453,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _createOSCListener() {
-		this._oscListener = new OSCSocket(this.osc, this.host);
+		this._oscListener = new OSCSocket(this.osc);
+		this.setParent(this._oscListener);
 
 		this._oscListener.on(OSCSocketEvent.newStageMessage, (event) => {
 			if (this.onStageMessage) this.onStageMessage(event.params.address, event.params.value);
@@ -482,7 +483,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this._socket) {
 			this._socket.connect();
 		}
-		if (this.osc) {
+		if (this._oscListener) {
 			this._oscListener.listen();
 		}
 	}

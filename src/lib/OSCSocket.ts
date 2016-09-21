@@ -10,7 +10,6 @@ import {OSCSocketEvent} from "./event/Events";
  */
 export interface IOscSocket {
 	port: number;
-	address: string;
 }
 
 /**
@@ -19,16 +18,14 @@ export interface IOscSocket {
 export class OSCSocket extends EventEmitter implements IOscSocket {
 	private _listening = false;
 	private _port = 6250;
-	private _address = "0.0.0.0";
 	private _socket: udp.Socket;
 
 	/**
 	 * 
 	 */
-	public constructor(port: number, address?: string) {
+	public constructor(port: number) {
 		super();
 		this._port = port;
-		if (address) this._address = address;
 
 		this._createSocket();
 	}
@@ -43,11 +40,7 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 		this._socket = udp.createSocket("udp4", (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
 		this._socket.on("error", (error) => this._errorHandler(error));
 		this._listening = true;
-		try {
-			this._socket.bind(this._port, this._address);
-		} catch (e) {
-			this._errorHandler(e);
-		}
+		this._socket.bind(this._port);
 	}
 
 	/**
@@ -55,7 +48,6 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 	 */
 	private _onReceivedCallback(msg, rinfo): void {
 		let bundle: any = osc.fromBuffer(msg);
-
 		for (let element of bundle.elements) {
 			let adress = element.address.split("/");
 			if (adress[3] === "stage") {
@@ -74,27 +66,7 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 	 * 
 	 */
 	private _errorHandler(error): void {
-		console.log("FOO", error);
-	}
-
-	/**
-	 * 
-	 */
-	public set address(address: string) {
-		if (address && this._address !== address) {
-			this._address = address;
-			// recreates socket if address changes after creation
-			if	(this._socket) {
-				this._createSocket();
-			}
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public get address() {
-		return this._address;
+		// @todo: fire error
 	}
 
 	/**
@@ -120,16 +92,11 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 	 * 
 	 */
 	public listen()
-	public listen(port?: number, address?: string) {
-		if (port && address) {
-			this.close();
-		}
-
+	public listen(port?: number) {
 		this.port = port;
-		this.address = address;
 
 		if (!this._listening) {
-			this._socket.bind(this._port, this._address);
+			this._socket.bind(this._port);
 		}
 	}
 
