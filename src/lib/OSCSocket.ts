@@ -38,9 +38,13 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 			this.close();
 		}
 		this._socket = udp.createSocket("udp4", (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
-		this._socket.on("error", (error) => this._errorHandler(error));
+		this._socket.on("error", (error) => this._onError(error));
 		this._listening = true;
-		this._socket.bind(this._port);
+		try {
+			this._socket.bind(this._port);
+		}catch (e) {
+			this._onError(e);
+		}
 	}
 
 	/**
@@ -63,10 +67,12 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 	}
 
 	/**
-	 * 
+	 * @todo:::
 	 */
-	private _errorHandler(error): void {
-		// @todo: fire error
+	private _onError(error: Error) {
+		// dispatch error!!!!!
+		// @todo: error event????
+		this.fire("error", error);
 	}
 
 	/**
@@ -96,7 +102,11 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 		this.port = port;
 
 		if (!this._listening) {
+			try {
 			this._socket.bind(this._port);
+		}catch (e) {
+			this._onError(e);
+		}
 		}
 	}
 
