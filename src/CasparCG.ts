@@ -473,6 +473,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		this._createNewSocket(options);
 
+		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
+		this.on(CasparCGSocketStatusEvent.TIMEOUT, (event) => this._onSocketStatusTimeout());
+		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
+
 		if (this.autoConnect) {
 			this.connect();
 		}
@@ -517,8 +521,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
 		this.setParent(this._socket);
 		this._socket.on("error", (error) => this._onSocketError(error));
-		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
-		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
@@ -546,6 +548,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this._socket) {
 			this._socket.disconnect();
 		}
+	}
+
+	/**
+	 * 
+	 */
+	public reconnect(): void {
+		this._createNewSocket(null, true);
+		this.connect();
 	}
 
 	/**
