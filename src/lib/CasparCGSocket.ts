@@ -110,6 +110,9 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		this.socketStatus |= SocketState.connectionAttempt;	// toggles triedConnection on
 		this.socketStatus &= ~SocketState.lostConnection;	// toggles triedConnection on
 		this._client.connect(this._port, this._host);
+		if (this._reconnectAttempt === 0) {
+			this._reconnectInterval = global.setInterval(() => this._autoReconnection(), this._reconnectDelay);
+		}
 	}
 
 	/**
@@ -238,7 +241,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		this._client.write(`${commandString}\r\n`);
 		command.status = IAMCPStatus.Sent;
 
-		console.log(commandString);
+		this.log(commandString);
 		return command;
 	}
 
