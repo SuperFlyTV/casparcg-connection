@@ -857,6 +857,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
       			// create response object for response codes 200 to 202
         			// resolve with response object
 
+		// handle empty responses
+		if (this._sentCommands.length === 0) {
+			return;
+		}
+
 		let currentCommand: IAMCPCommand = this._sentCommands.shift();
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
