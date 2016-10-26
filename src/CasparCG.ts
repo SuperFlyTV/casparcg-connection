@@ -710,7 +710,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				if (this.onConnected) {
 					this.onConnected(this._connected);
 				}
-				this._expediteCommand();
+				this._expediteCommand(true);
 			}
 			if (!this._connected) {
 				this.fire(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
@@ -718,6 +718,23 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					this.onDisconnected(this._connected);
 				}
 			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private _onSocketStatusTimeout(): void {
+		let shouldReset: Boolean;
+		while (this._sentCommands.length > 0) {
+			shouldReset = true;
+			let i: IAMCPCommand = this._sentCommands.shift();
+			i.status =  IAMCPStatus.Timeout;
+			i.reject(i);
+		}
+
+		if (shouldReset) {
+			this.reconnect();
 		}
 	}
 
@@ -882,7 +899,15 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * 
 	 */
-	private _expediteCommand(): void {
+	private _expediteCommand(flushSent: boolean = false): void {
+
+		if (flushSent) {
+			while (this._sentCommands.length > 0) {
+				let i: IAMCPCommand = this._sentCommands.shift();
+				i.status =  IAMCPStatus.Failed;
+				i.reject(i);
+			}
+		}
 		if (this.connected) {
 			// @todo add TTL for cleanup on stuck commands
 
@@ -903,6 +928,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					this._socket.executeCommand(nextCommand);
 				}
 			}
+		} else {
+			// reconnect on missing queue
+			this.reconnect();
 		}
 	}
 
