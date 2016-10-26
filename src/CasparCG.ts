@@ -1036,7 +1036,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_INVOKE
 	 */
 	public cgInvoke(channel: number, layer: number, flashLayer: number, method: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGRemoveCommand({channel: channel, layer: layer, flashLayer: flashLayer, method: method}));
+		return this.do(new AMCP.CGInvokeCommand({channel: channel, layer: layer, flashLayer: flashLayer, method: method}));
 	}
 
 	/**
