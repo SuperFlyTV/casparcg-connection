@@ -102,6 +102,8 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_autoreconnect" class="tsd-kind-icon">_auto<wbr>Reconnect</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_client" class="tsd-kind-icon">_client</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_commandtimeout" class="tsd-kind-icon">_command<wbr>Timeout</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_commandtimeouttimer" class="tsd-kind-icon">_command<wbr>Timeout<wbr>Timer</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_host" class="tsd-kind-icon">_host</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_parsedresponse" class="tsd-kind-icon">_parsed<wbr>Response</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_port" class="tsd-kind-icon">_port</a></li>
@@ -137,6 +139,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_ondrain" class="tsd-kind-icon">_on<wbr>Drain</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_onerror" class="tsd-kind-icon">_on<wbr>Error</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_onlookup" class="tsd-kind-icon">_on<wbr>Lookup</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_ontimeout" class="tsd-kind-icon">_on<wbr>Timeout</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_parseresponsegroups" class="tsd-kind-icon">_parse<wbr>Response<wbr>Groups</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="casparcgsocket.html#_startreconnection" class="tsd-kind-icon">_start<wbr>Reconnection</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="casparcgsocket.html#addchild" class="tsd-kind-icon">add<wbr>Child</a></li>
@@ -181,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L62">lib/CasparCGSocket.ts:62</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L64">lib/CasparCGSocket.ts:64</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -230,6 +233,26 @@
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_commandtimeout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _command<wbr>Timeout</h3>
+					<div class="tsd-signature tsd-kind-icon">_command<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L61">lib/CasparCGSocket.ts:61</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="_commandtimeouttimer" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _command<wbr>Timeout<wbr>Timer</h3>
+					<div class="tsd-signature tsd-kind-icon">_command<wbr>Timeout<wbr>Timer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Timer</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L60">lib/CasparCGSocket.ts:60</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_host" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _host</h3>
 					<div class="tsd-signature tsd-kind-icon">_host<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -245,7 +268,7 @@
 					<div class="tsd-signature tsd-kind-icon">_parsed<wbr>Response<span class="tsd-signature-symbol">:</span> <a href="amcputil.casparcgsocketresponse.html" class="tsd-signature-type">CasparCGSocketResponse</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L62">lib/CasparCGSocket.ts:62</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L64">lib/CasparCGSocket.ts:64</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -305,7 +328,7 @@
 					<div class="tsd-signature tsd-kind-icon">_socket<wbr>Status<span class="tsd-signature-symbol">:</span> <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L60">lib/CasparCGSocket.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L62">lib/CasparCGSocket.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -355,7 +378,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L88">lib/CasparCGSocket.ts:88</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L90">lib/CasparCGSocket.ts:90</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -378,7 +401,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L102">lib/CasparCGSocket.ts:102</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L104">lib/CasparCGSocket.ts:104</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -401,7 +424,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L95">lib/CasparCGSocket.ts:95</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L97">lib/CasparCGSocket.ts:97</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -424,7 +447,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L223">lib/CasparCGSocket.ts:223</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L228">lib/CasparCGSocket.ts:228</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -447,7 +470,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L171">lib/CasparCGSocket.ts:171</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L176">lib/CasparCGSocket.ts:176</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -464,7 +487,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L181">lib/CasparCGSocket.ts:181</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L186">lib/CasparCGSocket.ts:186</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -482,7 +505,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L191">lib/CasparCGSocket.ts:191</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L196">lib/CasparCGSocket.ts:196</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></h4>
@@ -490,7 +513,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L198">lib/CasparCGSocket.ts:198</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L203">lib/CasparCGSocket.ts:203</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -516,7 +539,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L139">lib/CasparCGSocket.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L144">lib/CasparCGSocket.ts:144</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -533,7 +556,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L159">lib/CasparCGSocket.ts:159</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L164">lib/CasparCGSocket.ts:164</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -550,7 +573,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L311">lib/CasparCGSocket.ts:311</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L326">lib/CasparCGSocket.ts:326</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -573,7 +596,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L255">lib/CasparCGSocket.ts:255</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L269">lib/CasparCGSocket.ts:269</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -590,7 +613,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L303">lib/CasparCGSocket.ts:303</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L318">lib/CasparCGSocket.ts:318</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -614,7 +637,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L295">lib/CasparCGSocket.ts:295</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L310">lib/CasparCGSocket.ts:310</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -644,7 +667,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L248">lib/CasparCGSocket.ts:248</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L262">lib/CasparCGSocket.ts:262</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -659,6 +682,23 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="_ontimeout" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _on<wbr>Timeout</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">_on<wbr>Timeout<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L254">lib/CasparCGSocket.ts:254</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
 					<a name="_parseresponsegroups" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _parse<wbr>Response<wbr>Groups</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
@@ -668,7 +708,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L263">lib/CasparCGSocket.ts:263</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L277">lib/CasparCGSocket.ts:277</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -691,7 +731,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L127">lib/CasparCGSocket.ts:127</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L132">lib/CasparCGSocket.ts:132</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -868,7 +908,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#connect">connect</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L109">lib/CasparCGSocket.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L111">lib/CasparCGSocket.ts:111</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -886,7 +926,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#disconnect">disconnect</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L118">lib/CasparCGSocket.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L123">lib/CasparCGSocket.ts:123</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -904,7 +944,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#dispose">dispose</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L208">lib/CasparCGSocket.ts:208</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L213">lib/CasparCGSocket.ts:213</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -950,7 +990,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#executecommand">executeCommand</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L230">lib/CasparCGSocket.ts:230</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L235">lib/CasparCGSocket.ts:235</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1067,7 +1107,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/icasparcgsocket.html">ICasparCGSocket</a>.<a href="../interfaces/icasparcgsocket.html#log">log</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L216">lib/CasparCGSocket.ts:216</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/CasparCGSocket.ts#L221">lib/CasparCGSocket.ts:221</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1350,6 +1390,12 @@
 								<a href="casparcgsocket.html#_client" class="tsd-kind-icon">_client</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="casparcgsocket.html#_commandtimeout" class="tsd-kind-icon">_command<wbr>Timeout</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="casparcgsocket.html#_commandtimeouttimer" class="tsd-kind-icon">_command<wbr>Timeout<wbr>Timer</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="casparcgsocket.html#_host" class="tsd-kind-icon">_host</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
@@ -1423,6 +1469,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="casparcgsocket.html#_onlookup" class="tsd-kind-icon">_on<wbr>Lookup</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="casparcgsocket.html#_ontimeout" class="tsd-kind-icon">_on<wbr>Timeout</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="casparcgsocket.html#_parseresponsegroups" class="tsd-kind-icon">_parse<wbr>Response<wbr>Groups</a>
