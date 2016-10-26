@@ -26,5 +26,6 @@ export namespace Event {
 		static STATUS_CHANGED = "casparcgsocketconnectioneventstatuschanged";
 		static CONNECTED = "casparcgsocketconnectioneventstatusconnected";
 		static DISCONNECTED = "casparcgsocketconnectioneventstatusdisconnected";
+		static TIMEOUT = "casparcgsocketconnectioneventstatustimeout";
 	}
 }

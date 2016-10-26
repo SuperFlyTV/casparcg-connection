@@ -57,6 +57,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _reconnectAttempts: number;
 	private _reconnectAttempt: number = 0;
 	private _reconnectInterval: NodeJS.Timer;
+	private _commandTimeoutTimer: NodeJS.Timer;
+	private _commandTimeout: number = 5000; // @todo make connectionOption!
 	private _socketStatus: SocketState = SocketState.unconfigured;
 
 	private _parsedResponse: AMCPUtil.CasparCGSocketResponse;
@@ -238,11 +240,20 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			commandString += (payload.key ? payload.key + " " : "") + payload.value;
 		}
 
+		this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout);
 		this._client.write(`${commandString}\r\n`);
 		command.status = IAMCPStatus.Sent;
 
 		this.log(commandString);
 		return command;
+	}
+
+	/** 
+	 * 
+	 */
+	private _onTimeout() {
+		global.clearTimeout(this._commandTimeoutTimer);
+		this.fire(CasparCGSocketStatusEvent.TIMEOUT, new CasparCGSocketStatusEvent(this.socketStatus));
 	}
 
 	/**
@@ -264,6 +275,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 * 
 	 */
 	private _parseResponseGroups(i: string): void {
+		global.clearTimeout(this._commandTimeoutTimer);
 		i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
 		if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
 			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i);
