@@ -19,6 +19,9 @@ gulp.task('static', function () {
 gulp.task('compile', function () {
   var tsResult = project.src() 
         .pipe(ts(project));
+
+         tsResult.dts
+			.pipe(gulp.dest(DIST_DIR));
             
     return tsResult.js
 			.pipe(gulp.dest(DIST_DIR));
