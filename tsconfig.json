@@ -5,9 +5,9 @@
 		"noEmitOnError": true,
 	//	"noImplicitAny": true,
 	//	"noImplicitReturns": true,
-	//	"noImplicitThis": true,
-	//	"noUnusedLocals": true,
-	//	"noUnusedParameters": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
 	//	"strictNullChecks": true,
 		"target": "es5",
 		"lib": [

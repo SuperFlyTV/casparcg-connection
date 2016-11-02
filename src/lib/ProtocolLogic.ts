@@ -32,9 +32,7 @@ export namespace Protocol {
 		/**
 		 * 
 		 */
-		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> { 
-			return null;
-		}
+		abstract resolve(protocol: Array<IParamSignature>): Array<IParamSignature>;
 	}
 
 	/**

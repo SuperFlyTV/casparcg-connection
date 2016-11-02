@@ -19,12 +19,7 @@ export namespace Validation {
 
 		public resolved = false;
 
-		/**
-		 * 
-		 */
-		resolve(value: Object, key?: string): ParamData {
-			return false;
-		}
+		abstract resolve(value: number, key?: string): ParamData;
 	}
 
 	/**
@@ -42,7 +37,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			let textstring;
 
 			function checkTextstring(rawClipNameString: string): string {
@@ -101,7 +96,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			let clipName;
 
 			function checkClipNameString(rawClipNameString: string): string {
@@ -170,7 +165,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			if (data instanceof this._enumClass) {
 				return data.value;
 			}else if (typeof data === "string") {
@@ -205,7 +200,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			let keywordCopy: string = this._keyword;
 			if (!this._caseSensitive) {
 				keywordCopy = keywordCopy.toLowerCase();
@@ -261,7 +256,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			if (data instanceof Array) {
 				let arrayCast: Array<string> = [].concat(data);
 				let index: number;
@@ -304,7 +299,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			if (typeof data === "number") {
 				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min);
 				if (numberCast >= 0) {
@@ -337,8 +332,8 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
-			let result: ParamData = super.resolve(data, key);
+		resolve(data: Object): ParamData {
+			let result: ParamData = super.resolve(data);
 
 			if (result) {
 				return Number(result).toFixed();
@@ -362,7 +357,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			if (typeof data === "number") {
 				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min);
 				return numberCast;
@@ -460,7 +455,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			let stringCast = data.toString();
 
 			// data is object: serialize

@@ -1,19 +1,13 @@
 import * as net from "net";
 import * as _ from "highland";
 import {EventEmitter} from "hap";
-import {IConnectionOptions, ConnectionOptions} from "./AMCPConnectionOptions";
 import {AMCPUtil} from "./AMCP";
 // Command NS
 import {Command as CommandNS} from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
-import IAMCPResponse = CommandNS.IAMCPResponse;
-import AMCPResponse = CommandNS.AMCPResponse;
 import IAMCPStatus = CommandNS.IAMCPStatus;
 // Event NS
-import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent} from "./event/Events";
-// Callback NSIAMCPResponse
-import {Callback as CallbackNS} from "./global/Callback";
-import IResponseCallback = CallbackNS.IResponseCallback;
+import {CasparCGSocketStatusEvent, CasparCGSocketResponseEvent} from "./event/Events";
 // Param NS 
 import {Param as ParamNS} from "./ParamSignature";
 import Payload = ParamNS.Payload;

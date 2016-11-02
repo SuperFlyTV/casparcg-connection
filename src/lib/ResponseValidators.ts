@@ -1,9 +1,7 @@
 import {parseString as xmlParser} from "xml2js";
-import {AMCP, AMCPUtil as AMCPUtilNS} from "./AMCP";
+import {AMCPUtil as AMCPUtilNS} from "./AMCP";
 // AMCPUtilNS
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
-import {Command  as CommandNS} from "./AbstractCommand";
-import IAMCPResponse = CommandNS.IAMCPResponse;
 
 export namespace Response {
 
@@ -22,7 +20,7 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public resolve(response: CasparCGSocketResponse): Object {
+		public resolve(): Object {
 			return null;
 		}
 	}
@@ -82,7 +80,7 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public resolve(response: CasparCGSocketResponse): Object {
+		public resolve(): Object {
 			return null;
 		}
 	}
@@ -108,7 +106,7 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public resolve(response: CasparCGSocketResponse): Object {
+		public resolve(): Object {
 			return null;
 		}
 	}

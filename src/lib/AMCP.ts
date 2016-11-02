@@ -13,7 +13,6 @@ import ConfigParser = ResponseParserNS.ConfigParser;
 import HelpParser = ResponseParserNS.HelpParser;
 import GLParser = ResponseParserNS.GLParser;
 import InfoDelayParser = ResponseParserNS.InfoDelayParser;
-import InfoParser = ResponseParserNS.InfoParser;
 import InfoThreadsParser = ResponseParserNS.InfoThreadsParser;
 import InfoQueuesParser = ResponseParserNS.InfoQueuesParser;
 import InfoServerParser = ResponseParserNS.InfoServerParser;
@@ -32,12 +31,10 @@ import ResponseSignature = ResponseNS.ResponseSignature;
 import {Command as CommandNS} from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
 import IAMCPCommandVO = CommandNS.IAMCPCommandVO;
-import isIAMCPCommand = CommandNS.isIAMCPCommand;
 import AbstractCommand = CommandNS.AbstractCommand;
 import AbstractOrChannelOrLayerCommand = CommandNS.AbstractOrChannelOrLayerCommand;
 import AbstractChannelCommand = CommandNS.AbstractChannelCommand;
 import AbstractChannelOrLayerCommand = CommandNS.AbstractChannelOrLayerCommand;
-import AbstractLayerCommand = CommandNS.AbstractLayerCommand;
 import AbstractLayerWithFallbackCommand = CommandNS.AbstractLayerWithFallbackCommand;
 import AbstractLayerWithCgFallbackCommand = CommandNS.AbstractLayerWithCgFallbackCommand;
 // Param NS
@@ -49,7 +46,6 @@ import ParamSignature = ParamNS.ParamSignature;
 // Validation NS
 import {Validation as ValidationNS} from "./ParamValidators";
 import BooleanValidatorWithDefaults = ValidationNS.BooleanValidatorWithDefaults;
-import BooleanValidator = ValidationNS.BooleanValidator;
 import StringValidator = ValidationNS.StringValidator;
 import ClipNameValidator = ValidationNS.ClipNameValidator;
 import TemplateNameValidator = ValidationNS.TemplateNameValidator;
@@ -59,7 +55,6 @@ import KeywordValidator = ValidationNS.KeywordValidator;
 import FrameValidator = ValidationNS.FrameValidator;
 import PositiveNumberValidatorBetween = ValidationNS.PositiveNumberValidatorBetween;
 import NumberValidator = ValidationNS.NumberValidator;
-import PositiveNumberValidator = ValidationNS.NumberValidator;
 import PositiveNumberRoundValidatorBetween = ValidationNS.PositiveNumberRoundValidatorBetween;
 import TemplateDataValidator = ValidationNS.TemplateDataValidator;
 // Protocol NS

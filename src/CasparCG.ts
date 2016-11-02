@@ -19,14 +19,12 @@ import {Param as ParamNS} from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
 // Event NS
-import {BaseEvent, CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
+import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
 // Callback NS
 import {Callback as CallbackNS} from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
-import IEventCallback = CallbackNS.IEventCallback;
 import IStringCallback = CallbackNS.IStringCallback;
-import IResponseCallback = CallbackNS.IResponseCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
 
 /**
@@ -386,7 +384,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this._createNewSocket(options);
 
 		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
-		this.on(CasparCGSocketStatusEvent.TIMEOUT, (event) => this._onSocketStatusTimeout());
+		this.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
 		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
 
 		if (this.autoConnect) {
@@ -1292,7 +1290,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_PERSPECTIVE>
 	 */
-	public mixerPerspectiveDeferred(channel: number, layer: number = undefined, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerPerspectiveDeferred(channel: number, layer: number = undefined, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerPerspective(channel, layer, topLeftX, topLeftY, topRightx, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, true);
 	}
 

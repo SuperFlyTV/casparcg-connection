@@ -2,7 +2,6 @@
 import {Callback as CallbackNS} from "./global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
-import IEventCallback = CallbackNS.IEventCallback;
 import IStringCallback = CallbackNS.IStringCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
 

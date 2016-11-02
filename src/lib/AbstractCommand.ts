@@ -10,8 +10,6 @@ import {Response as ResponseParserNS} from "./ResponseParsers";
 import IResponseParser = ResponseParserNS.IResponseParser;
 // Param NS
 import {Param as ParamNS} from "./ParamSignature";
-import optional = ParamNS.Optional;
-import required = ParamNS.Required;
 import Payload = ParamNS.Payload;
 import PayloadVO = ParamNS.PayloadVO;
 import Param = ParamNS.Param;
@@ -20,7 +18,6 @@ import IParamSignature = ParamNS.IParamSignature;
 // Validation ND
 import {Validation as ValidationNS} from "./ParamValidators";
 import PositiveNumberValidatorBetween = ValidationNS.PositiveNumberRoundValidatorBetween;
-import KeywordValidator = ValidationNS.KeywordValidator;
 // Protocol NS
 import {Protocol as ProtocolNS} from "./ProtocolLogic";
 import IProtocolLogic = ProtocolNS.IProtocolLogic;
@@ -240,7 +237,6 @@ export namespace Command {
 		 */
 		protected validateParam(signature: IParamSignature): boolean {
 			let result: ParamData;
-			let key: string;
 			let param: Object;
 
 			// objectParams parsing
