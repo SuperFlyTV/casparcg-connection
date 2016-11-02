@@ -4,7 +4,7 @@ node_js:
 before_install:
 - npm install -g gulp
 install:
-- npm install --ignore-scripts && typings install
+- npm install --ignore-scripts
 script:
 - gulp build
 before_deploy:
