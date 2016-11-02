@@ -1,4 +1,4 @@
-/// <reference path="../typings/index.d.ts" />
+import "jasmine";
 import {CasparCG} from "../src/CasparCG";
 import {CasparCGSocket} from "../src/lib/CasparCGSocket";
 import {Enum} from "../src/lib/ServerStateEnum";
