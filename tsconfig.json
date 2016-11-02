@@ -1,16 +1,24 @@
 {
 	"compilerOptions": {
-		"jsx": "react",
-		"module": "commonjs",
-		"moduleResolution": "node",
+		"declaration": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmitOnError": true,
+	//	"noImplicitAny": true,
+	//	"noImplicitReturns": true,
+	//	"noImplicitThis": true,
+	//	"noUnusedLocals": true,
+	//	"noUnusedParameters": true,
+	//	"strictNullChecks": true,
 		"target": "es5",
-		"sourceMap": false,
-		"removeComments": false,
-		"declaration": true
+		"lib": [
+			"es5"
+		],
+		"types": [
+			"node"
+		]
 	},
 	"exclude": [
 		"node_modules",
-		"tests",
-		"*___empty.ts"
+		"tests"
 	]
 }

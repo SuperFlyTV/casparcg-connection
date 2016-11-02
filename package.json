@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/SuperFlyTV/casparcg-connection/issues"
   },
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "author": "Jesper Stærkær @ SuperFly.tv",
   "homepage": "http://superfly.tv",
   "keywords": [
@@ -40,24 +40,22 @@
     "remote"
   ],
   "dependencies": {
+    "@types/highland": "^1.14.30",
+    "@types/node": "^6.0.46",
+    "@types/xml2js": "0.0.28",
     "es6-promise": "^3.3.0",
-    "hap": "https://github.com/jesperstarkar/hap.git",
     "highland": "^3.0.0-beta.3",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
     "del": "^2.2.1",
     "gulp": "^3.9.1",
-    "gulp-gitignore": "^0.1.0",
-    "gulp-sourcemaps": "^1.6.0",
     "gulp-typedoc": "^2.0.0",
     "gulp-typescript": "^2.10.0",
     "gulp-watch": "^4.3.5",
-    "gulp-zip": "^3.2.0",
     "jasmine-ts": "0.0.3",
     "tslint": "^3.13.0",
     "typedoc": "^0.3.12",
-    "typescript": "^1.7.3",
-    "typings": "^1.3.1"
+    "typescript": "^2.0.6"
   }
 }

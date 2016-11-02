@@ -2,11 +2,8 @@
 var gulp        = require('gulp'),
     typescript  = require('typescript'),
     ts          = require('gulp-typescript'),
-	  sourcemaps  = require('gulp-sourcemaps'),
     del         = require('del'),
-    typedoc     = require('gulp-typedoc'),
-    zip         = require('gulp-zip'),
-    gitignore   = require('gulp-gitignore');
+    typedoc     = require('gulp-typedoc');
 
 var project = ts.createProject('tsconfig.json', {typescript: typescript});
 var DIST_DIR = 'js/';
@@ -21,14 +18,9 @@ gulp.task('static', function () {
 //compile
 gulp.task('compile', function () {
   var tsResult = project.src() 
-		.pipe(sourcemaps.init())     
         .pipe(ts(project));
-
-         tsResult.dts
-			.pipe(gulp.dest(DIST_DIR));
             
     return tsResult.js
-			.pipe(sourcemaps.write('maps'))
 			.pipe(gulp.dest(DIST_DIR));
 });
 
@@ -44,26 +36,12 @@ gulp.task('clean', function () {
   ]);
 });
 
-//dist zip
-gulp.task('dist', function () {
-  return gulp.src(['js', 'js/**/*.**', 'license', 'readme.md'], {base: '.'})
-        .pipe(zip('casparcg-connection-js.zip'))
-        .pipe(gulp.dest('tmp'));
-  //return gulp.src('**/**/**.*', {base: '.'})
-  //      .pipe(gitignore())
-  //      .pipe(zip('casparcg-connection-src.zip'))
-  //      .pipe(gulp.dest('tmp'));
-});
-
 //dfault
 gulp.task('default', ['watch', 'compile']); 
-
 gulp.task('build', ['compile', 'static'])
-    
 
 //createProject
 gulp.task("typedoc", function() {
-    
 	return gulp.src(['src/**/*.ts', 'typings/'])
 		.pipe(typedoc({
             target: "es5",
