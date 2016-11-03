@@ -45,7 +45,7 @@ gulp.task('build', ['compile', 'static'])
 
 //createProject
 gulp.task("typedoc", function() {
-	return gulp.src(['src/**/*.ts', 'typings/'])
+	return gulp.src(['src'])
 		.pipe(typedoc({
             target: "es5",
             mode: 'file',

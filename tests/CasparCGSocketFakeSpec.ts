@@ -1,5 +1,4 @@
 import "jasmine";
-import {CasparCG} from "../src/CasparCG";
 import {CasparCGSocket} from "../src/lib/CasparCGSocket";
 
 describe("CasparCG Socket", () => {
