@@ -73,8 +73,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		this._client.on("error", (error: Error) => this._onError(error));
 		this._client.on("drain", () => this._onDrain());
 		this._client.on("close", (hadError: boolean) => this._onClose(hadError));
-
-		_(this._client)["splitBy"](/(?=\r\n)/).errors((error) => this._onError(error)).each((i) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
+		_(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
 		this.socketStatus = SocketState.configured;
 	}
 

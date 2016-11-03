@@ -3,19 +3,13 @@
 		"declaration": true,
 		"forceConsistentCasingInFileNames": true,
 		"noEmitOnError": true,
-	//	"noImplicitAny": true,
-	//	"noImplicitReturns": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
 		"noImplicitThis": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 	//	"strictNullChecks": true,
-		"target": "es5",
-		"lib": [
-			"es5"
-		],
-		"types": [
-			"node"
-		]
+		"target": "es5"
 	},
 	"exclude": [
 		"node_modules",

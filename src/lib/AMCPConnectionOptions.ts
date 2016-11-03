@@ -1,4 +1,5 @@
 // Callback NS
+import * as _ from "highland";
 import {Callback as CallbackNS} from "./global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
@@ -83,15 +84,9 @@ export class ConnectionOptions implements IConnectionOptions {
 				}
 			}
 
-			// @todo: object assign
-			for (let key in hostOrOptions) {
-				if (!hostOrOptions.hasOwnProperty(key)) {
-					continue;
-				}
-				if (this.hasOwnProperty(key)) {
-					this[key] = hostOrOptions[key];
-				}
-			}
+			// assign new values
+			// @todo: make sure to filter out only valid params
+			_.extend(hostOrOptions, this);
 			return;
 		}
 

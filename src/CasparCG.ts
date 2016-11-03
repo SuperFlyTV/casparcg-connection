@@ -1,3 +1,4 @@
+import * as _ from "highland";
 import {Promise} from "es6-promise";
 import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
@@ -397,21 +398,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	private _createNewSocket(options?: IConnectionOptions, enforceRecreation: boolean = false): void {
 		let hasNewOptions = false;
-		for (let key in options) {
+		// assign new values
+		// @todo: make sure to filter out only valid params
+		_.extend(options, this);
 
-			// @todo: object.assign
-			if (!options.hasOwnProperty(key)) {		// @todo: ????
-				continue;
-			}
-
-			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
-				// only update new options
-				if (this[key] !== options[key]) {
-					this[key] = options[key];
-					hasNewOptions = true;
-				}
-			}
-		}
 		// dont recreate if exising socket, same options + host + port
 		if (this._socket && (this._socket.host !== this.host)) {
 			hasNewOptions = true;
@@ -573,14 +563,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	public get connectionOptions(): ConnectionOptions {
-		let options: ConnectionOptions = new ConnectionOptions();
-
-		for (let key in options) {
-			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
-				options[key] = this[key];
-			}
-		}
-
+		let options: ConnectionOptions = new ConnectionOptions(this);
 		return options;
 	}
 
