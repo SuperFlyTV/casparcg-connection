@@ -443,7 +443,7 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		populate(cmdVo: IAMCPCommandVO, id): void {
+		populate(cmdVo: IAMCPCommandVO, id: string): void {
 			this._stringParamsArray = cmdVo._stringParamsArray;
 			this._objectParams = cmdVo._objectParams;
 			this.response = cmdVo.response;

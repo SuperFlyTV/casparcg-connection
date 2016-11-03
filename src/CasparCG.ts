@@ -384,9 +384,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		this._createNewSocket(options);
 
-		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
+		this.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
-		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
+		this.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
 
 		if (this.autoConnect) {
 			this.connect();
@@ -420,7 +420,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
 		this.setParent(this._socket);
-		this._socket.on("error", (error) => this._onSocketError(error));
+		this._socket.on("error", (error: Error) => this._onSocketError(error));
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
@@ -686,9 +686,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			if (AMCP.hasOwnProperty(commandOrString)) {
 
 				// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
-
-
-
 				// @todo: typechecking with fallback
 				command = Object.create(AMCP[commandOrString]["prototype"]);
 				// @todo: typechecking with fallback

@@ -34,16 +34,15 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
-
-			let parseNumbers = function(str) {
+			let parseNumbers = function(str: any) {
 				if (!isNaN(str)) {
 					str = str % 1 === 0 ? parseInt(str, 10) : parseFloat(str);
 				}
 				return str;
 			};
 
-			let returnFalse;
-			let returnData;
+			let returnFalse: Error;
+			let returnData: Object;
 
 			xmlParser(
 				response.items[0].replace("\n", ""),

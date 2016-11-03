@@ -38,7 +38,7 @@ export namespace Validation {
 		 *
 		 */
 		resolve(data: Object): ParamData {
-			let textstring;
+			let textstring: string;
 
 			function checkTextstring(rawClipNameString: string): string {
 				if (rawClipNameString ==  null) {
@@ -97,7 +97,7 @@ export namespace Validation {
 		 *
 		 */
 		resolve(data: Object): ParamData {
-			let clipName;
+			let clipName: string;
 
 			function checkClipNameString(rawClipNameString: string): string {
 				if (rawClipNameString ==  null) {
@@ -185,8 +185,8 @@ export namespace Validation {
 	 * 
 	 */
 	export class KeywordValidator extends AbstractValidator {
-		private _keyword;
-		private _caseSensitive;
+		private _keyword: string;
+		private _caseSensitive: boolean;
 
 		/**
 		 * 
@@ -242,8 +242,7 @@ export namespace Validation {
 	 * 
 	 */
 	export class FrameValidator extends AbstractValidator {
-
-		private _keyword;
+		private _keyword: string;
 
 		/**
 		 * 

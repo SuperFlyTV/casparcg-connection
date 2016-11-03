@@ -68,7 +68,7 @@ export namespace Param {
 	export class ParamSignature implements IParamSignature {
 
 		public validation: IValidator;
-		public payload = null;
+		public payload: Object = null;
 
 		/**
 		 * 

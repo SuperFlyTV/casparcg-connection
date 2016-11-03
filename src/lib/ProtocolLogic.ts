@@ -43,13 +43,11 @@ export namespace Protocol {
 		/**
 		 * 
 		 */
-		public if(target: string, mustBe: AbstractEnum|string): IProtocolLogic;
-		public if(...fields): IProtocolLogic;
-		public if(...fields): IProtocolLogic {
+		public if(target: string, mustBe: AbstractEnum|string): IProtocolLogic {
 			let resolveRef = this.resolve;
 			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => { 
 				for (let param of protocol){
-					if (param.name === fields[0] && param.payload === fields[1].toString()) {
+					if (param.name === target && param.payload === mustBe.toString()) {
 						return resolveRef.call(this, protocol);
 					}
 				}
@@ -62,13 +60,11 @@ export namespace Protocol {
 		/**
 		 * 
 		 */
-		public ifNot(target: string, cantBe: AbstractEnum|string): IProtocolLogic;
-		public ifNot(...fields): IProtocolLogic;
-		public ifNot(...fields): IProtocolLogic {
+		public ifNot(target: string, cantBe: AbstractEnum|string): IProtocolLogic {
 			let resolveRef = this.resolve;
 			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => { 
 				for (let param of protocol){
-					if (param.name === fields[0] && param.payload === fields[1].toString()) {
+					if (param.name === target && param.payload === cantBe.toString()) {
 						return protocol;
 					}
 				}
