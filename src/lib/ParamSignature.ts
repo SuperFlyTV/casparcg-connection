@@ -39,16 +39,16 @@ export namespace Param {
 	export interface IParamSignature {
 		required: (Required|Optional);
 		name: string;
-		key: string;
+		key: string | null;
 		validation: IValidator;
 		resolved: boolean;
-		payload: Object;
+		payload: Object | null;
 	}
 
 	/**
 	 * 
 	 */
-	export type Param = {[k: string]: (string|number|boolean|Object)};
+	export type Param = {[k: string]: (string|number|boolean|Object|undefined)};
 	export type Payload = {key: string, value: (string|number|boolean|Object)};
 	export type PayloadVO = {[k: string]: Payload};
 
@@ -68,14 +68,14 @@ export namespace Param {
 	export class ParamSignature implements IParamSignature {
 
 		public validation: IValidator;
-		public payload: Object = null;
+		public payload: Object | null = null;
 
 		/**
 		 * 
 		 */
 		constructor(public required: (Required|Optional),
 					public name: string,
-					public key: string,
+					public key: string | null,
 					validation: (IValidator|Object)) {
 			if (validation instanceof AbstractValidator) {
 				this.validation = validation;

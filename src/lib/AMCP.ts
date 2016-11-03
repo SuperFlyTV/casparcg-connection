@@ -103,13 +103,7 @@ export namespace AMCPUtil {
 		 * 
 		 */
 		static evaluateStatusCode(responseString: string): number {
-			let code: number = parseInt(responseString.substr(0, 3), 10);
-
-			if (code !== NaN) {
-				return code;
-			}
-
-			return null;
+			return parseInt(responseString.substr(0, 3), 10);
 		}
 	}
 }
@@ -344,7 +338,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "KEYER";
 		}
@@ -377,7 +371,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CHROMA";
 		}
@@ -400,7 +394,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "BLEND";
 		}
@@ -427,7 +421,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "OPACITY";
 		}
@@ -454,7 +448,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "BRIGHTNESS";
 		}
@@ -481,7 +475,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "SATURATION";
 		}
@@ -508,7 +502,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CONTRAST";
 		}
@@ -540,7 +534,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "LEVELS";
 		}
@@ -571,7 +565,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "FILL";
 		}
@@ -602,7 +596,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CLIP";
 		}
@@ -631,7 +625,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "ANCHOR";
 		}
@@ -662,7 +656,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CROP";
 		}
@@ -689,7 +683,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "ROTATION";
 		}
@@ -724,7 +718,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "PERSPECTIVE";
 		}
@@ -747,7 +741,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "MIPMAP";
 		}
@@ -774,7 +768,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "VOLUME";
 		}
@@ -799,7 +793,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "MASTERVOLUME";
 		}
@@ -822,7 +816,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "STRAIGHT_ALPHA_OUTPUT";
 		}
@@ -844,7 +838,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "GRID";
 		}
@@ -862,7 +856,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "COMMIT";
 		}
@@ -880,7 +874,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CLEAR";
 		}
@@ -1195,7 +1189,7 @@ export namespace AMCP {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["delay"] = "DELAY";
 		}
@@ -1216,7 +1210,7 @@ export namespace AMCP {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["info"] = "INFO";
 		}

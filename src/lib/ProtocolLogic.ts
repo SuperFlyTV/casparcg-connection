@@ -123,7 +123,7 @@ export namespace Protocol {
 			if (valids.length === 1) {
 				return protocol;
 			}
-			return null;
+			return [];
 		}
 	}
 

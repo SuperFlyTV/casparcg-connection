@@ -38,11 +38,11 @@ export namespace Validation {
 		 *
 		 */
 		resolve(data: Object): ParamData {
-			let textstring: string;
+			let textstring: string = "";
 
 			function checkTextstring(rawClipNameString: string): string {
 				if (rawClipNameString ==  null) {
-					return null;
+					return "";
 				}
 
 				// trim all non-textual content
@@ -50,14 +50,14 @@ export namespace Validation {
 
 				// check length
 				if (rawClipNameString.length === 0) {
-					return null;
+					return "";
 				}
 				return rawClipNameString;
 			}
 
 
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				let i: number = 0;
 
 				// switch lazy/greedy mode
@@ -97,11 +97,11 @@ export namespace Validation {
 		 *
 		 */
 		resolve(data: Object): ParamData {
-			let clipName: string;
+			let clipName: string = "";
 
 			function checkClipNameString(rawClipNameString: string): string {
 				if (rawClipNameString ==  null) {
-					return null;
+					return "";
 				}
 
 				// trim all non-textual content
@@ -109,14 +109,14 @@ export namespace Validation {
 
 				// check length
 				if (rawClipNameString.length === 0) {
-					return null;
+					return "";
 				}
 				return rawClipNameString;
 			}
 
 
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				let i: number = 0;
 				do {
 					clipName = checkClipNameString(arrayCast[i]);
@@ -207,7 +207,7 @@ export namespace Validation {
 			}
 
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				if (!this._caseSensitive) {
 					arrayCast = arrayCast.map(value => String(value).toLowerCase());
 				}
@@ -247,7 +247,7 @@ export namespace Validation {
 		/**
 		 * 
 		 */
-		constructor(keyword?: string) {
+		constructor(keyword: string) {
 			super();
 			this._keyword = keyword;
 		}
@@ -257,7 +257,7 @@ export namespace Validation {
 		 */
 		resolve(data: Object): ParamData {
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				let index: number;
 				arrayCast = arrayCast.map(element => String(element).toLowerCase());
 				if ((index = arrayCast.indexOf(this._keyword.toLowerCase())) > -1) {
@@ -331,13 +331,11 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
-			let result: ParamData = super.resolve(data);
-
-			if (result) {
-				return Number(result).toFixed();
+		resolve(data: Object | undefined): ParamData {
+			if (data) {
+				return Number(super.resolve(data)).toFixed();
 			}
-			return result;
+			return NaN;
 		}
 	}
 
@@ -394,9 +392,9 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object, key: string): ParamData {
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				let index: number;
 				arrayCast = arrayCast.map(element => String(element).toLowerCase());
 				if ((index = arrayCast.indexOf(key.toLowerCase())) > -1) {

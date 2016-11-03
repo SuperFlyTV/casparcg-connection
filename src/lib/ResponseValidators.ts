@@ -21,7 +21,7 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(): Object {
-			return null;
+			return {};
 		}
 	}
 
@@ -41,8 +41,8 @@ export namespace Response {
 				return str;
 			};
 
-			let returnFalse: Error;
-			let returnData: Object;
+			let returnFalse: Error | undefined;
+			let returnData: Object | undefined;
 
 			xmlParser(
 				response.items[0].replace("\n", ""),
@@ -52,7 +52,7 @@ export namespace Response {
 					returnData = result;
 				});
 
-			return (returnFalse !== null) ? false : returnData;
+			return returnFalse ? {} : returnData || {};
 		}
 	}
 
@@ -80,7 +80,7 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(): Object {
-			return null;
+			return {};
 		}
 	}
 
@@ -106,7 +106,7 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(): Object {
-			return null;
+			return {};
 		}
 	}
 }

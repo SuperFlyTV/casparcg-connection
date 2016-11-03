@@ -55,7 +55,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _commandTimeout: number = 5000; // @todo make connectionOption!
 	private _socketStatus: SocketState = SocketState.unconfigured;
 
-	private _parsedResponse: AMCPUtil.CasparCGSocketResponse;
+	private _parsedResponse: AMCPUtil.CasparCGSocketResponse | undefined;
 
 	/**
 	 * 
@@ -170,7 +170,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		if (this._client) {
 			return this._host;
 		}
-		return null;
+		return this._host;
 	}
 
 	/**
@@ -180,7 +180,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		if (this._client) {
 			return this._port;
 		}
-		return null;
+		return this._port;
 	}
 
 	/**
@@ -279,7 +279,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 				return;
 			} else {
 				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
-				this._parsedResponse = null;
+				this._parsedResponse = undefined;
 				return;
 			}
 		}
@@ -289,7 +289,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		} else if (this._parsedResponse && this._parsedResponse.statusCode === 201 || this._parsedResponse && this._parsedResponse.statusCode === 400 || this._parsedResponse && this._parsedResponse.statusCode === 101) {
 			this._parsedResponse.items.push(i);
 			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
-			this._parsedResponse = null;
+			this._parsedResponse = undefined;
 			return;
 		} else {
 			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(new AMCPUtil.CasparCGSocketResponse(i)));

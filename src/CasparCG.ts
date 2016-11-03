@@ -1,4 +1,3 @@
-import * as _ from "highland";
 import {Promise} from "es6-promise";
 import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
@@ -251,48 +250,48 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * Try to connect upon creation.
 	 */
-	public autoConnect: boolean = undefined;
+	public autoConnect: boolean | undefined = undefined;
 
 
 	/**b
 	 * @todo: document  
 	 */
-	public queueMode: QueueMode = undefined;
+	public queueMode: QueueMode | undefined = undefined;
 
 	/**
 	 * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].  
 	 */
-	public debug: boolean = undefined;
+	public debug: boolean | undefined = undefined;
 
 	/**
 	 * Callback for all logging. 
 	 */
-	public onLog: IStringCallback = undefined;
+	public onLog: IStringCallback | undefined = undefined;
 
 	/**
 	 * Callback for all status updates from the `CasparCGSocket`. 
 	 */
-	public onConnectionStatus: ISocketStatusCallback = undefined;
+	public onConnectionStatus: ISocketStatusCallback | undefined = undefined;
 
 	/**
 	 * Callback for status updates from the `CasparCGSocket` if the `connected` property changes value.
 	 */
-	public onConnectionChanged: IBooleanCallback = undefined;
+	public onConnectionChanged: IBooleanCallback | undefined = undefined;
 
 	/**
 	 * Callback for status updates from the `CasparCGSocket` if the `connected` property is set to `true`.
 	 */
-	public onConnected: IBooleanCallback = undefined;
+	public onConnected: IBooleanCallback | undefined = undefined;
 
 	/**
 	 * Callback for status updates from the `CasparCGSocket` if the `connected` property is set to `false`.
 	 */
-	public onDisconnected: IBooleanCallback = undefined;
+	public onDisconnected: IBooleanCallback | undefined = undefined;
 
 	/**
 	 * Callback for general errors
 	 */
-	public onError: IErrorCallback = undefined;
+	public onError: IErrorCallback | undefined = undefined;
 
 	/**
 	 * If the constructor gets called with no parameters, all properties of the CasparCG object will match all default properties defined by [[IConnectionOptions]].
@@ -397,11 +396,25 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _createNewSocket(options?: IConnectionOptions, enforceRecreation: boolean = false): void {
+		if (!options) {
+			return;
+		}
 		let hasNewOptions = false;
-		// assign new values
-		// @todo: make sure to filter out only valid params
-		_.extend(options, this);
+		for (let key in options) {
 
+			// @todo: object.assign
+			if (!options.hasOwnProperty(key)) {		// @todo: ????
+				continue;
+			}
+
+			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
+				// only update new options
+				if (this[key] !== options[key]) {
+					this[key] = options[key];
+					hasNewOptions = true;
+				}
+			}
+		}
 		// dont recreate if exising socket, same options + host + port
 		if (this._socket && (this._socket.host !== this.host)) {
 			hasNewOptions = true;
@@ -454,7 +467,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	public reconnect(): void {
-		this._createNewSocket(null, true);
+		this._createNewSocket(undefined, true);
 		this.connect();
 	}
 
@@ -563,7 +576,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	public get connectionOptions(): ConnectionOptions {
-		let options: ConnectionOptions = new ConnectionOptions(this);
+		let options: ConnectionOptions = new ConnectionOptions({});
+
+		for (let key in options) {
+			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
+				options[key] = this[key];
+			}
+		}
+
 		return options;
 	}
 
@@ -618,10 +638,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _onSocketStatusTimeout(): void {
-		let shouldReset: Boolean;
+		let shouldReset: Boolean = false;
 		while (this._sentCommands.length > 0) {
 			shouldReset = true;
-			let i: IAMCPCommand = this._sentCommands.shift();
+			let i: IAMCPCommand;
+			i = this._sentCommands.shift()!;
 			i.status =  IAMCPStatus.Timeout;
 			i.reject(i);
 		}
@@ -678,30 +699,34 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public do(command: IAMCPCommand): Promise<IAMCPCommand>;
 	public do(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
 	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> {
-		let command: IAMCPCommand;
+		let command: IAMCPCommand | undefined;
 
 		if (isIAMCPCommand(commandOrString)) {
 			command = commandOrString as IAMCPCommand;
 		}else if (typeof commandOrString === "string") {
 			if (AMCP.hasOwnProperty(commandOrString)) {
-
 				// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
+
 				// @todo: typechecking with fallback
 				command = Object.create(AMCP[commandOrString]["prototype"]);
 				// @todo: typechecking with fallback
-				command.constructor.apply(command, params);
+				if (command) {
+					command.constructor.apply(command, params);
+				}else {
+					throw new Error("Invalid command constructor");
+				}
 			}
 		}else {
 			// @todo: Handle, return?
 			throw new Error("Invalid command or commandstring");
 		}
 		// validate command and params
-		if (!command.validateParams()) {
-			// handle error, return??
-			return null;
+		if (!command || !command.validateParams()) {
+			// @todo: Handle, return?
+			throw new Error("Invalid command parameters");
 		}
 
-		return new Promise<IAMCPCommand>((resolve, reject) => {command.resolve = resolve; command.reject = reject; this._addQueuedCommand(command); });
+		return new Promise<IAMCPCommand>((resolve, reject) => {command!.resolve = resolve; command!.reject = reject; this._addQueuedCommand(command!); });
 	}
 
 
@@ -719,7 +744,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * @todo: document
 	 */
 	public removeQueuedCommand(id: string): boolean {
-		let removed: Array<IAMCPCommand>;
+		let removed: Array<IAMCPCommand> | undefined;
 		for (let i: number = 0; i < this._queuedCommands.length; i++) {
 			let o: IAMCPCommand = this._queuedCommands[i];
 			if (o.id === id) {
@@ -727,7 +752,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				break;
 			}
 		}
-		return typeof Object.prototype.toString.call( removed ) === "[object Array]" && removed.length > 0;
+		return typeof Object.prototype.toString.call( removed ) === "[object Array]" && removed!.length > 0;
 	}
 
 	/**
@@ -769,7 +794,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			return;
 		}
 
-		let currentCommand: IAMCPCommand = this._sentCommands.shift();
+		let currentCommand: IAMCPCommand = (this._sentCommands.shift())!;
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
 		}
@@ -793,7 +818,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		if (flushSent) {
 			while (this._sentCommands.length > 0) {
-				let i: IAMCPCommand = this._sentCommands.shift();
+				let i: IAMCPCommand = (this._sentCommands.shift())!;
 				i.status =  IAMCPStatus.Failed;
 				i.reject(i);
 			}
@@ -804,7 +829,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			// salvo mode
 			if (this.queueMode === QueueMode.SALVO) {
 				if (this._queuedCommands.length > 0) {
-					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
+					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
 					this._sentCommands.push(nextCommand);
 					this._socket.executeCommand(nextCommand);
 				}
@@ -813,7 +838,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			// sequential mode
 			if (this.queueMode === QueueMode.SEQUENTIAL) {
 				if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
-					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
+					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
 					this._sentCommands.push(nextCommand);
 					this._socket.executeCommand(nextCommand);
 				}
@@ -832,14 +857,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
 	 */
-	public loadbg(channel: number, layer: number = undefined, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
+	public loadbg(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadbgCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
 	 */
-	public load(channel: number, layer: number = undefined, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
+	public load(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto}));
 	}
 
@@ -848,7 +873,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public play(channel: number, layer?: number): Promise<IAMCPCommand>;
 	public play(channel: number, layer: number, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand>;
-	public play(channel: number, layer: number = undefined, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
+	public play(channel: number, layer: number = NaN, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.PlayCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto}));
 	}
 
@@ -876,7 +901,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_ADD>
 	 */
-	public cgAdd(channel: number, layer: number = undefined, flashLayer: number = undefined, templateName: string, playOnLoad?: boolean|number|string, data?: TemplateData): Promise<IAMCPCommand> {
+	public cgAdd(channel: number, layer: number = NaN, flashLayer: number = NaN, templateName: string, playOnLoad?: boolean|number|string, data?: TemplateData): Promise<IAMCPCommand> {
 		return this.do(new AMCP.CGAddCommand({channel: channel, layer: layer, flashLayer: flashLayer, templateName: templateName, playOnLoad: playOnLoad, data: data}));
 	}
 
@@ -918,7 +943,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_UPDATE>
 	 */
-	public cgUpdate(channel: number, layer: number = undefined, flashLayer: number, data: TemplateData): Promise<IAMCPCommand> {
+	public cgUpdate(channel: number, layer: number = NaN, flashLayer: number, data: TemplateData): Promise<IAMCPCommand> {
 		return this.do(new AMCP.CGUpdateCommand({channel: channel, layer: layer, flashLayer: flashLayer, data: data}));
 	}
 
@@ -933,7 +958,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_KEYER>
 	 */
 	public mixerKeyer(channel: number, layer?: number): Promise<IAMCPCommand>;
-	public mixerKeyer(channel: number, layer: number, state: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
+	public mixerKeyer(channel: number, layer: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerKeyer(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerKeyerCommand({channel: channel, layer: layer, keyer: state, defer: defer}));
 	}
@@ -995,7 +1020,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public mixerBlendDeferred(channel: number, layer: number, blendmode: Enum.BlendMode): Promise<IAMCPCommand>;
 	public mixerBlendDeferred(channel: number, layer: number, blendmode: string): Promise<IAMCPCommand>;
-	public mixerBlendDeferred(channel: number, layer: number = undefined, blendmode: Enum.BlendMode|string): Promise<IAMCPCommand> {
+	public mixerBlendDeferred(channel: number, layer: number = NaN, blendmode: Enum.BlendMode|string): Promise<IAMCPCommand> {
 		return this.mixerBlend(channel, layer, blendmode, true);
 	}
 
@@ -1020,7 +1045,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_OPACITY>
 	 */
-	public mixerOpacityDeferred(channel: number, layer: number = undefined, opacity: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerOpacityDeferred(channel: number, layer: number = NaN, opacity: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerOpacity(channel, layer, opacity, transitionDuration, transitionEasing, true);
 	}
 
@@ -1045,7 +1070,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_BRIGHTNESS>
 	 */
-	public mixerBrightnessDeferred(channel: number, layer: number = undefined, brightness: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerBrightnessDeferred(channel: number, layer: number = NaN, brightness: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerBrightness(channel, layer, brightness, transitionDuration, transitionEasing, true);
 	}
 
@@ -1070,7 +1095,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_SATURATION>
 	 */
-	public mixerSaturationDeferred(channel: number, layer: number = undefined, saturation: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerSaturationDeferred(channel: number, layer: number = NaN, saturation: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerSaturation(channel, layer, saturation, transitionDuration, transitionEasing, true);
 	}
 
@@ -1095,7 +1120,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CONTRAST>
 	 */
-	public mixerContrastDeferred(channel: number, layer: number = undefined, contrast: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerContrastDeferred(channel: number, layer: number = NaN, contrast: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerContrast(channel, layer, contrast, transitionDuration, transitionEasing, true);
 	}
 
@@ -1113,14 +1138,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerLevels(channel: number, layer: number, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerLevels(channel: number, layer: number, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerLevels(channel: number, layer: number, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerLevels(channel: number, layer: number = undefined, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerLevels(channel: number, layer: number = NaN, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerLevelsCommand({channel: channel, layer: layer, minInput: minInput, maxInput: maxInput, gamma: gamma, minOutput: minOutput, maxOutput: maxOutput, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_LEVELS>
 	 */
-	public mixerLevelsDeferred(channel: number, layer: number = undefined, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerLevelsDeferred(channel: number, layer: number = NaN, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerLevels(channel, layer, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing, true);
 	}
 
@@ -1138,14 +1163,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerFill(channel: number, layer: number, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerFill(channel: number, layer: number, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerFill(channel: number, layer: number, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerFill(channel: number, layer: number = undefined, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerFill(channel: number, layer: number = NaN, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerFillCommand({channel: channel, layer: layer, x: x, y: y, xScale: xScale, yScale: yScale, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/*
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_FILL>
 	 */
-	public mixerFillDeferred(channel: number, layer: number = undefined, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerFillDeferred(channel: number, layer: number = NaN, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerFill(channel, layer, x, y, xScale, yScale, transitionDuration, transitionEasing, true);
 	}
 
@@ -1163,14 +1188,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerClip(channel: number, layer: number, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerClip(channel: number, layer: number, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerClip(channel: number, layer: number, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerClip(channel: number, layer: number = undefined, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerClip(channel: number, layer: number = NaN, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerClipCommand({channel: channel, layer: layer, x: x, y: y, width: width, height: height, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CLIP>
 	 */
-	public mixerClipDeferred(channel: number, layer: number = undefined, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerClipDeferred(channel: number, layer: number = NaN, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerClip(channel, layer, x, y, width, height, transitionDuration, transitionEasing, true);
 	}
 
@@ -1188,14 +1213,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerAnchor(channel: number, layer: number, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerAnchor(channel: number, layer: number, x: number, y: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerAnchor(channel: number, layer: number, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerAnchor(channel: number, layer: number = undefined, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerAnchor(channel: number, layer: number = NaN, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerAnchorCommand({channel: channel, layer: layer, x: x, y: y, ransition: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ANCHOR>
 	 */
-	public mixerAnchorDeferred(channel: number, layer: number = undefined, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerAnchorDeferred(channel: number, layer: number = NaN, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerAnchor(channel, layer, x, y, transitionDuration, transitionEasing, true);
 	}
 
@@ -1213,14 +1238,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerCrop(channel: number, layer: number, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerCrop(channel: number, layer: number, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerCrop(channel: number, layer: number, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerCrop(channel: number, layer: number = undefined, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerCrop(channel: number, layer: number = NaN, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerCropCommand({channel: channel, layer: layer, left: left, top: top, right: right, bottom: bottom, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CROP>
 	 */
-	public mixerCropDeferred(channel: number, layer: number = undefined, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerCropDeferred(channel: number, layer: number = NaN, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerCrop(channel, layer, left, top, right, bottom, transitionDuration, transitionEasing, true);
 	}
 
@@ -1245,7 +1270,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ROTATION>
 	 */
-	public mixerRotationDeferred(channel: number, layer: number = undefined, rotation: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerRotationDeferred(channel: number, layer: number = NaN, rotation: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerRotation(channel, layer, rotation, transitionDuration, transitionEasing, true);
 	}
 
@@ -1263,14 +1288,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerPerspective(channel: number, layer: number, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottmLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerPerspective(channel: number, layer: number, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottmLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerPerspective(channel: number, layer: number, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottmLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerPerspective(channel: number, layer: number = undefined, topLeftX?: number, topLeftY?: number, topRightx?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottmLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerPerspective(channel: number, layer: number = NaN, topLeftX?: number, topLeftY?: number, topRightx?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottmLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerPerspectiveCommand({channel: channel, layer: layer, topLeftX: topLeftX, topLeftY: topLeftY, topRightx: topRightx, topRightY: topRightY, bottomRightX: bottomRightX, bottomRightY: bottomRightY, bottmLeftX: bottmLeftX, bottomLeftY: bottomLeftY, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_PERSPECTIVE>
 	 */
-	public mixerPerspectiveDeferred(channel: number, layer: number = undefined, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerPerspectiveDeferred(channel: number, layer: number = NaN, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerPerspective(channel, layer, topLeftX, topLeftY, topRightx, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, true);
 	}
 
@@ -1285,7 +1310,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_MIPMAP>
 	 */
 	public mixerMipmap(channel: number, layer?: number): Promise<IAMCPCommand>;
-	public mixerMipmap(channel: number, layer: number, state: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
+	public mixerMipmap(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerMipmap(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerMipmapCommand({channel: channel, layer: layer, keyer: state, defer: defer}));
 	}
@@ -1318,7 +1343,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_VOLUME>
 	 */
-	public mixerVolumeDeferred(channel: number, layer: number = undefined, volume: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerVolumeDeferred(channel: number, layer: number = NaN, volume: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerVolume(channel, layer, volume, transitionDuration, transitionEasing, true);
 	}
 
@@ -1333,7 +1358,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_MASTERVOLUME>
 	 */
 	public mixerMastervolume(channel: number): Promise<IAMCPCommand>;
-	public mixerMastervolume(channel: number, mastervolume: number, defer?: boolean): Promise<IAMCPCommand>;
+	public mixerMastervolume(channel: number, mastervolume?: number, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerMastervolume(channel: number, mastervolume?: number, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerMastervolumeCommand({channel: channel, mastervolume: mastervolume, defer: defer}));
 	}
@@ -1356,7 +1381,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_STRAIGHT_ALPHA_OUTPUT>
 	 */
 	public mixerStraightAlphaOutput(channel: number, layer?: number): Promise<IAMCPCommand>;
-	public mixerStraightAlphaOutput(channel: number, layer: number, state: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
+	public mixerStraightAlphaOutput(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerStraightAlphaOutput(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerKeyerCommand({channel: channel, layer: layer, keyer: state, defer: defer}));
 	}
