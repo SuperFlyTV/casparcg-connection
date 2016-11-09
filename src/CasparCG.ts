@@ -396,9 +396,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _createNewSocket(options?: IConnectionOptions, enforceRecreation: boolean = false): void {
-		if (!options) {
-			return;
-		}
 		let hasNewOptions = false;
 		for (let key in options) {
 
@@ -674,11 +671,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			console.error(args);
 			if (this.onError) {
 				this.onError(args);
-
-				// re-emit error if there's any listener
-				if (this.listenerCount("error") > 0) {
-					this.fire("error", args);
-				}
+				this.fire("error", args);
 				return;
 			}
 		}
