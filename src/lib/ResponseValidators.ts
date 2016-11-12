@@ -1,3 +1,4 @@
+import * as _ from "highland";
 import {parseString as xmlParser} from "xml2js";
 import {AMCPUtil as AMCPUtilNS} from "./AMCP";
 // AMCPUtilNS
@@ -51,6 +52,27 @@ export namespace Response {
 					returnFalse = error;
 					returnData = result;
 				});
+
+			// unwraps array-wrappep object one level deep
+			if (!returnFalse && returnData) {
+				_.pairs(returnData).map((i) => {
+					let value: Object = i[1];
+					if (typeof value === "object") {
+						for (let o in value) {
+							if (Array.isArray(value[o])) {
+								i[1] = value[o];
+								return i;
+							}
+						}
+					}
+					return i;
+				}).toArray((i) => {
+					returnData = {};
+					i.forEach((o) => {
+						returnData![o[0]] = o[1];
+					});
+				});
+			}
 
 			return returnFalse ? {} : returnData || {};
 		}

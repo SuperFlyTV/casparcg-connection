@@ -15,7 +15,7 @@ export namespace Config {
 		export type Channel = {
 			"video-mode": v20x.VideoFormat;
 			"straight-alpha-output"?: boolean;
-			"consumers"?: Array<v20x.Consumer>;
+			"consumers": Array<v20x.Consumer>;
 		};
 
 		/** */
@@ -123,7 +123,7 @@ export namespace Config {
 	/**  */
 	const defaultPaths_207: v207.Paths = {"media-path": "media\\", "log-path": "log\\", "data-path": "data\\", "template-path": "templates\\", "thumbnails-path": "thumbnails\\"};
 	const defaultPaths_210: v210.Paths = {"media-path": "media/", "log-path": "log/", "data-path": "data/", "template-path": "template/", "thumbnail-path": "thumbnail/", "font-path": "font/"};
-	const defaultChannel_20x: v207.Channel = {"video-mode": v20x.VideoFormat._PAL};
+	const defaultChannel_20x: v207.Channel = {"video-mode": v20x.VideoFormat._PAL, "consumers": []};
 
 	/**  */
 	export interface IConfig20x {
