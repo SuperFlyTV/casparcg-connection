@@ -397,18 +397,18 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	private _createNewSocket(options?: IConnectionOptions, enforceRecreation: boolean = false): void {
 		let hasNewOptions = false;
-		for (let key in options) {
+		if (options) {
+			for (let key in options) {
+				if (!options.hasOwnProperty(key)) {
+					continue;
+				}
 
-			// @todo: object.assign
-			if (!options.hasOwnProperty(key)) {		// @todo: ????
-				continue;
-			}
-
-			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
-				// only update new options
-				if (this[key] !== options[key]) {
-					this[key] = options[key];
-					hasNewOptions = true;
+				if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
+					// only update new options
+					if (this[key] !== options[key]) {
+						this[key] = options[key];
+						hasNewOptions = true;
+					}
 				}
 			}
 		}

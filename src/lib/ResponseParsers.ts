@@ -1,8 +1,6 @@
 // config NS
 import {Config as ConfigNS} from "./Config";
-import Config207VO = ConfigNS.Config207VO;
 import Config207 = ConfigNS.Config207;
-import Config210VO = ConfigNS.Config210VO;
 import Config210 = ConfigNS.Config210;
 
 export namespace Response {
@@ -47,7 +45,7 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			let result: Config207 = new Config207();
+			let result: Config207 | Config210 = new Config207();
 
 			for (let key in data) {
 				if (!data.hasOwnProperty(key)) {
