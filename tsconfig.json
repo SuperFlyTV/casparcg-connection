@@ -1,16 +1,19 @@
 {
 	"compilerOptions": {
-		"jsx": "react",
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"target": "es5",
-		"sourceMap": false,
-		"removeComments": false,
-		"declaration": true
+		"declaration": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmitOnError": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+	//	"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strictNullChecks": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"target": "es5"
 	},
 	"exclude": [
 		"node_modules",
-		"tests",
-		"*___empty.ts"
+		"tests"
 	]
 }

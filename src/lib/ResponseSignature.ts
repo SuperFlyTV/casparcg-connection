@@ -1,10 +1,5 @@
 import {Response as ResponseValidatorNS} from "./ResponseValidators";
-import IResponseValidator = ResponseValidatorNS.IResponseValidator;
 import StatusValidator = ResponseValidatorNS.StatusValidator;
-
-
-import {Response as ResponseParserNS} from "./ResponseParsers";
-import IResponseParser = ResponseParserNS.IResponseParser;
 
 /**
  * 

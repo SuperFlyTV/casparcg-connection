@@ -1,9 +1,7 @@
 import {parseString as xmlParser} from "xml2js";
-import {AMCP, AMCPUtil as AMCPUtilNS} from "./AMCP";
+import {AMCPUtil as AMCPUtilNS} from "./AMCP";
 // AMCPUtilNS
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
-import {Command  as CommandNS} from "./AbstractCommand";
-import IAMCPResponse = CommandNS.IAMCPResponse;
 
 export namespace Response {
 
@@ -22,8 +20,8 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public resolve(response: CasparCGSocketResponse): Object {
-			return null;
+		public resolve(): Object {
+			return {};
 		}
 	}
 
@@ -36,16 +34,15 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
-
-			let parseNumbers = function(str) {
+			let parseNumbers = function(str: any) {
 				if (!isNaN(str)) {
 					str = str % 1 === 0 ? parseInt(str, 10) : parseFloat(str);
 				}
 				return str;
 			};
 
-			let returnFalse;
-			let returnData;
+			let returnFalse: Error | undefined;
+			let returnData: Object | undefined;
 
 			xmlParser(
 				response.items[0].replace("\n", ""),
@@ -55,7 +52,7 @@ export namespace Response {
 					returnData = result;
 				});
 
-			return (returnFalse !== null) ? false : returnData;
+			return returnFalse ? {} : returnData || {};
 		}
 	}
 
@@ -82,8 +79,8 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public resolve(response: CasparCGSocketResponse): Object {
-			return null;
+		public resolve(): Object {
+			return {};
 		}
 	}
 
@@ -108,8 +105,8 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public resolve(response: CasparCGSocketResponse): Object {
-			return null;
+		public resolve(): Object {
+			return {};
 		}
 	}
 }

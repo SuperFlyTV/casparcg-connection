@@ -1,19 +1,13 @@
 import * as net from "net";
 import * as _ from "highland";
 import {EventEmitter} from "hap";
-import {IConnectionOptions, ConnectionOptions} from "./AMCPConnectionOptions";
 import {AMCPUtil} from "./AMCP";
 // Command NS
 import {Command as CommandNS} from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
-import IAMCPResponse = CommandNS.IAMCPResponse;
-import AMCPResponse = CommandNS.AMCPResponse;
 import IAMCPStatus = CommandNS.IAMCPStatus;
 // Event NS
-import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent} from "./event/Events";
-// Callback NSIAMCPResponse
-import {Callback as CallbackNS} from "./global/Callback";
-import IResponseCallback = CallbackNS.IResponseCallback;
+import {CasparCGSocketStatusEvent, CasparCGSocketResponseEvent} from "./event/Events";
 // Param NS 
 import {Param as ParamNS} from "./ParamSignature";
 import Payload = ParamNS.Payload;
@@ -60,7 +54,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _commandTimeout: number = 5000; // @todo make connectionOption!
 	private _socketStatus: SocketState = SocketState.unconfigured;
 
-	private _parsedResponse: AMCPUtil.CasparCGSocketResponse;
+	private _parsedResponse: AMCPUtil.CasparCGSocketResponse | undefined;
 
 	/**
 	 * 
@@ -78,8 +72,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		this._client.on("error", (error: Error) => this._onError(error));
 		this._client.on("drain", () => this._onDrain());
 		this._client.on("close", (hadError: boolean) => this._onClose(hadError));
-
-		_(this._client)["splitBy"](/(?=\r\n)/).errors((error) => this._onError(error)).each((i) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
+		_(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
 		this.socketStatus = SocketState.configured;
 	}
 
@@ -176,7 +169,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		if (this._client) {
 			return this._host;
 		}
-		return null;
+		return this._host;
 	}
 
 	/**
@@ -186,7 +179,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		if (this._client) {
 			return this._port;
 		}
-		return null;
+		return this._port;
 	}
 
 	/**
@@ -285,7 +278,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 				return;
 			} else {
 				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
-				this._parsedResponse = null;
+				this._parsedResponse = undefined;
 				return;
 			}
 		}
@@ -295,7 +288,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		} else if (this._parsedResponse && this._parsedResponse.statusCode === 201 || this._parsedResponse && this._parsedResponse.statusCode === 400 || this._parsedResponse && this._parsedResponse.statusCode === 101) {
 			this._parsedResponse.items.push(i);
 			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
-			this._parsedResponse = null;
+			this._parsedResponse = undefined;
 			return;
 		} else {
 			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(new AMCPUtil.CasparCGSocketResponse(i)));

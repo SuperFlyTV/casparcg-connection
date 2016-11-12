@@ -19,12 +19,7 @@ export namespace Validation {
 
 		public resolved = false;
 
-		/**
-		 * 
-		 */
-		resolve(value: Object, key?: string): ParamData {
-			return false;
-		}
+		abstract resolve(value: number, key?: string): ParamData;
 	}
 
 	/**
@@ -42,12 +37,12 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
-			let textstring;
+		resolve(data: Object): ParamData {
+			let textstring: string = "";
 
 			function checkTextstring(rawClipNameString: string): string {
 				if (rawClipNameString ==  null) {
-					return null;
+					return "";
 				}
 
 				// trim all non-textual content
@@ -55,14 +50,14 @@ export namespace Validation {
 
 				// check length
 				if (rawClipNameString.length === 0) {
-					return null;
+					return "";
 				}
 				return rawClipNameString;
 			}
 
 
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				let i: number = 0;
 
 				// switch lazy/greedy mode
@@ -101,12 +96,12 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
-			let clipName;
+		resolve(data: Object): ParamData {
+			let clipName: string = "";
 
 			function checkClipNameString(rawClipNameString: string): string {
 				if (rawClipNameString ==  null) {
-					return null;
+					return "";
 				}
 
 				// trim all non-textual content
@@ -114,14 +109,14 @@ export namespace Validation {
 
 				// check length
 				if (rawClipNameString.length === 0) {
-					return null;
+					return "";
 				}
 				return rawClipNameString;
 			}
 
 
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				let i: number = 0;
 				do {
 					clipName = checkClipNameString(arrayCast[i]);
@@ -170,7 +165,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			if (data instanceof this._enumClass) {
 				return data.value;
 			}else if (typeof data === "string") {
@@ -190,8 +185,8 @@ export namespace Validation {
 	 * 
 	 */
 	export class KeywordValidator extends AbstractValidator {
-		private _keyword;
-		private _caseSensitive;
+		private _keyword: string;
+		private _caseSensitive: boolean;
 
 		/**
 		 * 
@@ -205,14 +200,14 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			let keywordCopy: string = this._keyword;
 			if (!this._caseSensitive) {
 				keywordCopy = keywordCopy.toLowerCase();
 			}
 
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				if (!this._caseSensitive) {
 					arrayCast = arrayCast.map(value => String(value).toLowerCase());
 				}
@@ -247,13 +242,12 @@ export namespace Validation {
 	 * 
 	 */
 	export class FrameValidator extends AbstractValidator {
-
-		private _keyword;
+		private _keyword: string;
 
 		/**
 		 * 
 		 */
-		constructor(keyword?: string) {
+		constructor(keyword: string) {
 			super();
 			this._keyword = keyword;
 		}
@@ -261,9 +255,9 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				let index: number;
 				arrayCast = arrayCast.map(element => String(element).toLowerCase());
 				if ((index = arrayCast.indexOf(this._keyword.toLowerCase())) > -1) {
@@ -304,7 +298,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			if (typeof data === "number") {
 				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min);
 				if (numberCast >= 0) {
@@ -337,13 +331,11 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
-			let result: ParamData = super.resolve(data, key);
-
-			if (result) {
-				return Number(result).toFixed();
+		resolve(data: Object | undefined): ParamData {
+			if (data) {
+				return Number(super.resolve(data)).toFixed();
 			}
-			return result;
+			return NaN;
 		}
 	}
 
@@ -362,7 +354,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			if (typeof data === "number") {
 				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min);
 				return numberCast;
@@ -400,9 +392,9 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object, key: string): ParamData {
 			if (data instanceof Array) {
-				let arrayCast: Array<string> = [].concat(data);
+				let arrayCast: Array<string> = data;
 				let index: number;
 				arrayCast = arrayCast.map(element => String(element).toLowerCase());
 				if ((index = arrayCast.indexOf(key.toLowerCase())) > -1) {
@@ -460,7 +452,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object, key?: string): ParamData {
+		resolve(data: Object): ParamData {
 			let stringCast = data.toString();
 
 			// data is object: serialize

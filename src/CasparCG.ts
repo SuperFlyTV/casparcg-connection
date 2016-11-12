@@ -19,103 +19,13 @@ import {Param as ParamNS} from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
 // Event NS
-import {BaseEvent, CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
+import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
 // Callback NS
 import {Callback as CallbackNS} from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
-import IEventCallback = CallbackNS.IEventCallback;
 import IStringCallback = CallbackNS.IStringCallback;
-import IResponseCallback = CallbackNS.IResponseCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
-
-/*
-https://github.com/CasparCG/Server/commits/2.1.0/protocol/amcp/AMCPCommandsImpl.cpp
-repo.register_channel_command(	L"Basic Commands",		L"LOADBG",						loadbg_describer,					loadbg_command,					1);
-repo.register_channel_command(	L"Basic Commands",		L"LOAD",						load_describer,						load_command,					1);
-repo.register_channel_command(	L"Basic Commands",		L"PLAY",						play_describer,						play_command,					0);
-repo.register_channel_command(	L"Basic Commands",		L"PAUSE",						pause_describer,					pause_command,					0);
-repo.register_channel_command(	L"Basic Commands",		L"RESUME",						resume_describer,					resume_command,					0);
-repo.register_channel_command(	L"Basic Commands",		L"STOP",						stop_describer,						stop_command,					0);
-repo.register_channel_command(	L"Basic Commands",		L"CLEAR",						clear_describer,					clear_command,					0);
-repo.register_channel_command(	L"Basic Commands",		L"CALL",						call_describer,						call_command,					1);
-repo.register_channel_command(	L"Basic Commands",		L"SWAP",						swap_describer,						swap_command,					1);
-repo.register_channel_command(	L"Basic Commands",		L"ADD",							add_describer,						add_command,					1);
-repo.register_channel_command(	L"Basic Commands",		L"REMOVE",						remove_describer,					remove_command,					0);
-repo.register_channel_command(	L"Basic Commands",		L"PRINT",						print_describer,					print_command,					0);
-repo.register_command(			L"Basic Commands",		L"LOG LEVEL",					log_level_describer,				log_level_command,				1);
-repo.register_command(			L"Basic Commands",		L"LOG CATEGORY",				log_category_describer,				log_category_command,			2);
-repo.register_channel_command(	L"Basic Commands",		L"SET",							set_describer,						set_command,					2);
-repo.register_command(			L"Basic Commands",		L"LOCK",						lock_describer,						lock_command,					2);
-
-repo.register_command(			L"Data Commands", 		L"DATA STORE",					data_store_describer,				data_store_command,				2);
-repo.register_command(			L"Data Commands", 		L"DATA RETRIEVE",				data_retrieve_describer,			data_retrieve_command,			1);
-repo.register_command(			L"Data Commands", 		L"DATA LIST",					data_list_describer,				data_list_command,				0);
-repo.register_command(			L"Data Commands", 		L"DATA REMOVE",					data_remove_describer,				data_remove_command,			1);
-
-repo.register_channel_command(	L"Template Commands",	L"CG ADD",						cg_add_describer,					cg_add_command,					3);
-repo.register_channel_command(	L"Template Commands",	L"CG PLAY",						cg_play_describer,					cg_play_command,				1);
-repo.register_channel_command(	L"Template Commands",	L"CG STOP",						cg_stop_describer,					cg_stop_command,				1);
-repo.register_channel_command(	L"Template Commands",	L"CG NEXT",						cg_next_describer,					cg_next_command,				1);
-repo.register_channel_command(	L"Template Commands",	L"CG REMOVE",					cg_remove_describer,				cg_remove_command,				1);
-repo.register_channel_command(	L"Template Commands",	L"CG CLEAR",					cg_clear_describer,					cg_clear_command,				0);
-repo.register_channel_command(	L"Template Commands",	L"CG UPDATE",					cg_update_describer,				cg_update_command,				2);
-repo.register_channel_command(	L"Template Commands",	L"CG INVOKE",					cg_invoke_describer,				cg_invoke_command,				2);
-repo.register_channel_command(	L"Template Commands",	L"CG INFO",						cg_info_describer,					cg_info_command,				0);
-
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER KEYER",					mixer_keyer_describer,				mixer_keyer_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER CHROMA",				mixer_chroma_describer,				mixer_chroma_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER BLEND",					mixer_blend_describer,				mixer_blend_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER OPACITY",				mixer_opacity_describer,			mixer_opacity_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER BRIGHTNESS",			mixer_brightness_describer,			mixer_brightness_command,		0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER SATURATION",			mixer_saturation_describer,			mixer_saturation_command,		0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER CONTRAST",				mixer_contrast_describer,			mixer_contrast_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER LEVELS",				mixer_levels_describer,				mixer_levels_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER FILL",					mixer_fill_describer,				mixer_fill_command,				0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER CLIP",					mixer_clip_describer,				mixer_clip_command,				0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER ANCHOR",				mixer_anchor_describer,				mixer_anchor_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER CROP",					mixer_crop_describer,				mixer_crop_command,				0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER ROTATION",				mixer_rotation_describer,			mixer_rotation_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER PERSPECTIVE",			mixer_perspective_describer,		mixer_perspective_command,		0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER MIPMAP",				mixer_mipmap_describer,				mixer_mipmap_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER VOLUME",				mixer_volume_describer,				mixer_volume_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER MASTERVOLUME",			mixer_mastervolume_describer,		mixer_mastervolume_command,		0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER STRAIGHT_ALPHA_OUTPUT",	mixer_straight_alpha_describer,		mixer_straight_alpha_command,	0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER GRID",					mixer_grid_describer,				mixer_grid_command,				1);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER COMMIT",				mixer_commit_describer,				mixer_commit_command,			0);
-repo.register_channel_command(	L"Mixer Commands",		L"MIXER CLEAR",					mixer_clear_describer,				mixer_clear_command,			0);
-repo.register_command(			L"Mixer Commands",		L"CHANNEL_GRID",				channel_grid_describer,				channel_grid_command,			0);
-
-repo.register_command(			L"Thumbnail Commands",	L"THUMBNAIL LIST",				thumbnail_list_describer,			thumbnail_list_command,			0);
-repo.register_command(			L"Thumbnail Commands",	L"THUMBNAIL RETRIEVE",			thumbnail_retrieve_describer,		thumbnail_retrieve_command,		1);
-repo.register_command(			L"Thumbnail Commands",	L"THUMBNAIL GENERATE",			thumbnail_generate_describer,		thumbnail_generate_command,		1);
-repo.register_command(			L"Thumbnail Commands",	L"THUMBNAIL GENERATE_ALL",		thumbnail_generateall_describer,	thumbnail_generateall_command,	0);
-
-repo.register_command(			L"Query Commands",		L"CINF",						cinf_describer,						cinf_command,					1);
-repo.register_command(			L"Query Commands",		L"CLS",							cls_describer,						cls_command,					0);
-repo.register_command(			L"Query Commands",		L"FLS",							fls_describer,						fls_command,					0);
-repo.register_command(			L"Query Commands",		L"TLS",							tls_describer,						tls_command,					0);
-repo.register_command(			L"Query Commands",		L"VERSION",						version_describer,					version_command,				0);
-repo.register_command(			L"Query Commands",		L"INFO",						info_describer,						info_command,					0);
-repo.register_channel_command(	L"Query Commands",		L"INFO",						info_channel_describer,				info_channel_command,			0);
-repo.register_command(			L"Query Commands",		L"INFO TEMPLATE",				info_template_describer,			info_template_command,			1);
-repo.register_command(			L"Query Commands",		L"INFO CONFIG",					info_config_describer,				info_config_command,			0);
-repo.register_command(			L"Query Commands",		L"INFO PATHS",					info_paths_describer,				info_paths_command,				0);
-repo.register_command(			L"Query Commands",		L"INFO SYSTEM",					info_system_describer,				info_system_command,			0);
-repo.register_command(			L"Query Commands",		L"INFO SERVER",					info_server_describer,				info_server_command,			0);
-repo.register_command(			L"Query Commands",		L"INFO QUEUES",					info_queues_describer,				info_queues_command,			0);
-repo.register_command(			L"Query Commands",		L"INFO THREADS",				info_threads_describer,				info_threads_command,			0);
-repo.register_channel_command(	L"Query Commands",		L"INFO DELAY",					info_delay_describer,				info_delay_command,				0);
-repo.register_command(			L"Query Commands",		L"DIAG",						diag_describer,						diag_command,					0);
-repo.register_command(			L"Query Commands",		L"GL INFO",						gl_info_describer,					gl_info_command,				0);
-repo.register_command(			L"Query Commands",		L"GL GC",						gl_gc_describer,					gl_gc_command,					0);
-repo.register_command(			L"Query Commands",		L"BYE",							bye_describer,						bye_command,					0);
-repo.register_command(			L"Query Commands",		L"KILL",						kill_describer,						kill_command,					0);
-repo.register_command(			L"Query Commands",		L"RESTART",						restart_describer,					restart_command,				0);
-repo.register_command(			L"Query Commands",		L"HELP",						help_describer,						help_command,					0);
-repo.register_command(			L"Query Commands",		L"HELP PRODUCER",				help_producer_describer,			help_producer_command,			0);
-repo.register_command(			L"Query Commands",		L"HELP CONSUMER",				help_consumer_describer,			help_consumer_command,			0);
-*/
 
 /**
  * CasparCG Protocols
@@ -340,48 +250,48 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * Try to connect upon creation.
 	 */
-	public autoConnect: boolean = undefined;
+	public autoConnect: boolean | undefined = undefined;
 
 
 	/**b
 	 * @todo: document  
 	 */
-	public queueMode: QueueMode = undefined;
+	public queueMode: QueueMode | undefined = undefined;
 
 	/**
 	 * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].  
 	 */
-	public debug: boolean = undefined;
+	public debug: boolean | undefined = undefined;
 
 	/**
 	 * Callback for all logging. 
 	 */
-	public onLog: IStringCallback = undefined;
+	public onLog: IStringCallback | undefined = undefined;
 
 	/**
 	 * Callback for all status updates from the `CasparCGSocket`. 
 	 */
-	public onConnectionStatus: ISocketStatusCallback = undefined;
+	public onConnectionStatus: ISocketStatusCallback | undefined = undefined;
 
 	/**
 	 * Callback for status updates from the `CasparCGSocket` if the `connected` property changes value.
 	 */
-	public onConnectionChanged: IBooleanCallback = undefined;
+	public onConnectionChanged: IBooleanCallback | undefined = undefined;
 
 	/**
 	 * Callback for status updates from the `CasparCGSocket` if the `connected` property is set to `true`.
 	 */
-	public onConnected: IBooleanCallback = undefined;
+	public onConnected: IBooleanCallback | undefined = undefined;
 
 	/**
 	 * Callback for status updates from the `CasparCGSocket` if the `connected` property is set to `false`.
 	 */
-	public onDisconnected: IBooleanCallback = undefined;
+	public onDisconnected: IBooleanCallback | undefined = undefined;
 
 	/**
 	 * Callback for general errors
 	 */
-	public onError: IErrorCallback = undefined;
+	public onError: IErrorCallback | undefined = undefined;
 
 	/**
 	 * If the constructor gets called with no parameters, all properties of the CasparCG object will match all default properties defined by [[IConnectionOptions]].
@@ -473,9 +383,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		this._createNewSocket(options);
 
-		this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
-		this.on(CasparCGSocketStatusEvent.TIMEOUT, (event) => this._onSocketStatusTimeout());
-		this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
+		this.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
+		this.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
+		this.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
 
 		if (this.autoConnect) {
 			this.connect();
@@ -520,7 +430,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
 		this.setParent(this._socket);
-		this._socket.on("error", (error) => this._onSocketError(error));
+		this._socket.on("error", (error: Error) => this._onSocketError(error));
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
@@ -554,7 +464,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	public reconnect(): void {
-		this._createNewSocket(null, true);
+		this._createNewSocket(undefined, true);
 		this.connect();
 	}
 
@@ -663,7 +573,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	public get connectionOptions(): ConnectionOptions {
-		let options: ConnectionOptions = new ConnectionOptions();
+		let options: ConnectionOptions = new ConnectionOptions({});
 
 		for (let key in options) {
 			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
@@ -725,10 +635,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _onSocketStatusTimeout(): void {
-		let shouldReset: Boolean;
+		let shouldReset: Boolean = false;
 		while (this._sentCommands.length > 0) {
 			shouldReset = true;
-			let i: IAMCPCommand = this._sentCommands.shift();
+			let i: IAMCPCommand;
+			i = this._sentCommands.shift()!;
 			i.status =  IAMCPStatus.Timeout;
 			i.reject(i);
 		}
@@ -760,11 +671,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			console.error(args);
 			if (this.onError) {
 				this.onError(args);
-
-				// re-emit error if there's any listener
-				if (this.listenerCount("error") > 0) {
-					this.fire("error", args);
-				}
+				this.fire("error", args);
 				return;
 			}
 		}
@@ -785,33 +692,34 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public do(command: IAMCPCommand): Promise<IAMCPCommand>;
 	public do(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
 	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> {
-		let command: IAMCPCommand;
+		let command: IAMCPCommand | undefined;
 
 		if (isIAMCPCommand(commandOrString)) {
 			command = commandOrString as IAMCPCommand;
 		}else if (typeof commandOrString === "string") {
 			if (AMCP.hasOwnProperty(commandOrString)) {
-
 				// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
-
-
 
 				// @todo: typechecking with fallback
 				command = Object.create(AMCP[commandOrString]["prototype"]);
 				// @todo: typechecking with fallback
-				command.constructor.apply(command, params);
+				if (command) {
+					command.constructor.apply(command, params);
+				}else {
+					throw new Error("Invalid command constructor");
+				}
 			}
 		}else {
 			// @todo: Handle, return?
 			throw new Error("Invalid command or commandstring");
 		}
 		// validate command and params
-		if (!command.validateParams()) {
-			// handle error, return??
-			return null;
+		if (!command || !command.validateParams()) {
+			// @todo: Handle, return?
+			throw new Error("Invalid command parameters");
 		}
 
-		return new Promise<IAMCPCommand>((resolve, reject) => {command.resolve = resolve; command.reject = reject; this._addQueuedCommand(command); });
+		return new Promise<IAMCPCommand>((resolve, reject) => {command!.resolve = resolve; command!.reject = reject; this._addQueuedCommand(command!); });
 	}
 
 
@@ -829,7 +737,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * @todo: document
 	 */
 	public removeQueuedCommand(id: string): boolean {
-		let removed: Array<IAMCPCommand>;
+		let removed: Array<IAMCPCommand> | undefined;
 		for (let i: number = 0; i < this._queuedCommands.length; i++) {
 			let o: IAMCPCommand = this._queuedCommands[i];
 			if (o.id === id) {
@@ -837,7 +745,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				break;
 			}
 		}
-		return typeof Object.prototype.toString.call( removed ) === "[object Array]" && removed.length > 0;
+		return typeof Object.prototype.toString.call( removed ) === "[object Array]" && removed!.length > 0;
 	}
 
 	/**
@@ -879,7 +787,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			return;
 		}
 
-		let currentCommand: IAMCPCommand = this._sentCommands.shift();
+		let currentCommand: IAMCPCommand = (this._sentCommands.shift())!;
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
 		}
@@ -903,7 +811,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		if (flushSent) {
 			while (this._sentCommands.length > 0) {
-				let i: IAMCPCommand = this._sentCommands.shift();
+				let i: IAMCPCommand = (this._sentCommands.shift())!;
 				i.status =  IAMCPStatus.Failed;
 				i.reject(i);
 			}
@@ -914,7 +822,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			// salvo mode
 			if (this.queueMode === QueueMode.SALVO) {
 				if (this._queuedCommands.length > 0) {
-					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
+					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
 					this._sentCommands.push(nextCommand);
 					this._socket.executeCommand(nextCommand);
 				}
@@ -923,7 +831,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			// sequential mode
 			if (this.queueMode === QueueMode.SEQUENTIAL) {
 				if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
-					let nextCommand: IAMCPCommand = this._queuedCommands.shift();
+					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
 					this._sentCommands.push(nextCommand);
 					this._socket.executeCommand(nextCommand);
 				}
@@ -942,14 +850,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
 	 */
-	public loadbg(channel: number, layer: number = undefined, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
+	public loadbg(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadbgCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
 	 */
-	public load(channel: number, layer: number = undefined, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
+	public load(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto}));
 	}
 
@@ -958,7 +866,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public play(channel: number, layer?: number): Promise<IAMCPCommand>;
 	public play(channel: number, layer: number, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand>;
-	public play(channel: number, layer: number = undefined, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
+	public play(channel: number, layer: number = NaN, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.PlayCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto}));
 	}
 
@@ -986,7 +894,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_ADD>
 	 */
-	public cgAdd(channel: number, layer: number = undefined, flashLayer: number = undefined, templateName: string, playOnLoad?: boolean|number|string, data?: TemplateData): Promise<IAMCPCommand> {
+	public cgAdd(channel: number, layer: number = NaN, flashLayer: number = NaN, templateName: string, playOnLoad?: boolean|number|string, data?: TemplateData): Promise<IAMCPCommand> {
 		return this.do(new AMCP.CGAddCommand({channel: channel, layer: layer, flashLayer: flashLayer, templateName: templateName, playOnLoad: playOnLoad, data: data}));
 	}
 
@@ -1028,7 +936,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_UPDATE>
 	 */
-	public cgUpdate(channel: number, layer: number = undefined, flashLayer: number, data: TemplateData): Promise<IAMCPCommand> {
+	public cgUpdate(channel: number, layer: number = NaN, flashLayer: number, data: TemplateData): Promise<IAMCPCommand> {
 		return this.do(new AMCP.CGUpdateCommand({channel: channel, layer: layer, flashLayer: flashLayer, data: data}));
 	}
 
@@ -1043,7 +951,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_KEYER>
 	 */
 	public mixerKeyer(channel: number, layer?: number): Promise<IAMCPCommand>;
-	public mixerKeyer(channel: number, layer: number, state: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
+	public mixerKeyer(channel: number, layer: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerKeyer(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerKeyerCommand({channel: channel, layer: layer, keyer: state, defer: defer}));
 	}
@@ -1105,7 +1013,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public mixerBlendDeferred(channel: number, layer: number, blendmode: Enum.BlendMode): Promise<IAMCPCommand>;
 	public mixerBlendDeferred(channel: number, layer: number, blendmode: string): Promise<IAMCPCommand>;
-	public mixerBlendDeferred(channel: number, layer: number = undefined, blendmode: Enum.BlendMode|string): Promise<IAMCPCommand> {
+	public mixerBlendDeferred(channel: number, layer: number = NaN, blendmode: Enum.BlendMode|string): Promise<IAMCPCommand> {
 		return this.mixerBlend(channel, layer, blendmode, true);
 	}
 
@@ -1130,7 +1038,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_OPACITY>
 	 */
-	public mixerOpacityDeferred(channel: number, layer: number = undefined, opacity: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerOpacityDeferred(channel: number, layer: number = NaN, opacity: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerOpacity(channel, layer, opacity, transitionDuration, transitionEasing, true);
 	}
 
@@ -1155,7 +1063,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_BRIGHTNESS>
 	 */
-	public mixerBrightnessDeferred(channel: number, layer: number = undefined, brightness: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerBrightnessDeferred(channel: number, layer: number = NaN, brightness: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerBrightness(channel, layer, brightness, transitionDuration, transitionEasing, true);
 	}
 
@@ -1180,7 +1088,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_SATURATION>
 	 */
-	public mixerSaturationDeferred(channel: number, layer: number = undefined, saturation: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerSaturationDeferred(channel: number, layer: number = NaN, saturation: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerSaturation(channel, layer, saturation, transitionDuration, transitionEasing, true);
 	}
 
@@ -1205,7 +1113,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CONTRAST>
 	 */
-	public mixerContrastDeferred(channel: number, layer: number = undefined, contrast: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerContrastDeferred(channel: number, layer: number = NaN, contrast: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerContrast(channel, layer, contrast, transitionDuration, transitionEasing, true);
 	}
 
@@ -1223,14 +1131,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerLevels(channel: number, layer: number, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerLevels(channel: number, layer: number, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerLevels(channel: number, layer: number, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerLevels(channel: number, layer: number = undefined, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerLevels(channel: number, layer: number = NaN, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerLevelsCommand({channel: channel, layer: layer, minInput: minInput, maxInput: maxInput, gamma: gamma, minOutput: minOutput, maxOutput: maxOutput, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_LEVELS>
 	 */
-	public mixerLevelsDeferred(channel: number, layer: number = undefined, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerLevelsDeferred(channel: number, layer: number = NaN, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerLevels(channel, layer, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing, true);
 	}
 
@@ -1248,14 +1156,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerFill(channel: number, layer: number, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerFill(channel: number, layer: number, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerFill(channel: number, layer: number, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerFill(channel: number, layer: number = undefined, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerFill(channel: number, layer: number = NaN, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerFillCommand({channel: channel, layer: layer, x: x, y: y, xScale: xScale, yScale: yScale, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/*
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_FILL>
 	 */
-	public mixerFillDeferred(channel: number, layer: number = undefined, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerFillDeferred(channel: number, layer: number = NaN, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerFill(channel, layer, x, y, xScale, yScale, transitionDuration, transitionEasing, true);
 	}
 
@@ -1273,14 +1181,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerClip(channel: number, layer: number, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerClip(channel: number, layer: number, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerClip(channel: number, layer: number, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerClip(channel: number, layer: number = undefined, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerClip(channel: number, layer: number = NaN, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerClipCommand({channel: channel, layer: layer, x: x, y: y, width: width, height: height, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CLIP>
 	 */
-	public mixerClipDeferred(channel: number, layer: number = undefined, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerClipDeferred(channel: number, layer: number = NaN, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerClip(channel, layer, x, y, width, height, transitionDuration, transitionEasing, true);
 	}
 
@@ -1298,14 +1206,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerAnchor(channel: number, layer: number, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerAnchor(channel: number, layer: number, x: number, y: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerAnchor(channel: number, layer: number, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerAnchor(channel: number, layer: number = undefined, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerAnchor(channel: number, layer: number = NaN, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerAnchorCommand({channel: channel, layer: layer, x: x, y: y, ransition: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ANCHOR>
 	 */
-	public mixerAnchorDeferred(channel: number, layer: number = undefined, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerAnchorDeferred(channel: number, layer: number = NaN, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerAnchor(channel, layer, x, y, transitionDuration, transitionEasing, true);
 	}
 
@@ -1323,14 +1231,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerCrop(channel: number, layer: number, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerCrop(channel: number, layer: number, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerCrop(channel: number, layer: number, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerCrop(channel: number, layer: number = undefined, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerCrop(channel: number, layer: number = NaN, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerCropCommand({channel: channel, layer: layer, left: left, top: top, right: right, bottom: bottom, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CROP>
 	 */
-	public mixerCropDeferred(channel: number, layer: number = undefined, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerCropDeferred(channel: number, layer: number = NaN, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerCrop(channel, layer, left, top, right, bottom, transitionDuration, transitionEasing, true);
 	}
 
@@ -1355,7 +1263,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ROTATION>
 	 */
-	public mixerRotationDeferred(channel: number, layer: number = undefined, rotation: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerRotationDeferred(channel: number, layer: number = NaN, rotation: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerRotation(channel, layer, rotation, transitionDuration, transitionEasing, true);
 	}
 
@@ -1373,14 +1281,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerPerspective(channel: number, layer: number, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottmLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerPerspective(channel: number, layer: number, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottmLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerPerspective(channel: number, layer: number, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottmLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>;
-	public mixerPerspective(channel: number, layer: number = undefined, topLeftX?: number, topLeftY?: number, topRightx?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottmLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerPerspective(channel: number, layer: number = NaN, topLeftX?: number, topLeftY?: number, topRightx?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottmLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerPerspectiveCommand({channel: channel, layer: layer, topLeftX: topLeftX, topLeftY: topLeftY, topRightx: topRightx, topRightY: topRightY, bottomRightX: bottomRightX, bottomRightY: bottomRightY, bottmLeftX: bottmLeftX, bottomLeftY: bottomLeftY, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_PERSPECTIVE>
 	 */
-	public mixerPerspectiveDeferred(channel: number, layer: number = undefined, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerPerspectiveDeferred(channel: number, layer: number = NaN, topLeftX: number, topLeftY: number, topRightx: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerPerspective(channel, layer, topLeftX, topLeftY, topRightx, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, true);
 	}
 
@@ -1395,7 +1303,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_MIPMAP>
 	 */
 	public mixerMipmap(channel: number, layer?: number): Promise<IAMCPCommand>;
-	public mixerMipmap(channel: number, layer: number, state: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
+	public mixerMipmap(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerMipmap(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerMipmapCommand({channel: channel, layer: layer, keyer: state, defer: defer}));
 	}
@@ -1428,7 +1336,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_VOLUME>
 	 */
-	public mixerVolumeDeferred(channel: number, layer: number = undefined, volume: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
+	public mixerVolumeDeferred(channel: number, layer: number = NaN, volume: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string): Promise<IAMCPCommand> {
 		return this.mixerVolume(channel, layer, volume, transitionDuration, transitionEasing, true);
 	}
 
@@ -1443,7 +1351,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_MASTERVOLUME>
 	 */
 	public mixerMastervolume(channel: number): Promise<IAMCPCommand>;
-	public mixerMastervolume(channel: number, mastervolume: number, defer?: boolean): Promise<IAMCPCommand>;
+	public mixerMastervolume(channel: number, mastervolume?: number, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerMastervolume(channel: number, mastervolume?: number, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerMastervolumeCommand({channel: channel, mastervolume: mastervolume, defer: defer}));
 	}
@@ -1466,7 +1374,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_STRAIGHT_ALPHA_OUTPUT>
 	 */
 	public mixerStraightAlphaOutput(channel: number, layer?: number): Promise<IAMCPCommand>;
-	public mixerStraightAlphaOutput(channel: number, layer: number, state: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
+	public mixerStraightAlphaOutput(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand>;
 	public mixerStraightAlphaOutput(channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand> {
 		return this.do(new AMCP.MixerKeyerCommand({channel: channel, layer: layer, keyer: state, defer: defer}));
 	}

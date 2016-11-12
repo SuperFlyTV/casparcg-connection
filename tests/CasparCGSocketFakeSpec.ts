@@ -1,5 +1,4 @@
-/// <reference path="../typings/index.d.ts" />
-import {CasparCG} from "../src/CasparCG";
+import "jasmine";
 import {CasparCGSocket} from "../src/lib/CasparCGSocket";
 
 describe("CasparCG Socket", () => {

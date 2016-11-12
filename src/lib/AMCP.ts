@@ -13,7 +13,6 @@ import ConfigParser = ResponseParserNS.ConfigParser;
 import HelpParser = ResponseParserNS.HelpParser;
 import GLParser = ResponseParserNS.GLParser;
 import InfoDelayParser = ResponseParserNS.InfoDelayParser;
-import InfoParser = ResponseParserNS.InfoParser;
 import InfoThreadsParser = ResponseParserNS.InfoThreadsParser;
 import InfoQueuesParser = ResponseParserNS.InfoQueuesParser;
 import InfoServerParser = ResponseParserNS.InfoServerParser;
@@ -32,12 +31,10 @@ import ResponseSignature = ResponseNS.ResponseSignature;
 import {Command as CommandNS} from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
 import IAMCPCommandVO = CommandNS.IAMCPCommandVO;
-import isIAMCPCommand = CommandNS.isIAMCPCommand;
 import AbstractCommand = CommandNS.AbstractCommand;
 import AbstractOrChannelOrLayerCommand = CommandNS.AbstractOrChannelOrLayerCommand;
 import AbstractChannelCommand = CommandNS.AbstractChannelCommand;
 import AbstractChannelOrLayerCommand = CommandNS.AbstractChannelOrLayerCommand;
-import AbstractLayerCommand = CommandNS.AbstractLayerCommand;
 import AbstractLayerWithFallbackCommand = CommandNS.AbstractLayerWithFallbackCommand;
 import AbstractLayerWithCgFallbackCommand = CommandNS.AbstractLayerWithCgFallbackCommand;
 // Param NS
@@ -49,7 +46,6 @@ import ParamSignature = ParamNS.ParamSignature;
 // Validation NS
 import {Validation as ValidationNS} from "./ParamValidators";
 import BooleanValidatorWithDefaults = ValidationNS.BooleanValidatorWithDefaults;
-import BooleanValidator = ValidationNS.BooleanValidator;
 import StringValidator = ValidationNS.StringValidator;
 import ClipNameValidator = ValidationNS.ClipNameValidator;
 import TemplateNameValidator = ValidationNS.TemplateNameValidator;
@@ -59,7 +55,6 @@ import KeywordValidator = ValidationNS.KeywordValidator;
 import FrameValidator = ValidationNS.FrameValidator;
 import PositiveNumberValidatorBetween = ValidationNS.PositiveNumberValidatorBetween;
 import NumberValidator = ValidationNS.NumberValidator;
-import PositiveNumberValidator = ValidationNS.NumberValidator;
 import PositiveNumberRoundValidatorBetween = ValidationNS.PositiveNumberRoundValidatorBetween;
 import TemplateDataValidator = ValidationNS.TemplateDataValidator;
 // Protocol NS
@@ -108,13 +103,7 @@ export namespace AMCPUtil {
 		 * 
 		 */
 		static evaluateStatusCode(responseString: string): number {
-			let code: number = parseInt(responseString.substr(0, 3), 10);
-
-			if (code !== NaN) {
-				return code;
-			}
-
-			return null;
+			return parseInt(responseString.substr(0, 3), 10);
 		}
 	}
 }
@@ -349,7 +338,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "KEYER";
 		}
@@ -382,7 +371,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CHROMA";
 		}
@@ -405,7 +394,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "BLEND";
 		}
@@ -432,7 +421,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "OPACITY";
 		}
@@ -459,7 +448,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "BRIGHTNESS";
 		}
@@ -486,7 +475,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "SATURATION";
 		}
@@ -513,7 +502,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CONTRAST";
 		}
@@ -545,7 +534,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "LEVELS";
 		}
@@ -576,7 +565,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "FILL";
 		}
@@ -607,7 +596,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CLIP";
 		}
@@ -636,7 +625,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "ANCHOR";
 		}
@@ -667,7 +656,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CROP";
 		}
@@ -694,7 +683,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "ROTATION";
 		}
@@ -729,7 +718,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "PERSPECTIVE";
 		}
@@ -752,7 +741,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "MIPMAP";
 		}
@@ -779,7 +768,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "VOLUME";
 		}
@@ -804,7 +793,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "MASTERVOLUME";
 		}
@@ -827,7 +816,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "STRAIGHT_ALPHA_OUTPUT";
 		}
@@ -849,7 +838,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "GRID";
 		}
@@ -867,7 +856,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "COMMIT";
 		}
@@ -885,7 +874,7 @@ export namespace AMCP {
 		/**
 		 *  
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["keyword"] = "CLEAR";
 		}
@@ -1200,7 +1189,7 @@ export namespace AMCP {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["delay"] = "DELAY";
 		}
@@ -1221,7 +1210,7 @@ export namespace AMCP {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
 			this._objectParams["info"] = "INFO";
 		}

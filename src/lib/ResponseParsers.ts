@@ -34,7 +34,7 @@ export namespace Response {
 				return result;
 			}
 
-			return null;
+			return {};
 		}
 	}
 
@@ -200,10 +200,9 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public parse(data: Object): Object {
-			let arrayCast: Array<string> = [].concat(data);
+		public parse(data: Array<any>): Object {
 
-			return arrayCast.map((i) => {
+			return data.map((i) => {
 				let components: Array<string> = i.split(" ");
 
 				// is font
