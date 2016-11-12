@@ -1,3 +1,10 @@
+// config NS
+import {Config as ConfigNS} from "./Config";
+import Config207VO = ConfigNS.Config207VO;
+import Config207 = ConfigNS.Config207;
+import Config210VO = ConfigNS.Config210VO;
+import Config210 = ConfigNS.Config210;
+
 export namespace Response {
 
 	/**
@@ -40,7 +47,18 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			return data;
+			let result: Config207 = new Config207();
+
+			for (let key in data) {
+				if (!data.hasOwnProperty(key)) {
+					console.log("missing: " + key);
+					continue;
+				}
+				if (result.hasOwnProperty(key) || Config207.prototype.hasOwnProperty(key)) {
+					result[key] = data[key];
+				}
+			}
+			return result;
 		}
 	}
 
