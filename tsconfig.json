@@ -5,7 +5,7 @@
 		"noEmitOnError": true,
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
-	//	"noImplicitThis": true,
+	//	"noImplicitThis": true, conflict with jasmine, leave off until fixed
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
