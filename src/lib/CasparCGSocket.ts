@@ -39,7 +39,6 @@ export enum SocketState {
 		hostFound		= 1 << 1,		// @todo: implement
 		connectionAttempt = 1 << 2,		// @todo: implement
 		connected		= 1 << 3,
-		disconnected	= 1	<< 4,
 		lostConnection	= 1 << 5,
 		reconnecting	= 1 << 6
 }

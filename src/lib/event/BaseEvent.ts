@@ -17,13 +17,6 @@ export namespace Event {
 		/**
 		 * 
 		 */
-		get value(): Object{
-			return this.valueOf();
-		}
-
-		/**
-		 * 
-		 */
 		valueOf(): Object {
 			return this.val();
 		}

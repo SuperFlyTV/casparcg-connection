@@ -193,7 +193,7 @@ export namespace Enum {
 		static INFO = new LogLevel("INFO");
 		static WARNING = new LogLevel("WARNING");
 		static ERROR = new LogLevel("ERROR");
-		static FATAL = new LogLevel("FATAL");
+		static FATAL = new LogLevel("FATAL");	// @todo: 2.1?????
 	}
 
 	/**
