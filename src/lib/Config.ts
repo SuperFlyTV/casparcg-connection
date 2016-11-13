@@ -6,21 +6,6 @@ export namespace Config {
 	/** */
 	export namespace v20x {
 		/** */
-		export class Paths {
-			"media-path": string;
-			"log-path": string;
-			"data-path": string;
-			"template-path": string;
-		};
-
-		/** */
-		export class Channel {
-			"video-mode": v20x.VideoMode;
-			"straight-alpha-output"?: boolean;
-			"consumers": Array<v20x.Consumer>;
-		}
-
-		/** */
 		export enum VideoMode {
 			_PAL,
 			_NTSC,
@@ -72,35 +57,118 @@ export namespace Config {
 		}
 
 		/** */
-		export interface Consumer {
+		@JsonObject
+		export class Consumer {
+			public foo: String;
+		}
 
+		/** */
+		export class Decklink {
+
+		}
+
+		/** */
+		export class Bluefish {
+
+		}
+
+		/** */
+		export class SystemAudio {
+
+		}
+
+		/** */
+		export class Screen {
+
+		}
+
+		/** */
+		export class NewtekIvga {
+
+		}
+
+		/** */
+		export class Ffmpeg {
+
+		}
+
+		/** */
+		export class Syncto { // @todo: 2.1 ns
+
+		}
+
+		/** */
+		@JsonObject
+		export class Channel {
+			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: custom "enum"-class
+			videoMode: string = "PAL";
+
+			@JsonMember({type: Boolean, name: "straight-alpha-output"})
+			straightAlphaOutput?: boolean = false;
+
+			@JsonMember({type: Array, elements: Object, isRequired: true})
+			consumers: Array<Object> = [];
 		}
 	}
 
 	/** */
 	export namespace v207 {
 		/** */
-		export class Paths extends v20x.Paths {
-			"thumbnails-path": string;
+		@JsonObject
+		export class Paths {
+			@JsonMember({type: String, name: "media-path"})
+			mediaPath: string = "media\\";
+
+			@JsonMember({type: String, name: "log-path"})
+			logPath: string = "log\\";
+
+			@JsonMember({type: String, name: "data-path"})
+			dataPath: string = "data\\";
+
+			@JsonMember({type: String, name: "template-path"})
+			templatePath: string = "templates\\";
+
+			@JsonMember({type: String, name: "thumbnails-path"})
+			thumbnailsPath: string = "thumbnails\\";
 		};
 
 		/** */
+		@JsonObject
 		export class Channel extends v20x.Channel {
-			"channel-layout"?: v20x.ChannelLayout;
+			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
+			channelLayout?: string = "stereo";
 		}
 	}
 
 	/** */
 	export namespace v21x {
 		/** */
-		export class Paths extends v20x.Paths {
-			"thumbnail-path": string;
-			"font-path": string;
+		@JsonObject
+		export class Paths {
+			@JsonMember({type: String, name: "media-path"})
+			mediaPath: string = "media/";
+
+			@JsonMember({type: String, name: "log-path"})
+			logPath: string = "log/";
+
+			@JsonMember({type: String, name: "data-path"})
+			dataPath: string = "data/";
+
+			@JsonMember({type: String, name: "template-path"})
+			templatePath: string = "template/";
+
+			@JsonMember({type: String, name: "thumbnail-path"})
+			thumbnailPath: string = "thumbnail/";
+
+			@JsonMember({type: String, name: "font-path"})
+			fontPath: string = "font/";
 		};
 
 		/** */
+		@JsonObject
 		export class Channel extends v20x.Channel {
-			"channel-layout"?: v21x.ChannelLayout;
+			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
+			channelLayout?: string = "stereo";
 		};
 
 		/** */
@@ -121,20 +189,18 @@ export namespace Config {
 	/** */
 	export namespace v210 {
 		/** */
+		@JsonObject
 		export class Paths extends v21x.Paths {
 
 		}
 	}
 
 	/**  */
-	const defaultPaths_207: v207.Paths = {"media-path": "media\\", "log-path": "log\\", "data-path": "data\\", "template-path": "templates\\", "thumbnails-path": "thumbnails\\"};
-	const defaultPaths_210: v210.Paths = {"media-path": "media/", "log-path": "log/", "data-path": "data/", "template-path": "template/", "thumbnail-path": "thumbnail/", "font-path": "font/"};
-	const defaultChannel_207: v207.Channel = {"video-mode": v20x.VideoMode._PAL, "consumers": []};
-	const defaultChannel_21x: v21x.Channel = {"video-mode": v20x.VideoMode._PAL, "consumers": []};
+	const defaultChannel_207: v207.Channel = {videoMode: "PAL", consumers: []};
+	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", consumers: []};
 
 	/**  */
 	export interface IConfig20x {
-		paths: v20x.Paths;
 	}
 
 	/**  */
@@ -157,15 +223,17 @@ export namespace Config {
 	/** */
 	@JsonObject
 	export class Config207 implements IConfig207 {
-		@JsonMember({type: v207.Paths})
-		public paths: v207.Paths = defaultPaths_207;
-		@JsonMember({type: Array, elementType: v207.Channel})
+		@JsonMember({type: v207.Paths, isRequired: true})
+		public paths: v207.Paths = new v207.Paths();
+		@JsonMember({type: Array, elements: v207.Channel, isRequired: true})
 		public channels: Array<v207.Channel> = [defaultChannel_207];
 	}
 
 	/**  */
 	export class Config210 implements IConfig210 {
-		public paths: v210.Paths = defaultPaths_210;
+		@JsonMember({type: v210.Paths, isRequired: true})
+		public paths: v210.Paths = new v210.Paths();
+		@JsonMember({type: Array, elements: v21x.Channel, isRequired: true})
 		public channels: Array<v21x.Channel> = [defaultChannel_21x];
 	}
 }

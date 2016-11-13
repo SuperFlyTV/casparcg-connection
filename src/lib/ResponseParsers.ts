@@ -47,10 +47,39 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			let result: Config207 | Config210 = TypedJSON.parse(JSON.stringify(data), Config207);
 
-			console.log(JSON.stringify(result));
+			console.log("RAW::::", JSON.stringify(data));
 
+
+			if (data.hasOwnProperty("channels")) {
+				if (!Array.isArray(data["channels"])) {
+					data["channels"] = [data["channels"]];
+				}
+				(<Array<Object>>data["channels"]).map((i: Object) => {
+					if (i.hasOwnProperty("consumers")) {
+						let consumers: Object = i["consumers"];
+						if (!Array.isArray(consumers)) {
+							let wrap: Array<Object> = [];
+							for (let o in consumers) {
+								let u: Object = {};
+								u[o] = consumers[o] === "" ? {} : consumers[o];
+								wrap.push(u);
+							}
+							i["consumers"] = wrap;
+						}
+					}
+					return i;
+				});
+			}
+			let dataString: string = TypedJSON.stringify(data);
+			console.log("FØØØRRRRR:::::", dataString);
+			let result: Config207 | Config210 | {}  = {};
+			try {
+				result = TypedJSON.parse(dataString, Config207);
+			}catch (e) {
+				console.log("CONFIG PARSE ERROR: ", e);
+			}
+			console.log("ETTER:::::", TypedJSON.stringify(result));
 			return result;
 		}
 	}
