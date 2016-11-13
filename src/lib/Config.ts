@@ -1,10 +1,12 @@
+import {JsonObject, JsonMember} from "typedjson-npm";
+
 /**  */
 export namespace Config {
 
 	/** */
 	export namespace v20x {
 		/** */
-		export type Paths = {
+		export class Paths {
 			"media-path": string;
 			"log-path": string;
 			"data-path": string;
@@ -12,14 +14,14 @@ export namespace Config {
 		};
 
 		/** */
-		export type Channel = {
-			"video-mode": v20x.VideoFormat;
+		export class Channel {
+			"video-mode": v20x.VideoMode;
 			"straight-alpha-output"?: boolean;
 			"consumers": Array<v20x.Consumer>;
-		};
+		}
 
 		/** */
-		export enum VideoFormat {
+		export enum VideoMode {
 			_PAL,
 			_NTSC,
 			_576p2500,
@@ -78,24 +80,26 @@ export namespace Config {
 	/** */
 	export namespace v207 {
 		/** */
-		export type Paths = v20x.Paths & {"thumbnails-path": string};
+		export class Paths extends v20x.Paths {
+			"thumbnails-path": string;
+		};
 
 		/** */
-		export type Channel = v20x.Channel & {
+		export class Channel extends v20x.Channel {
 			"channel-layout"?: v20x.ChannelLayout;
-		};
+		}
 	}
 
 	/** */
 	export namespace v21x {
 		/** */
-		export type Paths = {
+		export class Paths extends v20x.Paths {
 			"thumbnail-path": string;
-			"font-path": string
+			"font-path": string;
 		};
 
 		/** */
-		export type Channel = v20x.Channel & {
+		export class Channel extends v20x.Channel {
 			"channel-layout"?: v21x.ChannelLayout;
 		};
 
@@ -117,13 +121,16 @@ export namespace Config {
 	/** */
 	export namespace v210 {
 		/** */
-		export type Paths = v20x.Paths & v21x.Paths;
+		export class Paths extends v21x.Paths {
+
+		}
 	}
 
 	/**  */
 	const defaultPaths_207: v207.Paths = {"media-path": "media\\", "log-path": "log\\", "data-path": "data\\", "template-path": "templates\\", "thumbnails-path": "thumbnails\\"};
 	const defaultPaths_210: v210.Paths = {"media-path": "media/", "log-path": "log/", "data-path": "data/", "template-path": "template/", "thumbnail-path": "thumbnail/", "font-path": "font/"};
-	const defaultChannel_20x: v207.Channel = {"video-mode": v20x.VideoFormat._PAL, "consumers": []};
+	const defaultChannel_207: v207.Channel = {"video-mode": v20x.VideoMode._PAL, "consumers": []};
+	const defaultChannel_21x: v21x.Channel = {"video-mode": v20x.VideoMode._PAL, "consumers": []};
 
 	/**  */
 	export interface IConfig20x {
@@ -148,26 +155,17 @@ export namespace Config {
 	}
 
 	/** */
-	export class Config207VO {
+	@JsonObject
+	export class Config207 implements IConfig207 {
+		@JsonMember({type: v207.Paths})
 		public paths: v207.Paths = defaultPaths_207;
-		public channels: Array<v207.Channel> = [defaultChannel_20x];
-	}
-
-	/** */
-	export class Config207 extends Config207VO  implements IConfig207 {
-		public paths: v207.Paths;
-		public channels: Array<v207.Channel>;
-	}
-
-	/** */
-	export class Config210VO {
-		public paths: v210.Paths = defaultPaths_210;
-		public channels: Array<v21x.Channel> = [defaultChannel_20x];
+		@JsonMember({type: Array, elementType: v207.Channel})
+		public channels: Array<v207.Channel> = [defaultChannel_207];
 	}
 
 	/**  */
-	export class Config210 extends Config210VO implements IConfig210 {
-		public paths: v210.Paths;
-		public channels: Array<v21x.Channel>;
+	export class Config210 implements IConfig210 {
+		public paths: v210.Paths = defaultPaths_210;
+		public channels: Array<v21x.Channel> = [defaultChannel_21x];
 	}
 }

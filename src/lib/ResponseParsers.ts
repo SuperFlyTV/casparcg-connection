@@ -1,3 +1,5 @@
+import {TypedJSON} from "typedjson-npm";
+
 // config NS
 import {Config as ConfigNS} from "./Config";
 import Config207 = ConfigNS.Config207;
@@ -45,17 +47,10 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			let result: Config207 | Config210 = new Config207();
+			let result: Config207 | Config210 = TypedJSON.parse(JSON.stringify(data), Config207);
 
-			for (let key in data) {
-				if (!data.hasOwnProperty(key)) {
-					console.log("missing: " + key);
-					continue;
-				}
-				if (result.hasOwnProperty(key) || Config207.prototype.hasOwnProperty(key)) {
-					result[key] = data[key];
-				}
-			}
+			console.log(JSON.stringify(result));
+
 			return result;
 		}
 	}
