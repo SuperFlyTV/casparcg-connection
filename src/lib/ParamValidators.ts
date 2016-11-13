@@ -56,21 +56,20 @@ export namespace Validation {
 			}
 
 
-			if (data instanceof Array) {
-				let arrayCast: Array<string> = data;
+			if (Array.isArray(data)) {
 				let i: number = 0;
 
 				// switch lazy/greedy mode
 				if (this.lazy) {
 					// lazy = return first valid hit
 					do {
-						textstring = checkTextstring(arrayCast[i]);
+						textstring = checkTextstring(data[i]);
 						i++;
 					}while (textstring == null);
 				}else {
 					// greedy 
 					textstring = "";
-					arrayCast.forEach(i => {
+					data.forEach(i => {
 						let o = checkTextstring(i);
 						textstring += (o) ? o + " " : "";
 					});
@@ -115,11 +114,10 @@ export namespace Validation {
 			}
 
 
-			if (data instanceof Array) {
-				let arrayCast: Array<string> = data;
+			if (Array.isArray(data)) {
 				let i: number = 0;
 				do {
-					clipName = checkClipNameString(arrayCast[i]);
+					clipName = checkClipNameString(data[i]);
 					i++;
 				}while (clipName == null);
 
@@ -206,12 +204,11 @@ export namespace Validation {
 				keywordCopy = keywordCopy.toLowerCase();
 			}
 
-			if (data instanceof Array) {
-				let arrayCast: Array<string> = data;
+			if (Array.isArray(data)) {
 				if (!this._caseSensitive) {
-					arrayCast = arrayCast.map(value => String(value).toLowerCase());
+					data = data.map(value => String(value).toLowerCase());
 				}
-				if (arrayCast.indexOf(keywordCopy) > -1) {
+				if ((<Array<string>>data).indexOf(keywordCopy) > -1) {
 					return this._keyword;
 				}
 			}else if (typeof data === "object" && data !== null) {
@@ -256,12 +253,11 @@ export namespace Validation {
 		 *
 		 */
 		resolve(data: Object): ParamData {
-			if (data instanceof Array) {
-				let arrayCast: Array<string> = data;
+			if (Array.isArray(data)) {
 				let index: number;
-				arrayCast = arrayCast.map(element => String(element).toLowerCase());
-				if ((index = arrayCast.indexOf(this._keyword.toLowerCase())) > -1) {
-					data = parseInt(arrayCast[index + 1], 10);
+				data = data.map(element => String(element).toLowerCase());
+				if ((index = (<Array<string>>data).indexOf(this._keyword.toLowerCase())) > -1) {
+					data = parseInt(data[index + 1], 10);
 				}
 			}else if (typeof data === "object" && data !== null) {
 				let objectCast = data;
@@ -393,14 +389,13 @@ export namespace Validation {
 		 *
 		 */
 		resolve(data: Object, key: string): ParamData {
-			if (data instanceof Array) {
-				let arrayCast: Array<string> = data;
+			if (Array.isArray(data)) {
 				let index: number;
-				arrayCast = arrayCast.map(element => String(element).toLowerCase());
-				if ((index = arrayCast.indexOf(key.toLowerCase())) > -1) {
-					data = arrayCast[index + 1];
+				data = data.map(element => String(element).toLowerCase());
+				if ((index = (<Array<string>>data).indexOf(key.toLowerCase())) > -1) {
+					data = data[index + 1];
 					if (data === undefined) {
-						data = 	arrayCast[index];
+						data = 	data[index];
 					}
 				}
 				// @todo: probably add some string-parsing logic:

@@ -21,7 +21,7 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			let result: Array<Object> = new Array<Object>();
+			let result: Array<Object> = [];
 			let components: Array<string> = data.toString().split(/\s|,/);
 
 			while (components.length > 0) {

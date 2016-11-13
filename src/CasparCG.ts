@@ -244,8 +244,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _autoReconnectInterval: number;
 	private _autoReconnectAttempts: number;
 	private _socket: CasparCGSocket;
-	private _queuedCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
-	private _sentCommands: Array<IAMCPCommand> = new Array<IAMCPCommand>();
+	private _queuedCommands: Array<IAMCPCommand> = [];
+	private _sentCommands: Array<IAMCPCommand> = [];
 
 	/**
 	 * Try to connect upon creation.
@@ -745,7 +745,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				break;
 			}
 		}
-		return typeof Object.prototype.toString.call( removed ) === "[object Array]" && removed!.length > 0;
+		return Array.isArray(removed) && removed.length > 0;
 	}
 
 	/**

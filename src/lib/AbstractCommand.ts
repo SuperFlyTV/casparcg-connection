@@ -38,16 +38,6 @@ export namespace Command {
 		raw: string;
 		toString(): string;
 		data: Object;
-
-		// 1xx
-		// 2xx
-		// 3xx
-		// 4xx
-		// 5xx
-		// payload 
-			// -> raw string
-			// -> object with string payload
-			// -> object with array of string payloads
 	}
 
 	/**
@@ -169,8 +159,8 @@ export namespace Command {
 			let paramsArray: Array<string|Param> = [];
 
 			// conform params to array
-			if (params instanceof Array) {
-				paramsArray = params as Array<string|Param>;
+			if (Array.isArray(params)) {
+				paramsArray = params;
 			}else {
 				paramsArray = [<string|Param>params];
 			}
@@ -207,9 +197,9 @@ export namespace Command {
 			}
 
 			// add valid optionals
-			for (let signature of optional){
+			optional.forEach((signature) => {
 				this.validateParam(signature);
-			}
+			});
 
 			if (!this.validateProtocolLogic()) {
 				return false;
@@ -222,12 +212,12 @@ export namespace Command {
 				return false;
 			}
 
-			for (let param of validParams){
+			validParams.forEach((param) => {
 				let payload: Payload = {key: "", value: {}};
 				payload.key = param.key || "";
 				payload.value = param.payload || {};
 				this.payload[param.name] = payload;
-			}
+			});
 
 			return true;
 		}
