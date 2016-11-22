@@ -62,173 +62,177 @@ export namespace Config {
 		export class Consumer {
 			@JsonMember({type: String, isRequired: true})	// @todo: custom "enum"-class for all props
 			public type: String;
-
-			@JsonMember({type: Number, isRequired: false})
-			public device?: Number;
-
-			@JsonMember({type: Number, isRequired: false, name: "key-device"})
-			public keyDevice?: Number;
-
-			@JsonMember({type: String, isRequired: false, name: "embedded-audio"})
-			public embeddedAudio?: String;
-
-			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
-			public channelLayout?: String;
-
-			@JsonMember({type: Object, isRequired: false})
-			public latency?: String|Number;
-
-			@JsonMember({type: String, isRequired: false})
-			public keyer?: String;
-
-			@JsonMember({type: String, isRequired: false, name: "key-only"})
-			public keyOnly?: String;
-
-			@JsonMember({type: Number, isRequired: false, name: "buffer-depth"})
-			public bufferDepth?: Number;
-
-			@JsonMember({type: String, isRequired: false, name: "aspect-ratio"})
-			public aspectRatio?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public stretch?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public windowed?: String;
-
-			@JsonMember({type: String, isRequired: false, name: "auto-deinterlace"})
-			public autoDeinterlace?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public vsync?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public interactive?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public borderless?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public path?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public args?: String;
-
-			@JsonMember({type: String, isRequired: false, name: "separate-key"})
-			public separateKey?: String;
-
-			@JsonMember({type: String, isRequired: false, name: "mono-streams"})
-			public monoStreams?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public vcodec?: String;
-
-			@JsonMember({type: Number, isRequired: false, name: "channel-id"})
-			public channelId?: Number;
-
-			@JsonMember({type: String, isRequired: false, name: "custom-allocator"})
-			public customAllocator?: String;
-
-			@JsonMember({type: String, isRequired: false})
-			public name?: String;
-
-			@JsonMember({type: String, isRequired: false, name: "provide-sync"})
-			public provideSync?: String;
 		}
 
 		/** */
 		@JsonObject
 		export class DecklinkConsumer extends Consumer {
 			type = "decklink";
-			device = 1;
-			embeddedAudio = "false";
-			channelLayout = "stereo";
-			latency: String = "normal";
-			keyer = "external";
-			keyOnly = "false";
-			bufferDepth = 3;
-			customAllocator = "true";	// @todo: ns 2.0 only
+
+			@JsonMember({type: Number, isRequired: false})
+			public device: Number = 1;
+
+			@JsonMember({type: Number, isRequired: false, name: "key-device"})
+			public keyDevice: Number;
+
+			@JsonMember({type: String, isRequired: false, name: "embedded-audio"})
+			public embeddedAudio: String = "false";
+
+			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			public channelLayout: String = "stereo";
+
+			@JsonMember({type: String, isRequired: false})
+			public latency: String = "normal";
+
+			@JsonMember({type: String, isRequired: false})
+			public keyer: String = "external";
+
+			@JsonMember({type: String, isRequired: false, name: "key-only"})
+			public keyOnly: String = "false";
+
+			@JsonMember({type: Number, isRequired: false, name: "buffer-depth"})
+			public bufferDepth: Number = 3;
+
+			@JsonMember({type: String, isRequired: false, name: "custom-allocator"})
+			public customAllocator: String = "true";	// @todo: ns 2.0 only
 		}
 
 		/** */
 		@JsonObject
 		export class BluefishConsumer extends Consumer {
 			type = "Bluefish";
-			device = 1;
-			embeddedAudio = "false";
-			channelLayout = "stereo";
-			keyOnly = "false";
+
+			@JsonMember({type: Number, isRequired: false})
+			public device: Number = 1;
+
+			@JsonMember({type: String, isRequired: false, name: "embedded-audio"})
+			public embeddedAudio: String = "false";
+
+			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			public channelLayout: String = "stereo";
+
+			@JsonMember({type: String, isRequired: false, name: "key-only"})
+			public keyOnly: String = "false";
 		}
 
 		/** */
 		@JsonObject
 		export class SystemAudioConsumer extends Consumer {
-			type = "systemaudio";
-			channelLayout = "stereo";
-			latency: Number = 200;
+			type: String = "systemaudio";
+
+			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			public channelLayout: String = "stereo";
+
+			@JsonMember({type: Number, isRequired: false})
+			public latency: Number = 200;
 		}
 
 		/** */
 		@JsonObject
 		export class ScreenConsumer extends Consumer {
 			type = "screen";
-			device = 0;
-			stretch = "fill";
-			windowed = "true";
-			keyOnly = "false";
-			autoDeinterlace = "true";
-			vsync = "false";
-			borderless = "false";
-			interactive = "true";		// @todo: ns 2.1 only
-			name = "Screen Consumer";	// @todo: ns 2.0 only
+
+			@JsonMember({type: Number, isRequired: false})
+			public device: Number = 0;
+
+			@JsonMember({type: String, isRequired: false, name: "aspect-ratio"})
+			public aspectRatio: String = "default";
+
+			@JsonMember({type: String, isRequired: false})
+			public stretch: String = "fill";
+
+			@JsonMember({type: String, isRequired: false})
+			public windowed: String = "true";
+
+			@JsonMember({type: String, isRequired: false, name: "key-only"})
+			public keyOnly: String = "false";
+
+			@JsonMember({type: String, isRequired: false, name: "auto-deinterlace"})
+			public autoDeinterlace: String = "true";
+
+			@JsonMember({type: String, isRequired: false})
+			public vsync: String = "false";
+
+			@JsonMember({type: String, isRequired: false})
+			public borderless: String = "false";
+
+			@JsonMember({type: String, isRequired: false})
+			public interactive: String = "true";		// @todo: ns 2.1 only
+
+			@JsonMember({type: String, isRequired: false})
+			public name: String = "Screen Consumer";	// @todo: ns 2.0 only
 		}
 
 		/** */
 		@JsonObject
 		export class NewtekIvgaConsumer extends Consumer {
 			type = "newtekivga";
-			channelLayout = "stereo";	// @todo: ns 2.0 only
-			provideSync = "true";		// @todo: ns 2.0 only
+
+			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			public channelLayout: String = "stereo";	// @todo: ns 2.0 only
+
+			@JsonMember({type: String, isRequired: false, name: "provide-sync"})
+			public provideSync: String = "true";		// @todo: ns 2.0 only
 		}
 
 		/** */
 		@JsonObject
 		export class FfmpegConsumer extends Consumer { // @todo: 2.1 ns
-			type = "ffmpeg";
-			path = "";
-			args = "";
-			separateKey = "false";
-			monoStreams = "false";
+			type: String = "ffmpeg";
+
+			@JsonMember({type: String, isRequired: false})
+			public path: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public args: String;
+
+			@JsonMember({type: String, isRequired: false, name: "separate-key"})
+			public separateKey: String = "false";
+
+			@JsonMember({type: String, isRequired: false, name: "mono-streams"})
+			public monoStreams: String = "false";
 		}
 
 		/** */
 		@JsonObject
 		export class FileConsumer extends Consumer { // @todo: 2.0 ns
-			type = "file";
-			path = "";
-			vcodec = "libx264";
-			separateKey = "false";
+			type: String = "file";
+
+			@JsonMember({type: String, isRequired: false})
+			public path: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public vcodec: String = "libx264";
+
+			@JsonMember({type: String, isRequired: false, name: "separate-key"})
+			public separateKey: String = "false";
 		}
 
 		/** */
 		@JsonObject
 		export class StreamConsumer extends Consumer { // @todo: 2.0 ns
 			type = "stream";
-			path = "";
-			args = "";
+
+			@JsonMember({type: String, isRequired: false})
+			public path: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public args: String;
 		}
 
 		/** */
 		@JsonObject
 		export class SynctoConsumer extends Consumer { // @todo: 2.1 ns
-			type = "syncto";
-			// defaults 
+			type: String = "syncto";
+
+			@JsonMember({type: Number, isRequired: false, name: "channel-id"})
+			public channelId: Number;
 		}
 
 		/** */
 		@JsonObject
 		export class Channel {
-			_consumers: Array<Consumer> = [];
+			_consumers?: Array<Consumer> = [];
 
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: custom "enum"-class
 			videoMode: string = "PAL";
@@ -238,7 +242,7 @@ export namespace Config {
 
 			@JsonMember({type: Array, elements: Object, isRequired: true, name: "consumers"})
 			public get consumers(): Array<Object> {
-				return this._consumers;
+				return this._consumers || [];
 			}
 
 			/** */
@@ -369,8 +373,8 @@ export namespace Config {
 	}
 
 	/**  */
-	const defaultChannel_207: v207.Channel = {videoMode: "PAL", consumers: [], _consumers: []};
-	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", consumers: [], _consumers: []};
+	const defaultChannel_207: v207.Channel = {videoMode: "PAL", consumers: []};
+	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", consumers: []};
 
 	/**  */
 	export interface IConfig20x {
