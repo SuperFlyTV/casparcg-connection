@@ -79,7 +79,7 @@ export namespace Response {
 			}catch (e) {
 				console.log("CONFIG PARSE ERROR: ", e);
 			}
-			console.log("ETTER:::::", TypedJSON.stringify(result));
+			console.log("PARSED:::::", TypedJSON.stringify(result));
 			return result;
 		}
 	}

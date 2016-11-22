@@ -235,7 +235,7 @@ export namespace Config {
 			_consumers?: Array<Consumer> = [];
 
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: custom "enum"-class
-			videoMode: string = "PAL";
+			videoMode: String = "PAL";
 
 			@JsonMember({type: String, name: "straight-alpha-output"})
 			straightAlphaOutput?: String = "false";
@@ -248,43 +248,52 @@ export namespace Config {
 			/** */
 			public set consumers(consumers: Array<Object>) {
 				let consumer: Consumer | undefined;
+				let consumerKey: string;
+				let consumerClass: typeof Consumer;
 				consumers.forEach((i: Object) => {
 					if (i.hasOwnProperty("decklink")) {
-						consumer = new DecklinkConsumer();
-						_.extend(i["decklink"], consumer);
+						consumerKey = "decklink";
+						consumerClass = DecklinkConsumer;
 					} else if (i.hasOwnProperty("bluefish")) {
-						consumer = new BluefishConsumer();
-						_.extend(i["bluefish"], consumer);
+						consumerKey = "bluefish";
+						consumerClass = BluefishConsumer;
 					} else if (i.hasOwnProperty("system-audio")) {
-						consumer = new SystemAudioConsumer();
-						_.extend(i["ystem-audio"], consumer);
+						consumerKey = "system-audio";
+						consumerClass = SystemAudioConsumer;
 					} else if (i.hasOwnProperty("screen")) {
-						consumer = new ScreenConsumer();
-						_.extend(i["screen"], consumer);
+						consumerKey = "screen";
+						consumerClass = ScreenConsumer;
 					} else if (i.hasOwnProperty("newtek-ivga")) {
-						consumer = new NewtekIvgaConsumer();
-						_.extend(i["newtek-ivga"], consumer);
+						consumerKey = "newtek-ivga";
+						consumerClass = NewtekIvgaConsumer;
 					} else if (i.hasOwnProperty("ffmpeg")) {
-						consumer = new FfmpegConsumer();
-						_.extend(i["ffmpeg"], consumer);
+						consumerKey = "ffmpeg";
+						consumerClass = FfmpegConsumer;
 					} else if (i.hasOwnProperty("file")) {
-						consumer = new FileConsumer();
-						_.extend(i["file"], consumer);
+						consumerKey = "file";
+						consumerClass = FileConsumer;
 					} else if (i.hasOwnProperty("stream")) {
-						consumer = new StreamConsumer();
-						_.extend(i["stream"], consumer);
+						consumerKey = "stream";
+						consumerClass = StreamConsumer;
 					} else if (i.hasOwnProperty("syncto")) {
-						consumer = new SynctoConsumer();
-						_.extend(i["syncto"], consumer);
+						consumerKey = "syncto";
+						consumerClass = SynctoConsumer;
 					}
 
-					if (consumer) {
-						this.consumers.push(consumer);
-					}
-					consumer = undefined;
+
+					if (Array.isArray(i[consumerKey])) {
+							(<Array<Object>>(i[consumerKey])).forEach((o: Object) => {
+								consumer = new consumerClass();
+								_.extend(o, consumer);
+								this._consumers!.push(consumer);
+							});
+						}else {
+							consumer = new consumerClass();
+							_.extend(i[consumerKey], consumer);
+							this._consumers!.push(consumer);
+						}
 				});
 			}
-
 		}
 	}
 
@@ -294,26 +303,26 @@ export namespace Config {
 		@JsonObject
 		export class Paths {
 			@JsonMember({type: String, name: "media-path"})
-			mediaPath: string = "media\\";
+			mediaPath: String = "media\\";
 
 			@JsonMember({type: String, name: "log-path"})
-			logPath: string = "log\\";
+			logPath: String = "log\\";
 
 			@JsonMember({type: String, name: "data-path"})
-			dataPath: string = "data\\";
+			dataPath: String = "data\\";
 
 			@JsonMember({type: String, name: "template-path"})
-			templatePath: string = "templates\\";
+			templatePath: String = "templates\\";
 
 			@JsonMember({type: String, name: "thumbnails-path"})
-			thumbnailsPath: string = "thumbnails\\";
+			thumbnailsPath: String = "thumbnails\\";
 		};
 
 		/** */
 		@JsonObject
 		export class Channel extends v20x.Channel {
 			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
-			channelLayout?: string = "stereo";
+			channelLayout?: String = "stereo";
 		}
 	}
 
@@ -323,29 +332,29 @@ export namespace Config {
 		@JsonObject
 		export class Paths {
 			@JsonMember({type: String, name: "media-path"})
-			mediaPath: string = "media/";
+			mediaPath: String = "media/";
 
 			@JsonMember({type: String, name: "log-path"})
-			logPath: string = "log/";
+			logPath: String = "log/";
 
 			@JsonMember({type: String, name: "data-path"})
-			dataPath: string = "data/";
+			dataPath: String = "data/";
 
 			@JsonMember({type: String, name: "template-path"})
-			templatePath: string = "template/";
+			templatePath: String = "template/";
 
 			@JsonMember({type: String, name: "thumbnail-path"})
-			thumbnailPath: string = "thumbnail/";
+			thumbnailPath: String = "thumbnail/";
 
 			@JsonMember({type: String, name: "font-path"})
-			fontPath: string = "font/";
+			fontPath: String = "font/";
 		};
 
 		/** */
 		@JsonObject
 		export class Channel extends v20x.Channel {
 			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
-			channelLayout?: string = "stereo";
+			channelLayout?: String = "stereo";
 		};
 
 		/** */
