@@ -71,7 +71,7 @@ export namespace Response {
 					return i;
 				});
 			}
-			let dataString: string = TypedJSON.stringify(data);
+			let dataString: string = TypedJSON.stringify(data).toLowerCase();
 			console.log("FØØØRRRRR:::::", dataString);
 			let result: Config207 | Config210 | {}  = {};
 			try {

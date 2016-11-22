@@ -1,4 +1,5 @@
 import {JsonObject, JsonMember} from "typedjson-npm";
+import * as _ from "highland";
 
 /**  */
 export namespace Config {
@@ -59,55 +60,227 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class Consumer {
-			public foo: String;
+			@JsonMember({type: String, isRequired: true})	// @todo: custom "enum"-class for all props
+			public type: String;
+
+			@JsonMember({type: Number, isRequired: false})
+			public device?: Number;
+
+			@JsonMember({type: Number, isRequired: false, name: "key-device"})
+			public keyDevice?: Number;
+
+			@JsonMember({type: String, isRequired: false, name: "embedded-audio"})
+			public embeddedAudio?: String;
+
+			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			public channelLayout?: String;
+
+			@JsonMember({type: Object, isRequired: false})
+			public latency?: String|Number;
+
+			@JsonMember({type: String, isRequired: false})
+			public keyer?: String;
+
+			@JsonMember({type: String, isRequired: false, name: "key-only"})
+			public keyOnly?: String;
+
+			@JsonMember({type: Number, isRequired: false, name: "buffer-depth"})
+			public bufferDepth?: Number;
+
+			@JsonMember({type: String, isRequired: false, name: "aspect-ratio"})
+			public aspectRatio?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public stretch?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public windowed?: String;
+
+			@JsonMember({type: String, isRequired: false, name: "auto-deinterlace"})
+			public autoDeinterlace?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public vsync?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public interactive?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public borderless?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public path?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public args?: String;
+
+			@JsonMember({type: String, isRequired: false, name: "separate-key"})
+			public separateKey?: String;
+
+			@JsonMember({type: String, isRequired: false, name: "mono-streams"})
+			public monoStreams?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public vcodec?: String;
+
+			@JsonMember({type: Number, isRequired: false, name: "channel-id"})
+			public channelId?: Number;
+
+			@JsonMember({type: String, isRequired: false, name: "custom-allocator"})
+			public customAllocator?: String;
+
+			@JsonMember({type: String, isRequired: false})
+			public name?: String;
+
+			@JsonMember({type: String, isRequired: false, name: "provide-sync"})
+			public provideSync?: String;
 		}
 
 		/** */
-		export class Decklink {
-
+		@JsonObject
+		export class DecklinkConsumer extends Consumer {
+			type = "decklink";
+			device = 1;
+			embeddedAudio = "false";
+			channelLayout = "stereo";
+			latency: String = "normal";
+			keyer = "external";
+			keyOnly = "false";
+			bufferDepth = 3;
+			customAllocator = "true";	// @todo: ns 2.0 only
 		}
 
 		/** */
-		export class Bluefish {
-
+		@JsonObject
+		export class BluefishConsumer extends Consumer {
+			type = "Bluefish";
+			device = 1;
+			embeddedAudio = "false";
+			channelLayout = "stereo";
+			keyOnly = "false";
 		}
 
 		/** */
-		export class SystemAudio {
-
+		@JsonObject
+		export class SystemAudioConsumer extends Consumer {
+			type = "systemaudio";
+			channelLayout = "stereo";
+			latency: Number = 200;
 		}
 
 		/** */
-		export class Screen {
-
+		@JsonObject
+		export class ScreenConsumer extends Consumer {
+			type = "screen";
+			device = 0;
+			stretch = "fill";
+			windowed = "true";
+			keyOnly = "false";
+			autoDeinterlace = "true";
+			vsync = "false";
+			borderless = "false";
+			interactive = "true";		// @todo: ns 2.1 only
+			name = "Screen Consumer";	// @todo: ns 2.0 only
 		}
 
 		/** */
-		export class NewtekIvga {
-
+		@JsonObject
+		export class NewtekIvgaConsumer extends Consumer {
+			type = "newtekivga";
+			channelLayout = "stereo";	// @todo: ns 2.0 only
+			provideSync = "true";		// @todo: ns 2.0 only
 		}
 
 		/** */
-		export class Ffmpeg {
-
+		@JsonObject
+		export class FfmpegConsumer extends Consumer { // @todo: 2.1 ns
+			type = "ffmpeg";
+			path = "";
+			args = "";
+			separateKey = "false";
+			monoStreams = "false";
 		}
 
 		/** */
-		export class Syncto { // @todo: 2.1 ns
+		@JsonObject
+		export class FileConsumer extends Consumer { // @todo: 2.0 ns
+			type = "file";
+			path = "";
+			vcodec = "libx264";
+			separateKey = "false";
+		}
 
+		/** */
+		@JsonObject
+		export class StreamConsumer extends Consumer { // @todo: 2.0 ns
+			type = "stream";
+			path = "";
+			args = "";
+		}
+
+		/** */
+		@JsonObject
+		export class SynctoConsumer extends Consumer { // @todo: 2.1 ns
+			type = "syncto";
+			// defaults 
 		}
 
 		/** */
 		@JsonObject
 		export class Channel {
+			_consumers: Array<Consumer> = [];
+
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: custom "enum"-class
 			videoMode: string = "PAL";
 
-			@JsonMember({type: Boolean, name: "straight-alpha-output"})
-			straightAlphaOutput?: boolean = false;
+			@JsonMember({type: String, name: "straight-alpha-output"})
+			straightAlphaOutput?: String = "false";
 
-			@JsonMember({type: Array, elements: Object, isRequired: true})
-			consumers: Array<Object> = [];
+			@JsonMember({type: Array, elements: Object, isRequired: true, name: "consumers"})
+			public get consumers(): Array<Object> {
+				return this._consumers;
+			}
+
+			/** */
+			public set consumers(consumers: Array<Object>) {
+				let consumer: Consumer | undefined;
+				consumers.forEach((i: Object) => {
+					if (i.hasOwnProperty("decklink")) {
+						consumer = new DecklinkConsumer();
+						_.extend(i["decklink"], consumer);
+					} else if (i.hasOwnProperty("bluefish")) {
+						consumer = new BluefishConsumer();
+						_.extend(i["bluefish"], consumer);
+					} else if (i.hasOwnProperty("system-audio")) {
+						consumer = new SystemAudioConsumer();
+						_.extend(i["ystem-audio"], consumer);
+					} else if (i.hasOwnProperty("screen")) {
+						consumer = new ScreenConsumer();
+						_.extend(i["screen"], consumer);
+					} else if (i.hasOwnProperty("newtek-ivga")) {
+						consumer = new NewtekIvgaConsumer();
+						_.extend(i["newtek-ivga"], consumer);
+					} else if (i.hasOwnProperty("ffmpeg")) {
+						consumer = new FfmpegConsumer();
+						_.extend(i["ffmpeg"], consumer);
+					} else if (i.hasOwnProperty("file")) {
+						consumer = new FileConsumer();
+						_.extend(i["file"], consumer);
+					} else if (i.hasOwnProperty("stream")) {
+						consumer = new StreamConsumer();
+						_.extend(i["stream"], consumer);
+					} else if (i.hasOwnProperty("syncto")) {
+						consumer = new SynctoConsumer();
+						_.extend(i["syncto"], consumer);
+					}
+
+					if (consumer) {
+						this.consumers.push(consumer);
+					}
+					consumer = undefined;
+				});
+			}
+
 		}
 	}
 
@@ -196,8 +369,8 @@ export namespace Config {
 	}
 
 	/**  */
-	const defaultChannel_207: v207.Channel = {videoMode: "PAL", consumers: []};
-	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", consumers: []};
+	const defaultChannel_207: v207.Channel = {videoMode: "PAL", consumers: [], _consumers: []};
+	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", consumers: [], _consumers: []};
 
 	/**  */
 	export interface IConfig20x {
