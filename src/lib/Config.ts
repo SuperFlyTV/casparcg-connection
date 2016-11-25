@@ -394,5 +394,7 @@ export namespace Config {
 		public paths: v210.Paths = new v210.Paths();
 		@JsonMember({type: Array, elements: v21x.Channel, isRequired: true})
 		public channels: Array<v21x.Channel> = [defaultChannel_21x];
+		@JsonMember({type: String, isRequired: false})
+		public lockClearPhrase: string = "secret";
 	}
 }
