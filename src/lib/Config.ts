@@ -6,7 +6,7 @@ export namespace Config {
 	/** */
 	export namespace v20x {
 		/** */
-		export enum VideoMode {
+		export enum VideoModeEnum {
 			_PAL,
 			_NTSC,
 			_576p2500,
@@ -46,7 +46,7 @@ export namespace Config {
 		}
 
 		/** */
-		export enum ChannelLayout {
+		export enum ChannelLayoutEnum {
 			_mono,
 			_stereo,
 			_dts,
@@ -60,7 +60,7 @@ export namespace Config {
 		@JsonObject
 		export class Consumer {
 			@JsonMember({type: String, isRequired: true})	// @todo: custom "enum"-class for all props
-			public type: String;
+			public _type: String;
 		}
 
 		/** */
@@ -290,7 +290,7 @@ export namespace Config {
 		@JsonObject
 		export class Controller {
 			@JsonMember({type: String, isRequired: true})
-			public type: String;
+			public _type: String;
 
 			@JsonMember({type: Number, isRequired: true})
 			public port: number;
@@ -433,7 +433,6 @@ export namespace Config {
 			public mipMap: string = "true";
 		}
 
-
 		/** */
 		@JsonObject
 		export class Html {
@@ -442,7 +441,7 @@ export namespace Config {
 		}
 
 		/** */
-		export enum ChannelLayout {
+		export enum ChannelLayoutEnum {
 			_mono,
 			_stereo,
 			_matrix,
@@ -468,8 +467,8 @@ export namespace Config {
 	/**  */
 	const defaultChannel_207: v207.Channel = {videoMode: "PAL", _consumers: []};
 	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", _consumers: []};
-	const defaultAMCPController: v20x.Controller = {type: "tcp", port: 5250, protocol: "AMCP"};
-	const defaultLOGController: v20x.Controller = {type: "tcp", port: 3250, protocol: "LOG"};
+	const defaultAMCPController: v20x.Controller = {_type: "tcp", port: 5250, protocol: "AMCP"};
+	const defaultLOGController: v20x.Controller = {_type: "tcp", port: 3250, protocol: "LOG"};
 
 	/**  */
 	export interface IConfig20x {
