@@ -1,4 +1,5 @@
 import {TypedJSON} from "typedjson-npm";
+import * as _ from "highland";
 
 // config NS
 import {Config as ConfigNS} from "./Config";
@@ -46,32 +47,63 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public parse(data: Object): Object {
-
-			console.log("RAW::::", JSON.stringify(data));
-
-
-			if (data.hasOwnProperty("channels")) {
-				if (!Array.isArray(data["channels"])) {
-					data["channels"] = [data["channels"]];
-				}
-				(<Array<Object>>data["channels"]).map((i: Object) => {
-					if (i.hasOwnProperty("consumers")) {
-						let consumers: Object = i["consumers"];
-						if (!Array.isArray(consumers)) {
-							let wrap: Array<Object> = [];
-							for (let o in consumers) {
-								let u: Object = {};
-								u[o] = consumers[o] === "" ? {} : consumers[o];
-								wrap.push(u);
+		private childrenToArray(root: Object, childIndices: Array<string>): Object {
+			_.pairs(root).map((i) => {
+				let outerKey: string = i[0].toString();
+				let outerValue: Object = i[1];
+				// filter top-level possible arrays
+				if (childIndices.indexOf(outerKey) > -1) {
+					let flatArray: Array<Object> = [];
+					for (let innerKey in outerValue) {
+						let innerValue: Object = outerValue[innerKey];
+						if (typeof innerValue === "object") {
+							if (Array.isArray(innerValue)) { // multiple innervalues
+								innerValue.forEach((o: Object) => {
+									o["type"] = innerKey;
+									flatArray.push(o);
+								});
+							} else { // single inner object
+								innerValue["type"] = innerKey;
+								flatArray.push(innerValue);
 							}
-							i["consumers"] = wrap;
+						// update outer member with transformed array of inner members
+						i[1] = flatArray;
 						}
 					}
-					return i;
+				}
+				return i;
+			}).toArray((i) => {
+					root = {};
+					i.forEach((o) => {
+						root![(<string>o[0])] = o[1];
+					});
 				});
+			return root;
+		}
+
+		/**
+		 * 
+		 */
+		public parse(data: Object): Object {
+
+			data = this.childrenToArray(data, ["channels", "controllers", "template-hosts"]);
+			if (data.hasOwnProperty("channels")) {
+				for (let i in data["channels"]) {
+					data["channels"][i] = this.childrenToArray(data["channels"][i], ["consumers"]);
+				}
 			}
-			let dataString: string = TypedJSON.stringify(data).toLowerCase();
+			if (data.hasOwnProperty("osc")) {
+				for (let i in data["osc"]) {
+					data["osc"][i] = this.childrenToArray(data["osc"][i], ["predefined-clients"]);
+				}
+			}
+			if (data.hasOwnProperty("audio")) {
+				for (let i in data["audio"]) {
+					data["audio"][i] = this.childrenToArray(data["audio"][i], ["channel-layouts"]);
+				}
+			}
+
+			let dataString: string = JSON.stringify(data).toLowerCase();
 			console.log("FØØØRRRRR:::::", dataString);
 			let result: Config207 | Config210 | {}  = {};
 			try {
