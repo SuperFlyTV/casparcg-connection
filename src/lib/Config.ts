@@ -330,6 +330,22 @@ export namespace Config {
 			@JsonMember({type: String, name: "buffer-depth"})
 			bufferDepth: string = "auto";	// @todo: string or number
 		}
+
+		/** */
+		@JsonObject
+		export class TemplateHost {
+			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: enum
+			public videoMode: string;
+
+			@JsonMember({type: String, isRequired: true})	// @todo: enum
+			public filename: string;
+
+			@JsonMember({type: Number, isRequired: true})
+			public width: number;
+
+			@JsonMember({type: Number, isRequired: true})
+			public height: number;
+		}
 	}
 
 	/** */
@@ -501,6 +517,8 @@ export namespace Config {
 		public thumbnails: v207.Thumbnails = new v207.Thumbnails();
 		@JsonMember({type: v20x.Flash, isRequired: false})
 		public flash: v20x.Flash = new v20x.Flash();
+		@JsonMember({type: Array, elements: v20x.TemplateHost, name: "template-hosts"})
+		public templateHosts: Array<v20x.TemplateHost> = [];
 	}
 
 	/**  */
@@ -531,5 +549,7 @@ export namespace Config {
 		public flash: v20x.Flash = new v20x.Flash();
 		@JsonMember({type: v21x.Html, isRequired: false})
 		public html: v21x.Html = new v21x.Html();
+		@JsonMember({type: Array, elements: v20x.TemplateHost, name: "template-hosts"})
+		public templateHosts: Array<v20x.TemplateHost> = [];
 	}
 }
