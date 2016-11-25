@@ -95,13 +95,14 @@ export namespace Response {
 				}
 			}
 			if (data.hasOwnProperty("osc")) {
-				for (let i in data["osc"]) {
-					data["osc"][i] = this.childrenToArray(data["osc"][i], ["predefined-clients"]);
-				}
+				data["osc"] = this.childrenToArray(data["osc"], ["predefined-clients"]);
 			}
 			if (data.hasOwnProperty("audio")) {
-				for (let i in data["audio"]) {
-					data["audio"][i] = this.childrenToArray(data["audio"][i], ["channel-layouts"]);
+				data["audio"] = this.childrenToArray(data["audio"], ["channel-layouts", "mix-configs"]);
+				if (data["audio"].hasOwnProperty("mix-configs")) {
+					for (let i in data["audio"]["mix-configs"]) {
+						data["audio"]["mix-configs"][i] = this.childrenToArray(data["audio"]["mix-configs"][i], ["mappings"]);
+					}
 				}
 			}
 
@@ -113,7 +114,8 @@ export namespace Response {
 			}catch (e) {
 				console.log("CONFIG PARSE ERROR: ", e);
 			}
-			console.log("PARSED:::::", TypedJSON.stringify(result));
+			console.log("PARSED JSON:::::", JSON.stringify(result));
+			console.log("PARSED TJSON:::::", TypedJSON.stringify(result));
 			return result;
 		}
 	}

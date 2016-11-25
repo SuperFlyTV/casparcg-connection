@@ -301,6 +301,26 @@ export namespace Config {
 
 		/** */
 		@JsonObject
+		export class PredefinedClient {
+			@JsonMember({type: String, isRequired: true})
+			public address: String;
+
+			@JsonMember({type: Number, isRequired: true})
+			public port: number;
+		}
+
+		/** */
+		@JsonObject
+		export class OscClient {
+			@JsonMember({type: String, isRequired: true})
+			public address: String;
+
+			@JsonMember({type: Number, isRequired: true})
+			public port: number;
+		}
+
+		/** */
+		@JsonObject
 		export class Thumbnails { // @todo: isRequired on childs?
 			@JsonMember({type: String, name: "generate-thumbnails" , isRequired: true})
 			public generateThumbnails: string = "true";
@@ -345,6 +365,58 @@ export namespace Config {
 
 			@JsonMember({type: Number, isRequired: true})
 			public height: number;
+		}
+
+		/**  */
+		@JsonObject
+		export class Osc {
+			@JsonMember({type: Number, isRequired: false, name: "default-port"})
+			public defaultPort: number = 6250;
+
+			@JsonMember({type: Array, elements: OscClient, isRequired: true, name: "predefined-clients"})
+			public predefinedClients: Array<OscClient> = [new OscClient()];
+		}
+
+		/**  */
+		@JsonObject
+		export class ChannelLayout {
+			@JsonMember({type: String, isRequired: true})
+			public name: string;
+
+			@JsonMember({type: String, isRequired: true})
+			public type: string;
+
+			@JsonMember({type: Number, isRequired: true, name: "num-channels"})
+			public numChannels: number;
+
+			@JsonMember({type: String, isRequired: true})
+			public channels: string;
+		}
+
+		/**  */
+		@JsonObject
+		export class MixConfig {
+			@JsonMember({type: String, isRequired: true})
+			public from: string;
+
+			@JsonMember({type: String, isRequired: true})
+			public to: string;
+
+			@JsonMember({type: String, isRequired: true})
+			public mix: string;
+
+			@JsonMember({type: String, isRequired: true})
+			public mappings: string;
+		}
+
+		/**  */
+		@JsonObject
+		export class Audio {
+			@JsonMember({type: Array, elements: v20x.ChannelLayout, isRequired: true, name: "channel-layouts"})
+			public channelLayouts: Array<v20x.ChannelLayout> = [];
+
+			@JsonMember({type: Array, elements: v20x.MixConfig, isRequired: true, name: "mix-configs"})
+			public mixConfigs: Array<v20x.MixConfig> = [];
 		}
 	}
 
@@ -440,6 +512,55 @@ export namespace Config {
 			remoteDebuggingPort: number = 0;	// @todo: valid range = 0|1024-6535
 		}
 
+		/**  */
+		@JsonObject
+		export class Osc extends v20x.Osc {
+			@JsonMember({type: String, isRequired: true, name: "disable-send-to-amcp-clients"})
+			public disableSendToAmcpClient: string = "false";
+		}
+
+		/**  */
+		@JsonObject
+		export class ChannelLayout {
+			@JsonMember({type: String, isRequired: true})
+			public name: string;
+
+			@JsonMember({type: String, isRequired: true})
+			public _type: string;
+
+			@JsonMember({type: Number, isRequired: true, name: "num-channels"})
+			public numChannels: number;
+
+			@JsonMember({type: String, isRequired: true, name: "channel-order"})
+			public channelOrder: string;
+		}
+
+		/**  */
+		@JsonObject
+		export class MixConfig {
+			@JsonMember({type: String, isRequired: true, name: "from-type"})
+			public fromType: string;
+
+			@JsonMember({type: String, isRequired: true, name: "to-types"})
+			public toTypes: string;
+
+			@JsonMember({type: String, isRequired: true})
+			public mix: string;
+
+			@JsonMember({type: String, isRequired: true})
+			public _type: string;
+		}
+
+		/**  */
+		@JsonObject
+		export class Audio {
+			@JsonMember({type: Array, elements: v21x.ChannelLayout, isRequired: true, name: "channel-layouts"})
+			public channelLayouts: Array<v21x.ChannelLayout> = [];
+
+			@JsonMember({type: Array, elements: v21x.MixConfig, isRequired: true, name: "mix-configs"})
+			public mixConfigs: Array<v21x.MixConfig> = [];
+		}
+
 		/** */
 		export enum ChannelLayoutEnum {
 			_mono,
@@ -518,6 +639,10 @@ export namespace Config {
 		public flash: v20x.Flash = new v20x.Flash();
 		@JsonMember({type: Array, elements: v20x.TemplateHost, name: "template-hosts"})
 		public templateHosts: Array<v20x.TemplateHost> = [];
+		@JsonMember({type: v20x.Osc})
+		public osc: v20x.Osc = new v20x.Osc();
+		@JsonMember({type: v20x.Audio})
+		public audio: v20x.Audio = new v20x.Audio();
 	}
 
 	/**  */
@@ -550,5 +675,9 @@ export namespace Config {
 		public html: v21x.Html = new v21x.Html();
 		@JsonMember({type: Array, elements: v20x.TemplateHost, name: "template-hosts"})
 		public templateHosts: Array<v20x.TemplateHost> = [];
+		@JsonMember({type: v21x.Osc})
+		public osc: v21x.Osc = new v21x.Osc();
+		@JsonMember({type: v21x.Audio})
+		public audio: v21x.Audio = new v21x.Audio();
 	}
 }
