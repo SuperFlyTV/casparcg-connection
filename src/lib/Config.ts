@@ -249,17 +249,21 @@ export namespace Config {
 				consumers.forEach((i: Object) => {
 					if (i.hasOwnProperty("type")) {
 						let className: string = i["type"];
-						className = className.replace(/-/, "");
-						className = className.charAt(0).toUpperCase() + className.slice(1) + "Consumer";
+
+						let dashBlocks: Array<string> = className.split("-");
+						className = dashBlocks.map((i) => {return i.charAt(0).toUpperCase() + i.slice(1); }).join("") + "Consumer";
 						if (v20x[className]) {
 							let consumer: Consumer = new v20x[className]();
+							let consumerKey: string;
 							for (let key in i) {
-								key = key.replace(/-/, "");
+								let dashBlocks: Array<string> = key.split("-");
+								consumerKey = dashBlocks.map((i, o) => {return o > 0 ? i.charAt(0).toUpperCase() + i.slice(1) : i; }).join("");
 								if (!i.hasOwnProperty(key)) {
 									continue;
 								}
-								if (consumer.hasOwnProperty(key)) {
-									consumer[key] = i[key];
+								if (consumer.hasOwnProperty(consumerKey)) {
+									consumer[consumerKey] = i[key];
+								}else {
 								}
 							}
 							this.consumers!.push(consumer);
@@ -394,7 +398,7 @@ export namespace Config {
 		public paths: v210.Paths = new v210.Paths();
 		@JsonMember({type: Array, elements: v21x.Channel, isRequired: true})
 		public channels: Array<v21x.Channel> = [defaultChannel_21x];
-		@JsonMember({type: String, isRequired: false})
+		@JsonMember({type: String, isRequired: false, name: "lock-clear-phrase"})
 		public lockClearPhrase: string = "secret";
 	}
 }
