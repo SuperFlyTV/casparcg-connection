@@ -432,6 +432,16 @@ export namespace Config {
 		public mixer: v207.Mixer = new v207.Mixer();
 		@JsonMember({type: Array, elements: v20x.Controller, isRequired: true})
 		public controllers: Array<v20x.Controller> = [defaultAMCPController];
+		@JsonMember({type: String,  name: "log-level"})	// @todo: enum
+		public logLevel: string = "trace";				// @todo: differs from 2.1.0 default
+		@JsonMember({type: String,  name: "channel-grid"})
+		public channelGrid: string = "false";
+		@JsonMember({type: String,  name: "atuo-deinterlace"})
+		public autoDeinterlace: string = "true";
+		@JsonMember({type: String,  name: "auto-transcode"})
+		public autoTranscode: string = "true";
+		@JsonMember({type: Number,  name: "pipeline-tokens"})
+		public pipelineTokens: number = 2;
 	}
 
 	/**  */
@@ -446,5 +456,15 @@ export namespace Config {
 		public mixer: v21x.Mixer = new v21x.Mixer();
 		@JsonMember({type: Array, elements: v20x.Controller, isRequired: true})
 		public controllers: Array<v20x.Controller> = [defaultAMCPController, defaultLOGController];
+		@JsonMember({type: String,  name: "log-level"})	// @todo: enum
+		public logLevel: string = "info";				// @todo: differs from 2.0.7 default
+		@JsonMember({type: String,  name: "log-categories"}) // @todo: enum
+		public logCategories: string = "communication";		// @todo, concated (comma-delimited) values in string
+		@JsonMember({type: String,  name: "channel-grid"})
+		public channelGrid: string = "false";
+		@JsonMember({type: String,  name: "force-deinterlace"})
+		public forceDeinterlace: string = "false";
+		@JsonMember({type: String})				// @todo: enum
+		public accellerator: string = "auto";
 	}
 }
