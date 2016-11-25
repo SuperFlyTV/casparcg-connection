@@ -323,6 +323,13 @@ export namespace Config {
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: enum
 			public videoMode: string = "720p5000";
 		}
+
+		/** */
+		@JsonObject
+		export class Flash {
+			@JsonMember({type: String, name: "buffer-depth"})
+			bufferDepth: string = "auto";	// @todo: string or number
+		}
 	}
 
 	/** */
@@ -410,6 +417,14 @@ export namespace Config {
 			public mipMap: string = "true";
 		}
 
+
+		/** */
+		@JsonObject
+		export class Html {
+			@JsonMember({type: Number, name: "remote-debugging-port"})
+			remoteDebuggingPort: number = 0;	// @todo: valid range = 0|1024-6535
+		}
+
 		/** */
 		export enum ChannelLayout {
 			_mono,
@@ -484,6 +499,8 @@ export namespace Config {
 		public pipelineTokens: number = 2;
 		@JsonMember({type: v207.Thumbnails, isRequired: false})
 		public thumbnails: v207.Thumbnails = new v207.Thumbnails();
+		@JsonMember({type: v20x.Flash, isRequired: false})
+		public flash: v20x.Flash = new v20x.Flash();
 	}
 
 	/**  */
@@ -510,5 +527,9 @@ export namespace Config {
 		public accellerator: string = "auto";
 		@JsonMember({type: v21x.Thumbnails, isRequired: false})
 		public thumbnails: v21x.Thumbnails = new v21x.Thumbnails();
+		@JsonMember({type: v20x.Flash, isRequired: false})
+		public flash: v20x.Flash = new v20x.Flash();
+		@JsonMember({type: v21x.Html, isRequired: false})
+		public html: v21x.Html = new v21x.Html();
 	}
 }
