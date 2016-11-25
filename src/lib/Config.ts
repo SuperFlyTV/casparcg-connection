@@ -231,7 +231,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class Channel {
-			_consumers?: Array<Consumer> = [];
+			consumers?: Array<Consumer> = [];
 
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: custom "enum"-class
 			videoMode: string = "PAL";
@@ -240,12 +240,12 @@ export namespace Config {
 			straightAlphaOutput?: string = "false";
 
 			@JsonMember({type: Array, elements: Object, isRequired: true, name: "consumers"})
-			public get consumers(): Array<Object> {
-				return this._consumers || [];
+			public get _consumers(): Array<Object> {
+				return this.consumers || [];
 			}
 
 			/** */
-			public set consumers(consumers: Array<Object>) {
+			public set _consumers(consumers: Array<Object>) {
 				consumers.forEach((i: Object) => {
 					if (i.hasOwnProperty("type")) {
 						let className: string = i["type"];
@@ -262,7 +262,7 @@ export namespace Config {
 									consumer[key] = i[key];
 								}
 							}
-							this._consumers!.push(consumer);
+							this.consumers!.push(consumer);
 						}
 					}
 				});
@@ -355,8 +355,8 @@ export namespace Config {
 	}
 
 	/**  */
-	const defaultChannel_207: v207.Channel = {videoMode: "PAL", consumers: []};
-	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", consumers: []};
+	const defaultChannel_207: v207.Channel = {videoMode: "PAL", _consumers: []};
+	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", _consumers: []};
 
 	/**  */
 	export interface IConfig20x {
