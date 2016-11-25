@@ -71,13 +71,13 @@ export namespace Config {
 			@JsonMember({type: Number, isRequired: false})
 			public device: number = 1;
 
-			@JsonMember({type: Number, isRequired: false, name: "key-device"})
+			@JsonMember({type: Number,  name: "key-device"})
 			public keyDevice: Number;
 
-			@JsonMember({type: String, isRequired: false, name: "embedded-audio"})
+			@JsonMember({type: String,  name: "embedded-audio"})
 			public embeddedAudio: string = "false";
 
-			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			@JsonMember({type: String,  name: "channel-layout"})
 			public channelLayout: string = "stereo";
 
 			@JsonMember({type: String, isRequired: false})
@@ -86,13 +86,13 @@ export namespace Config {
 			@JsonMember({type: String, isRequired: false})
 			public keyer: string = "external";
 
-			@JsonMember({type: String, isRequired: false, name: "key-only"})
+			@JsonMember({type: String,  name: "key-only"})
 			public keyOnly: string = "false";
 
-			@JsonMember({type: Number, isRequired: false, name: "buffer-depth"})
+			@JsonMember({type: Number,  name: "buffer-depth"})
 			public bufferDepth: number = 3;
 
-			@JsonMember({type: String, isRequired: false, name: "custom-allocator"})
+			@JsonMember({type: String,  name: "custom-allocator"})
 			public customAllocator: string = "true";	// @todo: ns 2.0 only
 		}
 
@@ -104,13 +104,13 @@ export namespace Config {
 			@JsonMember({type: Number, isRequired: false})
 			public device: number = 1;
 
-			@JsonMember({type: String, isRequired: false, name: "embedded-audio"})
+			@JsonMember({type: String,  name: "embedded-audio"})
 			public embeddedAudio: string = "false";
 
-			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			@JsonMember({type: String,  name: "channel-layout"})
 			public channelLayout: string = "stereo";
 
-			@JsonMember({type: String, isRequired: false, name: "key-only"})
+			@JsonMember({type: String,  name: "key-only"})
 			public keyOnly: string = "false";
 		}
 
@@ -119,7 +119,7 @@ export namespace Config {
 		export class SystemAudioConsumer extends Consumer {
 			type: string = "systemaudio";
 
-			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			@JsonMember({type: String,  name: "channel-layout"})
 			public channelLayout: string = "stereo";
 
 			@JsonMember({type: Number, isRequired: false})
@@ -134,7 +134,7 @@ export namespace Config {
 			@JsonMember({type: Number, isRequired: false})
 			public device: number = 0;
 
-			@JsonMember({type: String, isRequired: false, name: "aspect-ratio"})
+			@JsonMember({type: String,  name: "aspect-ratio"})
 			public aspectRatio: string = "default";
 
 			@JsonMember({type: String, isRequired: false})
@@ -143,10 +143,10 @@ export namespace Config {
 			@JsonMember({type: String, isRequired: false})
 			public windowed: string = "true";
 
-			@JsonMember({type: String, isRequired: false, name: "key-only"})
+			@JsonMember({type: String,  name: "key-only"})
 			public keyOnly: string = "false";
 
-			@JsonMember({type: String, isRequired: false, name: "auto-deinterlace"})
+			@JsonMember({type: String,  name: "auto-deinterlace"})
 			public autoDeinterlace: string = "true";
 
 			@JsonMember({type: String, isRequired: false})
@@ -167,10 +167,10 @@ export namespace Config {
 		export class NewtekIvgaConsumer extends Consumer {
 			type = "newtekivga";
 
-			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
+			@JsonMember({type: String,  name: "channel-layout"})
 			public channelLayout: string = "stereo";	// @todo: ns 2.0 only
 
-			@JsonMember({type: String, isRequired: false, name: "provide-sync"})
+			@JsonMember({type: String,  name: "provide-sync"})
 			public provideSync: string = "true";		// @todo: ns 2.0 only
 		}
 
@@ -185,10 +185,10 @@ export namespace Config {
 			@JsonMember({type: String, isRequired: false})
 			public args: String;
 
-			@JsonMember({type: String, isRequired: false, name: "separate-key"})
+			@JsonMember({type: String,  name: "separate-key"})
 			public separateKey: string = "false";
 
-			@JsonMember({type: String, isRequired: false, name: "mono-streams"})
+			@JsonMember({type: String,  name: "mono-streams"})
 			public monoStreams: string = "false";
 		}
 
@@ -203,7 +203,7 @@ export namespace Config {
 			@JsonMember({type: String, isRequired: false})
 			public vcodec: string = "libx264";
 
-			@JsonMember({type: String, isRequired: false, name: "separate-key"})
+			@JsonMember({type: String,  name: "separate-key"})
 			public separateKey: string = "false";
 		}
 
@@ -224,7 +224,7 @@ export namespace Config {
 		export class SynctoConsumer extends Consumer { // @todo: 2.1 ns
 			type: string = "syncto";
 
-			@JsonMember({type: Number, isRequired: false, name: "channel-id"})
+			@JsonMember({type: Number,  name: "channel-id"})
 			public channelId: Number;
 		}
 
@@ -250,13 +250,13 @@ export namespace Config {
 					if (i.hasOwnProperty("type")) {
 						let className: string = i["type"];
 
-						let dashBlocks: Array<string> = className.split("-");
+						let dashBlocks: Array<string> = className.split(/-|_/);
 						className = dashBlocks.map((i) => {return i.charAt(0).toUpperCase() + i.slice(1); }).join("") + "Consumer";
 						if (v20x[className]) {
 							let consumer: Consumer = new v20x[className]();
 							let consumerKey: string;
 							for (let key in i) {
-								let dashBlocks: Array<string> = key.split("-");
+								let dashBlocks: Array<string> = key.split(/-|_/);
 								consumerKey = dashBlocks.map((i, o) => {return o > 0 ? i.charAt(0).toUpperCase() + i.slice(1) : i; }).join("");
 								if (!i.hasOwnProperty(key)) {
 									continue;
@@ -271,6 +271,19 @@ export namespace Config {
 					}
 				});
 			}
+		}
+
+		/** */
+		@JsonObject
+		export class Mixer {
+			@JsonMember({type: String, name: "blend-modes"})
+			blendModes: string = "false";
+
+			@JsonMember({type: String, name: "straight-alpha"})
+			straightAlpha: string = "false";
+
+			@JsonMember({type: String, name: "mipmapping_default_on	"})
+			mipmappingDefaultOn: string = "false";
 		}
 	}
 
@@ -300,6 +313,13 @@ export namespace Config {
 		export class Channel extends v20x.Channel {
 			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
 			channelLayout?: string = "stereo";
+		}
+
+				/** */
+		@JsonObject
+		export class Mixer extends v20x.Mixer {
+			@JsonMember({type: String, name: "chroma-key"})
+			chromaKey: string = "false";
 		}
 	}
 
@@ -333,6 +353,9 @@ export namespace Config {
 			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
 			channelLayout?: string = "stereo";
 		};
+
+		@JsonObject
+		export class Mixer extends v20x.Mixer {}
 
 		/** */
 		export enum ChannelLayout {
@@ -390,6 +413,8 @@ export namespace Config {
 		public paths: v207.Paths = new v207.Paths();
 		@JsonMember({type: Array, elements: v207.Channel, isRequired: true})
 		public channels: Array<v207.Channel> = [defaultChannel_207];
+		@JsonMember({type: v207.Mixer, isRequired: false})
+		public mixer: v207.Mixer = new v207.Mixer();
 	}
 
 	/**  */
@@ -398,7 +423,9 @@ export namespace Config {
 		public paths: v210.Paths = new v210.Paths();
 		@JsonMember({type: Array, elements: v21x.Channel, isRequired: true})
 		public channels: Array<v21x.Channel> = [defaultChannel_21x];
-		@JsonMember({type: String, isRequired: false, name: "lock-clear-phrase"})
+		@JsonMember({type: String,  name: "lock-clear-phrase"})
 		public lockClearPhrase: string = "secret";
+		@JsonMember({type: v21x.Mixer, isRequired: false})
+		public mixer: v21x.Mixer = new v21x.Mixer();
 	}
 }
