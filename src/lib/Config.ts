@@ -282,8 +282,21 @@ export namespace Config {
 			@JsonMember({type: String, name: "straight-alpha"})
 			straightAlpha: string = "false";
 
-			@JsonMember({type: String, name: "mipmapping_default_on	"})
+			@JsonMember({type: String, name: "mipmapping_default_on"})
 			mipmappingDefaultOn: string = "false";
+		}
+
+		/** */
+		@JsonObject
+		export class Controller {
+			@JsonMember({type: String, isRequired: true})
+			public type: String;
+
+			@JsonMember({type: Number, isRequired: true})
+			public port: number;
+
+			@JsonMember({type: String, isRequired: true})
+			public protocol: String;
 		}
 	}
 
@@ -384,6 +397,8 @@ export namespace Config {
 	/**  */
 	const defaultChannel_207: v207.Channel = {videoMode: "PAL", _consumers: []};
 	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", _consumers: []};
+	const defaultAMCPController: v20x.Controller = {type: "tcp", port: 5250, protocol: "AMCP"};
+	const defaultLOGController: v20x.Controller = {type: "tcp", port: 3250, protocol: "LOG"};
 
 	/**  */
 	export interface IConfig20x {
@@ -415,6 +430,8 @@ export namespace Config {
 		public channels: Array<v207.Channel> = [defaultChannel_207];
 		@JsonMember({type: v207.Mixer, isRequired: false})
 		public mixer: v207.Mixer = new v207.Mixer();
+		@JsonMember({type: Array, elements: v20x.Controller, isRequired: true})
+		public controllers: Array<v20x.Controller> = [defaultAMCPController];
 	}
 
 	/**  */
@@ -427,5 +444,7 @@ export namespace Config {
 		public lockClearPhrase: string = "secret";
 		@JsonMember({type: v21x.Mixer, isRequired: false})
 		public mixer: v21x.Mixer = new v21x.Mixer();
+		@JsonMember({type: Array, elements: v20x.Controller, isRequired: true})
+		public controllers: Array<v20x.Controller> = [defaultAMCPController, defaultLOGController];
 	}
 }
