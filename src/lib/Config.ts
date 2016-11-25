@@ -72,13 +72,13 @@ export namespace Config {
 			public device: number = 1;
 
 			@JsonMember({type: Number, isRequired: false, name: "key-device"})
-			public keydevice: Number;
+			public keyDevice: Number;
 
 			@JsonMember({type: String, isRequired: false, name: "embedded-audio"})
-			public embeddedaudio: string = "false";
+			public embeddedAudio: string = "false";
 
 			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
-			public channellayout: string = "stereo";
+			public channelLayout: string = "stereo";
 
 			@JsonMember({type: String, isRequired: false})
 			public latency: string = "normal";
@@ -87,13 +87,13 @@ export namespace Config {
 			public keyer: string = "external";
 
 			@JsonMember({type: String, isRequired: false, name: "key-only"})
-			public keyonly: string = "false";
+			public keyOnly: string = "false";
 
 			@JsonMember({type: Number, isRequired: false, name: "buffer-depth"})
-			public bufferdepth: number = 3;
+			public bufferDepth: number = 3;
 
 			@JsonMember({type: String, isRequired: false, name: "custom-allocator"})
-			public customallocator: string = "true";	// @todo: ns 2.0 only
+			public customAllocator: string = "true";	// @todo: ns 2.0 only
 		}
 
 		/** */
@@ -105,22 +105,22 @@ export namespace Config {
 			public device: number = 1;
 
 			@JsonMember({type: String, isRequired: false, name: "embedded-audio"})
-			public embeddedaudio: string = "false";
+			public embeddedAudio: string = "false";
 
 			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
-			public channellayout: string = "stereo";
+			public channelLayout: string = "stereo";
 
 			@JsonMember({type: String, isRequired: false, name: "key-only"})
-			public keyonly: string = "false";
+			public keyOnly: string = "false";
 		}
 
 		/** */
 		@JsonObject
-		export class SystemaudioConsumer extends Consumer {
+		export class SystemAudioConsumer extends Consumer {
 			type: string = "systemaudio";
 
 			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
-			public channellayout: string = "stereo";
+			public channelLayout: string = "stereo";
 
 			@JsonMember({type: Number, isRequired: false})
 			public latency: number = 200;
@@ -135,7 +135,7 @@ export namespace Config {
 			public device: number = 0;
 
 			@JsonMember({type: String, isRequired: false, name: "aspect-ratio"})
-			public aspectratio: string = "default";
+			public aspectRatio: string = "default";
 
 			@JsonMember({type: String, isRequired: false})
 			public stretch: string = "fill";
@@ -144,10 +144,10 @@ export namespace Config {
 			public windowed: string = "true";
 
 			@JsonMember({type: String, isRequired: false, name: "key-only"})
-			public keyonly: string = "false";
+			public keyOnly: string = "false";
 
 			@JsonMember({type: String, isRequired: false, name: "auto-deinterlace"})
-			public autodeinterlace: string = "true";
+			public autoDeinterlace: string = "true";
 
 			@JsonMember({type: String, isRequired: false})
 			public vsync: string = "false";
@@ -164,14 +164,14 @@ export namespace Config {
 
 		/** */
 		@JsonObject
-		export class NewtekivgaConsumer extends Consumer {
+		export class NewtekIvgaConsumer extends Consumer {
 			type = "newtekivga";
 
 			@JsonMember({type: String, isRequired: false, name: "channel-layout"})
-			public channellayout: string = "stereo";	// @todo: ns 2.0 only
+			public channelLayout: string = "stereo";	// @todo: ns 2.0 only
 
 			@JsonMember({type: String, isRequired: false, name: "provide-sync"})
-			public providesync: string = "true";		// @todo: ns 2.0 only
+			public provideSync: string = "true";		// @todo: ns 2.0 only
 		}
 
 		/** */
@@ -186,10 +186,10 @@ export namespace Config {
 			public args: String;
 
 			@JsonMember({type: String, isRequired: false, name: "separate-key"})
-			public separatekey: string = "false";
+			public separateKey: string = "false";
 
 			@JsonMember({type: String, isRequired: false, name: "mono-streams"})
-			public monostreams: string = "false";
+			public monoStreams: string = "false";
 		}
 
 		/** */
@@ -204,7 +204,7 @@ export namespace Config {
 			public vcodec: string = "libx264";
 
 			@JsonMember({type: String, isRequired: false, name: "separate-key"})
-			public separatekey: string = "false";
+			public separateKey: string = "false";
 		}
 
 		/** */
@@ -225,7 +225,7 @@ export namespace Config {
 			type: string = "syncto";
 
 			@JsonMember({type: Number, isRequired: false, name: "channel-id"})
-			public channelid: Number;
+			public channelId: Number;
 		}
 
 		/** */
@@ -295,7 +295,7 @@ export namespace Config {
 		@JsonObject
 		export class Channel extends v20x.Channel {
 			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
-			channellayout?: string = "stereo";
+			channelLayout?: string = "stereo";
 		}
 	}
 
@@ -327,7 +327,7 @@ export namespace Config {
 		@JsonObject
 		export class Channel extends v20x.Channel {
 			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
-			channellayout?: string = "stereo";
+			channelLayout?: string = "stereo";
 		};
 
 		/** */
