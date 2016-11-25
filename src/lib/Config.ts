@@ -68,7 +68,7 @@ export namespace Config {
 		export class DecklinkConsumer extends Consumer {
 			type = "decklink";
 
-			@JsonMember({type: Number, isRequired: false})
+			@JsonMember({type: Number})
 			public device: number = 1;
 
 			@JsonMember({type: Number,  name: "key-device"})
@@ -80,10 +80,10 @@ export namespace Config {
 			@JsonMember({type: String,  name: "channel-layout"})
 			public channelLayout: string = "stereo";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public latency: string = "normal";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public keyer: string = "external";
 
 			@JsonMember({type: String,  name: "key-only"})
@@ -101,7 +101,7 @@ export namespace Config {
 		export class BluefishConsumer extends Consumer {
 			type = "Bluefish";
 
-			@JsonMember({type: Number, isRequired: false})
+			@JsonMember({type: Number})
 			public device: number = 1;
 
 			@JsonMember({type: String,  name: "embedded-audio"})
@@ -122,7 +122,7 @@ export namespace Config {
 			@JsonMember({type: String,  name: "channel-layout"})
 			public channelLayout: string = "stereo";
 
-			@JsonMember({type: Number, isRequired: false})
+			@JsonMember({type: Number})
 			public latency: number = 200;
 		}
 
@@ -131,16 +131,16 @@ export namespace Config {
 		export class ScreenConsumer extends Consumer {
 			type = "screen";
 
-			@JsonMember({type: Number, isRequired: false})
+			@JsonMember({type: Number})
 			public device: number = 0;
 
 			@JsonMember({type: String,  name: "aspect-ratio"})
 			public aspectRatio: string = "default";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public stretch: string = "fill";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public windowed: string = "true";
 
 			@JsonMember({type: String,  name: "key-only"})
@@ -149,16 +149,16 @@ export namespace Config {
 			@JsonMember({type: String,  name: "auto-deinterlace"})
 			public autoDeinterlace: string = "true";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public vsync: string = "false";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public borderless: string = "false";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public interactive: string = "true";		// @todo: ns 2.1 only
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public name: string = "Screen Consumer";	// @todo: ns 2.0 only
 		}
 
@@ -179,10 +179,10 @@ export namespace Config {
 		export class FfmpegConsumer extends Consumer { // @todo: 2.1 ns
 			type: string = "ffmpeg";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public path: String;
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public args: String;
 
 			@JsonMember({type: String,  name: "separate-key"})
@@ -197,10 +197,10 @@ export namespace Config {
 		export class FileConsumer extends Consumer { // @todo: 2.0 ns
 			type: string = "file";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public path: String;
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public vcodec: string = "libx264";
 
 			@JsonMember({type: String,  name: "separate-key"})
@@ -212,10 +212,10 @@ export namespace Config {
 		export class StreamConsumer extends Consumer { // @todo: 2.0 ns
 			type = "stream";
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public path: String;
 
-			@JsonMember({type: String, isRequired: false})
+			@JsonMember({type: String})
 			public args: String;
 		}
 
@@ -499,7 +499,7 @@ export namespace Config {
 		public paths: v207.Paths = new v207.Paths();
 		@JsonMember({type: Array, elements: v207.Channel, isRequired: true})
 		public channels: Array<v207.Channel> = [defaultChannel_207];
-		@JsonMember({type: v207.Mixer, isRequired: false})
+		@JsonMember({type: v207.Mixer})
 		public mixer: v207.Mixer = new v207.Mixer();
 		@JsonMember({type: Array, elements: v20x.Controller, isRequired: true})
 		public controllers: Array<v20x.Controller> = [defaultAMCPController];
@@ -513,9 +513,9 @@ export namespace Config {
 		public autoTranscode: string = "true";
 		@JsonMember({type: Number,  name: "pipeline-tokens"})
 		public pipelineTokens: number = 2;
-		@JsonMember({type: v207.Thumbnails, isRequired: false})
+		@JsonMember({type: v207.Thumbnails})
 		public thumbnails: v207.Thumbnails = new v207.Thumbnails();
-		@JsonMember({type: v20x.Flash, isRequired: false})
+		@JsonMember({type: v20x.Flash})
 		public flash: v20x.Flash = new v20x.Flash();
 		@JsonMember({type: Array, elements: v20x.TemplateHost, name: "template-hosts"})
 		public templateHosts: Array<v20x.TemplateHost> = [];
@@ -529,7 +529,7 @@ export namespace Config {
 		public channels: Array<v21x.Channel> = [defaultChannel_21x];
 		@JsonMember({type: String,  name: "lock-clear-phrase"})
 		public lockClearPhrase: string = "secret";
-		@JsonMember({type: v21x.Mixer, isRequired: false})
+		@JsonMember({type: v21x.Mixer})
 		public mixer: v21x.Mixer = new v21x.Mixer();
 		@JsonMember({type: Array, elements: v20x.Controller, isRequired: true})
 		public controllers: Array<v20x.Controller> = [defaultAMCPController, defaultLOGController];
@@ -543,11 +543,11 @@ export namespace Config {
 		public forceDeinterlace: string = "false";
 		@JsonMember({type: String})				// @todo: enum
 		public accellerator: string = "auto";
-		@JsonMember({type: v21x.Thumbnails, isRequired: false})
+		@JsonMember({type: v21x.Thumbnails})
 		public thumbnails: v21x.Thumbnails = new v21x.Thumbnails();
-		@JsonMember({type: v20x.Flash, isRequired: false})
+		@JsonMember({type: v20x.Flash})
 		public flash: v20x.Flash = new v20x.Flash();
-		@JsonMember({type: v21x.Html, isRequired: false})
+		@JsonMember({type: v21x.Html})
 		public html: v21x.Html = new v21x.Html();
 		@JsonMember({type: Array, elements: v20x.TemplateHost, name: "template-hosts"})
 		public templateHosts: Array<v20x.TemplateHost> = [];
