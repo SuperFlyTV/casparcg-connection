@@ -99,23 +99,56 @@ export namespace Response {
 			}
 			if (data.hasOwnProperty("audio")) {
 				data["audio"] = this.childrenToArray(data["audio"], ["channel-layouts", "mix-configs"]);
+				if (data["audio"].hasOwnProperty("channel-layouts")) {
+					let o: string;
+					for (let i in data["audio"]["channel-layouts"]) {
+						console.log(data["audio"]["channel-layouts"][i]);
+						if (data["audio"]["mix-configs"][i]["type"]) {
+							o = (data["audio"]["channel-layouts"][i]["type"]).toString();
+							o += o.indexOf(".") === -1 ? ".0" : "";
+							data["audio"]["channel-layouts"][i]["type"] = o;
+						}
+					}
+				}
 				if (data["audio"].hasOwnProperty("mix-configs")) {
+					let o: string;
 					for (let i in data["audio"]["mix-configs"]) {
+						if (data["audio"]["mix-configs"][i]["to"]) {
+							o = (data["audio"]["mix-configs"][i]["to"]).toString();
+							o += o.indexOf(".") === -1 ? ".0" : "";
+							data["audio"]["mix-configs"][i]["to"] = o;
+						}
+						if (data["audio"]["mix-configs"][i]["from"]) {
+							o = (data["audio"]["mix-configs"][i]["from"]).toString();
+							o += o.indexOf(".") === -1 ? ".0" : "";
+							data["audio"]["mix-configs"][i]["from"] = o;
+						}
+						if (data["audio"]["mix-configs"][i]["to-types"]) {
+							o = (data["audio"]["mix-configs"][i]["to-types"]).toString();
+							o += o.indexOf(".") === -1 ? ".0" : "";
+							data["audio"]["mix-configs"][i]["to-types"] = o;
+						}
+						if (data["audio"]["mix-configs"][i]["from-type"]) {
+							o = (data["audio"]["mix-configs"][i]["from-type"]).toString();
+							o += o.indexOf(".") === -1 ? ".0" : "";
+							data["audio"]["mix-configs"][i]["from-type"] = o;
+						}
+
 						data["audio"]["mix-configs"][i] = this.childrenToArray(data["audio"]["mix-configs"][i], ["mappings"]);
 					}
 				}
 			}
 
 			let dataString: string = JSON.stringify(data).toLowerCase();
-			console.log("FØØØRRRRR:::::", dataString);
+			// console.log("FØØØRRRRR:::::", dataString);
 			let result: Config207 | Config210 | {}  = {};
 			try {
 				result = TypedJSON.parse(dataString, Config207);
 			}catch (e) {
 				console.log("CONFIG PARSE ERROR: ", e);
 			}
-			console.log("PARSED JSON:::::", JSON.stringify(result));
-			console.log("PARSED TJSON:::::", TypedJSON.stringify(result));
+			// console.log("PARSED JSON:::::", JSON.stringify(result));
+			// console.log("PARSED TJSON:::::", TypedJSON.stringify(result));
 			return result;
 		}
 	}

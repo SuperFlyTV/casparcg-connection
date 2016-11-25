@@ -405,8 +405,8 @@ export namespace Config {
 			@JsonMember({type: String, isRequired: true})
 			public mix: string;
 
-			@JsonMember({type: String, isRequired: true})
-			public mappings: string;
+			@JsonMember({type: Array, elements: String, isRequired: true})
+			public mappings: Array<string> = [];
 		}
 
 		/**  */
