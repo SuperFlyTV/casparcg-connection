@@ -67,8 +67,10 @@ export namespace Response {
 								flatArray.push(innerValue);
 							}
 						// update outer member with transformed array of inner members
-						i[1] = flatArray;
+						}else {
+							flatArray.push({type: innerKey});
 						}
+						i[1] = flatArray;
 					}
 				}
 				return i;
