@@ -59,11 +59,11 @@ export namespace Response {
 						if (typeof innerValue === "object") {
 							if (Array.isArray(innerValue)) { // multiple innervalues
 								innerValue.forEach((o: Object) => {
-									o["type"] = innerKey;
+									o["_type"] = innerKey;
 									flatArray.push(o);
 								});
 							} else { // single inner object
-								innerValue["type"] = innerKey;
+								innerValue["_type"] = innerKey;
 								flatArray.push(innerValue);
 							}
 						// update outer member with transformed array of inner members
