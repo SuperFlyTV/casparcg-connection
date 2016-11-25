@@ -298,6 +298,31 @@ export namespace Config {
 			@JsonMember({type: String, isRequired: true})
 			public protocol: String;
 		}
+
+		/** */
+		@JsonObject
+		export class Thumbnails { // @todo: isRequired on childs?
+			@JsonMember({type: String, name: "generate-thumbnails" , isRequired: true})
+			public generateThumbnails: string = "true";
+
+			@JsonMember({type: Number, isRequired: true})
+			public width: number = 256;
+
+			@JsonMember({type: Number, isRequired: true})
+			public height: number = 144;
+
+			@JsonMember({type: Number, isRequired: true, name: "video-grid"})
+			public videoGrid: number = 2;
+
+			@JsonMember({type: Number, isRequired: true, name: "scan-interval-millis"})
+			public scanIntervalMillis: number = 5000;
+
+			@JsonMember({type: Number, isRequired: true, name: "generate-delay-millis"})
+			public generateDelayMillis: number = 2000;
+
+			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: enum
+			public videoMode: string = "720p5000";
+		}
 	}
 
 	/** */
@@ -328,11 +353,18 @@ export namespace Config {
 			channelLayout?: string = "stereo";
 		}
 
-				/** */
+		/** */
 		@JsonObject
 		export class Mixer extends v20x.Mixer {
 			@JsonMember({type: String, name: "chroma-key"})
 			chromaKey: string = "false";
+		}
+
+		/**  */
+		@JsonObject
+		export class Thumbnails extends v20x.Thumbnails {
+			@JsonMember({type: String, isRequired: true})
+			public mipMap: string = "false";
 		}
 	}
 
@@ -367,8 +399,16 @@ export namespace Config {
 			channelLayout?: string = "stereo";
 		};
 
+		/**  */
 		@JsonObject
 		export class Mixer extends v20x.Mixer {}
+
+		/**  */
+		@JsonObject
+		export class Thumbnails extends v20x.Thumbnails {
+			@JsonMember({type: String, isRequired: true})
+			public mipMap: string = "true";
+		}
 
 		/** */
 		export enum ChannelLayout {
@@ -442,6 +482,8 @@ export namespace Config {
 		public autoTranscode: string = "true";
 		@JsonMember({type: Number,  name: "pipeline-tokens"})
 		public pipelineTokens: number = 2;
+		@JsonMember({type: v207.Thumbnails, isRequired: false})
+		public thumbnail: v207.Thumbnails = new v207.Thumbnails();
 	}
 
 	/**  */
@@ -466,5 +508,7 @@ export namespace Config {
 		public forceDeinterlace: string = "false";
 		@JsonMember({type: String})				// @todo: enum
 		public accellerator: string = "auto";
+		@JsonMember({type: v21x.Thumbnails, isRequired: false})
+		public thumbnail: v21x.Thumbnails = new v21x.Thumbnails();
 	}
 }
