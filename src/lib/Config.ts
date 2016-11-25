@@ -483,7 +483,7 @@ export namespace Config {
 		@JsonMember({type: Number,  name: "pipeline-tokens"})
 		public pipelineTokens: number = 2;
 		@JsonMember({type: v207.Thumbnails, isRequired: false})
-		public thumbnail: v207.Thumbnails = new v207.Thumbnails();
+		public thumbnails: v207.Thumbnails = new v207.Thumbnails();
 	}
 
 	/**  */
@@ -509,6 +509,6 @@ export namespace Config {
 		@JsonMember({type: String})				// @todo: enum
 		public accellerator: string = "auto";
 		@JsonMember({type: v21x.Thumbnails, isRequired: false})
-		public thumbnail: v21x.Thumbnails = new v21x.Thumbnails();
+		public thumbnails: v21x.Thumbnails = new v21x.Thumbnails();
 	}
 }
