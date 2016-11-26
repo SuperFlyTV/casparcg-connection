@@ -102,11 +102,10 @@ export namespace Response {
 				if (data["audio"].hasOwnProperty("channel-layouts")) {
 					let o: string;
 					for (let i in data["audio"]["channel-layouts"]) {
-						console.log(data["audio"]["channel-layouts"][i]);
-						if (data["audio"]["mix-configs"][i]["type"]) {
-							o = (data["audio"]["channel-layouts"][i]["type"]).toString();
-							o += o.indexOf(".") === -1 ? ".0" : "";
-							data["audio"]["channel-layouts"][i]["type"] = o;
+						if (data["audio"]["channel-layouts"][i]["type"]) {
+						o = (data["audio"]["channel-layouts"][i]["type"]).toString();
+						o += o.indexOf(".") === -1 ? ".0" : "";
+						data["audio"]["channel-layouts"][i]["type"] = o;
 						}
 					}
 				}
@@ -136,6 +135,9 @@ export namespace Response {
 
 						data["audio"]["mix-configs"][i] = this.childrenToArray(data["audio"]["mix-configs"][i], ["mappings"]);
 					}
+				}
+				if (data["flash"] && data["flash"]["buffer-depth"]) {
+					data["flash"]["buffer-depth"] = (data["flash"]["buffer-depth"]).toString();
 				}
 			}
 

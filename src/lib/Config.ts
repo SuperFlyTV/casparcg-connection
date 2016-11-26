@@ -348,7 +348,7 @@ export namespace Config {
 		@JsonObject
 		export class Flash {
 			@JsonMember({type: String, name: "buffer-depth"})
-			bufferDepth: string = "auto";	// @todo: string or number
+			bufferDepth: string = "auto";
 		}
 
 		/** */
@@ -459,7 +459,7 @@ export namespace Config {
 		@JsonObject
 		export class Thumbnails extends v20x.Thumbnails {
 			@JsonMember({type: String, isRequired: true})
-			public mipMap: string = "false";
+			public mipmap: string = "false";
 		}
 	}
 
