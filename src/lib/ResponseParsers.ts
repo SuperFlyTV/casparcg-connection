@@ -70,8 +70,8 @@ export namespace Response {
 						}else {
 							flatArray.push({type: innerKey});
 						}
-						i[1] = flatArray;
 					}
+					i[1] = flatArray;
 				}
 				return i;
 			}).toArray((i) => {
