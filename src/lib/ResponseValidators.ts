@@ -54,13 +54,21 @@ export namespace Response {
 				}
 				return str;
 			};
+			let parseBooleans = function(str: any) {
+				if (str === true || str === "true") {
+					return true;
+				}else if (str === false || str === "false") {
+					return false;
+				}
+				return str;
+			};
 
 			let returnFalse: Error | undefined;
 			let returnData: Object | undefined;
 
 			xmlParser(
 				response.items[0].replace("\n", ""),
-				{explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, valueProcessors: [parseNumbers]},
+				{explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, valueProcessors: [parseNumbers, parseBooleans]},
 				(error, result) => {
 					returnFalse = error;
 					returnData = result;
