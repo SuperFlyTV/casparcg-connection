@@ -250,8 +250,8 @@ export namespace Config {
 			/** */
 			public set _consumers(consumers: Array<Object>) {
 				consumers.forEach((i: Object) => {
-					if (i.hasOwnProperty("type")) {
-						let className: string = i["type"];
+					if (i.hasOwnProperty("_type")) {
+						let className: string = i["_type"];
 
 						let dashBlocks: Array<string> = className.split(/-|_/);
 						className = dashBlocks.map((i) => {return i.charAt(0).toUpperCase() + i.slice(1); }).join("") + "Consumer";
