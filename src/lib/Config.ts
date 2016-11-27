@@ -4,7 +4,7 @@ import {JsonObject, JsonMember} from "typedjson-npm";
 export namespace Config {
 
 	/** */
-	export namespace v20x {
+	export namespace v2xx {
 		/** */
 		export enum VideoModeEnum {
 			_PAL,
@@ -252,8 +252,8 @@ export namespace Config {
 
 						let dashBlocks: Array<string> = className.split(/-|_/);
 						className = dashBlocks.map((i) => {return i.charAt(0).toUpperCase() + i.slice(1); }).join("") + "Consumer";
-						if (v20x[className]) {
-							let consumer: Consumer = new v20x[className]();
+						if (v2xx[className]) {
+							let consumer: Consumer = new v2xx[className]();
 							let consumerKey: string;
 							for (let key in i) {
 								let dashBlocks: Array<string> = key.split(/-|_/);
@@ -412,11 +412,11 @@ export namespace Config {
 		/**  */
 		@JsonObject
 		export class Audio {
-			@JsonMember({type: Array, elements: v20x.ChannelLayout, isRequired: true, name: "channel-layouts"})
-			public channelLayouts: Array<v20x.ChannelLayout> = [];
+			@JsonMember({type: Array, elements: v2xx.ChannelLayout, isRequired: true, name: "channel-layouts"})
+			public channelLayouts: Array<v2xx.ChannelLayout> = [];
 
-			@JsonMember({type: Array, elements: v20x.MixConfig, isRequired: true, name: "mix-configs"})
-			public mixConfigs: Array<v20x.MixConfig> = [];
+			@JsonMember({type: Array, elements: v2xx.MixConfig, isRequired: true, name: "mix-configs"})
+			public mixConfigs: Array<v2xx.MixConfig> = [];
 		}
 	}
 
@@ -443,21 +443,21 @@ export namespace Config {
 
 		/** */
 		@JsonObject
-		export class Channel extends v20x.Channel {
+		export class Channel extends v2xx.Channel {
 			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
 			channelLayout?: string = "stereo";
 		}
 
 		/** */
 		@JsonObject
-		export class Mixer extends v20x.Mixer {
+		export class Mixer extends v2xx.Mixer {
 			@JsonMember({type: String, name: "chroma-key"})
 			chromaKey: string = "false";
 		}
 
 		/**  */
 		@JsonObject
-		export class Thumbnails extends v20x.Thumbnails {
+		export class Thumbnails extends v2xx.Thumbnails {
 			@JsonMember({type: String, isRequired: true})
 			public mipmap: string = "false";
 		}
@@ -489,18 +489,18 @@ export namespace Config {
 
 		/** */
 		@JsonObject
-		export class Channel extends v20x.Channel {
+		export class Channel extends v2xx.Channel {
 			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
 			channelLayout?: string = "stereo";
 		};
 
 		/**  */
 		@JsonObject
-		export class Mixer extends v20x.Mixer {}
+		export class Mixer extends v2xx.Mixer {}
 
 		/**  */
 		@JsonObject
-		export class Thumbnails extends v20x.Thumbnails {
+		export class Thumbnails extends v2xx.Thumbnails {
 			@JsonMember({type: String, isRequired: true})
 			public mipMap: string = "true";
 		}
@@ -514,7 +514,7 @@ export namespace Config {
 
 		/**  */
 		@JsonObject
-		export class Osc extends v20x.Osc {
+		export class Osc extends v2xx.Osc {
 			@JsonMember({type: String, isRequired: true, name: "disable-send-to-amcp-clients"})
 			public disableSendToAmcpClient: string = "false";
 		}
@@ -577,19 +577,14 @@ export namespace Config {
 
 
 	/** */
-	export namespace v210 {
-		/** */
-		@JsonObject
-		export class Paths extends v21x.Paths {
-
-		}
+	export namespace v21x {
 	}
 
 	/**  */
 	const defaultChannel_207: v207.Channel = {videoMode: "PAL", _consumers: []};
 	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", _consumers: []};
-	const defaultAMCPController: v20x.Controller = {_type: "tcp", port: 5250, protocol: "AMCP"};
-	const defaultLOGController: v20x.Controller = {_type: "tcp", port: 3250, protocol: "LOG"};
+	const defaultAMCPController: v2xx.Controller = {_type: "tcp", port: 5250, protocol: "AMCP"};
+	const defaultLOGController: v2xx.Controller = {_type: "tcp", port: 3250, protocol: "LOG"};
 
 	/**  */
 	export interface IConfig20x {
@@ -597,7 +592,7 @@ export namespace Config {
 
 	/**  */
 	export interface IConfig21x extends IConfig20x {
-		paths: v210.Paths;
+		paths: v21x.Paths;
 
 	}
 
@@ -621,8 +616,8 @@ export namespace Config {
 		public channels: Array<v207.Channel> = [defaultChannel_207];
 		@JsonMember({type: v207.Mixer})
 		public mixer: v207.Mixer = new v207.Mixer();
-		@JsonMember({type: Array, elements: v20x.Controller, isRequired: true})
-		public controllers: Array<v20x.Controller> = [defaultAMCPController];
+		@JsonMember({type: Array, elements: v2xx.Controller, isRequired: true})
+		public controllers: Array<v2xx.Controller> = [defaultAMCPController];
 		@JsonMember({type: String,  name: "log-level"})	// @todo: enum
 		public logLevel: string = "trace";				// @todo: differs from 2.1.0 default
 		@JsonMember({type: String,  name: "channel-grid"})
@@ -635,28 +630,28 @@ export namespace Config {
 		public pipelineTokens: number = 2;
 		@JsonMember({type: v207.Thumbnails})
 		public thumbnails: v207.Thumbnails = new v207.Thumbnails();
-		@JsonMember({type: v20x.Flash})
-		public flash: v20x.Flash = new v20x.Flash();
-		@JsonMember({type: Array, elements: v20x.TemplateHost, name: "template-hosts"})
-		public templateHosts: Array<v20x.TemplateHost> = [];
-		@JsonMember({type: v20x.Osc})
-		public osc: v20x.Osc = new v20x.Osc();
-		@JsonMember({type: v20x.Audio})
-		public audio: v20x.Audio = new v20x.Audio();
+		@JsonMember({type: v2xx.Flash})
+		public flash: v2xx.Flash = new v2xx.Flash();
+		@JsonMember({type: Array, elements: v2xx.TemplateHost, name: "template-hosts"})
+		public templateHosts: Array<v2xx.TemplateHost> = [];
+		@JsonMember({type: v2xx.Osc})
+		public osc: v2xx.Osc = new v2xx.Osc();
+		@JsonMember({type: v2xx.Audio})
+		public audio: v2xx.Audio = new v2xx.Audio();
 	}
 
 	/**  */
 	export class Config210 implements IConfig210 {
-		@JsonMember({type: v210.Paths, isRequired: true})
-		public paths: v210.Paths = new v210.Paths();
+		@JsonMember({type: v21x.Paths, isRequired: true})
+		public paths: v21x.Paths = new v21x.Paths();
 		@JsonMember({type: Array, elements: v21x.Channel, isRequired: true})
 		public channels: Array<v21x.Channel> = [defaultChannel_21x];
 		@JsonMember({type: String,  name: "lock-clear-phrase"})
 		public lockClearPhrase: string = "secret";
 		@JsonMember({type: v21x.Mixer})
 		public mixer: v21x.Mixer = new v21x.Mixer();
-		@JsonMember({type: Array, elements: v20x.Controller, isRequired: true})
-		public controllers: Array<v20x.Controller> = [defaultAMCPController, defaultLOGController];
+		@JsonMember({type: Array, elements: v2xx.Controller, isRequired: true})
+		public controllers: Array<v2xx.Controller> = [defaultAMCPController, defaultLOGController];
 		@JsonMember({type: String,  name: "log-level"})	// @todo: enum
 		public logLevel: string = "info";				// @todo: differs from 2.0.7 default
 		@JsonMember({type: String,  name: "log-categories"}) // @todo: enum
@@ -669,12 +664,12 @@ export namespace Config {
 		public accellerator: string = "auto";
 		@JsonMember({type: v21x.Thumbnails})
 		public thumbnails: v21x.Thumbnails = new v21x.Thumbnails();
-		@JsonMember({type: v20x.Flash})
-		public flash: v20x.Flash = new v20x.Flash();
+		@JsonMember({type: v2xx.Flash})
+		public flash: v2xx.Flash = new v2xx.Flash();
 		@JsonMember({type: v21x.Html})
 		public html: v21x.Html = new v21x.Html();
-		@JsonMember({type: Array, elements: v20x.TemplateHost, name: "template-hosts"})
-		public templateHosts: Array<v20x.TemplateHost> = [];
+		@JsonMember({type: Array, elements: v2xx.TemplateHost, name: "template-hosts"})
+		public templateHosts: Array<v2xx.TemplateHost> = [];
 		@JsonMember({type: v21x.Osc})
 		public osc: v21x.Osc = new v21x.Osc();
 		@JsonMember({type: v21x.Audio})
