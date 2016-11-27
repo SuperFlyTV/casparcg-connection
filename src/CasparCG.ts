@@ -1653,7 +1653,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_CONFIG>
 	 */
 	public infoConfig(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoConfigCommand(), {serverVersion: this.serverVersion});
+		return this.do(new AMCP.InfoConfigCommand([], {serverVersion: this.serverVersion}));
 	}
 
 	/**

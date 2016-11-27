@@ -296,6 +296,7 @@ export namespace Command {
 			// data gets parsed
 			if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
 				let parser: IResponseParser = Object.create(this.responseProtocol.parser["prototype"]);
+				parser.context = this.context;
 				if ((validData = parser.parse(validData)) === false) {
 					return false;
 				}

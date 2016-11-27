@@ -1,10 +1,12 @@
 import {TypedJSON} from "typedjson-npm";
 import * as _ from "highland";
-
+import {Options as OptionsNS} from "./AMCPConnectionOptions";
+// Options NS
+import ServerVersion = OptionsNS.ServerVersion;
 // config NS
 import {Config as ConfigNS} from "./Config";
-import Config207 = ConfigNS.Config207;
-import Config210 = ConfigNS.Config210;
+import Config207VO = ConfigNS.Config207VO;
+import Config210VO = ConfigNS.Config210VO;
 
 export namespace Response {
 
@@ -148,14 +150,21 @@ export namespace Response {
 					data["flash"]["buffer-depth"] = (data["flash"]["buffer-depth"]).toString();
 				}
 			}
-
-			console.log(this.context);
-
 			let dataString: string = JSON.stringify(data).toLowerCase();
+			let configVOClass: any = null;
+
+			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
+				configVOClass = Config210VO;
+			}else {
+				configVOClass = Config207VO;
+			}
+
+			// console.log("PARSING WITH:", configVOClass);
+
 			// console.log("FØØØRRRRR:::::", dataString);
-			let result: Config207 | Config210 | {}  = {};
+			let result: Config207VO | Config210VO | {}  = {};
 			try {
-				result = TypedJSON.parse(dataString, Config207);
+				result = TypedJSON.parse(dataString, configVOClass);
 			}catch (e) {
 				// @todo: handle
 				console.log("CONFIG PARSE ERROR: ", e);

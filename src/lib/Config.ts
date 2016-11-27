@@ -578,7 +578,7 @@ export namespace Config {
 
 	/** */
 	@JsonObject
-	export class Config207 {
+	export class Config207VO {
 		@JsonMember({type: v207.Paths, isRequired: true})
 		public paths: v207.Paths = new v207.Paths();
 		@JsonMember({type: Array, elements: v2xx.Channel, isRequired: true})
@@ -610,7 +610,7 @@ export namespace Config {
 	}
 
 	/**  */
-	export class Config210 {
+	export class Config210VO {
 		@JsonMember({type: v21x.Paths, isRequired: true})
 		public paths: v21x.Paths = new v21x.Paths();
 		@JsonMember({type: Array, elements: v2xx.Channel, isRequired: true})
