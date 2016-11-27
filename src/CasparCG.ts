@@ -253,6 +253,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public autoConnect: boolean | undefined = undefined;
 
+	/**
+	 * @todo: document  
+	 */
+	public autoServerVersion: boolean | undefined = undefined;
 
 	/**
 	 * @todo: document  
@@ -626,7 +630,15 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				if (this.onConnected) {
 					this.onConnected(this._connected);
 				}
-				this._expediteCommand(true);
+
+				if (this.autoServerVersion) {
+					console.log("query version");
+					this.version(Enum.Version.SERVER).then((result: IAMCPCommand) => {
+						this._setVersionFromServerResponse(result.response);
+					});
+				}else {
+					this._expediteCommand(true);
+				}
 			}
 			if (!this._connected) {
 				this.fire(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
@@ -845,6 +857,21 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		} else {
 			// reconnect on missing queue
 			this.reconnect();
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private _setVersionFromServerResponse(serverVersionResponse: AMCPResponse): void {
+		let versionString: string = serverVersionResponse.data.toString().slice(0, 5);
+		switch (versionString) {
+			case "2.0.7":
+				this.serverVersion = ServerVersion.V207;
+				break;
+			case "2.1.0":
+				this.serverVersion = ServerVersion.V210;
+				break;
 		}
 	}
 
