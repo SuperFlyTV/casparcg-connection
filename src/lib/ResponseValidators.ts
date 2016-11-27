@@ -34,8 +34,7 @@ export namespace Response {
 		 * 
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
-			console.log(response);
-			let result: string = response.items[0].toString();
+			let result: String = response.items[0].toString();
 			return result.length > 0 ? result : false;
 		}
 	}
