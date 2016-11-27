@@ -658,16 +658,216 @@ export namespace Config {
 	}
 
 	/** */
-	export class CasparCGConfig {
+	export interface ICasparCGConfig {
+		paths: v21x.Paths;
+		lockClearPhrase: string;
+		channels: Array<v2xx.Channel>;
+		mixer: v207.Mixer;
+		controllers: Array<v2xx.Controller>;
+		logLevel: string;
+		logCategories: string;
+		channelGrid: string;
+		forceDeinterlace: string;
+		autoDeinterlace: string;
+		autoTranscode: string;
+		pipelineTokens: number;
+		accellerator: string;
+		thumbnails: v21x.Thumbnails;
+		flash: v2xx.Flash;
+		html: v21x.Html;
+		templateHosts: Array<v2xx.TemplateHost>;
+		osc: v21x.Osc;
+		audio: v21x.Audio;
+	}
+
+	/** */
+	export abstract class AbstractDefaultCasparCGConfig implements ICasparCGConfig {
+		public paths: v21x.Paths;
+		public lockClearPhrase: string;
+		public channels: Array<v2xx.Channel> = [];
+		public mixer: v207.Mixer;
+		public controllers: Array<v2xx.Controller> = [];
+		public logLevel: string;
+		public logCategories: string;
+		public channelGrid: string;
+		public forceDeinterlace: string;
+		public autoDeinterlace: string;
+		autoTranscode: string;
+		public pipelineTokens: number;
+		public accellerator: string;
+		public thumbnails: v21x.Thumbnails;
+		public flash: v2xx.Flash;
+		public html: v21x.Html;
+		public templateHosts: Array<v2xx.TemplateHost>;
+		public osc: v21x.Osc;
+		public audio: v21x.Audio;
+	}
+
+
+	/** */
+	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
 		/** */
-		public constructor() {
+		public constructor(initConfigVO?: Config207VO | Config210VO | {}) {
+			super();
+			if (initConfigVO) {
+				if (initConfigVO instanceof Config207VO) {
+					this.fromV207ConfigVO(initConfigVO);
+				}else if (initConfigVO instanceof Config210VO) {
+					this.fromV210ConfigVO(initConfigVO);
+				}
+			}
 		}
 
 		/** */
-		public fromV207ConfigVO(): void {}
+		public fromV207ConfigVO(configVO: Config207VO): void {
+			// paths
+			this.paths.mediaPath = configVO.paths.mediaPath;
+			this.paths.logPath = configVO.paths.logPath;
+			this.paths.dataPath = configVO.paths.dataPath;
+			this.paths.templatePath = configVO.paths.templatePath;
+			this.paths.thumbnailPath = configVO.paths.thumbnailsPath;
+			this.paths.fontPath = "";
+
+			// lock clear phrase
+			this.lockClearPhrase = "";
+
+			// channels
+			this.channels = configVO.channels;
+
+			// mixer
+			this.mixer = configVO.mixer;
+
+			// controllers
+			this.controllers = configVO.controllers;
+
+			// log level
+			this.logLevel = configVO.logLevel;
+
+			// log categories
+			this.logCategories = "";
+
+			// channel grid
+			this.channelGrid = configVO.channelGrid;
+
+			// force deinterlace
+			this.forceDeinterlace = "";
+
+			// auto deinterlace
+			this.autoDeinterlace = configVO.autoDeinterlace;
+
+			// auto transcode
+			this.autoTranscode = configVO.autoTranscode;
+
+			// pipeline tokens
+			this.pipelineTokens = configVO.pipelineTokens;
+
+			// accellerator
+			this.accellerator = "";
+
+			// thumbnails
+			this.thumbnails = configVO.thumbnails;
+
+			// flash
+			this.flash = configVO.flash;
+
+			// html
+			this.html = {remoteDebuggingPort: -1};	// @todo: default null
+
+			// template hosts
+			this.templateHosts = configVO.templateHosts;
+
+			// osc
+			this.osc.defaultPort = configVO.osc.defaultPort;
+			this.osc.disableSendToAmcpClient = "";
+			this.osc.predefinedClients = configVO.osc.predefinedClients;
+
+			// audio
+			this.audio.channelLayouts = new Array<v21x.ChannelLayout>();
+			this.audio.mixConfigs = new Array<v21x.MixConfig>();
+			configVO.audio.channelLayouts.forEach((i: v2xx.ChannelLayout) => {
+				let channelLayout: v21x.ChannelLayout = new v21x.ChannelLayout();
+				channelLayout._type = i._type;
+				channelLayout.channelOrder = i.channels;
+				channelLayout.name = i.name;
+				channelLayout.numChannels = i.numChannels;
+				channelLayout.type = i.type;
+				this.audio.channelLayouts.push(channelLayout);
+			});
+			configVO.audio.mixConfigs.forEach((i: v2xx.MixConfig) => {
+				let mixConfig: v21x.MixConfig = new v21x.MixConfig();
+				mixConfig._type = i._type;
+				mixConfig.fromType = i.from;
+				mixConfig.mix = "";	// @todo: algorithm for converting 207 to 210 mix
+				mixConfig.toTypes = i.to;
+				this.audio.mixConfigs.push(mixConfig);
+			});
+		}
 
 		/** */
-		public fromV210ConfigVO(): void {}
+		public fromV210ConfigVO(configVO: Config210VO): void {
+			// paths
+			this.paths = configVO.paths;
+
+			// lock clear phrase
+			this.lockClearPhrase = configVO.lockClearPhrase;
+
+			// channels
+			this.channels = configVO.channels;
+
+			// mixer
+			this.mixer.blendModes = configVO.mixer.blendModes;
+			this.mixer.chromaKey = "";
+			this.mixer.mipmappingDefaultOn = configVO.mixer.mipmappingDefaultOn;
+			this.mixer.straightAlpha = configVO.mixer.straightAlpha;
+
+			// controllers
+			this.controllers = configVO.controllers;
+
+			// log level
+			this.logLevel = configVO.logLevel;
+
+			// log categories
+			this.logCategories = configVO.logCategories;
+
+			// channel grid
+			this.channelGrid = configVO.channelGrid;
+
+			// channel grid
+			this.channelGrid = configVO.channelGrid;
+
+			// force deinterlace
+			this.forceDeinterlace = configVO.forceDeinterlace;
+
+			// auto deinterlace
+			this.autoDeinterlace = "";
+
+			// auto transcode
+			this.autoTranscode = "";
+
+			// pipeline tokens
+			this.pipelineTokens = -1; // @todo: null value
+
+			// accellerator
+			this.accellerator = configVO.accellerator;
+
+			// thumbnails
+			this.thumbnails = configVO.thumbnails;
+
+			// flash
+			this.flash = configVO.flash;
+
+			// html
+			this.html = configVO.html;
+
+			// template hosts
+			this.templateHosts = configVO.templateHosts;
+
+			// osc
+			this.osc = configVO.osc;
+
+			// audio
+			this.audio = configVO.audio;
+		}
 
 		/** */
 		public toV207ConfigVO(): Config207VO { return new Config207VO(); }

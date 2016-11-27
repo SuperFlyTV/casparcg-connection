@@ -5,6 +5,7 @@ import {Options as OptionsNS} from "./AMCPConnectionOptions";
 import ServerVersion = OptionsNS.ServerVersion;
 // config NS
 import {Config as ConfigNS} from "./Config";
+import CasparCGConfig = ConfigNS.CasparCGConfig;
 import Config207VO = ConfigNS.Config207VO;
 import Config210VO = ConfigNS.Config210VO;
 
@@ -161,18 +162,16 @@ export namespace Response {
 			}else {
 				configVOClass = Config207VO;
 			}
-			// console.log("FØØØRRRRR:::::", dataString);
-			let result: Config207VO | Config210VO | {}  = {};
+			let configVO: Config207VO | Config210VO | {}  = {};
 			try {
-				result = TypedJSON.parse(dataString, configVOClass);
+				configVO = TypedJSON.parse(dataString, configVOClass);
 			}catch (e) {
 				// @todo: version fallback
 				// @todo: handle
 				console.log("CONFIG PARSE ERROR: ", e);
 			}
-			// console.log("PARSED JSON:::::", JSON.stringify(result));
-			// console.log("PARSED TJSON:::::", TypedJSON.stringify(result));
-			return result;
+			let configResult: CasparCGConfig = new CasparCGConfig(configVO);
+			return configResult;
 		}
 	}
 
