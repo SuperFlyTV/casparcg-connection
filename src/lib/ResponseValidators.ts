@@ -20,8 +20,23 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public resolve(): Object {
-			return {};
+		public resolve(response: CasparCGSocketResponse): Object {
+			return response.statusCode < 400;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	export class StringValidator implements IResponseValidator {
+
+		/**
+		 * 
+		 */
+		public resolve(response: CasparCGSocketResponse): Object {
+			console.log(response);
+			let result: string = response.items[0].toString();
+			return result.length > 0 ? result : false;
 		}
 	}
 
@@ -74,7 +89,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class DataValidator implements IResponseValidator {
+	export class DataValidator implements IResponseValidator {	// @todo
 
 		/**
 		 * 
@@ -94,19 +109,6 @@ export namespace Response {
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			return response.items[0];
-		}
-	}
-
-	/**
-	 * 
-	 */
-	export class SomeThingValidator implements IResponseValidator {
-
-		/**
-		 * 
-		 */
-		public resolve(): Object {
-			return {};
 		}
 	}
 }
