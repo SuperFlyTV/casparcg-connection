@@ -1071,7 +1071,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(optional, "component", null, new ParameterValidator.EnumValidator(Enum.Version))
 		];
-		responseProtocol = new ResponseSignature(200, ResponseValidator.StringValidator, ResponseParser.VersionParser);
+		responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.VersionParser);
 	}
 
 	/**
