@@ -66,7 +66,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class DecklinkConsumer extends Consumer {
-			type = "decklink";
+			_type = "decklink";
 
 			@JsonMember({type: Number})
 			public device: number = 1;
@@ -99,7 +99,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class BluefishConsumer extends Consumer {
-			type = "Bluefish";
+			_type = "Bluefish";
 
 			@JsonMember({type: Number})
 			public device: number = 1;
@@ -117,7 +117,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class SystemAudioConsumer extends Consumer {
-			type: string = "systemaudio";
+			_type = "systemaudio";
 
 			@JsonMember({type: String,  name: "channel-layout"})
 			public channelLayout: string = "stereo";
@@ -129,7 +129,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class ScreenConsumer extends Consumer {
-			type = "screen";
+			_type = "screen";
 
 			@JsonMember({type: Number})
 			public device: number = 0;
@@ -165,7 +165,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class NewtekIvgaConsumer extends Consumer {
-			type = "newtekivga";
+			_type = "newtekivga";
 
 			@JsonMember({type: String,  name: "channel-layout"})
 			public channelLayout: string = "stereo";	// @todo: ns 2.0 only
@@ -177,7 +177,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class FfmpegConsumer extends Consumer { // @todo: 2.1 ns
-			type: string = "ffmpeg";
+			_type = "ffmpeg";
 
 			@JsonMember({type: String})
 			public path: String;
@@ -195,7 +195,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class FileConsumer extends Consumer { // @todo: 2.0 ns
-			type: string = "file";
+			_type = "file";
 
 			@JsonMember({type: String})
 			public path: String;
@@ -210,7 +210,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class StreamConsumer extends Consumer { // @todo: 2.0 ns
-			type = "stream";
+			_type = "stream";
 
 			@JsonMember({type: String})
 			public path: String;
@@ -222,7 +222,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class SynctoConsumer extends Consumer { // @todo: 2.1 ns
-			type: string = "syncto";
+			_type = "syncto";
 
 			@JsonMember({type: Number,  name: "channel-id"})
 			public channelId: Number;
@@ -232,6 +232,9 @@ export namespace Config {
 		@JsonObject
 		export class Channel {
 			consumers?: Array<Consumer> = [];
+
+			@JsonMember({type: String, isRequired: true})
+			public _type: String;
 
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: custom "enum"-class
 			videoMode: string = "PAL";
@@ -304,17 +307,11 @@ export namespace Config {
 
 		/** */
 		@JsonObject
-		export class PredefinedClient {
-			@JsonMember({type: String, isRequired: true})
-			public address: String;
-
-			@JsonMember({type: Number, isRequired: true})
-			public port: number;
-		}
-
-		/** */
-		@JsonObject
 		export class OscClient {
+
+			@JsonMember({type: String, isRequired: true})
+			public _type: string;
+
 			@JsonMember({type: String, isRequired: true})
 			public address: String;
 
@@ -357,6 +354,9 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class TemplateHost {
+			@JsonMember({type: String, isRequired: true})
+			public _type: string;
+
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: enum
 			public videoMode: string;
 
@@ -570,7 +570,7 @@ export namespace Config {
 	}
 
 	/**  */
-	const defaultChannel_2xx: v2xx.Channel = {videoMode: "PAL", _consumers: []};
+	const defaultChannel_2xx: v2xx.Channel = {videoMode: "PAL", _consumers: [], _type: "channel"};
 	const defaultAMCPController: v2xx.Controller = {_type: "tcp", port: 5250, protocol: "AMCP"};
 	const defaultLOGController: v2xx.Controller = {_type: "tcp", port: 3250, protocol: "LOG"};
 
