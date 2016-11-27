@@ -69,6 +69,9 @@ export namespace Response {
 						if (typeof innerValue === "object") {
 							if (Array.isArray(innerValue)) { // multiple innervalues
 								innerValue.forEach((o: Object) => {
+									if (typeof o !== "object") {	// "" string values, i.e. empty screen consumers
+										o = {};
+									}
 									o["_type"] = innerKey;
 									flatArray.push(o);
 								});
