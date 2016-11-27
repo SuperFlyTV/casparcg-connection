@@ -547,9 +547,6 @@ export namespace Config {
 
 			@JsonMember({type: String, isRequired: true})
 			public mix: string;
-
-			@JsonMember({type: String, isRequired: true})
-			public type: string;
 		}
 
 		/**  */
