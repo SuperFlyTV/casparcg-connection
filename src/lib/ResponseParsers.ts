@@ -161,14 +161,12 @@ export namespace Response {
 			}else {
 				configVOClass = Config207VO;
 			}
-
-			// console.log("PARSING WITH:", configVOClass);
-
 			// console.log("FØØØRRRRR:::::", dataString);
 			let result: Config207VO | Config210VO | {}  = {};
 			try {
 				result = TypedJSON.parse(dataString, configVOClass);
 			}catch (e) {
+				// @todo: version fallback
 				// @todo: handle
 				console.log("CONFIG PARSE ERROR: ", e);
 			}

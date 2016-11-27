@@ -644,4 +644,29 @@ export namespace Config {
 		@JsonMember({type: v21x.Audio})
 		public audio: v21x.Audio = new v21x.Audio();
 	}
+
+	/** */
+	export class CasparCGConfig {
+		/** */
+		public constructor() {
+		}
+
+		/** */
+		public fromV207ConfigVO(): void {}
+
+		/** */
+		public fromV210ConfigVO(): void {}
+
+		/** */
+		public toV207ConfigVO(): Config207VO { return new Config207VO(); }
+
+		/** */
+		public toV210ConfigVO(): Config210VO { return new Config210VO(); }
+
+		/** */
+		public toV207ConfigXML(): XMLDocument {return new XMLDocument(); }
+
+		/** */
+		public toV210ConfigXML(): XMLDocument {return new XMLDocument(); }
+	}
 }
