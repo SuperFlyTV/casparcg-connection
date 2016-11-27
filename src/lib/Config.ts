@@ -132,9 +132,9 @@ export namespace Config {
 			_type = "screen";
 
 			@JsonMember({type: Number})
-			public device: number = 0;
+			public device: number = 1;	// @todo: wrong default implemented in caspar, should be 0:::
 
-			@JsonMember({type: String,  name: "aspect-ratio"})
+			@JsonMember({type: String, name: "aspect-ratio"})
 			public aspectRatio: string = "default";
 
 			@JsonMember({type: String})
