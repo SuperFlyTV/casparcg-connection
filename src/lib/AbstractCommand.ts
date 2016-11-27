@@ -99,7 +99,7 @@ export namespace Command {
 		validateParams(): boolean;
 		validateResponse(response: CasparCGSocketResponse): boolean;
 		serialize(): IAMCPCommandVO;
-		populate(cmdVo: IAMCPCommandVO, id: string): void;
+		populate(cmdVO: IAMCPCommandVO, id: string): void;
 		paramProtocol: Array<IParamSignature>;
 		protocolLogic: Array<IProtocolLogic>;
 		responseProtocol: ResponseSignature;
@@ -430,10 +430,10 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		populate(cmdVo: IAMCPCommandVO, id: string): void {
-			this._stringParamsArray = cmdVo._stringParamsArray;
-			this._objectParams = cmdVo._objectParams;
-			this.response = cmdVo.response;
+		populate(cmdVO: IAMCPCommandVO, id: string): void {
+			this._stringParamsArray = cmdVO._stringParamsArray;
+			this._objectParams = cmdVO._objectParams;
+			this.response = cmdVO.response;
 			this._id = id;
 		}
 
