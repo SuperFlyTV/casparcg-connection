@@ -384,6 +384,9 @@ export namespace Config {
 		@JsonObject
 		export class ChannelLayout {
 			@JsonMember({type: String, isRequired: true})
+			public _type: string;
+
+			@JsonMember({type: String, isRequired: true})
 			public name: string;
 
 			@JsonMember({type: String, isRequired: true})
@@ -399,6 +402,9 @@ export namespace Config {
 		/**  */
 		@JsonObject
 		export class MixConfig {
+			@JsonMember({type: String, isRequired: true})
+			public _type: string;
+
 			@JsonMember({type: String, isRequired: true})
 			public from: string;
 
@@ -491,7 +497,7 @@ export namespace Config {
 		@JsonObject
 		export class Thumbnails extends v2xx.Thumbnails {
 			@JsonMember({type: String, isRequired: true})
-			public mipMap: string = "true";
+			public mipmap: string = "true";
 		}
 
 		/** */
@@ -512,10 +518,13 @@ export namespace Config {
 		@JsonObject
 		export class ChannelLayout {
 			@JsonMember({type: String, isRequired: true})
+			public _type: string;
+
+			@JsonMember({type: String, isRequired: true})
 			public name: string;
 
 			@JsonMember({type: String, isRequired: true})
-			public _type: string;
+			public type: string;
 
 			@JsonMember({type: Number, isRequired: true, name: "num-channels"})
 			public numChannels: number;
@@ -527,6 +536,9 @@ export namespace Config {
 		/**  */
 		@JsonObject
 		export class MixConfig {
+			@JsonMember({type: String, isRequired: true})
+			public _type: string;
+
 			@JsonMember({type: String, isRequired: true, name: "from-type"})
 			public fromType: string;
 
@@ -537,7 +549,7 @@ export namespace Config {
 			public mix: string;
 
 			@JsonMember({type: String, isRequired: true})
-			public _type: string;
+			public type: string;
 		}
 
 		/**  */
