@@ -239,6 +239,9 @@ export namespace Config {
 			@JsonMember({type: String, name: "straight-alpha-output"})
 			straightAlphaOutput?: string = "false";
 
+			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
+			channelLayout?: string = "stereo";
+
 			@JsonMember({type: Array, elements: Object, isRequired: true, name: "consumers"})
 			public get _consumers(): Array<Object> {
 				return this.consumers || [];
@@ -443,13 +446,6 @@ export namespace Config {
 
 		/** */
 		@JsonObject
-		export class Channel extends v2xx.Channel {
-			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
-			channelLayout?: string = "stereo";
-		}
-
-		/** */
-		@JsonObject
 		export class Mixer extends v2xx.Mixer {
 			@JsonMember({type: String, name: "chroma-key"})
 			chromaKey: string = "false";
@@ -485,13 +481,6 @@ export namespace Config {
 
 			@JsonMember({type: String, name: "font-path"})
 			fontPath: string = "font/";
-		};
-
-		/** */
-		@JsonObject
-		export class Channel extends v2xx.Channel {
-			@JsonMember({type: String, name: "channel-layout"})		// @todo: custom "enum"-class
-			channelLayout?: string = "stereo";
 		};
 
 		/**  */
@@ -581,39 +570,19 @@ export namespace Config {
 	}
 
 	/**  */
-	const defaultChannel_207: v207.Channel = {videoMode: "PAL", _consumers: []};
-	const defaultChannel_21x: v21x.Channel = {videoMode: "PAL", _consumers: []};
+	const defaultChannel_2xx: v2xx.Channel = {videoMode: "PAL", _consumers: []};
 	const defaultAMCPController: v2xx.Controller = {_type: "tcp", port: 5250, protocol: "AMCP"};
 	const defaultLOGController: v2xx.Controller = {_type: "tcp", port: 3250, protocol: "LOG"};
 
-	/**  */
-	export interface IConfig20x {
-	}
-
-	/**  */
-	export interface IConfig21x extends IConfig20x {
-		paths: v21x.Paths;
-
-	}
-
-	/**  */
-	export interface IConfig207 extends IConfig20x {
-		paths: v207.Paths;
-		channels: Array<v207.Channel>;
-	}
-
-	/**  */
-	export interface IConfig210 extends IConfig21x {
-		channels: Array<v21x.Channel>;
-	}
+	// @todo: add interfaces
 
 	/** */
 	@JsonObject
-	export class Config207 implements IConfig207 {
+	export class Config207 {
 		@JsonMember({type: v207.Paths, isRequired: true})
 		public paths: v207.Paths = new v207.Paths();
-		@JsonMember({type: Array, elements: v207.Channel, isRequired: true})
-		public channels: Array<v207.Channel> = [defaultChannel_207];
+		@JsonMember({type: Array, elements: v2xx.Channel, isRequired: true})
+		public channels: Array<v2xx.Channel> = [defaultChannel_2xx];
 		@JsonMember({type: v207.Mixer})
 		public mixer: v207.Mixer = new v207.Mixer();
 		@JsonMember({type: Array, elements: v2xx.Controller, isRequired: true})
@@ -641,11 +610,11 @@ export namespace Config {
 	}
 
 	/**  */
-	export class Config210 implements IConfig210 {
+	export class Config210 {
 		@JsonMember({type: v21x.Paths, isRequired: true})
 		public paths: v21x.Paths = new v21x.Paths();
-		@JsonMember({type: Array, elements: v21x.Channel, isRequired: true})
-		public channels: Array<v21x.Channel> = [defaultChannel_21x];
+		@JsonMember({type: Array, elements: v2xx.Channel, isRequired: true})
+		public channels: Array<v2xx.Channel> = [defaultChannel_2xx];
 		@JsonMember({type: String,  name: "lock-clear-phrase"})
 		public lockClearPhrase: string = "secret";
 		@JsonMember({type: v21x.Mixer})
