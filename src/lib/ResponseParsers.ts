@@ -12,13 +12,21 @@ export namespace Response {
 	 * 
 	 */
 	export interface IResponseParser {
+		context?: Object;
 		parse(data: Object): Object;
 	}
 
 	/**
 	 * 
 	 */
-	export class ChannelParser implements IResponseParser {
+	export abstract class AbstractParser {
+		context?: Object;
+	}
+
+	/**
+	 * 
+	 */
+	export class ChannelParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -42,7 +50,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class ConfigParser implements IResponseParser {
+	export class ConfigParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -141,12 +149,15 @@ export namespace Response {
 				}
 			}
 
+			console.log(this.context);
+
 			let dataString: string = JSON.stringify(data).toLowerCase();
 			// console.log("FØØØRRRRR:::::", dataString);
 			let result: Config207 | Config210 | {}  = {};
 			try {
 				result = TypedJSON.parse(dataString, Config207);
 			}catch (e) {
+				// @todo: handle
 				console.log("CONFIG PARSE ERROR: ", e);
 			}
 			// console.log("PARSED JSON:::::", JSON.stringify(result));
@@ -158,7 +169,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class DataParser implements IResponseParser {
+	export class DataParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -171,7 +182,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class DataListParser implements IResponseParser {
+	export class DataListParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -184,7 +195,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class InfoTemplateParser implements IResponseParser {
+	export class InfoTemplateParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -197,7 +208,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class HelpParser implements IResponseParser {
+	export class HelpParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -210,7 +221,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class GLParser implements IResponseParser {
+	export class GLParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -223,7 +234,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class InfoDelayParser implements IResponseParser {
+	export class InfoDelayParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -236,7 +247,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class InfoParser implements IResponseParser {
+	export class InfoParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -249,7 +260,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class InfoThreadsParser implements IResponseParser {
+	export class InfoThreadsParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -262,7 +273,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class ThumbnailParser implements IResponseParser {
+	export class ThumbnailParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -275,7 +286,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class VersionParser implements IResponseParser {
+	export class VersionParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -288,7 +299,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class PathParser implements IResponseParser {
+	export class PathParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -318,7 +329,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class CinfParser implements IResponseParser {
+	export class CinfParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -331,7 +342,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class InfoQueuesParser implements IResponseParser {
+	export class InfoQueuesParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -344,7 +355,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class InfoServerParser implements IResponseParser {
+	export class InfoServerParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -357,7 +368,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class InfoPathsParser implements IResponseParser {
+	export class InfoPathsParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 
@@ -370,7 +381,7 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class InfoSystemParser implements IResponseParser {
+	export class InfoSystemParser extends AbstractParser implements IResponseParser {
 
 		/**
 		 * 

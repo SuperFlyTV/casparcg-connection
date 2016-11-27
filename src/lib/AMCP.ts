@@ -1072,6 +1072,13 @@ export namespace AMCP {
 			new ParamSignature(optional, "component", null, new ParameterValidator.EnumValidator(Enum.Version))
 		];
 		responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.VersionParser);
+
+		/**
+		 * 
+		 */
+		constructor(params: (string|Param|(string|Param)[]), context?: Object) {
+			super(params, context);
+		}
 	}
 
 	/**

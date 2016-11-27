@@ -631,8 +631,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					this.onConnected(this._connected);
 				}
 
+				// @todo: handle flush buffer + shift/push version command in queue.
 				if (this.autoServerVersion) {
-					console.log("query version");
 					this.version(Enum.Version.SERVER).then((result: IAMCPCommand) => {
 						this._setVersionFromServerResponse(result.response);
 					});
@@ -1653,7 +1653,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_CONFIG>
 	 */
 	public infoConfig(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoConfigCommand());
+		return this.do(new AMCP.InfoConfigCommand(), {serverVersion: this.serverVersion});
 	}
 
 	/**

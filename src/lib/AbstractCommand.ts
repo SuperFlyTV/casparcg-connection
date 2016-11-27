@@ -154,7 +154,7 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params?: string|Param|(string|Param)[]) {
+		constructor(params?: string|Param|(string|Param)[], public context?: Object) {
 			// parse params to objects
 			let paramsArray: Array<string|Param> = [];
 
@@ -475,8 +475,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer();
 			if (channel) {
@@ -527,8 +527,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			if (channel) {
 				this._channel = channel;
@@ -573,8 +573,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer();
 			if (channel && layer) {
@@ -629,8 +629,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer();
 
@@ -687,8 +687,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer(0);
 			if (channel) {
@@ -740,8 +740,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer(9999);
 			if (channel) {
