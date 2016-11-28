@@ -109,7 +109,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class BluefishConsumer extends Consumer {
-			_type = "Bluefish";
+			_type = "bluefish";
 
 			@JsonMember({type: Number})
 			public device: number = 1;
