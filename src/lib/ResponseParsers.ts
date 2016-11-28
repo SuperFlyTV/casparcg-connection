@@ -168,7 +168,7 @@ export namespace Response {
 			}catch (e) {
 				// @todo: version fallback
 				// @todo: handle
-				console.log("CONFIG PARSE ERROR: ", e);
+				console.log(e);
 			}
 			let configResult: CasparCGConfig = new CasparCGConfig(configVO);
 			return configResult;

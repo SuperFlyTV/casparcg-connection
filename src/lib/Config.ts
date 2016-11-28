@@ -242,7 +242,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class Channel {
-			consumers?: Array<Consumer> = [];
+			consumers: Array<Consumer> = [];
 
 			@JsonMember({type: String, isRequired: true})
 			public _type: String;
@@ -389,11 +389,11 @@ export namespace Config {
 
 			public disableSendToAmcpClient?: boolean | null;
 
-			@JsonMember({type: Number, isRequired: false, name: "default-port"})
+			@JsonMember({type: Number, name: "default-port"})
 			public defaultPort: number = 6250;
 
-			@JsonMember({type: Array, elements: OscClient, isRequired: true, name: "predefined-clients"})
-			public predefinedClients: Array<OscClient> = [new OscClient()];
+			@JsonMember({type: Array, elements: OscClient, name: "predefined-clients"})
+			public predefinedClients: Array<OscClient> = [];
 		}
 
 		/**  */
@@ -526,7 +526,7 @@ export namespace Config {
 		/**  */
 		@JsonObject
 		export class Osc extends v2xx.Osc {
-			@JsonMember({type: Boolean, isRequired: true, name: "disable-send-to-amcp-clients"})
+			@JsonMember({type: Boolean, name: "disable-send-to-amcp-clients"})
 			public disableSendToAmcpClient: boolean = false;
 		}
 
@@ -595,7 +595,7 @@ export namespace Config {
 	}
 
 	/**  */
-	const defaultChannel_2xx: v2xx.Channel = {videoMode: "PAL", _consumers: [], _type: "channel"};
+	const defaultChannel_2xx: v2xx.Channel = {videoMode: "PAL", _consumers: [], consumers: [], _type: "channel"};
 	const defaultAMCPController: v2xx.Controller = {_type: "tcp", port: 5250, protocol: "AMCP"};
 	const defaultLOGController: v2xx.Controller = {_type: "tcp", port: 3250, protocol: "LOG"};
 
@@ -882,17 +882,148 @@ export namespace Config {
 		}
 
 		/** */
-		public toV207ConfigVO(): Config207VO { return new Config207VO(); }
+		public get V207ConfigVO(): Config207VO { return new Config207VO(); }
 
 		/** */
-		public toV210ConfigVO(): Config210VO { return new Config210VO(); }
+		public get V210ConfigVO(): Config210VO { return new Config210VO(); }
 
 		/** */
-		public toV207ConfigXML(): string {return ""; }
+		public get V207ConfigXML(): string {return ""; }
 
 		/** */
-		public toV210ConfigXML(): string {
-			return xmlbuilder("configuration").end({pretty: true});
+		public get V210ConfigXML(): string {
+			let root = xmlbuilder("configuration");
+
+			// paths
+			CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("paths"), this.paths); // , ["mediaPath", "logPath", "dataPath", "templatePath", "thumbnailPath", "fontpath"]);
+
+			// channels
+			let channels = root.ele("channels");
+			this.channels.forEach((i) => {
+				let channel = channels.ele("channel");
+				CasparCGConfig.addFormattedXMLChildsFromObject(channel, i, ["_type", "consumers", "_consumers"]);
+
+				// consumer
+				let consumers = channel.ele("consumers");
+				i.consumers.forEach((i) => {
+					let consumer = consumers.ele(i._type);
+					CasparCGConfig.addFormattedXMLChildsFromObject(consumer, i, ["_type"]);
+				});
+			});
+
+			// controllers
+			let controllers = root.ele("controllers");
+			this.controllers.forEach((i) => {
+				let controller = controllers.ele(i._type);
+				CasparCGConfig.addFormattedXMLChildsFromObject(controller, i, ["_type"]);
+			});
+
+			// all root-level single values
+			CasparCGConfig.addFormattedXMLChildsFromArray(root, this, ["lockClearPhrase", "logLevel", "logCategories", "forceDeinterlace", "channelGrid", "accellerator"]);
+
+			// mixer
+			if (this.mixer) {
+				CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("mixer"), this.mixer);
+			}
+
+			// flash
+			if (this.flash) {
+				CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("flash"), this.flash);
+			}
+
+			// html
+			if (this.html) {
+				CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("html"), this.html);
+			}
+
+			// template hosts
+			if (this.templateHosts && this.templateHosts.length > 0) {
+				let templateHosts = root.ele("template-hosts");
+				this.templateHosts.forEach((i) => {
+					let templatehost = templateHosts.ele(i._type);
+					CasparCGConfig.addFormattedXMLChildsFromObject(templatehost, i, ["_type"]);
+				});
+			}
+
+			// thumbnails
+			if (this.thumbnails) {
+				CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("thumbnails"), this.thumbnails);
+			}
+
+			// osc
+			if (this.osc) {
+				let osc = root.ele("osc");
+				CasparCGConfig.addFormattedXMLChildsFromArray(osc, this.osc, ["defaultPort", "disableSendToAmcpClient"]);
+				// predefined clients
+				if (this.osc.predefinedClients && this.osc.predefinedClients.length > 0) {
+					let predefinedClients = osc.ele("predefined-clients");
+					this.osc.predefinedClients.forEach((i) => {
+						console.log(i);
+						predefinedClients;
+						let client = predefinedClients.ele(i._type);
+						CasparCGConfig.addFormattedXMLChildsFromObject(client, i, ["_type"]);
+					});
+				}
+			}
+
+			// audio
+			if (this.audio) {
+				let audio = root.ele("audio");
+				if (this.audio.channelLayouts && this.audio.channelLayouts.length > 0) {
+					let channelLayouts = audio.ele("channel-layouts");
+					this.audio.channelLayouts.forEach((i) => {
+						channelLayouts.ele("channel-layout")
+							.att("name", i.name)
+							.att("type", i.type)
+							.att("num-channels", i.numChannels)
+							.att("channel-order", i.channelOrder);
+					});
+				}
+				if (this.audio.mixConfigs && this.audio.mixConfigs.length > 0) {
+					let mixConfigs = audio.ele("mix-configs");
+					this.audio.mixConfigs.forEach((i) => {
+						mixConfigs.ele("mix-config")
+						.att("from-type", i.fromType)
+						.att("to-types", i.toTypes)
+						.att("mix", i.mix);
+					});
+				}
+			}
+
+			return root.end({pretty: false});
+		}
+
+		/** */
+		static addFormattedXMLChildsFromObject(root: Object, data: Object, blacklist?: Array<string>): Object {
+			for (let key in data) {
+				if ((key === "constructor") || (blacklist && blacklist.indexOf(key) > -1)) {
+					continue;
+				}
+				let value: string = data[key];
+				if (value !== null && value !== "") {
+					let keyBlocks: Array<string> = key.split(/(?=[A-Z])/);
+					key = keyBlocks.map((i) => i.toLowerCase()).join("-");
+					root["ele"].call(root, key, value);
+				}
+			}
+			return root;
+		}
+
+		/** */
+		static addFormattedXMLChildsFromArray(root: Object, data: Object, whitelist?: Array<string>): Object {
+			if (whitelist) {
+				whitelist.forEach((key) => {
+					if (data.hasOwnProperty(key)) {
+						let value: string = data[key];
+						if (value !== null && value !== "") {
+							let keyBlocks: Array<string> = key.split(/(?=[A-Z])/);
+							key = keyBlocks.map((i) => i.toLowerCase()).join("-");
+							root["ele"].call(root, key, value);
+						}
+					}
+				});
+			}
+			return root;
 		}
 	}
 }
