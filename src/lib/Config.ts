@@ -266,7 +266,7 @@ export namespace Config {
 					if (i.hasOwnProperty("_type")) {
 						let className: string = i["_type"];
 
-						let dashBlocks: Array<string> = className.split(/-|_/);
+						let dashBlocks: Array<string> = className.split(/-/);
 						className = dashBlocks.map((i) => {return i.charAt(0).toUpperCase() + i.slice(1); }).join("") + "Consumer";
 						if (v2xx[className]) {
 							let consumer: Consumer = new v2xx[className]();
@@ -300,7 +300,7 @@ export namespace Config {
 			@JsonMember({type: Boolean, name: "straight-alpha"})
 			straightAlpha: boolean = false;
 
-			@JsonMember({type: Boolean, name: "mipmapping_default_on"})
+			@JsonMember({type: Boolean, name: "mipmapping-default-on"})
 			mipmappingDefaultOn: boolean = false;
 		}
 
