@@ -57,10 +57,10 @@ export namespace Config {
 		}
 
 		export class Paths {
-			mediaPath: string | null;
-			logPath: string | null;
-			dataPath: string | null;
-			templatePath: string | null;
+			mediaPath?: string | null;
+			logPath?: string | null;
+			dataPath?: string | null;
+			templatePath?: string | null;
 			thumbnailPath?: string | null;
 			thumbnailsPath?: string | null;
 			fontPath?: string | null;
@@ -81,13 +81,13 @@ export namespace Config {
 			@JsonMember({type: Number})
 			public device: number = 1;
 
-			@JsonMember({type: Number,  name: "key-device"})
+			@JsonMember({type: Number, name: "key-device"})
 			public keyDevice: Number;
 
-			@JsonMember({type: Boolean,  name: "embedded-audio"})
+			@JsonMember({type: Boolean, name: "embedded-audio"})
 			public embeddedAudio: boolean = false;
 
-			@JsonMember({type: String,  name: "channel-layout"})
+			@JsonMember({type: String, name: "channel-layout"})
 			public channelLayout: string = "stereo";
 
 			@JsonMember({type: String})
@@ -96,13 +96,13 @@ export namespace Config {
 			@JsonMember({type: String})
 			public keyer: string = "external";
 
-			@JsonMember({type: Boolean,  name: "key-only"})
+			@JsonMember({type: Boolean, name: "key-only"})
 			public keyOnly: boolean = false;
 
-			@JsonMember({type: Number,  name: "buffer-depth"})
+			@JsonMember({type: Number, name: "buffer-depth"})
 			public bufferDepth: number = 3;
 
-			@JsonMember({type: Boolean,  name: "custom-allocator"})
+			@JsonMember({type: Boolean, name: "custom-allocator"})
 			public customAllocator: boolean = true;	// @todo: ns 2.0 only
 		}
 
@@ -114,13 +114,13 @@ export namespace Config {
 			@JsonMember({type: Number})
 			public device: number = 1;
 
-			@JsonMember({type: Boolean,  name: "embedded-audio"})
+			@JsonMember({type: Boolean, name: "embedded-audio"})
 			public embeddedAudio: boolean = false;
 
-			@JsonMember({type: String,  name: "channel-layout"})
+			@JsonMember({type: String, name: "channel-layout"})
 			public channelLayout: string = "stereo";
 
-			@JsonMember({type: Boolean,  name: "key-only"})
+			@JsonMember({type: Boolean, name: "key-only"})
 			public keyOnly: boolean = false;
 		}
 
@@ -129,7 +129,7 @@ export namespace Config {
 		export class SystemAudioConsumer extends Consumer {
 			_type = "systemaudio";
 
-			@JsonMember({type: String,  name: "channel-layout"})
+			@JsonMember({type: String, name: "channel-layout"})
 			public channelLayout: string = "stereo";
 
 			@JsonMember({type: Number})
@@ -153,10 +153,10 @@ export namespace Config {
 			@JsonMember({type: Boolean})
 			public windowed: boolean = true;
 
-			@JsonMember({type: Boolean,  name: "key-only"})
+			@JsonMember({type: Boolean, name: "key-only"})
 			public keyOnly: boolean = false;
 
-			@JsonMember({type: Boolean,  name: "auto-deinterlace"})
+			@JsonMember({type: Boolean, name: "auto-deinterlace"})
 			public autoDeinterlace: boolean = true;
 
 			@JsonMember({type: Boolean})
@@ -177,10 +177,10 @@ export namespace Config {
 		export class NewtekIvgaConsumer extends Consumer {
 			_type = "newtekivga";
 
-			@JsonMember({type: String,  name: "channel-layout"})
+			@JsonMember({type: String, name: "channel-layout"})
 			public channelLayout: string = "stereo";	// @todo: ns 2.0 only
 
-			@JsonMember({type: Boolean,  name: "provide-sync"})
+			@JsonMember({type: Boolean, name: "provide-sync"})
 			public provideSync: boolean = true;		// @todo: ns 2.0 only
 		}
 
@@ -195,10 +195,10 @@ export namespace Config {
 			@JsonMember({type: String})
 			public args: String;
 
-			@JsonMember({type: Boolean,  name: "separate-key"})
+			@JsonMember({type: Boolean, name: "separate-key"})
 			public separateKey: boolean = false;
 
-			@JsonMember({type: Boolean,  name: "mono-streams"})
+			@JsonMember({type: Boolean, name: "mono-streams"})
 			public monoStreams: boolean = false;
 		}
 
@@ -213,7 +213,7 @@ export namespace Config {
 			@JsonMember({type: String})
 			public vcodec: string = "libx264";
 
-			@JsonMember({type: Boolean,  name: "separate-key"})
+			@JsonMember({type: Boolean, name: "separate-key"})
 			public separateKey: boolean = false;
 		}
 
@@ -234,7 +234,7 @@ export namespace Config {
 		export class SynctoConsumer extends Consumer { // @todo: 2.1 ns
 			_type = "syncto";
 
-			@JsonMember({type: Number,  name: "channel-id"})
+			@JsonMember({type: Number, name: "channel-id"})
 			public channelId: Number;
 		}
 
@@ -605,7 +605,7 @@ export namespace Config {
 	export class ConfigxxVO {
 		@JsonMember({type: Array, elements: v2xx.Channel, isRequired: true})
 		public channels: Array<v2xx.Channel> = [defaultChannel_2xx];
-		@JsonMember({type: Boolean,  name: "channel-grid"})
+		@JsonMember({type: Boolean, name: "channel-grid"})
 		public channelGrid: boolean = false;
 		@JsonMember({type: v2xx.Flash})
 		public flash: v2xx.Flash = new v2xx.Flash();
@@ -620,13 +620,13 @@ export namespace Config {
 		public paths: v207.Paths = new v207.Paths();
 		@JsonMember({type: v207.Mixer})
 		public mixer: v207.Mixer = new v207.Mixer();
-		@JsonMember({type: String,  name: "log-level"})	// @todo: enum
+		@JsonMember({type: String, name: "log-level"})	// @todo: enum
 		public logLevel: string = "trace";				// @todo: differs from 2.1.0 default
-		@JsonMember({type: Boolean,  name: "atuo-deinterlace"})
+		@JsonMember({type: Boolean, name: "atuo-deinterlace"})
 		public autoDeinterlace: boolean = true;
-		@JsonMember({type: Boolean,  name: "auto-transcode"})
+		@JsonMember({type: Boolean, name: "auto-transcode"})
 		public autoTranscode: boolean = true;
-		@JsonMember({type: Number,  name: "pipeline-tokens"})
+		@JsonMember({type: Number, name: "pipeline-tokens"})
 		public pipelineTokens: number = 2;
 		@JsonMember({type: Array, elements: v2xx.Controller, isRequired: true})
 		public controllers: Array<v2xx.Controller> = [defaultAMCPController];
@@ -639,18 +639,19 @@ export namespace Config {
 	}
 
 	/**  */
-	export class Config210VO  extends ConfigxxVO {
+	@JsonObject
+	export class Config210VO extends ConfigxxVO {
 		@JsonMember({type: v21x.Paths, isRequired: true})
 		public paths: v21x.Paths = new v21x.Paths();
-		@JsonMember({type: String,  name: "lock-clear-phrase"})
+		@JsonMember({type: String, name: "lock-clear-phrase"})
 		public lockClearPhrase: string = "secret";
 		@JsonMember({type: v21x.Mixer})
 		public mixer: v21x.Mixer = new v21x.Mixer();
-		@JsonMember({type: String,  name: "log-level"})	// @todo: enum
-		public logLevel: string = "info";				// @todo: differs from 2.0.7 default
-		@JsonMember({type: String,  name: "log-categories"}) // @todo: enum
+		@JsonMember({type: String, name: "log-level"})		// @todo: enum
+		public logLevel: string = "info";					// @todo: differs from 2.0.7 default
+		@JsonMember({type: String, name: "log-categories"}) // @todo: enum
 		public logCategories: string = "communication";		// @todo, concated (comma-delimited) values in string
-		@JsonMember({type: Boolean,  name: "force-deinterlace"})
+		@JsonMember({type: Boolean, name: "force-deinterlace"})
 		public forceDeinterlace: boolean = false;
 		@JsonMember({type: String})				// @todo: enum
 		public accellerator: string = "auto";
@@ -841,9 +842,6 @@ export namespace Config {
 
 			// log categories
 			this.logCategories = configVO.logCategories;
-
-			// channel grid
-			this.channelGrid = configVO.channelGrid;
 
 			// channel grid
 			this.channelGrid = configVO.channelGrid;
