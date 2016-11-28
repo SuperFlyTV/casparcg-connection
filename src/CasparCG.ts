@@ -632,10 +632,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			}
 			if (this._connected) {
 				// @todo: handle flush buffer + shift/push version command in queue.
+
+				// reset cached data
+				delete this._configPromise;
 				if (this.autoServerVersion) {
 					this.version(Enum.Version.SERVER).then((result: IAMCPCommand) => {
 						this._setVersionFromServerResponse(result.response);
 					});
+
 				}else {
 					this._expediteCommand(true);
 				}

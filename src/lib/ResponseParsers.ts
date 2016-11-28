@@ -163,13 +163,10 @@ export namespace Response {
 				configVOClass = Config207VO;
 			}
 			let configVO: Config207VO | Config210VO | {}  = {};
-			try {
-				configVO = TypedJSON.parse(dataString, configVOClass);
-			}catch (e) {
-				// @todo: version fallback
-				// @todo: handle
-				console.log(e);
-			}
+
+			// errors thrown in parsing bubbles and rejects the promise for the active command
+			configVO = TypedJSON.parse(dataString, configVOClass);
+
 			let configResult: CasparCGConfig = new CasparCGConfig(configVO);
 			return configResult;
 		}
