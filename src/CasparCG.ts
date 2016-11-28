@@ -27,6 +27,9 @@ import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
 import IStringCallback = CallbackNS.IStringCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
+// Config NS
+import {Config as ConfigNS} from "./lib/Config";
+import CasparCGConfig = ConfigNS.CasparCGConfig;
 
 /**
  * CasparCG Protocols
@@ -222,6 +225,7 @@ export interface ICasparCGConnection {
 	connectionOptions: ConnectionOptions;
 	connected: boolean;
 	connectionStatus: SocketState;
+	getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
 	commandQueue: Array<IAMCPCommand>;
 	removeQueuedCommand(id: string): boolean;
 	connect(options?: IConnectionOptions): void;
@@ -247,6 +251,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _socket: CasparCGSocket;
 	private _queuedCommands: Array<IAMCPCommand> = [];
 	private _sentCommands: Array<IAMCPCommand> = [];
+	private _configPromise: Promise<CasparCGConfig>;
 
 	/**
 	 * Try to connect upon creation.
@@ -736,7 +741,16 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			throw new Error("Invalid command parameters");
 		}
 
-		return new Promise<IAMCPCommand>((resolve, reject) => {command!.resolve = resolve; command!.reject = reject; this._addQueuedCommand(command!); });
+		let commandPromise: Promise<IAMCPCommand> = new Promise<IAMCPCommand>((resolve, reject) => {
+			command!.resolve = resolve;
+			command!.reject = reject;
+			this._addQueuedCommand(command!);
+		});
+		commandPromise.catch((error: any) => {
+			// @todo: global command error handler here
+			this._log("Command error: " + error.toString());
+		});
+		return commandPromise;
 	}
 
 
@@ -859,9 +873,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 	}
 
-	/**
-	 * 
-	 */
+	/**	 */
 	private _setVersionFromServerResponse(serverVersionResponse: AMCPResponse): void {
 		let versionString: string = serverVersionResponse.data.toString().slice(0, 5);
 		switch (versionString) {
@@ -872,6 +884,31 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				this.serverVersion = ServerVersion.V210;
 				break;
 		}
+	}
+
+	/** */
+	public getCasparCGConfig(refresh: boolean = false): Promise<CasparCGConfig> {
+		if (!this._configPromise || refresh) {
+			this._configPromise = new Promise<CasparCGConfig>((resolve) => {
+				this.infoConfig().then((response) => {
+					resolve(response.response.data as CasparCGConfig);
+				});
+			});
+		}
+		return this._configPromise;
+
+/*
+		if (!this._configPromise || refresh) {
+			configPromise = new Promise<CasparCGConfig>((resolve) => {
+				this.infoConfig().then((response) => {
+					this._config = response.response.data as CasparCGConfig;
+					resolve(this._config);
+				});
+			});
+		} else {
+			configPromise = Promise.resolve(this._config);
+		}
+		return configPromise;*/
 	}
 
 

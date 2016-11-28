@@ -1,4 +1,5 @@
 import {JsonObject, JsonMember} from "typedjson-npm";
+import {create as xmlbuilder} from "xmlbuilder";
 
 /**  */
 export namespace Config {
@@ -887,9 +888,11 @@ export namespace Config {
 		public toV210ConfigVO(): Config210VO { return new Config210VO(); }
 
 		/** */
-		public toV207ConfigXML(): XMLDocument {return new XMLDocument(); }
+		public toV207ConfigXML(): string {return ""; }
 
 		/** */
-		public toV210ConfigXML(): XMLDocument {return new XMLDocument(); }
+		public toV210ConfigXML(): string {
+			return xmlbuilder("configuration").end({pretty: true});
+		}
 	}
 }
