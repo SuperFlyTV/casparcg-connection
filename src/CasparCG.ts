@@ -626,11 +626,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				this.onConnectionChanged(this._connected);
 			}
 			if (this._connected) {
-				this.fire(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
-				if (this.onConnected) {
-					this.onConnected(this._connected);
-				}
-
 				// @todo: handle flush buffer + shift/push version command in queue.
 				if (this.autoServerVersion) {
 					this.version(Enum.Version.SERVER).then((result: IAMCPCommand) => {
@@ -638,6 +633,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					});
 				}else {
 					this._expediteCommand(true);
+				}
+				this.fire(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
+				if (this.onConnected) {
+					this.onConnected(this._connected);
 				}
 			}
 			if (!this._connected) {
