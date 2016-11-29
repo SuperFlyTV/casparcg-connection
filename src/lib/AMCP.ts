@@ -1086,7 +1086,8 @@ export namespace AMCP {
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
-			if(this.layer && this.layer > -1) {
+			console.log("CHANNEL::::", this.channel)
+			if(this.channel && this.channel > -1) {
 				this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser); 
 			}
 		}
