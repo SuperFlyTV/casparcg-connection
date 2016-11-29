@@ -696,30 +696,32 @@ export namespace Config {
 
 	/** */
 	export abstract class AbstractDefaultCasparCGConfig implements ICasparCGConfig {
-		public paths: v2xx.Paths;
-		public lockClearPhrase: string | null;
+		public paths: v2xx.Paths = new v2xx.Paths();
+		public lockClearPhrase: string | null = null;
 		public channels: Array<v2xx.Channel> = [];
-		public mixer: v2xx.Mixer;
+		public mixer: v2xx.Mixer = new v2xx.Mixer();
 		public controllers: Array<v2xx.Controller> = [];
-		public logLevel: string;
-		public logCategories: string | null;
-		public channelGrid: boolean;
-		public forceDeinterlace: boolean | null;
-		public autoDeinterlace: boolean | null;
-		public autoTranscode: boolean | null;
-		public pipelineTokens: number | null;
-		public accellerator: string | null;
-		public thumbnails: v21x.Thumbnails;
-		public flash: v2xx.Flash;
-		public html: v21x.Html;
-		public templateHosts: Array<v2xx.TemplateHost>;
-		public osc: v2xx.Osc;
-		public audio: v21x.Audio;
+		public logLevel: string = "";
+		public logCategories: string | null = null;
+		public channelGrid: boolean = false;
+		public forceDeinterlace: boolean | null = null;
+		public autoDeinterlace: boolean | null = null;
+		public autoTranscode: boolean | null = null;
+		public pipelineTokens: number | null = null;
+		public accellerator: string | null = null;
+		public thumbnails: v21x.Thumbnails = new v21x.Thumbnails;
+		public flash: v2xx.Flash = new v2xx.Flash();
+		public html: v21x.Html = new v21x.Html();
+		public templateHosts: Array<v2xx.TemplateHost> = [];
+		public osc: v2xx.Osc = new v2xx.Osc;
+		public audio: v21x.Audio = new v21x.Audio;
 	}
+
+	export const RestartParams: RegExp  = /(^paths|^channels_channel$|keyDevice|bufferDepth|^customAllocator|^lockClearPhrase|^controllers|^forceDeinterlace|^autoDeinterlace|^autoTranscode|^pipelineTokens|^channelGrid|^mixer|^accellerator|^flash|^html|^thumbnails|^osc|^audio )/;
 
 	/** */
 	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
-		private mode: ServerVersion;
+		private mode: ServerVersion = ServerVersion.V2xx;
 
 		/** */
 		public constructor(version: string);
@@ -734,6 +736,8 @@ export namespace Config {
 				}else if (initConfigVO instanceof Config210VO) {
 					this.mode = ServerVersion.V210;
 					this.fromV210ConfigVO(initConfigVO);
+				}else {
+					this.import(initConfigVO);
 				}
 			}else if (typeof initConfigVOOrString === "string") {
 				let versionString: string = initConfigVOOrString;
@@ -741,6 +745,15 @@ export namespace Config {
 					this.mode = ServerVersion.V207;
 				}else if (versionString === "2.1.0") {
 					this.mode = ServerVersion.V210;
+				}
+			}
+		}
+
+		/** */
+		public import(configVO: Object): void {
+			for (let key in configVO) {
+				if(configVO.hasOwnProperty(key) && this.hasOwnProperty(key)) {
+					this[key] = configVO[key];
 				}
 			}
 		}

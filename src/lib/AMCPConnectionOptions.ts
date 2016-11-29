@@ -23,7 +23,7 @@ export namespace Options {
 	 * 
 	 */
 	export enum ServerVersion  {
-		V20x = 2000,
+		V2xx = 2000,
 		V207 = 2007,
 		V21x = 2100,
 		V210 = 2110
@@ -63,7 +63,7 @@ export class ConnectionOptions implements IConnectionOptions {
 	public autoReconnectInterval: number | undefined = 1000;
 	public autoReconnectAttempts: number | undefined = Infinity;
 	public autoServerVersion?: boolean = true;
-	public serverVersion?: Options.ServerVersion | undefined = Options.ServerVersion.V20x;
+	public serverVersion?: Options.ServerVersion | undefined = Options.ServerVersion.V2xx;
 	public queueMode: Options.QueueMode | undefined = Options.QueueMode.SEQUENTIAL;	// @todo: change to SALVO once server has command UIDs https://github.com/CasparCG/Server/issues/475
 	public debug: boolean | undefined = false;
 	public onLog: IStringCallback | undefined = undefined;
