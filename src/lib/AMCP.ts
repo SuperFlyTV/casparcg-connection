@@ -1080,6 +1080,16 @@ export namespace AMCP {
 	export class InfoCommand extends AbstractOrChannelOrLayerCommand {
 		static commandString = "INFO";
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ChannelParser);
+
+		/**
+		 *  
+		 */
+		constructor(params: (string|Param|(string|Param)[])) {
+			super(params);
+			if(this.layer) {
+				this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser); 
+			}
+		}
 	}
 
 	/**
