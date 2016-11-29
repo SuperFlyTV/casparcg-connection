@@ -424,7 +424,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					continue;
 				}
 
-				if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
+				if (this.hasOwnProperty(key) || CasparCG.prototype.hasOwnProperty(key)) {
 					// only update new options
 					if (this[key] !== options[key]) {
 						this[key] = options[key];
@@ -597,7 +597,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		let options: ConnectionOptions = new ConnectionOptions({});
 
 		for (let key in options) {
-			if (this.hasOwnProperty(key) ||  CasparCG.prototype.hasOwnProperty(key)) {
+			if (this.hasOwnProperty(key) || CasparCG.hasOwnProperty(key)) {
 				options[key] = this[key];
 			}
 		}
