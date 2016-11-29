@@ -1,5 +1,8 @@
 import {JsonObject, JsonMember} from "typedjson-npm";
 import {create as xmlbuilder} from "xmlbuilder";
+import {Options as OptionsNS} from "./AMCPConnectionOptions";
+// Options NS
+import ServerVersion = OptionsNS.ServerVersion;
 
 /**  */
 export namespace Config {
@@ -716,18 +719,28 @@ export namespace Config {
 
 	/** */
 	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
-		private mode: typeof ConfigxxVO;
+		private mode: ServerVersion;
 
 		/** */
-		public constructor(initConfigVO?: Config207VO | Config210VO | {}) {
+		public constructor(version: string);
+		public constructor(initConfigVO: Config207VO | Config210VO | {});
+		public constructor(initConfigVOOrString?: Config207VO | Config210VO | {} | string) {
 			super();
-			if (initConfigVO) {
+			if (typeof initConfigVOOrString === "object") {
+				let initConfigVO: Config207VO | Config210VO | {} = initConfigVOOrString;
 				if (initConfigVO instanceof Config207VO) {
-					this.mode = Config207VO;
+					this.mode = ServerVersion.V207;
 					this.fromV207ConfigVO(initConfigVO);
 				}else if (initConfigVO instanceof Config210VO) {
-					this.mode = Config210VO;
+					this.mode = ServerVersion.V210;
 					this.fromV210ConfigVO(initConfigVO);
+				}
+			}else if (typeof initConfigVOOrString === "string") {
+				let versionString: string = initConfigVOOrString;
+				if (versionString === "2.0.7") {
+					this.mode = ServerVersion.V207;
+				}else if (versionString === "2.1.0") {
+					this.mode = ServerVersion.V210;
 				}
 			}
 		}
@@ -892,9 +905,9 @@ export namespace Config {
 
 		/** */
 		public get configXML(): string {
-			if (this.mode === Config207VO) {
+			if (this.mode === ServerVersion.V207) {
 					return this.V207ConfigXML;
-			} else if (this.mode === Config210VO) {
+			} else if (this.mode === ServerVersion.V210) {
 				return this.V210ConfigXML;
 			}
 			return "";
@@ -1003,7 +1016,7 @@ export namespace Config {
 				}
 			}
 
-			return root.end({pretty: false});
+			return root.end({pretty: true});
 		}
 
 		/** */
