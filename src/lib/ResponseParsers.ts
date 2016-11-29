@@ -126,22 +126,22 @@ export namespace Response {
 				if (data["audio"].hasOwnProperty("mix-configs")) {
 					let o: string;
 					for (let i in data["audio"]["mix-configs"]) {
-						if (data["audio"]["mix-configs"][i]["to"]) {
+						if (data["audio"]["mix-configs"][i]["to"] && !isNaN(data["audio"]["mix-configs"][i]["to"])) {
 							o = (data["audio"]["mix-configs"][i]["to"]).toString();
 							o += o.indexOf(".") === -1 ? ".0" : "";
 							data["audio"]["mix-configs"][i]["to"] = o;
 						}
-						if (data["audio"]["mix-configs"][i]["from"]) {
+						if (data["audio"]["mix-configs"][i]["from"] && !isNaN(data["audio"]["mix-configs"][i]["from"])) {
 							o = (data["audio"]["mix-configs"][i]["from"]).toString();
 							o += o.indexOf(".") === -1 ? ".0" : "";
 							data["audio"]["mix-configs"][i]["from"] = o;
 						}
-						if (data["audio"]["mix-configs"][i]["to-types"]) {
+						if (data["audio"]["mix-configs"][i]["to-types"] && !isNaN(data["audio"]["mix-configs"][i]["to-types"])) {
 							o = (data["audio"]["mix-configs"][i]["to-types"]).toString();
 							o += o.indexOf(".") === -1 ? ".0" : "";
 							data["audio"]["mix-configs"][i]["to-types"] = o;
 						}
-						if (data["audio"]["mix-configs"][i]["from-type"]) {
+						if (data["audio"]["mix-configs"][i]["from-type"] && !isNaN(data["audio"]["mix-configs"][i]["from-type"])) {
 							o = (data["audio"]["mix-configs"][i]["from-type"]).toString();
 							o += o.indexOf(".") === -1 ? ".0" : "";
 							data["audio"]["mix-configs"][i]["from-type"] = o;
