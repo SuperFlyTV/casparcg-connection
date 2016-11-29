@@ -68,7 +68,7 @@ export namespace Response {
 
 			xmlParser(
 				response.items[0].replace("\n", ""),
-				{explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, valueProcessors: [parseNumbers, parseBooleans]},
+				{explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, attrValueProcessors: [parseNumbers], valueProcessors: [parseNumbers, parseBooleans]},
 				(error, result) => {
 					returnFalse = error;
 					returnData = result;

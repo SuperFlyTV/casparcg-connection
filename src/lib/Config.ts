@@ -308,13 +308,13 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class Controller {
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public _type: String;
 
-			@JsonMember({type: Number, isRequired: true})
+			@JsonMember({type: Number})
 			public port: number;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public protocol: String;
 		}
 
@@ -322,38 +322,38 @@ export namespace Config {
 		@JsonObject
 		export class OscClient {
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public _type: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public address: String;
 
-			@JsonMember({type: Number, isRequired: true})
+			@JsonMember({type: Number})
 			public port: number;
 		}
 
 		/** */
 		@JsonObject
 		export class Thumbnails { // @todo: isRequired on childs?
-			@JsonMember({type: Boolean, name: "generate-thumbnails" , isRequired: true})
+			@JsonMember({type: Boolean, name: "generate-thumbnails" })
 			public generateThumbnails: boolean = true;
 
-			@JsonMember({type: Number, isRequired: true})
+			@JsonMember({type: Number})
 			public width: number = 256;
 
-			@JsonMember({type: Number, isRequired: true})
+			@JsonMember({type: Number})
 			public height: number = 144;
 
-			@JsonMember({type: Number, isRequired: true, name: "video-grid"})
+			@JsonMember({type: Number, name: "video-grid"})
 			public videoGrid: number = 2;
 
-			@JsonMember({type: Number, isRequired: true, name: "scan-interval-millis"})
+			@JsonMember({type: Number, name: "scan-interval-millis"})
 			public scanIntervalMillis: number = 5000;
 
-			@JsonMember({type: Number, isRequired: true, name: "generate-delay-millis"})
+			@JsonMember({type: Number, name: "generate-delay-millis"})
 			public generateDelayMillis: number = 2000;
 
-			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: enum
+			@JsonMember({type: String, name: "video-mode"})	// @todo: enum
 			public videoMode: string = "720p5000";
 		}
 
@@ -367,19 +367,19 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class TemplateHost {
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public _type: string;
 
-			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: enum
+			@JsonMember({type: String, name: "video-mode"})	// @todo: enum
 			public videoMode: string;
 
-			@JsonMember({type: String, isRequired: true})	// @todo: enum
+			@JsonMember({type: String})	// @todo: enum
 			public filename: string;
 
-			@JsonMember({type: Number, isRequired: true})
+			@JsonMember({type: Number})
 			public width: number;
 
-			@JsonMember({type: Number, isRequired: true})
+			@JsonMember({type: Number})
 			public height: number;
 		}
 
@@ -399,48 +399,48 @@ export namespace Config {
 		/**  */
 		@JsonObject
 		export class ChannelLayout {
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public _type: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public name: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public type: string;
 
-			@JsonMember({type: Number, isRequired: true, name: "num-channels"})
+			@JsonMember({type: Number, name: "num-channels"})
 			public numChannels: number;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public channels: string;
 		}
 
 		/**  */
 		@JsonObject
 		export class MixConfig {
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public _type: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public from: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public to: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public mix: string;
 
-			@JsonMember({type: Array, elements: String, isRequired: true})
+			@JsonMember({type: Array, elements: String})
 			public mappings: Array<string> = [];
 		}
 
 		/**  */
 		@JsonObject
 		export class Audio {
-			@JsonMember({type: Array, elements: v2xx.ChannelLayout, isRequired: true, name: "channel-layouts"})
+			@JsonMember({type: Array, elements: v2xx.ChannelLayout, name: "channel-layouts"})
 			public channelLayouts: Array<v2xx.ChannelLayout> = [];
 
-			@JsonMember({type: Array, elements: v2xx.MixConfig, isRequired: true, name: "mix-configs"})
+			@JsonMember({type: Array, elements: v2xx.MixConfig, name: "mix-configs"})
 			public mixConfigs: Array<v2xx.MixConfig> = [];
 		}
 	}
@@ -476,7 +476,7 @@ export namespace Config {
 		/**  */
 		@JsonObject
 		export class Thumbnails extends v2xx.Thumbnails {
-			@JsonMember({type: Boolean, isRequired: true})
+			@JsonMember({type: Boolean})
 			public mipmap: boolean = false;
 		}
 	}
@@ -512,7 +512,7 @@ export namespace Config {
 		/**  */
 		@JsonObject
 		export class Thumbnails extends v2xx.Thumbnails {
-			@JsonMember({type: Boolean, isRequired: true})
+			@JsonMember({type: Boolean})
 			public mipmap: boolean = true;
 		}
 
@@ -533,45 +533,45 @@ export namespace Config {
 		/**  */
 		@JsonObject
 		export class ChannelLayout {
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public _type: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public name: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public type: string;
 
-			@JsonMember({type: Number, isRequired: true, name: "num-channels"})
+			@JsonMember({type: Number, name: "num-channels"})
 			public numChannels: number;
 
-			@JsonMember({type: String, isRequired: true, name: "channel-order"})
+			@JsonMember({type: String, name: "channel-order"})
 			public channelOrder: string;
 		}
 
 		/**  */
 		@JsonObject
 		export class MixConfig {
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public _type: string;
 
-			@JsonMember({type: String, isRequired: true, name: "from-type"})
+			@JsonMember({type: String, name: "from-type"})
 			public fromType: string;
 
-			@JsonMember({type: String, isRequired: true, name: "to-types"})
+			@JsonMember({type: String, name: "to-types"})
 			public toTypes: string;
 
-			@JsonMember({type: String, isRequired: true})
+			@JsonMember({type: String})
 			public mix: string;
 		}
 
 		/**  */
 		@JsonObject
 		export class Audio {
-			@JsonMember({type: Array, elements: v21x.ChannelLayout, isRequired: true, name: "channel-layouts"})
+			@JsonMember({type: Array, elements: v21x.ChannelLayout, name: "channel-layouts"})
 			public channelLayouts: Array<v21x.ChannelLayout> = [];
 
-			@JsonMember({type: Array, elements: v21x.MixConfig, isRequired: true, name: "mix-configs"})
+			@JsonMember({type: Array, elements: v21x.MixConfig, name: "mix-configs"})
 			public mixConfigs: Array<v21x.MixConfig> = [];
 		}
 
@@ -714,16 +714,19 @@ export namespace Config {
 		public audio: v21x.Audio;
 	}
 
-
 	/** */
 	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
+		private mode: typeof ConfigxxVO;
+
 		/** */
 		public constructor(initConfigVO?: Config207VO | Config210VO | {}) {
 			super();
 			if (initConfigVO) {
 				if (initConfigVO instanceof Config207VO) {
+					this.mode = Config207VO;
 					this.fromV207ConfigVO(initConfigVO);
 				}else if (initConfigVO instanceof Config210VO) {
+					this.mode = Config210VO;
 					this.fromV210ConfigVO(initConfigVO);
 				}
 			}
@@ -888,6 +891,16 @@ export namespace Config {
 		public get V210ConfigVO(): Config210VO { return new Config210VO(); }
 
 		/** */
+		public get configXML(): string {
+			if (this.mode === Config207VO) {
+					return this.V207ConfigXML;
+			} else if (this.mode === Config210VO) {
+				return this.V210ConfigXML;
+			}
+			return "";
+		}
+
+		/** */
 		public get V207ConfigXML(): string {return ""; }
 
 		/** */
@@ -967,16 +980,16 @@ export namespace Config {
 			}
 
 			// audio
-			if (this.audio) {
+			if (this.audio && ((this.audio.channelLayouts && this.audio.channelLayouts.length > 0) || (this.audio.mixConfigs && this.audio.mixConfigs.length > 0))) {
 				let audio = root.ele("audio");
 				if (this.audio.channelLayouts && this.audio.channelLayouts.length > 0) {
 					let channelLayouts = audio.ele("channel-layouts");
 					this.audio.channelLayouts.forEach((i) => {
-						channelLayouts.ele("channel-layout")
-							.att("name", i.name)
-							.att("type", i.type)
-							.att("num-channels", i.numChannels)
-							.att("channel-order", i.channelOrder);
+						let channelLayout = channelLayouts.ele("channel-layout");
+						if (i.name) channelLayout.att("name", i.name);
+						if (i.type) channelLayout.att("type", i.type);
+						if (i.numChannels) channelLayout.att("num-channels", i.numChannels);
+						if (i.channelOrder) channelLayout.att("channel-order", i.channelOrder);
 					});
 				}
 				if (this.audio.mixConfigs && this.audio.mixConfigs.length > 0) {

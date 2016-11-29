@@ -116,10 +116,10 @@ export namespace Response {
 				if (data["audio"].hasOwnProperty("channel-layouts")) {
 					let o: string;
 					for (let i in data["audio"]["channel-layouts"]) {
-						if (data["audio"]["channel-layouts"][i]["type"]) {
-						o = (data["audio"]["channel-layouts"][i]["type"]).toString();
-						o += o.indexOf(".") === -1 ? ".0" : "";
-						data["audio"]["channel-layouts"][i]["type"] = o;
+						if (data["audio"]["channel-layouts"][i]["type"] && !isNaN(data["audio"]["channel-layouts"][i]["type"])) {
+							o = (data["audio"]["channel-layouts"][i]["type"]).toString();
+							o += o.indexOf(".") === -1 ? ".0" : "";		// 
+							data["audio"]["channel-layouts"][i]["type"] = o;
 						}
 					}
 				}
