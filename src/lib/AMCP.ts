@@ -1086,7 +1086,7 @@ export namespace AMCP {
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
-			if(this.layer) {
+			if(this.layer && this.layer > -1) {
 				this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser); 
 			}
 		}
