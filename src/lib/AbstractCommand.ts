@@ -103,8 +103,8 @@ export namespace Command {
 		paramProtocol: Array<IParamSignature>;
 		protocolLogic: Array<IProtocolLogic>;
 		responseProtocol: ResponseSignature;
-		resolve?: any;
-		reject?: any;
+		resolve: (command: IAMCPCommand) => void;
+		reject: (command: IAMCPCommand) => void;
 		onStatusChanged: ICommandStatusCallback;
 	}
 
@@ -129,6 +129,8 @@ export namespace Command {
 		paramProtocol: Array<IParamSignature>;
 		responseProtocol: ResponseSignature = new ResponseSignature();
 		onStatusChanged: ICommandStatusCallback;
+		resolve: (command: IAMCPCommand) => void;
+		reject: (command: IAMCPCommand) => void;
 		private _status: IAMCPStatus = IAMCPStatus.New;
 		protected _channel: number;
 		protected _layer: number;

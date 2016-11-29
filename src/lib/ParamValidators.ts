@@ -381,7 +381,7 @@ export namespace Validation {
 		/**
 		 * 
 		 */
-		constructor(private _valueOnSuccess?: any, private _valueOnFail?: any) {
+		constructor(private _valueOnSuccess?: (string | number | boolean), private _valueOnFail?: (string | number | boolean)) {
 			super();
 		}
 

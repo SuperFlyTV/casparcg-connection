@@ -386,10 +386,16 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 ```
 	 *
 	 */
-	public constructor(options?: IConnectionOptions);
-	public constructor(hostOrOptions?: any, port?: number) {
+	public constructor(options: IConnectionOptions);
+	public constructor(hostOrOptions?: Object | string, port?: number) {
 		super();
-		let options: ConnectionOptions = new ConnectionOptions(hostOrOptions, port);
+		let options: ConnectionOptions;
+		if (typeof hostOrOptions === "object") {
+		 	options = new ConnectionOptions(hostOrOptions);
+		}else {
+			options = new ConnectionOptions(hostOrOptions, port);
+		}
+		
 
 		// if both options and port specified, port overrides options
 		if (port && (port !== options.port)) {

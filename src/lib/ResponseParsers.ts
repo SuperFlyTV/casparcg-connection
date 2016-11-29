@@ -155,7 +155,7 @@ export namespace Response {
 				}
 			}
 			let dataString: string = JSON.stringify(data).toLowerCase();
-			let configVOClass: any = null;
+			let configVOClass: any;
 
 			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
 				configVOClass = Config210VO;

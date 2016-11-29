@@ -76,9 +76,9 @@ export class ConnectionOptions implements IConnectionOptions {
 	/**
 	 * 
 	 */
-	constructor(options: IConnectionOptions);
-	constructor(host: string, port?: number);
-	constructor(hostOrOptions: (IConnectionOptions|string), port?: number) {
+	constructor(host?: string, port?: number);
+	constructor(options?: IConnectionOptions);
+	constructor(hostOrOptions?: IConnectionOptions|string, port?: number) {
 		// if object
 		if (hostOrOptions && typeof hostOrOptions === "object") {
 			if (hostOrOptions.hasOwnProperty("host") && hostOrOptions.host !== undefined) {
