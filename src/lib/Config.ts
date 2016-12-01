@@ -717,10 +717,10 @@ export namespace Config {
 		public audio: v21x.Audio = new v21x.Audio;
 	}
 
-	export const RestartParams: RegExp  = /(^paths|^channels_channel$|keyDevice|bufferDepth|^customAllocator|^lockClearPhrase|^controllers|^forceDeinterlace|^autoDeinterlace|^autoTranscode|^pipelineTokens|^channelGrid|^mixer|^accellerator|^flash|^html|^thumbnails|^osc|^audio )/;
+	//export const RuntimeConfigParams: RegExp  = /(videoMode$)/;
+	export const RuntimeConfigParams: RegExp  = /()/;
 
-	/** */
-	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
+	/** */	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
 		private mode: ServerVersion = ServerVersion.V2xx;
 
 		/** */
