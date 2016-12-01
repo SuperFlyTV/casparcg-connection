@@ -154,7 +154,7 @@ export namespace Response {
 					data["flash"]["buffer-depth"] = (data["flash"]["buffer-depth"]).toString();
 				}
 			}
-			let dataString: string = JSON.stringify(data).toLowerCase();
+			let dataString: string = JSON.stringify(data);
 			let configVOClass: any;
 
 			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {

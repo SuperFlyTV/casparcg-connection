@@ -55,12 +55,15 @@ export namespace Response {
 				return str;
 			};
 			let parseBooleans = function(str: any) {
-				if (str === true || str === "true") {
+				if (str === true || str.toString().toLowerCase() === "true") {
 					return true;
-				}else if (str === false || str === "false") {
+				}else if (str === false || str.toString().toLowerCase() === "false") {
 					return false;
 				}
 				return str;
+			};
+			let parseLowerCase = function(str: any) {
+				return str.toString().toLowerCase();
 			};
 
 			let returnFalse: Error | undefined;
@@ -68,7 +71,7 @@ export namespace Response {
 
 			xmlParser(
 				response.items[0].replace("\n", ""),
-				{explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, attrValueProcessors: [parseNumbers], valueProcessors: [parseNumbers, parseBooleans]},
+				{explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, attrValueProcessors: [parseNumbers], valueProcessors: [parseNumbers, parseBooleans], tagNameProcessors: [parseLowerCase], attrNameProcessors: [parseLowerCase]},
 				(error, result) => {
 					returnFalse = error;
 					returnData = result;
