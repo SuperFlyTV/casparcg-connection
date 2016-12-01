@@ -39,10 +39,6 @@
     "remote"
   ],
   "dependencies": {
-    "@types/highland": "^1.14.30",
-    "@types/node": "^6.0.46",
-    "@types/xml2js": "0.0.28",
-    "@types/xmlbuilder": "0.0.28",
     "es6-promise": "^3.3.0",
     "hap": "https://github.com/jesperstarkar/hap.git",
     "highland": "^3.0.0-beta.3",
@@ -51,6 +47,10 @@
     "xmlbuilder": "^8.2.2"
   },
   "devDependencies": {
+    "@types/highland": "^1.14.30",
+    "@types/node": "^6.0.46",
+    "@types/xml2js": "0.0.28",
+    "@types/xmlbuilder": "0.0.28",
     "@types/jasmine": "^2.5.37",
     "del": "^2.2.1",
     "gulp": "^3.9.1",
