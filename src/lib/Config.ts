@@ -717,9 +717,6 @@ export namespace Config {
 		public audio: v21x.Audio = new v21x.Audio;
 	}
 
-	//export const RuntimeConfigParams: RegExp  = /(videoMode$)/;
-	export const RuntimeConfigParams: RegExp  = /()/;
-
 	/** */	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
 		private mode: ServerVersion = ServerVersion.V2xx;
 
