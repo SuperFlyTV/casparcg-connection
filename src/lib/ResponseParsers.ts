@@ -162,7 +162,7 @@ export namespace Response {
 			}else {
 				configVOClass = Config207VO;
 			}
-			let configVO: Config207VO | Config210VO | {}  = {};
+			let configVO: Config207VO | Config210VO;
 
 			// errors thrown in parsing bubbles and rejects the promise for the active command
 			configVO = TypedJSON.parse(dataString, configVOClass);

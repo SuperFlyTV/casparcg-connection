@@ -74,7 +74,7 @@ export namespace Config {
 		@JsonObject
 		export class Consumer {
 			@JsonMember({type: String, isRequired: true})	// @todo: custom "enum"-class for all props
-			public _type: String;
+			public _type: string;
 		}
 
 		/** */
@@ -194,10 +194,10 @@ export namespace Config {
 			_type = "ffmpeg";
 
 			@JsonMember({type: String})
-			public path: String;
+			public path: string;
 
 			@JsonMember({type: String})
-			public args: String;
+			public args: string;
 
 			@JsonMember({type: Boolean, name: "separate-key"})
 			public separateKey: boolean = false;
@@ -212,7 +212,7 @@ export namespace Config {
 			_type = "file";
 
 			@JsonMember({type: String})
-			public path: String;
+			public path: string;
 
 			@JsonMember({type: String})
 			public vcodec: string = "libx264";
@@ -227,10 +227,10 @@ export namespace Config {
 			_type = "stream";
 
 			@JsonMember({type: String})
-			public path: String;
+			public path: string;
 
 			@JsonMember({type: String})
-			public args: String;
+			public args: string;
 		}
 
 		/** */
@@ -248,7 +248,7 @@ export namespace Config {
 			consumers: Array<Consumer> = [];
 
 			@JsonMember({type: String, isRequired: true})
-			public _type: String;
+			public _type: string;
 
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: custom "enum"-class
 			videoMode: string = "PAL";
@@ -312,13 +312,13 @@ export namespace Config {
 		@JsonObject
 		export class Controller {
 			@JsonMember({type: String})
-			public _type: String;
+			public _type: string;
 
 			@JsonMember({type: Number})
 			public port: number;
 
 			@JsonMember({type: String})
-			public protocol: String;
+			public protocol: string;
 		}
 
 		/** */
@@ -329,7 +329,7 @@ export namespace Config {
 			public _type: string;
 
 			@JsonMember({type: String})
-			public address: String;
+			public address: string;
 
 			@JsonMember({type: Number})
 			public port: number;
@@ -749,7 +749,7 @@ export namespace Config {
 		/** */
 		public import(configVO: Object): void {
 			for (let key in configVO) {
-				if(configVO.hasOwnProperty(key) && this.hasOwnProperty(key)) {
+				if (configVO.hasOwnProperty(key) && this.hasOwnProperty(key)) {
 					this[key] = configVO[key];
 				}
 			}
