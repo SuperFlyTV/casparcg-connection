@@ -319,7 +319,7 @@ export namespace Response {
 					return null;
 				}
 
-				let name: string = components[1];
+				let name: string = components[1].replace(/\\/g, "/");
 				let typeData: Array<string> = components[2].split(/\s+/);
 
 
