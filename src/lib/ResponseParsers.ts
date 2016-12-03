@@ -313,14 +313,14 @@ export namespace Response {
 		public parse(data: Array<string>): Object {
 
 			return data.map((i: string) => {
-				let components: RegExpMatchArray|null = i.match(/\"([\s\S]*)\" ([\s\S]*)/);
+				let components: RegExpMatchArray|null = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
 				
 				if(components === null) {
 					return null;
 				}
 
 				let name: string = components[1];
-				let typeData: Array<string> = components[2].split(" ");
+				let typeData: Array<string> = components[2].split(/\s+/);
 
 
 				// is font
