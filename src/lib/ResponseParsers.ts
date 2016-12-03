@@ -150,9 +150,9 @@ export namespace Response {
 						data["audio"]["mix-configs"][i] = this.childrenToArray(data["audio"]["mix-configs"][i], ["mappings"]);
 					}
 				}
-				if (data["flash"] && data["flash"]["buffer-depth"]) {
+			}
+			if (data.hasOwnProperty("flash") && data["flash"].hasOwnProperty("buffer-depth")) {
 					data["flash"]["buffer-depth"] = (data["flash"]["buffer-depth"]).toString();
-				}
 			}
 			let dataString: string = JSON.stringify(data).toLowerCase();
 			let configVOClass: any;
