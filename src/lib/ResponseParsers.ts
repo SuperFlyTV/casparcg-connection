@@ -310,24 +310,31 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public parse(data: Array<any>): Object {
+		public parse(data: Array<string>): Object {
 
-			return data.map((i) => {
-				let components: Array<string> = i.split(" ");
+			return data.map((i: string) => {
+				let components: RegExpMatchArray|null = i.match(/\"([\s\S]*)\" ([\s\S]*)/);
+				
+				if(components === null) {
+					return null;
+				}
+
+				let name: string = components[1];
+				let typeData: Array<string> = components[2].split(" ");
+
 
 				// is font
-				if (components.length === 2) {
-					return {name: components[1].replace(/\"/g, ""), type: "font"};
+				if (typeData.length === 1) {
+					return {name: name, type: "font"};
 				 }
 
 				// is template
-				if (components.length === 4) {
-					return {name: components[0].replace(/\"/g, ""), type: "template"};
+				if (typeData.length === 3) {
+					return {name: name, type: "template"};
 				}
 
 				// is media
-				return {name: components[0].replace(/\"/g, ""), type: components[1].toLowerCase() === "movie" ? "video" : components[1].toLowerCase() === "still" ? "image" : components[1].toLowerCase()};
-
+				return {name: name, type: typeData[0].toLowerCase() === "movie" ? "video" : typeData[0].toLowerCase() === "still" ? "image" : typeData[0].toLowerCase()};
 			});
 		}
 	}
