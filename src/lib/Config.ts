@@ -131,7 +131,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class SystemAudioConsumer extends Consumer {
-			_type = "systemaudio";
+			_type = "system-audio";
 
 			@JsonMember({type: String, name: "channel-layout"})
 			public channelLayout: string = "stereo";
@@ -1031,6 +1031,7 @@ export namespace Config {
 
 		/** */
 		static addFormattedXMLChildsFromObject(root: Object, data: Object, blacklist?: Array<string>): Object {
+			blacklist && blacklist.push("arrayNo", "array-no");
 			for (let key in data) {
 				if ((key === "constructor") || (blacklist && blacklist.indexOf(key) > -1)) {
 					continue;
