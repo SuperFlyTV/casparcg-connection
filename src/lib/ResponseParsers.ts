@@ -311,7 +311,6 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Array<string>): Object {
-
 			return data.map((i: string) => {
 				let components: RegExpMatchArray|null = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
 				
@@ -348,7 +347,18 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			return data;
+			if(data && Array.isArray(data)) {
+				let components: RegExpMatchArray|null = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/);
+				
+				if(components === null) {
+					return {};
+				}
+
+				// let name: string = components[1].replace(/\\/g, "/");
+				let typeData: Array<string> = components[2].split(/\s+/);
+			return {size: parseInt(typeData[1]), created: typeData[2], duration: parseInt(typeData[3]), fps: typeData[4]};
+			}
+			return {};
 		}
 	}
 
