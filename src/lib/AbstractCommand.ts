@@ -478,7 +478,7 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+		constructor(params?: (string|Param|(string|Param)[]),  context?: Object) {
 			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer();
