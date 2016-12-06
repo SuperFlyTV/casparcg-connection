@@ -30,6 +30,9 @@ import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
 // Config NS
 import {Config as ConfigNS} from "./lib/Config";
 import CasparCGConfig = ConfigNS.CasparCGConfig;
+// Response NS
+import {Response as ResponseNS} from "./lib/ResponseParsers";
+import CasparCGPaths = ResponseNS.CasparCGPaths;
 
 /**
  * CasparCG Protocols
@@ -226,6 +229,7 @@ export interface ICasparCGConnection {
 	connected: boolean;
 	connectionStatus: SocketState;
 	getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
+	getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>;
 	commandQueue: Array<IAMCPCommand>;
 	removeQueuedCommand(id: string): boolean;
 	connect(options?: IConnectionOptions): void;
@@ -252,6 +256,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _queuedCommands: Array<IAMCPCommand> = [];
 	private _sentCommands: Array<IAMCPCommand> = [];
 	private _configPromise: Promise<CasparCGConfig>;
+	private _pathsPromise: Promise<CasparCGPaths>;
 
 	/**
 	 * Try to connect upon creation.
@@ -380,7 +385,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 ```
 	 var con = new CasparCG({host: "192.168.0.1", onConnect: (connected) => {
 		 	// do something once we get connected
-		 	console.log("Are we conencted?", connected)
+		 	("Are we conencted?", connected)
 	 	}
 	});	
 	 ```
@@ -641,6 +646,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 				// reset cached data
 				delete this._configPromise;
+				delete this._pathsPromise;
 				if (this.autoServerVersion) {
 					this.version(Enum.Version.SERVER).then((result: IAMCPCommand) => {
 						this._setVersionFromServerResponse(result.response);
@@ -906,19 +912,18 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			});
 		}
 		return this._configPromise;
+	}
 
-/*
-		if (!this._configPromise || refresh) {
-			configPromise = new Promise<CasparCGConfig>((resolve) => {
-				this.infoConfig().then((response) => {
-					this._config = response.response.data as CasparCGConfig;
-					resolve(this._config);
+		/** */
+	public getCasparCGPaths(refresh: boolean = false): Promise<CasparCGPaths> {
+		if (!this._pathsPromise || refresh) {
+			this._pathsPromise = new Promise<CasparCGPaths>((resolve) => {
+				this.infoPaths().then((response) => {
+					resolve(response.response.data as CasparCGPaths);
 				});
 			});
-		} else {
-			configPromise = Promise.resolve(this._config);
 		}
-		return configPromise;*/
+		return this._pathsPromise;
 	}
 
 

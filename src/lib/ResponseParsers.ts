@@ -8,8 +8,73 @@ import {Config as ConfigNS} from "./Config";
 import CasparCGConfig = ConfigNS.CasparCGConfig;
 import Config207VO = ConfigNS.Config207VO;
 import Config210VO = ConfigNS.Config210VO;
-
 export namespace Response {
+
+	/** */
+	export class CasparCGPaths {
+		media: string;
+		data: string;
+		log: string;
+		template: string;
+		thumbnail: string;
+		font: string;
+		root: string;
+
+		/** */
+		get thumbnails(): string {
+			return this.thumbnail;			
+		}
+
+		/** */
+		get absoluteMedia(): string{
+			return this.absolutePath(this.media);
+		}
+
+		/** */
+		get absoluteData(): string {
+			return this.absolutePath(this.data);
+		}
+		
+		/** */
+		get absoluteLog(): string {
+			return this.absolutePath(this.log);
+		}
+
+		/** */
+		get absoluteTemplate(): string {
+			return this.absolutePath(this.template);
+		}
+
+		/** */
+		get absoluteThumbnail(): string {
+			return this.absolutePath(this.thumbnail);
+		}
+
+		/** */
+		get absoluteThumbnails(): string {
+			return this.absolutePath(this.thumbnails);
+		}
+
+		/** */
+		get absoluteFont(): string {
+			return this.absolutePath(this.font);
+		}
+		
+		/** */
+		private absolutePath(relativeOrAbsolutePath: string): string {
+			if(relativeOrAbsolutePath.match(/\:\\|\:\//)) {
+				return relativeOrAbsolutePath;
+			}
+
+			let pathSection: RegExpMatchArray | null = relativeOrAbsolutePath.match(/^(\\|\/)*([\s\S]+)/);
+
+			if(pathSection) {
+				return this.root + pathSection[2]; 
+			}
+			
+			return this.root + "/" + relativeOrAbsolutePath;
+		}
+	}
 
 	/**
 	 * 
@@ -150,11 +215,11 @@ export namespace Response {
 						data["audio"]["mix-configs"][i] = this.childrenToArray(data["audio"]["mix-configs"][i], ["mappings"]);
 					}
 				}
-				if (data["flash"] && data["flash"]["buffer-depth"]) {
-					data["flash"]["buffer-depth"] = (data["flash"]["buffer-depth"]).toString();
-				}
 			}
-			let dataString: string = JSON.stringify(data);
+			if (data.hasOwnProperty("flash") && data["flash"].hasOwnProperty("buffer-depth")) {
+					data["flash"]["buffer-depth"] = (data["flash"]["buffer-depth"]).toString();
+			}
+			let dataString: string = JSON.stringify(data).toLowerCase();
 			let configVOClass: any;
 
 			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
@@ -310,24 +375,30 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public parse(data: Array<any>): Object {
+		public parse(data: Array<string>): Object {
+			return data.map((i: string) => {
+				let components: RegExpMatchArray|null = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
+				
+				if(components === null) {
+					return null;
+				}
 
-			return data.map((i) => {
-				let components: Array<string> = i.split(" ");
+				let name: string = components[1].replace(/\\/g, "/");
+				let typeData: Array<string> = components[2].split(/\s+/);
+
 
 				// is font
-				if (components.length === 2) {
-					return {name: components[1].replace(/\"/g, ""), type: "font"};
+				if (typeData.length === 1) {
+					return {name: name, type: "font"};
 				 }
 
 				// is template
-				if (components.length === 4) {
-					return {name: components[0].replace(/\"/g, ""), type: "template"};
+				if (typeData.length === 3) {
+					return {name: name, type: "template"};
 				}
 
 				// is media
-				return {name: components[0].replace(/\"/g, ""), type: components[1].toLowerCase() === "movie" ? "video" : components[1].toLowerCase() === "still" ? "image" : components[1].toLowerCase()};
-
+				return {name: name, type: typeData[0].toLowerCase() === "movie" ? "video" : typeData[0].toLowerCase() === "still" ? "image" : typeData[0].toLowerCase()};
 			});
 		}
 	}
@@ -341,7 +412,18 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			return data;
+			if(data && Array.isArray(data)) {
+				let components: RegExpMatchArray|null = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/);
+				
+				if(components === null) {
+					return {};
+				}
+
+				// let name: string = components[1].replace(/\\/g, "/");
+				let typeData: Array<string> = components[2].split(/\s+/);
+			return {size: parseInt(typeData[1]), created: typeData[2], duration: parseInt(typeData[3]), fps: typeData[4]};
+			}
+			return {};
 		}
 	}
 
@@ -359,7 +441,7 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 	* 
 	 */
 	export class InfoServerParser extends AbstractParser implements IResponseParser {
 
@@ -380,7 +462,41 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			return data;
+			let paths = new CasparCGPaths();
+			
+			if(data.hasOwnProperty("initial-path")) {
+				paths.root = data["initial-path"];
+			}
+
+			if(data.hasOwnProperty("media-path")) {
+				paths.media = data["media-path"];
+			}
+
+			if(data.hasOwnProperty("data-path")) {
+				paths.data = data["data-path"];
+			}
+
+			if(data.hasOwnProperty("log-path")) {
+				paths.log = data["log-path"];
+			}
+			
+			if(data.hasOwnProperty("template-path")) {
+				paths.template = data["template-path"];
+			}
+
+			if(data.hasOwnProperty("thumbnails-path")) {
+				paths.thumbnail = data["thumbnails-path"];
+			}
+
+			if(data.hasOwnProperty("thumbnail-path")) {
+				paths.thumbnail = data["thumbnail-path"];
+			}
+
+			if(data.hasOwnProperty("font-path")) {
+				paths.font = data["font-path"];
+			}
+
+			return paths;
 		}
 	}
 

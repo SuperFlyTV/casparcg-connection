@@ -217,7 +217,7 @@ export namespace Command {
 			validParams.forEach((param) => {
 				let payload: Payload = {key: "", value: {}};
 				payload.key = param.key || "";
-				payload.value = param.payload || {};
+				payload.value = param.payload !== undefined && param.payload !== null && param.payload !== false ? param.payload : {};
 				this.payload[param.name] = payload;
 			});
 
@@ -478,7 +478,7 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+		constructor(params?: (string|Param|(string|Param)[]),  context?: Object) {
 			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer();
