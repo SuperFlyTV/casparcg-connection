@@ -11,7 +11,7 @@ import Config210VO = ConfigNS.Config210VO;
 export namespace Response {
 
 	/** */
-	export class Paths {
+	export class CasparCGPaths {
 		media: string;
 		data: string;
 		log: string;
@@ -462,11 +462,7 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-
-			console.log(data);
-			
-
-			let paths = new Paths();
+			let paths = new CasparCGPaths();
 			
 			if(data.hasOwnProperty("initial-path")) {
 				paths.root = data["initial-path"];
