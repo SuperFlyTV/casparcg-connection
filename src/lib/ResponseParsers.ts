@@ -8,8 +8,73 @@ import {Config as ConfigNS} from "./Config";
 import CasparCGConfig = ConfigNS.CasparCGConfig;
 import Config207VO = ConfigNS.Config207VO;
 import Config210VO = ConfigNS.Config210VO;
-
 export namespace Response {
+
+	/** */
+	export class Paths {
+		media: string;
+		data: string;
+		log: string;
+		template: string;
+		thumbnail: string;
+		font: string;
+		root: string;
+
+		/** */
+		get thumbnails(): string {
+			return this.thumbnail;			
+		}
+
+		/** */
+		get absoluteMedia(): string{
+			return this.absolutePath(this.media);
+		}
+
+		/** */
+		get absoluteData(): string {
+			return this.absolutePath(this.data);
+		}
+		
+		/** */
+		get absoluteLog(): string {
+			return this.absolutePath(this.log);
+		}
+
+		/** */
+		get absoluteTemplate(): string {
+			return this.absolutePath(this.template);
+		}
+
+		/** */
+		get absoluteThumbnail(): string {
+			return this.absolutePath(this.thumbnail);
+		}
+
+		/** */
+		get absoluteThumbnails(): string {
+			return this.absolutePath(this.thumbnails);
+		}
+
+		/** */
+		get absoluteFont(): string {
+			return this.absolutePath(this.font);
+		}
+		
+		/** */
+		private absolutePath(relativeOrAbsolutePath: string): string {
+			if(relativeOrAbsolutePath.match(/\:\\|\:\//)) {
+				return relativeOrAbsolutePath;
+			}
+
+			let pathSection: RegExpMatchArray | null = relativeOrAbsolutePath.match(/^(\\|\/)*([\s\S]+)/);
+
+			if(pathSection) {
+				return this.root + pathSection[2]; 
+			}
+			
+			return this.root + "/" + relativeOrAbsolutePath;
+		}
+	}
 
 	/**
 	 * 
@@ -376,7 +441,7 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 	* 
 	 */
 	export class InfoServerParser extends AbstractParser implements IResponseParser {
 
@@ -397,7 +462,45 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			return data;
+
+			console.log(data);
+			
+
+			let paths = new Paths();
+			
+			if(data.hasOwnProperty("initial-path")) {
+				paths.root = data["initial-path"];
+			}
+
+			if(data.hasOwnProperty("media-path")) {
+				paths.media = data["media-path"];
+			}
+
+			if(data.hasOwnProperty("data-path")) {
+				paths.data = data["data-path"];
+			}
+
+			if(data.hasOwnProperty("log-path")) {
+				paths.log = data["log-path"];
+			}
+			
+			if(data.hasOwnProperty("template-path")) {
+				paths.template = data["template-path"];
+			}
+
+			if(data.hasOwnProperty("thumbnails-path")) {
+				paths.thumbnail = data["thumbnails-path"];
+			}
+
+			if(data.hasOwnProperty("thumbnail-path")) {
+				paths.thumbnail = data["thumbnail-path"];
+			}
+
+			if(data.hasOwnProperty("font-path")) {
+				paths.font = data["font-path"];
+			}
+
+			return paths;
 		}
 	}
 
