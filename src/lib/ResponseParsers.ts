@@ -22,7 +22,7 @@ export namespace Response {
 
 		/** */
 		get thumbnails(): string {
-			return this.thumbnail;			
+			return this.thumbnail;
 		}
 
 		/** */
@@ -34,7 +34,7 @@ export namespace Response {
 		get absoluteData(): string {
 			return this.absolutePath(this.data);
 		}
-		
+
 		/** */
 		get absoluteLog(): string {
 			return this.absolutePath(this.log);
@@ -59,20 +59,25 @@ export namespace Response {
 		get absoluteFont(): string {
 			return this.absolutePath(this.font);
 		}
-		
+
 		/** */
 		private absolutePath(relativeOrAbsolutePath: string): string {
-			if(relativeOrAbsolutePath.match(/\:\\|\:\//)) {
-				return relativeOrAbsolutePath;
+			if (relativeOrAbsolutePath.match(/\:\\|\:\//)) {
+				return CasparCGPaths.ensureTrailingSlash(relativeOrAbsolutePath);
 			}
 
 			let pathSection: RegExpMatchArray | null = relativeOrAbsolutePath.match(/^(\\|\/)*([\s\S]+)/);
 
-			if(pathSection) {
-				return this.root + pathSection[2]; 
+			if (pathSection) {
+				return CasparCGPaths.ensureTrailingSlash(this.root + pathSection[2]);
 			}
-			
-			return this.root + "/" + relativeOrAbsolutePath;
+
+			return CasparCGPaths.ensureTrailingSlash(this.root + "/" + relativeOrAbsolutePath);
+		}
+
+		/** */
+		static ensureTrailingSlash(path: string): string {
+			return ((path.slice(-1) === "/" || path.slice(-1) === "\\") ? path : path + "/");
 		}
 	}
 
@@ -378,8 +383,8 @@ export namespace Response {
 		public parse(data: Array<string>): Object {
 			return data.map((i: string) => {
 				let components: RegExpMatchArray|null = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
-				
-				if(components === null) {
+
+				if (components === null) {
 					return null;
 				}
 
@@ -412,10 +417,10 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			if(data && Array.isArray(data)) {
+			if (data && Array.isArray(data)) {
 				let components: RegExpMatchArray|null = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/);
-				
-				if(components === null) {
+
+				if (components === null) {
 					return {};
 				}
 
@@ -463,36 +468,36 @@ export namespace Response {
 		 */
 		public parse(data: Object): Object {
 			let paths = new CasparCGPaths();
-			
-			if(data.hasOwnProperty("initial-path")) {
+
+			if (data.hasOwnProperty("initial-path")) {
 				paths.root = data["initial-path"];
 			}
 
-			if(data.hasOwnProperty("media-path")) {
+			if (data.hasOwnProperty("media-path")) {
 				paths.media = data["media-path"];
 			}
 
-			if(data.hasOwnProperty("data-path")) {
+			if (data.hasOwnProperty("data-path")) {
 				paths.data = data["data-path"];
 			}
 
-			if(data.hasOwnProperty("log-path")) {
+			if (data.hasOwnProperty("log-path")) {
 				paths.log = data["log-path"];
 			}
-			
-			if(data.hasOwnProperty("template-path")) {
+
+			if (data.hasOwnProperty("template-path")) {
 				paths.template = data["template-path"];
 			}
 
-			if(data.hasOwnProperty("thumbnails-path")) {
+			if (data.hasOwnProperty("thumbnails-path")) {
 				paths.thumbnail = data["thumbnails-path"];
 			}
 
-			if(data.hasOwnProperty("thumbnail-path")) {
+			if (data.hasOwnProperty("thumbnail-path")) {
 				paths.thumbnail = data["thumbnail-path"];
 			}
 
-			if(data.hasOwnProperty("font-path")) {
+			if (data.hasOwnProperty("font-path")) {
 				paths.font = data["font-path"];
 			}
 
