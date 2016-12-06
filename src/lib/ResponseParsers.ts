@@ -17,7 +17,7 @@ export namespace Response {
 		log: string;
 		template: string;
 		thumbnail: string;
-		font: string;
+		font?: string | undefined;
 		root: string;
 
 		/** */
@@ -56,8 +56,8 @@ export namespace Response {
 		}
 
 		/** */
-		get absoluteFont(): string {
-			return this.absolutePath(this.font);
+		get absoluteFont(): string | undefined {
+			return this.font ? this.absolutePath(this.font) : undefined;
 		}
 
 		/** */
