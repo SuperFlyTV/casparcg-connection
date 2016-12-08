@@ -179,7 +179,7 @@ export namespace Config {
 		/** */
 		@JsonObject
 		export class NewtekIvgaConsumer extends Consumer {
-			_type = "newtekivga";
+			_type = "newtek-ivga";
 
 			@JsonMember({type: String, name: "channel-layout"})
 			public channelLayout: string = "stereo";	// @todo: ns 2.0 only
