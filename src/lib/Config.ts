@@ -994,7 +994,6 @@ export namespace Config {
 				if (this.osc.predefinedClients && this.osc.predefinedClients.length > 0) {
 					let predefinedClients = osc.ele("predefined-clients");
 					this.osc.predefinedClients.forEach((i) => {
-						console.log(i);
 						predefinedClients;
 						let client = predefinedClients.ele(i._type);
 						CasparCGConfig.addFormattedXMLChildsFromObject(client, i, ["_type"]);

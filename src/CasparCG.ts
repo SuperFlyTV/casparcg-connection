@@ -642,7 +642,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				this.onConnectionChanged(this._connected);
 			}
 			if (this._connected) {
-				// @todo: handle flush buffer + shift/push version command in queue.
+				// @todo: handle flush SENT-buffer + shift/push version command in queue.
 
 				// reset cached data
 				delete this._configPromise;
@@ -846,8 +846,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			currentCommand.status =  IAMCPStatus.Failed;
 			currentCommand.reject(currentCommand);
 		}
-
 		this.fire(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
+
+
+		if(this._socket.isRestarting) {
+			return;
+		}		
+
 		this._expediteCommand();
 	}
 
@@ -884,8 +889,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				}
 			}
 		} else {
-			// reconnect on missing queue
-			this.reconnect();
+
+			
+
+			// reconnect on missing connection, if  not restating
+			if(!this._socket.isRestarting) {
+				this.reconnect();
+			}
 		}
 	}
 

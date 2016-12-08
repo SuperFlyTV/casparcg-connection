@@ -1,7 +1,7 @@
 import * as net from "net";
 import * as _ from "highland";
 import {EventEmitter} from "hap";
-import {AMCPUtil} from "./AMCP";
+import {AMCP, AMCPUtil} from "./AMCP";
 // Command NS
 import {Command as CommandNS} from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
@@ -20,6 +20,7 @@ export interface ICasparCGSocket {
 	host: string;
 	port: number;
 	socketStatus: SocketState;
+	isRestarting: boolean;
 	connect(): void;
 	disconnect(): void;
 	dispose(): void;
@@ -41,8 +42,8 @@ export enum SocketState {
  * 
  */
 export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
+	public isRestarting: boolean = false;
 	private _client: net.Socket;
-
 	private _host: string;
 	private _port: number;
 	private _autoReconnect: boolean;
@@ -53,7 +54,6 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _commandTimeoutTimer: NodeJS.Timer;
 	private _commandTimeout: number = 5000; // @todo make connectionOption!
 	private _socketStatus: SocketState = SocketState.unconfigured;
-
 	private _parsedResponse: AMCPUtil.CasparCGSocketResponse | undefined;
 
 	/**
@@ -72,7 +72,6 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		this._client.on("error", (error: Error) => this._onError(error));
 		this._client.on("drain", () => this._onDrain());
 		this._client.on("close", (hadError: boolean) => this._onClose(hadError));
-		_(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
 		this.socketStatus = SocketState.configured;
 	}
 
@@ -141,11 +140,12 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 					this._clearReconnectInterval();
 					return;
 				}
-
-			// new attempt
-			this.log("Socket attempting reconnection");
-			this._reconnectAttempt++;
-			this.connect();
+				// new attempt if not allready connected
+				if(!((this.socketStatus &  SocketState.connected) === SocketState.connected)) {
+					this.log("Socket attempting reconnection");
+					this._reconnectAttempt++;
+					this.connect();
+				}
 			}
 		}
 	}
@@ -232,10 +232,12 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			commandString += (payload.key ? payload.key + " " : "") + payload.value;
 		}
 
+		if(command instanceof AMCP.RestartCommand) {
+			this.isRestarting = true;
+		}
 		this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout);
 		this._client.write(`${commandString}\r\n`);
 		command.status = IAMCPStatus.Sent;
-
 		this.log(commandString);
 		return command;
 	}
@@ -259,7 +261,9 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 * 
 	 */
 	private _onConnected() {
+		this.isRestarting = false;
 		this._clearReconnectInterval();
+		_(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
 		this.connected = true;
 	}
 
@@ -291,7 +295,10 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			this._parsedResponse = undefined;
 			return;
 		} else {
-			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(new AMCPUtil.CasparCGSocketResponse(i)));
+			let parsedResponse: AMCPUtil.CasparCGSocketResponse = new AMCPUtil.CasparCGSocketResponse(i);
+			if(!isNaN(parsedResponse.statusCode)) {
+				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
+			}
 			return;
 		}
 	}
@@ -317,7 +324,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	private _onClose(hadError: boolean) {
 		this.connected = false;
-		if (hadError) {
+		console.log(hadError, this.isRestarting, this.autoReconnect);
+		if (hadError || this.isRestarting) {
 			this.socketStatus |= SocketState.lostConnection;
 			// error message, not "log"
 			// dispatch (is it done through error handler first????)
