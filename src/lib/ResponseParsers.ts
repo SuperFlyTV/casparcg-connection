@@ -1,4 +1,5 @@
 import {TypedJSON} from "typedjson-npm";
+import * as Path from "path";
 import * as _ from "highland";
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
 // Options NS
@@ -66,13 +67,7 @@ export namespace Response {
 				return CasparCGPaths.ensureTrailingSlash(relativeOrAbsolutePath);
 			}
 
-			let pathSection: RegExpMatchArray | null = relativeOrAbsolutePath.match(/^(\\|\/)*([\s\S]+)/);
-
-			if (pathSection) {
-				return CasparCGPaths.ensureTrailingSlash(this.root + pathSection[2]);
-			}
-
-			return CasparCGPaths.ensureTrailingSlash(this.root + "/" + relativeOrAbsolutePath);
+			return CasparCGPaths.ensureTrailingSlash(Path.join(this.root, relativeOrAbsolutePath));
 		}
 
 		/** */
