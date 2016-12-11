@@ -390,7 +390,7 @@ export namespace Config {
 		@JsonObject
 		export class Osc {
 
-			public disableSendToAmcpClient?: boolean | null;
+			public disableSendToAmcpClients?: boolean | null;
 
 			@JsonMember({type: Number, name: "default-port"})
 			public defaultPort: number = 6250;
@@ -530,7 +530,7 @@ export namespace Config {
 		@JsonObject
 		export class Osc extends v2xx.Osc {
 			@JsonMember({type: Boolean, name: "disable-send-to-amcp-clients"})
-			public disableSendToAmcpClient: boolean = false;
+			public disableSendToAmcpClients: boolean = false;
 		}
 
 		/**  */
@@ -817,7 +817,7 @@ export namespace Config {
 			// osc
 			this.osc = new v2xx.Osc();
 			this.osc.defaultPort = configVO.osc.defaultPort;
-			this.osc.disableSendToAmcpClient = null;
+			this.osc.disableSendToAmcpClients = null;
 			this.osc.predefinedClients = configVO.osc.predefinedClients;
 
 			// audio
@@ -989,7 +989,7 @@ export namespace Config {
 			// osc
 			if (this.osc) {
 				let osc = root.ele("osc");
-				CasparCGConfig.addFormattedXMLChildsFromArray(osc, this.osc, ["defaultPort", "disableSendToAmcpClient"]);
+				CasparCGConfig.addFormattedXMLChildsFromArray(osc, this.osc, ["defaultPort", "disableSendToAmcpClients"]);
 				// predefined clients
 				if (this.osc.predefinedClients && this.osc.predefinedClients.length > 0) {
 					let predefinedClients = osc.ele("predefined-clients");
