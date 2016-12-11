@@ -63,7 +63,7 @@ export namespace Response {
 
 		/** */
 		private absolutePath(relativeOrAbsolutePath: string): string {
-			if (Path.isAbsolute(relativeOrAbsolutePath)) {
+			if (relativeOrAbsolutePath.match(/\:\\|\:\//)) {
 				return CasparCGPaths.ensureTrailingSlash(relativeOrAbsolutePath);
 			}
 
