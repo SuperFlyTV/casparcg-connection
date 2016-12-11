@@ -324,7 +324,6 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	private _onClose(hadError: boolean) {
 		this.connected = false;
-		console.log(hadError, this.isRestarting, this.autoReconnect);
 		if (hadError || this.isRestarting) {
 			this.socketStatus |= SocketState.lostConnection;
 			// error message, not "log"
