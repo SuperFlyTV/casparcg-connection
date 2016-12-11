@@ -658,7 +658,7 @@ export namespace Config {
 		@JsonMember({type: Boolean, name: "force-deinterlace"})
 		public forceDeinterlace: boolean = false;
 		@JsonMember({type: String})				// @todo: enum
-		public accellerator: string = "auto";
+		public accelerator: string = "auto";
 		@JsonMember({type: Array, elements: v2xx.Controller, isRequired: true})
 		public controllers: Array<v2xx.Controller> = [defaultAMCPController, defaultLOGController];
 		@JsonMember({type: v21x.Thumbnails})
@@ -685,7 +685,7 @@ export namespace Config {
 		autoDeinterlace: boolean | null;
 		autoTranscode: boolean | null;
 		pipelineTokens: number | null;
-		accellerator: string | null;
+		accelerator: string | null;
 		thumbnails: v21x.Thumbnails;
 		flash: v2xx.Flash;
 		html: v21x.Html;
@@ -708,7 +708,7 @@ export namespace Config {
 		public autoDeinterlace: boolean | null = null;
 		public autoTranscode: boolean | null = null;
 		public pipelineTokens: number | null = null;
-		public accellerator: string | null = null;
+		public accelerator: string | null = null;
 		public thumbnails: v21x.Thumbnails = new v21x.Thumbnails;
 		public flash: v2xx.Flash = new v2xx.Flash();
 		public html: v21x.Html = new v21x.Html();
@@ -799,8 +799,8 @@ export namespace Config {
 			// pipeline tokens
 			this.pipelineTokens = configVO.pipelineTokens;
 
-			// accellerator
-			this.accellerator = null;
+			// accelerator
+			this.accelerator = null;
 
 			// thumbnails
 			this.thumbnails = configVO.thumbnails;
@@ -885,8 +885,8 @@ export namespace Config {
 			// pipeline tokens
 			this.pipelineTokens = -1; // @todo: null value
 
-			// accellerator
-			this.accellerator = configVO.accellerator;
+			// accelerator
+			this.accelerator = configVO.accelerator;
 
 			// thumbnails
 			this.thumbnails = configVO.thumbnails;
@@ -955,7 +955,7 @@ export namespace Config {
 			});
 
 			// all root-level single values
-			CasparCGConfig.addFormattedXMLChildsFromArray(root, this, ["lockClearPhrase", "logLevel", "logCategories", "forceDeinterlace", "channelGrid", "accellerator"]);
+			CasparCGConfig.addFormattedXMLChildsFromArray(root, this, ["lockClearPhrase", "logLevel", "logCategories", "forceDeinterlace", "channelGrid", "accelerator"]);
 
 			// mixer
 			if (this.mixer) {
