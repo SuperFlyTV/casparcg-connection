@@ -141,7 +141,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 					return;
 				}
 				// new attempt if not allready connected
-				if(!((this.socketStatus &  SocketState.connected) === SocketState.connected)) {
+				if (!((this.socketStatus &  SocketState.connected) === SocketState.connected)) {
 					this.log("Socket attempting reconnection");
 					this._reconnectAttempt++;
 					this.connect();
@@ -232,7 +232,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			commandString += (payload.key ? payload.key + " " : "") + payload.value;
 		}
 
-		if(command instanceof AMCP.RestartCommand) {
+		if (command instanceof AMCP.RestartCommand) {
 			this.isRestarting = true;
 		}
 		this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout);
@@ -296,7 +296,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			return;
 		} else {
 			let parsedResponse: AMCPUtil.CasparCGSocketResponse = new AMCPUtil.CasparCGSocketResponse(i);
-			if(!isNaN(parsedResponse.statusCode)) {
+			if (!isNaN(parsedResponse.statusCode)) {
 				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
 			}
 			return;

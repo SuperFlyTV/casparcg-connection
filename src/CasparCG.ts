@@ -396,11 +396,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		super();
 		let options: ConnectionOptions;
 		if (typeof hostOrOptions === "object") {
-		 	options = new ConnectionOptions(hostOrOptions);
+			options = new ConnectionOptions(hostOrOptions);
 		}else {
 			options = new ConnectionOptions(hostOrOptions, port);
 		}
-		
+
 
 		// if both options and port specified, port overrides options
 		if (port && (port !== options.port)) {
@@ -849,9 +849,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.fire(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
 
 
-		if(this._socket.isRestarting) {
+		if (this._socket.isRestarting) {
 			return;
-		}		
+		}
 
 		this._expediteCommand();
 	}
@@ -890,10 +890,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			}
 		} else {
 
-			
+
 
 			// reconnect on missing connection, if  not restating
-			if(!this._socket.isRestarting) {
+			if (!this._socket.isRestarting) {
 				this.reconnect();
 			}
 		}

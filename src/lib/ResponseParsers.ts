@@ -514,15 +514,15 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-			
+
 			// wrap devices in arrays (if single device of a type)
-			if(data.hasOwnProperty("decklink") && data["decklink"].hasOwnProperty("device")) {
-				if(!Array.isArray(data["decklink"]["device"])) {
+			if (data.hasOwnProperty("decklink") && data["decklink"].hasOwnProperty("device")) {
+				if (!Array.isArray(data["decklink"]["device"])) {
 					data["decklink"]["device"] = [data["decklink"]["device"]];
 				}
 			}
-			if(data.hasOwnProperty("bluefish") && data["bluefish"].hasOwnProperty("device")) {
-				if(!Array.isArray(data["bluefish"]["device"])) {
+			if (data.hasOwnProperty("bluefish") && data["bluefish"].hasOwnProperty("device")) {
+				if (!Array.isArray(data["bluefish"]["device"])) {
 					data["bluefish"]["device"] = [data["bluefish"]["device"]];
 				}
 			}
