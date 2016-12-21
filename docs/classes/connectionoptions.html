@@ -104,6 +104,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#autoreconnect" class="tsd-kind-icon">auto<wbr>Reconnect</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#autoreconnectattempts" class="tsd-kind-icon">auto<wbr>Reconnect<wbr>Attempts</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#autoreconnectinterval" class="tsd-kind-icon">auto<wbr>Reconnect<wbr>Interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#autoserverversion" class="tsd-kind-icon">auto<wbr>Server<wbr>Version</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#debug" class="tsd-kind-icon">debug</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#host" class="tsd-kind-icon">host</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#onconnected" class="tsd-kind-icon">on<wbr>Connected</a></li>
@@ -114,6 +115,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#onlog" class="tsd-kind-icon">on<wbr>Log</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#port" class="tsd-kind-icon">port</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#queuemode" class="tsd-kind-icon">queue<wbr>Mode</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="connectionoptions.html#serverversion" class="tsd-kind-icon">server<wbr>Version</a></li>
 							</ul>
 						</section>
 					</div>
@@ -125,20 +127,23 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Connection<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><a href="../interfaces/iconnectionoptions.html" class="tsd-signature-type">IConnectionOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="connectionoptions.html" class="tsd-signature-type">ConnectionOptions</a></li>
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Connection<wbr>Options<span class="tsd-signature-symbol">(</span>host<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, port<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="connectionoptions.html" class="tsd-signature-type">ConnectionOptions</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Connection<wbr>Options<span class="tsd-signature-symbol">(</span>host<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, port<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="connectionoptions.html" class="tsd-signature-type">ConnectionOptions</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Connection<wbr>Options<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><a href="../interfaces/iconnectionoptions.html" class="tsd-signature-type">IConnectionOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="connectionoptions.html" class="tsd-signature-type">ConnectionOptions</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L60">lib/AMCPConnectionOptions.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L74">lib/AMCPConnectionOptions.ts:74</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <a href="../interfaces/iconnectionoptions.html" class="tsd-signature-type">IConnectionOptions</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> host: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> port: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="connectionoptions.html" class="tsd-signature-type">ConnectionOptions</a></h4>
@@ -146,16 +151,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L65">lib/AMCPConnectionOptions.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L79">lib/AMCPConnectionOptions.ts:79</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>host: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> port: <span class="tsd-signature-type">number</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <a href="../interfaces/iconnectionoptions.html" class="tsd-signature-type">IConnectionOptions</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="connectionoptions.html" class="tsd-signature-type">ConnectionOptions</a></h4>
@@ -172,7 +174,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoconnect">autoConnect</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L49">lib/AMCPConnectionOptions.ts:49</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L61">lib/AMCPConnectionOptions.ts:61</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -183,7 +185,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoreconnect">autoReconnect</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L50">lib/AMCPConnectionOptions.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L62">lib/AMCPConnectionOptions.ts:62</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -194,7 +196,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoreconnectattempts">autoReconnectAttempts</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L52">lib/AMCPConnectionOptions.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L64">lib/AMCPConnectionOptions.ts:64</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -205,7 +207,18 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoreconnectinterval">autoReconnectInterval</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L51">lib/AMCPConnectionOptions.ts:51</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L63">lib/AMCPConnectionOptions.ts:63</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="autoserverversion" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> auto<wbr>Server<wbr>Version</h3>
+					<div class="tsd-signature tsd-kind-icon">auto<wbr>Server<wbr>Version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#autoserverversion">autoServerVersion</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L65">lib/AMCPConnectionOptions.ts:65</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -216,7 +229,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#debug">debug</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L54">lib/AMCPConnectionOptions.ts:54</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L68">lib/AMCPConnectionOptions.ts:68</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -227,7 +240,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#host">host</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L47">lib/AMCPConnectionOptions.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L59">lib/AMCPConnectionOptions.ts:59</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -238,7 +251,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onconnected">onConnected</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L58">lib/AMCPConnectionOptions.ts:58</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L72">lib/AMCPConnectionOptions.ts:72</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -249,7 +262,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onconnectionchanged">onConnectionChanged</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L57">lib/AMCPConnectionOptions.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L71">lib/AMCPConnectionOptions.ts:71</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -260,7 +273,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onconnectionstatus">onConnectionStatus</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L56">lib/AMCPConnectionOptions.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L70">lib/AMCPConnectionOptions.ts:70</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -271,7 +284,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#ondisconnected">onDisconnected</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L59">lib/AMCPConnectionOptions.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L73">lib/AMCPConnectionOptions.ts:73</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -282,7 +295,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onerror">onError</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L60">lib/AMCPConnectionOptions.ts:60</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L74">lib/AMCPConnectionOptions.ts:74</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -293,7 +306,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#onlog">onLog</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L55">lib/AMCPConnectionOptions.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L69">lib/AMCPConnectionOptions.ts:69</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -304,7 +317,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#port">port</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L48">lib/AMCPConnectionOptions.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L60">lib/AMCPConnectionOptions.ts:60</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -315,7 +328,18 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#queuemode">queueMode</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L53">lib/AMCPConnectionOptions.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L67">lib/AMCPConnectionOptions.ts:67</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="serverversion" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> server<wbr>Version</h3>
+					<div class="tsd-signature tsd-kind-icon">server<wbr>Version<span class="tsd-signature-symbol">:</span> <a href="../enums/options.serverversion.html" class="tsd-signature-type">ServerVersion</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<aside class="tsd-sources">
+						<p>Implementation of <a href="../interfaces/iconnectionoptions.html">IConnectionOptions</a>.<a href="../interfaces/iconnectionoptions.html#serverversion">serverVersion</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AMCPConnectionOptions.ts#L66">lib/AMCPConnectionOptions.ts:66</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -361,6 +385,9 @@
 								<a href="connectionoptions.html#autoreconnectinterval" class="tsd-kind-icon">auto<wbr>Reconnect<wbr>Interval</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="connectionoptions.html#autoserverversion" class="tsd-kind-icon">auto<wbr>Server<wbr>Version</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="connectionoptions.html#debug" class="tsd-kind-icon">debug</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
@@ -389,6 +416,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="connectionoptions.html#queuemode" class="tsd-kind-icon">queue<wbr>Mode</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="connectionoptions.html#serverversion" class="tsd-kind-icon">server<wbr>Version</a>
 							</li>
 						</ul>
 					</li>
