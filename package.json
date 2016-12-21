@@ -21,8 +21,19 @@
   "bugs": {
     "url": "https://github.com/SuperFlyTV/casparcg-connection/issues"
   },
-  "license": "GPL-3.0",
-  "author": "Jesper Stærkær @ SuperFly.tv",
+  "license": {
+    "type": "MIT",
+    "url": "https://opensource.org/licenses/MIT"
+  },
+  "directories": {
+    "lib": "src/",
+    "doc": "docs/"
+  },
+  "author": { 
+    "name" : "Jesper Stærkær",
+    "email" : "jesper@superfly.tv",
+    "url" : "http://superfly.tv"
+  },
   "homepage": "http://superfly.tv",
   "keywords": [
     "casparcg",
