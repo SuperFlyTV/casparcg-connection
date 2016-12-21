@@ -1000,7 +1000,115 @@ export namespace Config {
 		}
 
 		/** */
-		public get V207ConfigXML(): string {return ""; }
+		public get V207ConfigXML(): string {
+			let root = xmlbuilder("configuration");
+
+			// paths
+			let paths: v2xx.Paths = new v2xx.Paths();
+			paths = this.paths;
+			paths.thumbnailsPath = paths.thumbnailPath;
+			delete paths.thumbnailPath;
+
+			CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("paths"), paths); // , ["mediaPath", "logPath", "dataPath", "templatesPath", "thumbnailPath"]);
+
+			// channels
+			let channels = root.ele("channels");
+			this.channels.forEach((i) => {
+				let channel = channels.ele("channel");
+				CasparCGConfig.addFormattedXMLChildsFromObject(channel, i, ["_type", "consumers", "_consumers"]);
+
+				// consumer
+				let consumers = channel.ele("consumers");
+				i.consumers.forEach((i) => {
+					let consumer = consumers.ele(i._type);
+					CasparCGConfig.addFormattedXMLChildsFromObject(consumer, i, ["_type"]);
+				});
+			});
+
+			// controllers
+			let controllers = root.ele("controllers");
+			this.controllers.forEach((i) => {
+				let controller = controllers.ele(i._type);
+				CasparCGConfig.addFormattedXMLChildsFromObject(controller, i, ["_type"]);
+			});
+
+			// all root-level single values
+			CasparCGConfig.addFormattedXMLChildsFromArray(root, this, ["logLevel", "autoDeinterlace", "autoTranscode", "pipelineTokens", "channelGrid"]);
+
+			// mixer
+			if (this.mixer) {
+				CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("mixer"), this.mixer);
+			}
+
+			// flash
+			if (this.flash) {
+				CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("flash"), this.flash);
+			}
+
+			// template hosts
+			if (this.templateHosts && this.templateHosts.length > 0) {
+				let templateHosts = root.ele("template-hosts");
+				this.templateHosts.forEach((i) => {
+					let templatehost = templateHosts.ele(i._type);
+					CasparCGConfig.addFormattedXMLChildsFromObject(templatehost, i, ["_type"]);
+				});
+			}
+
+			// thumbnails
+			if (this.thumbnails) {
+				CasparCGConfig.addFormattedXMLChildsFromObject(root.ele("thumbnails"), this.thumbnails);
+			}
+
+			// osc
+			if (this.osc) {
+				let osc = root.ele("osc");
+				// predefined clients
+				if (this.osc.predefinedClients && this.osc.predefinedClients.length > 0) {
+					let predefinedClients = osc.ele("predefined-clients");
+					this.osc.predefinedClients.forEach((i) => {
+						predefinedClients;
+						let client = predefinedClients.ele(i._type);
+						CasparCGConfig.addFormattedXMLChildsFromObject(client, i, ["_type"]);
+					});
+				}
+			}
+
+			// audio
+			if (this.audio && ((this.audio.channelLayouts && this.audio.channelLayouts.length > 0) || (this.audio.mixConfigs && this.audio.mixConfigs.length > 0))) {
+				let audio = root.ele("audio");
+				if (this.audio.channelLayouts && this.audio.channelLayouts.length > 0) {
+					let channelLayouts = audio.ele("channel-layouts");
+					this.audio.channelLayouts.forEach((i) => {
+						let channelLayout = channelLayouts.ele("channel-layout");
+						if (i.name) channelLayout.att("name", i.name);
+						if (i.type) channelLayout.att("type", i.type);
+						if (i.numChannels) channelLayout.att("num-channels", i.numChannels);
+						if (i.channelOrder) channelLayout.att("channels", i.channelOrder);
+					});
+				}
+
+				if (this.audio.mixConfigs && this.audio.mixConfigs.length > 0) {
+					let mixConfigs = audio.ele("mix-configs");
+					this.audio.mixConfigs.forEach((i) => {
+						let mixConfig = mixConfigs.ele("mix-config");
+						mixConfig.ele("from", i.fromType);
+						mixConfig.ele("to", i.toTypes);
+						mixConfig.ele("mix", i.mix.mixType);
+						let mappings = mixConfig.ele("mappings");
+						for (let o in i.mix.destinations) {
+							let destination: Array<{source: string, expression: string}> = i.mix.destinations[o];
+							destination.forEach((u) => {
+								mappings.ele("mapping", u.source + " " + o + " " + u.expression);
+							});
+						}
+					});
+
+				}
+
+			}
+
+			return root.end({pretty: true});
+		}
 
 		/** */
 		public get V210ConfigXML(): string {
