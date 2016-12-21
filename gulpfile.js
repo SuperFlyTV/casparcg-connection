@@ -3,6 +3,7 @@ var gulp        = require('gulp'),
     typescript  = require('typescript'),
     ts          = require('gulp-typescript'),
     del         = require('del'),
+    zip         = require('gulp-zip'),
     typedoc     = require('gulp-typedoc');
 
 var project = ts.createProject('tsconfig.json', {typescript: typescript});
@@ -14,6 +15,18 @@ gulp.task('static', function () {
     //.src(['assets/**/*.*'])
     //.pipe(gulp.dest(DIST_DIR + '/assets'));
 });
+
+//dist zip
+gulp.task('dist', function () {
+  return gulp.src(['js', 'js/**/*.**', 'license', 'readme.md'], {base: '.'})
+        .pipe(zip('casparcg-connection-js.zip'))
+        .pipe(gulp.dest('tmp'));
+  //return gulp.src('**/**/**.*', {base: '.'})
+  //      .pipe(gitignore())
+  //      .pipe(zip('casparcg-connection-src.zip'))
+  //      .pipe(gulp.dest('tmp'));
+});
+
 
 //compile
 gulp.task('compile', function () {
