@@ -211,8 +211,11 @@ export namespace Response {
 							o += o.indexOf(".") === -1 ? ".0" : "";
 							data["audio"]["mix-configs"][i]["from-type"] = o;
 						}
-
-						data["audio"]["mix-configs"][i] = this.childrenToArray(data["audio"]["mix-configs"][i], ["mappings"]);
+						if (data["audio"]["mix-configs"][i]["mappings"]["mapping"] && Array.isArray(data["audio"]["mix-configs"][i]["mappings"]["mapping"])) {
+							data["audio"]["mix-configs"][i]["mappings"] = data["audio"]["mix-configs"][i]["mappings"]["mapping"];
+						}else if (data["audio"]["mix-configs"][i]["mappings"]["mapping"]) {
+							data["audio"]["mix-configs"][i]["mappings"] = [(data["audio"]["mix-configs"][i]["mappings"]["mapping"]).toString()];
+						}
 					}
 				}
 			}

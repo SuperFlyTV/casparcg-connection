@@ -837,7 +837,46 @@ export namespace Config {
 				let mixConfig: v21x.MixConfig = new v21x.MixConfig();
 				mixConfig._type = i._type;
 				mixConfig.fromType = i.from;
-				mixConfig.mix = "";	// @todo: algorithm for converting 207 to 210 mix
+
+				// convert 2.0.x mix-config to 2.1.x
+				let mixString: string = "";
+				let mixOperator: string = i.mix === "add" ? "=" : i.mix === "average" ? "<" : "";
+				let destinations: {[destination: string]: Array<{source: string, expression: string}>} = {};
+
+				let mapSections: RegExpMatchArray | null;
+				for (let o: number = 0; o < i.mappings.length; o++) {
+					mapSections = i.mappings[o].match(/(\S+)\s+(\S+)\s+(\S+)/);
+					if (mapSections !== null) {
+						let src: string = mapSections[1];
+						let dst: string = mapSections[2];
+						let expr: string = mapSections[3];
+
+						if (!destinations.hasOwnProperty(dst)) {
+							destinations[dst] = [];
+						}
+						destinations[dst].push({source: src, expression: expr});
+					}
+				}
+
+				let currentMixOperator: string;
+				let destination: Array<{source: string, expression: string}>;
+				for (let o in destinations) {
+					destination = destinations[o];
+					if (destination.length > 1) {
+						currentMixOperator = mixOperator;
+						mixString += o + " " + currentMixOperator + " ";
+						destination.forEach((u) => {
+							mixString += (u.expression === "1.0" ? u.source : (u.expression.toString() + "*" + u.source)) + " + ";
+						});
+						mixString = mixString.replace(/\s\+\s$/, "");
+					}else {
+						mixString += o + " = " +  (destination[0].expression === "1.0" ? destination[0].source : (destination[0].expression.toString() + "*" + destination[0].source));
+					}
+					mixString += " | ";
+				}
+
+				mixConfig.mix = mixString.replace(/\s\|\s$/, "");
+
 				mixConfig.toTypes = i.to;
 				this.audio.mixConfigs.push(mixConfig);
 			});
