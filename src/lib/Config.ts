@@ -597,6 +597,31 @@ export namespace Config {
 	export namespace v21x {
 	}
 
+	/** */
+	export namespace CasparCGAbstract {
+
+		/** */
+		export class Audio {
+			public channelLayouts: Array<v21x.ChannelLayout> = [];
+			public mixConfigs: Array<CasparCGAbstract.MixConfig> = [];
+		}
+
+		/**  */
+		export class MixConfig {
+			@JsonMember({type: String})
+			public _type: string;
+
+			@JsonMember({type: String, name: "from-type"})
+			public fromType: string;
+
+			@JsonMember({type: String, name: "to-types"})
+			public toTypes: string;
+
+			@JsonMember({type: String})
+			public mix: {mixType: string, destinations: {[destination: string]: Array<{source: string, expression: string}>}};
+		}
+	}
+
 	/**  */
 	const defaultChannel_2xx: v2xx.Channel = {videoMode: "PAL", _consumers: [], consumers: [], _type: "channel"};
 	const defaultAMCPController: v2xx.Controller = {_type: "tcp", port: 5250, protocol: "AMCP"};
@@ -691,7 +716,7 @@ export namespace Config {
 		html: v21x.Html;
 		templateHosts: Array<v2xx.TemplateHost>;
 		osc: v2xx.Osc;
-		audio: v21x.Audio;
+		audio: CasparCGAbstract.Audio;
 	}
 
 	/** */
@@ -709,12 +734,12 @@ export namespace Config {
 		public autoTranscode: boolean | null = null;
 		public pipelineTokens: number | null = null;
 		public accelerator: string | null = null;
-		public thumbnails: v21x.Thumbnails = new v21x.Thumbnails;
+		public thumbnails: v21x.Thumbnails = new v21x.Thumbnails();
 		public flash: v2xx.Flash = new v2xx.Flash();
 		public html: v21x.Html = new v21x.Html();
 		public templateHosts: Array<v2xx.TemplateHost> = [];
-		public osc: v2xx.Osc = new v2xx.Osc;
-		public audio: v21x.Audio = new v21x.Audio;
+		public osc: v2xx.Osc = new v2xx.Osc();
+		public audio: CasparCGAbstract.Audio = new CasparCGAbstract.Audio();
 	}
 
 	/** */	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
@@ -821,7 +846,7 @@ export namespace Config {
 			this.osc.predefinedClients = configVO.osc.predefinedClients;
 
 			// audio
-			this.audio = new v21x.Audio();
+			this.audio = new CasparCGAbstract.Audio();
 			this.audio.channelLayouts = new Array<v21x.ChannelLayout>();
 			configVO.audio.channelLayouts.forEach((i: v2xx.ChannelLayout) => {
 				let channelLayout: v21x.ChannelLayout = new v21x.ChannelLayout();
@@ -832,17 +857,16 @@ export namespace Config {
 				channelLayout.type = i.type;
 				this.audio.channelLayouts.push(channelLayout);
 			});
-			this.audio.mixConfigs = new Array<v21x.MixConfig>();
+			this.audio.mixConfigs = new Array<CasparCGAbstract.MixConfig>();
 			configVO.audio.mixConfigs.forEach((i: v2xx.MixConfig) => {
-				let mixConfig: v21x.MixConfig = new v21x.MixConfig();
+				let mixConfig: CasparCGAbstract.MixConfig = new CasparCGAbstract.MixConfig();
 				mixConfig._type = i._type;
 				mixConfig.fromType = i.from;
+				mixConfig.toTypes = i.to;
+				mixConfig.mix = {mixType: i.mix, destinations: {}};
 
 				// convert 2.0.x mix-config to 2.1.x
-				let mixString: string = "";
-				let mixOperator: string = i.mix === "add" ? "=" : i.mix === "average" ? "<" : "";
 				let destinations: {[destination: string]: Array<{source: string, expression: string}>} = {};
-
 				let mapSections: RegExpMatchArray | null;
 				for (let o: number = 0; o < i.mappings.length; o++) {
 					mapSections = i.mappings[o].match(/(\S+)\s+(\S+)\s+(\S+)/);
@@ -858,26 +882,7 @@ export namespace Config {
 					}
 				}
 
-				let currentMixOperator: string;
-				let destination: Array<{source: string, expression: string}>;
-				for (let o in destinations) {
-					destination = destinations[o];
-					if (destination.length > 1) {
-						currentMixOperator = mixOperator;
-						mixString += o + " " + currentMixOperator + " ";
-						destination.forEach((u) => {
-							mixString += (u.expression === "1.0" ? u.source : (u.expression.toString() + "*" + u.source)) + " + ";
-						});
-						mixString = mixString.replace(/\s\+\s$/, "");
-					}else {
-						mixString += o + " = " +  (destination[0].expression === "1.0" ? destination[0].source : (destination[0].expression.toString() + "*" + destination[0].source));
-					}
-					mixString += " | ";
-				}
-
-				mixConfig.mix = mixString.replace(/\s\|\s$/, "");
-
-				mixConfig.toTypes = i.to;
+				mixConfig.mix.destinations = destinations;
 				this.audio.mixConfigs.push(mixConfig);
 			});
 		}
@@ -943,7 +948,39 @@ export namespace Config {
 			this.osc = configVO.osc;
 
 			// audio
-			this.audio = configVO.audio;
+			this.audio = new CasparCGAbstract.Audio();
+			this.audio.channelLayouts = configVO.audio.channelLayouts;
+			this.audio.mixConfigs = new Array<CasparCGAbstract.MixConfig>();
+			configVO.audio.mixConfigs.forEach((i: v21x.MixConfig) => {
+				let mixConfig: CasparCGAbstract.MixConfig = new CasparCGAbstract.MixConfig();
+				mixConfig._type = i._type;
+				mixConfig.fromType = i.fromType;
+				mixConfig.toTypes = i.toTypes;
+
+				let destinations: {[destination: string]: Array<{source: string, expression: string}>} = {};
+				let mixType: string = i.mix.match(/\&lt\;|\</g) !== null ? "average" : "add";
+				let src: string;
+				let dest: string;
+				let expr: string;
+				i.mix.split("|").map((i) => i.replace(/^\s*|\s*$/g, "")).forEach((o) => {
+					let srcDstSplit = o.split(/\&lt\;|\<|\=/);
+					dest = srcDstSplit[0].replace(/^\s*|\s*$/g, "");
+					destinations[dest] = [];
+					srcDstSplit[1].split("+").forEach((u) => {
+						let exprSplit: Array<string> = u.split("*");
+						if (exprSplit.length > 1) {
+							expr = exprSplit[0].replace(/^\s*|\s*$/g, "");
+							src = exprSplit[1].replace(/^\s*|\s*$/g, "");
+						}else {
+							src = exprSplit[0].replace(/^\s*|\s*$/g, "");
+							expr = "1.0";
+						}
+						destinations[dest].push({source: src, expression: expr});
+					});
+				});
+				mixConfig.mix = {mixType: mixType, destinations: destinations};
+				this.audio.mixConfigs.push(mixConfig);
+			});
 		}
 
 		/** */
@@ -1056,10 +1093,27 @@ export namespace Config {
 				if (this.audio.mixConfigs && this.audio.mixConfigs.length > 0) {
 					let mixConfigs = audio.ele("mix-configs");
 					this.audio.mixConfigs.forEach((i) => {
+
+						let mixStrings: Array<string> = [];
+						let mixOperator: string = i.mix.mixType === "average" ? "<" : i.mix.mixType === "add" ? "=" : "";
+						let destination: Array<{source: string, expression: string}>;
+						for (let o in i.mix.destinations) {
+							destination = i.mix.destinations[o];
+							if (destination.length > 1) {
+								let subSourceStrings: Array<string> = [];
+								destination.forEach((u) => {
+									subSourceStrings.push(u.expression === "1.0" ? u.source : (u.expression.toString() + "*" + u.source));
+								});
+								mixStrings.push(o + " " + mixOperator + " " + subSourceStrings.join(" + "));
+							} else {
+								mixStrings.push(o + " = " + (destination[0].expression === "1.0" ? destination[0].source : (destination[0].expression.toString() + "*" + destination[0].source)));
+							}
+						}
+
 						mixConfigs.ele("mix-config")
 						.att("from-type", i.fromType)
 						.att("to-types", i.toTypes)
-						.att("mix", i.mix);
+						.att("mix", mixStrings.join(" | "));
 					});
 				}
 			}
