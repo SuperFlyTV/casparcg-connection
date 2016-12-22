@@ -984,10 +984,164 @@ export namespace Config {
 		}
 
 		/** */
-		public get V207ConfigVO(): Config207VO { return new Config207VO(); }
+		public get V207ConfigVO(): Config207VO {
+			let configVO: Config207VO = new Config207VO();
+
+			// paths
+			configVO.paths = new v207.Paths();
+			if (typeof this.paths.dataPath === "string") configVO.paths.dataPath = this.paths.dataPath;
+			if (typeof this.paths.fontPath === "string") configVO.paths.fontPath = this.paths.fontPath;
+			if (typeof this.paths.logPath === "string") configVO.paths.logPath = this.paths.logPath;
+			if (typeof this.paths.mediaPath === "string") configVO.paths.mediaPath = this.paths.mediaPath;
+			if (typeof this.paths.templatePath === "string") configVO.paths.templatePath = this.paths.templatePath;
+			if (typeof this.paths.thumbnailPath === "string") configVO.paths.thumbnailsPath = this.paths.thumbnailPath;
+
+			// channels
+			configVO.channels = this.channels;
+
+			// controllers
+			configVO.controllers = this.controllers;
+
+			// single values on root
+			if (typeof this.logLevel === "string") configVO.logLevel = this.logLevel;
+			if (typeof this.autoDeinterlace === "string") configVO.autoDeinterlace = this.autoDeinterlace;
+			if (typeof this.autoTranscode === "string") configVO.autoTranscode = this.autoTranscode;
+			if (typeof this.pipelineTokens === "string") configVO.pipelineTokens = this.pipelineTokens;
+			if (typeof this.channelGrid === "string") configVO.channelGrid = this.channelGrid;
+
+			// mixer
+			configVO.mixer = new v207.Mixer();
+			configVO.mixer.blendModes = this.mixer.blendModes;
+			if (this.mixer.chromaKey) configVO.mixer.chromaKey = this.mixer.chromaKey;
+			configVO.mixer.mipmappingDefaultOn = this.mixer.mipmappingDefaultOn;
+			configVO.mixer.straightAlpha = this.mixer.straightAlpha;
+
+			// flash
+			configVO.flash = this.flash;
+
+			// template hosts
+			configVO.templateHosts = this.templateHosts;
+
+			// thumbnails
+			configVO.thumbnails = this.thumbnails;
+
+			// osc
+			configVO.osc = new v2xx.Osc();
+			if (this.osc.defaultPort) configVO.osc.defaultPort = this.osc.defaultPort;
+			if (this.osc.predefinedClients) configVO.osc.predefinedClients = this.osc.predefinedClients;
+
+			// audio
+			configVO.audio = new v2xx.Audio();
+			this.audio.channelLayouts.forEach((i) => {
+				let channelLayout: v2xx.ChannelLayout = new v2xx.ChannelLayout();
+				channelLayout.name = i.name;
+				channelLayout.numChannels = i.numChannels;
+				channelLayout.type = i.type;
+				channelLayout.channels = i.channelOrder;
+				configVO.audio.channelLayouts.push(channelLayout);
+			});
+
+			this.audio.mixConfigs.forEach((i) => {
+				let mixConfig: v2xx.MixConfig = new v2xx.MixConfig();
+				mixConfig.from = i.fromType;
+				mixConfig.to = i.toTypes;
+				mixConfig.mix = i.mix.mixType;
+				for (let o in i.mix.destinations) {
+					i.mix.destinations[o].forEach((u) => {
+						mixConfig.mappings.push([u.source, o, u.expression].join(" "));
+					});
+				}
+				configVO.audio.mixConfigs.push(mixConfig);
+			});
+
+			return configVO;
+		}
 
 		/** */
-		public get V210ConfigVO(): Config210VO { return new Config210VO(); }
+		public get V210ConfigVO(): Config210VO {
+			let configVO: Config210VO = new Config210VO();
+
+			// paths
+			configVO.paths = new v21x.Paths();
+			if (typeof this.paths.dataPath === "string") configVO.paths.dataPath = this.paths.dataPath;
+			if (typeof this.paths.fontPath === "string") configVO.paths.fontPath = this.paths.fontPath;
+			if (typeof this.paths.logPath === "string") configVO.paths.logPath = this.paths.logPath;
+			if (typeof this.paths.mediaPath === "string") configVO.paths.mediaPath = this.paths.mediaPath;
+			if (typeof this.paths.templatePath === "string") configVO.paths.templatePath = this.paths.templatePath;
+			if (typeof this.paths.thumbnailPath === "string") configVO.paths.thumbnailPath = this.paths.thumbnailPath;
+
+			// channels
+			configVO.channels = this.channels;
+
+			// controllers
+			configVO.controllers = this.controllers;
+
+			// single values on root
+			if (typeof this.lockClearPhrase === "string") configVO.lockClearPhrase = this.lockClearPhrase;
+			if (typeof this.logLevel === "string") configVO.logLevel = this.logLevel;
+			if (typeof this.logCategories === "string") configVO.logCategories = this.logCategories;
+			if (typeof this.forceDeinterlace === "string") configVO.forceDeinterlace = this.forceDeinterlace;
+			if (typeof this.channelGrid === "string") configVO.channelGrid = this.channelGrid;
+			if (typeof this.accelerator === "string") configVO.accelerator = this.accelerator;
+
+			// mixer
+			configVO.mixer = new v21x.Mixer();
+			configVO.mixer.blendModes = this.mixer.blendModes;
+			configVO.mixer.mipmappingDefaultOn = this.mixer.mipmappingDefaultOn;
+			configVO.mixer.straightAlpha = this.mixer.straightAlpha;
+
+			// flash
+			configVO.flash = this.flash;
+
+			// html
+			configVO.html = this.html;
+
+			// template hosts
+			configVO.templateHosts = this.templateHosts;
+
+			// thumbnails
+			configVO.thumbnails = this.thumbnails;
+
+			// osc
+			configVO.osc = new v21x.Osc();
+			if (this.osc.disableSendToAmcpClients) configVO.osc.disableSendToAmcpClients = this.osc.disableSendToAmcpClients;
+			if (this.osc.defaultPort) configVO.osc.defaultPort = this.osc.defaultPort;
+			if (this.osc.predefinedClients) configVO.osc.predefinedClients = this.osc.predefinedClients;
+
+			// audio
+			configVO.audio = new v21x.Audio();
+			configVO.audio.channelLayouts = this.audio.channelLayouts;
+			this.audio.mixConfigs.forEach((i) => {
+				let mixConfig: v21x.MixConfig = new v21x.MixConfig();
+				mixConfig.fromType = i.fromType;
+				mixConfig.toTypes = i.toTypes;
+				let mixOperator: string;
+				let destinationStrings: Array<string> = [];
+				for (let o in i.mix.destinations) {
+					let destinationSubStrings: Array<string> = [];
+					let destinations = i.mix.destinations[o];
+					mixOperator = (destinations.length > 1 && i.mix.mixType === "average") ? "<" : "=";
+					destinations.forEach((u) => {
+						destinationSubStrings.push(u.expression === "1.0" ? u.source : u.expression + "*" + u.source);
+					});
+					destinationStrings.push(o + " " + mixOperator + " " + destinationSubStrings.join(" + "));
+				}
+				mixConfig.mix = destinationStrings.join(" | ");
+				configVO.audio.mixConfigs.push(mixConfig);
+			});
+
+			return configVO;
+		}
+
+		/** */
+		public get configVO(): Config207VO|Config210VO|null {
+			if (this.mode === ServerVersion.V207) {
+					return this.V207ConfigVO;
+			} else if (this.mode === ServerVersion.V210) {
+				return this.V210ConfigVO;
+			}
+			return null;
+		}
 
 		/** */
 		public get configXML(): string {
@@ -1062,6 +1216,7 @@ export namespace Config {
 			// osc
 			if (this.osc) {
 				let osc = root.ele("osc");
+				osc.ele("default-port", this.osc.defaultPort);
 				// predefined clients
 				if (this.osc.predefinedClients && this.osc.predefinedClients.length > 0) {
 					let predefinedClients = osc.ele("predefined-clients");
@@ -1173,6 +1328,7 @@ export namespace Config {
 			// osc
 			if (this.osc) {
 				let osc = root.ele("osc");
+				osc.ele("default-port", this.osc.defaultPort);
 				CasparCGConfig.addFormattedXMLChildsFromArray(osc, this.osc, ["defaultPort", "disableSendToAmcpClients"]);
 				// predefined clients
 				if (this.osc.predefinedClients && this.osc.predefinedClients.length > 0) {
