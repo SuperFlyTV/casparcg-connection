@@ -254,7 +254,19 @@ export namespace AMCP {
 	 * 
 	 */
 	export class CGClearCommand extends AbstractLayerWithCgFallbackCommand {
-		static commandString = "CG CLEAR";
+		static commandString = "CG";
+
+		paramProtocol = [
+			new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("CLEAR"))
+		];
+
+		/**
+		 *  
+		 */
+		constructor(params: (string|Param|(string|Param)[])) {
+			super(params);
+			this._objectParams["keyword"] = "CLEAR";
+		}
 	}
 
 	/**
@@ -1086,8 +1098,8 @@ export namespace AMCP {
 		 */
 		constructor(params?: (string|Param|(string|Param)[])) {
 			super(params);
-			if(this.channel && this.channel > -1) {
-				this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser); 
+			if (this.channel && this.channel > -1) {
+				this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser);
 			}
 		}
 	}
