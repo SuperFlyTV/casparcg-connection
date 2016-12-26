@@ -8,8 +8,127 @@ import ServerVersion = OptionsNS.ServerVersion;
 export namespace Config {
 
 	/** */
+	export namespace utils {
+
+		export type factoryMembers = "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host"  | "channel-layout" | "mix-config";
+		export type FactyoryTypes = v2xx.Consumer | v2xx.Channel | v2xx.Controller | v2xx.OscClient | v2xx.TemplateHost | v207.ChannelLayout | v207.MixConfig | v21x.ChannelLayout | v21x.MixConfig | undefined;
+
+		export function configMemberFactory(version: ServerVersion, memberName: factoryMembers | string, initValues?: Object): FactyoryTypes {
+			let member: FactyoryTypes = undefined;
+
+			switch (memberName) {
+				case "channel":
+					if (version < 2100) {
+						member = new v207.Channel();
+					} else {
+						member = new v21x.Channel();
+					}
+					break;
+
+				case "decklink":
+					if (version < 2100) {
+						member = new v207.DecklinkConsumer();
+					} else {
+						member = new v21x.DecklinkConsumer();
+					}
+					break;
+
+				case "bluefish":
+					member = new v2xx.BluefishConsumer();
+					break;
+
+				case "system-audio":
+					if (version < 2100) {
+						member = new v207.SystemAudioConsumer();
+					} else {
+						member = new v21x.SystemAudioConsumer();
+					}
+					break;
+
+				case "screen":
+					if (version < 2100) {
+						member = new v207.ScreenConsumer();
+					} else {
+						member = new v21x.ScreenConsumer();
+					}
+					break;
+
+				case "newtek-ivga":
+					if (version < 2100) {
+						member = new v207.NewtekIvgaConsumer();
+					} else {
+						member = new v21x.NewtekIvgaConsumer();
+					}
+					break;
+				case "ffmpeg":
+					if (version > 2100) {
+						member = new v21x.FfmpegConsumer();
+					}
+					break;
+
+				case "file":
+					if (version < 2100) {
+						member = new v207.FileConsumer();
+					}
+					break;
+
+				case "stream":
+					if (version < 2100) {
+						member = new v207.StreamConsumer();
+					}
+					break;
+
+				case "syncto":
+					if (version > 2100) {
+						member = new v21x.SynctoConsumer();
+					}
+					break;
+
+				case "tcp":
+					member = new v2xx.Controller();
+					break;
+
+				case "predefined-client":
+					member = new v2xx.OscClient();
+					break;
+
+				case "template-host":
+					member = new v2xx.TemplateHost();
+					break;
+
+				case "channel-layout":
+					if (version < 2100) {
+						member = new v207.ChannelLayout();
+					} else {
+						member = new v21x.ChannelLayout();
+					}
+					break;
+
+				case "mix-config":
+					if (version < 2100) {
+						member = new v207.MixConfig();
+					} else {
+						member = new v21x.MixConfig();
+					}
+					break;
+			}
+
+			if (member && initValues) {
+				for (let key in initValues) {
+					if (member.hasOwnProperty(key)) {
+						if (typeof member[key] === ((typeof initValues[key]) || undefined)) {
+							member[key] = initValues[key];
+						}
+					}
+				}
+			}
+			return member;
+		}
+	}
+
+	/** */
 	export namespace v2xx {
-		/** */
+		/** *
 		export enum VideoModeEnum {
 			_PAL,
 			_NTSC,
@@ -47,9 +166,9 @@ export namespace Config {
 			_dci2160p2398,
 			_dci2160p2400,
 			_dci2160p2500
-		}
+		}*/
 
-		/** */
+		/** *
 		export enum ChannelLayoutEnum {
 			_mono,
 			_stereo,
@@ -58,27 +177,25 @@ export namespace Config {
 			_dolbydigital,
 			_smpte,
 			_passthru
-		}
+		}*/
 
 		export class Paths {
-			mediaPath?: string | null;
-			logPath?: string | null;
-			dataPath?: string | null;
-			templatePath?: string | null;
-			thumbnailPath?: string | null;
-			thumbnailsPath?: string | null;
-			fontPath?: string | null;
-		};
+			mediaPath?: string;
+			logPath?: string;
+			dataPath?: string;
+			templatePath?: string;
+			thumbnailPath?: string;
+			thumbnailsPath?: string;
+			fontPath?: string;
+		}
 
 		/** */
-		@JsonObject
 		export class Consumer {
-			@JsonMember({type: String, isRequired: true})	// @todo: custom "enum"-class for all props
+			@JsonMember({type: String, isRequired: true})
 			public _type: string;
 		}
 
 		/** */
-		@JsonObject
 		export class DecklinkConsumer extends Consumer {
 			_type = "decklink";
 
@@ -86,7 +203,7 @@ export namespace Config {
 			public device: number = 1;
 
 			@JsonMember({type: Number, name: "key-device"})
-			public keyDevice: Number;
+			public keyDevice: Number | undefined = undefined;
 
 			@JsonMember({type: Boolean, name: "embedded-audio"})
 			public embeddedAudio: boolean = false;
@@ -106,8 +223,6 @@ export namespace Config {
 			@JsonMember({type: Number, name: "buffer-depth"})
 			public bufferDepth: number = 3;
 
-			@JsonMember({type: Boolean, name: "custom-allocator"})
-			public customAllocator: boolean = true;	// @todo: ns 2.0 only
 		}
 
 		/** */
@@ -129,24 +244,16 @@ export namespace Config {
 		}
 
 		/** */
-		@JsonObject
 		export class SystemAudioConsumer extends Consumer {
 			_type = "system-audio";
-
-			@JsonMember({type: String, name: "channel-layout"})
-			public channelLayout: string = "stereo";
-
-			@JsonMember({type: Number})
-			public latency: number = 200;
 		}
 
 		/** */
-		@JsonObject
 		export class ScreenConsumer extends Consumer {
 			_type = "screen";
 
 			@JsonMember({type: Number})
-			public device: number = 1;	// @todo: wrong default implemented in caspar, should be 0:::
+			public device: number = 1;		// @todo: wrong default implemented in caspar, should be 0:::
 
 			@JsonMember({type: String, name: "aspect-ratio"})
 			public aspectRatio: string = "default";
@@ -168,87 +275,19 @@ export namespace Config {
 
 			@JsonMember({type: Boolean})
 			public borderless: boolean = false;
-
-			@JsonMember({type: Boolean})
-			public interactive: boolean = true;		// @todo: ns 2.1 only
-
-			@JsonMember({type: String})
-			public name: string = "Screen Consumer";	// @todo: ns 2.0 only
 		}
 
 		/** */
-		@JsonObject
 		export class NewtekIvgaConsumer extends Consumer {
 			_type = "newtek-ivga";
-
-			@JsonMember({type: String, name: "channel-layout"})
-			public channelLayout: string = "stereo";	// @todo: ns 2.0 only
-
-			@JsonMember({type: Boolean, name: "provide-sync"})
-			public provideSync: boolean = true;		// @todo: ns 2.0 only
 		}
 
 		/** */
-		@JsonObject
-		export class FfmpegConsumer extends Consumer { // @todo: 2.1 ns
-			_type = "ffmpeg";
-
-			@JsonMember({type: String})
-			public path: string;
-
-			@JsonMember({type: String})
-			public args: string;
-
-			@JsonMember({type: Boolean, name: "separate-key"})
-			public separateKey: boolean = false;
-
-			@JsonMember({type: Boolean, name: "mono-streams"})
-			public monoStreams: boolean = false;
-		}
-
-		/** */
-		@JsonObject
-		export class FileConsumer extends Consumer { // @todo: 2.0 ns
-			_type = "file";
-
-			@JsonMember({type: String})
-			public path: string;
-
-			@JsonMember({type: String})
-			public vcodec: string = "libx264";
-
-			@JsonMember({type: Boolean, name: "separate-key"})
-			public separateKey: boolean = false;
-		}
-
-		/** */
-		@JsonObject
-		export class StreamConsumer extends Consumer { // @todo: 2.0 ns
-			_type = "stream";
-
-			@JsonMember({type: String})
-			public path: string;
-
-			@JsonMember({type: String})
-			public args: string;
-		}
-
-		/** */
-		@JsonObject
-		export class SynctoConsumer extends Consumer { // @todo: 2.1 ns
-			_type = "syncto";
-
-			@JsonMember({type: Number, name: "channel-id"})
-			public channelId: Number;
-		}
-
-		/** */
-		@JsonObject
 		export class Channel {
 			consumers: Array<Consumer> = [];
 
 			@JsonMember({type: String, isRequired: true})
-			public _type: string;
+			public _type: string = "channel";
 
 			@JsonMember({type: String, isRequired: true, name: "video-mode"})	// @todo: custom "enum"-class
 			videoMode: string = "PAL";
@@ -263,40 +302,12 @@ export namespace Config {
 			public get _consumers(): Array<Object> {
 				return this.consumers || [];
 			}
-
-			/** */
-			public set _consumers(consumers: Array<Object>) {
-				consumers.forEach((i: Object) => {
-					if (i.hasOwnProperty("_type")) {
-						let className: string = i["_type"];
-
-						let dashBlocks: Array<string> = className.split(/-/);
-						className = dashBlocks.map((i) => {return i.charAt(0).toUpperCase() + i.slice(1); }).join("") + "Consumer";
-						if (v2xx[className]) {
-							let consumer: Consumer = new v2xx[className]();
-							let consumerKey: string;
-							for (let key in i) {
-								let dashBlocks: Array<string> = key.split(/-|_/);
-								consumerKey = dashBlocks.map((i, o) => {return o > 0 ? i.charAt(0).toUpperCase() + i.slice(1) : i; }).join("");
-								if (!i.hasOwnProperty(key)) {
-									continue;
-								}
-								if (consumer.hasOwnProperty(consumerKey)) {
-									consumer[consumerKey] = i[key];
-								}else {
-								}
-							}
-							this.consumers!.push(consumer);
-						}
-					}
-				});
-			}
 		}
 
 		/** */
 		@JsonObject
 		export class Mixer {
-			public chromaKey?: boolean | null;
+			public chromaKey?: boolean;
 
 			@JsonMember({type: Boolean, name: "blend-modes"})
 			blendModes: boolean = false;
@@ -312,13 +323,13 @@ export namespace Config {
 		@JsonObject
 		export class Controller {
 			@JsonMember({type: String})
-			public _type: string;
+			public _type: string = "tcp";
 
 			@JsonMember({type: Number})
-			public port: number;
+			public port: number | undefined = undefined;
 
 			@JsonMember({type: String})
-			public protocol: string;
+			public protocol: string = "";
 		}
 
 		/** */
@@ -326,13 +337,13 @@ export namespace Config {
 		export class OscClient {
 
 			@JsonMember({type: String})
-			public _type: string;
+			public _type: string = "predefined-client";
 
 			@JsonMember({type: String})
-			public address: string;
+			public address: string = "";
 
 			@JsonMember({type: Number})
-			public port: number;
+			public port: number | undefined = undefined;
 		}
 
 		/** */
@@ -371,80 +382,30 @@ export namespace Config {
 		@JsonObject
 		export class TemplateHost {
 			@JsonMember({type: String})
-			public _type: string;
+			public _type: string = "template-host";
 
 			@JsonMember({type: String, name: "video-mode"})	// @todo: enum
-			public videoMode: string;
+			public videoMode: string = "";
 
 			@JsonMember({type: String})	// @todo: enum
-			public filename: string;
+			public filename: string = "";
 
 			@JsonMember({type: Number})
-			public width: number;
+			public width: number | undefined = undefined;
 
 			@JsonMember({type: Number})
-			public height: number;
+			public height: number | undefined = undefined;
 		}
 
 		/**  */
-		@JsonObject
 		export class Osc {
-
-			public disableSendToAmcpClients?: boolean | null;
+			public disableSendToAmcpClients?: boolean;
 
 			@JsonMember({type: Number, name: "default-port"})
 			public defaultPort: number = 6250;
 
 			@JsonMember({type: Array, elements: OscClient, name: "predefined-clients"})
 			public predefinedClients: Array<OscClient> = [];
-		}
-
-		/**  */
-		@JsonObject
-		export class ChannelLayout {
-			@JsonMember({type: String})
-			public _type: string;
-
-			@JsonMember({type: String})
-			public name: string;
-
-			@JsonMember({type: String})
-			public type: string;
-
-			@JsonMember({type: Number, name: "num-channels"})
-			public numChannels: number;
-
-			@JsonMember({type: String})
-			public channels: string;
-		}
-
-		/**  */
-		@JsonObject
-		export class MixConfig {
-			@JsonMember({type: String})
-			public _type: string;
-
-			@JsonMember({type: String})
-			public from: string;
-
-			@JsonMember({type: String})
-			public to: string;
-
-			@JsonMember({type: String})
-			public mix: string;
-
-			@JsonMember({type: Array, elements: String})
-			public mappings: Array<string> = [];
-		}
-
-		/**  */
-		@JsonObject
-		export class Audio {
-			@JsonMember({type: Array, elements: v2xx.ChannelLayout, name: "channel-layouts"})
-			public channelLayouts: Array<v2xx.ChannelLayout> = [];
-
-			@JsonMember({type: Array, elements: v2xx.MixConfig, name: "mix-configs"})
-			public mixConfigs: Array<v2xx.MixConfig> = [];
 		}
 	}
 
@@ -467,7 +428,92 @@ export namespace Config {
 
 			@JsonMember({type: String, name: "thumbnails-path"})
 			thumbnailsPath: string = "thumbnails\\";
-		};
+		}
+
+		/** */
+		@JsonObject
+		export class Channel extends v2xx.Channel {
+
+			/** */
+			public set _consumers(consumers: Array<Object>) {
+				consumers.forEach((i: Object) => {
+					if (i.hasOwnProperty("_type")) {
+						let transformedInitValues: Object = {};
+						let consumerKey: string;
+						for (let key in i) {
+							let dashBlocks: Array<string> = key.split(/-|_/);
+							consumerKey = dashBlocks.map((i, o) => {return o > 0 ? i.charAt(0).toUpperCase() + i.slice(1) : i; }).join("");
+							if (!i.hasOwnProperty(key)) {
+								continue;
+							}
+							transformedInitValues[consumerKey] = i[key];
+						}
+
+						let className: string = i["_type"];
+						let consumer: v2xx.Consumer | undefined = utils.configMemberFactory(2100, className, transformedInitValues);
+						if (consumer) { 
+							this.consumers!.push(consumer);
+						}
+					}
+				});
+			}
+		}
+
+		/** */
+		@JsonObject
+		export class DecklinkConsumer extends v2xx.DecklinkConsumer {
+			@JsonMember({type: Boolean, name: "custom-allocator"})
+			public customAllocator: boolean = true;	// @todo: ns 2.0 only
+
+		}
+
+		/** */
+		@JsonObject
+		export class SystemAudioConsumer extends v2xx.SystemAudioConsumer {}
+
+		/** */
+		@JsonObject
+		export class ScreenConsumer extends v2xx.ScreenConsumer {
+			@JsonMember({type: String})
+			public name: string = "Screen Consumer";
+		}
+
+		/** */
+		@JsonObject
+		export class NewtekIvgaConsumer extends v2xx.NewtekIvgaConsumer {
+			@JsonMember({type: String, name: "channel-layout"})
+			public channelLayout: string = "stereo";
+
+			@JsonMember({type: Boolean, name: "provide-sync"})
+			public provideSync: boolean = true;
+		}
+
+		/** */
+		@JsonObject
+		export class FileConsumer extends v2xx.Consumer {
+			_type = "file";
+
+			@JsonMember({type: String})
+			public path: string = "";
+
+			@JsonMember({type: String})
+			public vcodec: string = "libx264";
+
+			@JsonMember({type: Boolean, name: "separate-key"})
+			public separateKey: boolean = false;
+		}
+
+		/** */
+		@JsonObject
+		export class StreamConsumer extends v2xx.Consumer {
+			_type = "stream";
+
+			@JsonMember({type: String})
+			public path: string = "";
+
+			@JsonMember({type: String})
+			public args: string = "";
+		}
 
 		/** */
 		@JsonObject
@@ -481,6 +527,58 @@ export namespace Config {
 		export class Thumbnails extends v2xx.Thumbnails {
 			@JsonMember({type: Boolean})
 			public mipmap: boolean = false;
+		}
+
+		/**  */
+		@JsonObject
+		export class Osc extends v2xx.Osc {}
+
+		/**  */
+		@JsonObject
+		export class ChannelLayout {
+			@JsonMember({type: String})
+			public _type: string = "channel-layout";
+
+			@JsonMember({type: String})
+			public name: string = "";
+
+			@JsonMember({type: String})
+			public type: string = "";
+
+			@JsonMember({type: Number, name: "num-channels"})
+			public numChannels: number | undefined = undefined;
+
+			@JsonMember({type: String})
+			public channels: string = "";
+		}
+
+		/**  */
+		@JsonObject
+		export class MixConfig {
+			@JsonMember({type: String})
+			public _type: string = "mix-config";
+
+			@JsonMember({type: String})
+			public from: string = "";
+
+			@JsonMember({type: String})
+			public to: string = "";
+
+			@JsonMember({type: String})
+			public mix: string = "";
+
+			@JsonMember({type: Array, elements: String})
+			public mappings: Array<string> = [];
+		}
+
+		/**  */
+		@JsonObject
+		export class Audio {
+			@JsonMember({type: Array, elements: v207.ChannelLayout, name: "channel-layouts"})
+			public channelLayouts: Array<v207.ChannelLayout> = [];
+
+			@JsonMember({type: Array, elements: v207.MixConfig, name: "mix-configs"})
+			public mixConfigs: Array<v207.MixConfig> = [];
 		}
 	}
 
@@ -506,9 +604,89 @@ export namespace Config {
 
 			@JsonMember({type: String, name: "font-path"})
 			fontPath: string = "font/";
-		};
+		}
 
-		/**  */
+		/** */
+		@JsonObject
+		export class Channel extends v2xx.Channel {
+			/** */
+			public set _consumers(consumers: Array<Object>) {
+				consumers.forEach((i: Object) => {
+					if (i.hasOwnProperty("_type")) {
+						let transformedInitValues: Object = {};
+						let consumerKey: string;
+						for (let key in i) {
+							let dashBlocks: Array<string> = key.split(/-|_/);
+							consumerKey = dashBlocks.map((i, o) => {return o > 0 ? i.charAt(0).toUpperCase() + i.slice(1) : i; }).join("");
+							if (!i.hasOwnProperty(key)) {
+								continue;
+							}
+							transformedInitValues[consumerKey] = i[key];
+						}
+
+						let className: string = i["_type"];
+						let consumer: v2xx.Consumer | undefined = utils.configMemberFactory(2007, className, transformedInitValues);
+						if (consumer) {
+							this.consumers!.push(consumer);
+						}
+					}
+				});
+			}
+		}
+
+		/** */
+		@JsonObject
+		export class DecklinkConsumer extends v2xx.DecklinkConsumer {}
+
+		/** */
+		@JsonObject
+		export class SystemAudioConsumer extends v2xx.SystemAudioConsumer {
+			@JsonMember({type: String, name: "channel-layout"})
+			public channelLayout: string = "stereo";
+
+			@JsonMember({type: Number})
+			public latency: number = 200;
+		}
+
+		/** */
+		@JsonObject
+		export class ScreenConsumer extends v2xx.ScreenConsumer {
+			@JsonMember({type: Boolean})
+			public interactive: boolean = true;
+		}
+
+		/** */
+		@JsonObject
+		export class NewtekIvgaConsumer extends v2xx.NewtekIvgaConsumer {}
+
+			/** */
+		@JsonObject
+		export class FfmpegConsumer extends v2xx.Consumer {
+			_type = "ffmpeg";
+
+			@JsonMember({type: String})
+			public path: string = "";
+
+			@JsonMember({type: String})
+			public args: string = "";
+
+			@JsonMember({type: Boolean, name: "separate-key"})
+			public separateKey: boolean = false;
+
+			@JsonMember({type: Boolean, name: "mono-streams"})
+			public monoStreams: boolean = false;
+		}
+
+		/** */
+		@JsonObject
+		export class SynctoConsumer extends v2xx.Consumer {
+			_type = "syncto";
+
+			@JsonMember({type: Number, name: "channel-id"})
+			public channelId: Number | undefined = undefined;
+		}
+
+		/** */
 		@JsonObject
 		export class Mixer extends v2xx.Mixer {}
 
@@ -523,7 +701,7 @@ export namespace Config {
 		@JsonObject
 		export class Html {
 			@JsonMember({type: Number, name: "remote-debugging-port"})
-			remoteDebuggingPort: number = 0;	// @todo: valid range = 0|1024-6535
+			remoteDebuggingPort: number | undefined = undefined;	// @todo: valid range = 0|1024-6535
 		}
 
 		/**  */
@@ -537,35 +715,35 @@ export namespace Config {
 		@JsonObject
 		export class ChannelLayout {
 			@JsonMember({type: String})
-			public _type: string;
+			public _type: string = "channel-layout";
 
 			@JsonMember({type: String})
-			public name: string;
+			public name: string = "";
 
 			@JsonMember({type: String})
-			public type: string;
+			public type: string = "";
 
 			@JsonMember({type: Number, name: "num-channels"})
-			public numChannels: number;
+			public numChannels: number | undefined = undefined;
 
 			@JsonMember({type: String, name: "channel-order"})
-			public channelOrder: string;
+			public channelOrder: string = "";
 		}
 
 		/**  */
 		@JsonObject
 		export class MixConfig {
 			@JsonMember({type: String})
-			public _type: string;
+			public _type: string = "mix-config";
 
 			@JsonMember({type: String, name: "from-type"})
-			public fromType: string;
+			public fromType: string = "";
 
 			@JsonMember({type: String, name: "to-types"})
-			public toTypes: string;
+			public toTypes: string = "";
 
 			@JsonMember({type: String})
-			public mix: string;
+			public mix: string = "";
 		}
 
 		/**  */
@@ -578,7 +756,7 @@ export namespace Config {
 			public mixConfigs: Array<v21x.MixConfig> = [];
 		}
 
-		/** */
+		/** *
 		export enum ChannelLayoutEnum {
 			_mono,
 			_stereo,
@@ -589,12 +767,7 @@ export namespace Config {
 			_ebu_r123_8b,
 			_8ch,
 			_16ch
-		}
-	}
-
-
-	/** */
-	export namespace v21x {
+		}*/
 	}
 
 	/** */
@@ -608,22 +781,14 @@ export namespace Config {
 
 		/**  */
 		export class MixConfig {
-			@JsonMember({type: String})
-			public _type: string;
-
-			@JsonMember({type: String, name: "from-type"})
-			public fromType: string;
-
-			@JsonMember({type: String, name: "to-types"})
-			public toTypes: string;
-
-			@JsonMember({type: String})
+			public _type: string = "mix-config";
+			public fromType: string = "";
+			public toTypes: string = "";
 			public mix: {mixType: string, destinations: {[destination: string]: Array<{source: string, expression: string}>}};
 		}
 	}
 
 	/**  */
-	const defaultChannel_2xx: v2xx.Channel = {videoMode: "PAL", _consumers: [], consumers: [], _type: "channel"};
 	const defaultAMCPController: v2xx.Controller = {_type: "tcp", port: 5250, protocol: "AMCP"};
 	const defaultLOGController: v2xx.Controller = {_type: "tcp", port: 3250, protocol: "LOG"};
 
@@ -632,8 +797,6 @@ export namespace Config {
 	/** */
 	@JsonObject
 	export class ConfigxxVO {
-		@JsonMember({type: Array, elements: v2xx.Channel, isRequired: true})
-		public channels: Array<v2xx.Channel> = [defaultChannel_2xx];
 		@JsonMember({type: Boolean, name: "channel-grid"})
 		public channelGrid: boolean = false;
 		@JsonMember({type: v2xx.Flash})
@@ -647,6 +810,8 @@ export namespace Config {
 	export class Config207VO extends ConfigxxVO {
 		@JsonMember({type: v207.Paths, isRequired: true})
 		public paths: v207.Paths = new v207.Paths();
+		@JsonMember({type: Array, elements: v207.Channel, isRequired: true})
+		public channels: Array<v207.Channel> = [new v2xx.Channel()];
 		@JsonMember({type: v207.Mixer})
 		public mixer: v207.Mixer = new v207.Mixer();
 		@JsonMember({type: String, name: "log-level"})	// @todo: enum
@@ -663,8 +828,8 @@ export namespace Config {
 		public thumbnails: v207.Thumbnails = new v207.Thumbnails();
 		@JsonMember({type: v2xx.Osc})
 		public osc: v2xx.Osc = new v2xx.Osc();
-		@JsonMember({type: v2xx.Audio})
-		public audio: v2xx.Audio = new v2xx.Audio();
+		@JsonMember({type: v207.Audio})
+		public audio: v207.Audio = new v207.Audio();
 	}
 
 	/**  */
@@ -672,6 +837,8 @@ export namespace Config {
 	export class Config210VO extends ConfigxxVO {
 		@JsonMember({type: v21x.Paths, isRequired: true})
 		public paths: v21x.Paths = new v21x.Paths();
+		@JsonMember({type: Array, elements: v21x.Channel, isRequired: true})
+		public channels: Array<v21x.Channel> = [new v2xx.Channel()];
 		@JsonMember({type: String, name: "lock-clear-phrase"})
 		public lockClearPhrase: string = "secret";
 		@JsonMember({type: v21x.Mixer})
@@ -789,7 +956,6 @@ export namespace Config {
 			this.paths.dataPath = configVO.paths.dataPath;
 			this.paths.templatePath = configVO.paths.templatePath;
 			this.paths.thumbnailPath = configVO.paths.thumbnailsPath;
-			this.paths.fontPath = null;
 
 			// lock clear phrase
 			this.lockClearPhrase = null;
@@ -842,13 +1008,12 @@ export namespace Config {
 			// osc
 			this.osc = new v2xx.Osc();
 			this.osc.defaultPort = configVO.osc.defaultPort;
-			this.osc.disableSendToAmcpClients = null;
 			this.osc.predefinedClients = configVO.osc.predefinedClients;
 
 			// audio
 			this.audio = new CasparCGAbstract.Audio();
 			this.audio.channelLayouts = new Array<v21x.ChannelLayout>();
-			configVO.audio.channelLayouts.forEach((i: v2xx.ChannelLayout) => {
+			configVO.audio.channelLayouts.forEach((i: v207.ChannelLayout) => {
 				let channelLayout: v21x.ChannelLayout = new v21x.ChannelLayout();
 				channelLayout._type = i._type;
 				channelLayout.channelOrder = i.channels;
@@ -858,7 +1023,7 @@ export namespace Config {
 				this.audio.channelLayouts.push(channelLayout);
 			});
 			this.audio.mixConfigs = new Array<CasparCGAbstract.MixConfig>();
-			configVO.audio.mixConfigs.forEach((i: v2xx.MixConfig) => {
+			configVO.audio.mixConfigs.forEach((i: v207.MixConfig) => {
 				let mixConfig: CasparCGAbstract.MixConfig = new CasparCGAbstract.MixConfig();
 				mixConfig._type = i._type;
 				mixConfig.fromType = i.from;
@@ -901,7 +1066,6 @@ export namespace Config {
 			// mixer
 			this.mixer = new v2xx.Mixer();
 			this.mixer.blendModes = configVO.mixer.blendModes;
-			this.mixer.chromaKey = null;
 			this.mixer.mipmappingDefaultOn = configVO.mixer.mipmappingDefaultOn;
 			this.mixer.straightAlpha = configVO.mixer.straightAlpha;
 
@@ -1031,9 +1195,9 @@ export namespace Config {
 			if (this.osc.predefinedClients) configVO.osc.predefinedClients = this.osc.predefinedClients;
 
 			// audio
-			configVO.audio = new v2xx.Audio();
+			configVO.audio = new v207.Audio();
 			this.audio.channelLayouts.forEach((i) => {
-				let channelLayout: v2xx.ChannelLayout = new v2xx.ChannelLayout();
+				let channelLayout: v207.ChannelLayout = new v207.ChannelLayout();
 				channelLayout.name = i.name;
 				channelLayout.numChannels = i.numChannels;
 				channelLayout.type = i.type;
@@ -1042,7 +1206,7 @@ export namespace Config {
 			});
 
 			this.audio.mixConfigs.forEach((i) => {
-				let mixConfig: v2xx.MixConfig = new v2xx.MixConfig();
+				let mixConfig: v207.MixConfig = new v207.MixConfig();
 				mixConfig.from = i.fromType;
 				mixConfig.to = i.toTypes;
 				mixConfig.mix = i.mix.mixType;
