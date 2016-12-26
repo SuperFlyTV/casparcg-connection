@@ -8,7 +8,7 @@ import ServerVersion = OptionsNS.ServerVersion;
 export namespace Config {
 
 	/** */
-	export namespace utils {
+	export namespace Utils {
 
 		export type factoryMembers = "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host"  | "channel-layout" | "mix-config";
 		export type FactyoryTypes = v2xx.Consumer | v2xx.Channel | v2xx.Controller | v2xx.OscClient | v2xx.TemplateHost | v207.ChannelLayout | v207.MixConfig | v21x.ChannelLayout | v21x.MixConfig | undefined;
@@ -450,7 +450,7 @@ export namespace Config {
 						}
 
 						let className: string = i["_type"];
-						let consumer: v2xx.Consumer | undefined = utils.configMemberFactory(2100, className, transformedInitValues);
+						let consumer: v2xx.Consumer | undefined = Utils.configMemberFactory(2007, className, transformedInitValues);
 						if (consumer) { 
 							this.consumers!.push(consumer);
 						}
@@ -625,7 +625,10 @@ export namespace Config {
 						}
 
 						let className: string = i["_type"];
-						let consumer: v2xx.Consumer | undefined = utils.configMemberFactory(2007, className, transformedInitValues);
+						let consumer: v2xx.Consumer | undefined = Utils.configMemberFactory(2100, className, transformedInitValues);
+
+						console.log("CONSUMER::::", consumer);
+
 						if (consumer) {
 							this.consumers!.push(consumer);
 						}
