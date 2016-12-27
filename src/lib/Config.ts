@@ -626,9 +626,6 @@ export namespace Config {
 
 						let className: string = i["_type"];
 						let consumer: v2xx.Consumer | undefined = Utils.configMemberFactory(2100, className, transformedInitValues);
-
-						console.log("CONSUMER::::", consumer);
-
 						if (consumer) {
 							this.consumers!.push(consumer);
 						}
@@ -913,7 +910,7 @@ export namespace Config {
 	}
 
 	/** */	export class CasparCGConfig extends AbstractDefaultCasparCGConfig implements ICasparCGConfig {
-		private mode: ServerVersion = ServerVersion.V2xx;
+		private _mode: ServerVersion = ServerVersion.V2xx;
 
 		/** */
 		public constructor(version: string);
@@ -923,20 +920,20 @@ export namespace Config {
 			if (typeof initConfigVOOrString === "object") {
 				let initConfigVO: Config207VO | Config210VO | {} = initConfigVOOrString;
 				if (initConfigVO instanceof Config207VO) {
-					this.mode = ServerVersion.V207;
-					this.fromV207ConfigVO(initConfigVO);
+					this._mode = ServerVersion.V207;
+					this.fromConfigVO(initConfigVO);
 				}else if (initConfigVO instanceof Config210VO) {
-					this.mode = ServerVersion.V210;
-					this.fromV210ConfigVO(initConfigVO);
+					this._mode = ServerVersion.V210;
+					this.fromConfigVO(initConfigVO);
 				}else {
 					this.import(initConfigVO);
 				}
 			}else if (typeof initConfigVOOrString === "string") {
 				let versionString: string = initConfigVOOrString;
 				if (versionString === "2.0.7") {
-					this.mode = ServerVersion.V207;
+					this._mode = ServerVersion.V207;
 				}else if (versionString === "2.1.0") {
-					this.mode = ServerVersion.V210;
+					this._mode = ServerVersion.V210;
 				}
 			}
 		}
@@ -947,6 +944,15 @@ export namespace Config {
 				if (configVO.hasOwnProperty(key) && this.hasOwnProperty(key)) {
 					this[key] = configVO[key];
 				}
+			}
+		}
+
+		/** */
+		public fromConfigVO(configVO: Config207VO | Config210VO): void {
+			if (this._mode === ServerVersion.V207) {
+				this.fromV207ConfigVO((<Config207VO>configVO));
+			} else if (this._mode === ServerVersion.V210) {
+				this.fromV210ConfigVO((<Config210VO>configVO));
 			}
 		}
 
@@ -1302,9 +1308,9 @@ export namespace Config {
 
 		/** */
 		public get configVO(): Config207VO|Config210VO|null {
-			if (this.mode === ServerVersion.V207) {
+			if (this._mode === ServerVersion.V207) {
 					return this.V207ConfigVO;
-			} else if (this.mode === ServerVersion.V210) {
+			} else if (this._mode === ServerVersion.V210) {
 				return this.V210ConfigVO;
 			}
 			return null;
@@ -1312,9 +1318,9 @@ export namespace Config {
 
 		/** */
 		public get configXML(): string {
-			if (this.mode === ServerVersion.V207) {
+			if (this._mode === ServerVersion.V207) {
 					return this.V207ConfigXML;
-			} else if (this.mode === ServerVersion.V210) {
+			} else if (this._mode === ServerVersion.V210) {
 				return this.V210ConfigXML;
 			}
 			return "";
