@@ -1,4 +1,3 @@
-import {TypedJSON} from "typedjson-npm";
 import * as Path from "path";
 import * as _ from "highland";
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
@@ -6,9 +5,9 @@ import {Options as OptionsNS} from "./AMCPConnectionOptions";
 import ServerVersion = OptionsNS.ServerVersion;
 // config NS
 import {Config as ConfigNS} from "./Config";
-import CasparCGConfig = ConfigNS.CasparCGConfig;
-import Config207VO = ConfigNS.Config207VO;
-import Config210VO = ConfigNS.Config210VO;
+import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
+import Config207VO = ConfigNS.v207.CasparCGConfigVO;
+import Config210VO = ConfigNS.v21x.CasparCGConfigVO;
 export namespace Response {
 
 	/** */
@@ -166,76 +165,7 @@ export namespace Response {
 		 * 
 		 */
 		public parse(data: Object): Object {
-
-			data = this.childrenToArray(data, ["channels", "controllers", "template-hosts"]);
-			if (data.hasOwnProperty("channels")) {
-				for (let i in data["channels"]) {
-					data["channels"][i] = this.childrenToArray(data["channels"][i], ["consumers"]);
-				}
-			}
-			if (data.hasOwnProperty("osc")) {
-				data["osc"] = this.childrenToArray(data["osc"], ["predefined-clients"]);
-			}
-			if (data.hasOwnProperty("audio")) {
-				data["audio"] = this.childrenToArray(data["audio"], ["channel-layouts", "mix-configs"]);
-				if (data["audio"].hasOwnProperty("channel-layouts")) {
-					let o: string;
-					for (let i in data["audio"]["channel-layouts"]) {
-						if (data["audio"]["channel-layouts"][i]["type"] && !isNaN(data["audio"]["channel-layouts"][i]["type"])) {
-							o = (data["audio"]["channel-layouts"][i]["type"]).toString();
-							o += o.indexOf(".") === -1 ? ".0" : "";		// 
-							data["audio"]["channel-layouts"][i]["type"] = o;
-						}
-					}
-				}
-				if (data["audio"].hasOwnProperty("mix-configs")) {
-					let o: string;
-					for (let i in data["audio"]["mix-configs"]) {
-						if (data["audio"]["mix-configs"][i]["to"] && !isNaN(data["audio"]["mix-configs"][i]["to"])) {
-							o = (data["audio"]["mix-configs"][i]["to"]).toString();
-							o += o.indexOf(".") === -1 ? ".0" : "";
-							data["audio"]["mix-configs"][i]["to"] = o;
-						}
-						if (data["audio"]["mix-configs"][i]["from"] && !isNaN(data["audio"]["mix-configs"][i]["from"])) {
-							o = (data["audio"]["mix-configs"][i]["from"]).toString();
-							o += o.indexOf(".") === -1 ? ".0" : "";
-							data["audio"]["mix-configs"][i]["from"] = o;
-						}
-						if (data["audio"]["mix-configs"][i]["to-types"] && !isNaN(data["audio"]["mix-configs"][i]["to-types"])) {
-							o = (data["audio"]["mix-configs"][i]["to-types"]).toString();
-							o += o.indexOf(".") === -1 ? ".0" : "";
-							data["audio"]["mix-configs"][i]["to-types"] = o;
-						}
-						if (data["audio"]["mix-configs"][i]["from-type"] && !isNaN(data["audio"]["mix-configs"][i]["from-type"])) {
-							o = (data["audio"]["mix-configs"][i]["from-type"]).toString();
-							o += o.indexOf(".") === -1 ? ".0" : "";
-							data["audio"]["mix-configs"][i]["from-type"] = o;
-						}
-						if (data["audio"]["mix-configs"][i]["mappings"] && data["audio"]["mix-configs"][i]["mappings"]["mapping"] && Array.isArray(data["audio"]["mix-configs"][i]["mappings"]["mapping"])) {
-							data["audio"]["mix-configs"][i]["mappings"] = data["audio"]["mix-configs"][i]["mappings"]["mapping"];
-						}else if (data["audio"]["mix-configs"][i]["mappings"] && data["audio"]["mix-configs"][i]["mappings"]["mapping"]) {
-							data["audio"]["mix-configs"][i]["mappings"] = [(data["audio"]["mix-configs"][i]["mappings"]["mapping"]).toString()];
-						}
-					}
-				}
-			}
-			if (data.hasOwnProperty("flash") && data["flash"].hasOwnProperty("buffer-depth")) {
-					data["flash"]["buffer-depth"] = (data["flash"]["buffer-depth"]).toString();
-			}
-			let dataString: string = JSON.stringify(data).toLowerCase();
-			let configVOClass: any;
-
-			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
-				configVOClass = Config210VO;
-			}else {
-				configVOClass = Config207VO;
-			}
-			let configVO: Config207VO | Config210VO;
-
-			// errors thrown in parsing bubbles and rejects the promise for the active command
-			configVO = TypedJSON.parse(dataString, configVOClass);
-
-			let configResult: CasparCGConfig = new CasparCGConfig(configVO);
+			let configResult: CasparCGConfig = new CasparCGConfig(data);
 			return configResult;
 		}
 	}
