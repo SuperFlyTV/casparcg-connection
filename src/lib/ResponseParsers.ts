@@ -1,13 +1,10 @@
 import * as Path from "path";
-import * as _ from "highland";
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
 // Options NS
 import ServerVersion = OptionsNS.ServerVersion;
 // config NS
 import {Config as ConfigNS} from "./Config";
 import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
-import Config207VO = ConfigNS.v207.CasparCGConfigVO;
-import Config210VO = ConfigNS.v21x.CasparCGConfigVO;
 export namespace Response {
 
 	/** */
@@ -114,59 +111,18 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 * 
-	 */
+	/** */
 	export class ConfigParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 * 
-		 */
-		private childrenToArray(root: Object, childIndices: Array<string>): Object {
-			_.pairs(root).map((i) => {
-				let outerKey: string = i[0].toString();
-				let outerValue: Object = i[1];
-				// filter top-level possible arrays
-				if (childIndices.indexOf(outerKey) > -1) {
-					let flatArray: Array<Object> = [];
-					for (let innerKey in outerValue) {
-						let innerValue: Object = outerValue[innerKey];
-						if (typeof innerValue === "object") {
-							if (Array.isArray(innerValue)) { // multiple innervalues
-								innerValue.forEach((o: Object) => {
-									if (typeof o !== "object") {	// "" string values, i.e. empty screen consumers
-										o = {};
-									}
-									o["_type"] = innerKey;
-									flatArray.push(o);
-								});
-							} else { // single inner object
-								innerValue["_type"] = innerKey;
-								flatArray.push(innerValue);
-							}
-						// update outer member with transformed array of inner members
-						}else {
-							flatArray.push({_type: innerKey});
-						}
-					}
-					i[1] = flatArray;
-				}
-				return i;
-			}).toArray((i) => {
-					root = {};
-					i.forEach((o) => {
-						root![(<string>o[0])] = o[1];
-					});
-				});
-			return root;
-		}
-
-		/**
-		 * 
-		 */
+		/** */
 		public parse(data: Object): Object {
-			let configResult: CasparCGConfig = new CasparCGConfig(data);
-			return configResult;
+			let serverVersion: ServerVersion;
+			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
+				serverVersion = ServerVersion.V210;
+			}else {
+				serverVersion = ServerVersion.V210;
+			}
+			let configResult: CasparCGConfig = new CasparCGConfig(serverVersion);
+			return configResult.import(data);
 		}
 	}
 
