@@ -872,13 +872,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			// @todo add TTL for cleanup on stuck commands
 
 			// salvo mode
-			if (this.queueMode === QueueMode.SALVO) {
+			/*if (this.queueMode === QueueMode.SALVO) {
 				if (this._queuedCommands.length > 0) {
 					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
 					this._sentCommands.push(nextCommand);
 					this._socket.executeCommand(nextCommand);
 				}
-			}
+			}*/
 
 			// sequential mode
 			if (this.queueMode === QueueMode.SEQUENTIAL) {

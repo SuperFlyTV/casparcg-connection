@@ -14,9 +14,9 @@ export namespace Options {
 	 * 
 	 */
 	export enum QueueMode  {
-		SALVO 		= 1,
+		// SALVO 		= 1,
 		SEQUENTIAL 	= 2,
-		SMART 		= 3
+		// SMART 		= 3
 	}
 
 	/**
