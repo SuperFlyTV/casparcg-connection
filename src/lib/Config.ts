@@ -1,59 +1,8 @@
 import {create as XMLBuilder} from "xmlbuilder";
-import {XMLElementOrXMLNode} from "../@types/xmlbuilder/index";
-
 // Options NS
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
 import ServerVersion = OptionsNS.ServerVersion;
-// Validation NS
-import {Response as validatonNS} from "./ResponseValidators";
-import XMLValidator = validatonNS.XMLValidator;
-// Response NS
-import {Response as responseNS} from "./ResponseParsers";
-import ConfigParser = responseNS.ConfigParser;
-// AMCPUtilNS
-import {AMCPUtil as AMCPUtilNS} from "./AMCP";
-import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
 
-/** */
-export namespace ConfigUtil {
-	/** */
-	export function parseConfigFrom207XML(XMLString: string): Config.Intermediate.CasparCGConfig | {} {
-		let validator: XMLValidator = new XMLValidator();
-		let parser: ConfigParser = new ConfigParser();
-		parser.context = {serverVersion: ServerVersion.V207};
-		let fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString);	// @todo: does this work?
-		let validData: Object = {};
-
-		if ((validData = validator.resolve(fauxResponseData)) === false) {
-			return {};
-		}
-
-		if ((validData = parser.parse(validData)) === false) {
-			return {};
-		}
-
-		return validData;
-	}
-
-	/** */
-	export function parseConfigFrom10XML(XMLString: string): Config.Intermediate.CasparCGConfig | {} {
-		let validator: XMLValidator = new XMLValidator();
-		let parser: ConfigParser = new ConfigParser();
-		parser.context = {serverVersion: ServerVersion.V207};
-		let fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString);	// @todo: does this work?
-		let validData: Object = {};
-
-		if ((validData = validator.resolve(fauxResponseData)) === false) {
-			return {};
-		}
-
-		if ((validData = parser.parse(validData)) === false) {
-			return {};
-		}
-
-		return validData;
-	}
-}
 
 /** */
 export namespace Config {
@@ -98,9 +47,9 @@ export namespace Config {
 			readonly VO: v207.CasparCGConfigVO | v21x.CasparCGConfigVO;
 			readonly v207VO: v207.CasparCGConfigVO;
 			readonly v210VO: v21x.CasparCGConfigVO;
-			readonly XML: XMLElementOrXMLNode | null;
-			readonly v207XML: XMLElementOrXMLNode;
-			readonly v210XML: XMLElementOrXMLNode;
+			readonly XML: Object | null;
+			readonly v207XML: Object;
+			readonly v210XML: Object;
 			readonly XMLString: string;
 			readonly v207XMLString: string;
 			readonly v210XMLString: string;
@@ -126,18 +75,18 @@ export namespace Config {
 					return;
 				}
 				// is initVO
-				if (initVersionOrConfigVO instanceof Config207VO) {
-					this.__version = ServerVersion.V207;
-				} else if (initVersionOrConfigVO instanceof Config210VO) {
-					this.__version = ServerVersion.V210;
-				} else if ((typeof initVersionOrConfigVO === "object") && initVersionOrConfigVO.hasOwnProperty("_version")) {
-					if (initVersionOrConfigVO["_version"] >= 2100) {
-						this.__version = ServerVersion.V210;
-					} else if (initVersionOrConfigVO["_version"] >= 2007) {
-						this.__version = ServerVersion.V207;
-					}
-				}
 				if (initVersionOrConfigVO) {
+					if (initVersionOrConfigVO instanceof Config207VO) {
+						this.__version = ServerVersion.V207;
+					} else if (initVersionOrConfigVO instanceof Config210VO) {
+						this.__version = ServerVersion.V210;
+					} else if ((typeof initVersionOrConfigVO === "object") && initVersionOrConfigVO["_version"]) {
+						if (initVersionOrConfigVO["_version"] >= 2100) {
+							this.__version = ServerVersion.V210;
+						} else if (initVersionOrConfigVO["_version"] >= 2007) {
+							this.__version = ServerVersion.V207;
+						}
+					}
 					this.import(initVersionOrConfigVO);
 				}
 			}
@@ -188,7 +137,7 @@ export namespace Config {
 			}
 
 			/** */
-			public get XML(): XMLElementOrXMLNode | null {
+			public get XML(): Object | null {
 				if (this.__version === ServerVersion.V207) {
 					return this.v207XML;
 				} else if (this.__version === ServerVersion.V210) {
@@ -198,14 +147,14 @@ export namespace Config {
 			}
 
 			/** */
-			public get v207XML(): XMLElementOrXMLNode {
+			public get v207XML(): Object {
 				let xml = XMLBuilder("configuration");
 
 				return xml;
 			}
 
 			/** */
-			public get v210XML(): XMLElementOrXMLNode {
+			public get v210XML(): Object {
 				let xml = XMLBuilder("configuration");
 
 				return xml;
@@ -223,12 +172,12 @@ export namespace Config {
 
 			/** */
 			public get v207XMLString(): string {
-				return this.v207XML.end({pretty: true});
+				return this.v207XML["end"]({pretty: true});
 			}
 
 			/** */
 			public get v210XMLString(): string {
-				return this.v210XML.end({pretty: true});
+				return this.v210XML["end"]({pretty: true});
 			}
 
 			/** */

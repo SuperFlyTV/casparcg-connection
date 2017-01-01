@@ -21,10 +21,7 @@
   "bugs": {
     "url": "https://github.com/SuperFlyTV/casparcg-connection/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://opensource.org/licenses/MIT"
-  },
+  "license": "MIT",
   "directories": {
     "lib": "src/",
     "doc": "docs/"

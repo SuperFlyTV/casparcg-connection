@@ -122,7 +122,8 @@ export namespace Response {
 				serverVersion = ServerVersion.V210;
 			}
 			let configResult: CasparCGConfig = new CasparCGConfig(serverVersion);
-			return configResult.import(data);
+			configResult.import(data);
+			return configResult;
 		}
 	}
 

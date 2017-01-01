@@ -29,7 +29,7 @@ import IStringCallback = CallbackNS.IStringCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
 // Config NS
 import {Config as ConfigNS} from "./lib/Config";
-import CasparCGConfig = ConfigNS.CasparCGConfig;
+import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
 // Response NS
 import {Response as ResponseNS} from "./lib/ResponseParsers";
 import CasparCGPaths = ResponseNS.CasparCGPaths;
