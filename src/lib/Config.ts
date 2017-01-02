@@ -3,7 +3,6 @@ import {create as XMLBuilder} from "xmlbuilder";
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
 import ServerVersion = OptionsNS.ServerVersion;
 
-
 /** */
 export namespace Config {
 
@@ -129,6 +128,9 @@ export namespace Config {
 			public defaultPort: number = 6250;
 			public predefinedClients: Array<OscClient> = [];
 		}
+
+		/** */
+		export const defaultAMCPController: v2xx.Controller = {_type: new v2xx.Controller()._type, port: 5250, protocol: "AMCP"};
 	}
 
 	/** */
@@ -137,7 +139,7 @@ export namespace Config {
 		export class CasparCGConfigVO extends v2xx.CasparCGConfigVO {
 			public paths: v207.Paths = new v207.Paths();
 			public channels: Array<v207.Channel> = [new v2xx.Channel()];
-			public controllers: Array<v2xx.Controller> = [defaultAMCPController];
+			public controllers: Array<v2xx.Controller> = [v2xx.defaultAMCPController];
 			public mixer?: v207.Mixer = new v207.Mixer();
 			public logLevel?: string = "trace";		// @todo: literal
 			public autoDeinterlace?: boolean = true;
@@ -149,6 +151,11 @@ export namespace Config {
 		}
 
 		/** */
+		export class Channel {
+			public consumers: Array<v207.Consumer> = [];
+		}
+
+		/** */
 		export class Paths {
 			mediaPath: string = "media\\";
 			logPath: string = "log\\";
@@ -156,6 +163,9 @@ export namespace Config {
 			templatePath: string = "templates\\";
 			thumbnailsPath: string = "thumbnails\\";
 		}
+
+		/** */
+		export class Consumer extends v2xx.Consumer {}
 
 		/** */
 		export class DecklinkConsumer extends v2xx.DecklinkConsumer {
@@ -192,6 +202,9 @@ export namespace Config {
 		}
 
 		/** */
+		export class Thumbnails extends v2xx.Thumbnails {}
+
+		/** */
 		export class Mixer extends v2xx.Mixer {
 			public chromaKey?: boolean = false;
 		}
@@ -226,11 +239,13 @@ export namespace Config {
 
 	/** */
 	export namespace v21x {
+		export const defaultLOGController: v2xx.Controller = {_type: new v2xx.Controller()._type, port: 3250, protocol: "LOG"};
+
 		/** */
 		export class CasparCGConfigVO extends v2xx.CasparCGConfigVO {
 			public paths: v21x.Paths = new v21x.Paths();
 			public channels: Array<v21x.Channel> = [new v2xx.Channel()];
-			public controllers: Array<v2xx.Controller> = [defaultAMCPController, defaultLOGController];
+			public controllers: Array<v2xx.Controller> = [v2xx.defaultAMCPController, v21x.defaultLOGController];
 			public lockClearPhrase?: string = "secret";
 			public mixer?: v21x.Mixer = new v21x.Mixer();
 			public logLevel?: string = "info";					// @todo: literal
@@ -244,6 +259,11 @@ export namespace Config {
 		}
 
 		/** */
+		export class Channel {
+			public consumers: Array<v21x.Consumer> = [];
+		}
+
+		/** */
 		export class Paths {
 			mediaPath?: string = "media/";
 			logPath?: string = "log/";
@@ -252,6 +272,9 @@ export namespace Config {
 			thumbnailPath?: string = "thumbnail/";
 			fontPath?: string = "font/";
 		}
+
+		/** */
+		export class Consumer extends v2xx.Consumer {}
 
 		/** */
 		export class DecklinkConsumer extends v2xx.DecklinkConsumer {}
@@ -333,6 +356,20 @@ export namespace Config {
 		import  Config210VO = v21x.CasparCGConfigVO;
 
 		/** */
+		export class Audio {
+			public channelLayouts: Array<v21x.ChannelLayout> = [];
+			public mixConfigs: Array<Intermediate.MixConfig> = [];
+		}
+
+		/**  */
+		export class MixConfig {
+			public _type: string = "mix-config";
+			public fromType: string = "";
+			public toTypes: string = "";
+			public mix: {mixType: string, destinations: {[destination: string]: Array<{source: string, expression: string}>}};
+		}
+
+		/** */
 		export interface ICasparCGConfig {
 			import(configVO: Object): void;
 			importFromV207VO(configVO: Object): void;
@@ -349,10 +386,10 @@ export namespace Config {
 			readonly _version: ServerVersion;
 
 			paths: v21x.Paths;
-			lockClearPhrase: string;
 			channels: Array<v2xx.Channel>;
-			mixer: Intermediate.Mixer;
 			controllers: Array<v2xx.Controller>;
+			lockClearPhrase: string | undefined;
+			mixer: v2xx.Mixer;
 			logLevel: string;
 			logCategories: string;
 			channelGrid: boolean;
@@ -371,8 +408,26 @@ export namespace Config {
 
 		/** */
 		export class CasparCGConfig implements ICasparCGConfig {
-
 			private __version: ServerVersion;
+			public paths: v21x.Paths = new v21x.Paths();
+			public channels: Array<v2xx.Channel> = [new v2xx.Channel()];
+			public controllers: Array<v2xx.Controller> = [v2xx.defaultAMCPController];
+			public lockClearPhrase: string | undefined = undefined;
+			public mixer: v2xx.Mixer = new v2xx.Mixer();
+			public logLevel: string = "info";	// @todo literal
+			public logCategories: string = "communication";	// @todo literal
+			public channelGrid: boolean = false;
+			public forceDeinterlace: boolean = false;
+			public autoDeinterlace: boolean = true;
+			public autoTranscode: boolean = true;
+			public pipelineTokens: number = 2;
+			public accelerator: string = "auto";	// @todo literal
+			public thumbnails: v21x.Thumbnails = new v21x.Thumbnails;
+			public flash: v2xx.Flash = new v2xx.Flash;
+			public html: v21x.Html = new v21x.Html;
+			public templateHosts: Array<v2xx.TemplateHost> = [];
+			public osc: v2xx.Osc = new v2xx.Osc();
+			public audio: Intermediate.Audio = new Intermediate.Audio();
 
 			/** */
 			public constructor(version: ServerVersion);
@@ -426,25 +481,27 @@ export namespace Config {
 			}
 
 			/** */
-			public get VO(): Config207VO | Config210VO {
+			public get VO(): Config207VO | Config210VO{
 				if (this.__version === ServerVersion.V207) {
 					return this.v207VO;
 				} else if (this.__version === ServerVersion.V210) {
 					return this.v210VO;
 				}
-				return {}; // @todo: throw error
+				throw new Error("@todo");	// @todo: throw
 			}
 
 			/** */
 			public get v207VO(): Config207VO {
-				let configVO: Config207VO = {};
+				// let configVO: Config207VO = {};
+				let configVO: Config207VO = new Config207VO;
 
 				return configVO;
 			}
 
 			/** */
 			public get v210VO(): Config210VO {
-				let configVO: Config210VO = {};
+				// let configVO: Config210VO = {};
+				let configVO: Config210VO = new Config210VO();
 
 				return configVO;
 			}
