@@ -754,7 +754,7 @@ export namespace AMCP {
 	/**
 	 * 
 	 */
-	export class MixerMastervolumeCommand extends AbstractChannelOrLayerCommand {
+	export class MixerMastervolumeCommand extends AbstractChannelCommand {
 		static commandString = "MIXER";
 		paramProtocol = [
 			new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("MASTERVOLUME")),
