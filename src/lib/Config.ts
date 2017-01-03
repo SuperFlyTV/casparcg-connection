@@ -477,7 +477,7 @@ export namespace Config {
 
 			/** */
 			public importFromV207VO(configVO: Object): void {
-				console.log(configVO);
+				configVO;
 			}
 
 			/** */
@@ -834,14 +834,12 @@ export namespace Config {
 				values.forEach((dashedKey) => {
 					let camelKey = CasparCGConfig.dashedToMixedCase(dashedKey);
 					// sets value if key is valid
-					if (sourceRoot.hasOwnProperty(dashedKey) && sourceRoot[dashedKey] !== undefined && sourceRoot[dashedKey] !== null) {
+					if (sourceRoot && sourceRoot.hasOwnProperty(dashedKey) && sourceRoot[dashedKey] !== undefined && sourceRoot[dashedKey] !== null) {
 						if (destRoot.hasOwnProperty(camelKey)) {
-							console.log("set " + camelKey + " ::: " + sourceRoot[dashedKey]);
 							destRoot[camelKey] = sourceRoot[dashedKey];	// @todo: type checking/reflection/cast??
 						}
-					} else if (sourceRoot.hasOwnProperty(camelKey) && sourceRoot[camelKey] !== undefined && sourceRoot[camelKey] !== null) {
+					} else if (sourceRoot && sourceRoot.hasOwnProperty(camelKey) && sourceRoot[camelKey] !== undefined && sourceRoot[camelKey] !== null) {
 						if (destRoot.hasOwnProperty(camelKey)) {
-							console.log("set " + camelKey + " ::: " + sourceRoot[camelKey]);
 							destRoot[camelKey] = sourceRoot[camelKey];	// @todo: type checking/reflection/cast??
 						}
 					}
