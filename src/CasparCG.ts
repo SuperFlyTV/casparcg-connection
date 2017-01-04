@@ -412,6 +412,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
 		this.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
+		this.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleInvalidSocketResponse(event.response));
 
 		if (this.autoConnect) {
 			this.connect();
@@ -799,8 +800,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
-
-
 		/*
 		
 		100 [action] - Information about an event.
@@ -859,6 +858,15 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * 
 	 */
+	private _handleInvalidSocketResponse(socketResponse: CasparCGSocketResponse): void {
+		if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion < 2100) {
+			this._expediteCommand(true);
+		}
+	}
+
+	/**
+	 * 
+	 */
 	private _expediteCommand(flushSent: boolean = false): void {
 
 		if (flushSent) {
@@ -889,9 +897,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				}
 			}
 		} else {
-
-
-
 			// reconnect on missing connection, if  not restating
 			if (!this._socket.isRestarting) {
 				this.reconnect();
