@@ -86,7 +86,6 @@ export namespace Config {
 			public blendModes: boolean = false;
 			public straightAlpha: boolean = false;
 			public mipmappingDefaultOn: boolean = false;
-			public chromaKey: boolean | null = null;
 		}
 
 		/** */
@@ -375,6 +374,11 @@ export namespace Config {
 		}
 
 		/** */
+		export class Mixer extends v207.Mixer { 
+			chromaKey: boolean;
+		}
+
+		/** */
 		export interface ICasparCGConfig {
 			import(configVO: Object): void;
 			importFromV207VO(configVO: Object): void;
@@ -394,7 +398,7 @@ export namespace Config {
 			channels: Array<v2xx.Channel>;
 			controllers: Array<v2xx.Controller>;
 			lockClearPhrase: string | null;
-			mixer: v2xx.Mixer;
+			mixer: Intermediate.Mixer;
 			logLevel: string;
 			logCategories: string;
 			channelGrid: boolean;
@@ -415,10 +419,10 @@ export namespace Config {
 		export class CasparCGConfig implements ICasparCGConfig {
 			private __version: ServerVersion;
 			public paths: v21x.Paths = new v21x.Paths();
-			public channels: Array<v2xx.Channel> = [new v2xx.Channel()];
-			public controllers: Array<v2xx.Controller> = [v2xx.defaultAMCPController];
+			public channels: Array<v2xx.Channel> = [];
+			public controllers: Array<v2xx.Controller> = [];
 			public lockClearPhrase: string | null = null;
-			public mixer: v2xx.Mixer = new v2xx.Mixer();
+			public mixer: Intermediate.Mixer = new Intermediate.Mixer();
 			public logLevel: string = "info";	// @todo literal
 			public logCategories: string = "communication";	// @todo literal
 			public channelGrid: boolean = false;
@@ -489,16 +493,16 @@ export namespace Config {
 				this.importValues(configVO["paths"], this.paths, ["media-path", "log-path", "data-path", "template-path", "thumbnail-path", "font-path"]);
 
 				// channels
-				let channels: Array<Object> = this.findListMembers(configVO, "channels");
-				for (let i in channels) {
+				this.findListMembers(configVO, "channels").forEach((i) => {
 					let channel: v2xx.Channel = new v2xx.Channel();
-					this.importValues(channels[i], channel, ["video-mode", "channel-layout", "straight-alpha-output"]);
-					this.findListMembers(channels[i], "consumers").forEach((o) => {
+					this.importValues(i, channel, ["video-mode", "channel-layout", "straight-alpha-output"]);
+					this.findListMembers(i, "consumers").forEach((o) => {
 						let consumerName: string = CasparCGConfig.dashedToCamelCase(o["_type"]) + "Consumer";
 						this.importListMembers(o, consumerName, v21x);
+						channel.consumers.push(<v2xx.Consumer>o);
 					});
 					this.channels.push(channel);
-				}
+				});
 
 				// controllers
 				this.findListMembers(configVO, "controllers").forEach((i) => {
