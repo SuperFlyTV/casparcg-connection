@@ -135,6 +135,7 @@ export namespace Config {
 	export namespace v207 {
 		/** */
 		export class CasparCGConfigVO extends v2xx.CasparCGConfigVO {
+			public _version: number;
 			public paths: v207.Paths = new v207.Paths();
 			public channels: Array<v207.Channel> = [new v2xx.Channel()];
 			public controllers: Array<v2xx.Controller> = [v2xx.defaultAMCPController];
@@ -244,6 +245,7 @@ export namespace Config {
 
 		/** */
 		export class CasparCGConfigVO extends v2xx.CasparCGConfigVO {
+			public _version: number;
 			public paths: v21x.Paths = new v21x.Paths();
 			public channels: Array<v21x.Channel> = [new v2xx.Channel()];
 			public controllers: Array<v2xx.Controller> = [v2xx.defaultAMCPController, v21x.defaultLOGController];
@@ -593,13 +595,14 @@ export namespace Config {
 			public get v207VO(): Config207VO {
 				// let configVO: Config207VO = {};
 				let configVO: Config207VO = new Config207VO;
-
+				configVO._version = this._version;
 				return configVO;
 			}
 
 			/** */
 			public get v210VO(): Config210VO {
 				let configVO: Config210VO = new Config210VO();
+				configVO._version = this._version;
 
 				// paths
 				configVO.paths = this.paths;
@@ -902,7 +905,7 @@ export namespace Config {
 						namespace = v2xx;
 					}
 				}
-				if (namespace) {
+				if (namespace && namespace.hasOwnProperty(memberName)) {
 					let member: v2xx.Consumer = Object.create(namespace[memberName]["prototype"]);
 					member.constructor.call(member);
 					this.importAllValues(root, member);
