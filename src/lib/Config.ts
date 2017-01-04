@@ -424,7 +424,7 @@ export namespace Config {
 			public channels: Array<v2xx.Channel> = [];
 			public controllers: Array<v2xx.Controller> = [];
 			public lockClearPhrase: string | null = null;
-			public mixer: Intermediate.Mixer = new Intermediate.Mixer();
+			public mixer: Intermediate.Mixer;
 			public logLevel: string = "info";	// @todo literal
 			public logCategories: string = "communication";	// @todo literal
 			public channelGrid: boolean = false;
@@ -842,11 +842,11 @@ export namespace Config {
 					let camelKey = CasparCGConfig.dashedToMixedCase(dashedKey);
 					// sets value if key is valid
 					if (sourceRoot && sourceRoot.hasOwnProperty(dashedKey) && sourceRoot[dashedKey] !== undefined && sourceRoot[dashedKey] !== null) {
-						if (destRoot.hasOwnProperty(camelKey)) {
+						if (destRoot && destRoot.hasOwnProperty(camelKey)) {
 							destRoot[camelKey] = sourceRoot[dashedKey];	// @todo: type checking/reflection/cast??
 						}
 					} else if (sourceRoot && sourceRoot.hasOwnProperty(camelKey) && sourceRoot[camelKey] !== undefined && sourceRoot[camelKey] !== null) {
-						if (destRoot.hasOwnProperty(camelKey)) {
+						if (destRoot && destRoot.hasOwnProperty(camelKey)) {
 							destRoot[camelKey] = sourceRoot[camelKey];	// @todo: type checking/reflection/cast??
 						}
 					}
