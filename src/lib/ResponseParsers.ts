@@ -119,7 +119,7 @@ export namespace Response {
 			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
 				serverVersion = ServerVersion.V210;
 			}else {
-				serverVersion = ServerVersion.V210;
+				serverVersion = ServerVersion.V207;
 			}
 			let configResult: CasparCGConfig = new CasparCGConfig(serverVersion);
 			configResult.import(data);
