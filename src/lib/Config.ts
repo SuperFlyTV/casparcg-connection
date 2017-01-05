@@ -981,7 +981,10 @@ export namespace Config {
 
 					// mixer
 					if (this.mixer) {
-						CasparCGConfig.addFormattedXMLChildsFromObject(xml.ele("mixer"), this.mixer);
+						let mixer = xml.ele("mixer");
+						mixer.ele("blend-modes", this.mixer.blendModes);
+						mixer.ele("mipmapping-default-on", this.mixer.mipmappingDefaultOn);
+						mixer.ele("straight-alpha", this.mixer.straightAlpha);
 					}
 
 					// flash
