@@ -1245,8 +1245,9 @@ export namespace Config {
 				for (let i in root) {
 					pairs.push([i, root[i]]);
 				}
+				childKey = CasparCGConfig.dashedToLowerCase(childKey);
 				for (let i of pairs){
-					let outerKey: string = i[0].toString();
+					let outerKey: string = CasparCGConfig.dashedToLowerCase(i[0].toString());
 					let outerValue: Object = i[1];
 					// filter top-level possible arrays
 					if (childKey === outerKey) {
@@ -1357,6 +1358,11 @@ export namespace Config {
 					i = i.slice(0, 1).toUpperCase() + i.slice(1);
 					return i;
 				}).join("");
+			}
+
+			/** */
+			static dashedToLowerCase(dashedString: string): string {
+				return dashedString.toLowerCase().split(/-/).join("");
 			}
 
 			/** */
