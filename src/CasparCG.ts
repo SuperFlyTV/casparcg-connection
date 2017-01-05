@@ -872,8 +872,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (flushSent) {
 			while (this._sentCommands.length > 0) {
 				let i: IAMCPCommand = (this._sentCommands.shift())!;
-				i.status =  IAMCPStatus.Failed;
-				i.reject(i);
+				if (i instanceof AMCP.RestartCommand && this._socket.isRestarting) {
+					i.status =  IAMCPStatus.Suceeded;
+					i.resolve(i);
+					continue;
+				}else {
+					i.status =  IAMCPStatus.Failed;
+					i.reject(i);
+				}
 			}
 		}
 		if (this.connected) {
