@@ -1138,11 +1138,15 @@ export namespace Config {
 										if (typeof o !== "object") {	// "" string values, i.e. empty screen consumers
 											o = {};
 										}
-										o["_type"] = innerKey;
+										if (!o["_type"]) {
+											o["_type"] = innerKey;
+										}
 										flatArray.push(o);
 									});
 								} else { // single inner object
-									innerValue["_type"] = innerKey;
+									if (!innerValue["_type"]){
+										innerValue["_type"] = innerKey;
+									}
 									flatArray.push(innerValue);
 								}
 							// update outer member with transformed array of inner members
