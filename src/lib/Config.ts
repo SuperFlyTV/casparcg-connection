@@ -1014,7 +1014,6 @@ export namespace Config {
 					// osc
 					if (this.osc) {
 						let osc = xml.ele("osc");
-						osc.ele("default-port", this.osc.defaultPort);
 						CasparCGConfig.addFormattedXMLChildsFromArray(osc, this.osc, ["defaultPort", "disableSendToAmcpClients"]);
 						// predefined clients
 						if (this.osc.predefinedClients && this.osc.predefinedClients.length > 0) {
@@ -1147,7 +1146,7 @@ export namespace Config {
 										flatArray.push(o);
 									});
 								} else { // single inner object
-									if (!innerValue["_type"]){
+									if (!innerValue["_type"]) {
 										innerValue["_type"] = innerKey;
 									}
 									flatArray.push(innerValue);
