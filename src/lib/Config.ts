@@ -7,6 +7,125 @@ import ServerVersion = OptionsNS.ServerVersion;
 export namespace Config {
 
 	/** */
+	export namespace Utils {
+
+		export type factoryMembers = "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host"  | "channel-layout" | "mix-config";
+		export type FactyoryTypes = v2xx.Consumer | v2xx.Channel | v2xx.Controller | v2xx.OscClient | v2xx.TemplateHost | v207.ChannelLayout | v207.MixConfig | v21x.ChannelLayout | v21x.MixConfig | undefined;
+
+		export function configMemberFactory(version: ServerVersion, memberName: factoryMembers | string, initValues?: Object): FactyoryTypes {
+			let member: FactyoryTypes = undefined;
+
+			switch (memberName) {
+				case "channel":
+					if (version < 2100) {
+						member = new v207.Channel();
+					} else {
+						member = new v21x.Channel();
+					}
+					break;
+
+				case "decklink":
+					if (version < 2100) {
+						member = new v207.DecklinkConsumer();
+					} else {
+						member = new v21x.DecklinkConsumer();
+					}
+					break;
+
+				case "bluefish":
+					member = new v2xx.BluefishConsumer();
+					break;
+
+				case "system-audio":
+					if (version < 2100) {
+						member = new v207.SystemAudioConsumer();
+					} else {
+						member = new v21x.SystemAudioConsumer();
+					}
+					break;
+
+				case "screen":
+					if (version < 2100) {
+						member = new v207.ScreenConsumer();
+					} else {
+						member = new v21x.ScreenConsumer();
+					}
+					break;
+
+				case "newtek-ivga":
+					if (version < 2100) {
+						member = new v207.NewtekIvgaConsumer();
+					} else {
+						member = new v21x.NewtekIvgaConsumer();
+					}
+					break;
+				case "ffmpeg":
+					if (version > 2100) {
+						member = new v21x.FfmpegConsumer();
+					}
+					break;
+
+				case "file":
+					if (version < 2100) {
+						member = new v207.FileConsumer();
+					}
+					break;
+
+				case "stream":
+					if (version < 2100) {
+						member = new v207.StreamConsumer();
+					}
+					break;
+
+				case "syncto":
+					if (version > 2100) {
+						member = new v21x.SynctoConsumer();
+					}
+					break;
+
+				case "tcp":
+					member = new v2xx.Controller();
+					break;
+
+				case "predefined-client":
+					member = new v2xx.OscClient();
+					break;
+
+				case "template-host":
+					member = new v2xx.TemplateHost();
+					break;
+
+				case "channel-layout":
+					if (version < 2100) {
+						member = new v207.ChannelLayout();
+					} else {
+						member = new v21x.ChannelLayout();
+					}
+					break;
+
+				case "mix-config":
+					if (version < 2100) {
+						member = new v207.MixConfig();
+					} else {
+						member = new v21x.MixConfig();
+					}
+					break;
+			}
+
+			if (member && initValues) {
+				for (let key in initValues) {
+					if (member.hasOwnProperty(key)) {
+						if (typeof member[key] === ((typeof initValues[key]) || undefined)) {
+							member[key] = initValues[key];
+						}
+					}
+				}
+			}
+			return member;
+		}
+	}
+
+	/** */
 	export namespace v2xx {
 		/** */
 		export class CasparCGConfigVO {
@@ -150,7 +269,7 @@ export namespace Config {
 		}
 
 		/** */
-		export class Channel {
+		export class Channel extends v2xx.Channel {
 			public consumers: Array<v207.Consumer> = [];
 		}
 
@@ -262,7 +381,7 @@ export namespace Config {
 		}
 
 		/** */
-		export class Channel {
+		export class Channel extends v2xx.Channel {
 			public consumers: Array<v21x.Consumer> = [];
 		}
 
