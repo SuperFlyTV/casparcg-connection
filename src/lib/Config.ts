@@ -1215,11 +1215,11 @@ export namespace Config {
 
 			/** */
 			private importAllValues(sourceRoot: Object, destRoot: Object): void {
-				let values: Array<string> = [];
+				let keys: Array<string> = [];
 				for (let i in sourceRoot) {
-					values.push(i);
+					keys.push(i);
 				}
-				this.importValues(sourceRoot, destRoot, values);
+				this.importValues(sourceRoot, destRoot, keys);
 			}
 
 			/** */
@@ -1245,9 +1245,9 @@ export namespace Config {
 				for (let i in root) {
 					pairs.push([i, root[i]]);
 				}
-				childKey = CasparCGConfig.dashedToLowerCase(childKey);
+				childKey = CasparCGConfig.dashedToMixedCase(childKey);
 				for (let i of pairs){
-					let outerKey: string = CasparCGConfig.dashedToLowerCase(i[0].toString());
+					let outerKey: string = CasparCGConfig.dashedToMixedCase(i[0].toString());
 					let outerValue: Object = i[1];
 					// filter top-level possible arrays
 					if (childKey === outerKey) {
@@ -1337,32 +1337,35 @@ export namespace Config {
 			}
 
 			/** */
-			static dashedToMixedCase(dashedString: string): string {
-				let keyBlocks: Array<string> = dashedString.split(/-/);
-				return keyBlocks.map((i, o) => {
-					if (o > 0) {
+			static dashedToMixedCase(rawString: string): string {
+				let keyBlocks: Array<string> = rawString.split(/-/);
+				if (keyBlocks.length > 1) {
+					return keyBlocks.map((i, o) => {
+						if (o > 0) {
+							i = i.toLowerCase();
+							i = i.slice(0, 1).toUpperCase() + i.slice(1);
+						}else {
+							i = i.toLowerCase();
+						}
+						return i;
+					}).join("");
+				}else {
+					return rawString;
+				}
+			}
+
+			/** */
+			static dashedToCamelCase(rawString: string): string {
+				let keyBlocks: Array<string> = rawString.split(/-/);
+				if (keyBlocks.length > 1) {
+					return keyBlocks.map((i) => {
 						i = i.toLowerCase();
 						i = i.slice(0, 1).toUpperCase() + i.slice(1);
-					}else {
-						i = i.toLowerCase();
-					}
-					return i;
-				}).join("");
-			}
-
-			/** */
-			static dashedToCamelCase(dashedString: string): string {
-				let keyBlocks: Array<string> = dashedString.split(/-/);
-				return keyBlocks.map((i) => {
-					i = i.toLowerCase();
-					i = i.slice(0, 1).toUpperCase() + i.slice(1);
-					return i;
-				}).join("");
-			}
-
-			/** */
-			static dashedToLowerCase(dashedString: string): string {
-				return dashedString.toLowerCase().split(/-/).join("");
+						return i;
+					}).join("");
+				}else {
+					return rawString;
+				}
 			}
 
 			/** */
