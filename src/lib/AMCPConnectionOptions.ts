@@ -14,9 +14,9 @@ export namespace Options {
 	 * 
 	 */
 	export enum QueueMode  {
-		SALVO 		= 1,
+		// SALVO 		= 1,
 		SEQUENTIAL 	= 2,
-		SMART 		= 3
+		// SMART 		= 3
 	}
 
 	/**
@@ -26,7 +26,7 @@ export namespace Options {
 		V2xx = 2000,
 		V207 = 2007,
 		V21x = 2100,
-		V210 = 2101
+		V210 = 2110
 	}
 }
 

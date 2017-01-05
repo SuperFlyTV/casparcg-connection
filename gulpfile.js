@@ -54,7 +54,7 @@ gulp.task('clean', function () {
 
 //dfault
 gulp.task('default', ['watch', 'compile']); 
-gulp.task('build', ['compile', 'static'])
+gulp.task('build', ['compile', 'static']);
 
 //createProject
 gulp.task("typedoc", function() {

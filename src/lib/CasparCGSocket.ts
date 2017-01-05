@@ -298,6 +298,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			let parsedResponse: AMCPUtil.CasparCGSocketResponse = new AMCPUtil.CasparCGSocketResponse(i);
 			if (!isNaN(parsedResponse.statusCode)) {
 				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
+			}else {
+				this.fire(CasparCGSocketResponseEvent.INVALID_RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
 			}
 			return;
 		}

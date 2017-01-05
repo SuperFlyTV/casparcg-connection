@@ -29,7 +29,7 @@ import IStringCallback = CallbackNS.IStringCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
 // Config NS
 import {Config as ConfigNS} from "./lib/Config";
-import CasparCGConfig = ConfigNS.CasparCGConfig;
+import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
 // Response NS
 import {Response as ResponseNS} from "./lib/ResponseParsers";
 import CasparCGPaths = ResponseNS.CasparCGPaths;
@@ -412,6 +412,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
 		this.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
 		this.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
+		this.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleInvalidSocketResponse(event.response));
 
 		if (this.autoConnect) {
 			this.connect();
@@ -799,8 +800,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
-
-
 		/*
 		
 		100 [action] - Information about an event.
@@ -859,26 +858,41 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * 
 	 */
+	private _handleInvalidSocketResponse(socketResponse: CasparCGSocketResponse): void {
+		if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion < 2100) {
+			this._expediteCommand(true);
+		}
+	}
+
+	/**
+	 * 
+	 */
 	private _expediteCommand(flushSent: boolean = false): void {
 
 		if (flushSent) {
 			while (this._sentCommands.length > 0) {
 				let i: IAMCPCommand = (this._sentCommands.shift())!;
-				i.status =  IAMCPStatus.Failed;
-				i.reject(i);
+				if (i instanceof AMCP.RestartCommand && this._socket.isRestarting) {
+					i.status =  IAMCPStatus.Suceeded;
+					i.resolve(i);
+					continue;
+				}else {
+					i.status =  IAMCPStatus.Failed;
+					i.reject(i);
+				}
 			}
 		}
 		if (this.connected) {
 			// @todo add TTL for cleanup on stuck commands
 
 			// salvo mode
-			if (this.queueMode === QueueMode.SALVO) {
+			/*if (this.queueMode === QueueMode.SALVO) {
 				if (this._queuedCommands.length > 0) {
 					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
 					this._sentCommands.push(nextCommand);
 					this._socket.executeCommand(nextCommand);
 				}
-			}
+			}*/
 
 			// sequential mode
 			if (this.queueMode === QueueMode.SEQUENTIAL) {
@@ -889,9 +903,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				}
 			}
 		} else {
-
-
-
 			// reconnect on missing connection, if  not restating
 			if (!this._socket.isRestarting) {
 				this.reconnect();
