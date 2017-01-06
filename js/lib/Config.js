@@ -17,6 +17,14 @@ var Config;
         function configMemberFactory(version, memberName, initValues) {
             var member = undefined;
             switch (memberName) {
+                case "config":
+                    if (version < 2100) {
+                        member = new v207.CasparCGConfigVO();
+                    }
+                    else {
+                        member = new v21x.CasparCGConfigVO();
+                    }
+                    break;
                 case "channel":
                     if (version < 2100) {
                         member = new v207.Channel();

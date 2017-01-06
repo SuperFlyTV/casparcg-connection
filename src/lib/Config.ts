@@ -9,13 +9,21 @@ export namespace Config {
 	/** */
 	export namespace Utils {
 
-		export type factoryMembers = "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host"  | "channel-layout" | "mix-config";
-		export type FactyoryTypes = v2xx.Consumer | v2xx.Channel | v2xx.Controller | v2xx.OscClient | v2xx.TemplateHost | v207.ChannelLayout | v207.MixConfig | v21x.ChannelLayout | v21x.MixConfig | undefined;
+		export type factoryMembers = "config" | "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host"  | "channel-layout" | "mix-config";
+		export type FactyoryTypes = v207.CasparCGConfigVO | v21x.CasparCGConfigVO | v2xx.Consumer | v2xx.Channel | v2xx.Controller | v2xx.OscClient | v2xx.TemplateHost | v207.ChannelLayout | v207.MixConfig | v21x.ChannelLayout | v21x.MixConfig | undefined;
 
 		export function configMemberFactory(version: ServerVersion, memberName: factoryMembers | string, initValues?: Object): FactyoryTypes {
 			let member: FactyoryTypes = undefined;
 
 			switch (memberName) {
+				case "config":
+					if (version < 2100) {
+						member = new v207.CasparCGConfigVO();
+					} else {
+						member = new v21x.CasparCGConfigVO();
+					}
+					break;
+
 				case "channel":
 					if (version < 2100) {
 						member = new v207.Channel();
