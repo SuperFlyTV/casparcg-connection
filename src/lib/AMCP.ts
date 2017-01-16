@@ -1004,7 +1004,7 @@ export namespace AMCP {
 	 */
 	export class ThumbnailListCommand extends AbstractCommand {
 		static commandString = "THUMBNAIL LIST";
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.PathParser);
+		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser);
 	}
 
 	/**
@@ -1056,7 +1056,7 @@ export namespace AMCP {
 	 */
 	export class ClsCommand extends AbstractCommand {
 		static commandString = "CLS";
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.PathParser);
+		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser);
 	}
 
 	/**
@@ -1064,7 +1064,7 @@ export namespace AMCP {
 	 */
 	export class FlsCommand extends AbstractCommand {
 		static commandString = "FLS";
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.PathParser);
+		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser);
 	}
 
 	/**
@@ -1072,7 +1072,7 @@ export namespace AMCP {
 	 */
 	export class TlsCommand extends AbstractCommand {
 		static commandString = "TLS";
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.PathParser);
+		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser);
 	}
 
 	/**

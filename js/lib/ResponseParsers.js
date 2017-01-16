@@ -324,15 +324,26 @@ var Response;
     /**
      *
      */
-    var PathParser = (function (_super) {
-        __extends(PathParser, _super);
-        function PathParser() {
+    var ContentParser = (function (_super) {
+        __extends(ContentParser, _super);
+        function ContentParser() {
             return _super.apply(this, arguments) || this;
         }
+        ContentParser.parseTimeString = function (timeDateString) {
+            timeDateString = timeDateString.replace(/[tT]/g, "");
+            var year = parseInt(timeDateString.slice(0, 4));
+            var month = parseInt(timeDateString.slice(4, 6));
+            var date = parseInt(timeDateString.slice(6, 8));
+            var hours = parseInt(timeDateString.slice(8, 10));
+            var minutes = parseInt(timeDateString.slice(10, 12));
+            var seconds = parseInt(timeDateString.slice(12, 14));
+            console.log(new Date(year, month, date, hours, minutes, seconds));
+            return new Date(year, month, date, hours, minutes, seconds).getTime();
+        };
         /**
          *
          */
-        PathParser.prototype.parse = function (data) {
+        ContentParser.prototype.parse = function (data) {
             return data.map(function (i) {
                 var components = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
                 if (components === null) {
@@ -342,19 +353,51 @@ var Response;
                 var typeData = components[2].split(/\s+/);
                 // is font
                 if (typeData.length === 1) {
-                    return { name: name, type: "font" };
+                    return { name: name,
+                        type: "font",
+                        fileName: typeData[0].replace(/\"/g, "")
+                    };
                 }
                 // is template
                 if (typeData.length === 3) {
-                    return { name: name, type: "template" };
+                    return { name: name,
+                        type: "template",
+                        size: parseInt(typeData[0]),
+                        changed: ContentParser.parseTimeString(typeData[1]),
+                        format: typeData[2]
+                    };
+                }
+                // is thumbnail
+                if (typeData.length === 2) {
+                    return { name: name,
+                        type: "thumbnail",
+                        changed: ContentParser.parseTimeString(typeData[0]),
+                        size: parseInt(typeData[1]),
+                    };
                 }
                 // is media
-                return { name: name, type: typeData[0].toLowerCase() === "movie" ? "video" : typeData[0].toLowerCase() === "still" ? "image" : typeData[0].toLowerCase() };
+                var frames = parseInt(typeData[3]);
+                var frameRate = 0;
+                var duration = 0;
+                var frameTimeSegments = typeData[4].split("/");
+                if (frameTimeSegments[0] !== "0") {
+                    frameRate = +(parseInt(frameTimeSegments[1]) / parseInt(frameTimeSegments[0])).toFixed(2);
+                    duration = frames / frameRate;
+                }
+                return { name: name,
+                    type: typeData[0].toLowerCase() === "movie" ? "video" : typeData[0].toLowerCase() === "still" ? "image" : typeData[0].toLowerCase(),
+                    size: parseInt(typeData[1]),
+                    changed: ContentParser.parseTimeString(typeData[2]),
+                    frames: frames,
+                    frameTime: typeData[4],
+                    frameRate: frameRate,
+                    duration: duration
+                };
             });
         };
-        return PathParser;
+        return ContentParser;
     }(AbstractParser));
-    Response.PathParser = PathParser;
+    Response.ContentParser = ContentParser;
     /**
      *
      */
@@ -374,7 +417,7 @@ var Response;
                 }
                 // let name: string = components[1].replace(/\\/g, "/");
                 var typeData = components[2].split(/\s+/);
-                return { size: parseInt(typeData[1]), created: typeData[2], duration: parseInt(typeData[3]), fps: typeData[4] };
+                return { size: parseInt(typeData[1]), changed: typeData[2], duration: parseInt(typeData[3]), fps: typeData[4] };
             }
             return {};
         };

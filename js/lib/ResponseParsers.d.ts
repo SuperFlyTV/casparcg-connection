@@ -149,7 +149,8 @@ export declare namespace Response {
     /**
      *
      */
-    class PathParser extends AbstractParser implements IResponseParser {
+    class ContentParser extends AbstractParser implements IResponseParser {
+        static parseTimeString(timeDateString: string): number;
         /**
          *
          */

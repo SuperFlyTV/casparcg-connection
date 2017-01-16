@@ -1196,7 +1196,7 @@ var AMCP;
         __extends(ThumbnailListCommand, _super);
         function ThumbnailListCommand() {
             var _this = _super.apply(this, arguments) || this;
-            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.PathParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
             return _this;
         }
         return ThumbnailListCommand;
@@ -1277,7 +1277,7 @@ var AMCP;
         __extends(ClsCommand, _super);
         function ClsCommand() {
             var _this = _super.apply(this, arguments) || this;
-            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.PathParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
             return _this;
         }
         return ClsCommand;
@@ -1291,7 +1291,7 @@ var AMCP;
         __extends(FlsCommand, _super);
         function FlsCommand() {
             var _this = _super.apply(this, arguments) || this;
-            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.PathParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
             return _this;
         }
         return FlsCommand;
@@ -1305,7 +1305,7 @@ var AMCP;
         __extends(TlsCommand, _super);
         function TlsCommand() {
             var _this = _super.apply(this, arguments) || this;
-            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.PathParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
             return _this;
         }
         return TlsCommand;

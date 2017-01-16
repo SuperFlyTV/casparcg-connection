@@ -260,7 +260,21 @@ export namespace Response {
 	/**
 	 * 
 	 */
-	export class PathParser extends AbstractParser implements IResponseParser {
+	export class ContentParser extends AbstractParser implements IResponseParser {
+
+		static parseTimeString(timeDateString: string): number {
+
+				timeDateString = timeDateString.replace(/[tT]/g, "");
+
+				let year: number = parseInt(timeDateString.slice(0, 4));
+				let month: number = parseInt(timeDateString.slice(4, 6));
+				let date: number = parseInt(timeDateString.slice(6, 8));
+				let hours: number = parseInt(timeDateString.slice(8, 10));
+				let minutes: number = parseInt(timeDateString.slice(10, 12));
+				let seconds: number = parseInt(timeDateString.slice(12, 14));
+				console.log(new Date(year, month, date, hours, minutes, seconds));
+				return new Date(year, month, date, hours, minutes, seconds).getTime();
+		}
 
 		/**
 		 * 
@@ -276,19 +290,53 @@ export namespace Response {
 				let name: string = components[1].replace(/\\/g, "/");
 				let typeData: Array<string> = components[2].split(/\s+/);
 
-
 				// is font
 				if (typeData.length === 1) {
-					return {name: name, type: "font"};
+					return {name: name,
+							type: "font",
+							fileName: typeData[0].replace(/\"/g, "")
+					};
 				 }
 
 				// is template
 				if (typeData.length === 3) {
-					return {name: name, type: "template"};
+					return {name: name,
+						type: "template",
+						size: parseInt(typeData[0]),
+						changed: ContentParser.parseTimeString(typeData[1]),
+						format: typeData[2]
+					};
+				}
+
+				// is thumbnail
+				if (typeData.length === 2) {
+					return {name: name,
+						type: "thumbnail",
+						changed: ContentParser.parseTimeString(typeData[0]),
+						size: parseInt(typeData[1]),
+					};
 				}
 
 				// is media
-				return {name: name, type: typeData[0].toLowerCase() === "movie" ? "video" : typeData[0].toLowerCase() === "still" ? "image" : typeData[0].toLowerCase()};
+
+				let frames: number = parseInt(typeData[3]);
+				let frameRate: number = 0;
+				let duration: number = 0;
+				let frameTimeSegments: Array<string> = typeData[4].split("/");
+				if (frameTimeSegments[0] !== "0") {
+					frameRate = +(parseInt(frameTimeSegments[1]) / parseInt(frameTimeSegments[0])).toFixed(2);
+					duration = frames / frameRate;
+				}
+
+				return {name: name,
+						type: typeData[0].toLowerCase() === "movie" ? "video" : typeData[0].toLowerCase() === "still" ? "image" : typeData[0].toLowerCase(),
+						size: parseInt(typeData[1]),
+						changed: ContentParser.parseTimeString(typeData[2]),
+						frames: frames,
+						frameTime: typeData[4],
+						frameRate: frameRate,
+						duration: duration
+					};
 			});
 		}
 	}
@@ -311,7 +359,7 @@ export namespace Response {
 
 				// let name: string = components[1].replace(/\\/g, "/");
 				let typeData: Array<string> = components[2].split(/\s+/);
-			return {size: parseInt(typeData[1]), created: typeData[2], duration: parseInt(typeData[3]), fps: typeData[4]};
+			return {size: parseInt(typeData[1]), changed: typeData[2], duration: parseInt(typeData[3]), fps: typeData[4]};
 			}
 			return {};
 		}
