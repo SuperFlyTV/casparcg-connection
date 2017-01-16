@@ -272,7 +272,6 @@ export namespace Response {
 				let hours: number = parseInt(timeDateString.slice(8, 10));
 				let minutes: number = parseInt(timeDateString.slice(10, 12));
 				let seconds: number = parseInt(timeDateString.slice(12, 14));
-				console.log(new Date(year, month, date, hours, minutes, seconds));
 				return new Date(year, month, date, hours, minutes, seconds).getTime();
 		}
 

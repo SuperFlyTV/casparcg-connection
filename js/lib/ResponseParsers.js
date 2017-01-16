@@ -337,7 +337,6 @@ var Response;
             var hours = parseInt(timeDateString.slice(8, 10));
             var minutes = parseInt(timeDateString.slice(10, 12));
             var seconds = parseInt(timeDateString.slice(12, 14));
-            console.log(new Date(year, month, date, hours, minutes, seconds));
             return new Date(year, month, date, hours, minutes, seconds).getTime();
         };
         /**
