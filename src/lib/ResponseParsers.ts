@@ -324,7 +324,7 @@ export namespace Response {
 				let frameTimeSegments: Array<string> = typeData[4].split("/");
 				if (frameTimeSegments[0] !== "0") {
 					frameRate = +(parseInt(frameTimeSegments[1]) / parseInt(frameTimeSegments[0])).toFixed(2);
-					duration = frames / frameRate;
+					duration = Math.round((frames / frameRate) * 100) / 100;
 				}
 
 				return {name: name,
