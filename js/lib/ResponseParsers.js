@@ -95,6 +95,38 @@ var Response;
         return CasparCGPaths;
     }());
     Response.CasparCGPaths = CasparCGPaths;
+    /** */
+    var ChannelRate = (function () {
+        /** */
+        function ChannelRate(rateExpression) {
+            this.isInterlaced = rateExpression.indexOf("i") > -1;
+            var rateMatch = rateExpression.match(/[0-9]+$/);
+            var rate = 0;
+            if (rateMatch) {
+                rate = +rateMatch[0];
+            }
+            if (rate === 5994) {
+                this.channelRate = 60 * 1000 / 1001;
+                this.frameRate = this.isInterlaced ? 30 * 1000 / 1001 : this.channelRate;
+            }
+            else if (rateExpression.toLowerCase() === "pal") {
+                this.isInterlaced = true;
+                this.channelRate = 50;
+                this.frameRate = 25;
+            }
+            else if (rateExpression.toLowerCase() === "ntsc") {
+                this.isInterlaced = true;
+                this.channelRate = 60 * 1000 / 1001;
+                this.frameRate = 30 * 1000 / 1001;
+            }
+            else {
+                this.channelRate = rate / 100;
+                this.frameRate = this.isInterlaced ? rate / 200 : this.channelRate;
+            }
+        }
+        return ChannelRate;
+    }());
+    Response.ChannelRate = ChannelRate;
     /**
      *
      */
@@ -116,11 +148,15 @@ var Response;
          *
          */
         ChannelParser.prototype.parse = function (data) {
+            data = [].concat(data);
             var result = [];
-            var components = data.toString().split(/\s|,/);
-            while (components.length > 0) {
-                result.push({ channel: components.shift(), format: components.shift(), status: components.shift() });
-            }
+            data.forEach(function (channel) {
+                var components = channel.toString().split(/\s|,/);
+                var i = +components.shift();
+                var format = components.shift() || "";
+                var rates = new ChannelRate(format);
+                result.push({ channel: i, format: format.toLowerCase(), channelRate: rates.channelRate, frameRate: rates.frameRate, interlaced: rates.isInterlaced });
+            });
             if (result.length > 0) {
                 return result;
             }
