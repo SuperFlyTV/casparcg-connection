@@ -1,11 +1,10 @@
 {
   "name": "casparcg-connection",
-  "version": "0.8.4",
+  "version": "0.14.2",
   "description": "Node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
   "scripts": {
-    "postinstall": "typings install",
     "prepublish": "npm run cleanbuild && npm run doc",
     "postversion": "npm run test && npm run doc",
     "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
@@ -22,8 +21,16 @@
   "bugs": {
     "url": "https://github.com/SuperFlyTV/casparcg-connection/issues"
   },
-  "license": "GPLv3",
-  "author": "Jesper Stærkær @ SuperFly.tv",
+  "license": "MIT",
+  "directories": {
+    "lib": "src/",
+    "doc": "docs/"
+  },
+  "author": {
+    "name": "Jesper Stærkær",
+    "email": "jesper@superfly.tv",
+    "url": "http://superfly.tv"
+  },
   "homepage": "http://superfly.tv",
   "keywords": [
     "casparcg",
@@ -40,16 +47,21 @@
     "remote"
   ],
   "dependencies": {
+    "es6-promise": "^3.3.0",
     "hap": "https://github.com/jesperstarkar/hap.git",
-    "highland": "^3.0.0-beta.3",
     "osc-min": "git+https://github.com/baltedewit/node-osc-min.git",
-    "xml2js": "^0.4.17"
+    "highland": "^3.0.0-beta.3",
+    "xml2js": "^0.4.17",
+    "xmlbuilder": "^8.2.2"
   },
   "devDependencies": {
+    "@types/highland": "^1.14.30",
+    "@types/jasmine": "^2.5.37",
+    "@types/node": "^6.0.46",
+    "@types/xml2js": "0.0.28",
+    "@types/xmlbuilder": "0.0.28",
     "del": "^2.2.1",
     "gulp": "^3.9.1",
-    "gulp-gitignore": "^0.1.0",
-    "gulp-sourcemaps": "^1.6.0",
     "gulp-typedoc": "^2.0.0",
     "gulp-typescript": "^2.10.0",
     "gulp-watch": "^4.3.5",
@@ -57,7 +69,6 @@
     "jasmine-ts": "0.0.3",
     "tslint": "^3.13.0",
     "typedoc": "^0.3.12",
-    "typescript": "^1.7.3",
-    "typings": "^1.3.1"
+    "typescript": "^2.0.6"
   }
 }

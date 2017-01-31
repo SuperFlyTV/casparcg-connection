@@ -49,5 +49,6 @@ export namespace Event {
 		}
 
 		static RESPONSE = "casparcgsocketresponseeventresponse";
+		static INVALID_RESPONSE = "casparcgsocketcommandeventresponseinvalid";
 	}
 }

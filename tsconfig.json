@@ -1,16 +1,21 @@
 {
 	"compilerOptions": {
-		"jsx": "react",
-		"module": "commonjs",
-		"moduleResolution": "node",
+		"declaration": true,
+		"forceConsistentCasingInFileNames": true,
+		"noEmitOnError": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+	//	"noImplicitThis": true, conflict with jasmine, leave off until fixed
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strictNullChecks": true,
+		"suppressImplicitAnyIndexErrors": true,
 		"target": "es5",
-		"sourceMap": false,
-		"removeComments": false,
-		"declaration": true
+		"experimentalDecorators": true
 	},
 	"exclude": [
 		"node_modules",
 		"tests",
-		"*___empty.ts"
+		"tmp"
 	]
 }

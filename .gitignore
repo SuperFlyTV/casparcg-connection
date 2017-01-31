@@ -1,8 +1,3 @@
 .git/
 .vscode/
 node_modules/
-/typings
-/js
-/tmp
-wallaby.js
-npm-debug.log

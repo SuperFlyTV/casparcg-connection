@@ -11,13 +11,16 @@ CasparCG is an open source graphics- and video server for broadcast and streamin
 
 - Node.js
 - npm package
-- TypeScript/Javascript with Typings and Sourcemaps
-- ES5 or ES6
+- TypeScript/Javascript, strongly typed
+- ES5 (easily compiled to ES6)
 - API docs
-- CasparCG AMCP 2.1 protocol implemented
-- Parsing and validation of command parameters
-- Parsing of response data
+- CasparCG AMCP 2.0 and 2.1 protocol implemented
+- Parsing and validation of command parameters and response
 - Queueing of commands
+- Promise-based commands for easy chaining and sequences
+- Helper functions for parsing of Config, Version and System info
+- MIT license
+
 
 ##Example
 ```javascript

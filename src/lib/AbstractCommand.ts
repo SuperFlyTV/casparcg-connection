@@ -1,7 +1,15 @@
+// AMCPUtilNS
+import {AMCPUtil as AMCPUtilNS} from "./AMCP";
+import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
+// ResponseNS
+import {Response as ResponseNS} from "./ResponseSignature";
+import ResponseSignature = ResponseNS.ResponseSignature;
+import {Response as ResponseValidatorNS} from "./ResponseValidators";
+import IResponseValidator = ResponseValidatorNS.IResponseValidator;
+import {Response as ResponseParserNS} from "./ResponseParsers";
+import IResponseParser = ResponseParserNS.IResponseParser;
 // Param NS
 import {Param as ParamNS} from "./ParamSignature";
-import optional = ParamNS.Optional;
-import required = ParamNS.Required;
 import Payload = ParamNS.Payload;
 import PayloadVO = ParamNS.PayloadVO;
 import Param = ParamNS.Param;
@@ -10,7 +18,6 @@ import IParamSignature = ParamNS.IParamSignature;
 // Validation ND
 import {Validation as ValidationNS} from "./ParamValidators";
 import PositiveNumberValidatorBetween = ValidationNS.PositiveNumberRoundValidatorBetween;
-import KeywordValidator = ValidationNS.KeywordValidator;
 // Protocol NS
 import {Protocol as ProtocolNS} from "./ProtocolLogic";
 import IProtocolLogic = ProtocolNS.IProtocolLogic;
@@ -31,16 +38,6 @@ export namespace Command {
 		raw: string;
 		toString(): string;
 		data: Object;
-
-		// 1xx
-		// 2xx
-		// 3xx
-		// 4xx
-		// 5xx
-		// payload 
-			// -> raw string
-			// -> object with string payload
-			// -> object with array of string payloads
 	}
 
 	/**
@@ -100,10 +97,14 @@ export namespace Command {
 	 */
 	export interface IAMCPCommand extends IAMCPCommandData {
 		validateParams(): boolean;
+		validateResponse(response: CasparCGSocketResponse): boolean;
 		serialize(): IAMCPCommandVO;
-		populate(cmdVo: IAMCPCommandVO, id: string): void;
-		protocol: Array<IParamSignature>;
+		populate(cmdVO: IAMCPCommandVO, id: string): void;
+		paramProtocol: Array<IParamSignature>;
 		protocolLogic: Array<IProtocolLogic>;
+		responseProtocol: ResponseSignature;
+		resolve: (command: IAMCPCommand) => void;
+		reject: (command: IAMCPCommand) => void;
 		onStatusChanged: ICommandStatusCallback;
 	}
 
@@ -125,8 +126,11 @@ export namespace Command {
 	 */
 	export abstract class AbstractCommand implements IAMCPCommand {
 		response: IAMCPResponse = new AMCPResponse();
-		protocol: Array<IParamSignature>;
+		paramProtocol: Array<IParamSignature>;
+		responseProtocol: ResponseSignature = new ResponseSignature();
 		onStatusChanged: ICommandStatusCallback;
+		resolve: (command: IAMCPCommand) => void;
+		reject: (command: IAMCPCommand) => void;
 		private _status: IAMCPStatus = IAMCPStatus.New;
 		protected _channel: number;
 		protected _layer: number;
@@ -152,13 +156,13 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
+		constructor(params?: string|Param|(string|Param)[], public context?: Object) {
 			// parse params to objects
 			let paramsArray: Array<string|Param> = [];
 
 			// conform params to array
-			if (params instanceof Array) {
-				paramsArray = params as Array<string|Param>;
+			if (Array.isArray(params)) {
+				paramsArray = params;
 			}else {
 				paramsArray = [<string|Param>params];
 			}
@@ -184,8 +188,8 @@ export namespace Command {
 		 * 
 		 */
 		public validateParams(): boolean {
-			let required: Array<IParamSignature> = this.protocol ? this.protocol.filter(signature => signature.required.valueOf() === true) : [];
-			let optional: Array<IParamSignature> = this.protocol ? this.protocol.filter(signature => signature.required.valueOf() === false) : [];
+			let required: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === true) : [];
+			let optional: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === false) : [];
 
 			// check all required
 			for (let signature of required){
@@ -195,27 +199,27 @@ export namespace Command {
 			}
 
 			// add valid optionals
-			for (let signature of optional){
+			optional.forEach((signature) => {
 				this.validateParam(signature);
-			}
+			});
 
 			if (!this.validateProtocolLogic()) {
 				return false;
 			}
 
-			let validParams: Array<IParamSignature> = this.protocol ? this.protocol.filter((param) => param.resolved && param.payload !== null) : [];
-			let invalidParams: Array<IParamSignature> = this.protocol ? this.protocol.filter((param) => param.resolved && param.payload === null && param.required.valueOf() === true) : [];
+			let validParams: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter((param) => param.resolved && param.payload !== null) : [];
+			let invalidParams: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter((param) => param.resolved && param.payload === null && param.required.valueOf() === true) : [];
 
 			if (invalidParams.length > 0) {
 				return false;
 			}
 
-			for (let param of validParams){
-				let payload: Payload = {key: "", value: null};
+			validParams.forEach((param) => {
+				let payload: Payload = {key: "", value: {}};
 				payload.key = param.key || "";
-				payload.value = param.payload;
+				payload.value = param.payload !== undefined && param.payload !== null && param.payload !== false ? param.payload : {};
 				this.payload[param.name] = payload;
-			}
+			});
 
 			return true;
 		}
@@ -225,8 +229,7 @@ export namespace Command {
 		 */
 		protected validateParam(signature: IParamSignature): boolean {
 			let result: ParamData;
-			let key: string;
-			let param: Object;
+			let param: Object | undefined;
 
 			// objectParams parsing
 			if (this._objectParams.hasOwnProperty(signature.name)) {
@@ -265,12 +268,44 @@ export namespace Command {
 
 			let result: Array<IParamSignature>;
 			for (let rule of this.protocolLogic){
-				if ((result = rule.resolve(this.protocol)) !== null) {
-					this.protocol = result;
+				if ((result = rule.resolve(this.paramProtocol)) !== null) {
+					this.paramProtocol = result;
 				}else {
 					return false;
 				}
 			}
+			return true;
+		}
+
+		/**
+		 * 
+		 */
+		public validateResponse(response: CasparCGSocketResponse): boolean {
+			// code is correct
+			if (response.statusCode !== this.responseProtocol.code) {
+				// @todo: fallbacks? multiple valid codes?
+				return false;
+			}
+			// data is valid
+			let validData: Object = {};
+			if (this.responseProtocol.validator) { // @todo: typechecking ("class that implements....")
+				let validator: IResponseValidator = Object.create(this.responseProtocol.validator["prototype"]);
+				if ((validData = validator.resolve(response)) === false) {
+					return false;
+				}
+			}
+
+			// data gets parsed
+			if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
+				let parser: IResponseParser = Object.create(this.responseProtocol.parser["prototype"]);
+				parser.context = this.context;
+				if ((validData = parser.parse(validData)) === false) {
+					return false;
+				}
+			}
+			this.response.raw = response.responseString;
+			this.response.code = response.statusCode;
+			this.response.data = validData;
 			return true;
 		}
 
@@ -291,48 +326,44 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		protected validateChannel(override?: number): number {
+		protected validateChannel(): number {
 			let result: ParamData;
 			let validator = new PositiveNumberValidatorBetween(1, 9999);
-			let param: Object;
+			let param: Object | undefined;
 
 			if (this._objectParams.hasOwnProperty("channel")) {
 				param = this._objectParams["channel"];
 			}else {
-				// @todo: dispatch error
-				return override;
+				param = NaN;
 			}
 
 			if ((result = validator.resolve(param)) !== false) {
 				return Number(result);
-			}else {
-				// @todo: dispatch error
 			}
 
-			return null;
+			// @todo: dispatch error
+			return NaN;
 		}
 
 		/**
 		 * 
 		 */
-		protected validateLayer(override?: number): number {
+		protected validateLayer(fallback?: number): number {
 			let result: ParamData;
 			let validator = new PositiveNumberValidatorBetween(0, 9999);
-			let param: Object;
+			let param: Object | undefined;
 
 			if (this._objectParams.hasOwnProperty("layer")) {
 				param = this._objectParams["layer"];
 			}else {
-				// @todo: dispatch error
-				return override;
+				param = fallback;
 			}
 			if ((result = validator.resolve(param)) !== false) {
 				return Number(result);
-			}else {
-				// @todo: dispatch error
 			}
 
-			return null;
+			// @todo: dispatch error
+			return 0;
 		}
 
 		/**
@@ -401,10 +432,10 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		populate(cmdVo: IAMCPCommandVO, id): void {
-			this._stringParamsArray = cmdVo._stringParamsArray;
-			this._objectParams = cmdVo._objectParams;
-			this.response = cmdVo.response;
+		populate(cmdVO: IAMCPCommandVO, id: string): void {
+			this._stringParamsArray = cmdVO._stringParamsArray;
+			this._objectParams = cmdVO._objectParams;
+			this.response = cmdVO.response;
 			this._id = id;
 		}
 
@@ -447,8 +478,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params?: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer();
 			if (channel) {
@@ -499,8 +530,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			if (channel) {
 				this._channel = channel;
@@ -528,12 +559,12 @@ export namespace Command {
 		 * 
 		 */
 		get address(): string{
-	if (this.channel) {
-	return this.channel.toString();
-	}else {
-	return null;
-				// @todo throw???
-	}
+			if (this.channel) {
+				return this.channel.toString();
+			}else {
+				return "";
+						// @todo throw???
+			}
 		}
 	}
 
@@ -545,8 +576,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer();
 			if (channel && layer) {
@@ -575,22 +606,21 @@ export namespace Command {
 		 * 
 		 */
 		get address(): string{
-	let address: string;
+			let address: string;
+			if (this.channel && (this.channel > -1)) {
+				address = this.channel.toString();
+			}else {
+				return "";
+						// @todo throw???
+			}
+			if (this.layer && (this.layer > -1)) {
+				address = `${address}-${this.layer}`;
+			}else {
+				return "";
+						// @todo throw???
+			}
 
-	if (this.channel && (this.channel > -1)) {
-	address = this.channel.toString();
-	}else {
-	return null;
-				// @todo throw???
-	}
-	if (this.layer && (this.layer > -1)) {
-	address = `${address}-${this.layer}`;
-	}else {
-	return null;
-				// @todo throw???
-	}
-
-	return address;
+			return address;
 		}
 	}
 
@@ -602,8 +632,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer();
 
@@ -638,11 +668,10 @@ export namespace Command {
 		 */
 		get address(): string{
 			let address: string;
-
 			if (this.channel) {
 				address = this.channel.toString();
 			}else {
-				return null;
+				return "";
 						// @todo throw???
 			}
 			if (this.layer && (this.layer > -1)) {
@@ -661,8 +690,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer(0);
 			if (channel) {
@@ -692,11 +721,10 @@ export namespace Command {
 		 */
 		get address(): string{
 			let address: string;
-
 			if (this.channel) {
 				address = this.channel.toString();
 			}else {
-				return null;
+				return "";
 						// @todo throw???
 			}
 			if (this.layer && (this.layer > -1)) {
@@ -715,8 +743,8 @@ export namespace Command {
 		/**
 		 * 
 		 */
-		constructor(params?: (string|Param|(string|Param)[])) {
-			super(params);
+		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
+			super(params, context);
 			let channel: number = this.validateChannel();
 			let layer: number = this.validateLayer(9999);
 			if (channel) {
@@ -745,19 +773,18 @@ export namespace Command {
 		 * 
 		 */
 		get address(): string{
-	let address: string;
+			let address: string;
+			if (this.channel) {
+				address = this.channel.toString();
+			}else {
+				return "";
+						// @todo throw???
+			}
+			if (this.layer && (this.layer > -1)) {
+				address = `${address}-${this.layer}`;
+			}
 
-	if (this.channel) {
-	address = this.channel.toString();
-	}else {
-	return null;
-				// @todo throw???
-	}
-	if (this.layer && (this.layer > -1)) {
-	address = `${address}-${this.layer}`;
-	}
-
-	return address;
+			return address;
 		}
 	}
 }

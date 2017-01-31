@@ -1,13 +1,12 @@
-/// <reference path="../typings/index.d.ts" />
+import "jasmine";
 import {CasparCG} from "../src/CasparCG";
-import {CasparCGSocket} from "../src/lib/CasparCGSocket";
 import {Enum} from "../src/lib/ServerStateEnum";
 
 describe("AMCPProtocol_v2_1", () => {
 	describe("basic signature", () => {
 
 		beforeAll((done) => {
-			this.instance = new CasparCG({host: "52.208.248.56", onConnected: (event) => done()});
+			this.instance = new CasparCG({host: "52.208.248.56", onConnected: () => done()});
 		});
 
 		afterAll(() => {

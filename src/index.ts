@@ -9,3 +9,5 @@ export * from "./lib/CasparCGSocket";
 export * from "./lib/ParamSignature";
 export * from "./lib/ParamValidators";
 export * from "./lib/ServerStateEnum";
+export * from "./lib/Config";
+export * from "./lib/ResponseParsers";
