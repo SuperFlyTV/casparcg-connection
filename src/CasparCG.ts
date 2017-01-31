@@ -21,7 +21,7 @@ import {Param as ParamNS} from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
 // Event NS
-import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
+import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent, OSCSocketEvent} from "./lib/event/Events";
 // Callback NS
 import {Callback as CallbackNS} from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
@@ -259,7 +259,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _sentCommands: Array<IAMCPCommand> = [];
 	private _configPromise: Promise<CasparCGConfig>;
 	private _pathsPromise: Promise<CasparCGPaths>;
-	private _oscListener: OSCSocket = null;
+	private _oscListener: OSCSocket | null = null;
 	private _osc: number;
 
 	/**
@@ -290,10 +290,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/*
 	 * Public callbacks for osc events
 	 */
-	public onStageMessage: IOSCCallback = undefined;
-	public onMixerMessage: IOSCCallback = undefined;
-	public onDiagMessage: IOSCCallback = undefined;
-	public onOutputMessage: IOSCCallback = undefined;
+	public onStageMessage: IOSCCallback | undefined = undefined;
+	public onMixerMessage: IOSCCallback | undefined = undefined;
+	public onDiagMessage: IOSCCallback | undefined = undefined;
+	public onOutputMessage: IOSCCallback | undefined = undefined;
 
 	/**
 	 * Callback for all logging. 
@@ -431,19 +431,19 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 	}
 
-	private _createOSCListener(options) {
+	private _createOSCListener() {
 		this._oscListener = new OSCSocket(this.osc, this.host);
 
-		this._oscListener.on(OSCSocketEvent.newStageMessage, (event) => {
+		this._oscListener.on(OSCSocketEvent.newStageMessage, (event: any) => {
 			if (this.onStageMessage) this.onStageMessage(event.params.address, event.params.value);
 		});
-		this._oscListener.on(OSCSocketEvent.newMixerMessage, (event) => {
+		this._oscListener.on(OSCSocketEvent.newMixerMessage, (event: any) => {
 			if (this.onMixerMessage) this.onMixerMessage(event.params.address, event.params.value);
 		});
-		this._oscListener.on(OSCSocketEvent.newDiagMessage, (event) => {
+		this._oscListener.on(OSCSocketEvent.newDiagMessage, (event: any) => {
 			if (this.onDiagMessage) this.onDiagMessage(event.params.address, event.params.value);
 		});
-		this._oscListener.on(OSCSocketEvent.newOutputMessage, (event) => {
+		this._oscListener.on(OSCSocketEvent.newOutputMessage, (event: any) => {
 			if (this.onOutputMessage) this.onOutputMessage(event.params.address, event.params.value);
 		});
 	}
@@ -488,7 +488,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.setParent(this._socket);
 		this._socket.on("error", (error: Error) => this._onSocketError(error));
 
-		if (this.osc) this._createOSCListener(options);
+		if (this.osc) this._createOSCListener();
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
@@ -507,7 +507,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this._socket) {
 			this._socket.connect();
 		}
-		if (this.osc) {
+		if (this.osc && this._oscListener) {
 			this._oscListener.listen();
 		}
 	}

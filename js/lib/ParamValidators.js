@@ -83,7 +83,7 @@ var Validation;
     var ClipNameValidator = (function (_super) {
         __extends(ClipNameValidator, _super);
         function ClipNameValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -128,7 +128,7 @@ var Validation;
     var TemplateNameValidator = (function (_super) {
         __extends(TemplateNameValidator, _super);
         function TemplateNameValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return TemplateNameValidator;
     }(ClipNameValidator));
@@ -139,7 +139,7 @@ var Validation;
     var DataNameValidator = (function (_super) {
         __extends(DataNameValidator, _super);
         function DataNameValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return DataNameValidator;
     }(ClipNameValidator));
@@ -328,7 +328,7 @@ var Validation;
     var PositiveNumberRoundValidatorBetween = (function (_super) {
         __extends(PositiveNumberRoundValidatorBetween, _super);
         function PositiveNumberRoundValidatorBetween() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -462,7 +462,7 @@ var Validation;
     var TemplateDataValidator = (function (_super) {
         __extends(TemplateDataValidator, _super);
         function TemplateDataValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *

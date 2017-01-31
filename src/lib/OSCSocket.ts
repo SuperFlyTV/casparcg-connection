@@ -2,7 +2,6 @@ import * as osc from 'osc-min';
 import * as udp from 'dgram';
 
 import {EventEmitter} from "hap";
-import {IConnectionOptions, ConnectionOptions} from "./AMCPConnectionOptions";
 import {OSCSocketEvent} from "./event/Events";
 
 export interface IOscSocket {
@@ -12,7 +11,7 @@ export interface IOscSocket {
 }
 
 export class OSCSocket extends EventEmitter implements IOscSocket {
-  private _socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
+  private _socket = udp.createSocket('udp4', (msg) => this._onReceivedCallback(msg));
 
   private _listening = false;
   private _port = 6250;
@@ -26,7 +25,7 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
     this._socket.on('error', (error) => this._errorHandler(error));
   }
 
-  private _onReceivedCallback(msg, rinfo): void {
+  private _onReceivedCallback(msg: any): void {
     let bundle: any = osc.fromBuffer(msg);
 
 
@@ -45,7 +44,7 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
     }
   }
 
-  private _errorHandler(error): void {
+  private _errorHandler(error: Error): void {
     console.log(error);
   }
 
@@ -54,7 +53,7 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
       this._address = address;
       if (this._listening === true) {
         this._socket.close();
-        this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
+        this._socket = udp.createSocket('udp4', (msg) => this._onReceivedCallback(msg));
         this._socket.bind(this._port, this._address);
       }
     }
@@ -69,7 +68,7 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
       this._port = port;
       if (this._listening === true) {
         this._socket.close();
-        this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
+        this._socket = udp.createSocket('udp4', (msg) => this._onReceivedCallback(msg));
         this._socket.bind(this._port, this._address);
       }
     }
@@ -83,7 +82,6 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
     return this._listening;
   }
 
-  public listen()
   public listen(port?: number, address?: string) {
     if (port) this._port = port;
     if (address) this._address = address;
@@ -93,6 +91,6 @@ export class OSCSocket extends EventEmitter implements IOscSocket {
 
   public close() {
     this._socket.close();
-    this._socket = udp.createSocket('udp4', (msg, rinfo) => this._onReceivedCallback(msg, rinfo));
+    this._socket = udp.createSocket('udp4', (msg) => this._onReceivedCallback(msg));
   }
 }

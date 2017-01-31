@@ -62,11 +62,11 @@ export interface IConnectionOptions {
  * 
  */
 export class ConnectionOptions implements IConnectionOptions {
-	public osc: number = undefined;
-	public onStageMessage: IOSCCallback = undefined;
-	public onDiagMessage: IOSCCallback = undefined;
-	public onMixerMessage: IOSCCallback = undefined;
-	public onOutputMessage: IOSCCallback = undefined;
+	public osc: number | undefined = undefined;
+	public onStageMessage: IOSCCallback | undefined = undefined;
+	public onDiagMessage: IOSCCallback | undefined = undefined;
+	public onMixerMessage: IOSCCallback | undefined = undefined;
+	public onOutputMessage: IOSCCallback | undefined = undefined;
 	public host: string | undefined = "localhost";
 	public port: number | undefined = 5250;
 	public autoConnect: boolean | undefined = true;

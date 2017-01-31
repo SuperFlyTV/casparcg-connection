@@ -49,4 +49,7 @@ export declare namespace Callback {
     interface ICommandStatusCallback {
         (code: IAMCPStatus): void;
     }
+    interface IOSCCallback {
+        (category: string, value: Object): void;
+    }
 }

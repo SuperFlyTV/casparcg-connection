@@ -19,6 +19,7 @@ import { Config as ConfigNS } from "./lib/Config";
 import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
 import { Response as ResponseNS } from "./lib/ResponseParsers";
 import CasparCGPaths = ResponseNS.CasparCGPaths;
+import IOSCCallback = CallbackNS.IOSCCallback;
 /**
  * CasparCG Protocols
  */
@@ -225,6 +226,8 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
     private _sentCommands;
     private _configPromise;
     private _pathsPromise;
+    private _oscListener;
+    private _osc;
     /**
      * Try to connect upon creation.
      */
@@ -245,6 +248,10 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].
      */
     debug: boolean | undefined;
+    onStageMessage: IOSCCallback | undefined;
+    onMixerMessage: IOSCCallback | undefined;
+    onDiagMessage: IOSCCallback | undefined;
+    onOutputMessage: IOSCCallback | undefined;
     /**
      * Callback for all logging.
      */
@@ -348,6 +355,7 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      *
      */
     constructor(options: IConnectionOptions);
+    private _createOSCListener();
     /**
      *
      */
@@ -384,6 +392,7 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      * The new `CasparCGSocket` will `autoConnect` if the old socket was either successfully connected, or currently reconnecting. Changing the host resets the number of [[CasparCG.autoReconnectAttempts]].
      */
     port: number;
+    osc: number;
     /**
      * Try to reconnect in case of unintentionally loss of connection, or in case of failed connection in the first place.
      */
