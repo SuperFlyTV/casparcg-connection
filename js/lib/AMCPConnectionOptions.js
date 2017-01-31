@@ -29,6 +29,11 @@ var Options;
  */
 var ConnectionOptions = (function () {
     function ConnectionOptions(hostOrOptions, port) {
+        this.osc = undefined;
+        this.onStageMessage = undefined;
+        this.onDiagMessage = undefined;
+        this.onMixerMessage = undefined;
+        this.onOutputMessage = undefined;
         this.host = "localhost";
         this.port = 5250;
         this.autoConnect = true;

@@ -4,6 +4,7 @@ import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
 import IStringCallback = CallbackNS.IStringCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
+import IOSCCallback = CallbackNS.IOSCCallback;
 
 /**
  * 
@@ -36,6 +37,7 @@ export namespace Options {
 export interface IConnectionOptions {
 	host?: string;
 	port?: number;
+	osc?: number;
 	autoConnect?: boolean;
 	autoReconnect?: boolean;
 	autoReconnectInterval?: number;
@@ -44,6 +46,10 @@ export interface IConnectionOptions {
 	serverVersion?: Options.ServerVersion;
 	queueMode?: Options.QueueMode;
 	debug?: boolean;
+	onStageMessage?: IOSCCallback;
+	onMixerMessage?: IOSCCallback;
+	onDiagMessage?: IOSCCallback;
+	onOutputMessage?: IOSCCallback;
 	onLog?: IStringCallback;
 	onConnectionStatus?: ISocketStatusCallback;
 	onConnectionChanged?: IBooleanCallback;
@@ -56,6 +62,11 @@ export interface IConnectionOptions {
  * 
  */
 export class ConnectionOptions implements IConnectionOptions {
+	public osc: number | undefined = undefined;
+	public onStageMessage: IOSCCallback | undefined = undefined;
+	public onDiagMessage: IOSCCallback | undefined = undefined;
+	public onMixerMessage: IOSCCallback | undefined = undefined;
+	public onOutputMessage: IOSCCallback | undefined = undefined;
 	public host: string | undefined = "localhost";
 	public port: number | undefined = 5250;
 	public autoConnect: boolean | undefined = true;

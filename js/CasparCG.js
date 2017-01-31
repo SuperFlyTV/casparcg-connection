@@ -7,6 +7,7 @@ var __extends = (this && this.__extends) || function (d, b) {
 var es6_promise_1 = require("es6-promise");
 var hap_1 = require("hap");
 var CasparCGSocket_1 = require("./lib/CasparCGSocket");
+var OSCSocket_1 = require("./lib/OSCSocket");
 var AMCP_1 = require("./lib/AMCP");
 var ServerStateEnum_1 = require("./lib/ServerStateEnum");
 var AMCPConnectionOptions_1 = require("./lib/AMCPConnectionOptions");
@@ -33,6 +34,7 @@ var CasparCG = (function (_super) {
         var _this = _super.call(this) || this;
         _this._queuedCommands = [];
         _this._sentCommands = [];
+        _this._oscListener = null;
         /**
          * Try to connect upon creation.
          */
@@ -53,6 +55,13 @@ var CasparCG = (function (_super) {
          * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].
          */
         _this.debug = undefined;
+        /*
+         * Public callbacks for osc events
+         */
+        _this.onStageMessage = undefined;
+        _this.onMixerMessage = undefined;
+        _this.onDiagMessage = undefined;
+        _this.onOutputMessage = undefined;
         /**
          * Callback for all logging.
          */
@@ -98,6 +107,26 @@ var CasparCG = (function (_super) {
         }
         return _this;
     }
+    CasparCG.prototype._createOSCListener = function () {
+        var _this = this;
+        this._oscListener = new OSCSocket_1.OSCSocket(this.osc, this.host);
+        this._oscListener.on(Events_1.OSCSocketEvent.newStageMessage, function (event) {
+            if (_this.onStageMessage)
+                _this.onStageMessage(event.params.address, event.params.value);
+        });
+        this._oscListener.on(Events_1.OSCSocketEvent.newMixerMessage, function (event) {
+            if (_this.onMixerMessage)
+                _this.onMixerMessage(event.params.address, event.params.value);
+        });
+        this._oscListener.on(Events_1.OSCSocketEvent.newDiagMessage, function (event) {
+            if (_this.onDiagMessage)
+                _this.onDiagMessage(event.params.address, event.params.value);
+        });
+        this._oscListener.on(Events_1.OSCSocketEvent.newOutputMessage, function (event) {
+            if (_this.onOutputMessage)
+                _this.onOutputMessage(event.params.address, event.params.value);
+        });
+    };
     /**
      *
      */
@@ -137,6 +166,8 @@ var CasparCG = (function (_super) {
         this._socket = new CasparCGSocket_1.CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
         this.setParent(this._socket);
         this._socket.on("error", function (error) { return _this._onSocketError(error); });
+        if (this.osc)
+            this._createOSCListener();
         // inherit log method
         this._socket.log = function (args) { return _this._log(args); };
     };
@@ -153,6 +184,9 @@ var CasparCG = (function (_super) {
         if (this._socket) {
             this._socket.connect();
         }
+        if (this.osc && this._oscListener) {
+            this._oscListener.listen();
+        }
     };
     /**
      * Disconnects and disposes the [[CasparCGSocket]] connection.
@@ -160,6 +194,9 @@ var CasparCG = (function (_super) {
     CasparCG.prototype.disconnect = function () {
         if (this._socket) {
             this._socket.disconnect();
+        }
+        if (this._oscListener) {
+            this._oscListener.close();
         }
     };
     /**
@@ -218,6 +255,20 @@ var CasparCG = (function (_super) {
                         this.connect();
                     }
                 }
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CasparCG.prototype, "osc", {
+        get: function () {
+            return this._osc; // @todo
+        },
+        set: function (port) {
+            if (this._osc !== port) {
+                this._osc = port;
+                if (this._oscListener)
+                    this._oscListener.port = port;
             }
         },
         enumerable: true,

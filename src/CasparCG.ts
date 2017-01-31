@@ -1,6 +1,7 @@
 import {Promise} from "es6-promise";
 import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
+import {OSCSocket} from "./lib/OSCSocket";
 import {AMCP, AMCPUtil as AMCPUtilNS} from "./lib/AMCP";
 // AMCPUtilNS
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
@@ -20,7 +21,7 @@ import {Param as ParamNS} from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
 // Event NS
-import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
+import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent, OSCSocketEvent} from "./lib/event/Events";
 // Callback NS
 import {Callback as CallbackNS} from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
@@ -33,6 +34,7 @@ import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
 // Response NS
 import {Response as ResponseNS} from "./lib/ResponseParsers";
 import CasparCGPaths = ResponseNS.CasparCGPaths;
+import IOSCCallback = CallbackNS.IOSCCallback;
 
 /**
  * CasparCG Protocols
@@ -257,6 +259,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _sentCommands: Array<IAMCPCommand> = [];
 	private _configPromise: Promise<CasparCGConfig>;
 	private _pathsPromise: Promise<CasparCGPaths>;
+	private _oscListener: OSCSocket | null = null;
+	private _osc: number;
 
 	/**
 	 * Try to connect upon creation.
@@ -282,6 +286,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].  
 	 */
 	public debug: boolean | undefined = undefined;
+
+	/*
+	 * Public callbacks for osc events
+	 */
+	public onStageMessage: IOSCCallback | undefined = undefined;
+	public onMixerMessage: IOSCCallback | undefined = undefined;
+	public onDiagMessage: IOSCCallback | undefined = undefined;
+	public onOutputMessage: IOSCCallback | undefined = undefined;
 
 	/**
 	 * Callback for all logging. 
@@ -419,6 +431,23 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 	}
 
+	private _createOSCListener() {
+		this._oscListener = new OSCSocket(this.osc, this.host);
+
+		this._oscListener.on(OSCSocketEvent.newStageMessage, (event: any) => {
+			if (this.onStageMessage) this.onStageMessage(event.params.address, event.params.value);
+		});
+		this._oscListener.on(OSCSocketEvent.newMixerMessage, (event: any) => {
+			if (this.onMixerMessage) this.onMixerMessage(event.params.address, event.params.value);
+		});
+		this._oscListener.on(OSCSocketEvent.newDiagMessage, (event: any) => {
+			if (this.onDiagMessage) this.onDiagMessage(event.params.address, event.params.value);
+		});
+		this._oscListener.on(OSCSocketEvent.newOutputMessage, (event: any) => {
+			if (this.onOutputMessage) this.onOutputMessage(event.params.address, event.params.value);
+		});
+	}
+
 	/**
 	 * 
 	 */
@@ -459,6 +488,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this.setParent(this._socket);
 		this._socket.on("error", (error: Error) => this._onSocketError(error));
 
+		if (this.osc) this._createOSCListener();
+
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
 	}
@@ -476,6 +507,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this._socket) {
 			this._socket.connect();
 		}
+		if (this.osc && this._oscListener) {
+			this._oscListener.listen();
+		}
 	}
 
 	/**
@@ -484,6 +518,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public disconnect(): void {
 		if (this._socket) {
 			this._socket.disconnect();
+		}
+		if (this._oscListener) {
+			this._oscListener.close();
 		}
 	}
 
@@ -542,6 +579,17 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					this.connect();
 				}
 			}
+		}
+	}
+
+	public get osc(): number {
+		return this._osc; // @todo
+	}
+
+	public set osc(port: number) {
+		if (this._osc !== port) {
+			this._osc = port;
+			if (this._oscListener) this._oscListener.port = port;
 		}
 	}
 
