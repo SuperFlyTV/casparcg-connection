@@ -72,6 +72,40 @@ export namespace Response {
 		}
 	}
 
+	/** */
+	export class ChannelRate {
+
+		public channelRate: number;
+		public frameRate: number;
+		public isInterlaced: boolean;
+
+		/** */
+		constructor(rateExpression: string) {
+			this.isInterlaced = rateExpression.indexOf("i") > -1;
+			let rateMatch: RegExpMatchArray | null = rateExpression.match(/[0-9]+$/);
+			let rate: number = 0;
+			if (rateMatch) {
+				rate = +rateMatch[0];
+			}
+
+			if (rate === 5994) {
+				this.channelRate = 60 * 1000 / 1001;
+				this.frameRate = this.isInterlaced ? 30 * 1000 / 1001 : this.channelRate;
+			} else if (rateExpression.toLowerCase() === "pal") {
+				this.isInterlaced = true;
+				this.channelRate = 50;
+				this.frameRate = 25;
+			} else if (rateExpression.toLowerCase() === "ntsc") {
+				this.isInterlaced = true;
+				this.channelRate = 60 * 1000 / 1001;
+				this.frameRate = 30 * 1000 / 1001;
+			} else {
+				this.channelRate = rate / 100;
+				this.frameRate = this.isInterlaced ? rate / 200 : this.channelRate;
+			}
+		}
+	}
+
 	/**
 	 * 
 	 */
@@ -95,13 +129,19 @@ export namespace Response {
 		/**
 		 * 
 		 */
-		public parse(data: Object): Object {
+		public parse(data: any): Object {
+			data = [].concat(data);
 			let result: Array<Object> = [];
-			let components: Array<string> = data.toString().split(/\s|,/);
+			(<Array<Object>>data).forEach((channel) => {
+				let components: Array<string> = channel.toString().split(/\s|,/);
 
-			while (components.length > 0) {
-				result.push({channel: components.shift(), format: components.shift(), status: components.shift()});
-			}
+				let i: number = +components.shift();
+				let format: string = components.shift() || "";
+				let rates: ChannelRate = new ChannelRate(format);
+
+				result.push({channel: i, format: format.toLowerCase(), channelRate: rates.channelRate, frameRate: rates.frameRate, interlaced: rates.isInterlaced});
+			});
+
 
 			if (result.length > 0) {
 				return result;
@@ -324,7 +364,7 @@ export namespace Response {
 				let frameTimeSegments: Array<string> = typeData[4].split("/");
 				if (frameTimeSegments[0] !== "0") {
 					frameRate = +(parseInt(frameTimeSegments[1]) / parseInt(frameTimeSegments[0])).toFixed(2);
-					duration = frames / frameRate;
+					duration = Math.round((frames / frameRate) * 100) / 100;
 				}
 
 				return {name: name,

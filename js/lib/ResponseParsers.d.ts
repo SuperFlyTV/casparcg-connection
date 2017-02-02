@@ -29,6 +29,14 @@ export declare namespace Response {
         /** */
         static ensureTrailingSlash(path: string): string;
     }
+    /** */
+    class ChannelRate {
+        channelRate: number;
+        frameRate: number;
+        isInterlaced: boolean;
+        /** */
+        constructor(rateExpression: string);
+    }
     /**
      *
      */
@@ -49,7 +57,7 @@ export declare namespace Response {
         /**
          *
          */
-        parse(data: Object): Object;
+        parse(data: any): Object;
     }
     /** */
     class ConfigParser extends AbstractParser implements IResponseParser {
