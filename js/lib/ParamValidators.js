@@ -116,8 +116,8 @@ var Validation;
                 return false;
             }
             // add quotation
-            clipName = "\"" + clipName + "\"";
-            return clipName;
+            var quotedClipName = "\"" + clipName + "\"";
+            return { raw: clipName, payload: quotedClipName };
         };
         return ClipNameValidator;
     }(AbstractValidator));
@@ -491,7 +491,8 @@ var Validation;
                 }*/
             // add qoutation 
             stringCast = stringCast.replace(/\"/g, "\\\"");
-            return "\"" + stringCast + "\"";
+            var quotedString = "\"" + stringCast + "\"";
+            return { raw: stringCast, payload: quotedString };
         };
         return TemplateDataValidator;
     }(AbstractValidator));

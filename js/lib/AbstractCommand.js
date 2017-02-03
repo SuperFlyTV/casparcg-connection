@@ -166,7 +166,13 @@ var Command;
             }
             if ((result = signature.validation.resolve(param, (signature.key || signature.name))) !== false) {
                 signature.validation.resolved = true;
-                signature.payload = result;
+                if (typeof result === "object" && result.hasOwnProperty("raw") && result.hasOwnProperty("payload")) {
+                    signature.payload = result.payload;
+                    signature.raw = result.raw;
+                }
+                else {
+                    signature.payload = result;
+                }
                 return true;
             }
             else {

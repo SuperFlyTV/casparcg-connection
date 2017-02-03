@@ -43,6 +43,7 @@ export namespace Param {
 		validation: IValidator;
 		resolved: boolean;
 		payload: Object | null;
+		raw: Object | null;
 	}
 
 	/**
@@ -55,7 +56,7 @@ export namespace Param {
 	/**
 	 * 
 	 */
-	export type ParamData = (string|boolean|number);
+	export type ParamData = (string|boolean|number|{raw: string|boolean|number, payload: string|boolean|number});
 
 	/**
 	 * 
@@ -66,9 +67,9 @@ export namespace Param {
 	 * 
 	 */
 	export class ParamSignature implements IParamSignature {
-
 		public validation: IValidator;
-		public payload: Object | null = null;
+		public payload: string | number | boolean | null = null;
+		public raw: string | number | boolean | null = null;
 
 		/**
 		 * 
