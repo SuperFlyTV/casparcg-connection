@@ -31,9 +31,11 @@ connection.play(1, 1, "amb");
 ```
 
 ##Documentation
-Examples and tutorials in the [wiki](https://github.com/SuperFlyTV/casparcg-connection/wiki).
+Join the discussion in the [CasparCG Forum thread](http://casparcg.com/forum/viewtopic.php?f=3&t=4061).
 
 Visit [https://superflytv.github.io/casparcg-connection/](https://superflytv.github.io/casparcg-connection/) for API documentation.
+
+~~Examples and tutorials in the [wiki](https://github.com/SuperFlyTV/casparcg-connection/wiki).~~
 
 ##About
 
