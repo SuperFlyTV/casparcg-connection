@@ -130,9 +130,8 @@ export namespace Validation {
 			}
 
 			// add quotation
-			clipName = `"${clipName}"`;
-
-			return clipName;
+			let quotedClipName: string = `"${clipName}"`;
+			return {raw: clipName, payload: quotedClipName};
 		}
 	}
 
@@ -474,7 +473,9 @@ export namespace Validation {
 
 			// add qoutation 
 			stringCast = stringCast.replace(/\"/g, "\\\"");
-			return `"${stringCast}"`;
+
+			let quotedString: string = `"${stringCast}"`;
+			return {raw: stringCast, payload: quotedString};
 		}
 	}
 }

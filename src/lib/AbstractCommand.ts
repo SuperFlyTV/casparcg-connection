@@ -218,6 +218,7 @@ export namespace Command {
 				let payload: Payload = {key: "", value: {}};
 				payload.key = param.key || "";
 				payload.value = param.payload !== undefined && param.payload !== null && param.payload !== false ? param.payload : {};
+
 				this.payload[param.name] = payload;
 			});
 
@@ -250,7 +251,12 @@ export namespace Command {
 
 			if ((result = signature.validation.resolve(param, (signature.key ||  signature.name))) !== false) {
 				signature.validation.resolved = true;
-				signature.payload = result;
+				if (typeof result === "object" && result.hasOwnProperty("raw") && result.hasOwnProperty("payload")) {
+					signature.payload = result.payload;
+					signature.raw = result.raw;
+				}else {
+					signature.payload = result;
+				}
 				return true;
 			}else {
 				return false;

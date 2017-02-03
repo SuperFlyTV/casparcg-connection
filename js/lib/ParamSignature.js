@@ -48,6 +48,7 @@ var Param;
             this.name = name;
             this.key = key;
             this.payload = null;
+            this.raw = null;
             if (validation instanceof AbstractValidator) {
                 this.validation = validation;
             }

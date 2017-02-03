@@ -32,6 +32,7 @@ export declare namespace Param {
         validation: IValidator;
         resolved: boolean;
         payload: Object | null;
+        raw: Object | null;
     }
     /**
      *
@@ -49,7 +50,10 @@ export declare namespace Param {
     /**
      *
      */
-    type ParamData = (string | boolean | number);
+    type ParamData = (string | boolean | number | {
+        raw: string | boolean | number;
+        payload: string | boolean | number;
+    });
     /**
      *
      */
@@ -62,7 +66,8 @@ export declare namespace Param {
         name: string;
         key: string | null;
         validation: IValidator;
-        payload: Object | null;
+        payload: string | number | boolean | null;
+        raw: string | number | boolean | null;
         /**
          *
          */
