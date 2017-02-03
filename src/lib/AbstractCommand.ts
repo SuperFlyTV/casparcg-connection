@@ -215,10 +215,10 @@ export namespace Command {
 			}
 
 			validParams.forEach((param) => {
-				let payload: Payload = {key: "", value: {}};
+				let payload: Payload = {key: "", value: {}, raw: null};
 				payload.key = param.key || "";
-				payload.value = param.payload !== undefined && param.payload !== null && param.payload !== false ? param.payload : {};
-
+				payload.value = param.payload !== undefined && param.payload !== null ? param.payload : {};
+				payload.raw = param.raw;
 				this.payload[param.name] = payload;
 			});
 

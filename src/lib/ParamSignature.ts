@@ -50,7 +50,7 @@ export namespace Param {
 	 * 
 	 */
 	export type Param = {[k: string]: (string|number|boolean|Object|undefined)};
-	export type Payload = {key: string, value: (string|number|boolean|Object)};
+	export type Payload = {key: string, value: (string|number|boolean|Object), raw: (string|number|boolean|Object|null)};
 	export type PayloadVO = {[k: string]: Payload};
 
 	/**

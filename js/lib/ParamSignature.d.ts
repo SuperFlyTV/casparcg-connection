@@ -43,6 +43,7 @@ export declare namespace Param {
     type Payload = {
         key: string;
         value: (string | number | boolean | Object);
+        raw: (string | number | boolean | Object | null);
     };
     type PayloadVO = {
         [k: string]: Payload;

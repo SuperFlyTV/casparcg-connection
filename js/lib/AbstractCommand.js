@@ -134,9 +134,10 @@ var Command;
                 return false;
             }
             validParams.forEach(function (param) {
-                var payload = { key: "", value: {} };
+                var payload = { key: "", value: {}, raw: null };
                 payload.key = param.key || "";
-                payload.value = param.payload !== undefined && param.payload !== null && param.payload !== false ? param.payload : {};
+                payload.value = param.payload !== undefined && param.payload !== null ? param.payload : {};
+                payload.raw = param.raw;
                 _this.payload[param.name] = payload;
             });
             return true;
