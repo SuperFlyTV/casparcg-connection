@@ -103,7 +103,7 @@ export namespace AMCP {
 			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, "seek", "SEEK", new ParameterValidator.FrameValidator("SEEK")),
 			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.StringValidator()),
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
 		];
 		static protocolLogic = [
@@ -127,7 +127,7 @@ export namespace AMCP {
 			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, "seek", "SEEK", new ParameterValidator.FrameValidator("SEEK")),
 			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.StringValidator())
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator())
 		];
 		static protocolLogic = [
 			new Depends("transitionDuration", "transition"),
@@ -150,7 +150,7 @@ export namespace AMCP {
 			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, "seek", "SEEK", new ParameterValidator.FrameValidator("SEEK")),
 			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.StringValidator())
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator())
 		];
 		static protocolLogic = [
 			new Depends("loop", "clip"),
@@ -165,7 +165,6 @@ export namespace AMCP {
 			new Depends("transitionEasing", "transition"),
 			new Depends("transitionDirection", "transition")
 		];
-
 	}
 
 	/**
@@ -287,6 +286,89 @@ export namespace AMCP {
 			new ParamSignature(required, "method", null, new ParameterValidator.StringValidator())
 		];
 		responseProtocol = new ResponseSignature(201);
+	}
+}
+
+/**
+ * IInputOutput
+ */
+export namespace AMCP {
+		/**
+	 * 
+	 */
+	export class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "LOADBG";
+		paramProtocol = [
+			new ParamSignature(required, "device", null, new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.EnumValidator(Enum.ChannelFormat)),
+			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator()),
+			new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
+		];
+		static protocolLogic = [
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
+	}
+
+	/**
+	 * 
+	 */
+	export class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "LOAD";
+		paramProtocol = [
+			new ParamSignature(required, "device", null, new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.EnumValidator(Enum.ChannelFormat)),
+			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator())
+		];
+		static protocolLogic = [
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
+	}
+
+	/**
+	 * 
+	 */
+	export class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "PLAY";
+		paramProtocol = [
+			new ParamSignature(required, "device", null, new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.EnumValidator(Enum.ChannelFormat)),
+			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator())
+		];
+		static protocolLogic = [
+			new Depends("length", "device"),
+			new Depends("filter", "device"),
+			new Depends("format", "device"),
+			new Depends("channelLayout", "device"),
+			new Depends("transition", "device"),
+			new Depends("transitionDuration", "device"),
+			new Depends("transitionEasing", "device"),
+			new Depends("transitionDirection", "device"),
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
 	}
 }
 

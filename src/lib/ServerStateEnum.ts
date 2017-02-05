@@ -341,4 +341,57 @@ export namespace Enum {
 		static OUT_IN_BOUNCE = new Ease("EASEOUTINBOUNCE");
 		static EASEOUTINBOUNCE = Ease.OUT_IN_BOUNCE;
 	}
+
+	/**
+	 * 
+	 */
+	export class ChannelFormat extends AbstractEnum {
+		static INVALID = new ChannelFormat("invalid");
+		static PAL = new ChannelFormat("PAL");
+		static NTSC = new ChannelFormat("NTSC");
+		static SD_576P2500 = new ChannelFormat("576p2500");
+		static HD_720P2398 = new ChannelFormat("720p2398");
+		static HD_720P2400 = new ChannelFormat("720p2400");
+		static HD_720P2500 = new ChannelFormat("720p2500");
+		static HD_720P5000 = new ChannelFormat("720p5000");
+		static HD_720P2997 = new ChannelFormat("720p2997");
+		static HD_720P5994 = new ChannelFormat("720p5994");
+		static HD_720P3000 = new ChannelFormat("720p3000");
+		static HD_720P6000 = new ChannelFormat("720p6000");
+		static HD_1080P2398 = new ChannelFormat("1080p2398");
+		static HD_1080P2400 = new ChannelFormat("1080p2400");
+		static HD_1080I5000 = new ChannelFormat("1080i5000");
+		static HD_1080I5994 = new ChannelFormat("1080i5994");
+		static HD_1080I6000 = new ChannelFormat("1080i6000");
+		static HD_1080P2500 = new ChannelFormat("1080p2500");
+		static HD_1080P2997 = new ChannelFormat("1080p2997");
+		static HD_1080P3000 = new ChannelFormat("1080p3000");
+		static HD_1080P5000 = new ChannelFormat("1080p5000");
+		static HD_1080P5994 = new ChannelFormat("1080p5994");
+		static HD_1080P6000 = new ChannelFormat("1080p6000");
+		static UHD_1556P2398 = new ChannelFormat("1556p2398");
+		static UHD_1556P2400 = new ChannelFormat("1556p2400");
+		static UHD_1556P2500 = new ChannelFormat("1556p2500");
+		static DCI_1080P2398 = new ChannelFormat("dci1080p2398");
+		static DCI_1080P2400 = new ChannelFormat("dci1080p2400");
+		static DCI_1080P2500 = new ChannelFormat("dci1080p2500");
+		static UHD_2160P2398 = new ChannelFormat("2160p2398");
+		static UCH_2160P2400 = new ChannelFormat("2160p2400");
+		static UHD_2160P2500 = new ChannelFormat("2160p2500");
+		static UHD_2160P2997 = new ChannelFormat("2160p2997");
+		static UHD_2160P3000 = new ChannelFormat("2160p3000");
+		static UHD_2160P5000 = new ChannelFormat("2160p5000");
+		static UHD_2160P5994 = new ChannelFormat("2160p5994");
+		static UHD_2160P6000 = new ChannelFormat("2160p6000");
+		static DCI_2160P2398 = new ChannelFormat("dci2160p2398");
+		static DCI_2160P2400 = new ChannelFormat("dci2160p2400");
+		static DCI_2160P2500 = new ChannelFormat("dci2160p2500");
+	}
+
+	/**
+	 * 
+	 */
+	export class ChannelLayout extends AbstractEnum {
+
+	}
 }

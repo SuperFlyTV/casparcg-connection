@@ -87,6 +87,14 @@ export namespace Validation {
 		}
 	}
 
+	/** */
+	export class FilterValidator extends StringValidator {}
+
+	/** */
+	export class ChannelLayoutValidator extends StringValidator {
+		// @todo: a combination of string and enum!
+	}
+
 	/**
 	 * 
 	 */
@@ -371,6 +379,9 @@ export namespace Validation {
 			super();
 		}
 	}
+
+	/** */
+	export class DecklinkDeviceValidator extends PositiveNumberValidator {}
 
 	/**
 	 * 

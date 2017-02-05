@@ -404,4 +404,66 @@ var Enum;
     Ease.OUT_IN_BOUNCE = new Ease("EASEOUTINBOUNCE");
     Ease.EASEOUTINBOUNCE = Ease.OUT_IN_BOUNCE;
     Enum.Ease = Ease;
+    /**
+     *
+     */
+    var ChannelFormat = (function (_super) {
+        __extends(ChannelFormat, _super);
+        function ChannelFormat() {
+            return _super.apply(this, arguments) || this;
+        }
+        return ChannelFormat;
+    }(AbstractEnum));
+    ChannelFormat.INVALID = new ChannelFormat("invalid");
+    ChannelFormat.PAL = new ChannelFormat("PAL");
+    ChannelFormat.NTSC = new ChannelFormat("NTSC");
+    ChannelFormat.SD_576P2500 = new ChannelFormat("576p2500");
+    ChannelFormat.HD_720P2398 = new ChannelFormat("720p2398");
+    ChannelFormat.HD_720P2400 = new ChannelFormat("720p2400");
+    ChannelFormat.HD_720P2500 = new ChannelFormat("720p2500");
+    ChannelFormat.HD_720P5000 = new ChannelFormat("720p5000");
+    ChannelFormat.HD_720P2997 = new ChannelFormat("720p2997");
+    ChannelFormat.HD_720P5994 = new ChannelFormat("720p5994");
+    ChannelFormat.HD_720P3000 = new ChannelFormat("720p3000");
+    ChannelFormat.HD_720P6000 = new ChannelFormat("720p6000");
+    ChannelFormat.HD_1080P2398 = new ChannelFormat("1080p2398");
+    ChannelFormat.HD_1080P2400 = new ChannelFormat("1080p2400");
+    ChannelFormat.HD_1080I5000 = new ChannelFormat("1080i5000");
+    ChannelFormat.HD_1080I5994 = new ChannelFormat("1080i5994");
+    ChannelFormat.HD_1080I6000 = new ChannelFormat("1080i6000");
+    ChannelFormat.HD_1080P2500 = new ChannelFormat("1080p2500");
+    ChannelFormat.HD_1080P2997 = new ChannelFormat("1080p2997");
+    ChannelFormat.HD_1080P3000 = new ChannelFormat("1080p3000");
+    ChannelFormat.HD_1080P5000 = new ChannelFormat("1080p5000");
+    ChannelFormat.HD_1080P5994 = new ChannelFormat("1080p5994");
+    ChannelFormat.HD_1080P6000 = new ChannelFormat("1080p6000");
+    ChannelFormat.UHD_1556P2398 = new ChannelFormat("1556p2398");
+    ChannelFormat.UHD_1556P2400 = new ChannelFormat("1556p2400");
+    ChannelFormat.UHD_1556P2500 = new ChannelFormat("1556p2500");
+    ChannelFormat.DCI_1080P2398 = new ChannelFormat("dci1080p2398");
+    ChannelFormat.DCI_1080P2400 = new ChannelFormat("dci1080p2400");
+    ChannelFormat.DCI_1080P2500 = new ChannelFormat("dci1080p2500");
+    ChannelFormat.UHD_2160P2398 = new ChannelFormat("2160p2398");
+    ChannelFormat.UCH_2160P2400 = new ChannelFormat("2160p2400");
+    ChannelFormat.UHD_2160P2500 = new ChannelFormat("2160p2500");
+    ChannelFormat.UHD_2160P2997 = new ChannelFormat("2160p2997");
+    ChannelFormat.UHD_2160P3000 = new ChannelFormat("2160p3000");
+    ChannelFormat.UHD_2160P5000 = new ChannelFormat("2160p5000");
+    ChannelFormat.UHD_2160P5994 = new ChannelFormat("2160p5994");
+    ChannelFormat.UHD_2160P6000 = new ChannelFormat("2160p6000");
+    ChannelFormat.DCI_2160P2398 = new ChannelFormat("dci2160p2398");
+    ChannelFormat.DCI_2160P2400 = new ChannelFormat("dci2160p2400");
+    ChannelFormat.DCI_2160P2500 = new ChannelFormat("dci2160p2500");
+    Enum.ChannelFormat = ChannelFormat;
+    /**
+     *
+     */
+    var ChannelLayout = (function (_super) {
+        __extends(ChannelLayout, _super);
+        function ChannelLayout() {
+            return _super.apply(this, arguments) || this;
+        }
+        return ChannelLayout;
+    }(AbstractEnum));
+    Enum.ChannelLayout = ChannelLayout;
 })(Enum = exports.Enum || (exports.Enum = {}));

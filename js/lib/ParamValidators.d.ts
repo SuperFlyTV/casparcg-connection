@@ -31,6 +31,12 @@ export declare namespace Validation {
          */
         resolve(data: Object): ParamData;
     }
+    /** */
+    class FilterValidator extends StringValidator {
+    }
+    /** */
+    class ChannelLayoutValidator extends StringValidator {
+    }
     /**
      *
      */
@@ -149,6 +155,9 @@ export declare namespace Validation {
          *
          */
         constructor();
+    }
+    /** */
+    class DecklinkDeviceValidator extends PositiveNumberValidator {
     }
     /**
      *

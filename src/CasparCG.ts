@@ -47,7 +47,7 @@ export namespace CasparCGProtocols {
 		/**
 		 * AMCP version 2.1
 		 */
-		export interface AMCP extends IVideo, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation {
+		export interface AMCP extends IVideo, IInputOutput, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation {
 		}
 
 		/**
@@ -60,6 +60,15 @@ export namespace CasparCGProtocols {
 			pause(channel: number, layer?: number): Promise<IAMCPCommand>;
 			resume(channel: number, layer?: number): Promise<IAMCPCommand>;
 			stop(channel: number, layer?: number): Promise<IAMCPCommand>;
+		}
+
+		/**
+		 * AMCP In/Out-commands
+		 */
+		export interface IInputOutput {
+			loadDecklinkBg(channel: number, layer: number, device: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, channelLayout?: Enum.ChannelLayout|string, auto?: boolean|number|string): Promise<IAMCPCommand>;
+			loadDecklink(channel: number, layer: number, device: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, channelLayout?: Enum.ChannelLayout|string): Promise<IAMCPCommand>;
+			playDecklink(channel: number, layer?: number, device?: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, channelLayout?: Enum.ChannelLayout|string): Promise<IAMCPCommand>;
 		}
 
 		/**
@@ -975,6 +984,29 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		return this.do(new AMCP.PlayCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter}));
 	}
 
+		/**
+	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
+	 */
+	public loadDecklinkBg(channel: number, layer: number = NaN, device: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, channelLayout?: Enum.ChannelLayout|string, auto?: boolean|number|string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.LoadDecklinkBgCommand({channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout, auto: auto}));
+	}
+
+	/**
+	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
+	 */
+	public loadDecklink(channel: number, layer: number = NaN, device: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, channelLayout?: Enum.ChannelLayout|string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.LoadDecklinkCommand({channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout}));
+	}
+
+	/**
+	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PLAY>
+	 */
+	public playDecklink(channel: number, layer?: number): Promise<IAMCPCommand>;
+	public playDecklink(channel: number, layer: number, device?: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, chanel_layout?: Enum.ChannelLayout|string): Promise<IAMCPCommand>;
+	public playDecklink(channel: number, layer: number = NaN, device?: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, channelLayout?: Enum.ChannelLayout|string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.PlayDecklinkCommand({channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout}));
+	}
+
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PAUSE>
 	 */
@@ -1585,7 +1617,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * @todo	document
 	 */
 	public set(channel: number): Promise<IAMCPCommand> {
-		// @todo:  param enum (only MODE and CHANNEL_LAYOUT for now)
+		// @todo:  param enum (only MODE and channelLayout for now)
 		// @todo: switchable second parameter based on what to set:
 			// mode = enum modes.......
 			// layer = enum layouts..........

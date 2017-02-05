@@ -108,7 +108,7 @@ var AMCP;
                 new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
                 new ParamSignature(optional, "seek", "SEEK", new ParamValidators_1.Validation.FrameValidator("SEEK")),
                 new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.StringValidator()),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
                 new ParamSignature(optional, "auto", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("AUTO"))
             ];
             return _this;
@@ -138,7 +138,7 @@ var AMCP;
                 new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
                 new ParamSignature(optional, "seek", "SEEK", new ParamValidators_1.Validation.FrameValidator("SEEK")),
                 new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.StringValidator())
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator())
             ];
             return _this;
         }
@@ -167,7 +167,7 @@ var AMCP;
                 new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
                 new ParamSignature(optional, "seek", "SEEK", new ParamValidators_1.Validation.FrameValidator("SEEK")),
                 new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.StringValidator())
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator())
             ];
             return _this;
         }
@@ -367,6 +367,107 @@ var AMCP;
     }(AbstractLayerWithCgFallbackCommand));
     CGInvokeCommand.commandString = "CG";
     AMCP.CGInvokeCommand = CGInvokeCommand;
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
+/**
+ * IInputOutput
+ */
+(function (AMCP) {
+    /**
+ *
+ */
+    var LoadDecklinkBgCommand = (function (_super) {
+        __extends(LoadDecklinkBgCommand, _super);
+        function LoadDecklinkBgCommand() {
+            var _this = _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "device", null, new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.ChannelFormat)),
+                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator()),
+                new ParamSignature(optional, "auto", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("AUTO"))
+            ];
+            return _this;
+        }
+        return LoadDecklinkBgCommand;
+    }(AbstractLayerWithFallbackCommand));
+    LoadDecklinkBgCommand.commandString = "LOADBG";
+    LoadDecklinkBgCommand.protocolLogic = [
+        new Depends("transitionDuration", "transition"),
+        new Depends("transitionEasing", "transition"),
+        new Depends("transitionDirection", "transition")
+    ];
+    AMCP.LoadDecklinkBgCommand = LoadDecklinkBgCommand;
+    /**
+     *
+     */
+    var LoadDecklinkCommand = (function (_super) {
+        __extends(LoadDecklinkCommand, _super);
+        function LoadDecklinkCommand() {
+            var _this = _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "device", null, new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.ChannelFormat)),
+                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator())
+            ];
+            return _this;
+        }
+        return LoadDecklinkCommand;
+    }(AbstractLayerWithFallbackCommand));
+    LoadDecklinkCommand.commandString = "LOAD";
+    LoadDecklinkCommand.protocolLogic = [
+        new Depends("transitionDuration", "transition"),
+        new Depends("transitionEasing", "transition"),
+        new Depends("transitionDirection", "transition")
+    ];
+    AMCP.LoadDecklinkCommand = LoadDecklinkCommand;
+    /**
+     *
+     */
+    var PlayDecklinkCommand = (function (_super) {
+        __extends(PlayDecklinkCommand, _super);
+        function PlayDecklinkCommand() {
+            var _this = _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "device", null, new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.ChannelFormat)),
+                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator())
+            ];
+            return _this;
+        }
+        return PlayDecklinkCommand;
+    }(AbstractLayerWithFallbackCommand));
+    PlayDecklinkCommand.commandString = "PLAY";
+    PlayDecklinkCommand.protocolLogic = [
+        new Depends("length", "device"),
+        new Depends("filter", "device"),
+        new Depends("format", "device"),
+        new Depends("channelLayout", "device"),
+        new Depends("transition", "device"),
+        new Depends("transitionDuration", "device"),
+        new Depends("transitionEasing", "device"),
+        new Depends("transitionDirection", "device"),
+        new Depends("transitionDuration", "transition"),
+        new Depends("transitionEasing", "transition"),
+        new Depends("transitionDirection", "transition")
+    ];
+    AMCP.PlayDecklinkCommand = PlayDecklinkCommand;
 })(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
  * IMixer

@@ -159,6 +159,35 @@ export declare namespace AMCP {
     }
 }
 /**
+ * IInputOutput
+ */
+export declare namespace AMCP {
+    /**
+ *
+ */
+    class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+    /**
+     *
+     */
+    class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+    /**
+     *
+     */
+    class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+}
+/**
  * IMixer
  * @todo: switch 201/202 based on mode
  */

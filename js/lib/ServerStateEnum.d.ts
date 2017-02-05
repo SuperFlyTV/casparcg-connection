@@ -320,4 +320,54 @@ export declare namespace Enum {
         static OUT_IN_BOUNCE: Ease;
         static EASEOUTINBOUNCE: Ease;
     }
+    /**
+     *
+     */
+    class ChannelFormat extends AbstractEnum {
+        static INVALID: ChannelFormat;
+        static PAL: ChannelFormat;
+        static NTSC: ChannelFormat;
+        static SD_576P2500: ChannelFormat;
+        static HD_720P2398: ChannelFormat;
+        static HD_720P2400: ChannelFormat;
+        static HD_720P2500: ChannelFormat;
+        static HD_720P5000: ChannelFormat;
+        static HD_720P2997: ChannelFormat;
+        static HD_720P5994: ChannelFormat;
+        static HD_720P3000: ChannelFormat;
+        static HD_720P6000: ChannelFormat;
+        static HD_1080P2398: ChannelFormat;
+        static HD_1080P2400: ChannelFormat;
+        static HD_1080I5000: ChannelFormat;
+        static HD_1080I5994: ChannelFormat;
+        static HD_1080I6000: ChannelFormat;
+        static HD_1080P2500: ChannelFormat;
+        static HD_1080P2997: ChannelFormat;
+        static HD_1080P3000: ChannelFormat;
+        static HD_1080P5000: ChannelFormat;
+        static HD_1080P5994: ChannelFormat;
+        static HD_1080P6000: ChannelFormat;
+        static UHD_1556P2398: ChannelFormat;
+        static UHD_1556P2400: ChannelFormat;
+        static UHD_1556P2500: ChannelFormat;
+        static DCI_1080P2398: ChannelFormat;
+        static DCI_1080P2400: ChannelFormat;
+        static DCI_1080P2500: ChannelFormat;
+        static UHD_2160P2398: ChannelFormat;
+        static UCH_2160P2400: ChannelFormat;
+        static UHD_2160P2500: ChannelFormat;
+        static UHD_2160P2997: ChannelFormat;
+        static UHD_2160P3000: ChannelFormat;
+        static UHD_2160P5000: ChannelFormat;
+        static UHD_2160P5994: ChannelFormat;
+        static UHD_2160P6000: ChannelFormat;
+        static DCI_2160P2398: ChannelFormat;
+        static DCI_2160P2400: ChannelFormat;
+        static DCI_2160P2500: ChannelFormat;
+    }
+    /**
+     *
+     */
+    class ChannelLayout extends AbstractEnum {
+    }
 }

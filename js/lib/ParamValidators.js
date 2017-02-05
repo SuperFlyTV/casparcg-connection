@@ -77,6 +77,24 @@ var Validation;
         return StringValidator;
     }(AbstractValidator));
     Validation.StringValidator = StringValidator;
+    /** */
+    var FilterValidator = (function (_super) {
+        __extends(FilterValidator, _super);
+        function FilterValidator() {
+            return _super.apply(this, arguments) || this;
+        }
+        return FilterValidator;
+    }(StringValidator));
+    Validation.FilterValidator = FilterValidator;
+    /** */
+    var ChannelLayoutValidator = (function (_super) {
+        __extends(ChannelLayoutValidator, _super);
+        function ChannelLayoutValidator() {
+            return _super.apply(this, arguments) || this;
+        }
+        return ChannelLayoutValidator;
+    }(StringValidator));
+    Validation.ChannelLayoutValidator = ChannelLayoutValidator;
     /**
      *
      */
@@ -385,6 +403,15 @@ var Validation;
         return NumberValidator;
     }(NumberValidatorBetween));
     Validation.NumberValidator = NumberValidator;
+    /** */
+    var DecklinkDeviceValidator = (function (_super) {
+        __extends(DecklinkDeviceValidator, _super);
+        function DecklinkDeviceValidator() {
+            return _super.apply(this, arguments) || this;
+        }
+        return DecklinkDeviceValidator;
+    }(PositiveNumberValidator));
+    Validation.DecklinkDeviceValidator = DecklinkDeviceValidator;
     /**
      *
      */
