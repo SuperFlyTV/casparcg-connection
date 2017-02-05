@@ -35,6 +35,9 @@ export declare namespace Validation {
     class FilterValidator extends StringValidator {
     }
     /** */
+    class URLValidator extends StringValidator {
+    }
+    /** */
     class ChannelLayoutValidator extends StringValidator {
     }
     /**

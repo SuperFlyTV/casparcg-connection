@@ -88,6 +88,15 @@ var Validation;
     }(StringValidator));
     Validation.FilterValidator = FilterValidator;
     /** */
+    var URLValidator = (function (_super) {
+        __extends(URLValidator, _super);
+        function URLValidator() {
+            return _super.apply(this, arguments) || this;
+        }
+        return URLValidator;
+    }(StringValidator));
+    Validation.URLValidator = URLValidator;
+    /** */
     var ChannelLayoutValidator = (function (_super) {
         __extends(ChannelLayoutValidator, _super);
         function ChannelLayoutValidator() {

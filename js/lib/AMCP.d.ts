@@ -93,6 +93,59 @@ export declare namespace AMCP {
     }
 }
 /**
+ * IInputOutput
+ */
+export declare namespace AMCP {
+    /**
+     *
+     */
+    class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+    /**
+     *
+     */
+    class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+    /**
+     *
+     */
+    class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+    /**
+     *
+     */
+    class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+    /**
+     *
+     */
+    class LoadHtmlPageCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+    /**
+     *
+     */
+    class PlayHtmlPageCommand extends AbstractLayerWithFallbackCommand {
+        static commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+        static protocolLogic: ProtocolNS.Depends[];
+    }
+}
+/**
  * ICG
  */
 export declare namespace AMCP {
@@ -156,35 +209,6 @@ export declare namespace AMCP {
         static commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
-    }
-}
-/**
- * IInputOutput
- */
-export declare namespace AMCP {
-    /**
- *
- */
-    class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
-        paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
-    }
-    /**
-     *
-     */
-    class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
-        paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
-    }
-    /**
-     *
-     */
-    class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
-        paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
 }
 /**

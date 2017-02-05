@@ -52,6 +52,10 @@ export declare namespace CasparCGProtocols {
             loadDecklinkBgAuto(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>;
             loadDecklink(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>;
             playDecklink(channel: number, layer?: number, device?: number, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>;
+            loadHtmlPageBg(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>;
+            loadHtmlPageBgAuto(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string): Promise<IAMCPCommand>;
+            loadHtmlPage(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string): Promise<IAMCPCommand>;
+            playHtmlPage(channel: number, layer?: number, url?: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string): Promise<IAMCPCommand>;
         }
         /**
          * AMCP Template-commands
@@ -484,7 +488,7 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      */
     loadbg(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>;
     /**
-     *
+     * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
      */
     loadbgAuto(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
     /**
@@ -497,11 +501,11 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
     play(channel: number, layer?: number): Promise<IAMCPCommand>;
     play(channel: number, layer: number, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
     /**
- * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
- */
+     * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
+     */
     loadDecklinkBg(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string, auto?: boolean | number | string): Promise<IAMCPCommand>;
     /**
-     *
+     * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
      */
     loadDecklinkBgAuto(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>;
     /**
@@ -513,6 +517,23 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      */
     playDecklink(channel: number, layer?: number): Promise<IAMCPCommand>;
     playDecklink(channel: number, layer: number, device?: number, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, chanel_layout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>;
+    /**
+     * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
+     */
+    loadHtmlPageBg(channel: number, layer: number, clip: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, auto?: boolean | number | string): Promise<IAMCPCommand>;
+    /**
+     *
+     */
+    loadHtmlPageBgAuto(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string): Promise<IAMCPCommand>;
+    /**
+     * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
+     */
+    loadHtmlPage(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string): Promise<IAMCPCommand>;
+    /**
+     * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PLAY>
+     */
+    playHtmlPage(channel: number, layer?: number): Promise<IAMCPCommand>;
+    playHtmlPage(channel: number, layer: number, url?: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string): Promise<IAMCPCommand>;
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PAUSE>
      */

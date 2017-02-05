@@ -190,6 +190,151 @@ export namespace AMCP {
 }
 
 /**
+ * IInputOutput
+ */
+export namespace AMCP {
+	/**
+	 * 
+	 */
+	export class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "LOADBG";
+		paramProtocol = [
+			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
+			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator()),
+			new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
+		];
+		static protocolLogic = [
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
+	}
+
+	/**
+	 * 
+	 */
+	export class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "LOAD";
+		paramProtocol = [
+			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
+			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator())
+		];
+		static protocolLogic = [
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
+	}
+
+	/**
+	 * 
+	 */
+	export class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "PLAY";
+		paramProtocol = [
+			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
+			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator())
+		];
+		static protocolLogic = [
+			new Depends("length", "device"),
+			new Depends("filter", "device"),
+			new Depends("format", "device"),
+			new Depends("channelLayout", "device"),
+			new Depends("transition", "device"),
+			new Depends("transitionDuration", "device"),
+			new Depends("transitionEasing", "device"),
+			new Depends("transitionDirection", "device"),
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
+	}
+
+	/**
+	 * 
+	 */
+	export class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "LOADBG";
+		paramProtocol = [
+			new ParamSignature(required, "url", "[HTML]", new ParameterValidator.URLValidator()),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
+		];
+		static protocolLogic = [
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
+	}
+
+	/**
+	 * 
+	 */
+	export class LoadHtmlPageCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "LOAD";
+		paramProtocol = [
+			new ParamSignature(required, "url", "[HTML]", new ParameterValidator.URLValidator),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+		];
+		static protocolLogic = [
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
+	}
+
+	/**
+	 * 
+	 */
+	export class PlayHtmlPageCommand extends AbstractLayerWithFallbackCommand {
+		static commandString = "PLAY";
+		paramProtocol = [
+			new ParamSignature(optional, "url", "[HTML]", new ParameterValidator.URLValidator),
+			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+		];
+		static protocolLogic = [
+			new Depends("transition", "url"),
+			new Depends("transitionDuration", "url"),
+			new Depends("transitionEasing", "url"),
+			new Depends("transitionDirection", "url"),
+			new Depends("transitionDuration", "transition"),
+			new Depends("transitionEasing", "transition"),
+			new Depends("transitionDirection", "transition")
+		];
+	}
+}
+
+/**
  * ICG
  */
 export namespace AMCP {
@@ -286,89 +431,6 @@ export namespace AMCP {
 			new ParamSignature(required, "method", null, new ParameterValidator.StringValidator())
 		];
 		responseProtocol = new ResponseSignature(201);
-	}
-}
-
-/**
- * IInputOutput
- */
-export namespace AMCP {
-		/**
-	 * 
-	 */
-	export class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
-		static commandString = "LOADBG";
-		paramProtocol = [
-			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator()),
-			new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
-		];
-		static protocolLogic = [
-			new Depends("transitionDuration", "transition"),
-			new Depends("transitionEasing", "transition"),
-			new Depends("transitionDirection", "transition")
-		];
-	}
-
-	/**
-	 * 
-	 */
-	export class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
-		static commandString = "LOAD";
-		paramProtocol = [
-			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator())
-		];
-		static protocolLogic = [
-			new Depends("transitionDuration", "transition"),
-			new Depends("transitionEasing", "transition"),
-			new Depends("transitionDirection", "transition")
-		];
-	}
-
-	/**
-	 * 
-	 */
-	export class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
-		static commandString = "PLAY";
-		paramProtocol = [
-			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator())
-		];
-		static protocolLogic = [
-			new Depends("length", "device"),
-			new Depends("filter", "device"),
-			new Depends("format", "device"),
-			new Depends("channelLayout", "device"),
-			new Depends("transition", "device"),
-			new Depends("transitionDuration", "device"),
-			new Depends("transitionEasing", "device"),
-			new Depends("transitionDirection", "device"),
-			new Depends("transitionDuration", "transition"),
-			new Depends("transitionEasing", "transition"),
-			new Depends("transitionDirection", "transition")
-		];
 	}
 }
 
