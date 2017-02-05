@@ -380,7 +380,7 @@ var AMCP;
         function LoadDecklinkBgCommand() {
             var _this = _super.apply(this, arguments) || this;
             _this.paramProtocol = [
-                new ParamSignature(required, "device", null, new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
                 new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
                 new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
@@ -410,7 +410,7 @@ var AMCP;
         function LoadDecklinkCommand() {
             var _this = _super.apply(this, arguments) || this;
             _this.paramProtocol = [
-                new ParamSignature(required, "device", null, new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
                 new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
                 new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
@@ -439,7 +439,7 @@ var AMCP;
         function PlayDecklinkCommand() {
             var _this = _super.apply(this, arguments) || this;
             _this.paramProtocol = [
-                new ParamSignature(required, "device", null, new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
                 new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
                 new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),

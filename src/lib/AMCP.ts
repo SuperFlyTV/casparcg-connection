@@ -299,7 +299,7 @@ export namespace AMCP {
 	export class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "LOADBG";
 		paramProtocol = [
-			new ParamSignature(required, "device", null, new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
 			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
 			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
@@ -323,7 +323,7 @@ export namespace AMCP {
 	export class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "LOAD";
 		paramProtocol = [
-			new ParamSignature(required, "device", null, new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
 			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
 			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
@@ -346,7 +346,7 @@ export namespace AMCP {
 	export class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "PLAY";
 		paramProtocol = [
-			new ParamSignature(required, "device", null, new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
 			new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
 			new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
