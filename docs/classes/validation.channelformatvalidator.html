@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>DataNameValidator | casparcg-connection</title>
+	<title>ChannelFormatValidator | casparcg-connection</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -60,10 +60,10 @@
 					<a href="../modules/validation.html">Validation</a>
 				</li>
 				<li>
-					<a href="validation.datanamevalidator.html">DataNameValidator</a>
+					<a href="validation.channelformatvalidator.html">ChannelFormatValidator</a>
 				</li>
 			</ul>
-			<h1>Class DataNameValidator</h1>
+			<h1>Class ChannelFormatValidator</h1>
 		</div>
 	</div>
 </header>
@@ -74,10 +74,10 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="validation.clipnamevalidator.html" class="tsd-signature-type">ClipNameValidator</a>
+						<a href="validation.abstractvalidator.html" class="tsd-signature-type">AbstractValidator</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">DataNameValidator</span>
+								<span class="target">ChannelFormatValidator</span>
 							</li>
 						</ul>
 					</li>
@@ -93,19 +93,45 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="validation.channelformatvalidator.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="validation.datanamevalidator.html#resolved" class="tsd-kind-icon">resolved</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="validation.channelformatvalidator.html#resolved" class="tsd-kind-icon">resolved</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-inherited">
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="validation.datanamevalidator.html#resolve" class="tsd-kind-icon">resolve</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="validation.channelformatvalidator.html#resolve" class="tsd-kind-icon">resolve</a></li>
 							</ul>
 						</section>
 					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Channel<wbr>Format<wbr>Validator<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="validation.channelformatvalidator.html" class="tsd-signature-type">ChannelFormatValidator</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/ParamValidators.ts#L195">lib/ParamValidators.ts:195</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="validation.channelformatvalidator.html" class="tsd-signature-type">ChannelFormatValidator</a></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
@@ -123,21 +149,20 @@
 					</aside>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="resolve" class="tsd-anchor"></a>
 					<h3>resolve</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 						<li class="tsd-signature tsd-kind-icon">resolve<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#paramdata" class="tsd-signature-type">ParamData</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from <a href="validation.clipnamevalidator.html">ClipNameValidator</a>.<a href="validation.clipnamevalidator.html#resolve">resolve</a></p>
 								<p>Overwrites <a href="validation.abstractvalidator.html">AbstractValidator</a>.<a href="validation.abstractvalidator.html#resolve">resolve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/ParamValidators.ts#L109">lib/ParamValidators.ts:109</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/ParamValidators.ts#L207">lib/ParamValidators.ts:207</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -219,30 +244,33 @@
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="validation.booleanvalidatorwithdefaults.html" class="tsd-kind-icon">Boolean<wbr>Validator<wbr>With<wbr>Defaults</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-module">
 						<a href="validation.channelformatvalidator.html" class="tsd-kind-icon">Channel<wbr>Format<wbr>Validator</a>
+						<ul>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="validation.channelformatvalidator.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="validation.channelformatvalidator.html#resolved" class="tsd-kind-icon">resolved</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="validation.channelformatvalidator.html#resolve" class="tsd-kind-icon">resolve</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="validation.channellayoutvalidator.html" class="tsd-kind-icon">Channel<wbr>Layout<wbr>Validator</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="validation.clipnamevalidator.html" class="tsd-kind-icon">Clip<wbr>Name<wbr>Validator</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-module">
+					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="validation.datanamevalidator.html" class="tsd-kind-icon">Data<wbr>Name<wbr>Validator</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="validation.datanamevalidator.html#resolved" class="tsd-kind-icon">resolved</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
-								<a href="validation.datanamevalidator.html#resolve" class="tsd-kind-icon">resolve</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="validation.decklinkdevicevalidator.html" class="tsd-kind-icon">Decklink<wbr>Device<wbr>Validator</a>
 					</li>

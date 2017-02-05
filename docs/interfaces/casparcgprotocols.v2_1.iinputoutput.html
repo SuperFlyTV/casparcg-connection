@@ -103,7 +103,11 @@
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklink" class="tsd-kind-icon">load<wbr>Decklink</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklinkbg" class="tsd-kind-icon">load<wbr>Decklink<wbr>Bg</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklinkbgauto" class="tsd-kind-icon">load<wbr>Decklink<wbr>BgAuto</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loadhtmlpage" class="tsd-kind-icon">load<wbr>Html<wbr>Page</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loadhtmlpagebg" class="tsd-kind-icon">load<wbr>Html<wbr>Page<wbr>Bg</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loadhtmlpagebgauto" class="tsd-kind-icon">load<wbr>Html<wbr>Page<wbr>BgAuto</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#playdecklink" class="tsd-kind-icon">play<wbr>Decklink</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#playhtmlpage" class="tsd-kind-icon">play<wbr>Html<wbr>Page</a></li>
 							</ul>
 						</section>
 					</div>
@@ -274,6 +278,141 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="loadhtmlpage" class="tsd-anchor"></a>
+					<h3>load<wbr>Html<wbr>Page</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">load<wbr>Html<wbr>Page<span class="tsd-signature-symbol">(</span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, layer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, transition<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDuration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, transitionEasing<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDirection<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L76">CasparCG.ts:76</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>channel: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>layer: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>url: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transition: <a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDuration: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionEasing: <a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDirection: <a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="loadhtmlpagebg" class="tsd-anchor"></a>
+					<h3>load<wbr>Html<wbr>Page<wbr>Bg</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">load<wbr>Html<wbr>Page<wbr>Bg<span class="tsd-signature-symbol">(</span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, layer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, transition<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDuration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, transitionEasing<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDirection<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, seek<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, filter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, auto<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L74">CasparCG.ts:74</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>channel: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>layer: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>url: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transition: <a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDuration: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionEasing: <a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDirection: <a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> seek: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> length: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> auto: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="loadhtmlpagebgauto" class="tsd-anchor"></a>
+					<h3>load<wbr>Html<wbr>Page<wbr>BgAuto</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">load<wbr>Html<wbr>Page<wbr>BgAuto<span class="tsd-signature-symbol">(</span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, layer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, url<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, transition<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDuration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, transitionEasing<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDirection<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L75">CasparCG.ts:75</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>channel: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>layer: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>url: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transition: <a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDuration: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionEasing: <a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDirection: <a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="playdecklink" class="tsd-anchor"></a>
 					<h3>play<wbr>Decklink</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
@@ -320,6 +459,47 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> channelLayout: <a href="../classes/enum.channellayout.html" class="tsd-signature-type">ChannelLayout</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="playhtmlpage" class="tsd-anchor"></a>
+					<h3>play<wbr>Html<wbr>Page</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">play<wbr>Html<wbr>Page<span class="tsd-signature-symbol">(</span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, layer<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, url<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, transition<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDuration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, transitionEasing<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDirection<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L77">CasparCG.ts:77</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>channel: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> layer: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> url: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transition: <a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDuration: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionEasing: <a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDirection: <a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -418,7 +598,19 @@
 								<a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklinkbgauto" class="tsd-kind-icon">load<wbr>Decklink<wbr>BgAuto</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="casparcgprotocols.v2_1.iinputoutput.html#loadhtmlpage" class="tsd-kind-icon">load<wbr>Html<wbr>Page</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="casparcgprotocols.v2_1.iinputoutput.html#loadhtmlpagebg" class="tsd-kind-icon">load<wbr>Html<wbr>Page<wbr>Bg</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="casparcgprotocols.v2_1.iinputoutput.html#loadhtmlpagebgauto" class="tsd-kind-icon">load<wbr>Html<wbr>Page<wbr>BgAuto</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="casparcgprotocols.v2_1.iinputoutput.html#playdecklink" class="tsd-kind-icon">play<wbr>Decklink</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="casparcgprotocols.v2_1.iinputoutput.html#playhtmlpage" class="tsd-kind-icon">play<wbr>Html<wbr>Page</a>
 							</li>
 						</ul>
 					</li>
