@@ -102,6 +102,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklink" class="tsd-kind-icon">load<wbr>Decklink</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklinkbg" class="tsd-kind-icon">load<wbr>Decklink<wbr>Bg</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklinkbgauto" class="tsd-kind-icon">load<wbr>Decklink<wbr>BgAuto</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="casparcgprotocols.v2_1.iinputoutput.html#playdecklink" class="tsd-kind-icon">play<wbr>Decklink</a></li>
 							</ul>
 						</section>
@@ -120,7 +121,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L70">CasparCG.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L72">CasparCG.ts:72</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -173,7 +174,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L69">CasparCG.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L70">CasparCG.ts:70</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -220,6 +221,59 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="loaddecklinkbgauto" class="tsd-anchor"></a>
+					<h3>load<wbr>Decklink<wbr>BgAuto</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">load<wbr>Decklink<wbr>BgAuto<span class="tsd-signature-symbol">(</span>channel<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, layer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, device<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, transition<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDuration<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, transitionEasing<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, transitionDirection<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, length<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, filter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, format<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.channelformat.html" class="tsd-signature-type">ChannelFormat</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span>, channelLayout<span class="tsd-signature-symbol">?: </span><a href="../classes/enum.channellayout.html" class="tsd-signature-type">ChannelLayout</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L71">CasparCG.ts:71</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>channel: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>layer: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5>device: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transition: <a href="../classes/enum.transition.html" class="tsd-signature-type">Transition</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDuration: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionEasing: <a href="../classes/enum.ease.html" class="tsd-signature-type">Ease</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> transitionDirection: <a href="../classes/enum.direction.html" class="tsd-signature-type">Direction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> length: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> filter: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> format: <a href="../classes/enum.channelformat.html" class="tsd-signature-type">ChannelFormat</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> channelLayout: <a href="../classes/enum.channellayout.html" class="tsd-signature-type">ChannelLayout</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
 					<a name="playdecklink" class="tsd-anchor"></a>
 					<h3>play<wbr>Decklink</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
@@ -229,7 +283,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L71">CasparCG.ts:71</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/CasparCG.ts#L73">CasparCG.ts:73</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -359,6 +413,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklinkbg" class="tsd-kind-icon">load<wbr>Decklink<wbr>Bg</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="casparcgprotocols.v2_1.iinputoutput.html#loaddecklinkbgauto" class="tsd-kind-icon">load<wbr>Decklink<wbr>BgAuto</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="casparcgprotocols.v2_1.iinputoutput.html#playdecklink" class="tsd-kind-icon">play<wbr>Decklink</a>
