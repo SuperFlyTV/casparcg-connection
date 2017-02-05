@@ -387,7 +387,7 @@ var AMCP;
                 new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
                 new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
                 new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
-                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.ChannelFormat)),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.ChannelFormatValidator()),
                 new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator()),
                 new ParamSignature(optional, "auto", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("AUTO"))
             ];
@@ -417,7 +417,7 @@ var AMCP;
                 new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
                 new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
                 new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
-                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.ChannelFormat)),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.ChannelFormatValidator()),
                 new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator())
             ];
             return _this;
@@ -446,7 +446,7 @@ var AMCP;
                 new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
                 new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
                 new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
-                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.ChannelFormat)),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.ChannelFormatValidator()),
                 new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator())
             ];
             return _this;

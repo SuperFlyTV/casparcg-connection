@@ -4,6 +4,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+var ServerStateEnum_1 = require("./ServerStateEnum");
 var Validation;
 (function (Validation) {
     /**
@@ -196,6 +197,47 @@ var Validation;
         return EnumValidator;
     }(AbstractValidator));
     Validation.EnumValidator = EnumValidator;
+    /**
+     *
+     */
+    var ChannelFormatValidator = (function (_super) {
+        __extends(ChannelFormatValidator, _super);
+        /**
+         *
+         */
+        function ChannelFormatValidator() {
+            return _super.call(this) || this;
+        }
+        /**
+         *
+         */
+        ChannelFormatValidator.prototype.resolve = function (data) {
+            if (data instanceof ServerStateEnum_1.Enum.ChannelFormat) {
+                return data.value;
+            }
+            else if (typeof data === "string") {
+                var stringCast = data !== null ? data.toString() : "";
+                // format stringy enum value
+                stringCast = stringCast.toUpperCase();
+                stringCast = stringCast.replace(" ", "_");
+                if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty(stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat[stringCast].value;
+                }
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("SD_" + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat["SD_" + stringCast].value;
+                }
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("HD_" + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat["HD_" + stringCast].value;
+                }
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("UHD_" + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat["UHD_" + stringCast].value;
+                }
+            }
+            return false;
+        };
+        return ChannelFormatValidator;
+    }(AbstractValidator));
+    Validation.ChannelFormatValidator = ChannelFormatValidator;
     /**
      *
      */

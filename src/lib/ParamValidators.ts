@@ -189,6 +189,43 @@ export namespace Validation {
 	/**
 	 * 
 	 */
+	export class ChannelFormatValidator extends AbstractValidator {
+
+		/**
+		 * 
+		 */
+		constructor() {
+			super();
+		}
+
+		/**
+		 *
+		 */
+		resolve(data: Object): ParamData {
+			if (data instanceof Enum.ChannelFormat) {
+				return data.value;
+			}else if (typeof data === "string") {
+				let stringCast = data !== null ? data.toString() : "";
+				// format stringy enum value
+				stringCast = stringCast.toUpperCase();
+				stringCast = stringCast.replace(" ", "_");
+				if (Enum.ChannelFormat.hasOwnProperty(stringCast)) {
+					return Enum.ChannelFormat[stringCast].value;
+				}else if (Enum.ChannelFormat.hasOwnProperty("SD_" + stringCast)) {
+					return Enum.ChannelFormat["SD_" + stringCast].value;
+				}else if (Enum.ChannelFormat.hasOwnProperty("HD_" + stringCast)) {
+					return Enum.ChannelFormat["HD_" + stringCast].value;
+				}else if (Enum.ChannelFormat.hasOwnProperty("UHD_" + stringCast)) {
+					return Enum.ChannelFormat["UHD_" + stringCast].value;
+				}
+			}
+			return false;
+		}
+	}
+
+	/**
+	 * 
+	 */
 	export class KeywordValidator extends AbstractValidator {
 		private _keyword: string;
 		private _caseSensitive: boolean;

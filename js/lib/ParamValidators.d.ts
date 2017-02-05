@@ -73,6 +73,19 @@ export declare namespace Validation {
     /**
      *
      */
+    class ChannelFormatValidator extends AbstractValidator {
+        /**
+         *
+         */
+        constructor();
+        /**
+         *
+         */
+        resolve(data: Object): ParamData;
+    }
+    /**
+     *
+     */
     class KeywordValidator extends AbstractValidator {
         private _keyword;
         private _caseSensitive;
