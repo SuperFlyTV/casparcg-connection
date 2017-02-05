@@ -138,8 +138,7 @@ var AMCP;
                 new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
                 new ParamSignature(optional, "seek", "SEEK", new ParamValidators_1.Validation.FrameValidator("SEEK")),
                 new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.StringValidator()),
-                new ParamSignature(optional, "auto", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("AUTO"))
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.StringValidator())
             ];
             return _this;
         }
@@ -168,8 +167,7 @@ var AMCP;
                 new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
                 new ParamSignature(optional, "seek", "SEEK", new ParamValidators_1.Validation.FrameValidator("SEEK")),
                 new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.StringValidator()),
-                new ParamSignature(optional, "auto", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("AUTO"))
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.StringValidator())
             ];
             return _this;
         }
@@ -181,7 +179,6 @@ var AMCP;
         new Depends("seek", "clip"),
         new Depends("length", "clip"),
         new Depends("filter", "clip"),
-        new Depends("auto", "clip"),
         new Depends("transition", "clip"),
         new Depends("transitionDuration", "clip"),
         new Depends("transitionEasing", "clip"),

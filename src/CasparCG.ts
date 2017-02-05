@@ -55,8 +55,8 @@ export namespace CasparCGProtocols {
 		 */
 		export interface IVideo {
 			loadbg(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand>;
-			load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand>;
-			play(channel: number, layer?: number, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand>;
+			load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
+			play(channel: number, layer?: number, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
 			pause(channel: number, layer?: number): Promise<IAMCPCommand>;
 			resume(channel: number, layer?: number): Promise<IAMCPCommand>;
 			stop(channel: number, layer?: number): Promise<IAMCPCommand>;
@@ -962,17 +962,17 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
 	 */
-	public load(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.LoadCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto}));
+	public load(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.LoadCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter}));
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PLAY>
 	 */
 	public play(channel: number, layer?: number): Promise<IAMCPCommand>;
-	public play(channel: number, layer: number, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand>;
-	public play(channel: number, layer: number = NaN, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string, auto?: boolean|number|string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.PlayCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto}));
+	public play(channel: number, layer: number, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
+	public play(channel: number, layer: number = NaN, clip?: string, loop?: boolean, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.PlayCommand({channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter}));
 	}
 
 	/**

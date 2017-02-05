@@ -37,8 +37,8 @@ export declare namespace CasparCGProtocols {
          */
         interface IVideo {
             loadbg(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>;
-            load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>;
-            play(channel: number, layer?: number, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>;
+            load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
+            play(channel: number, layer?: number, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
             pause(channel: number, layer?: number): Promise<IAMCPCommand>;
             resume(channel: number, layer?: number): Promise<IAMCPCommand>;
             stop(channel: number, layer?: number): Promise<IAMCPCommand>;
@@ -476,12 +476,12 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
      */
-    load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>;
+    load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PLAY>
      */
     play(channel: number, layer?: number): Promise<IAMCPCommand>;
-    play(channel: number, layer: number, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>;
+    play(channel: number, layer: number, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>;
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PAUSE>
      */

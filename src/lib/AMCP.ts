@@ -127,8 +127,7 @@ export namespace AMCP {
 			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, "seek", "SEEK", new ParameterValidator.FrameValidator("SEEK")),
 			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.StringValidator()),
-			new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.StringValidator())
 		];
 		static protocolLogic = [
 			new Depends("transitionDuration", "transition"),
@@ -151,15 +150,13 @@ export namespace AMCP {
 			new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, "seek", "SEEK", new ParameterValidator.FrameValidator("SEEK")),
 			new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.StringValidator()),
-			new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
+			new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.StringValidator())
 		];
 		static protocolLogic = [
 			new Depends("loop", "clip"),
 			new Depends("seek", "clip"),
 			new Depends("length", "clip"),
 			new Depends("filter", "clip"),
-			new Depends("auto", "clip"),
 			new Depends("transition", "clip"),
 			new Depends("transitionDuration", "clip"),
 			new Depends("transitionEasing", "clip"),
