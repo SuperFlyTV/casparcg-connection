@@ -219,7 +219,6 @@ var Command;
                     return false;
                 }
             }
-            this.response.data = validData;
             // data gets parsed
             if (this.responseProtocol.parser && validData) {
                 var parser = Object.create(this.responseProtocol.parser["prototype"]);
@@ -228,6 +227,7 @@ var Command;
                     return false;
                 }
             }
+            this.response.data = validData;
             return true;
         };
         Object.defineProperty(AbstractCommand.prototype, "payload", {

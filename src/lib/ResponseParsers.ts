@@ -142,7 +142,6 @@ export namespace Response {
 				result.push({channel: i, format: format.toLowerCase(), channelRate: rates.channelRate, frameRate: rates.frameRate, interlaced: rates.isInterlaced});
 			});
 
-
 			if (result.length > 0) {
 				return result;
 			}

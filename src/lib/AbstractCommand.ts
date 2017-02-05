@@ -304,7 +304,6 @@ export namespace Command {
 					return false;
 				}
 			}
-			this.response.data = validData;
 
 			// data gets parsed
 			if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
@@ -314,6 +313,8 @@ export namespace Command {
 					return false;
 				}
 			}
+
+			this.response.data = validData;
 			return true;
 		}
 
