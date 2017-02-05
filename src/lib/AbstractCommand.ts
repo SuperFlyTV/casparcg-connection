@@ -287,6 +287,10 @@ export namespace Command {
 		 * 
 		 */
 		public validateResponse(response: CasparCGSocketResponse): boolean {
+			// assign raw response
+			this.response.raw = response.responseString;
+			this.response.code = response.statusCode;
+
 			// code is correct
 			if (response.statusCode !== this.responseProtocol.code) {
 				// @todo: fallbacks? multiple valid codes?
@@ -300,6 +304,7 @@ export namespace Command {
 					return false;
 				}
 			}
+			this.response.data = validData;
 
 			// data gets parsed
 			if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
@@ -309,9 +314,6 @@ export namespace Command {
 					return false;
 				}
 			}
-			this.response.raw = response.responseString;
-			this.response.code = response.statusCode;
-			this.response.data = validData;
 			return true;
 		}
 
