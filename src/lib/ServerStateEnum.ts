@@ -240,7 +240,7 @@ export namespace Enum {
 		static LINEAR_DODGE = new BlendMode("LINEAR DODGE");
 		static LINEAR_BURN = new BlendMode("LINEAR BURN");
 		static LINEAR_LIGHT = new BlendMode("LINEAR LIGHT");
-		static VIVID_LIGH = new BlendMode("VIVID LIGH");
+		static VIVID_LIGHT = new BlendMode("VIVID LIGHT");
 		static PIN_LIGHT = new BlendMode("PIN LIGHT");
 		static HARD_MIX = new BlendMode("HARD MIX");
 		static REFLECT = new BlendMode("REFLECT");
