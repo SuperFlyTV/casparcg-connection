@@ -749,29 +749,33 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> {
 		let command: IAMCPCommand | undefined;
 
-		if (isIAMCPCommand(commandOrString)) {
-			command = commandOrString as IAMCPCommand;
-		}else if (typeof commandOrString === "string") {
-			if (AMCP.hasOwnProperty(commandOrString)) {
-				// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
+		try {
+			if (isIAMCPCommand(commandOrString)) {
+				command = commandOrString as IAMCPCommand;
+			}else if (typeof commandOrString === "string") {
+				if (AMCP.hasOwnProperty(commandOrString)) {
+					// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
 
-				// @todo: typechecking with fallback
-				command = Object.create(AMCP[commandOrString]["prototype"]);
-				// @todo: typechecking with fallback
-				if (command) {
-					command.constructor.apply(command, params);
-				}else {
-					throw new Error("Invalid command constructor");
+					// @todo: typechecking with fallback
+					command = Object.create(AMCP[commandOrString]["prototype"]);
+					// @todo: typechecking with fallback
+					if (command) {
+						command.constructor.apply(command, params);
+					}else {
+						throw new Error("Invalid command constructor");
+					}
 				}
+			}else {
+				// @todo: Handle, return?
+				throw new Error("Invalid command or commandstring");
 			}
-		}else {
-			// @todo: Handle, return?
-			throw new Error("Invalid command or commandstring");
-		}
-		// validate command and params
-		if (!command || !command.validateParams()) {
-			// @todo: Handle, return?
-			throw new Error("Invalid command parameters");
+			// validate command and params
+			if (!command || !command.validateParams()) {
+				// @todo: Handle, return?
+				throw new Error("Invalid command parameters");
+			}
+		}catch (error) {
+			return Promise.reject(error);
 		}
 
 		let commandPromise: Promise<IAMCPCommand> = new Promise<IAMCPCommand>((resolve, reject) => {
