@@ -694,6 +694,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			shouldReset = true;
 			let i: IAMCPCommand;
 			i = this._sentCommands.shift()!;
+			this._log(`Command timed out, ${this._sentCommands.length} commands sent. Timeout: "${i.name}"`);
 			i.status =  IAMCPStatus.Timeout;
 			i.reject(i);
 		}
@@ -791,6 +792,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	private _addQueuedCommand(command: IAMCPCommand): IAMCPCommand {
 		this._queuedCommands.push(command);
+		this._log(`New command added, ${this._queuedCommands.length} on queue. Added: "${command.name}"`);
 		command.status = IAMCPStatus.Queued;
 		this._expediteCommand();
 		return command;
@@ -805,6 +807,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			let o: IAMCPCommand = this._queuedCommands[i];
 			if (o.id === id) {
 				removed = this._queuedCommands.splice(i, 1);
+				this._log(`Command removed, ${this._queuedCommands.length} on queue. Removed: "${removed[0].name}"`);
 				break;
 			}
 		}
@@ -849,6 +852,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 
 		let currentCommand: IAMCPCommand = (this._sentCommands.shift())!;
+		this._log(`Handling response, ${this._sentCommands.length} commands sent. Handling: "${currentCommand.name}"`);
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
 		}
@@ -887,6 +891,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (flushSent) {
 			while (this._sentCommands.length > 0) {
 				let i: IAMCPCommand = (this._sentCommands.shift())!;
+				this._log(`Flushing commands, ${this._sentCommands.length} commands sent. Deleting: "${i.name}"`);
 				if (i instanceof AMCP.RestartCommand && this._socket.isRestarting) {
 					i.status =  IAMCPStatus.Suceeded;
 					i.resolve(i);
@@ -914,6 +919,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
 					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
 					this._sentCommands.push(nextCommand);
+					this._log(`Sending command, ${this._sentCommands.length} commands sent, ${this._queuedCommands.length} commands on queue. Sending: "${nextCommand.name}"`);
 					this._socket.executeCommand(nextCommand);
 				}
 			}
