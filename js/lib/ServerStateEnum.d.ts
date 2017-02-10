@@ -220,7 +220,7 @@ export declare namespace Enum {
         static LINEAR_DODGE: BlendMode;
         static LINEAR_BURN: BlendMode;
         static LINEAR_LIGHT: BlendMode;
-        static VIVID_LIGH: BlendMode;
+        static VIVID_LIGHT: BlendMode;
         static PIN_LIGHT: BlendMode;
         static HARD_MIX: BlendMode;
         static REFLECT: BlendMode;

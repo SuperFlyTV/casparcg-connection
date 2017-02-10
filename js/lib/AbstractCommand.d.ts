@@ -56,6 +56,7 @@ export declare namespace Command {
         response: IAMCPResponse;
         status: IAMCPStatus;
         id: string;
+        readonly name: string;
     }
     /**
      *
@@ -130,6 +131,10 @@ export declare namespace Command {
          *
          */
         readonly id: string;
+        /**
+         *
+         */
+        readonly name: string;
         /**
          *
          */

@@ -77,7 +77,7 @@ var AMCP;
     var CustomCommand = (function (_super) {
         __extends(CustomCommand, _super);
         function CustomCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "command", null, new ParamValidators_1.Validation.StringValidator(false))
             ];
@@ -98,7 +98,7 @@ var AMCP;
     var LoadbgCommand = (function (_super) {
         __extends(LoadbgCommand, _super);
         function LoadbgCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "clip", null, new ParamValidators_1.Validation.ClipNameValidator()),
                 new ParamSignature(optional, "loop", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("LOOP")),
@@ -128,7 +128,7 @@ var AMCP;
     var LoadCommand = (function (_super) {
         __extends(LoadCommand, _super);
         function LoadCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "clip", null, new ParamValidators_1.Validation.ClipNameValidator),
                 new ParamSignature(optional, "loop", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("LOOP")),
@@ -157,7 +157,7 @@ var AMCP;
     var PlayCommand = (function (_super) {
         __extends(PlayCommand, _super);
         function PlayCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(optional, "clip", null, new ParamValidators_1.Validation.ClipNameValidator),
                 new ParamSignature(optional, "loop", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("LOOP")),
@@ -194,7 +194,7 @@ var AMCP;
     var PauseCommand = (function (_super) {
         __extends(PauseCommand, _super);
         function PauseCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return PauseCommand;
     }(AbstractLayerWithFallbackCommand));
@@ -206,7 +206,7 @@ var AMCP;
     var ResumeCommand = (function (_super) {
         __extends(ResumeCommand, _super);
         function ResumeCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return ResumeCommand;
     }(AbstractLayerWithFallbackCommand));
@@ -218,7 +218,7 @@ var AMCP;
     var StopCommand = (function (_super) {
         __extends(StopCommand, _super);
         function StopCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return StopCommand;
     }(AbstractLayerWithFallbackCommand));
@@ -235,7 +235,7 @@ var AMCP;
     var LoadDecklinkBgCommand = (function (_super) {
         __extends(LoadDecklinkBgCommand, _super);
         function LoadDecklinkBgCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
@@ -265,7 +265,7 @@ var AMCP;
     var LoadDecklinkCommand = (function (_super) {
         __extends(LoadDecklinkCommand, _super);
         function LoadDecklinkCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
@@ -294,7 +294,7 @@ var AMCP;
     var PlayDecklinkCommand = (function (_super) {
         __extends(PlayDecklinkCommand, _super);
         function PlayDecklinkCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
@@ -331,7 +331,7 @@ var AMCP;
     var LoadHtmlPageBgCommand = (function (_super) {
         __extends(LoadHtmlPageBgCommand, _super);
         function LoadHtmlPageBgCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "url", "[HTML]", new ParamValidators_1.Validation.URLValidator()),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
@@ -357,7 +357,7 @@ var AMCP;
     var LoadHtmlPageCommand = (function (_super) {
         __extends(LoadHtmlPageCommand, _super);
         function LoadHtmlPageCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "url", "[HTML]", new ParamValidators_1.Validation.URLValidator),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
@@ -382,7 +382,7 @@ var AMCP;
     var PlayHtmlPageCommand = (function (_super) {
         __extends(PlayHtmlPageCommand, _super);
         function PlayHtmlPageCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(optional, "url", "[HTML]", new ParamValidators_1.Validation.URLValidator),
                 new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
@@ -416,7 +416,7 @@ var AMCP;
     var CGAddCommand = (function (_super) {
         __extends(CGAddCommand, _super);
         function CGAddCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "flashLayer", "ADD", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
                 new ParamSignature(required, "templateName", null, new ParamValidators_1.Validation.TemplateNameValidator()),
@@ -435,7 +435,7 @@ var AMCP;
     var CGPlayCommand = (function (_super) {
         __extends(CGPlayCommand, _super);
         function CGPlayCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "flashLayer", "PLAY", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
@@ -451,7 +451,7 @@ var AMCP;
     var CGStopCommand = (function (_super) {
         __extends(CGStopCommand, _super);
         function CGStopCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "flashLayer", "STOP", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
@@ -467,7 +467,7 @@ var AMCP;
     var CGNextCommand = (function (_super) {
         __extends(CGNextCommand, _super);
         function CGNextCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "flashLayer", "NEXT", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
@@ -483,7 +483,7 @@ var AMCP;
     var CGRemoveCommand = (function (_super) {
         __extends(CGRemoveCommand, _super);
         function CGRemoveCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "flashLayer", "REMOVE", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
@@ -519,7 +519,7 @@ var AMCP;
     var CGUpdateCommand = (function (_super) {
         __extends(CGUpdateCommand, _super);
         function CGUpdateCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "flashLayer", "UPDATE", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
                 new ParamSignature(required, "data", null, new ParamValidators_1.Validation.TemplateDataValidator())
@@ -536,7 +536,7 @@ var AMCP;
     var CGInvokeCommand = (function (_super) {
         __extends(CGInvokeCommand, _super);
         function CGInvokeCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "flashLayer", "INVOKE", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
                 new ParamSignature(required, "method", null, new ParamValidators_1.Validation.StringValidator())
@@ -1166,7 +1166,7 @@ var AMCP;
     var ClearCommand = (function (_super) {
         __extends(ClearCommand, _super);
         function ClearCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return ClearCommand;
     }(AbstractChannelOrLayerCommand));
@@ -1178,7 +1178,7 @@ var AMCP;
     var CallCommand = (function (_super) {
         __extends(CallCommand, _super);
         function CallCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return CallCommand;
     }(AbstractLayerWithFallbackCommand));
@@ -1207,7 +1207,7 @@ var AMCP;
     var AddCommand = (function (_super) {
         __extends(AddCommand, _super);
         function AddCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return AddCommand;
     }(AbstractChannelCommand));
@@ -1219,7 +1219,7 @@ var AMCP;
     var RemoveCommand = (function (_super) {
         __extends(RemoveCommand, _super);
         function RemoveCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return RemoveCommand;
     }(AbstractChannelOrLayerCommand));
@@ -1231,7 +1231,7 @@ var AMCP;
     var PrintCommand = (function (_super) {
         __extends(PrintCommand, _super);
         function PrintCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return PrintCommand;
     }(AbstractChannelCommand));
@@ -1243,7 +1243,7 @@ var AMCP;
     var SetCommand = (function (_super) {
         __extends(SetCommand, _super);
         function SetCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return SetCommand;
     }(AbstractChannelCommand));
@@ -1255,7 +1255,7 @@ var AMCP;
     var LockCommand = (function (_super) {
         __extends(LockCommand, _super);
         function LockCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "action", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Lock)),
                 new ParamSignature(optional, "phrase", null, new ParamValidators_1.Validation.StringValidator())
@@ -1275,7 +1275,7 @@ var AMCP;
     var ChannelGridCommand = (function (_super) {
         __extends(ChannelGridCommand, _super);
         function ChannelGridCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return ChannelGridCommand;
     }(AbstractCommand));
@@ -1287,7 +1287,7 @@ var AMCP;
     var GlGCCommand = (function (_super) {
         __extends(GlGCCommand, _super);
         function GlGCCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return GlGCCommand;
     }(AbstractCommand));
@@ -1304,7 +1304,7 @@ var AMCP;
     var DataStoreCommand = (function (_super) {
         __extends(DataStoreCommand, _super);
         function DataStoreCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.DataNameValidator()),
                 new ParamSignature(required, "data", null, new ParamValidators_1.Validation.TemplateDataValidator())
@@ -1321,7 +1321,7 @@ var AMCP;
     var DataRetrieveCommand = (function (_super) {
         __extends(DataRetrieveCommand, _super);
         function DataRetrieveCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.DataNameValidator())
             ];
@@ -1338,7 +1338,7 @@ var AMCP;
     var DataListCommand = (function (_super) {
         __extends(DataListCommand, _super);
         function DataListCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.DataListParser);
             return _this;
         }
@@ -1352,7 +1352,7 @@ var AMCP;
     var DataRemoveCommand = (function (_super) {
         __extends(DataRemoveCommand, _super);
         function DataRemoveCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.DataNameValidator())
             ];
@@ -1373,7 +1373,7 @@ var AMCP;
     var ThumbnailListCommand = (function (_super) {
         __extends(ThumbnailListCommand, _super);
         function ThumbnailListCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
             return _this;
         }
@@ -1387,7 +1387,7 @@ var AMCP;
     var ThumbnailRetrieveCommand = (function (_super) {
         __extends(ThumbnailRetrieveCommand, _super);
         function ThumbnailRetrieveCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.ClipNameValidator())
             ];
@@ -1404,7 +1404,7 @@ var AMCP;
     var ThumbnailGenerateCommand = (function (_super) {
         __extends(ThumbnailGenerateCommand, _super);
         function ThumbnailGenerateCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.ClipNameValidator())
             ];
@@ -1420,7 +1420,7 @@ var AMCP;
     var ThumbnailGenerateAllCommand = (function (_super) {
         __extends(ThumbnailGenerateAllCommand, _super);
         function ThumbnailGenerateAllCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return ThumbnailGenerateAllCommand;
     }(AbstractCommand));
@@ -1437,7 +1437,7 @@ var AMCP;
     var CinfCommand = (function (_super) {
         __extends(CinfCommand, _super);
         function CinfCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.ClipNameValidator())
             ];
@@ -1454,7 +1454,7 @@ var AMCP;
     var ClsCommand = (function (_super) {
         __extends(ClsCommand, _super);
         function ClsCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
             return _this;
         }
@@ -1468,7 +1468,7 @@ var AMCP;
     var FlsCommand = (function (_super) {
         __extends(FlsCommand, _super);
         function FlsCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
             return _this;
         }
@@ -1482,7 +1482,7 @@ var AMCP;
     var TlsCommand = (function (_super) {
         __extends(TlsCommand, _super);
         function TlsCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
             return _this;
         }
@@ -1496,7 +1496,7 @@ var AMCP;
     var VersionCommand = (function (_super) {
         __extends(VersionCommand, _super);
         function VersionCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(optional, "component", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Version))
             ];
@@ -1533,7 +1533,7 @@ var AMCP;
     var InfoTemplateCommand = (function (_super) {
         __extends(InfoTemplateCommand, _super);
         function InfoTemplateCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, "template", null, new ParamValidators_1.Validation.TemplateNameValidator())
             ];
@@ -1567,7 +1567,7 @@ var AMCP;
     var InfoPathsCommand = (function (_super) {
         __extends(InfoPathsCommand, _super);
         function InfoPathsCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoPathsParser);
             return _this;
         }
@@ -1581,7 +1581,7 @@ var AMCP;
     var InfoSystemCommand = (function (_super) {
         __extends(InfoSystemCommand, _super);
         function InfoSystemCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoSystemParser);
             return _this;
         }
@@ -1595,7 +1595,7 @@ var AMCP;
     var InfoServerCommand = (function (_super) {
         __extends(InfoServerCommand, _super);
         function InfoServerCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoServerParser);
             return _this;
         }
@@ -1609,7 +1609,7 @@ var AMCP;
     var InfoQueuesCommand = (function (_super) {
         __extends(InfoQueuesCommand, _super);
         function InfoQueuesCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoQueuesParser);
             return _this;
         }
@@ -1623,7 +1623,7 @@ var AMCP;
     var InfoThreadsCommand = (function (_super) {
         __extends(InfoThreadsCommand, _super);
         function InfoThreadsCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.InfoThreadsParser);
             return _this;
         }
@@ -1680,7 +1680,7 @@ var AMCP;
     var GlInfoCommand = (function (_super) {
         __extends(GlInfoCommand, _super);
         function GlInfoCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.GLParser);
             return _this;
         }
@@ -1694,7 +1694,7 @@ var AMCP;
     var LogLevelCommand = (function (_super) {
         __extends(LogLevelCommand, _super);
         function LogLevelCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(optional, "level", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.LogLevel))
             ];
@@ -1710,7 +1710,7 @@ var AMCP;
     var LogCategoryCommand = (function (_super) {
         __extends(LogCategoryCommand, _super);
         function LogCategoryCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(optional, "calltrace", ServerStateEnum_1.Enum.LogCategory.CALLTRACE.value, new ParamValidators_1.Validation.BooleanValidatorWithDefaults(1, 0)),
                 new ParamSignature(optional, "communication", ServerStateEnum_1.Enum.LogCategory.COMMUNICATION.value, new ParamValidators_1.Validation.BooleanValidatorWithDefaults(1, 0))
@@ -1730,7 +1730,7 @@ var AMCP;
     var DiagCommand = (function (_super) {
         __extends(DiagCommand, _super);
         function DiagCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return DiagCommand;
     }(AbstractCommand));
@@ -1743,7 +1743,7 @@ var AMCP;
     var HelpCommand = (function (_super) {
         __extends(HelpCommand, _super);
         function HelpCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(optional, "command", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Command))
             ];
@@ -1760,7 +1760,7 @@ var AMCP;
     var HelpProducerCommand = (function (_super) {
         __extends(HelpProducerCommand, _super);
         function HelpProducerCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(optional, "producer", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Producer))
             ];
@@ -1777,7 +1777,7 @@ var AMCP;
     var HelpConsumerCommand = (function (_super) {
         __extends(HelpConsumerCommand, _super);
         function HelpConsumerCommand() {
-            var _this = _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(optional, "consumer", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Consumer))
             ];
@@ -1799,7 +1799,7 @@ var AMCP;
     var ByeCommand = (function (_super) {
         __extends(ByeCommand, _super);
         function ByeCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return ByeCommand;
     }(AbstractCommand));
@@ -1811,7 +1811,7 @@ var AMCP;
     var KillCommand = (function (_super) {
         __extends(KillCommand, _super);
         function KillCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return KillCommand;
     }(AbstractCommand));
@@ -1823,7 +1823,7 @@ var AMCP;
     var RestartCommand = (function (_super) {
         __extends(RestartCommand, _super);
         function RestartCommand() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return RestartCommand;
     }(AbstractCommand));

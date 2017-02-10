@@ -250,6 +250,16 @@ var Command;
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(AbstractCommand.prototype, "name", {
+            /**
+             *
+             */
+            get: function () {
+                return this.constructor["name"];
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          *
          */

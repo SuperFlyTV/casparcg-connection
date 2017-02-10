@@ -142,7 +142,7 @@ var Response;
     var ChannelParser = (function (_super) {
         __extends(ChannelParser, _super);
         function ChannelParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -169,7 +169,7 @@ var Response;
     var ConfigParser = (function (_super) {
         __extends(ConfigParser, _super);
         function ConfigParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /** */
         ConfigParser.prototype.parse = function (data) {
@@ -193,7 +193,7 @@ var Response;
     var DataParser = (function (_super) {
         __extends(DataParser, _super);
         function DataParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -210,7 +210,7 @@ var Response;
     var DataListParser = (function (_super) {
         __extends(DataListParser, _super);
         function DataListParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -227,7 +227,7 @@ var Response;
     var InfoTemplateParser = (function (_super) {
         __extends(InfoTemplateParser, _super);
         function InfoTemplateParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -244,7 +244,7 @@ var Response;
     var HelpParser = (function (_super) {
         __extends(HelpParser, _super);
         function HelpParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -261,7 +261,7 @@ var Response;
     var GLParser = (function (_super) {
         __extends(GLParser, _super);
         function GLParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -278,7 +278,7 @@ var Response;
     var InfoDelayParser = (function (_super) {
         __extends(InfoDelayParser, _super);
         function InfoDelayParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -295,7 +295,7 @@ var Response;
     var InfoParser = (function (_super) {
         __extends(InfoParser, _super);
         function InfoParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -312,7 +312,7 @@ var Response;
     var InfoThreadsParser = (function (_super) {
         __extends(InfoThreadsParser, _super);
         function InfoThreadsParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -329,7 +329,7 @@ var Response;
     var ThumbnailParser = (function (_super) {
         __extends(ThumbnailParser, _super);
         function ThumbnailParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -346,7 +346,7 @@ var Response;
     var VersionParser = (function (_super) {
         __extends(VersionParser, _super);
         function VersionParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -363,7 +363,7 @@ var Response;
     var ContentParser = (function (_super) {
         __extends(ContentParser, _super);
         function ContentParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         ContentParser.parseTimeString = function (timeDateString) {
             timeDateString = timeDateString.replace(/[tT]/g, "");
@@ -439,7 +439,7 @@ var Response;
     var CinfParser = (function (_super) {
         __extends(CinfParser, _super);
         function CinfParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -465,7 +465,7 @@ var Response;
     var InfoQueuesParser = (function (_super) {
         __extends(InfoQueuesParser, _super);
         function InfoQueuesParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -482,7 +482,7 @@ var Response;
     var InfoServerParser = (function (_super) {
         __extends(InfoServerParser, _super);
         function InfoServerParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -499,7 +499,7 @@ var Response;
     var InfoPathsParser = (function (_super) {
         __extends(InfoPathsParser, _super);
         function InfoPathsParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -541,7 +541,7 @@ var Response;
     var InfoSystemParser = (function (_super) {
         __extends(InfoSystemParser, _super);
         function InfoSystemParser() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *

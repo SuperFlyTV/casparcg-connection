@@ -34,7 +34,7 @@ var Enum;
     var Command = (function (_super) {
         __extends(Command, _super);
         function Command() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Command;
     }(AbstractEnum));
@@ -123,7 +123,7 @@ var Enum;
     var Producer = (function (_super) {
         __extends(Producer, _super);
         function Producer() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Producer;
     }(AbstractEnum));
@@ -147,7 +147,7 @@ var Enum;
     var Consumer = (function (_super) {
         __extends(Consumer, _super);
         function Consumer() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Consumer;
     }(AbstractEnum));
@@ -167,7 +167,7 @@ var Enum;
     var Version = (function (_super) {
         __extends(Version, _super);
         function Version() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Version;
     }(AbstractEnum));
@@ -183,7 +183,7 @@ var Enum;
     var Lock = (function (_super) {
         __extends(Lock, _super);
         function Lock() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Lock;
     }(AbstractEnum));
@@ -198,7 +198,7 @@ var Enum;
     var LogCategory = (function (_super) {
         __extends(LogCategory, _super);
         function LogCategory() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return LogCategory;
     }(AbstractEnum));
@@ -212,7 +212,7 @@ var Enum;
     var Chroma = (function (_super) {
         __extends(Chroma, _super);
         function Chroma() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Chroma;
     }(AbstractEnum));
@@ -227,7 +227,7 @@ var Enum;
     var LogLevel = (function (_super) {
         __extends(LogLevel, _super);
         function LogLevel() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return LogLevel;
     }(AbstractEnum));
@@ -245,7 +245,7 @@ var Enum;
     var Transition = (function (_super) {
         __extends(Transition, _super);
         function Transition() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Transition;
     }(AbstractEnum));
@@ -262,7 +262,7 @@ var Enum;
     var Direction = (function (_super) {
         __extends(Direction, _super);
         function Direction() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Direction;
     }(AbstractEnum));
@@ -275,7 +275,7 @@ var Enum;
     var BlendMode = (function (_super) {
         __extends(BlendMode, _super);
         function BlendMode() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return BlendMode;
     }(AbstractEnum));
@@ -298,7 +298,7 @@ var Enum;
     BlendMode.LINEAR_DODGE = new BlendMode("LINEAR DODGE");
     BlendMode.LINEAR_BURN = new BlendMode("LINEAR BURN");
     BlendMode.LINEAR_LIGHT = new BlendMode("LINEAR LIGHT");
-    BlendMode.VIVID_LIGH = new BlendMode("VIVID LIGH");
+    BlendMode.VIVID_LIGHT = new BlendMode("VIVID LIGHT");
     BlendMode.PIN_LIGHT = new BlendMode("PIN LIGHT");
     BlendMode.HARD_MIX = new BlendMode("HARD MIX");
     BlendMode.REFLECT = new BlendMode("REFLECT");
@@ -315,7 +315,7 @@ var Enum;
     var Ease = (function (_super) {
         __extends(Ease, _super);
         function Ease() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Ease;
     }(AbstractEnum));
@@ -410,7 +410,7 @@ var Enum;
     var ChannelFormat = (function (_super) {
         __extends(ChannelFormat, _super);
         function ChannelFormat() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return ChannelFormat;
     }(AbstractEnum));
@@ -461,7 +461,7 @@ var Enum;
     var ChannelLayout = (function (_super) {
         __extends(ChannelLayout, _super);
         function ChannelLayout() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return ChannelLayout;
     }(AbstractEnum));

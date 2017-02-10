@@ -82,7 +82,7 @@ var Validation;
     var FilterValidator = (function (_super) {
         __extends(FilterValidator, _super);
         function FilterValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return FilterValidator;
     }(StringValidator));
@@ -91,7 +91,7 @@ var Validation;
     var URLValidator = (function (_super) {
         __extends(URLValidator, _super);
         function URLValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return URLValidator;
     }(StringValidator));
@@ -100,7 +100,7 @@ var Validation;
     var ChannelLayoutValidator = (function (_super) {
         __extends(ChannelLayoutValidator, _super);
         function ChannelLayoutValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return ChannelLayoutValidator;
     }(StringValidator));
@@ -111,7 +111,7 @@ var Validation;
     var ClipNameValidator = (function (_super) {
         __extends(ClipNameValidator, _super);
         function ClipNameValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -156,7 +156,7 @@ var Validation;
     var TemplateNameValidator = (function (_super) {
         __extends(TemplateNameValidator, _super);
         function TemplateNameValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return TemplateNameValidator;
     }(ClipNameValidator));
@@ -167,7 +167,7 @@ var Validation;
     var DataNameValidator = (function (_super) {
         __extends(DataNameValidator, _super);
         function DataNameValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return DataNameValidator;
     }(ClipNameValidator));
@@ -397,7 +397,7 @@ var Validation;
     var PositiveNumberRoundValidatorBetween = (function (_super) {
         __extends(PositiveNumberRoundValidatorBetween, _super);
         function PositiveNumberRoundValidatorBetween() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *
@@ -458,7 +458,7 @@ var Validation;
     var DecklinkDeviceValidator = (function (_super) {
         __extends(DecklinkDeviceValidator, _super);
         function DecklinkDeviceValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return DecklinkDeviceValidator;
     }(PositiveNumberValidator));
@@ -540,7 +540,7 @@ var Validation;
     var TemplateDataValidator = (function (_super) {
         __extends(TemplateDataValidator, _super);
         function TemplateDataValidator() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         /**
          *

@@ -366,6 +366,7 @@ var CasparCG = (function (_super) {
             shouldReset = true;
             var i = void 0;
             i = this._sentCommands.shift();
+            this._log("Command timed out, " + this._sentCommands.length + " commands sent. Timeout: \"" + i.name + "\"");
             i.status = IAMCPStatus.Timeout;
             i.reject(i);
         }
@@ -416,31 +417,36 @@ var CasparCG = (function (_super) {
             params[_i - 1] = arguments[_i];
         }
         var command;
-        if (isIAMCPCommand(commandOrString)) {
-            command = commandOrString;
-        }
-        else if (typeof commandOrString === "string") {
-            if (AMCP_1.AMCP.hasOwnProperty(commandOrString)) {
-                // @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
-                // @todo: typechecking with fallback
-                command = Object.create(AMCP_1.AMCP[commandOrString]["prototype"]);
-                // @todo: typechecking with fallback
-                if (command) {
-                    command.constructor.apply(command, params);
-                }
-                else {
-                    throw new Error("Invalid command constructor");
+        try {
+            if (isIAMCPCommand(commandOrString)) {
+                command = commandOrString;
+            }
+            else if (typeof commandOrString === "string") {
+                if (AMCP_1.AMCP.hasOwnProperty(commandOrString)) {
+                    // @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
+                    // @todo: typechecking with fallback
+                    command = Object.create(AMCP_1.AMCP[commandOrString]["prototype"]);
+                    // @todo: typechecking with fallback
+                    if (command) {
+                        command.constructor.apply(command, params);
+                    }
+                    else {
+                        throw new Error("Invalid command constructor");
+                    }
                 }
             }
+            else {
+                // @todo: Handle, return?
+                throw new Error("Invalid command or commandstring");
+            }
+            // validate command and params
+            if (!command || !command.validateParams()) {
+                // @todo: Handle, return?
+                throw new Error("Invalid command parameters");
+            }
         }
-        else {
-            // @todo: Handle, return?
-            throw new Error("Invalid command or commandstring");
-        }
-        // validate command and params
-        if (!command || !command.validateParams()) {
-            // @todo: Handle, return?
-            throw new Error("Invalid command parameters");
+        catch (error) {
+            return es6_promise_1.Promise.reject(error);
         }
         var commandPromise = new es6_promise_1.Promise(function (resolve, reject) {
             command.resolve = resolve;
@@ -458,6 +464,7 @@ var CasparCG = (function (_super) {
      */
     CasparCG.prototype._addQueuedCommand = function (command) {
         this._queuedCommands.push(command);
+        this._log("New command added, " + this._queuedCommands.length + " on queue. Added: \"" + command.name + "\"");
         command.status = IAMCPStatus.Queued;
         this._expediteCommand();
         return command;
@@ -471,6 +478,7 @@ var CasparCG = (function (_super) {
             var o = this._queuedCommands[i];
             if (o.id === id) {
                 removed = this._queuedCommands.splice(i, 1);
+                this._log("Command removed, " + this._queuedCommands.length + " on queue. Removed: \"" + removed[0].name + "\"");
                 break;
             }
         }
@@ -511,6 +519,7 @@ var CasparCG = (function (_super) {
             return;
         }
         var currentCommand = (this._sentCommands.shift());
+        this._log("Handling response, " + this._sentCommands.length + " commands sent. Handling: \"" + currentCommand.name + "\"");
         if (!(currentCommand.response instanceof AMCPResponse)) {
             currentCommand.response = new AMCPResponse();
         }
@@ -544,6 +553,7 @@ var CasparCG = (function (_super) {
         if (flushSent) {
             while (this._sentCommands.length > 0) {
                 var i = (this._sentCommands.shift());
+                this._log("Flushing commands, " + this._sentCommands.length + " commands sent. Deleting: \"" + i.name + "\"");
                 if (i instanceof AMCP_1.AMCP.RestartCommand && this._socket.isRestarting) {
                     i.status = IAMCPStatus.Suceeded;
                     i.resolve(i);
@@ -570,6 +580,7 @@ var CasparCG = (function (_super) {
                 if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
                     var nextCommand = (this._queuedCommands.shift());
                     this._sentCommands.push(nextCommand);
+                    this._log("Sending command, " + this._sentCommands.length + " commands sent, " + this._queuedCommands.length + " commands on queue. Sending: \"" + nextCommand.name + "\"");
                     this._socket.executeCommand(nextCommand);
                 }
             }
