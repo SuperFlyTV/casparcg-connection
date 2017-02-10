@@ -81,6 +81,7 @@ export namespace Command {
 		response: IAMCPResponse;
 		status: IAMCPStatus;
 		id: string;
+		readonly name: string;
 	}
 
 	/**
@@ -330,6 +331,13 @@ export namespace Command {
 		 */
 		get id(): string{
 			return this._id || (new Date().getTime() + Math.random() * 100).toString();
+		}
+
+		/**
+		 * 
+		 */
+		get name(): string{
+			return this.constructor["name"];
 		}
 
 		/**
