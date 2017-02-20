@@ -393,7 +393,7 @@ var Response;
                         fileName: typeData[0].replace(/\"/g, "")
                     };
                 }
-                // is template
+                // is 2.1.0 template
                 if (typeData.length === 3) {
                     return { name: name,
                         type: "template",
@@ -402,12 +402,12 @@ var Response;
                         format: typeData[2]
                     };
                 }
-                // is thumbnail
+                // is 2.0.7 template
                 if (typeData.length === 2) {
                     return { name: name,
-                        type: "thumbnail",
-                        changed: ContentParser.parseTimeString(typeData[0]),
-                        size: parseInt(typeData[1]),
+                        type: "template",
+                        size: parseInt(typeData[0]),
+                        changed: ContentParser.parseTimeString(typeData[1]),
                     };
                 }
                 // is media
@@ -433,6 +433,36 @@ var Response;
         return ContentParser;
     }(AbstractParser));
     Response.ContentParser = ContentParser;
+    /**
+ *
+ */
+    var ThumbnailListParser = (function (_super) {
+        __extends(ThumbnailListParser, _super);
+        function ThumbnailListParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        ThumbnailListParser.prototype.parse = function (data) {
+            return data.map(function (i) {
+                var components = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
+                if (components === null) {
+                    return null;
+                }
+                var name = components[1].replace(/\\/g, "/");
+                var typeData = components[2].split(/\s+/);
+                return {
+                    name: name,
+                    type: "thumbnail",
+                    changed: ContentParser.parseTimeString(typeData[0]),
+                    size: parseInt(typeData[1]),
+                };
+            });
+        };
+        return ThumbnailListParser;
+    }(AbstractParser));
+    Response.ThumbnailListParser = ThumbnailListParser;
     /**
      *
      */

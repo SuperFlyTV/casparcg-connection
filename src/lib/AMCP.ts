@@ -1145,7 +1145,8 @@ export namespace AMCP {
 	 */
 	export class ThumbnailListCommand extends AbstractCommand {
 		static commandString = "THUMBNAIL LIST";
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser);
+		// responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser);
+		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser);
 	}
 
 	/**

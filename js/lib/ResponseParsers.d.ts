@@ -165,6 +165,15 @@ export declare namespace Response {
         parse(data: Array<string>): Object;
     }
     /**
+ *
+ */
+    class ThumbnailListParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<string>): Object;
+    }
+    /**
      *
      */
     class CinfParser extends AbstractParser implements IResponseParser {

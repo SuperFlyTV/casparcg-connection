@@ -1374,7 +1374,8 @@ var AMCP;
         __extends(ThumbnailListCommand, _super);
         function ThumbnailListCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
+            // responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ThumbnailListParser);
             return _this;
         }
         return ThumbnailListCommand;

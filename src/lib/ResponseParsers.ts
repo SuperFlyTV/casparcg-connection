@@ -336,7 +336,7 @@ export namespace Response {
 					};
 				 }
 
-				// is template
+				// is 2.1.0 template
 				if (typeData.length === 3) {
 					return {name: name,
 						type: "template",
@@ -346,12 +346,12 @@ export namespace Response {
 					};
 				}
 
-				// is thumbnail
+				// is 2.0.7 template
 				if (typeData.length === 2) {
 					return {name: name,
-						type: "thumbnail",
-						changed: ContentParser.parseTimeString(typeData[0]),
-						size: parseInt(typeData[1]),
+						type: "template",
+						size: parseInt(typeData[0]),
+						changed: ContentParser.parseTimeString(typeData[1]),
 					};
 				}
 
@@ -378,6 +378,36 @@ export namespace Response {
 			});
 		}
 	}
+
+		/**
+	 * 
+	 */
+	export class ThumbnailListParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 * 
+		 */
+		public parse(data: Array<string>): Object {
+			return data.map((i: string) => {
+				let components: RegExpMatchArray|null = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
+
+				if (components === null) {
+					return null;
+				}
+
+				let name: string = components[1].replace(/\\/g, "/");
+				let typeData: Array<string> = components[2].split(/\s+/);
+
+				return {
+					name: name,
+					type: "thumbnail",
+					changed: ContentParser.parseTimeString(typeData[0]),
+					size: parseInt(typeData[1]),
+				};
+			});
+		}
+	}
+
 
 	/**
 	 * 
