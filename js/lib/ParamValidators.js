@@ -93,6 +93,12 @@ var Validation;
         function URLValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
+        URLValidator.prototype.resolve = function (data) {
+            var url = _super.prototype.resolve.call(this, data).toString();
+            // add quotation
+            var quotedUrl = "\"" + url + "\"";
+            return { raw: url, payload: quotedUrl };
+        };
         return URLValidator;
     }(StringValidator));
     Validation.URLValidator = URLValidator;

@@ -91,7 +91,16 @@ export namespace Validation {
 	export class FilterValidator extends StringValidator {}
 
 	/** */
-	export class URLValidator extends StringValidator {}
+	export class URLValidator extends StringValidator {
+
+		resolve(data: Object): ParamData {
+			let url: string = super.resolve(data).toString();
+
+			// add quotation
+			let quotedUrl: string = `"${url}"`;
+			return {raw: url, payload: quotedUrl};
+		}
+	}
 
 	/** */
 	export class ChannelLayoutValidator extends StringValidator {
