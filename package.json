@@ -31,6 +31,13 @@
     "email": "jesper@superfly.tv",
     "url": "http://superfly.tv"
   },
+  "contributors": [
+    {
+      "name": "Balte de Wit",
+      "email": "balte.dewit@gmail.com",
+      "url": "http://balte.nl"
+    }
+  ],
   "homepage": "http://superfly.tv",
   "keywords": [
     "casparcg",
