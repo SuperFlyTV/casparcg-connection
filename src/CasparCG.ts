@@ -1032,7 +1032,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PLAY>
 	 */
 	public playDecklink(channel: number, layer?: number): Promise<IAMCPCommand>;
-	public playDecklink(channel: number, layer: number, device?: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, chanel_layout?: Enum.ChannelLayout|string): Promise<IAMCPCommand>;
+	public playDecklink(channel: number, layer: number, device?: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, channelLayout?: Enum.ChannelLayout|string): Promise<IAMCPCommand>;
 	public playDecklink(channel: number, layer: number = NaN, device?: number, transition?: Enum.Transition|string, transitionDuration?: number, transitionEasing?: Enum.Ease|string, transitionDirection?: Enum.Direction|string, length?: number, filter?: string, format?: Enum.ChannelFormat|string, channelLayout?: Enum.ChannelLayout|string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.PlayDecklinkCommand({channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout}));
 	}
