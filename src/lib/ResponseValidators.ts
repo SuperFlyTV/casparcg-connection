@@ -6,19 +6,19 @@ import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
 export namespace Response {
 
 	/**
-	 * 
+	 *
 	 */
 	export interface IResponseValidator {
 		resolve(response: CasparCGSocketResponse): Object;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class StatusValidator implements IResponseValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			return response.statusCode < 400;
@@ -26,12 +26,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class StringValidator implements IResponseValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			let result: String = response.items[0].toString();
@@ -40,12 +40,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class XMLValidator implements IResponseValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			let parseNumbers = function(str: any) {
@@ -82,12 +82,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ListValidator implements IResponseValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			// filters on stringitems in items-list and validates if any items present
@@ -97,25 +97,26 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class DataValidator implements IResponseValidator {	// @todo
 
 		/**
-		 * 
+		 *
 		 */
-		public resolve(): Object {
-			return {};
+		public resolve(response: CasparCGSocketResponse): Object {
+			let result: String = response.items[0].toString();
+			return result.length > 0 ? result : false;
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class Base64Validator implements IResponseValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			return response.items[0];
