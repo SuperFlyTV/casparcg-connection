@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var xml2js_1 = require("xml2js");
 var Response;
 (function (Response) {
@@ -98,8 +99,9 @@ var Response;
         /**
          *
          */
-        DataValidator.prototype.resolve = function () {
-            return {};
+        DataValidator.prototype.resolve = function (response) {
+            var result = response.items[0].toString();
+            return result.length > 0 ? result : false;
         };
         return DataValidator;
     }());

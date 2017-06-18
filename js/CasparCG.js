@@ -1,10 +1,15 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var es6_promise_1 = require("es6-promise");
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var hap_1 = require("hap");
 var CasparCGSocket_1 = require("./lib/CasparCGSocket");
 var AMCP_1 = require("./lib/AMCP");
@@ -446,9 +451,9 @@ var CasparCG = (function (_super) {
             }
         }
         catch (error) {
-            return es6_promise_1.Promise.reject(error);
+            return Promise.reject(error);
         }
-        var commandPromise = new es6_promise_1.Promise(function (resolve, reject) {
+        var commandPromise = new Promise(function (resolve, reject) {
             command.resolve = resolve;
             command.reject = reject;
             _this._addQueuedCommand(command);
@@ -541,7 +546,7 @@ var CasparCG = (function (_super) {
      *
      */
     CasparCG.prototype._handleInvalidSocketResponse = function (socketResponse) {
-        if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion < 2100) {
+        if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion && this.serverVersion < 2100) {
             this._expediteCommand(true);
         }
     };
@@ -609,7 +614,7 @@ var CasparCG = (function (_super) {
         var _this = this;
         if (refresh === void 0) { refresh = false; }
         if (!this._configPromise || refresh) {
-            this._configPromise = new es6_promise_1.Promise(function (resolve) {
+            this._configPromise = new Promise(function (resolve) {
                 _this.infoConfig().then(function (response) {
                     resolve(response.response.data);
                 });
@@ -622,7 +627,7 @@ var CasparCG = (function (_super) {
         var _this = this;
         if (refresh === void 0) { refresh = false; }
         if (!this._pathsPromise || refresh) {
-            this._pathsPromise = new es6_promise_1.Promise(function (resolve) {
+            this._pathsPromise = new Promise(function (resolve) {
                 _this.infoPaths().then(function (response) {
                     resolve(response.response.data);
                 });

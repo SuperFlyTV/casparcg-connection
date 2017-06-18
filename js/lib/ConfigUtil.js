@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // Options NS
 var AMCPConnectionOptions_1 = require("./AMCPConnectionOptions");
 var ServerVersion = AMCPConnectionOptions_1.Options.ServerVersion;

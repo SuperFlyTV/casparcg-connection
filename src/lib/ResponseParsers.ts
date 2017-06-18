@@ -135,7 +135,7 @@ export namespace Response {
 			(<Array<Object>>data).forEach((channel) => {
 				let components: Array<string> = channel.toString().split(/\s|,/);
 
-				let i: number = +components.shift();
+				let i: number = +components.shift()!;
 				let format: string = components.shift() || "";
 				let rates: ChannelRate = new ChannelRate(format);
 

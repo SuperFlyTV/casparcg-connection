@@ -1,4 +1,3 @@
-import {Promise} from "es6-promise";
 import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
 import {AMCP, AMCPUtil as AMCPUtilNS} from "./lib/AMCP";
@@ -746,7 +745,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public do(command: IAMCPCommand): Promise<IAMCPCommand>;
 	public do(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
-	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> {
+	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand|void> {
 		let command: IAMCPCommand | undefined;
 
 		try {
@@ -882,7 +881,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * 
 	 */
 	private _handleInvalidSocketResponse(socketResponse: CasparCGSocketResponse): void {
-		if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion < 2100) {
+		if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion && this.serverVersion < 2100) {
 			this._expediteCommand(true);
 		}
 	}

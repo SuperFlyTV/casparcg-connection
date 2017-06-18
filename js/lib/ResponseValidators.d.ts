@@ -50,7 +50,7 @@ export declare namespace Response {
         /**
          *
          */
-        resolve(): Object;
+        resolve(response: CasparCGSocketResponse): Object;
     }
     /**
      *

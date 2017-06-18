@@ -1,9 +1,15 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 // ResponseNS
 var ResponseSignature_1 = require("./ResponseSignature");
 var ResponseSignature = ResponseSignature_1.Response.ResponseSignature;
@@ -526,6 +532,7 @@ var Command;
                 }
                 else {
                     return "";
+                    // @todo throw???
                 }
             },
             enumerable: true,
@@ -586,12 +593,14 @@ var Command;
                 }
                 else {
                     return "";
+                    // @todo throw???
                 }
                 if (this.layer && (this.layer > -1)) {
                     address = address + "-" + this.layer;
                 }
                 else {
                     return "";
+                    // @todo throw???
                 }
                 return address;
             },
@@ -655,6 +664,7 @@ var Command;
                 }
                 else {
                     return "";
+                    // @todo throw???
                 }
                 if (this.layer && (this.layer > -1)) {
                     address = address + "-" + this.layer;
@@ -719,6 +729,7 @@ var Command;
                 }
                 else {
                     return "";
+                    // @todo throw???
                 }
                 if (this.layer && (this.layer > -1)) {
                     address = address + "-" + this.layer;
@@ -783,6 +794,7 @@ var Command;
                 }
                 else {
                     return "";
+                    // @todo throw???
                 }
                 if (this.layer && (this.layer > -1)) {
                     address = address + "-" + this.layer;
