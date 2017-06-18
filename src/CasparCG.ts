@@ -1,4 +1,3 @@
-import {Promise} from "es6-promise";
 import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
 import {AMCP, AMCPUtil as AMCPUtilNS} from "./lib/AMCP";
