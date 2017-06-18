@@ -33,9 +33,19 @@
   },
   "contributors": [
     {
+      "name": "Johan Nyman",
+      "email": "johan@superfly.tv",
+    "url": "http://superfly.tv"
+    },
+    {
       "name": "Balte de Wit",
       "email": "balte.dewit@gmail.com",
       "url": "http://balte.nl"
+    },
+    {
+      "name": "Andreas Jeansson",
+      "email": "andreas.jeansson@svt.se",
+      "url": "http://svt.se"
     }
   ],
   "homepage": "http://superfly.tv",
