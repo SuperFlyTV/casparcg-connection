@@ -6,13 +6,13 @@
   "typings": "js/index.d.ts",
   "scripts": {
     "prepublish": "npm run cleanbuild && npm run doc",
-    "postversion": "npm run test && npm run doc",
     "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
     "gulp": "gulp",
     "build": "gulp build",
     "cleanbuild": "gulp clean && gulp build",
     "clean": "gulp clean",
-    "doc": "gulp typedoc"
+    "doc": "gulp typedoc",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -73,6 +73,7 @@
     "gulp-watch": "^4.3.5",
     "gulp-zip": "^3.2.0",
     "jasmine-ts": "0.0.3",
+    "standard-version": "^4.2.0",
     "tslint": "^3.13.0",
     "typedoc": "^0.3.12",
     "typescript": "^2.0.6"
