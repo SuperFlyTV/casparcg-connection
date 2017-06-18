@@ -258,7 +258,7 @@ var CasparCGSocket = (function (_super) {
         var _this = this;
         this.isRestarting = false;
         this._clearReconnectInterval();
-        _(this._client).splitBy(/(?=\r\n)/).errors(function (error) { return _this._onError(error); }).each(function (i) { return _this._parseResponseGroups(i); }); // @todo: ["splitBy] hack due to missing type
+        _(this._client).splitBy(/(?=\r\n)/).errors(function (error) { return _this._onError(error); }).each(function (i) { return _this._parseResponseGroups(i); });
         this.connected = true;
     };
     /**

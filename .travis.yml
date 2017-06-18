@@ -19,18 +19,6 @@ deploy:
     tags: true
     repo: SuperFlyTV/casparcg-connection
     branch: master
-- provider: releases
-  api_key:
-    secure: L+tS772fbysRMXZpAPLusyAlqXDJKDsybmMYR0iQ0jqkEHFlRZ44K9v0FMHTXULaRIGqTka9PtSkjghjSQpxV3bQr+L9rgez6uJIdU+Iow/yY6mGXDPutYFkP8Csezg4FyXmFYdakDY8WGlVECbCvjWgR/YDvZzATtlyUCXmiIYxpGAVWxsHyfBm2aMoCfIjbTioDJ0XPs/kFVgRD1HfJFMuDdVePv408aSxownHEXi7VRsykTEzCp3T1Kz8iw6h4/JMzdbvLpUiieLsKLmsv+eNMGoDTjmufn44rkRsJR6lbxOUtDrA1kJZGUu7kaZmcf4pBHBvEvLFzoEo4857XLcFSGi8aEYk+PXmI3Z6/ir8px8qVdhrpfDWirlZj1NUouALXQeKIeMAbaJqmzJgbZ+Gnye1HL1Tn6ddJ+oxhKlC3h2oGPCDRfhjmxPMlwGOX0af1mvGS/8FEqGZt1Me3jG+/6okn9jSxX8wvddSq9+MLpVZ2PaP0pdTA3B2paBm/E76XWfRfSaw5Ai64PZSHAtd+h4B6FiEx7xxVp6dxAoINimJO6m8TXiTJY/iJWFCOConHgOrfIH2BsIkFsXHBEspJn05aH44FmzZy+cKx03OEI0+z9Zm4glEW+UVyUslG0l1edSnzIqgr8LLp/F+kUFOTsoxYBqtLfnbThrR9Xw=
-  file: 
-  - "tmp/casparcg-connection-js.zip"
-  - "tmp/casparcg-connection-src.zip"
-  file_glob: true
-  skip_cleanup: true
-  on:
-    tags: true
-    repo: SuperFlyTV/casparcg-connection
-    branch: master
 notifications:
   email:
     recipients:
