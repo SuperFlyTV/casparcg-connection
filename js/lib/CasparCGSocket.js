@@ -12,7 +12,6 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var net = require("net");
 var _ = require("highland");
-var hap_1 = require("hap");
 var AMCP_1 = require("./AMCP");
 // Command NS
 var AbstractCommand_1 = require("./AbstractCommand");
@@ -189,7 +188,7 @@ var CasparCGSocket = (function (_super) {
         set: function (statusMask) {
             if (this._socketStatus !== statusMask) {
                 this._socketStatus = statusMask;
-                this.fire(Events_1.CasparCGSocketStatusEvent.STATUS, new Events_1.CasparCGSocketStatusEvent(this._socketStatus));
+                this.emit(Events_1.CasparCGSocketStatusEvent.STATUS, new Events_1.CasparCGSocketStatusEvent(this._socketStatus));
             }
         },
         enumerable: true,
@@ -243,7 +242,7 @@ var CasparCGSocket = (function (_super) {
      */
     CasparCGSocket.prototype._onTimeout = function () {
         global.clearTimeout(this._commandTimeoutTimer);
-        this.fire(Events_1.CasparCGSocketStatusEvent.TIMEOUT, new Events_1.CasparCGSocketStatusEvent(this.socketStatus));
+        this.emit(Events_1.CasparCGSocketStatusEvent.TIMEOUT, new Events_1.CasparCGSocketStatusEvent(this.socketStatus));
     };
     /**
      * @todo:::
@@ -277,7 +276,7 @@ var CasparCGSocket = (function (_super) {
                 return;
             }
             else {
-                this.fire(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(this._parsedResponse));
+                this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(this._parsedResponse));
                 this._parsedResponse = undefined;
                 return;
             }
@@ -288,17 +287,17 @@ var CasparCGSocket = (function (_super) {
         }
         else if (this._parsedResponse && this._parsedResponse.statusCode === 201 || this._parsedResponse && this._parsedResponse.statusCode === 400 || this._parsedResponse && this._parsedResponse.statusCode === 101) {
             this._parsedResponse.items.push(i);
-            this.fire(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(this._parsedResponse));
+            this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(this._parsedResponse));
             this._parsedResponse = undefined;
             return;
         }
         else {
             var parsedResponse = new AMCP_1.AMCPUtil.CasparCGSocketResponse(i);
             if (!isNaN(parsedResponse.statusCode)) {
-                this.fire(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(parsedResponse));
+                this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(parsedResponse));
             }
             else {
-                this.fire(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, new Events_1.CasparCGSocketResponseEvent(parsedResponse));
+                this.emit(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, new Events_1.CasparCGSocketResponseEvent(parsedResponse));
             }
             return;
         }
@@ -336,5 +335,5 @@ var CasparCGSocket = (function (_super) {
         }
     };
     return CasparCGSocket;
-}(hap_1.EventEmitter));
+}(NodeJS.EventEmitter));
 exports.CasparCGSocket = CasparCGSocket;

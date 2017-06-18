@@ -10,7 +10,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var hap_1 = require("hap");
 var CasparCGSocket_1 = require("./lib/CasparCGSocket");
 var AMCP_1 = require("./lib/AMCP");
 var ServerStateEnum_1 = require("./lib/ServerStateEnum");
@@ -140,7 +139,6 @@ var CasparCG = (function (_super) {
             delete this._socket;
         }
         this._socket = new CasparCGSocket_1.CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
-        this.setParent(this._socket);
         this._socket.on("error", function (error) { return _this._onSocketError(error); });
         // inherit log method
         this._socket.log = function (args) { return _this._log(args); };
@@ -332,7 +330,7 @@ var CasparCG = (function (_super) {
         }
         if (connected !== this._connected) {
             this._connected = connected;
-            this.fire(Events_1.CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
+            this.emit(Events_1.CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
             if (this.onConnectionChanged) {
                 this.onConnectionChanged(this._connected);
             }
@@ -349,13 +347,13 @@ var CasparCG = (function (_super) {
                 else {
                     this._expediteCommand(true);
                 }
-                this.fire(Events_1.CasparCGSocketStatusEvent.CONNECTED, socketStatus);
+                this.emit(Events_1.CasparCGSocketStatusEvent.CONNECTED, socketStatus);
                 if (this.onConnected) {
                     this.onConnected(this._connected);
                 }
             }
             if (!this._connected) {
-                this.fire(Events_1.CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
+                this.emit(Events_1.CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
                 if (this.onDisconnected) {
                     this.onDisconnected(this._connected);
                 }
@@ -403,7 +401,7 @@ var CasparCG = (function (_super) {
             console.error(args);
             if (this.onError) {
                 this.onError(args);
-                this.fire("error", args);
+                this.emit("error", args);
                 return;
             }
         }
@@ -413,7 +411,7 @@ var CasparCG = (function (_super) {
         if (this.onLog) {
             this.onLog(args);
         }
-        this.fire(Events_1.LogEvent.LOG, new Events_1.LogEvent(args));
+        this.emit(Events_1.LogEvent.LOG, new Events_1.LogEvent(args));
     };
     CasparCG.prototype.do = function (commandOrString) {
         var _this = this;
@@ -536,7 +534,7 @@ var CasparCG = (function (_super) {
             currentCommand.status = IAMCPStatus.Failed;
             currentCommand.reject(currentCommand);
         }
-        this.fire(Events_1.CasparCGSocketCommandEvent.RESPONSE, new Events_1.CasparCGSocketCommandEvent(currentCommand));
+        this.emit(Events_1.CasparCGSocketCommandEvent.RESPONSE, new Events_1.CasparCGSocketCommandEvent(currentCommand));
         if (this._socket.isRestarting) {
             return;
         }
@@ -1412,5 +1410,5 @@ var CasparCG = (function (_super) {
         return this.do(new AMCP_1.AMCP.RestartCommand());
     };
     return CasparCG;
-}(hap_1.EventEmitter));
+}(NodeJS.EventEmitter));
 exports.CasparCG = CasparCG;

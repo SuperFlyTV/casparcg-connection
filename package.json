@@ -64,7 +64,6 @@
     "remote"
   ],
   "dependencies": {
-    "hap": "git+https://github.com/jesperstarkar/hap.git",
     "highland": "^3.0.0-beta.3",
     "xml2js": "^0.4.17",
     "xmlbuilder": "^8.2.2"

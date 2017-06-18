@@ -1,6 +1,5 @@
 import * as net from "net";
 import * as _ from "highland";
-import {EventEmitter} from "hap";
 import {AMCP, AMCPUtil} from "./AMCP";
 // Command NS
 import {Command as CommandNS} from "./AbstractCommand";
@@ -41,7 +40,7 @@ export enum SocketState {
 /**
  * 
  */
-export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
+export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSocket {
 	public isRestarting: boolean = false;
 	private _client: net.Socket;
 	private _host: string;
@@ -195,7 +194,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	public set socketStatus(statusMask: SocketState){
 		if (this._socketStatus !== statusMask) {
 			this._socketStatus = statusMask;
-			this.fire(CasparCGSocketStatusEvent.STATUS, new CasparCGSocketStatusEvent(this._socketStatus));
+			this.emit(CasparCGSocketStatusEvent.STATUS, new CasparCGSocketStatusEvent(this._socketStatus));
 		}
 	}
 
@@ -247,7 +246,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	private _onTimeout() {
 		global.clearTimeout(this._commandTimeoutTimer);
-		this.fire(CasparCGSocketStatusEvent.TIMEOUT, new CasparCGSocketStatusEvent(this.socketStatus));
+		this.emit(CasparCGSocketStatusEvent.TIMEOUT, new CasparCGSocketStatusEvent(this.socketStatus));
 	}
 
 	/**
@@ -281,7 +280,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 				this._parsedResponse.items.push(i);
 				return;
 			} else {
-				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
+				this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
 				this._parsedResponse = undefined;
 				return;
 			}
@@ -291,15 +290,15 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			return;
 		} else if (this._parsedResponse && this._parsedResponse.statusCode === 201 || this._parsedResponse && this._parsedResponse.statusCode === 400 || this._parsedResponse && this._parsedResponse.statusCode === 101) {
 			this._parsedResponse.items.push(i);
-			this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
+			this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
 			this._parsedResponse = undefined;
 			return;
 		} else {
 			let parsedResponse: AMCPUtil.CasparCGSocketResponse = new AMCPUtil.CasparCGSocketResponse(i);
 			if (!isNaN(parsedResponse.statusCode)) {
-				this.fire(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
+				this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
 			}else {
-				this.fire(CasparCGSocketResponseEvent.INVALID_RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
+				this.emit(CasparCGSocketResponseEvent.INVALID_RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
 			}
 			return;
 		}
