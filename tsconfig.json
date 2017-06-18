@@ -11,7 +11,12 @@
 		"strictNullChecks": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"target": "es5",
-		"experimentalDecorators": true
+		"experimentalDecorators": true,
+		"lib": [
+			"es5",
+			"es6",
+			"scripthost"
+		]
 	},
 	"exclude": [
 		"node_modules",
