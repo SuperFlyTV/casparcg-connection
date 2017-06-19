@@ -1,4 +1,4 @@
-import { EventEmitter } from "hap";
+/// <reference types="node" />
 import { Command as CommandNS } from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
 /**
@@ -28,7 +28,7 @@ export declare enum SocketState {
 /**
  *
  */
-export declare class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
+export declare class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSocket {
     isRestarting: boolean;
     private _client;
     private _host;

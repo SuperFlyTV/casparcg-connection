@@ -1,24 +1,22 @@
-import {EventFacade} from "hap";
-
 export namespace Event {
 	/**
 	 * 
 	 */
-	export class BaseEvent extends EventFacade {
+	export class BaseEvent {
+		public _val: Object;
 
 		/**
 		 * 
 		 */
 		constructor(params: Object) {
-			super(params);
-			this.val(params);
+			this._val = params;
 		}
 
 		/**
 		 * 
 		 */
 		valueOf(): Object {
-			return this.val();
+			return this._val;
 		}
 	}
 }

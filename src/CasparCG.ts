@@ -1,4 +1,3 @@
-import {EventEmitter} from "hap";
 import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
 import {AMCP, AMCPUtil as AMCPUtilNS} from "./lib/AMCP";
 // AMCPUtilNS
@@ -259,7 +258,7 @@ export interface ICasparCGConnection {
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object. 
  * `CasparCG` should be the only public interface to interact directly with.
  */
-export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
+export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
 	private _connected: boolean;
 	private _host: string;
 	private _port: number;
@@ -470,7 +469,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			delete this._socket;
 		}
 		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
-		this.setParent(this._socket);
 		this._socket.on("error", (error: Error) => this._onSocketError(error));
 
 		// inherit log method
@@ -651,7 +649,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		if (connected !== this._connected) {
 			this._connected = connected;
-			this.fire(CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
+			this.emit(CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
 
 			if (this.onConnectionChanged) {
 				this.onConnectionChanged(this._connected);
@@ -670,13 +668,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				}else {
 					this._expediteCommand(true);
 				}
-				this.fire(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
+				this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
 				if (this.onConnected) {
 					this.onConnected(this._connected);
 				}
 			}
 			if (!this._connected) {
-				this.fire(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
+				this.emit(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
 				if (this.onDisconnected) {
 					this.onDisconnected(this._connected);
 				}
@@ -725,7 +723,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			console.error(args);
 			if (this.onError) {
 				this.onError(args);
-				this.fire("error", args);
+				this.emit("error", args);
 				return;
 			}
 		}
@@ -736,7 +734,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this.onLog) {
 			this.onLog(args);
 		}
-		this.fire(LogEvent.LOG, new LogEvent(args));
+		this.emit(LogEvent.LOG, new LogEvent(args));
 	}
 
 	/**
@@ -867,7 +865,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			currentCommand.status =  IAMCPStatus.Failed;
 			currentCommand.reject(currentCommand);
 		}
-		this.fire(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
+		this.emit(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
 
 
 		if (this._socket.isRestarting) {
