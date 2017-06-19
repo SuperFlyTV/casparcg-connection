@@ -1,6 +1,6 @@
 # casparcg-connection
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/SuperFlyTV/casparcg-connection/master/LICENSE) [![npm](https://img.shields.io/npm/v/casparcg-connection.svg?style=flat-square)](https://www.npmjs.com/package/casparcg-connection) [![Travis](https://img.shields.io/travis/SuperFlyTV/casparcg-connection.svg?style=flat-square)](https://travis-ci.org/SuperFlyTV/casparcg-connection) [![Coveralls](https://img.shields.io/coveralls/SuperFlyTV/casparcg-connection.svg?style=flat-square)](https://coveralls.io/github/SuperFlyTV/casparcg-connection) [![David](https://img.shields.io/david/superflytv/casparcg-connection.svg?style=flat-square)](https://david-dm.org/superflytv/casparcg-connection)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/SuperFlyTV/casparcg-connection/master/LICENSE) [![npm](https://img.shields.io/npm/v/casparcg-connection.svg?style=flat-square)](https://www.npmjs.com/package/casparcg-connection) [![Travis](https://img.shields.io/travis/SuperFlyTV/casparcg-connection.svg?style=flat-square)](https://travis-ci.org/SuperFlyTV/casparcg-connection) [![David](https://img.shields.io/david/superflytv/casparcg-connection.svg?style=flat-square)](https://david-dm.org/superflytv/casparcg-connection)
 
 ## Introduction
 
@@ -18,14 +18,33 @@ CasparCG is an open source graphics- and video server for broadcast and streamin
 - Helper functions for parsing of Config, Version and System info
 - MIT license
 
+## Getting started
 
-## Example
+### Installing with NPM
+
+```
+npm install casparcg-connection --save
+```
+
+This installs the full project with sourcecode and dependencies, typescript project files and the compiled .js output with typings.
+
+In your code, include and use the CasparCG object from this library with a code similar to:
+
 ```javascript
 const {CasparCG} = require("casparcg-connection");
 
 var connection = new CasparCG();
 connection.play(1, 1, "amb");
 ```
+
+### Build from source
+Installing from NPM adds the dev-dependencies needed to compile TypeScript and using Gulp as build tool. A set of commands help you managing development and testing:
+
+* **`npm run gulp`** Runs the build command and watches all `/src` files for changes, re-running the build upon each file change.
+* **`npm run clean`** Empties the `/js` directory.
+* **`npm run build`** Runs a single build command without watching for changes.
+* **`npm run cleanBuild`**  Runs the clean command before a build command.
+* **`npm run test`** Runs code tests through Jasmine.
 
 ## Documentation
 Join the discussion in the [CasparCG Forum thread](http://casparcg.com/forum/viewtopic.php?f=3&t=4061).

@@ -263,7 +263,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _onConnected() {
 		this.isRestarting = false;
 		this._clearReconnectInterval();
-		_(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => this._parseResponseGroups(i));	// @todo: ["splitBy] hack due to missing type
+		_(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => this._parseResponseGroups(i));
 		this.connected = true;
 	}
 
