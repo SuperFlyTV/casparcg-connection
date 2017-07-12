@@ -1,24 +1,24 @@
 /**
- * 
+ *
  */
 export namespace Enum {
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractEnum {
 
 		public value: string;
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(value: string) {
 			this.value = value;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		toString(): string {
 			return this.value;
@@ -26,7 +26,7 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class Command extends AbstractEnum {
 		static LOADBG = new Command("LOADBG");
@@ -110,7 +110,7 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class Producer extends AbstractEnum {
 		static FFMPEG = new Producer("FFmpeg Producer");
@@ -129,7 +129,7 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class Consumer extends AbstractEnum {
 		static FFMPEG = new Consumer("FFMpeg Consumer");
@@ -144,8 +144,8 @@ export namespace Enum {
 
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	export class Version extends AbstractEnum {
 		static SERVER = new Version("SERVER");
@@ -155,8 +155,8 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	export class Lock extends AbstractEnum {
 		static ACQUIRE = new Lock("ACQUIRE");
@@ -165,8 +165,8 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	export class LogCategory extends AbstractEnum {
 		static CALLTRACE = new LogCategory("CALLTRACE");
@@ -174,8 +174,8 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	export class Chroma extends AbstractEnum {
 		static NONE = new Chroma("NONE");
@@ -184,8 +184,8 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	export class LogLevel extends AbstractEnum {
 		static TRACE = new LogLevel("TRACE");
@@ -197,8 +197,8 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	export class Transition extends AbstractEnum {
 		static CUT = new Transition("CUT");
@@ -209,8 +209,8 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	export class Direction extends AbstractEnum {
 		static LEFT = new Direction("LEFT");
@@ -218,7 +218,7 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class BlendMode extends AbstractEnum {
 		static NORMAL = new BlendMode("NORMAL");
@@ -253,7 +253,7 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class Ease extends AbstractEnum {
 		static LINEAR = new Ease("LINEAR");
@@ -343,7 +343,7 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ChannelFormat extends AbstractEnum {
 		static INVALID = new ChannelFormat("invalid");
@@ -389,7 +389,7 @@ export namespace Enum {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ChannelLayout extends AbstractEnum {
 

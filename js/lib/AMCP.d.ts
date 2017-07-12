@@ -12,7 +12,7 @@ import { Param as ParamNS } from "./ParamSignature";
 import Param = ParamNS.Param;
 import { Protocol as ProtocolNS } from "./ProtocolLogic";
 /**
- * Factory
+ *Factory
  */
 export declare namespace AMCPUtil {
     /**
@@ -37,7 +37,7 @@ export declare namespace AMCPUtil {
     }
 }
 /**
- * Internal
+ *Internal
  */
 export declare namespace AMCP {
     class CustomCommand extends AbstractCommand {
@@ -46,7 +46,7 @@ export declare namespace AMCP {
     }
 }
 /**
- * IVideo
+ *IVideo
  */
 export declare namespace AMCP {
     /**
@@ -93,7 +93,7 @@ export declare namespace AMCP {
     }
 }
 /**
- * IInputOutput
+ *IInputOutput
  */
 export declare namespace AMCP {
     /**
@@ -146,7 +146,7 @@ export declare namespace AMCP {
     }
 }
 /**
- * ICG
+ *ICG
  */
 export declare namespace AMCP {
     /**
@@ -203,7 +203,7 @@ export declare namespace AMCP {
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
-     * @todo: 201 response code, parsing???????
+     *@todo: 201 response code, parsing???????
      */
     class CGInvokeCommand extends AbstractLayerWithCgFallbackCommand {
         static commandString: string;
@@ -212,8 +212,8 @@ export declare namespace AMCP {
     }
 }
 /**
- * IMixer
- * @todo: switch 201/202 based on mode
+ *IMixer
+ *@todo: switch 201/202 based on mode
  */
 export declare namespace AMCP {
     /**
@@ -229,7 +229,7 @@ export declare namespace AMCP {
         constructor(params: (string | Param | (string | Param)[]));
     }
     /**
-     * @todo	Validata/clamp lamp number range?
+     *@todo	Validata/clamp lamp number range?
      */
     class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
         static commandString: string;
@@ -301,7 +301,7 @@ export declare namespace AMCP {
         constructor(params: (string | Param | (string | Param)[]));
     }
     /**
-     * @todo:	verify `gamma` value range
+     *@todo:	verify `gamma` value range
      */
     class MixerLevelsCommand extends AbstractLayerWithFallbackCommand {
         static commandString: string;
@@ -467,7 +467,7 @@ export declare namespace AMCP {
     }
 }
 /**
- * IChannel
+ *IChannel
  */
 export declare namespace AMCP {
     /**
@@ -538,7 +538,7 @@ export declare namespace AMCP {
     }
 }
 /**
- * IData
+ *IData
  */
 export declare namespace AMCP {
     /**
@@ -572,7 +572,7 @@ export declare namespace AMCP {
     }
 }
 /**
- * IThumbnail
+ *IThumbnail
  */
 export declare namespace AMCP {
     /**
@@ -605,7 +605,7 @@ export declare namespace AMCP {
     }
 }
 /**
- * IInfo
+ *IInfo
  */
 export declare namespace AMCP {
     /**
@@ -723,7 +723,7 @@ export declare namespace AMCP {
         constructor(params: (string | Param | (string | Param)[]));
     }
     /**
-     * @todo: response validator/parser
+     *@todo: response validator/parser
      */
     class CGInfoCommand extends AbstractLayerWithCgFallbackCommand {
         static commandString: string;
@@ -749,7 +749,7 @@ export declare namespace AMCP {
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
-     * @protocol	Needs either `calltrace` or `communication` parameter.
+     *@protocol	Needs either `calltrace` or `communication` parameter.
      */
     class LogCategoryCommand extends AbstractCommand {
         static commandString: string;
@@ -763,8 +763,8 @@ export declare namespace AMCP {
         static commandString: string;
     }
     /**
-     * @todo: mixed mode!!!!
-     * 202/201
+     *@todo: mixed mode!!!!
+     *202/201
      */
     class HelpCommand extends AbstractCommand {
         static commandString: string;
@@ -789,23 +789,23 @@ export declare namespace AMCP {
     }
 }
 /**
- * IOperation
+ *IOperation
  */
 export declare namespace AMCP {
     /**
-     * @todo: response
+     *@todo: response
      */
     class ByeCommand extends AbstractCommand {
         static commandString: string;
     }
     /**
-     * @todo: response
+     *@todo: response
      */
     class KillCommand extends AbstractCommand {
         static commandString: string;
     }
     /**
-     * @todo: response
+     *@todo: response
      */
     class RestartCommand extends AbstractCommand {
         static commandString: string;

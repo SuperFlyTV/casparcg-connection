@@ -1,6 +1,8 @@
-import { EventEmitter } from "hap";
+/// <reference types="node" />
+import { EventEmitter } from "events";
 import { Command as CommandNS } from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
+import { SocketStatusOptions } from "./event/Events";
 /**
  *
  */
@@ -8,22 +10,14 @@ export interface ICasparCGSocket {
     connected: boolean;
     host: string;
     port: number;
-    socketStatus: SocketState;
     isRestarting: boolean;
+    reconnecting: boolean;
+    socketStatus: SocketStatusOptions;
     connect(): void;
     disconnect(): void;
     dispose(): void;
     log(args: any): void;
     executeCommand(command: IAMCPCommand): IAMCPCommand;
-}
-export declare enum SocketState {
-    unconfigured = 0,
-    configured = 1,
-    hostFound = 2,
-    connectionAttempt = 4,
-    connected = 8,
-    lostConnection = 32,
-    reconnecting = 64,
 }
 /**
  *
@@ -33,6 +27,7 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
     private _client;
     private _host;
     private _port;
+    private _connected;
     private _autoReconnect;
     private _reconnectDelay;
     private _reconnectAttempts;
@@ -40,7 +35,6 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
     private _reconnectInterval;
     private _commandTimeoutTimer;
     private _commandTimeout;
-    private _socketStatus;
     private _parsedResponse;
     /**
      *
@@ -89,13 +83,6 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
     /**
      *
      */
-    /**
-     *
-     */
-    socketStatus: SocketState;
-    /**
-     *
-     */
     dispose(): void;
     /**
      *
@@ -107,13 +94,21 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
     /**
      *
      */
+    readonly socketStatus: SocketStatusOptions;
+    /**
+     *
+     */
+    readonly reconnecting: boolean;
+    /**
+     *
+     */
     executeCommand(command: IAMCPCommand): IAMCPCommand;
     /**
      *
      */
     private _onTimeout();
     /**
-     * @todo:::
+     *@todo:::
      */
     private _onLookup();
     /**
@@ -125,11 +120,11 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
      */
     private _parseResponseGroups(i);
     /**
-     * @todo:::
+     *@todo:::
      */
     private _onError(error);
     /**
-     * @todo:::
+     *@todo:::
      */
     private _onDrain();
     /**

@@ -6,11 +6,11 @@ import {Param as ParamNS} from "./ParamSignature";
 import IParamSignature = ParamNS.IParamSignature;
 
 /**
- * 
+ *
  */
 export namespace Protocol {
 	/**
-	 * 
+	 *
 	 */
 	export interface IProtocolLogic {
 		resolve(protocol: Array<IParamSignature>): Array<IParamSignature>;
@@ -23,29 +23,29 @@ export namespace Protocol {
 		protected fields: Array<string|AbstractEnum>;
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(...fields: Array<string|AbstractEnum>) {
 			this.fields = fields;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		abstract resolve(protocol: Array<IParamSignature>): Array<IParamSignature>;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class Depends extends AbstractProtocolLogic {
 
 		/**
-		 * 
+		 *
 		 */
 		public if(target: string, mustBe: AbstractEnum|string): IProtocolLogic {
 			let resolveRef = this.resolve;
-			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => { 
+			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
 				for (let param of protocol){
 					if (param.name === target && param.payload === mustBe.toString()) {
 						return resolveRef.call(this, protocol);
@@ -58,11 +58,11 @@ export namespace Protocol {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		public ifNot(target: string, cantBe: AbstractEnum|string): IProtocolLogic {
 			let resolveRef = this.resolve;
-			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => { 
+			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
 				for (let param of protocol){
 					if (param.name === target && param.payload === cantBe.toString()) {
 						return protocol;
@@ -75,7 +75,7 @@ export namespace Protocol {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(dependant: string|AbstractEnum, dependee: string|AbstractEnum);
 		constructor(...fields: Array<string|AbstractEnum>);
@@ -84,9 +84,9 @@ export namespace Protocol {
 		}
 
 		/**
-		 * 
+		 *
 		 */
-		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> { 
+		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
 			let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && param.name === this.fields[1]);
 			if (valids.length === 1) {
 				return protocol;
@@ -102,12 +102,12 @@ export namespace Protocol {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class OneOf extends AbstractProtocolLogic {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(either: string|AbstractEnum, or: string|AbstractEnum);
 		constructor(...fields: Array<string|AbstractEnum>);
@@ -116,9 +116,9 @@ export namespace Protocol {
 		}
 
 		/**
-		 * 
+		 *
 		 */
-		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> { 
+		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
 			let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && this.fields.indexOf(param.name) > -1);
 			if (valids.length === 1) {
 				return protocol;
@@ -128,12 +128,12 @@ export namespace Protocol {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class Coupled extends AbstractProtocolLogic {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(partnerA: string|AbstractEnum, partnerB: string|AbstractEnum);
 		constructor(...fields: Array<string|AbstractEnum>);
@@ -142,9 +142,9 @@ export namespace Protocol {
 		}
 
 		/**
-		 * 
+		 *
 		 */
-		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> { 
+		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
 
 			let valids: Array<IParamSignature> = protocol.filter((param) => this.fields.indexOf(param.name) > -1 && param.resolved === true);
 			if (valids.length >= this.fields.length) {

@@ -13,9 +13,9 @@ import XMLValidator = validationNS.XMLValidator;
 import {Response as responseNS} from "./ResponseParsers";
 import ConfigParser	 = responseNS.ConfigParser;
 
-/** */
+/***/
 export namespace ConfigUtil {
-	/** */
+	/***/
 	export function parseConfigFrom207XML(XMLString: string): Config.Intermediate.CasparCGConfig | {} {
 		let validator: XMLValidator = new XMLValidator();
 		let parser: ConfigParser = new ConfigParser();
@@ -34,7 +34,7 @@ export namespace ConfigUtil {
 		return validData;
 	}
 
-	/** */
+	/***/
 	export function parseConfigFrom210XML(XMLString: string): Config.Intermediate.CasparCGConfig | {} {
 		let validator: XMLValidator = new XMLValidator();
 		let parser: ConfigParser = new ConfigParser();

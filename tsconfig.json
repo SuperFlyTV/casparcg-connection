@@ -10,8 +10,16 @@
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
 		"suppressImplicitAnyIndexErrors": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
 		"target": "es5",
-		"experimentalDecorators": true
+		"experimentalDecorators": true,
+		"lib": [
+			"es5",
+			"es6",
+			"scripthost",
+			"dom"
+		]
 	},
 	"exclude": [
 		"node_modules",

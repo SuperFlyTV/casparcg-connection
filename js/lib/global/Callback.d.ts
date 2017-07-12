@@ -1,8 +1,7 @@
-import { Event as BaseEventNS } from "../event/BaseEvent";
+import { BaseEvent, SocketStatusOptions } from "../event/Events";
 import { Command as CommandNS } from "../AbstractCommand";
 import IAMCPResponse = CommandNS.IAMCPResponse;
 import IAMCPStatus = CommandNS.IAMCPStatus;
-import { SocketState } from "../CasparCGSocket";
 /**
  *
  */
@@ -11,7 +10,7 @@ export declare namespace Callback {
      *
      */
     interface IEventCallback {
-        (event: BaseEventNS.BaseEvent): void;
+        (event: BaseEvent): void;
     }
     /**
      *
@@ -32,7 +31,7 @@ export declare namespace Callback {
         (value: IAMCPResponse): void;
     }
     /**
-     * @todo implement
+     *@todo implement
      */
     interface IErrorCallback {
         (error: Error): void;
@@ -41,7 +40,7 @@ export declare namespace Callback {
      *
      */
     interface ISocketStatusCallback {
-        (value: SocketState): void;
+        (value: SocketStatusOptions): void;
     }
     /**
      *

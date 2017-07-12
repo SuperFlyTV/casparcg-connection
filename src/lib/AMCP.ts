@@ -30,12 +30,12 @@ import Coupled = ProtocolNS.Coupled;
 import OneOf = ProtocolNS.OneOf;
 
 /**
- * Factory
+ *Factory
  */
 export namespace AMCPUtil {
 
 	/**
-	 * 
+	 *
 	 */
 	export function deSerialize(cmd: IAMCPCommandVO, id: string): IAMCPCommand {
 
@@ -49,7 +49,7 @@ export namespace AMCPUtil {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CasparCGSocketResponse {
 		public statusCode: number;
@@ -57,7 +57,7 @@ export namespace AMCPUtil {
 		public items: Array<string> = [];
 
 		/**
-		 * 
+		 *
 		 */
 		constructor (responseString: string) {
 			this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString);
@@ -65,7 +65,7 @@ export namespace AMCPUtil {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		static evaluateStatusCode(responseString: string): number {
 			return parseInt(responseString.substr(0, 3), 10);
@@ -74,7 +74,7 @@ export namespace AMCPUtil {
 }
 
 /**
- * Internal
+ *Internal
  */
 export namespace AMCP {
 	export class CustomCommand extends AbstractCommand {
@@ -86,11 +86,11 @@ export namespace AMCP {
 }
 
 /**
- * IVideo
+ *IVideo
  */
 export namespace AMCP {
 	/**
-	 * 
+	 *
 	 */
 	export class LoadbgCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "LOADBG";
@@ -114,7 +114,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class LoadCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "LOAD";
@@ -137,7 +137,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class PlayCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "PLAY";
@@ -168,21 +168,21 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class PauseCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "PAUSE";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ResumeCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "RESUME";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class StopCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "STOP";
@@ -190,11 +190,11 @@ export namespace AMCP {
 }
 
 /**
- * IInputOutput
+ *IInputOutput
  */
 export namespace AMCP {
 	/**
-	 * 
+	 *
 	 */
 	export class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "LOADBG";
@@ -218,7 +218,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "LOAD";
@@ -241,7 +241,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "PLAY";
@@ -272,7 +272,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "LOADBG";
@@ -292,7 +292,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class LoadHtmlPageCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "LOAD";
@@ -311,7 +311,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class PlayHtmlPageCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "PLAY";
@@ -335,11 +335,11 @@ export namespace AMCP {
 }
 
 /**
- * ICG
+ *ICG
  */
 export namespace AMCP {
 	/**
-	 * 
+	 *
 	 */
 	export class CGAddCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -352,7 +352,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CGPlayCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -362,7 +362,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CGStopCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -372,7 +372,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CGNextCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -382,7 +382,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CGRemoveCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -392,7 +392,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CGClearCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -402,7 +402,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -411,7 +411,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CGUpdateCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -422,7 +422,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * @todo: 201 response code, parsing???????
+	 *@todo: 201 response code, parsing???????
 	 */
 	export class CGInvokeCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -435,12 +435,12 @@ export namespace AMCP {
 }
 
 /**
- * IMixer
- * @todo: switch 201/202 based on mode
+ *IMixer
+ *@todo: switch 201/202 based on mode
  */
 export namespace AMCP {
 	/**
-	 * 
+	 *
 	 */
 	export class MixerKeyerCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -454,7 +454,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -463,7 +463,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * @todo	Validata/clamp lamp number range?
+	 *@todo	Validata/clamp lamp number range?
 	 */
 	export class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -487,7 +487,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -496,7 +496,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerBlendCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -510,7 +510,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -519,7 +519,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerOpacityCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -537,7 +537,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -546,7 +546,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerBrightnessCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -564,7 +564,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -573,7 +573,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerSaturationCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -591,7 +591,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -600,7 +600,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerContrastCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -618,7 +618,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -627,7 +627,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * @todo:	verify `gamma` value range
+	 *@todo:	verify `gamma` value range
 	 */
 	export class MixerLevelsCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -650,7 +650,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -659,7 +659,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerFillCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -681,7 +681,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -690,7 +690,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerClipCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -712,7 +712,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -721,7 +721,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -741,7 +741,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -750,7 +750,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerCropCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -772,7 +772,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -781,7 +781,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerRotationCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -799,7 +799,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -808,7 +808,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerPerspectiveCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -834,7 +834,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -843,7 +843,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerMipmapCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -857,7 +857,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -866,7 +866,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerVolumeCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "MIXER";
@@ -884,7 +884,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -893,7 +893,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerMastervolumeCommand extends AbstractChannelCommand {
 		static commandString = "MIXER";
@@ -909,7 +909,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -918,7 +918,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerStraightAlphaOutputCommand extends AbstractChannelCommand {
 		static commandString = "MIXER";
@@ -932,7 +932,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -941,7 +941,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerGridCommand extends AbstractChannelCommand {
 		static commandString = "MIXER";
@@ -954,7 +954,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -963,7 +963,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerCommitCommand extends AbstractChannelCommand {
 		static commandString = "MIXER";
@@ -972,7 +972,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -981,7 +981,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class MixerClearCommand extends AbstractChannelOrLayerCommand {
 		static commandString = "MIXER";
@@ -990,7 +990,7 @@ export namespace AMCP {
 		];
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -1000,31 +1000,31 @@ export namespace AMCP {
 }
 
 /**
- * IChannel
+ *IChannel
  */
 export namespace AMCP {
 	/**
-	 * 
+	 *
 	 */
 	export class ClearCommand extends AbstractChannelOrLayerCommand {
 		static commandString = "CLEAR";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CallCommand extends AbstractLayerWithFallbackCommand {
 		static commandString = "CALL";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class SwapCommand extends AbstractChannelOrLayerCommand {
 		static commandString = "SWAP";
 
 		/**
-		 * 
+		 *
 		 */
 		constructor() {
 			super("1-1"); // @todo: foo
@@ -1035,35 +1035,35 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class AddCommand extends AbstractChannelCommand {
 		static commandString = "ADD";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class RemoveCommand extends AbstractChannelOrLayerCommand {
 		static commandString = "REMOVE";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class PrintCommand extends AbstractChannelCommand {
 		static commandString = "PRINT";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class SetCommand extends AbstractChannelCommand {
 		static commandString = "SET";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class LockCommand extends AbstractChannelCommand {
 		static commandString = "LOCK";
@@ -1077,14 +1077,14 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ChannelGridCommand extends AbstractCommand {
 		static commandString = "CHANNEL_GRID";
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class GlGCCommand extends AbstractCommand {
 		static commandString = "GL GC";
@@ -1092,11 +1092,11 @@ export namespace AMCP {
 }
 
 /**
- * IData
+ *IData
  */
 export namespace AMCP {
 	/**
-	 * 
+	 *
 	 */
 	export class DataStoreCommand extends AbstractCommand {
 		static commandString = "DATA STORE";
@@ -1107,7 +1107,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class DataRetrieveCommand extends AbstractCommand {
 		static commandString = "DATA RETRIEVE";
@@ -1118,7 +1118,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class DataListCommand extends AbstractCommand {
 		static commandString = "DATA LIST";
@@ -1126,7 +1126,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class DataRemoveCommand extends AbstractCommand {
 		static commandString = "DATA REMOVE";
@@ -1137,11 +1137,11 @@ export namespace AMCP {
 }
 
 /**
- * IThumbnail
+ *IThumbnail
  */
 export namespace AMCP {
 	/**
-	 * 
+	 *
 	 */
 	export class ThumbnailListCommand extends AbstractCommand {
 		static commandString = "THUMBNAIL LIST";
@@ -1150,7 +1150,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ThumbnailRetrieveCommand extends AbstractCommand {
 		static commandString = "THUMBNAIL RETRIEVE";
@@ -1161,7 +1161,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ThumbnailGenerateCommand extends AbstractCommand {
 		static commandString = "THUMBNAIL GENERATE";
@@ -1171,7 +1171,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ThumbnailGenerateAllCommand extends AbstractCommand {
 		static commandString = "THUMBNAIL GENERATE_ALL";
@@ -1179,11 +1179,11 @@ export namespace AMCP {
 }
 
 /**
- * IInfo
+ *IInfo
  */
 export namespace AMCP {
 	/**
-	 * 
+	 *
 	 */
 	export class CinfCommand extends AbstractCommand {
 		static commandString = "CINF";
@@ -1194,7 +1194,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ClsCommand extends AbstractCommand {
 		static commandString = "CLS";
@@ -1202,7 +1202,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class FlsCommand extends AbstractCommand {
 		static commandString = "FLS";
@@ -1210,7 +1210,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class TlsCommand extends AbstractCommand {
 		static commandString = "TLS";
@@ -1218,7 +1218,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class VersionCommand extends AbstractCommand {
 		static commandString = "VERSION";
@@ -1229,14 +1229,14 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoCommand extends AbstractOrChannelOrLayerCommand {
 		static commandString = "INFO";
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ChannelParser);
 
 		/**
-		 *  
+		 *
 		 */
 		constructor(params?: (string|Param|(string|Param)[])) {
 			super(params);
@@ -1247,7 +1247,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoTemplateCommand extends AbstractCommand {
 		static commandString = "INFO TEMPLATE";
@@ -1258,14 +1258,14 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoConfigCommand extends AbstractCommand {
 		static commandString = "INFO CONFIG";
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.ConfigParser);
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[]), context?: Object) {
 			super(params, context);
@@ -1273,7 +1273,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoPathsCommand extends AbstractCommand {
 		static commandString = "INFO PATHS";
@@ -1281,7 +1281,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoSystemCommand extends AbstractCommand {
 		static commandString = "INFO SYSTEM";
@@ -1289,7 +1289,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoServerCommand extends AbstractCommand {
 		static commandString = "INFO SERVER";
@@ -1297,7 +1297,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoQueuesCommand extends AbstractCommand {
 		static commandString = "INFO QUEUES";
@@ -1305,7 +1305,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoThreadsCommand extends AbstractCommand {
 		static commandString = "INFO THREADS";
@@ -1313,7 +1313,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoDelayCommand extends AbstractChannelOrLayerCommand {
 		static commandString = "INFO";
@@ -1323,7 +1323,7 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoDelayParser);
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -1332,7 +1332,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * @todo: response validator/parser
+	 *@todo: response validator/parser
 	 */
 	export class CGInfoCommand extends AbstractLayerWithCgFallbackCommand {
 		static commandString = "CG";
@@ -1344,7 +1344,7 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(201);
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[])) {
 			super(params);
@@ -1353,7 +1353,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class GlInfoCommand extends AbstractCommand {
 		static commandString = "GL INFO";
@@ -1361,7 +1361,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class LogLevelCommand extends AbstractCommand {
 		static commandString = "LOG LEVEL";
@@ -1371,7 +1371,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * @protocol	Needs either `calltrace` or `communication` parameter.
+	 *@protocol	Needs either `calltrace` or `communication` parameter.
 	 */
 	export class LogCategoryCommand extends AbstractCommand {
 		static commandString = "LOG CATEGORY";
@@ -1385,15 +1385,15 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class DiagCommand extends AbstractCommand {
 		static commandString = "DIAG";
 	}
 
 	/**
-	 * @todo: mixed mode!!!!
-	 * 202/201
+	 *@todo: mixed mode!!!!
+	 *202/201
 	 */
 	export class HelpCommand extends AbstractCommand {
 		static commandString = "HELP";
@@ -1404,7 +1404,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class HelpProducerCommand extends AbstractCommand {
 		static commandString = "HELP PRODUCER";
@@ -1415,7 +1415,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class HelpConsumerCommand extends AbstractCommand {
 		static commandString = "HELP CONSUMER";
@@ -1427,25 +1427,25 @@ export namespace AMCP {
 }
 
 /**
- * IOperation
+ *IOperation
  */
 export namespace AMCP {
 	/**
-	 * @todo: response
+	 *@todo: response
 	 */
 	export class ByeCommand extends AbstractCommand {
 		static commandString = "BYE";
 	}
 
 	/**
-	 * @todo: response
+	 *@todo: response
 	 */
 	export class KillCommand extends AbstractCommand {
 		static commandString = "KILL";
 	}
 
 	/**
-	 * @todo: response
+	 *@todo: response
 	 */
 	export class RestartCommand extends AbstractCommand {
 		static commandString = "RESTART";

@@ -1,17 +1,23 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var xmlbuilder_1 = require("xmlbuilder");
 // Options NS
 var AMCPConnectionOptions_1 = require("./AMCPConnectionOptions");
 var ServerVersion = AMCPConnectionOptions_1.Options.ServerVersion;
-/** */
+/***/
 var Config;
 (function (Config) {
-    /** */
+    /***/
     var Utils;
     (function (Utils) {
         function configMemberFactory(version, memberName, initValues) {
@@ -127,10 +133,10 @@ var Config;
         }
         Utils.configMemberFactory = configMemberFactory;
     })(Utils = Config.Utils || (Config.Utils = {}));
-    /** */
+    /***/
     var v2xx;
     (function (v2xx) {
-        /** */
+        /***/
         var CasparCGConfigVO = (function () {
             function CasparCGConfigVO() {
                 this.channelGrid = false;
@@ -140,7 +146,7 @@ var Config;
             return CasparCGConfigVO;
         }());
         v2xx.CasparCGConfigVO = CasparCGConfigVO;
-        /** */
+        /***/
         var Channel = (function () {
             function Channel() {
                 this._type = "channel";
@@ -152,14 +158,14 @@ var Config;
             return Channel;
         }());
         v2xx.Channel = Channel;
-        /** */
+        /***/
         var Consumer = (function () {
             function Consumer() {
             }
             return Consumer;
         }());
         v2xx.Consumer = Consumer;
-        /** */
+        /***/
         var DecklinkConsumer = (function (_super) {
             __extends(DecklinkConsumer, _super);
             function DecklinkConsumer() {
@@ -178,7 +184,7 @@ var Config;
             return DecklinkConsumer;
         }(Consumer));
         v2xx.DecklinkConsumer = DecklinkConsumer;
-        /** */
+        /***/
         var BluefishConsumer = (function (_super) {
             __extends(BluefishConsumer, _super);
             function BluefishConsumer() {
@@ -193,7 +199,7 @@ var Config;
             return BluefishConsumer;
         }(Consumer));
         v2xx.BluefishConsumer = BluefishConsumer;
-        /** */
+        /***/
         var SystemAudioConsumer = (function (_super) {
             __extends(SystemAudioConsumer, _super);
             function SystemAudioConsumer() {
@@ -204,7 +210,7 @@ var Config;
             return SystemAudioConsumer;
         }(Consumer));
         v2xx.SystemAudioConsumer = SystemAudioConsumer;
-        /** */
+        /***/
         var ScreenConsumer = (function (_super) {
             __extends(ScreenConsumer, _super);
             function ScreenConsumer() {
@@ -223,7 +229,7 @@ var Config;
             return ScreenConsumer;
         }(Consumer));
         v2xx.ScreenConsumer = ScreenConsumer;
-        /** */
+        /***/
         var NewtekIvgaConsumer = (function (_super) {
             __extends(NewtekIvgaConsumer, _super);
             function NewtekIvgaConsumer() {
@@ -234,7 +240,7 @@ var Config;
             return NewtekIvgaConsumer;
         }(Consumer));
         v2xx.NewtekIvgaConsumer = NewtekIvgaConsumer;
-        /** */
+        /***/
         var Controller = (function () {
             function Controller() {
                 this._type = "tcp";
@@ -244,7 +250,7 @@ var Config;
             return Controller;
         }());
         v2xx.Controller = Controller;
-        /** */
+        /***/
         var Mixer = (function () {
             function Mixer() {
                 this.blendModes = false;
@@ -254,7 +260,7 @@ var Config;
             return Mixer;
         }());
         v2xx.Mixer = Mixer;
-        /** */
+        /***/
         var OscClient = (function () {
             function OscClient() {
                 this._type = "predefined-client";
@@ -264,7 +270,7 @@ var Config;
             return OscClient;
         }());
         v2xx.OscClient = OscClient;
-        /** */
+        /***/
         var Thumbnails = (function () {
             function Thumbnails() {
                 this.generateThumbnails = true;
@@ -279,7 +285,7 @@ var Config;
             return Thumbnails;
         }());
         v2xx.Thumbnails = Thumbnails;
-        /** */
+        /***/
         var Flash = (function () {
             function Flash() {
                 this.bufferDepth = "auto";
@@ -287,7 +293,7 @@ var Config;
             return Flash;
         }());
         v2xx.Flash = Flash;
-        /** */
+        /***/
         var TemplateHost = (function () {
             function TemplateHost() {
                 this._type = "template-host";
@@ -299,7 +305,7 @@ var Config;
             return TemplateHost;
         }());
         v2xx.TemplateHost = TemplateHost;
-        /**  */
+        /***/
         var Osc = (function () {
             function Osc() {
                 this.defaultPort = 6250;
@@ -308,13 +314,13 @@ var Config;
             return Osc;
         }());
         v2xx.Osc = Osc;
-        /** */
+        /***/
         v2xx.defaultAMCPController = { _type: new v2xx.Controller()._type, port: 5250, protocol: "AMCP" };
     })(v2xx = Config.v2xx || (Config.v2xx = {}));
-    /** */
+    /***/
     var v207;
     (function (v207) {
-        /** */
+        /***/
         var CasparCGConfigVO = (function (_super) {
             __extends(CasparCGConfigVO, _super);
             function CasparCGConfigVO() {
@@ -335,7 +341,7 @@ var Config;
             return CasparCGConfigVO;
         }(v2xx.CasparCGConfigVO));
         v207.CasparCGConfigVO = CasparCGConfigVO;
-        /** */
+        /***/
         var Channel = (function (_super) {
             __extends(Channel, _super);
             function Channel() {
@@ -346,7 +352,7 @@ var Config;
             return Channel;
         }(v2xx.Channel));
         v207.Channel = Channel;
-        /** */
+        /***/
         var Paths = (function () {
             function Paths() {
                 this.mediaPath = "media\\";
@@ -358,7 +364,7 @@ var Config;
             return Paths;
         }());
         v207.Paths = Paths;
-        /** */
+        /***/
         var Consumer = (function (_super) {
             __extends(Consumer, _super);
             function Consumer() {
@@ -367,7 +373,7 @@ var Config;
             return Consumer;
         }(v2xx.Consumer));
         v207.Consumer = Consumer;
-        /** */
+        /***/
         var DecklinkConsumer = (function (_super) {
             __extends(DecklinkConsumer, _super);
             function DecklinkConsumer() {
@@ -378,7 +384,7 @@ var Config;
             return DecklinkConsumer;
         }(v2xx.DecklinkConsumer));
         v207.DecklinkConsumer = DecklinkConsumer;
-        /** */
+        /***/
         var BluefishConsumer = (function (_super) {
             __extends(BluefishConsumer, _super);
             function BluefishConsumer() {
@@ -387,7 +393,7 @@ var Config;
             return BluefishConsumer;
         }(v2xx.BluefishConsumer));
         v207.BluefishConsumer = BluefishConsumer;
-        /** */
+        /***/
         var SystemAudioConsumer = (function (_super) {
             __extends(SystemAudioConsumer, _super);
             function SystemAudioConsumer() {
@@ -396,7 +402,7 @@ var Config;
             return SystemAudioConsumer;
         }(v2xx.SystemAudioConsumer));
         v207.SystemAudioConsumer = SystemAudioConsumer;
-        /** */
+        /***/
         var ScreenConsumer = (function (_super) {
             __extends(ScreenConsumer, _super);
             function ScreenConsumer() {
@@ -407,7 +413,7 @@ var Config;
             return ScreenConsumer;
         }(v2xx.ScreenConsumer));
         v207.ScreenConsumer = ScreenConsumer;
-        /** */
+        /***/
         var NewtekIvgaConsumer = (function (_super) {
             __extends(NewtekIvgaConsumer, _super);
             function NewtekIvgaConsumer() {
@@ -419,7 +425,7 @@ var Config;
             return NewtekIvgaConsumer;
         }(v2xx.NewtekIvgaConsumer));
         v207.NewtekIvgaConsumer = NewtekIvgaConsumer;
-        /** */
+        /***/
         var FileConsumer = (function (_super) {
             __extends(FileConsumer, _super);
             function FileConsumer() {
@@ -433,7 +439,7 @@ var Config;
             return FileConsumer;
         }(v2xx.Consumer));
         v207.FileConsumer = FileConsumer;
-        /** */
+        /***/
         var StreamConsumer = (function (_super) {
             __extends(StreamConsumer, _super);
             function StreamConsumer() {
@@ -446,7 +452,7 @@ var Config;
             return StreamConsumer;
         }(v2xx.Consumer));
         v207.StreamConsumer = StreamConsumer;
-        /** */
+        /***/
         var Thumbnails = (function (_super) {
             __extends(Thumbnails, _super);
             function Thumbnails() {
@@ -455,7 +461,7 @@ var Config;
             return Thumbnails;
         }(v2xx.Thumbnails));
         v207.Thumbnails = Thumbnails;
-        /** */
+        /***/
         var Mixer = (function (_super) {
             __extends(Mixer, _super);
             function Mixer() {
@@ -466,7 +472,7 @@ var Config;
             return Mixer;
         }(v2xx.Mixer));
         v207.Mixer = Mixer;
-        /**  */
+        /***/
         var Osc = (function (_super) {
             __extends(Osc, _super);
             function Osc() {
@@ -475,7 +481,7 @@ var Config;
             return Osc;
         }(v2xx.Osc));
         v207.Osc = Osc;
-        /**  */
+        /***/
         var ChannelLayout = (function () {
             function ChannelLayout() {
                 this._type = "channel-layout";
@@ -487,7 +493,7 @@ var Config;
             return ChannelLayout;
         }());
         v207.ChannelLayout = ChannelLayout;
-        /**  */
+        /***/
         var MixConfig = (function () {
             function MixConfig() {
                 this._type = "mix-config";
@@ -499,7 +505,7 @@ var Config;
             return MixConfig;
         }());
         v207.MixConfig = MixConfig;
-        /**  */
+        /***/
         var Audio = (function () {
             function Audio() {
                 this.channelLayouts = [];
@@ -509,11 +515,11 @@ var Config;
         }());
         v207.Audio = Audio;
     })(v207 = Config.v207 || (Config.v207 = {}));
-    /** */
+    /***/
     var v21x;
     (function (v21x) {
         v21x.defaultLOGController = { _type: new v2xx.Controller()._type, port: 3250, protocol: "LOG" };
-        /** */
+        /***/
         var CasparCGConfigVO = (function (_super) {
             __extends(CasparCGConfigVO, _super);
             function CasparCGConfigVO() {
@@ -536,7 +542,7 @@ var Config;
             return CasparCGConfigVO;
         }(v2xx.CasparCGConfigVO));
         v21x.CasparCGConfigVO = CasparCGConfigVO;
-        /** */
+        /***/
         var Channel = (function (_super) {
             __extends(Channel, _super);
             function Channel() {
@@ -547,7 +553,7 @@ var Config;
             return Channel;
         }(v2xx.Channel));
         v21x.Channel = Channel;
-        /** */
+        /***/
         var Paths = (function () {
             function Paths() {
                 this.mediaPath = "media/";
@@ -560,7 +566,7 @@ var Config;
             return Paths;
         }());
         v21x.Paths = Paths;
-        /** */
+        /***/
         var Consumer = (function (_super) {
             __extends(Consumer, _super);
             function Consumer() {
@@ -569,7 +575,7 @@ var Config;
             return Consumer;
         }(v2xx.Consumer));
         v21x.Consumer = Consumer;
-        /** */
+        /***/
         var DecklinkConsumer = (function (_super) {
             __extends(DecklinkConsumer, _super);
             function DecklinkConsumer() {
@@ -578,7 +584,7 @@ var Config;
             return DecklinkConsumer;
         }(v2xx.DecklinkConsumer));
         v21x.DecklinkConsumer = DecklinkConsumer;
-        /** */
+        /***/
         var BluefishConsumer = (function (_super) {
             __extends(BluefishConsumer, _super);
             function BluefishConsumer() {
@@ -587,7 +593,7 @@ var Config;
             return BluefishConsumer;
         }(v2xx.BluefishConsumer));
         v21x.BluefishConsumer = BluefishConsumer;
-        /** */
+        /***/
         var SystemAudioConsumer = (function (_super) {
             __extends(SystemAudioConsumer, _super);
             function SystemAudioConsumer() {
@@ -599,7 +605,7 @@ var Config;
             return SystemAudioConsumer;
         }(v2xx.SystemAudioConsumer));
         v21x.SystemAudioConsumer = SystemAudioConsumer;
-        /** */
+        /***/
         var ScreenConsumer = (function (_super) {
             __extends(ScreenConsumer, _super);
             function ScreenConsumer() {
@@ -610,7 +616,7 @@ var Config;
             return ScreenConsumer;
         }(v2xx.ScreenConsumer));
         v21x.ScreenConsumer = ScreenConsumer;
-        /** */
+        /***/
         var NewtekIvgaConsumer = (function (_super) {
             __extends(NewtekIvgaConsumer, _super);
             function NewtekIvgaConsumer() {
@@ -619,7 +625,7 @@ var Config;
             return NewtekIvgaConsumer;
         }(v2xx.NewtekIvgaConsumer));
         v21x.NewtekIvgaConsumer = NewtekIvgaConsumer;
-        /** */
+        /***/
         var FfmpegConsumer = (function (_super) {
             __extends(FfmpegConsumer, _super);
             function FfmpegConsumer() {
@@ -634,7 +640,7 @@ var Config;
             return FfmpegConsumer;
         }(v2xx.Consumer));
         v21x.FfmpegConsumer = FfmpegConsumer;
-        /** */
+        /***/
         var SynctoConsumer = (function (_super) {
             __extends(SynctoConsumer, _super);
             function SynctoConsumer() {
@@ -646,7 +652,7 @@ var Config;
             return SynctoConsumer;
         }(v2xx.Consumer));
         v21x.SynctoConsumer = SynctoConsumer;
-        /** */
+        /***/
         var Mixer = (function (_super) {
             __extends(Mixer, _super);
             function Mixer() {
@@ -655,7 +661,7 @@ var Config;
             return Mixer;
         }(v2xx.Mixer));
         v21x.Mixer = Mixer;
-        /**  */
+        /***/
         var Thumbnails = (function (_super) {
             __extends(Thumbnails, _super);
             function Thumbnails() {
@@ -666,7 +672,7 @@ var Config;
             return Thumbnails;
         }(v2xx.Thumbnails));
         v21x.Thumbnails = Thumbnails;
-        /** */
+        /***/
         var Html = (function () {
             function Html() {
                 this.remoteDebuggingPort = null;
@@ -674,7 +680,7 @@ var Config;
             return Html;
         }());
         v21x.Html = Html;
-        /**  */
+        /***/
         var Osc = (function (_super) {
             __extends(Osc, _super);
             function Osc() {
@@ -685,7 +691,7 @@ var Config;
             return Osc;
         }(v2xx.Osc));
         v21x.Osc = Osc;
-        /**  */
+        /***/
         var ChannelLayout = (function () {
             function ChannelLayout() {
                 this._type = "channel-layout";
@@ -697,7 +703,7 @@ var Config;
             return ChannelLayout;
         }());
         v21x.ChannelLayout = ChannelLayout;
-        /**  */
+        /***/
         var MixConfig = (function () {
             function MixConfig() {
                 this._type = "mix-config";
@@ -708,7 +714,7 @@ var Config;
             return MixConfig;
         }());
         v21x.MixConfig = MixConfig;
-        /**  */
+        /***/
         var Audio = (function () {
             function Audio() {
                 this.channelLayouts = [];
@@ -718,12 +724,12 @@ var Config;
         }());
         v21x.Audio = Audio;
     })(v21x = Config.v21x || (Config.v21x = {}));
-    /** */
+    /***/
     var Intermediate;
     (function (Intermediate) {
         var Config207VO = v207.CasparCGConfigVO;
         var Config210VO = v21x.CasparCGConfigVO;
-        /** */
+        /***/
         var Audio = (function () {
             function Audio() {
                 this.channelLayouts = [];
@@ -732,7 +738,7 @@ var Config;
             return Audio;
         }());
         Intermediate.Audio = Audio;
-        /**  */
+        /***/
         var MixConfig = (function () {
             function MixConfig() {
                 this._type = "mix-config";
@@ -742,7 +748,7 @@ var Config;
             return MixConfig;
         }());
         Intermediate.MixConfig = MixConfig;
-        /** */
+        /***/
         var Mixer = (function (_super) {
             __extends(Mixer, _super);
             function Mixer() {
@@ -751,7 +757,7 @@ var Config;
             return Mixer;
         }(v207.Mixer));
         Intermediate.Mixer = Mixer;
-        /** */
+        /***/
         var CasparCGConfig = (function () {
             function CasparCGConfig(initVersionOrConfigVO) {
                 this.paths = new v21x.Paths();
@@ -802,7 +808,7 @@ var Config;
                     this.import(initVersionOrConfigVO);
                 }
             }
-            /** */
+            /***/
             CasparCGConfig.prototype.import = function (configVO) {
                 if (this.__version === ServerVersion.V207) {
                     this.importFromV207VO(configVO);
@@ -812,7 +818,7 @@ var Config;
                 }
                 // @todo: throw error
             };
-            /** */
+            /***/
             CasparCGConfig.prototype.importFromV207VO = function (configVO) {
                 var _this = this;
                 // root level
@@ -898,7 +904,7 @@ var Config;
                     }
                 }
             };
-            /** */
+            /***/
             CasparCGConfig.prototype.importFromV210VO = function (configVO) {
                 var _this = this;
                 // root level
@@ -984,7 +990,7 @@ var Config;
                 }
             };
             Object.defineProperty(CasparCGConfig.prototype, "VO", {
-                /** */
+                /***/
                 get: function () {
                     if (this.__version === ServerVersion.V207) {
                         return this.v207VO;
@@ -998,7 +1004,7 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "v207VO", {
-                /** */
+                /***/
                 get: function () {
                     // let configVO: Config207VO = {};
                     var configVO = new Config207VO;
@@ -1070,7 +1076,7 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "v210VO", {
-                /** */
+                /***/
                 get: function () {
                     var configVO = new Config210VO();
                     configVO._version = this._version;
@@ -1133,7 +1139,7 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "XML", {
-                /** */
+                /***/
                 get: function () {
                     if (this.__version === ServerVersion.V207) {
                         return this.v207XML;
@@ -1147,7 +1153,7 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "v207XML", {
-                /** */
+                /***/
                 get: function () {
                     var xml = xmlbuilder_1.create("configuration");
                     // paths
@@ -1255,7 +1261,7 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "v210XML", {
-                /** */
+                /***/
                 get: function () {
                     var xml = xmlbuilder_1.create("configuration");
                     // paths
@@ -1373,7 +1379,7 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "XMLString", {
-                /** */
+                /***/
                 get: function () {
                     if (this.__version === ServerVersion.V207) {
                         return this.v207XMLString;
@@ -1387,7 +1393,7 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "v207XMLString", {
-                /** */
+                /***/
                 get: function () {
                     return this.v207XML["end"]({ pretty: true });
                 },
@@ -1395,7 +1401,7 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "v210XMLString", {
-                /** */
+                /***/
                 get: function () {
                     return this.v210XML["end"]({ pretty: true });
                 },
@@ -1403,14 +1409,14 @@ var Config;
                 configurable: true
             });
             Object.defineProperty(CasparCGConfig.prototype, "_version", {
-                /** */
+                /***/
                 get: function () {
                     return this.__version;
                 },
                 enumerable: true,
                 configurable: true
             });
-            /** */
+            /***/
             CasparCGConfig.prototype.importAllValues = function (sourceRoot, destRoot) {
                 var keys = [];
                 for (var i in sourceRoot) {
@@ -1418,7 +1424,7 @@ var Config;
                 }
                 this.importValues(sourceRoot, destRoot, keys);
             };
-            /** */
+            /***/
             CasparCGConfig.prototype.importValues = function (sourceRoot, destRoot, values) {
                 values.forEach(function (dashedKey) {
                     var camelKey = CasparCGConfig.dashedToMixedCase(dashedKey);
@@ -1435,7 +1441,7 @@ var Config;
                     }
                 });
             };
-            /** */
+            /***/
             CasparCGConfig.prototype.findListMembers = function (root, childKey) {
                 var pairs = [];
                 for (var i in root) {
@@ -1468,6 +1474,7 @@ var Config;
                                     }
                                     flatArray_1.push(innerValue);
                                 }
+                                // update outer member with transformed array of inner members
                             }
                             else {
                                 flatArray_1.push({ _type: innerKey });
@@ -1487,7 +1494,7 @@ var Config;
                 }
                 return [];
             };
-            /** */
+            /***/
             CasparCGConfig.prototype.importListMembers = function (root, memberName, restrictedNamespace) {
                 var namespace;
                 if (restrictedNamespace) {
@@ -1510,7 +1517,7 @@ var Config;
                     this.importAllValues(root, member);
                 }
             };
-            /** */
+            /***/
             CasparCGConfig.addFormattedXMLChildsFromObject = function (root, data, blacklist) {
                 blacklist && blacklist.push("arrayNo", "array-no");
                 for (var key in data) {
@@ -1525,7 +1532,7 @@ var Config;
                 }
                 return root;
             };
-            /** */
+            /***/
             CasparCGConfig.addFormattedXMLChildsFromArray = function (root, data, whitelist) {
                 if (whitelist) {
                     whitelist.forEach(function (key) {
@@ -1541,7 +1548,7 @@ var Config;
                 }
                 return root;
             };
-            /** */
+            /***/
             CasparCGConfig.dashedToMixedCase = function (rawString) {
                 var keyBlocks = rawString.split(/-/);
                 if (keyBlocks.length > 1) {
@@ -1560,7 +1567,7 @@ var Config;
                     return rawString;
                 }
             };
-            /** */
+            /***/
             CasparCGConfig.dashedToCamelCase = function (rawString) {
                 var keyBlocks = rawString.split(/-/);
                 if (keyBlocks.length > 1) {
@@ -1574,7 +1581,7 @@ var Config;
                     return rawString;
                 }
             };
-            /** */
+            /***/
             CasparCGConfig.mixedCaseToDashed = function (mixedCased) {
                 var keyBlocks = mixedCased.split(/(?=[A-Z])/);
                 return keyBlocks.map(function (i) { return i.toLowerCase(); }).join("-");

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // Options NS
 var AMCPConnectionOptions_1 = require("./AMCPConnectionOptions");
 var ServerVersion = AMCPConnectionOptions_1.Options.ServerVersion;
@@ -11,10 +12,10 @@ var XMLValidator = ResponseValidators_1.Response.XMLValidator;
 // Response NS
 var ResponseParsers_1 = require("./ResponseParsers");
 var ConfigParser = ResponseParsers_1.Response.ConfigParser;
-/** */
+/***/
 var ConfigUtil;
 (function (ConfigUtil) {
-    /** */
+    /***/
     function parseConfigFrom207XML(XMLString) {
         var validator = new XMLValidator();
         var parser = new ConfigParser();
@@ -30,7 +31,7 @@ var ConfigUtil;
         return validData;
     }
     ConfigUtil.parseConfigFrom207XML = parseConfigFrom207XML;
-    /** */
+    /***/
     function parseConfigFrom210XML(XMLString) {
         var validator = new XMLValidator();
         var parser = new ConfigParser();

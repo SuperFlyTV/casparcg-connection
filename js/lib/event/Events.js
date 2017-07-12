@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var BaseEvent_1 = require("./BaseEvent");
 var CasparCGSocketStatusEvent_1 = require("./CasparCGSocketStatusEvent");
 var CasparCGSocketCommandEvent_1 = require("./CasparCGSocketCommandEvent");

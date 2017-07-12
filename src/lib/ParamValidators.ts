@@ -5,7 +5,7 @@ import AbstractEnum = Enum.AbstractEnum;
 
 export namespace Validation {
 	/**
-	 * 
+	 *
 	 */
 	export interface IValidator {
 		resolve(data: Object, key?: string): ParamData;
@@ -13,7 +13,7 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractValidator implements IValidator {
 
@@ -23,12 +23,12 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class StringValidator extends AbstractValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(private lazy: Boolean = true) {
 			super();
@@ -67,7 +67,7 @@ export namespace Validation {
 						i++;
 					}while (textstring == null);
 				}else {
-					// greedy 
+					// greedy
 					textstring = "";
 					data.forEach(i => {
 						let o = checkTextstring(i);
@@ -87,10 +87,10 @@ export namespace Validation {
 		}
 	}
 
-	/** */
+	/***/
 	export class FilterValidator extends StringValidator {}
 
-	/** */
+	/***/
 	export class URLValidator extends StringValidator {
 
 		resolve(data: Object): ParamData {
@@ -102,13 +102,13 @@ export namespace Validation {
 		}
 	}
 
-	/** */
+	/***/
 	export class ChannelLayoutValidator extends StringValidator {
 		// @todo: a combination of string and enum!
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ClipNameValidator extends AbstractValidator {
 
@@ -156,24 +156,24 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class TemplateNameValidator extends ClipNameValidator {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class DataNameValidator extends ClipNameValidator {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class EnumValidator extends AbstractValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(private _enumClass: typeof AbstractEnum) {
 			super();
@@ -199,12 +199,12 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ChannelFormatValidator extends AbstractValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor() {
 			super();
@@ -236,14 +236,14 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class KeywordValidator extends AbstractValidator {
 		private _keyword: string;
 		private _caseSensitive: boolean;
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(keyword: string, caseSensitive: boolean = false) {
 			super();
@@ -292,13 +292,13 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class FrameValidator extends AbstractValidator {
 		private _keyword: string;
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(keyword: string) {
 			super();
@@ -336,12 +336,12 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class PositiveNumberValidatorBetween extends AbstractValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(private _min: number = Number.NEGATIVE_INFINITY, private _max: number = Number.POSITIVE_INFINITY) {
 			super();
@@ -363,12 +363,12 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class PositiveNumberValidator extends PositiveNumberValidatorBetween {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor() {
 			super();
@@ -376,7 +376,7 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class PositiveNumberRoundValidatorBetween extends PositiveNumberValidatorBetween {
 
@@ -392,12 +392,12 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class NumberValidatorBetween extends AbstractValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(private _min: number = Number.NEGATIVE_INFINITY, private _max: number = Number.POSITIVE_INFINITY) {
 			super();
@@ -417,28 +417,28 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class NumberValidator extends NumberValidatorBetween {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor() {
 			super();
 		}
 	}
 
-	/** */
+	/***/
 	export class DecklinkDeviceValidator extends PositiveNumberValidator {}
 
 	/**
-	 * 
+	 *
 	 */
 	export class BooleanValidatorWithDefaults extends AbstractValidator {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(private _valueOnSuccess?: (string | number | boolean), private _valueOnFail?: (string | number | boolean)) {
 			super();
@@ -486,12 +486,12 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class BooleanValidator extends BooleanValidatorWithDefaults {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor() {
 			super();
@@ -499,7 +499,7 @@ export namespace Validation {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class TemplateDataValidator extends AbstractValidator {
 
@@ -531,7 +531,7 @@ export namespace Validation {
 				return stringCast;
 			}*/
 
-			// add qoutation 
+			// add qoutation
 			stringCast = stringCast.replace(/\"/g, "\\\"");
 
 			let quotedString: string = `"${stringCast}"`;

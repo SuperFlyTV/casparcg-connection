@@ -1,9 +1,15 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var Path = require("path");
 var AMCPConnectionOptions_1 = require("./AMCPConnectionOptions");
 // Options NS
@@ -13,12 +19,12 @@ var Config_1 = require("./Config");
 var CasparCGConfig = Config_1.Config.Intermediate.CasparCGConfig;
 var Response;
 (function (Response) {
-    /** */
+    /***/
     var CasparCGPaths = (function () {
         function CasparCGPaths() {
         }
         Object.defineProperty(CasparCGPaths.prototype, "thumbnails", {
-            /** */
+            /***/
             get: function () {
                 return this.thumbnail;
             },
@@ -26,7 +32,7 @@ var Response;
             configurable: true
         });
         Object.defineProperty(CasparCGPaths.prototype, "absoluteMedia", {
-            /** */
+            /***/
             get: function () {
                 return this.absolutePath(this.media);
             },
@@ -34,7 +40,7 @@ var Response;
             configurable: true
         });
         Object.defineProperty(CasparCGPaths.prototype, "absoluteData", {
-            /** */
+            /***/
             get: function () {
                 return this.absolutePath(this.data);
             },
@@ -42,7 +48,7 @@ var Response;
             configurable: true
         });
         Object.defineProperty(CasparCGPaths.prototype, "absoluteLog", {
-            /** */
+            /***/
             get: function () {
                 return this.absolutePath(this.log);
             },
@@ -50,7 +56,7 @@ var Response;
             configurable: true
         });
         Object.defineProperty(CasparCGPaths.prototype, "absoluteTemplate", {
-            /** */
+            /***/
             get: function () {
                 return this.absolutePath(this.template);
             },
@@ -58,7 +64,7 @@ var Response;
             configurable: true
         });
         Object.defineProperty(CasparCGPaths.prototype, "absoluteThumbnail", {
-            /** */
+            /***/
             get: function () {
                 return this.absolutePath(this.thumbnail);
             },
@@ -66,7 +72,7 @@ var Response;
             configurable: true
         });
         Object.defineProperty(CasparCGPaths.prototype, "absoluteThumbnails", {
-            /** */
+            /***/
             get: function () {
                 return this.absolutePath(this.thumbnails);
             },
@@ -74,30 +80,30 @@ var Response;
             configurable: true
         });
         Object.defineProperty(CasparCGPaths.prototype, "absoluteFont", {
-            /** */
+            /***/
             get: function () {
                 return this.font ? this.absolutePath(this.font) : undefined;
             },
             enumerable: true,
             configurable: true
         });
-        /** */
+        /***/
         CasparCGPaths.prototype.absolutePath = function (relativeOrAbsolutePath) {
             if (relativeOrAbsolutePath.match(/\:\\|\:\//)) {
                 return CasparCGPaths.ensureTrailingSlash(relativeOrAbsolutePath);
             }
             return CasparCGPaths.ensureTrailingSlash(Path.join(this.root, relativeOrAbsolutePath));
         };
-        /** */
+        /***/
         CasparCGPaths.ensureTrailingSlash = function (path) {
             return ((path.slice(-1) === "/" || path.slice(-1) === "\\") ? path : path + "/");
         };
         return CasparCGPaths;
     }());
     Response.CasparCGPaths = CasparCGPaths;
-    /** */
+    /***/
     var ChannelRate = (function () {
-        /** */
+        /***/
         function ChannelRate(rateExpression) {
             this.isInterlaced = rateExpression.indexOf("i") > -1;
             var rateMatch = rateExpression.match(/[0-9]+$/);
@@ -165,13 +171,13 @@ var Response;
         return ChannelParser;
     }(AbstractParser));
     Response.ChannelParser = ChannelParser;
-    /** */
+    /***/
     var ConfigParser = (function (_super) {
         __extends(ConfigParser, _super);
         function ConfigParser() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        /** */
+        /***/
         ConfigParser.prototype.parse = function (data) {
             var serverVersion;
             if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {

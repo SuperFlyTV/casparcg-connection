@@ -8,19 +8,19 @@ import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
 export namespace Event {
 
 	/**
-	 * 
+	 *
 	 */
 	export class CasparCGSocketCommandEvent extends BaseEventNS.BaseEvent {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(public command: IAMCPCommand) {
 			super({command});
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		valueOf(): IAMCPCommand {
 			return this.command;
@@ -30,19 +30,19 @@ export namespace Event {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CasparCGSocketResponseEvent extends BaseEventNS.BaseEvent {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(public response: CasparCGSocketResponse) {
 			super({response});
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		valueOf(): CasparCGSocketResponse {
 			return this.response;

@@ -1,9 +1,15 @@
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var ServerStateEnum_1 = require("./ServerStateEnum");
 var Validation;
 (function (Validation) {
@@ -59,7 +65,7 @@ var Validation;
                     } while (textstring == null);
                 }
                 else {
-                    // greedy 
+                    // greedy
                     textstring = "";
                     data.forEach(function (i) {
                         var o = checkTextstring(i);
@@ -78,7 +84,7 @@ var Validation;
         return StringValidator;
     }(AbstractValidator));
     Validation.StringValidator = StringValidator;
-    /** */
+    /***/
     var FilterValidator = (function (_super) {
         __extends(FilterValidator, _super);
         function FilterValidator() {
@@ -87,7 +93,7 @@ var Validation;
         return FilterValidator;
     }(StringValidator));
     Validation.FilterValidator = FilterValidator;
-    /** */
+    /***/
     var URLValidator = (function (_super) {
         __extends(URLValidator, _super);
         function URLValidator() {
@@ -102,7 +108,7 @@ var Validation;
         return URLValidator;
     }(StringValidator));
     Validation.URLValidator = URLValidator;
-    /** */
+    /***/
     var ChannelLayoutValidator = (function (_super) {
         __extends(ChannelLayoutValidator, _super);
         function ChannelLayoutValidator() {
@@ -460,7 +466,7 @@ var Validation;
         return NumberValidator;
     }(NumberValidatorBetween));
     Validation.NumberValidator = NumberValidator;
-    /** */
+    /***/
     var DecklinkDeviceValidator = (function (_super) {
         __extends(DecklinkDeviceValidator, _super);
         function DecklinkDeviceValidator() {
@@ -573,7 +579,7 @@ var Validation;
                 if (xmlCast) {
                     return stringCast;
                 }*/
-            // add qoutation 
+            // add qoutation
             stringCast = stringCast.replace(/\"/g, "\\\"");
             var quotedString = "\"" + stringCast + "\"";
             return { raw: stringCast, payload: quotedString };

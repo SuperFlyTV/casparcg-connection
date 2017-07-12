@@ -1,9 +1,9 @@
-import { EventFacade } from "hap";
 export declare namespace Event {
     /**
      *
      */
-    class BaseEvent extends EventFacade {
+    class BaseEvent {
+        _val: Object;
         /**
          *
          */

@@ -89,7 +89,7 @@ export declare namespace Command {
      *
      */
     abstract class AbstractCommand implements IAMCPCommand {
-        context: Object;
+        context: Object | undefined;
         response: IAMCPResponse;
         paramProtocol: Array<IParamSignature>;
         responseProtocol: ResponseSignature;
@@ -106,7 +106,7 @@ export declare namespace Command {
         /**
          *
          */
-        constructor(params?: string | Param | (string | Param)[], context?: Object);
+        constructor(params?: string | Param | (string | Param)[], context?: Object | undefined);
         /**
          *
          */

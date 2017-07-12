@@ -26,12 +26,12 @@ import {Callback as CallbackNS} from "./global/Callback";
 import ICommandStatusCallback = CallbackNS.ICommandStatusCallback;
 
 /**
- * 
+ *
  */
 export namespace Command {
 
 	/**
-	 * 
+	 *
 	 */
 	export interface IAMCPResponse {
 		code: number;
@@ -41,7 +41,7 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class AMCPResponse implements IAMCPResponse {
 		public code: number;
@@ -57,7 +57,7 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export enum IAMCPStatus {
 		Invalid		= -1,
@@ -71,7 +71,7 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export interface IAMCPCommandData {
 		address: string;
@@ -85,7 +85,7 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export interface IAMCPCommandVO extends IAMCPCommandData {
 		_commandName: string;
@@ -94,7 +94,7 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export interface IAMCPCommand extends IAMCPCommandData {
 		validateParams(): boolean;
@@ -110,7 +110,7 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export function isIAMCPCommand(object: Object): object is IAMCPCommand {
 		// @todo: better inheritance type checking
@@ -123,7 +123,7 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractCommand implements IAMCPCommand {
 		response: IAMCPResponse = new AMCPResponse();
@@ -147,7 +147,7 @@ export namespace Command {
 		// @todo:
 			// channel vs layer-specific vs layer-fallback addresses
 			// NB.: INFO BOTH LAYER AND CHANNEL!!!!!!!!
-				// INFO, SWAP, REMOVE, MIXER CLEAR, CLEAR, 
+				// INFO, SWAP, REMOVE, MIXER CLEAR, CLEAR,
 
 
 		// param getter/setters
@@ -155,7 +155,7 @@ export namespace Command {
 		// media info/template file-type to generate param data for fields
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params?: string|Param|(string|Param)[], public context?: Object) {
 			// parse params to objects
@@ -186,7 +186,7 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		public validateParams(): boolean {
 			let required: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === true) : [];
@@ -227,7 +227,7 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		protected validateParam(signature: IParamSignature): boolean {
 			let result: ParamData;
@@ -237,7 +237,7 @@ export namespace Command {
 			if (this._objectParams.hasOwnProperty(signature.name)) {
 				param = this._objectParams[signature.name];
 			}else {
-				// stringParam parsing	
+				// stringParam parsing
 				if (this._stringParamsArray.length > 0) {
 					param = this._stringParamsArray;
 				}else {
@@ -265,7 +265,7 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		protected validateProtocolLogic(): boolean {
 
@@ -285,7 +285,7 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		public validateResponse(response: CasparCGSocketResponse): boolean {
 			// assign raw response
@@ -320,28 +320,28 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get payload(): PayloadVO{
 			return this._payload;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get id(): string{
 			return this._id || (new Date().getTime() + Math.random() * 100).toString();
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get name(): string{
 			return this.constructor["name"];
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		protected validateChannel(): number {
 			let result: ParamData;
@@ -363,7 +363,7 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		protected validateLayer(fallback?: number): number {
 			let result: ParamData;
@@ -384,42 +384,42 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get protocolLogic(): Array<IProtocolLogic>{
 			return this.constructor["protocolLogic"] ||  [];
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get channel(): number{
 			return -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get layer(): number{
 			return -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get address(): string{
 			return "";
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get status(): IAMCPStatus{
 			return this._status;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		set status(code: IAMCPStatus) {
 			if (code !== this._status) {
@@ -431,7 +431,7 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		public serialize(): IAMCPCommandVO {
 			return{
@@ -447,7 +447,7 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		populate(cmdVO: IAMCPCommandVO, id: string): void {
 			this._stringParamsArray = cmdVO._stringParamsArray;
@@ -457,7 +457,7 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		public toString(): string {
 			let message: string = "";
@@ -488,12 +488,12 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractOrChannelOrLayerCommand extends AbstractCommand {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params?: (string|Param|(string|Param)[]),  context?: Object) {
 			super(params, context);
@@ -508,21 +508,21 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get channel(): number{
 	return this._channel ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get layer(): number{
 	return this._layer ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get address(): string{
 	let address: string = "";
@@ -541,11 +541,11 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractChannelCommand extends AbstractCommand {
 		/**
-		 * 
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
 			super(params, context);
@@ -559,21 +559,21 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get channel(): number{
 	return this._channel ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get layer(): number{
 	return -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get address(): string{
 			if (this.channel) {
@@ -586,12 +586,12 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractLayerCommand extends AbstractCommand {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
 			super(params, context);
@@ -606,21 +606,21 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get channel(): number{
 	return this._channel ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get layer(): number{
 	return this._layer ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get address(): string{
 			let address: string;
@@ -642,12 +642,12 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
 			super(params, context);
@@ -667,21 +667,21 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get channel(): number{
 			return this._channel ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get layer(): number{
 			return this._layer ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get address(): string{
 			let address: string;
@@ -700,12 +700,12 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractLayerWithFallbackCommand extends AbstractCommand {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
 			super(params, context);
@@ -720,21 +720,21 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get channel(): number{
 	return this._channel ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get layer(): number{
 	return this._layer ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get address(): string{
 			let address: string;
@@ -753,12 +753,12 @@ export namespace Command {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(params: (string|Param|(string|Param)[]),  context?: Object) {
 			super(params, context);
@@ -773,21 +773,21 @@ export namespace Command {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get channel(): number{
 	return this._channel ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get layer(): number{
 	return this._layer ||  -1;
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		get address(): string{
 			let address: string;
