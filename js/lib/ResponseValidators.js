@@ -1,46 +1,56 @@
-import { parseString as xmlParser } from "xml2js";
-export var Response;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var xml2js_1 = require("xml2js");
+var Response;
 (function (Response) {
     /**
      *
      */
-    class StatusValidator {
+    var StatusValidator = (function () {
+        function StatusValidator() {
+        }
         /**
          *
          */
-        resolve(response) {
+        StatusValidator.prototype.resolve = function (response) {
             return response.statusCode < 400;
-        }
-    }
+        };
+        return StatusValidator;
+    }());
     Response.StatusValidator = StatusValidator;
     /**
      *
      */
-    class StringValidator {
+    var StringValidator = (function () {
+        function StringValidator() {
+        }
         /**
          *
          */
-        resolve(response) {
-            let result = response.items[0].toString();
+        StringValidator.prototype.resolve = function (response) {
+            var result = response.items[0].toString();
             return result.length > 0 ? result : false;
-        }
-    }
+        };
+        return StringValidator;
+    }());
     Response.StringValidator = StringValidator;
     /**
      *
      */
-    class XMLValidator {
+    var XMLValidator = (function () {
+        function XMLValidator() {
+        }
         /**
          *
          */
-        resolve(response) {
-            let parseNumbers = function (str) {
+        XMLValidator.prototype.resolve = function (response) {
+            var parseNumbers = function (str) {
                 if (!isNaN(str)) {
                     str = str % 1 === 0 ? parseInt(str, 10) : parseFloat(str);
                 }
                 return str;
             };
-            let parseBooleans = function (str) {
+            var parseBooleans = function (str) {
                 if (str === true || str.toString().toLowerCase() === "true") {
                     return true;
                 }
@@ -49,56 +59,66 @@ export var Response;
                 }
                 return str;
             };
-            let parseLowerCase = function (str) {
+            var parseLowerCase = function (str) {
                 return str.toString().toLowerCase();
             };
-            let returnFalse;
-            let returnData;
-            xmlParser(response.items[0].replace("\n", ""), { explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, attrValueProcessors: [parseNumbers], valueProcessors: [parseNumbers, parseBooleans], tagNameProcessors: [parseLowerCase], attrNameProcessors: [parseLowerCase] }, (error, result) => {
+            var returnFalse;
+            var returnData;
+            xml2js_1.parseString(response.items[0].replace("\n", ""), { explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, attrValueProcessors: [parseNumbers], valueProcessors: [parseNumbers, parseBooleans], tagNameProcessors: [parseLowerCase], attrNameProcessors: [parseLowerCase] }, function (error, result) {
                 returnFalse = error;
                 returnData = result;
             });
             return returnFalse ? {} : returnData || {};
-        }
-    }
+        };
+        return XMLValidator;
+    }());
     Response.XMLValidator = XMLValidator;
     /**
      *
      */
-    class ListValidator {
+    var ListValidator = (function () {
+        function ListValidator() {
+        }
         /**
          *
          */
-        resolve(response) {
+        ListValidator.prototype.resolve = function (response) {
             // filters on stringitems in items-list and validates if any items present
-            let stringItems = response.items.filter((i) => typeof i === "string");
+            var stringItems = response.items.filter(function (i) { return typeof i === "string"; });
             return stringItems;
-        }
-    }
+        };
+        return ListValidator;
+    }());
     Response.ListValidator = ListValidator;
     /**
      *
      */
-    class DataValidator {
+    var DataValidator = (function () {
+        function DataValidator() {
+        }
         /**
          *
          */
-        resolve(response) {
-            let result = response.items[0].toString();
+        DataValidator.prototype.resolve = function (response) {
+            var result = response.items[0].toString();
             return result.length > 0 ? result : false;
-        }
-    }
+        };
+        return DataValidator;
+    }());
     Response.DataValidator = DataValidator;
     /**
      *
      */
-    class Base64Validator {
+    var Base64Validator = (function () {
+        function Base64Validator() {
+        }
         /**
          *
          */
-        resolve(response) {
+        Base64Validator.prototype.resolve = function (response) {
             return response.items[0];
-        }
-    }
+        };
+        return Base64Validator;
+    }());
     Response.Base64Validator = Base64Validator;
-})(Response || (Response = {}));
+})(Response = exports.Response || (exports.Response = {}));

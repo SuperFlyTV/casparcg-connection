@@ -1,22 +1,22 @@
 import { Options as OptionsNS } from "./AMCPConnectionOptions";
 import ServerVersion = OptionsNS.ServerVersion;
-/** */
+/***/
 export declare namespace Config {
-    /** */
+    /***/
     namespace Utils {
         type factoryMembers = "config" | "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host" | "channel-layout" | "mix-config";
         type FactyoryTypes = v207.CasparCGConfigVO | v21x.CasparCGConfigVO | v2xx.Consumer | v2xx.Channel | v2xx.Controller | v2xx.OscClient | v2xx.TemplateHost | v207.ChannelLayout | v207.MixConfig | v21x.ChannelLayout | v21x.MixConfig | undefined;
         function configMemberFactory(version: ServerVersion, memberName: factoryMembers | string, initValues?: Object): FactyoryTypes;
     }
-    /** */
+    /***/
     namespace v2xx {
-        /** */
+        /***/
         class CasparCGConfigVO {
             channelGrid: boolean;
             flash: v2xx.Flash;
             templateHosts: Array<v2xx.TemplateHost>;
         }
-        /** */
+        /***/
         class Channel {
             _type: string;
             videoMode: string;
@@ -24,11 +24,11 @@ export declare namespace Config {
             straightAlphaOutput: boolean;
             channelLayout: string;
         }
-        /** */
+        /***/
         class Consumer {
             _type: string;
         }
-        /** */
+        /***/
         class DecklinkConsumer extends Consumer {
             _type: string;
             device: number;
@@ -40,7 +40,7 @@ export declare namespace Config {
             keyOnly: boolean;
             bufferDepth: number;
         }
-        /** */
+        /***/
         class BluefishConsumer extends Consumer {
             _type: string;
             device: number;
@@ -48,11 +48,11 @@ export declare namespace Config {
             channelLayout: string;
             keyOnly: boolean;
         }
-        /** */
+        /***/
         class SystemAudioConsumer extends Consumer {
             _type: string;
         }
-        /** */
+        /***/
         class ScreenConsumer extends Consumer {
             _type: string;
             device: number;
@@ -64,29 +64,29 @@ export declare namespace Config {
             vsync: boolean;
             borderless: boolean;
         }
-        /** */
+        /***/
         class NewtekIvgaConsumer extends Consumer {
             _type: string;
         }
-        /** */
+        /***/
         class Controller {
             _type: string;
             port: number | null;
             protocol: string;
         }
-        /** */
+        /***/
         class Mixer {
             blendModes: boolean;
             straightAlpha: boolean;
             mipmappingDefaultOn: boolean;
         }
-        /** */
+        /***/
         class OscClient {
             _type: string;
             address: string;
             port: number | null;
         }
-        /** */
+        /***/
         class Thumbnails {
             generateThumbnails: boolean;
             width: number;
@@ -97,11 +97,11 @@ export declare namespace Config {
             mipmap: boolean;
             videoMode: string;
         }
-        /** */
+        /***/
         class Flash {
             bufferDepth: string | number;
         }
-        /** */
+        /***/
         class TemplateHost {
             _type: string;
             videoMode: string;
@@ -109,17 +109,17 @@ export declare namespace Config {
             width: number | null;
             height: number | null;
         }
-        /**  */
+        /***/
         class Osc {
             defaultPort: number;
             predefinedClients: Array<OscClient>;
         }
-        /** */
+        /***/
         const defaultAMCPController: v2xx.Controller;
     }
-    /** */
+    /***/
     namespace v207 {
-        /** */
+        /***/
         class CasparCGConfigVO extends v2xx.CasparCGConfigVO {
             _version: number;
             paths: v207.Paths;
@@ -134,11 +134,11 @@ export declare namespace Config {
             osc: v2xx.Osc;
             audio: v207.Audio;
         }
-        /** */
+        /***/
         class Channel extends v2xx.Channel {
             consumers: Array<v207.Consumer>;
         }
-        /** */
+        /***/
         class Paths {
             mediaPath: string;
             logPath: string;
@@ -146,52 +146,52 @@ export declare namespace Config {
             templatePath: string;
             thumbnailsPath: string;
         }
-        /** */
+        /***/
         class Consumer extends v2xx.Consumer {
         }
-        /** */
+        /***/
         class DecklinkConsumer extends v2xx.DecklinkConsumer {
             customAllocator: boolean;
         }
-        /** */
+        /***/
         class BluefishConsumer extends v2xx.BluefishConsumer {
         }
-        /** */
+        /***/
         class SystemAudioConsumer extends v2xx.SystemAudioConsumer {
         }
-        /** */
+        /***/
         class ScreenConsumer extends v2xx.ScreenConsumer {
             name: string;
         }
-        /** */
+        /***/
         class NewtekIvgaConsumer extends v2xx.NewtekIvgaConsumer {
             channelLayout: string;
             provideSync: boolean;
         }
-        /** */
+        /***/
         class FileConsumer extends v2xx.Consumer {
             _type: string;
             path: string;
             vcodec: string;
             separateKey: boolean;
         }
-        /** */
+        /***/
         class StreamConsumer extends v2xx.Consumer {
             _type: string;
             path: string;
             args: string;
         }
-        /** */
+        /***/
         class Thumbnails extends v2xx.Thumbnails {
         }
-        /** */
+        /***/
         class Mixer extends v2xx.Mixer {
             chromaKey: boolean;
         }
-        /**  */
+        /***/
         class Osc extends v2xx.Osc {
         }
-        /**  */
+        /***/
         class ChannelLayout {
             _type: string;
             name: string;
@@ -199,7 +199,7 @@ export declare namespace Config {
             numChannels: number | null;
             channels: string;
         }
-        /**  */
+        /***/
         class MixConfig {
             _type: string;
             from: string;
@@ -207,16 +207,16 @@ export declare namespace Config {
             mix: string;
             mappings: Array<string>;
         }
-        /**  */
+        /***/
         class Audio {
             channelLayouts: Array<v207.ChannelLayout>;
             mixConfigs: Array<v207.MixConfig>;
         }
     }
-    /** */
+    /***/
     namespace v21x {
         const defaultLOGController: v2xx.Controller;
-        /** */
+        /***/
         class CasparCGConfigVO extends v2xx.CasparCGConfigVO {
             _version: number;
             paths: v21x.Paths;
@@ -233,11 +233,11 @@ export declare namespace Config {
             osc: v21x.Osc;
             audio: v21x.Audio;
         }
-        /** */
+        /***/
         class Channel extends v2xx.Channel {
             consumers: Array<v21x.Consumer>;
         }
-        /** */
+        /***/
         class Paths {
             mediaPath: string;
             logPath: string;
@@ -246,28 +246,28 @@ export declare namespace Config {
             thumbnailPath: string;
             fontPath: string;
         }
-        /** */
+        /***/
         class Consumer extends v2xx.Consumer {
         }
-        /** */
+        /***/
         class DecklinkConsumer extends v2xx.DecklinkConsumer {
         }
-        /** */
+        /***/
         class BluefishConsumer extends v2xx.BluefishConsumer {
         }
-        /** */
+        /***/
         class SystemAudioConsumer extends v2xx.SystemAudioConsumer {
             channelLayout: string;
             latency: number;
         }
-        /** */
+        /***/
         class ScreenConsumer extends v2xx.ScreenConsumer {
             interactive: boolean;
         }
-        /** */
+        /***/
         class NewtekIvgaConsumer extends v2xx.NewtekIvgaConsumer {
         }
-        /** */
+        /***/
         class FfmpegConsumer extends v2xx.Consumer {
             _type: string;
             path: string;
@@ -275,27 +275,27 @@ export declare namespace Config {
             separateKey: boolean;
             monoStreams: boolean;
         }
-        /** */
+        /***/
         class SynctoConsumer extends v2xx.Consumer {
             _type: string;
             channelId: Number | null;
         }
-        /** */
+        /***/
         class Mixer extends v2xx.Mixer {
         }
-        /**  */
+        /***/
         class Thumbnails extends v2xx.Thumbnails {
             mipmap: boolean;
         }
-        /** */
+        /***/
         class Html {
             remoteDebuggingPort: number | null;
         }
-        /**  */
+        /***/
         class Osc extends v2xx.Osc {
             disableSendToAmcpClients: boolean;
         }
-        /**  */
+        /***/
         class ChannelLayout {
             _type: string;
             name: string;
@@ -303,29 +303,29 @@ export declare namespace Config {
             numChannels: number | null;
             channelOrder: string;
         }
-        /**  */
+        /***/
         class MixConfig {
             _type: string;
             fromType: string;
             toTypes: string;
             mix: string;
         }
-        /**  */
+        /***/
         class Audio {
             channelLayouts: Array<v21x.ChannelLayout>;
             mixConfigs: Array<v21x.MixConfig>;
         }
     }
-    /** */
+    /***/
     namespace Intermediate {
         import Config207VO = v207.CasparCGConfigVO;
         import Config210VO = v21x.CasparCGConfigVO;
-        /** */
+        /***/
         class Audio {
             channelLayouts: Array<v21x.ChannelLayout>;
             mixConfigs: Array<Intermediate.MixConfig>;
         }
-        /**  */
+        /***/
         class MixConfig {
             _type: string;
             fromType: string;
@@ -340,11 +340,11 @@ export declare namespace Config {
                 };
             };
         }
-        /** */
+        /***/
         class Mixer extends v207.Mixer {
             chromaKey: boolean;
         }
-        /** */
+        /***/
         interface ICasparCGConfig {
             import(configVO: Object): void;
             importFromV207VO(configVO: Object): void;
@@ -379,7 +379,7 @@ export declare namespace Config {
             osc: v2xx.Osc;
             audio: Intermediate.Audio;
         }
-        /** */
+        /***/
         class CasparCGConfig implements ICasparCGConfig {
             private __version;
             paths: v21x.Paths;
@@ -401,52 +401,52 @@ export declare namespace Config {
             templateHosts: Array<v2xx.TemplateHost>;
             osc: v21x.Osc;
             audio: Intermediate.Audio;
-            /** */
+            /***/
             constructor(version: ServerVersion);
             constructor(initConfigVO: Config207VO | Config210VO | {});
-            /** */
+            /***/
             import(configVO: Object): void;
-            /** */
+            /***/
             importFromV207VO(configVO: Object): void;
-            /** */
+            /***/
             importFromV210VO(configVO: Object): void;
-            /** */
+            /***/
             readonly VO: Config207VO | Config210VO;
-            /** */
+            /***/
             readonly v207VO: Config207VO;
-            /** */
+            /***/
             readonly v210VO: Config210VO;
-            /** */
+            /***/
             readonly XML: Object | null;
-            /** */
+            /***/
             readonly v207XML: Object;
-            /** */
+            /***/
             readonly v210XML: Object;
-            /** */
+            /***/
             readonly XMLString: string;
-            /** */
+            /***/
             readonly v207XMLString: string;
-            /** */
+            /***/
             readonly v210XMLString: string;
-            /** */
+            /***/
             readonly _version: ServerVersion;
-            /** */
+            /***/
             private importAllValues(sourceRoot, destRoot);
-            /** */
+            /***/
             private importValues(sourceRoot, destRoot, values);
-            /** */
+            /***/
             private findListMembers(root, childKey);
-            /** */
+            /***/
             private importListMembers(root, memberName, restrictedNamespace?);
-            /** */
+            /***/
             static addFormattedXMLChildsFromObject(root: Object, data: Object, blacklist?: Array<string>): Object;
-            /** */
+            /***/
             static addFormattedXMLChildsFromArray(root: Object, data: Object, whitelist?: Array<string>): Object;
-            /** */
+            /***/
             static dashedToMixedCase(rawString: string): string;
-            /** */
+            /***/
             static dashedToCamelCase(rawString: string): string;
-            /** */
+            /***/
             static mixedCaseToDashed(mixedCased: string): string;
         }
     }

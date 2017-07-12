@@ -31,14 +31,14 @@ export declare namespace Validation {
          */
         resolve(data: Object): ParamData;
     }
-    /** */
+    /***/
     class FilterValidator extends StringValidator {
     }
-    /** */
+    /***/
     class URLValidator extends StringValidator {
         resolve(data: Object): ParamData;
     }
-    /** */
+    /***/
     class ChannelLayoutValidator extends StringValidator {
     }
     /**
@@ -173,7 +173,7 @@ export declare namespace Validation {
          */
         constructor();
     }
-    /** */
+    /***/
     class DecklinkDeviceValidator extends PositiveNumberValidator {
     }
     /**

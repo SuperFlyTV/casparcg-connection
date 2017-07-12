@@ -1,31 +1,47 @@
-import { Enum } from "./ServerStateEnum";
-export var Validation;
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var ServerStateEnum_1 = require("./ServerStateEnum");
+var Validation;
 (function (Validation) {
     /**
      *
      */
-    class AbstractValidator {
-        constructor() {
+    var AbstractValidator = (function () {
+        function AbstractValidator() {
             this.resolved = false;
         }
-    }
+        return AbstractValidator;
+    }());
     Validation.AbstractValidator = AbstractValidator;
     /**
      *
      */
-    class StringValidator extends AbstractValidator {
+    var StringValidator = (function (_super) {
+        __extends(StringValidator, _super);
         /**
          *
          */
-        constructor(lazy = true) {
-            super();
-            this.lazy = lazy;
+        function StringValidator(lazy) {
+            if (lazy === void 0) { lazy = true; }
+            var _this = _super.call(this) || this;
+            _this.lazy = lazy;
+            return _this;
         }
         /**
          *
          */
-        resolve(data) {
-            let textstring = "";
+        StringValidator.prototype.resolve = function (data) {
+            var textstring = "";
             function checkTextstring(rawClipNameString) {
                 if (rawClipNameString == null) {
                     return "";
@@ -39,7 +55,7 @@ export var Validation;
                 return rawClipNameString;
             }
             if (Array.isArray(data)) {
-                let i = 0;
+                var i = 0;
                 // switch lazy/greedy mode
                 if (this.lazy) {
                     // lazy = return first valid hit
@@ -49,10 +65,10 @@ export var Validation;
                     } while (textstring == null);
                 }
                 else {
-                    // greedy 
+                    // greedy
                     textstring = "";
-                    data.forEach(i => {
-                        let o = checkTextstring(i);
+                    data.forEach(function (i) {
+                        var o = checkTextstring(i);
                         textstring += (o) ? o + " " : "";
                     });
                 }
@@ -64,36 +80,56 @@ export var Validation;
                 return false;
             }
             return textstring;
-        }
-    }
+        };
+        return StringValidator;
+    }(AbstractValidator));
     Validation.StringValidator = StringValidator;
-    /** */
-    class FilterValidator extends StringValidator {
-    }
-    Validation.FilterValidator = FilterValidator;
-    /** */
-    class URLValidator extends StringValidator {
-        resolve(data) {
-            let url = super.resolve(data).toString();
-            // add quotation
-            let quotedUrl = `"${url}"`;
-            return { raw: url, payload: quotedUrl };
+    /***/
+    var FilterValidator = (function (_super) {
+        __extends(FilterValidator, _super);
+        function FilterValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
-    }
+        return FilterValidator;
+    }(StringValidator));
+    Validation.FilterValidator = FilterValidator;
+    /***/
+    var URLValidator = (function (_super) {
+        __extends(URLValidator, _super);
+        function URLValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        URLValidator.prototype.resolve = function (data) {
+            var url = _super.prototype.resolve.call(this, data).toString();
+            // add quotation
+            var quotedUrl = "\"" + url + "\"";
+            return { raw: url, payload: quotedUrl };
+        };
+        return URLValidator;
+    }(StringValidator));
     Validation.URLValidator = URLValidator;
-    /** */
-    class ChannelLayoutValidator extends StringValidator {
-    }
+    /***/
+    var ChannelLayoutValidator = (function (_super) {
+        __extends(ChannelLayoutValidator, _super);
+        function ChannelLayoutValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return ChannelLayoutValidator;
+    }(StringValidator));
     Validation.ChannelLayoutValidator = ChannelLayoutValidator;
     /**
      *
      */
-    class ClipNameValidator extends AbstractValidator {
+    var ClipNameValidator = (function (_super) {
+        __extends(ClipNameValidator, _super);
+        function ClipNameValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        resolve(data) {
-            let clipName = "";
+        ClipNameValidator.prototype.resolve = function (data) {
+            var clipName = "";
             function checkClipNameString(rawClipNameString) {
                 if (rawClipNameString == null) {
                     return "";
@@ -107,7 +143,7 @@ export var Validation;
                 return rawClipNameString;
             }
             if (Array.isArray(data)) {
-                let i = 0;
+                var i = 0;
                 do {
                     clipName = checkClipNameString(data[i]);
                     i++;
@@ -120,43 +156,56 @@ export var Validation;
                 return false;
             }
             // add quotation
-            let quotedClipName = `"${clipName}"`;
+            var quotedClipName = "\"" + clipName + "\"";
             return { raw: clipName, payload: quotedClipName };
-        }
-    }
+        };
+        return ClipNameValidator;
+    }(AbstractValidator));
     Validation.ClipNameValidator = ClipNameValidator;
     /**
      *
      */
-    class TemplateNameValidator extends ClipNameValidator {
-    }
+    var TemplateNameValidator = (function (_super) {
+        __extends(TemplateNameValidator, _super);
+        function TemplateNameValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return TemplateNameValidator;
+    }(ClipNameValidator));
     Validation.TemplateNameValidator = TemplateNameValidator;
     /**
      *
      */
-    class DataNameValidator extends ClipNameValidator {
-    }
+    var DataNameValidator = (function (_super) {
+        __extends(DataNameValidator, _super);
+        function DataNameValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return DataNameValidator;
+    }(ClipNameValidator));
     Validation.DataNameValidator = DataNameValidator;
     /**
      *
      */
-    class EnumValidator extends AbstractValidator {
+    var EnumValidator = (function (_super) {
+        __extends(EnumValidator, _super);
         /**
          *
          */
-        constructor(_enumClass) {
-            super();
-            this._enumClass = _enumClass;
+        function EnumValidator(_enumClass) {
+            var _this = _super.call(this) || this;
+            _this._enumClass = _enumClass;
+            return _this;
         }
         /**
          *
          */
-        resolve(data) {
+        EnumValidator.prototype.resolve = function (data) {
             if (data instanceof this._enumClass) {
                 return data.value;
             }
             else if (typeof data === "string") {
-                let stringCast = data !== null ? data.toString() : "";
+                var stringCast = data !== null ? data.toString() : "";
                 // format stringy enum value
                 stringCast = stringCast.toUpperCase();
                 stringCast = stringCast.replace(" ", "_");
@@ -165,80 +214,86 @@ export var Validation;
                 }
             }
             return false;
-        }
-    }
+        };
+        return EnumValidator;
+    }(AbstractValidator));
     Validation.EnumValidator = EnumValidator;
     /**
      *
      */
-    class ChannelFormatValidator extends AbstractValidator {
+    var ChannelFormatValidator = (function (_super) {
+        __extends(ChannelFormatValidator, _super);
         /**
          *
          */
-        constructor() {
-            super();
+        function ChannelFormatValidator() {
+            return _super.call(this) || this;
         }
         /**
          *
          */
-        resolve(data) {
-            if (data instanceof Enum.ChannelFormat) {
+        ChannelFormatValidator.prototype.resolve = function (data) {
+            if (data instanceof ServerStateEnum_1.Enum.ChannelFormat) {
                 return data.value;
             }
             else if (typeof data === "string") {
-                let stringCast = data !== null ? data.toString() : "";
+                var stringCast = data !== null ? data.toString() : "";
                 // format stringy enum value
                 stringCast = stringCast.toUpperCase();
                 stringCast = stringCast.replace(" ", "_");
-                if (Enum.ChannelFormat.hasOwnProperty(stringCast)) {
-                    return Enum.ChannelFormat[stringCast].value;
+                if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty(stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat[stringCast].value;
                 }
-                else if (Enum.ChannelFormat.hasOwnProperty("SD_" + stringCast)) {
-                    return Enum.ChannelFormat["SD_" + stringCast].value;
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("SD_" + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat["SD_" + stringCast].value;
                 }
-                else if (Enum.ChannelFormat.hasOwnProperty("HD_" + stringCast)) {
-                    return Enum.ChannelFormat["HD_" + stringCast].value;
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("HD_" + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat["HD_" + stringCast].value;
                 }
-                else if (Enum.ChannelFormat.hasOwnProperty("UHD_" + stringCast)) {
-                    return Enum.ChannelFormat["UHD_" + stringCast].value;
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("UHD_" + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat["UHD_" + stringCast].value;
                 }
             }
             return false;
-        }
-    }
+        };
+        return ChannelFormatValidator;
+    }(AbstractValidator));
     Validation.ChannelFormatValidator = ChannelFormatValidator;
     /**
      *
      */
-    class KeywordValidator extends AbstractValidator {
+    var KeywordValidator = (function (_super) {
+        __extends(KeywordValidator, _super);
         /**
          *
          */
-        constructor(keyword, caseSensitive = false) {
-            super();
-            this._keyword = keyword;
-            this._caseSensitive = caseSensitive;
+        function KeywordValidator(keyword, caseSensitive) {
+            if (caseSensitive === void 0) { caseSensitive = false; }
+            var _this = _super.call(this) || this;
+            _this._keyword = keyword;
+            _this._caseSensitive = caseSensitive;
+            return _this;
         }
         /**
          *
          */
-        resolve(data) {
-            let keywordCopy = this._keyword;
+        KeywordValidator.prototype.resolve = function (data) {
+            var keywordCopy = this._keyword;
             if (!this._caseSensitive) {
                 keywordCopy = keywordCopy.toLowerCase();
             }
             if (Array.isArray(data)) {
                 if (!this._caseSensitive) {
-                    data = data.map(value => String(value).toLowerCase());
+                    data = data.map(function (value) { return String(value).toLowerCase(); });
                 }
                 if (data.indexOf(keywordCopy) > -1) {
                     return this._keyword;
                 }
             }
             else if (typeof data === "object" && data !== null) {
-                let objectCast = data;
+                var objectCast = data;
                 if (!this._caseSensitive) {
-                    for (let key in objectCast) {
+                    for (var key in objectCast) {
                         objectCast[key] = String(objectCast[key]).toLowerCase();
                     }
                 }
@@ -255,33 +310,36 @@ export var Validation;
                 }
             }
             return false;
-        }
-    }
+        };
+        return KeywordValidator;
+    }(AbstractValidator));
     Validation.KeywordValidator = KeywordValidator;
     /**
      *
      */
-    class FrameValidator extends AbstractValidator {
+    var FrameValidator = (function (_super) {
+        __extends(FrameValidator, _super);
         /**
          *
          */
-        constructor(keyword) {
-            super();
-            this._keyword = keyword;
+        function FrameValidator(keyword) {
+            var _this = _super.call(this) || this;
+            _this._keyword = keyword;
+            return _this;
         }
         /**
          *
          */
-        resolve(data) {
+        FrameValidator.prototype.resolve = function (data) {
             if (Array.isArray(data)) {
-                let index;
-                data = data.map(element => String(element).toLowerCase());
+                var index = void 0;
+                data = data.map(function (element) { return String(element).toLowerCase(); });
                 if ((index = data.indexOf(this._keyword.toLowerCase())) > -1) {
                     data = parseInt(data[index + 1], 10);
                 }
             }
             else if (typeof data === "object" && data !== null) {
-                let objectCast = data;
+                var objectCast = data;
                 if (objectCast.hasOwnProperty(this._keyword)) {
                     (data = objectCast[this._keyword]);
                 }
@@ -290,127 +348,154 @@ export var Validation;
                 data = Number(data);
             }
             if (typeof data === "number") {
-                let numberCast;
+                var numberCast = void 0;
                 if ((numberCast = data) >= 0) {
                     return numberCast;
                 }
             }
             return false;
-        }
-    }
+        };
+        return FrameValidator;
+    }(AbstractValidator));
     Validation.FrameValidator = FrameValidator;
     /**
      *
      */
-    class PositiveNumberValidatorBetween extends AbstractValidator {
+    var PositiveNumberValidatorBetween = (function (_super) {
+        __extends(PositiveNumberValidatorBetween, _super);
         /**
          *
          */
-        constructor(_min = Number.NEGATIVE_INFINITY, _max = Number.POSITIVE_INFINITY) {
-            super();
-            this._min = _min;
-            this._max = _max;
+        function PositiveNumberValidatorBetween(_min, _max) {
+            if (_min === void 0) { _min = Number.NEGATIVE_INFINITY; }
+            if (_max === void 0) { _max = Number.POSITIVE_INFINITY; }
+            var _this = _super.call(this) || this;
+            _this._min = _min;
+            _this._max = _max;
+            return _this;
         }
         /**
          *
          */
-        resolve(data) {
+        PositiveNumberValidatorBetween.prototype.resolve = function (data) {
             if (typeof data === "number") {
-                let numberCast = Math.max(Math.min(data, this._max), this._min);
+                var numberCast = Math.max(Math.min(data, this._max), this._min);
                 if (numberCast >= 0) {
                     return numberCast;
                 }
             }
             return false;
-        }
-    }
+        };
+        return PositiveNumberValidatorBetween;
+    }(AbstractValidator));
     Validation.PositiveNumberValidatorBetween = PositiveNumberValidatorBetween;
     /**
      *
      */
-    class PositiveNumberValidator extends PositiveNumberValidatorBetween {
+    var PositiveNumberValidator = (function (_super) {
+        __extends(PositiveNumberValidator, _super);
         /**
          *
          */
-        constructor() {
-            super();
+        function PositiveNumberValidator() {
+            return _super.call(this) || this;
         }
-    }
+        return PositiveNumberValidator;
+    }(PositiveNumberValidatorBetween));
     Validation.PositiveNumberValidator = PositiveNumberValidator;
     /**
      *
      */
-    class PositiveNumberRoundValidatorBetween extends PositiveNumberValidatorBetween {
+    var PositiveNumberRoundValidatorBetween = (function (_super) {
+        __extends(PositiveNumberRoundValidatorBetween, _super);
+        function PositiveNumberRoundValidatorBetween() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        resolve(data) {
+        PositiveNumberRoundValidatorBetween.prototype.resolve = function (data) {
             if (data) {
-                return Number(super.resolve(data)).toFixed();
+                return Number(_super.prototype.resolve.call(this, data)).toFixed();
             }
             return NaN;
-        }
-    }
+        };
+        return PositiveNumberRoundValidatorBetween;
+    }(PositiveNumberValidatorBetween));
     Validation.PositiveNumberRoundValidatorBetween = PositiveNumberRoundValidatorBetween;
     /**
      *
      */
-    class NumberValidatorBetween extends AbstractValidator {
+    var NumberValidatorBetween = (function (_super) {
+        __extends(NumberValidatorBetween, _super);
         /**
          *
          */
-        constructor(_min = Number.NEGATIVE_INFINITY, _max = Number.POSITIVE_INFINITY) {
-            super();
-            this._min = _min;
-            this._max = _max;
+        function NumberValidatorBetween(_min, _max) {
+            if (_min === void 0) { _min = Number.NEGATIVE_INFINITY; }
+            if (_max === void 0) { _max = Number.POSITIVE_INFINITY; }
+            var _this = _super.call(this) || this;
+            _this._min = _min;
+            _this._max = _max;
+            return _this;
         }
         /**
          *
          */
-        resolve(data) {
+        NumberValidatorBetween.prototype.resolve = function (data) {
             if (typeof data === "number") {
-                let numberCast = Math.max(Math.min(data, this._max), this._min);
+                var numberCast = Math.max(Math.min(data, this._max), this._min);
                 return numberCast;
             }
             return false;
-        }
-    }
+        };
+        return NumberValidatorBetween;
+    }(AbstractValidator));
     Validation.NumberValidatorBetween = NumberValidatorBetween;
     /**
      *
      */
-    class NumberValidator extends NumberValidatorBetween {
+    var NumberValidator = (function (_super) {
+        __extends(NumberValidator, _super);
         /**
          *
          */
-        constructor() {
-            super();
+        function NumberValidator() {
+            return _super.call(this) || this;
         }
-    }
+        return NumberValidator;
+    }(NumberValidatorBetween));
     Validation.NumberValidator = NumberValidator;
-    /** */
-    class DecklinkDeviceValidator extends PositiveNumberValidator {
-    }
+    /***/
+    var DecklinkDeviceValidator = (function (_super) {
+        __extends(DecklinkDeviceValidator, _super);
+        function DecklinkDeviceValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return DecklinkDeviceValidator;
+    }(PositiveNumberValidator));
     Validation.DecklinkDeviceValidator = DecklinkDeviceValidator;
     /**
      *
      */
-    class BooleanValidatorWithDefaults extends AbstractValidator {
+    var BooleanValidatorWithDefaults = (function (_super) {
+        __extends(BooleanValidatorWithDefaults, _super);
         /**
          *
          */
-        constructor(_valueOnSuccess, _valueOnFail) {
-            super();
-            this._valueOnSuccess = _valueOnSuccess;
-            this._valueOnFail = _valueOnFail;
+        function BooleanValidatorWithDefaults(_valueOnSuccess, _valueOnFail) {
+            var _this = _super.call(this) || this;
+            _this._valueOnSuccess = _valueOnSuccess;
+            _this._valueOnFail = _valueOnFail;
+            return _this;
         }
         /**
          *
          */
-        resolve(data, key) {
+        BooleanValidatorWithDefaults.prototype.resolve = function (data, key) {
             if (Array.isArray(data)) {
-                let index;
-                data = data.map(element => String(element).toLowerCase());
+                var index = void 0;
+                data = data.map(function (element) { return String(element).toLowerCase(); });
                 if ((index = data.indexOf(key.toLowerCase())) > -1) {
                     data = data[index + 1];
                     if (data === undefined) {
@@ -422,7 +507,7 @@ export var Validation;
                     data = false;
                 }
             }
-            let isValid = false;
+            var isValid = false;
             if (typeof data === "string") {
                 if (data === "true") {
                     isValid = true;
@@ -443,30 +528,37 @@ export var Validation;
             else {
                 return (this._valueOnFail !== undefined) ? this._valueOnFail : isValid;
             }
-        }
-    }
+        };
+        return BooleanValidatorWithDefaults;
+    }(AbstractValidator));
     Validation.BooleanValidatorWithDefaults = BooleanValidatorWithDefaults;
     /**
      *
      */
-    class BooleanValidator extends BooleanValidatorWithDefaults {
+    var BooleanValidator = (function (_super) {
+        __extends(BooleanValidator, _super);
         /**
          *
          */
-        constructor() {
-            super();
+        function BooleanValidator() {
+            return _super.call(this) || this;
         }
-    }
+        return BooleanValidator;
+    }(BooleanValidatorWithDefaults));
     Validation.BooleanValidator = BooleanValidator;
     /**
      *
      */
-    class TemplateDataValidator extends AbstractValidator {
+    var TemplateDataValidator = (function (_super) {
+        __extends(TemplateDataValidator, _super);
+        function TemplateDataValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        resolve(data) {
-            let stringCast = data.toString();
+        TemplateDataValidator.prototype.resolve = function (data) {
+            var stringCast = data.toString();
             // data is object: serialize
             if (typeof data === "object" && data !== null) {
                 stringCast = JSON.stringify(data);
@@ -487,11 +579,12 @@ export var Validation;
                 if (xmlCast) {
                     return stringCast;
                 }*/
-            // add qoutation 
+            // add qoutation
             stringCast = stringCast.replace(/\"/g, "\\\"");
-            let quotedString = `"${stringCast}"`;
+            var quotedString = "\"" + stringCast + "\"";
             return { raw: stringCast, payload: quotedString };
-        }
-    }
+        };
+        return TemplateDataValidator;
+    }(AbstractValidator));
     Validation.TemplateDataValidator = TemplateDataValidator;
-})(Validation || (Validation = {}));
+})(Validation = exports.Validation || (exports.Validation = {}));

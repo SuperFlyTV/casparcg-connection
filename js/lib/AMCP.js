@@ -1,33 +1,45 @@
-import { Enum } from "./ServerStateEnum";
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var ServerStateEnum_1 = require("./ServerStateEnum");
 // ResponseNS
-import { Response as ResponseSignatureNS } from "./ResponseSignature";
-import { Response as ResponseValidator } from "./ResponseValidators";
-import { Response as ResponseParser } from "./ResponseParsers";
-var ResponseSignature = ResponseSignatureNS.ResponseSignature;
+var ResponseSignature_1 = require("./ResponseSignature");
+var ResponseValidators_1 = require("./ResponseValidators");
+var ResponseParsers_1 = require("./ResponseParsers");
+var ResponseSignature = ResponseSignature_1.Response.ResponseSignature;
 // Command NS
-import { Command as CommandNS } from "./AbstractCommand";
-var AbstractCommand = CommandNS.AbstractCommand;
-var AbstractOrChannelOrLayerCommand = CommandNS.AbstractOrChannelOrLayerCommand;
-var AbstractChannelCommand = CommandNS.AbstractChannelCommand;
-var AbstractChannelOrLayerCommand = CommandNS.AbstractChannelOrLayerCommand;
-var AbstractLayerWithFallbackCommand = CommandNS.AbstractLayerWithFallbackCommand;
-var AbstractLayerWithCgFallbackCommand = CommandNS.AbstractLayerWithCgFallbackCommand;
+var AbstractCommand_1 = require("./AbstractCommand");
+var AbstractCommand = AbstractCommand_1.Command.AbstractCommand;
+var AbstractOrChannelOrLayerCommand = AbstractCommand_1.Command.AbstractOrChannelOrLayerCommand;
+var AbstractChannelCommand = AbstractCommand_1.Command.AbstractChannelCommand;
+var AbstractChannelOrLayerCommand = AbstractCommand_1.Command.AbstractChannelOrLayerCommand;
+var AbstractLayerWithFallbackCommand = AbstractCommand_1.Command.AbstractLayerWithFallbackCommand;
+var AbstractLayerWithCgFallbackCommand = AbstractCommand_1.Command.AbstractLayerWithCgFallbackCommand;
 // Param NS
-import { Param as ParamNS } from "./ParamSignature";
-var required = ParamNS.Required;
-var optional = ParamNS.Optional;
-var ParamSignature = ParamNS.ParamSignature;
+var ParamSignature_1 = require("./ParamSignature");
+var required = ParamSignature_1.Param.Required;
+var optional = ParamSignature_1.Param.Optional;
+var ParamSignature = ParamSignature_1.Param.ParamSignature;
 // Validation NS
-import { Validation as ParameterValidator } from "./ParamValidators";
+var ParamValidators_1 = require("./ParamValidators");
 // Protocol NS
-import { Protocol as ProtocolNS } from "./ProtocolLogic";
-var Depends = ProtocolNS.Depends;
-var Coupled = ProtocolNS.Coupled;
-var OneOf = ProtocolNS.OneOf;
+var ProtocolLogic_1 = require("./ProtocolLogic");
+var Depends = ProtocolLogic_1.Protocol.Depends;
+var Coupled = ProtocolLogic_1.Protocol.Coupled;
+var OneOf = ProtocolLogic_1.Protocol.OneOf;
 /**
- * Factory
+ *Factory
  */
-export var AMCPUtil;
+var AMCPUtil;
 (function (AMCPUtil) {
     /**
      *
@@ -35,7 +47,7 @@ export var AMCPUtil;
     function deSerialize(cmd, id) {
         // errror: commandstatus -1 //invalid command
         // @todo: error handling much?????? (callback??????)
-        let command = Object.create(AMCP[cmd._commandName]["prototype"]);
+        var command = Object.create(AMCP[cmd._commandName]["prototype"]);
         command.constructor.call(command, cmd._objectParams);
         command.populate(cmd, id);
         return command;
@@ -44,11 +56,11 @@ export var AMCPUtil;
     /**
      *
      */
-    class CasparCGSocketResponse {
+    var CasparCGSocketResponse = (function () {
         /**
          *
          */
-        constructor(responseString) {
+        function CasparCGSocketResponse(responseString) {
             this.items = [];
             this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString);
             this.responseString = responseString;
@@ -56,1485 +68,1772 @@ export var AMCPUtil;
         /**
          *
          */
-        static evaluateStatusCode(responseString) {
+        CasparCGSocketResponse.evaluateStatusCode = function (responseString) {
             return parseInt(responseString.substr(0, 3), 10);
-        }
-    }
+        };
+        return CasparCGSocketResponse;
+    }());
     AMCPUtil.CasparCGSocketResponse = CasparCGSocketResponse;
-})(AMCPUtil || (AMCPUtil = {}));
+})(AMCPUtil = exports.AMCPUtil || (exports.AMCPUtil = {}));
 /**
- * Internal
+ *Internal
  */
-export var AMCP;
+var AMCP;
 (function (AMCP) {
-    class CustomCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "command", null, new ParameterValidator.StringValidator(false))
+    var CustomCommand = (function (_super) {
+        __extends(CustomCommand, _super);
+        function CustomCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "command", null, new ParamValidators_1.Validation.StringValidator(false))
             ];
+            return _this;
         }
-    }
-    CustomCommand.commandString = "";
+        CustomCommand.commandString = "";
+        return CustomCommand;
+    }(AbstractCommand));
     AMCP.CustomCommand = CustomCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * IVideo
+ *IVideo
  */
 (function (AMCP) {
     /**
      *
      */
-    class LoadbgCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "clip", null, new ParameterValidator.ClipNameValidator()),
-                new ParamSignature(optional, "loop", null, new ParameterValidator.BooleanValidatorWithDefaults("LOOP")),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-                new ParamSignature(optional, "seek", "SEEK", new ParameterValidator.FrameValidator("SEEK")),
-                new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
-                new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
+    var LoadbgCommand = (function (_super) {
+        __extends(LoadbgCommand, _super);
+        function LoadbgCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "clip", null, new ParamValidators_1.Validation.ClipNameValidator()),
+                new ParamSignature(optional, "loop", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("LOOP")),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "seek", "SEEK", new ParamValidators_1.Validation.FrameValidator("SEEK")),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
+                new ParamSignature(optional, "auto", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("AUTO"))
             ];
+            return _this;
         }
-    }
-    LoadbgCommand.commandString = "LOADBG";
-    LoadbgCommand.protocolLogic = [
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        LoadbgCommand.commandString = "LOADBG";
+        LoadbgCommand.protocolLogic = [
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return LoadbgCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.LoadbgCommand = LoadbgCommand;
     /**
      *
      */
-    class LoadCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "clip", null, new ParameterValidator.ClipNameValidator),
-                new ParamSignature(optional, "loop", null, new ParameterValidator.BooleanValidatorWithDefaults("LOOP")),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-                new ParamSignature(optional, "seek", "SEEK", new ParameterValidator.FrameValidator("SEEK")),
-                new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator())
+    var LoadCommand = (function (_super) {
+        __extends(LoadCommand, _super);
+        function LoadCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "clip", null, new ParamValidators_1.Validation.ClipNameValidator),
+                new ParamSignature(optional, "loop", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("LOOP")),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "seek", "SEEK", new ParamValidators_1.Validation.FrameValidator("SEEK")),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator())
             ];
+            return _this;
         }
-    }
-    LoadCommand.commandString = "LOAD";
-    LoadCommand.protocolLogic = [
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        LoadCommand.commandString = "LOAD";
+        LoadCommand.protocolLogic = [
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return LoadCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.LoadCommand = LoadCommand;
     /**
      *
      */
-    class PlayCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(optional, "clip", null, new ParameterValidator.ClipNameValidator),
-                new ParamSignature(optional, "loop", null, new ParameterValidator.BooleanValidatorWithDefaults("LOOP")),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-                new ParamSignature(optional, "seek", "SEEK", new ParameterValidator.FrameValidator("SEEK")),
-                new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator())
+    var PlayCommand = (function (_super) {
+        __extends(PlayCommand, _super);
+        function PlayCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, "clip", null, new ParamValidators_1.Validation.ClipNameValidator),
+                new ParamSignature(optional, "loop", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("LOOP")),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "seek", "SEEK", new ParamValidators_1.Validation.FrameValidator("SEEK")),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator())
             ];
+            return _this;
         }
-    }
-    PlayCommand.commandString = "PLAY";
-    PlayCommand.protocolLogic = [
-        new Depends("loop", "clip"),
-        new Depends("seek", "clip"),
-        new Depends("length", "clip"),
-        new Depends("filter", "clip"),
-        new Depends("transition", "clip"),
-        new Depends("transitionDuration", "clip"),
-        new Depends("transitionEasing", "clip"),
-        new Depends("transitionDirection", "clip"),
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        PlayCommand.commandString = "PLAY";
+        PlayCommand.protocolLogic = [
+            new Depends("loop", "clip"),
+            new Depends("seek", "clip"),
+            new Depends("length", "clip"),
+            new Depends("filter", "clip"),
+            new Depends("transition", "clip"),
+            new Depends("transitionDuration", "clip"),
+            new Depends("transitionEasing", "clip"),
+            new Depends("transitionDirection", "clip"),
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return PlayCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.PlayCommand = PlayCommand;
     /**
      *
      */
-    class PauseCommand extends AbstractLayerWithFallbackCommand {
-    }
-    PauseCommand.commandString = "PAUSE";
+    var PauseCommand = (function (_super) {
+        __extends(PauseCommand, _super);
+        function PauseCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        PauseCommand.commandString = "PAUSE";
+        return PauseCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.PauseCommand = PauseCommand;
     /**
      *
      */
-    class ResumeCommand extends AbstractLayerWithFallbackCommand {
-    }
-    ResumeCommand.commandString = "RESUME";
+    var ResumeCommand = (function (_super) {
+        __extends(ResumeCommand, _super);
+        function ResumeCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ResumeCommand.commandString = "RESUME";
+        return ResumeCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.ResumeCommand = ResumeCommand;
     /**
      *
      */
-    class StopCommand extends AbstractLayerWithFallbackCommand {
-    }
-    StopCommand.commandString = "STOP";
+    var StopCommand = (function (_super) {
+        __extends(StopCommand, _super);
+        function StopCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        StopCommand.commandString = "STOP";
+        return StopCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.StopCommand = StopCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * IInputOutput
+ *IInputOutput
  */
 (function (AMCP) {
     /**
      *
      */
-    class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-                new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
-                new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
-                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator()),
-                new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
+    var LoadDecklinkBgCommand = (function (_super) {
+        __extends(LoadDecklinkBgCommand, _super);
+        function LoadDecklinkBgCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.ChannelFormatValidator()),
+                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator()),
+                new ParamSignature(optional, "auto", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("AUTO"))
             ];
+            return _this;
         }
-    }
-    LoadDecklinkBgCommand.commandString = "LOADBG";
-    LoadDecklinkBgCommand.protocolLogic = [
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        LoadDecklinkBgCommand.commandString = "LOADBG";
+        LoadDecklinkBgCommand.protocolLogic = [
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return LoadDecklinkBgCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.LoadDecklinkBgCommand = LoadDecklinkBgCommand;
     /**
      *
      */
-    class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-                new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
-                new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
-                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator())
+    var LoadDecklinkCommand = (function (_super) {
+        __extends(LoadDecklinkCommand, _super);
+        function LoadDecklinkCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.ChannelFormatValidator()),
+                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator())
             ];
+            return _this;
         }
-    }
-    LoadDecklinkCommand.commandString = "LOAD";
-    LoadDecklinkCommand.protocolLogic = [
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        LoadDecklinkCommand.commandString = "LOAD";
+        LoadDecklinkCommand.protocolLogic = [
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return LoadDecklinkCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.LoadDecklinkCommand = LoadDecklinkCommand;
     /**
      *
      */
-    class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParameterValidator.DecklinkDeviceValidator()),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-                new ParamSignature(optional, "length", "LENGTH", new ParameterValidator.FrameValidator("LENGTH")),
-                new ParamSignature(optional, "filter", "FILTER", new ParameterValidator.FilterValidator()),
-                new ParamSignature(optional, "format", "FORMAT", new ParameterValidator.ChannelFormatValidator()),
-                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParameterValidator.ChannelLayoutValidator())
+    var PlayDecklinkCommand = (function (_super) {
+        __extends(PlayDecklinkCommand, _super);
+        function PlayDecklinkCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "device", "DECKLINK DEVICE", new ParamValidators_1.Validation.DecklinkDeviceValidator()),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "length", "LENGTH", new ParamValidators_1.Validation.FrameValidator("LENGTH")),
+                new ParamSignature(optional, "filter", "FILTER", new ParamValidators_1.Validation.FilterValidator()),
+                new ParamSignature(optional, "format", "FORMAT", new ParamValidators_1.Validation.ChannelFormatValidator()),
+                new ParamSignature(optional, "channelLayout", "CHANNEL_LAYOUT", new ParamValidators_1.Validation.ChannelLayoutValidator())
             ];
+            return _this;
         }
-    }
-    PlayDecklinkCommand.commandString = "PLAY";
-    PlayDecklinkCommand.protocolLogic = [
-        new Depends("length", "device"),
-        new Depends("filter", "device"),
-        new Depends("format", "device"),
-        new Depends("channelLayout", "device"),
-        new Depends("transition", "device"),
-        new Depends("transitionDuration", "device"),
-        new Depends("transitionEasing", "device"),
-        new Depends("transitionDirection", "device"),
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        PlayDecklinkCommand.commandString = "PLAY";
+        PlayDecklinkCommand.protocolLogic = [
+            new Depends("length", "device"),
+            new Depends("filter", "device"),
+            new Depends("format", "device"),
+            new Depends("channelLayout", "device"),
+            new Depends("transition", "device"),
+            new Depends("transitionDuration", "device"),
+            new Depends("transitionEasing", "device"),
+            new Depends("transitionDirection", "device"),
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return PlayDecklinkCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.PlayDecklinkCommand = PlayDecklinkCommand;
     /**
      *
      */
-    class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "url", "[HTML]", new ParameterValidator.URLValidator()),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
-                new ParamSignature(optional, "auto", null, new ParameterValidator.BooleanValidatorWithDefaults("AUTO"))
+    var LoadHtmlPageBgCommand = (function (_super) {
+        __extends(LoadHtmlPageBgCommand, _super);
+        function LoadHtmlPageBgCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "url", "[HTML]", new ParamValidators_1.Validation.URLValidator()),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
+                new ParamSignature(optional, "auto", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("AUTO"))
             ];
+            return _this;
         }
-    }
-    LoadHtmlPageBgCommand.commandString = "LOADBG";
-    LoadHtmlPageBgCommand.protocolLogic = [
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        LoadHtmlPageBgCommand.commandString = "LOADBG";
+        LoadHtmlPageBgCommand.protocolLogic = [
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return LoadHtmlPageBgCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.LoadHtmlPageBgCommand = LoadHtmlPageBgCommand;
     /**
      *
      */
-    class LoadHtmlPageCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "url", "[HTML]", new ParameterValidator.URLValidator),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+    var LoadHtmlPageCommand = (function (_super) {
+        __extends(LoadHtmlPageCommand, _super);
+        function LoadHtmlPageCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "url", "[HTML]", new ParamValidators_1.Validation.URLValidator),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
             ];
+            return _this;
         }
-    }
-    LoadHtmlPageCommand.commandString = "LOAD";
-    LoadHtmlPageCommand.protocolLogic = [
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        LoadHtmlPageCommand.commandString = "LOAD";
+        LoadHtmlPageCommand.protocolLogic = [
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return LoadHtmlPageCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.LoadHtmlPageCommand = LoadHtmlPageCommand;
     /**
      *
      */
-    class PlayHtmlPageCommand extends AbstractLayerWithFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(optional, "url", "[HTML]", new ParameterValidator.URLValidator),
-                new ParamSignature(optional, "transition", null, new ParameterValidator.EnumValidator(Enum.Transition)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "transitionDirection", null, new ParameterValidator.EnumValidator(Enum.Direction)),
+    var PlayHtmlPageCommand = (function (_super) {
+        __extends(PlayHtmlPageCommand, _super);
+        function PlayHtmlPageCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, "url", "[HTML]", new ParamValidators_1.Validation.URLValidator),
+                new ParamSignature(optional, "transition", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Transition)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "transitionDirection", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Direction)),
             ];
+            return _this;
         }
-    }
-    PlayHtmlPageCommand.commandString = "PLAY";
-    PlayHtmlPageCommand.protocolLogic = [
-        new Depends("transition", "url"),
-        new Depends("transitionDuration", "url"),
-        new Depends("transitionEasing", "url"),
-        new Depends("transitionDirection", "url"),
-        new Depends("transitionDuration", "transition"),
-        new Depends("transitionEasing", "transition"),
-        new Depends("transitionDirection", "transition")
-    ];
+        PlayHtmlPageCommand.commandString = "PLAY";
+        PlayHtmlPageCommand.protocolLogic = [
+            new Depends("transition", "url"),
+            new Depends("transitionDuration", "url"),
+            new Depends("transitionEasing", "url"),
+            new Depends("transitionDirection", "url"),
+            new Depends("transitionDuration", "transition"),
+            new Depends("transitionEasing", "transition"),
+            new Depends("transitionDirection", "transition")
+        ];
+        return PlayHtmlPageCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.PlayHtmlPageCommand = PlayHtmlPageCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * ICG
+ *ICG
  */
 (function (AMCP) {
     /**
      *
      */
-    class CGAddCommand extends AbstractLayerWithCgFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "flashLayer", "ADD", new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(required, "templateName", null, new ParameterValidator.TemplateNameValidator()),
-                new ParamSignature(required, "playOnLoad", null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-                new ParamSignature(optional, "data", null, new ParameterValidator.TemplateDataValidator())
+    var CGAddCommand = (function (_super) {
+        __extends(CGAddCommand, _super);
+        function CGAddCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "flashLayer", "ADD", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(required, "templateName", null, new ParamValidators_1.Validation.TemplateNameValidator()),
+                new ParamSignature(required, "playOnLoad", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults(1, 0)),
+                new ParamSignature(optional, "data", null, new ParamValidators_1.Validation.TemplateDataValidator())
             ];
+            return _this;
         }
-    }
-    CGAddCommand.commandString = "CG";
+        CGAddCommand.commandString = "CG";
+        return CGAddCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGAddCommand = CGAddCommand;
     /**
      *
      */
-    class CGPlayCommand extends AbstractLayerWithCgFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "flashLayer", "PLAY", new ParameterValidator.PositiveNumberValidatorBetween(0))
+    var CGPlayCommand = (function (_super) {
+        __extends(CGPlayCommand, _super);
+        function CGPlayCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "flashLayer", "PLAY", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
+            return _this;
         }
-    }
-    CGPlayCommand.commandString = "CG";
+        CGPlayCommand.commandString = "CG";
+        return CGPlayCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGPlayCommand = CGPlayCommand;
     /**
      *
      */
-    class CGStopCommand extends AbstractLayerWithCgFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "flashLayer", "STOP", new ParameterValidator.PositiveNumberValidatorBetween(0))
+    var CGStopCommand = (function (_super) {
+        __extends(CGStopCommand, _super);
+        function CGStopCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "flashLayer", "STOP", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
+            return _this;
         }
-    }
-    CGStopCommand.commandString = "CG";
+        CGStopCommand.commandString = "CG";
+        return CGStopCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGStopCommand = CGStopCommand;
     /**
      *
      */
-    class CGNextCommand extends AbstractLayerWithCgFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "flashLayer", "NEXT", new ParameterValidator.PositiveNumberValidatorBetween(0))
+    var CGNextCommand = (function (_super) {
+        __extends(CGNextCommand, _super);
+        function CGNextCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "flashLayer", "NEXT", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
+            return _this;
         }
-    }
-    CGNextCommand.commandString = "CG";
+        CGNextCommand.commandString = "CG";
+        return CGNextCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGNextCommand = CGNextCommand;
     /**
      *
      */
-    class CGRemoveCommand extends AbstractLayerWithCgFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "flashLayer", "REMOVE", new ParameterValidator.PositiveNumberValidatorBetween(0))
+    var CGRemoveCommand = (function (_super) {
+        __extends(CGRemoveCommand, _super);
+        function CGRemoveCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "flashLayer", "REMOVE", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
+            return _this;
         }
-    }
-    CGRemoveCommand.commandString = "CG";
+        CGRemoveCommand.commandString = "CG";
+        return CGRemoveCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGRemoveCommand = CGRemoveCommand;
     /**
      *
      */
-    class CGClearCommand extends AbstractLayerWithCgFallbackCommand {
+    var CGClearCommand = (function (_super) {
+        __extends(CGClearCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("CLEAR"))
+        function CGClearCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("CLEAR"))
             ];
-            this._objectParams["keyword"] = "CLEAR";
+            _this._objectParams["keyword"] = "CLEAR";
+            return _this;
         }
-    }
-    CGClearCommand.commandString = "CG";
+        CGClearCommand.commandString = "CG";
+        return CGClearCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGClearCommand = CGClearCommand;
     /**
      *
      */
-    class CGUpdateCommand extends AbstractLayerWithCgFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "flashLayer", "UPDATE", new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(required, "data", null, new ParameterValidator.TemplateDataValidator())
+    var CGUpdateCommand = (function (_super) {
+        __extends(CGUpdateCommand, _super);
+        function CGUpdateCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "flashLayer", "UPDATE", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(required, "data", null, new ParamValidators_1.Validation.TemplateDataValidator())
             ];
+            return _this;
         }
-    }
-    CGUpdateCommand.commandString = "CG";
+        CGUpdateCommand.commandString = "CG";
+        return CGUpdateCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGUpdateCommand = CGUpdateCommand;
     /**
-     * @todo: 201 response code, parsing???????
+     *@todo: 201 response code, parsing???????
      */
-    class CGInvokeCommand extends AbstractLayerWithCgFallbackCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "flashLayer", "INVOKE", new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(required, "method", null, new ParameterValidator.StringValidator())
+    var CGInvokeCommand = (function (_super) {
+        __extends(CGInvokeCommand, _super);
+        function CGInvokeCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "flashLayer", "INVOKE", new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(required, "method", null, new ParamValidators_1.Validation.StringValidator())
             ];
-            this.responseProtocol = new ResponseSignature(201);
+            _this.responseProtocol = new ResponseSignature(201);
+            return _this;
         }
-    }
-    CGInvokeCommand.commandString = "CG";
+        CGInvokeCommand.commandString = "CG";
+        return CGInvokeCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGInvokeCommand = CGInvokeCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * IMixer
- * @todo: switch 201/202 based on mode
+ *IMixer
+ *@todo: switch 201/202 based on mode
  */
 (function (AMCP) {
     /**
      *
      */
-    class MixerKeyerCommand extends AbstractLayerWithFallbackCommand {
+    var MixerKeyerCommand = (function (_super) {
+        __extends(MixerKeyerCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("KEYER")),
-                new ParamSignature(optional, "keyer", null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerKeyerCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("KEYER")),
+                new ParamSignature(optional, "keyer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults(1, 0)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "KEYER";
+            _this._objectParams["keyword"] = "KEYER";
+            return _this;
         }
-    }
-    MixerKeyerCommand.commandString = "MIXER";
-    MixerKeyerCommand.protocolLogic = [
-        new Depends("defer", "keyer")
-    ];
+        MixerKeyerCommand.commandString = "MIXER";
+        MixerKeyerCommand.protocolLogic = [
+            new Depends("defer", "keyer")
+        ];
+        return MixerKeyerCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerKeyerCommand = MixerKeyerCommand;
     /**
-     * @todo	Validata/clamp lamp number range?
+     *@todo	Validata/clamp lamp number range?
      */
-    class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
+    var MixerChromaCommand = (function (_super) {
+        __extends(MixerChromaCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("CHROMA")),
-                new ParamSignature(optional, "keyer", null, new ParameterValidator.EnumValidator(Enum.Chroma)),
-                new ParamSignature(optional, "threshold", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "softness", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "spill", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerChromaCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("CHROMA")),
+                new ParamSignature(optional, "keyer", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Chroma)),
+                new ParamSignature(optional, "threshold", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "softness", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "spill", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "CHROMA";
+            _this._objectParams["keyword"] = "CHROMA";
+            return _this;
         }
-    }
-    MixerChromaCommand.commandString = "MIXER";
-    MixerChromaCommand.protocolLogic = [
-        new Coupled("threshold", "softness"),
-        new Depends("keyer", "threshold").ifNot("keyer", Enum.Chroma.NONE),
-        new Depends("spill", "threshold"),
-        new Depends("transitionDuration", "keyer"),
-        new Depends("transitionEasing", "keyer"),
-        new Depends("defer", "threshold").ifNot("keyer", Enum.Chroma.NONE)
-    ];
+        MixerChromaCommand.commandString = "MIXER";
+        MixerChromaCommand.protocolLogic = [
+            new Coupled("threshold", "softness"),
+            new Depends("keyer", "threshold").ifNot("keyer", ServerStateEnum_1.Enum.Chroma.NONE),
+            new Depends("spill", "threshold"),
+            new Depends("transitionDuration", "keyer"),
+            new Depends("transitionEasing", "keyer"),
+            new Depends("defer", "threshold").ifNot("keyer", ServerStateEnum_1.Enum.Chroma.NONE)
+        ];
+        return MixerChromaCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerChromaCommand = MixerChromaCommand;
     /**
      *
      */
-    class MixerBlendCommand extends AbstractLayerWithFallbackCommand {
+    var MixerBlendCommand = (function (_super) {
+        __extends(MixerBlendCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("BLEND")),
-                new ParamSignature(optional, "blendmode", null, new ParameterValidator.EnumValidator(Enum.BlendMode)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerBlendCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("BLEND")),
+                new ParamSignature(optional, "blendmode", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.BlendMode)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "BLEND";
+            _this._objectParams["keyword"] = "BLEND";
+            return _this;
         }
-    }
-    MixerBlendCommand.commandString = "MIXER";
-    MixerBlendCommand.protocolLogic = [
-        new Depends("defer", "blendmode")
-    ];
+        MixerBlendCommand.commandString = "MIXER";
+        MixerBlendCommand.protocolLogic = [
+            new Depends("defer", "blendmode")
+        ];
+        return MixerBlendCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerBlendCommand = MixerBlendCommand;
     /**
      *
      */
-    class MixerOpacityCommand extends AbstractLayerWithFallbackCommand {
+    var MixerOpacityCommand = (function (_super) {
+        __extends(MixerOpacityCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("OPACITY")),
-                new ParamSignature(optional, "opacity", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerOpacityCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("OPACITY")),
+                new ParamSignature(optional, "opacity", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "OPACITY";
+            _this._objectParams["keyword"] = "OPACITY";
+            return _this;
         }
-    }
-    MixerOpacityCommand.commandString = "MIXER";
-    MixerOpacityCommand.protocolLogic = [
-        new Depends("transitionDuration", "opacity"),
-        new Depends("transitionEasing", "opacity"),
-        new Depends("defer", "opacity")
-    ];
+        MixerOpacityCommand.commandString = "MIXER";
+        MixerOpacityCommand.protocolLogic = [
+            new Depends("transitionDuration", "opacity"),
+            new Depends("transitionEasing", "opacity"),
+            new Depends("defer", "opacity")
+        ];
+        return MixerOpacityCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerOpacityCommand = MixerOpacityCommand;
     /**
      *
      */
-    class MixerBrightnessCommand extends AbstractLayerWithFallbackCommand {
+    var MixerBrightnessCommand = (function (_super) {
+        __extends(MixerBrightnessCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("BRIGHTNESS")),
-                new ParamSignature(optional, "brightness", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerBrightnessCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("BRIGHTNESS")),
+                new ParamSignature(optional, "brightness", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "BRIGHTNESS";
+            _this._objectParams["keyword"] = "BRIGHTNESS";
+            return _this;
         }
-    }
-    MixerBrightnessCommand.commandString = "MIXER";
-    MixerBrightnessCommand.protocolLogic = [
-        new Depends("transitionDuration", "brightness"),
-        new Depends("transitionEasing", "brightness"),
-        new Depends("defer", "brightness")
-    ];
+        MixerBrightnessCommand.commandString = "MIXER";
+        MixerBrightnessCommand.protocolLogic = [
+            new Depends("transitionDuration", "brightness"),
+            new Depends("transitionEasing", "brightness"),
+            new Depends("defer", "brightness")
+        ];
+        return MixerBrightnessCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerBrightnessCommand = MixerBrightnessCommand;
     /**
      *
      */
-    class MixerSaturationCommand extends AbstractLayerWithFallbackCommand {
+    var MixerSaturationCommand = (function (_super) {
+        __extends(MixerSaturationCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("SATURATION")),
-                new ParamSignature(optional, "saturation", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerSaturationCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("SATURATION")),
+                new ParamSignature(optional, "saturation", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "SATURATION";
+            _this._objectParams["keyword"] = "SATURATION";
+            return _this;
         }
-    }
-    MixerSaturationCommand.commandString = "MIXER";
-    MixerSaturationCommand.protocolLogic = [
-        new Depends("transitionDuration", "saturation"),
-        new Depends("transitionEasing", "saturation"),
-        new Depends("defer", "saturation")
-    ];
+        MixerSaturationCommand.commandString = "MIXER";
+        MixerSaturationCommand.protocolLogic = [
+            new Depends("transitionDuration", "saturation"),
+            new Depends("transitionEasing", "saturation"),
+            new Depends("defer", "saturation")
+        ];
+        return MixerSaturationCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerSaturationCommand = MixerSaturationCommand;
     /**
      *
      */
-    class MixerContrastCommand extends AbstractLayerWithFallbackCommand {
+    var MixerContrastCommand = (function (_super) {
+        __extends(MixerContrastCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("CONTRAST")),
-                new ParamSignature(optional, "contrast", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerContrastCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("CONTRAST")),
+                new ParamSignature(optional, "contrast", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "CONTRAST";
+            _this._objectParams["keyword"] = "CONTRAST";
+            return _this;
         }
-    }
-    MixerContrastCommand.commandString = "MIXER";
-    MixerContrastCommand.protocolLogic = [
-        new Depends("transitionDuration", "contrast"),
-        new Depends("transitionEasing", "contrast"),
-        new Depends("defer", "contrast")
-    ];
+        MixerContrastCommand.commandString = "MIXER";
+        MixerContrastCommand.protocolLogic = [
+            new Depends("transitionDuration", "contrast"),
+            new Depends("transitionEasing", "contrast"),
+            new Depends("defer", "contrast")
+        ];
+        return MixerContrastCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerContrastCommand = MixerContrastCommand;
     /**
-     * @todo:	verify `gamma` value range
+     *@todo:	verify `gamma` value range
      */
-    class MixerLevelsCommand extends AbstractLayerWithFallbackCommand {
+    var MixerLevelsCommand = (function (_super) {
+        __extends(MixerLevelsCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("LEVELS")),
-                new ParamSignature(optional, "minInput", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "maxInput", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "gamma", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "minOutput", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "maxOutput", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerLevelsCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("LEVELS")),
+                new ParamSignature(optional, "minInput", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "maxInput", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "gamma", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "minOutput", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "maxOutput", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "LEVELS";
+            _this._objectParams["keyword"] = "LEVELS";
+            return _this;
         }
-    }
-    MixerLevelsCommand.commandString = "MIXER";
-    MixerLevelsCommand.protocolLogic = [
-        new Coupled("minInput", "maxInput", "gamma", "minOutput", "maxOutput"),
-        new Depends("transitionDuration", "minInput"),
-        new Depends("transitionEasing", "minInput"),
-        new Depends("defer", "minInput")
-    ];
+        MixerLevelsCommand.commandString = "MIXER";
+        MixerLevelsCommand.protocolLogic = [
+            new Coupled("minInput", "maxInput", "gamma", "minOutput", "maxOutput"),
+            new Depends("transitionDuration", "minInput"),
+            new Depends("transitionEasing", "minInput"),
+            new Depends("defer", "minInput")
+        ];
+        return MixerLevelsCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerLevelsCommand = MixerLevelsCommand;
     /**
      *
      */
-    class MixerFillCommand extends AbstractLayerWithFallbackCommand {
+    var MixerFillCommand = (function (_super) {
+        __extends(MixerFillCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("FILL")),
-                new ParamSignature(optional, "x", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "y", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "xScale", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "yScale", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerFillCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("FILL")),
+                new ParamSignature(optional, "x", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "y", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "xScale", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "yScale", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "FILL";
+            _this._objectParams["keyword"] = "FILL";
+            return _this;
         }
-    }
-    MixerFillCommand.commandString = "MIXER";
-    MixerFillCommand.protocolLogic = [
-        new Coupled("x", "y", "xScale", "yScale"),
-        new Depends("transitionDuration", "x"),
-        new Depends("transitionEasing", "x"),
-        new Depends("defer", "x")
-    ];
+        MixerFillCommand.commandString = "MIXER";
+        MixerFillCommand.protocolLogic = [
+            new Coupled("x", "y", "xScale", "yScale"),
+            new Depends("transitionDuration", "x"),
+            new Depends("transitionEasing", "x"),
+            new Depends("defer", "x")
+        ];
+        return MixerFillCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerFillCommand = MixerFillCommand;
     /**
      *
      */
-    class MixerClipCommand extends AbstractLayerWithFallbackCommand {
+    var MixerClipCommand = (function (_super) {
+        __extends(MixerClipCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("CLIP")),
-                new ParamSignature(optional, "x", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "y", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "width", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "height", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerClipCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("CLIP")),
+                new ParamSignature(optional, "x", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "y", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "width", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "height", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "CLIP";
+            _this._objectParams["keyword"] = "CLIP";
+            return _this;
         }
-    }
-    MixerClipCommand.commandString = "MIXER";
-    MixerClipCommand.protocolLogic = [
-        new Coupled("x", "y", "width", "height"),
-        new Depends("transitionDuration", "x"),
-        new Depends("transitionEasing", "x"),
-        new Depends("defer", "x")
-    ];
+        MixerClipCommand.commandString = "MIXER";
+        MixerClipCommand.protocolLogic = [
+            new Coupled("x", "y", "width", "height"),
+            new Depends("transitionDuration", "x"),
+            new Depends("transitionEasing", "x"),
+            new Depends("defer", "x")
+        ];
+        return MixerClipCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerClipCommand = MixerClipCommand;
     /**
      *
      */
-    class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
+    var MixerAnchorCommand = (function (_super) {
+        __extends(MixerAnchorCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("ANCHOR")),
-                new ParamSignature(optional, "x", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "y", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerAnchorCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("ANCHOR")),
+                new ParamSignature(optional, "x", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "y", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "ANCHOR";
+            _this._objectParams["keyword"] = "ANCHOR";
+            return _this;
         }
-    }
-    MixerAnchorCommand.commandString = "MIXER";
-    MixerAnchorCommand.protocolLogic = [
-        new Coupled("x", "y"),
-        new Depends("transitionDuration", "x"),
-        new Depends("transitionEasing", "x"),
-        new Depends("defer", "x")
-    ];
+        MixerAnchorCommand.commandString = "MIXER";
+        MixerAnchorCommand.protocolLogic = [
+            new Coupled("x", "y"),
+            new Depends("transitionDuration", "x"),
+            new Depends("transitionEasing", "x"),
+            new Depends("defer", "x")
+        ];
+        return MixerAnchorCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerAnchorCommand = MixerAnchorCommand;
     /**
      *
      */
-    class MixerCropCommand extends AbstractLayerWithFallbackCommand {
+    var MixerCropCommand = (function (_super) {
+        __extends(MixerCropCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("CROP")),
-                new ParamSignature(optional, "left", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "top", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "right", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "bottom", null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerCropCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("CROP")),
+                new ParamSignature(optional, "left", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "top", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "right", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "bottom", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0, 1)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "CROP";
+            _this._objectParams["keyword"] = "CROP";
+            return _this;
         }
-    }
-    MixerCropCommand.commandString = "MIXER";
-    MixerCropCommand.protocolLogic = [
-        new Coupled("left", "top", "right", "bottom"),
-        new Depends("transitionDuration", "x"),
-        new Depends("transitionEasing", "x"),
-        new Depends("defer", "x")
-    ];
+        MixerCropCommand.commandString = "MIXER";
+        MixerCropCommand.protocolLogic = [
+            new Coupled("left", "top", "right", "bottom"),
+            new Depends("transitionDuration", "x"),
+            new Depends("transitionEasing", "x"),
+            new Depends("defer", "x")
+        ];
+        return MixerCropCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerCropCommand = MixerCropCommand;
     /**
      *
      */
-    class MixerRotationCommand extends AbstractLayerWithFallbackCommand {
+    var MixerRotationCommand = (function (_super) {
+        __extends(MixerRotationCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("ROTATION")),
-                new ParamSignature(optional, "rotation", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerRotationCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("ROTATION")),
+                new ParamSignature(optional, "rotation", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "ROTATION";
+            _this._objectParams["keyword"] = "ROTATION";
+            return _this;
         }
-    }
-    MixerRotationCommand.commandString = "MIXER";
-    MixerRotationCommand.protocolLogic = [
-        new Depends("transitionDuration", "rotation"),
-        new Depends("transitionEasing", "rotation"),
-        new Depends("defer", "rotation")
-    ];
+        MixerRotationCommand.commandString = "MIXER";
+        MixerRotationCommand.protocolLogic = [
+            new Depends("transitionDuration", "rotation"),
+            new Depends("transitionEasing", "rotation"),
+            new Depends("defer", "rotation")
+        ];
+        return MixerRotationCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerRotationCommand = MixerRotationCommand;
     /**
      *
      */
-    class MixerPerspectiveCommand extends AbstractLayerWithFallbackCommand {
+    var MixerPerspectiveCommand = (function (_super) {
+        __extends(MixerPerspectiveCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("PERSPECTIVE")),
-                new ParamSignature(optional, "topLeftX", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "topLeftY", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "topRightX", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "topRightY", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "bottomRightX", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "bottomRightY", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "bottomLeftX", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "bottomLeftY", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.NumberValidator()),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerPerspectiveCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("PERSPECTIVE")),
+                new ParamSignature(optional, "topLeftX", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "topLeftY", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "topRightX", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "topRightY", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "bottomRightX", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "bottomRightY", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "bottomLeftX", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "bottomLeftY", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.NumberValidator()),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "PERSPECTIVE";
+            _this._objectParams["keyword"] = "PERSPECTIVE";
+            return _this;
         }
-    }
-    MixerPerspectiveCommand.commandString = "MIXER";
-    MixerPerspectiveCommand.protocolLogic = [
-        new Coupled("topLeftX", "topLeftY", "topRightX", "topRightY", "bottomRightX", "bottomRightY", "bottomLeftX", "bottomLeftY"),
-        new Depends("transitionDuration", "topLeftX"),
-        new Depends("transitionEasing", "topLeftX"),
-        new Depends("defer", "topLeftX")
-    ];
+        MixerPerspectiveCommand.commandString = "MIXER";
+        MixerPerspectiveCommand.protocolLogic = [
+            new Coupled("topLeftX", "topLeftY", "topRightX", "topRightY", "bottomRightX", "bottomRightY", "bottomLeftX", "bottomLeftY"),
+            new Depends("transitionDuration", "topLeftX"),
+            new Depends("transitionEasing", "topLeftX"),
+            new Depends("defer", "topLeftX")
+        ];
+        return MixerPerspectiveCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerPerspectiveCommand = MixerPerspectiveCommand;
     /**
      *
      */
-    class MixerMipmapCommand extends AbstractLayerWithFallbackCommand {
+    var MixerMipmapCommand = (function (_super) {
+        __extends(MixerMipmapCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("MIPMAP")),
-                new ParamSignature(optional, "mipmap", null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerMipmapCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("MIPMAP")),
+                new ParamSignature(optional, "mipmap", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults(1, 0)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "MIPMAP";
+            _this._objectParams["keyword"] = "MIPMAP";
+            return _this;
         }
-    }
-    MixerMipmapCommand.commandString = "MIXER";
-    MixerMipmapCommand.protocolLogic = [
-        new Depends("defer", "mipmap")
-    ];
+        MixerMipmapCommand.commandString = "MIXER";
+        MixerMipmapCommand.protocolLogic = [
+            new Depends("defer", "mipmap")
+        ];
+        return MixerMipmapCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerMipmapCommand = MixerMipmapCommand;
     /**
      *
      */
-    class MixerVolumeCommand extends AbstractLayerWithFallbackCommand {
+    var MixerVolumeCommand = (function (_super) {
+        __extends(MixerVolumeCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("VOLUME")),
-                new ParamSignature(optional, "volume", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerVolumeCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("VOLUME")),
+                new ParamSignature(optional, "volume", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "VOLUME";
+            _this._objectParams["keyword"] = "VOLUME";
+            return _this;
         }
-    }
-    MixerVolumeCommand.commandString = "MIXER";
-    MixerVolumeCommand.protocolLogic = [
-        new Depends("transitionDuration", "volume"),
-        new Depends("transitionEasing", "volume"),
-        new Depends("defer", "volume")
-    ];
+        MixerVolumeCommand.commandString = "MIXER";
+        MixerVolumeCommand.protocolLogic = [
+            new Depends("transitionDuration", "volume"),
+            new Depends("transitionEasing", "volume"),
+            new Depends("defer", "volume")
+        ];
+        return MixerVolumeCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.MixerVolumeCommand = MixerVolumeCommand;
     /**
      *
      */
-    class MixerMastervolumeCommand extends AbstractChannelCommand {
+    var MixerMastervolumeCommand = (function (_super) {
+        __extends(MixerMastervolumeCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("MASTERVOLUME")),
-                new ParamSignature(optional, "mastervolume", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerMastervolumeCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("MASTERVOLUME")),
+                new ParamSignature(optional, "mastervolume", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "MASTERVOLUME";
+            _this._objectParams["keyword"] = "MASTERVOLUME";
+            return _this;
         }
-    }
-    MixerMastervolumeCommand.commandString = "MIXER";
-    MixerMastervolumeCommand.protocolLogic = [
-        new Depends("transitionDuration", "mastervolume"),
-        new Depends("transitionEasing", "mastervolume"),
-        new Depends("defer", "mastervolume")
-    ];
+        MixerMastervolumeCommand.commandString = "MIXER";
+        MixerMastervolumeCommand.protocolLogic = [
+            new Depends("transitionDuration", "mastervolume"),
+            new Depends("transitionEasing", "mastervolume"),
+            new Depends("defer", "mastervolume")
+        ];
+        return MixerMastervolumeCommand;
+    }(AbstractChannelCommand));
     AMCP.MixerMastervolumeCommand = MixerMastervolumeCommand;
     /**
      *
      */
-    class MixerStraightAlphaOutputCommand extends AbstractChannelCommand {
+    var MixerStraightAlphaOutputCommand = (function (_super) {
+        __extends(MixerStraightAlphaOutputCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("STRAIGHT_ALPHA_OUTPUT")),
-                new ParamSignature(optional, "straight_alpha_output", null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerStraightAlphaOutputCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("STRAIGHT_ALPHA_OUTPUT")),
+                new ParamSignature(optional, "straight_alpha_output", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults(1, 0)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "STRAIGHT_ALPHA_OUTPUT";
+            _this._objectParams["keyword"] = "STRAIGHT_ALPHA_OUTPUT";
+            return _this;
         }
-    }
-    MixerStraightAlphaOutputCommand.commandString = "MIXER";
-    MixerStraightAlphaOutputCommand.protocolLogic = [
-        new Depends("defer", "straight_alpha_output")
-    ];
+        MixerStraightAlphaOutputCommand.commandString = "MIXER";
+        MixerStraightAlphaOutputCommand.protocolLogic = [
+            new Depends("defer", "straight_alpha_output")
+        ];
+        return MixerStraightAlphaOutputCommand;
+    }(AbstractChannelCommand));
     AMCP.MixerStraightAlphaOutputCommand = MixerStraightAlphaOutputCommand;
     /**
      *
      */
-    class MixerGridCommand extends AbstractChannelCommand {
+    var MixerGridCommand = (function (_super) {
+        __extends(MixerGridCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("GRID")),
-                new ParamSignature(optional, "resolution", null, new ParameterValidator.PositiveNumberRoundValidatorBetween(1)),
-                new ParamSignature(optional, "transitionDuration", null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-                new ParamSignature(optional, "transitionEasing", null, new ParameterValidator.EnumValidator(Enum.Ease)),
-                new ParamSignature(optional, "defer", null, new ParameterValidator.BooleanValidatorWithDefaults("DEFER"))
+        function MixerGridCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("GRID")),
+                new ParamSignature(optional, "resolution", null, new ParamValidators_1.Validation.PositiveNumberRoundValidatorBetween(1)),
+                new ParamSignature(optional, "transitionDuration", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0)),
+                new ParamSignature(optional, "transitionEasing", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Ease)),
+                new ParamSignature(optional, "defer", null, new ParamValidators_1.Validation.BooleanValidatorWithDefaults("DEFER"))
             ];
-            this._objectParams["keyword"] = "GRID";
+            _this._objectParams["keyword"] = "GRID";
+            return _this;
         }
-    }
-    MixerGridCommand.commandString = "MIXER";
+        MixerGridCommand.commandString = "MIXER";
+        return MixerGridCommand;
+    }(AbstractChannelCommand));
     AMCP.MixerGridCommand = MixerGridCommand;
     /**
      *
      */
-    class MixerCommitCommand extends AbstractChannelCommand {
+    var MixerCommitCommand = (function (_super) {
+        __extends(MixerCommitCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("COMMIT"))
+        function MixerCommitCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("COMMIT"))
             ];
-            this._objectParams["keyword"] = "COMMIT";
+            _this._objectParams["keyword"] = "COMMIT";
+            return _this;
         }
-    }
-    MixerCommitCommand.commandString = "MIXER";
+        MixerCommitCommand.commandString = "MIXER";
+        return MixerCommitCommand;
+    }(AbstractChannelCommand));
     AMCP.MixerCommitCommand = MixerCommitCommand;
     /**
      *
      */
-    class MixerClearCommand extends AbstractChannelOrLayerCommand {
+    var MixerClearCommand = (function (_super) {
+        __extends(MixerClearCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "keyword", null, new ParameterValidator.KeywordValidator("CLEAR"))
+        function MixerClearCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "keyword", null, new ParamValidators_1.Validation.KeywordValidator("CLEAR"))
             ];
-            this._objectParams["keyword"] = "CLEAR";
+            _this._objectParams["keyword"] = "CLEAR";
+            return _this;
         }
-    }
-    MixerClearCommand.commandString = "MIXER";
+        MixerClearCommand.commandString = "MIXER";
+        return MixerClearCommand;
+    }(AbstractChannelOrLayerCommand));
     AMCP.MixerClearCommand = MixerClearCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * IChannel
+ *IChannel
  */
 (function (AMCP) {
     /**
      *
      */
-    class ClearCommand extends AbstractChannelOrLayerCommand {
-    }
-    ClearCommand.commandString = "CLEAR";
+    var ClearCommand = (function (_super) {
+        __extends(ClearCommand, _super);
+        function ClearCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ClearCommand.commandString = "CLEAR";
+        return ClearCommand;
+    }(AbstractChannelOrLayerCommand));
     AMCP.ClearCommand = ClearCommand;
     /**
      *
      */
-    class CallCommand extends AbstractLayerWithFallbackCommand {
-    }
-    CallCommand.commandString = "CALL";
+    var CallCommand = (function (_super) {
+        __extends(CallCommand, _super);
+        function CallCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        CallCommand.commandString = "CALL";
+        return CallCommand;
+    }(AbstractLayerWithFallbackCommand));
     AMCP.CallCommand = CallCommand;
     /**
      *
      */
-    class SwapCommand extends AbstractChannelOrLayerCommand {
+    var SwapCommand = (function (_super) {
+        __extends(SwapCommand, _super);
         /**
          *
          */
-        constructor() {
-            super("1-1"); // @todo: foo
+        function SwapCommand() {
+            return _super.call(this, "1-1") || this;
             // @todo: custom parameters dual layerOrchannel with 1 optional param
             // overloading in method
         }
-    }
-    SwapCommand.commandString = "SWAP";
+        SwapCommand.commandString = "SWAP";
+        return SwapCommand;
+    }(AbstractChannelOrLayerCommand));
     AMCP.SwapCommand = SwapCommand;
     /**
      *
      */
-    class AddCommand extends AbstractChannelCommand {
-    }
-    AddCommand.commandString = "ADD";
+    var AddCommand = (function (_super) {
+        __extends(AddCommand, _super);
+        function AddCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        AddCommand.commandString = "ADD";
+        return AddCommand;
+    }(AbstractChannelCommand));
     AMCP.AddCommand = AddCommand;
     /**
      *
      */
-    class RemoveCommand extends AbstractChannelOrLayerCommand {
-    }
-    RemoveCommand.commandString = "REMOVE";
+    var RemoveCommand = (function (_super) {
+        __extends(RemoveCommand, _super);
+        function RemoveCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        RemoveCommand.commandString = "REMOVE";
+        return RemoveCommand;
+    }(AbstractChannelOrLayerCommand));
     AMCP.RemoveCommand = RemoveCommand;
     /**
      *
      */
-    class PrintCommand extends AbstractChannelCommand {
-    }
-    PrintCommand.commandString = "PRINT";
+    var PrintCommand = (function (_super) {
+        __extends(PrintCommand, _super);
+        function PrintCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        PrintCommand.commandString = "PRINT";
+        return PrintCommand;
+    }(AbstractChannelCommand));
     AMCP.PrintCommand = PrintCommand;
     /**
      *
      */
-    class SetCommand extends AbstractChannelCommand {
-    }
-    SetCommand.commandString = "SET";
+    var SetCommand = (function (_super) {
+        __extends(SetCommand, _super);
+        function SetCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        SetCommand.commandString = "SET";
+        return SetCommand;
+    }(AbstractChannelCommand));
     AMCP.SetCommand = SetCommand;
     /**
      *
      */
-    class LockCommand extends AbstractChannelCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "action", null, new ParameterValidator.EnumValidator(Enum.Lock)),
-                new ParamSignature(optional, "phrase", null, new ParameterValidator.StringValidator())
+    var LockCommand = (function (_super) {
+        __extends(LockCommand, _super);
+        function LockCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "action", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Lock)),
+                new ParamSignature(optional, "phrase", null, new ParamValidators_1.Validation.StringValidator())
             ];
+            return _this;
         }
-    }
-    LockCommand.commandString = "LOCK";
-    LockCommand.protocolLogic = [
-        new Depends("action", "phrase").ifNot("action", Enum.Lock.RELEASE)
-    ];
+        LockCommand.commandString = "LOCK";
+        LockCommand.protocolLogic = [
+            new Depends("action", "phrase").ifNot("action", ServerStateEnum_1.Enum.Lock.RELEASE)
+        ];
+        return LockCommand;
+    }(AbstractChannelCommand));
     AMCP.LockCommand = LockCommand;
     /**
      *
      */
-    class ChannelGridCommand extends AbstractCommand {
-    }
-    ChannelGridCommand.commandString = "CHANNEL_GRID";
+    var ChannelGridCommand = (function (_super) {
+        __extends(ChannelGridCommand, _super);
+        function ChannelGridCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ChannelGridCommand.commandString = "CHANNEL_GRID";
+        return ChannelGridCommand;
+    }(AbstractCommand));
     AMCP.ChannelGridCommand = ChannelGridCommand;
     /**
      *
      */
-    class GlGCCommand extends AbstractCommand {
-    }
-    GlGCCommand.commandString = "GL GC";
+    var GlGCCommand = (function (_super) {
+        __extends(GlGCCommand, _super);
+        function GlGCCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        GlGCCommand.commandString = "GL GC";
+        return GlGCCommand;
+    }(AbstractCommand));
     AMCP.GlGCCommand = GlGCCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * IData
+ *IData
  */
 (function (AMCP) {
     /**
      *
      */
-    class DataStoreCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "fileName", null, new ParameterValidator.DataNameValidator()),
-                new ParamSignature(required, "data", null, new ParameterValidator.TemplateDataValidator())
+    var DataStoreCommand = (function (_super) {
+        __extends(DataStoreCommand, _super);
+        function DataStoreCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.DataNameValidator()),
+                new ParamSignature(required, "data", null, new ParamValidators_1.Validation.TemplateDataValidator())
             ];
+            return _this;
         }
-    }
-    DataStoreCommand.commandString = "DATA STORE";
+        DataStoreCommand.commandString = "DATA STORE";
+        return DataStoreCommand;
+    }(AbstractCommand));
     AMCP.DataStoreCommand = DataStoreCommand;
     /**
      *
      */
-    class DataRetrieveCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "fileName", null, new ParameterValidator.DataNameValidator())
+    var DataRetrieveCommand = (function (_super) {
+        __extends(DataRetrieveCommand, _super);
+        function DataRetrieveCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.DataNameValidator())
             ];
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.DataValidator, ResponseParser.DataParser);
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.DataValidator, ResponseParsers_1.Response.DataParser);
+            return _this;
         }
-    }
-    DataRetrieveCommand.commandString = "DATA RETRIEVE";
+        DataRetrieveCommand.commandString = "DATA RETRIEVE";
+        return DataRetrieveCommand;
+    }(AbstractCommand));
     AMCP.DataRetrieveCommand = DataRetrieveCommand;
     /**
      *
      */
-    class DataListCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.DataListParser);
+    var DataListCommand = (function (_super) {
+        __extends(DataListCommand, _super);
+        function DataListCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.DataListParser);
+            return _this;
         }
-    }
-    DataListCommand.commandString = "DATA LIST";
+        DataListCommand.commandString = "DATA LIST";
+        return DataListCommand;
+    }(AbstractCommand));
     AMCP.DataListCommand = DataListCommand;
     /**
      *
      */
-    class DataRemoveCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "fileName", null, new ParameterValidator.DataNameValidator())
+    var DataRemoveCommand = (function (_super) {
+        __extends(DataRemoveCommand, _super);
+        function DataRemoveCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.DataNameValidator())
             ];
+            return _this;
         }
-    }
-    DataRemoveCommand.commandString = "DATA REMOVE";
+        DataRemoveCommand.commandString = "DATA REMOVE";
+        return DataRemoveCommand;
+    }(AbstractCommand));
     AMCP.DataRemoveCommand = DataRemoveCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * IThumbnail
+ *IThumbnail
  */
 (function (AMCP) {
     /**
      *
      */
-    class ThumbnailListCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
+    var ThumbnailListCommand = (function (_super) {
+        __extends(ThumbnailListCommand, _super);
+        function ThumbnailListCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
             // responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser);
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ThumbnailListParser);
+            return _this;
         }
-    }
-    ThumbnailListCommand.commandString = "THUMBNAIL LIST";
+        ThumbnailListCommand.commandString = "THUMBNAIL LIST";
+        return ThumbnailListCommand;
+    }(AbstractCommand));
     AMCP.ThumbnailListCommand = ThumbnailListCommand;
     /**
      *
      */
-    class ThumbnailRetrieveCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "fileName", null, new ParameterValidator.ClipNameValidator())
+    var ThumbnailRetrieveCommand = (function (_super) {
+        __extends(ThumbnailRetrieveCommand, _super);
+        function ThumbnailRetrieveCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.ClipNameValidator())
             ];
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.Base64Validator, ResponseParser.ThumbnailParser);
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.Base64Validator, ResponseParsers_1.Response.ThumbnailParser);
+            return _this;
         }
-    }
-    ThumbnailRetrieveCommand.commandString = "THUMBNAIL RETRIEVE";
+        ThumbnailRetrieveCommand.commandString = "THUMBNAIL RETRIEVE";
+        return ThumbnailRetrieveCommand;
+    }(AbstractCommand));
     AMCP.ThumbnailRetrieveCommand = ThumbnailRetrieveCommand;
     /**
      *
      */
-    class ThumbnailGenerateCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "fileName", null, new ParameterValidator.ClipNameValidator())
+    var ThumbnailGenerateCommand = (function (_super) {
+        __extends(ThumbnailGenerateCommand, _super);
+        function ThumbnailGenerateCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.ClipNameValidator())
             ];
+            return _this;
         }
-    }
-    ThumbnailGenerateCommand.commandString = "THUMBNAIL GENERATE";
+        ThumbnailGenerateCommand.commandString = "THUMBNAIL GENERATE";
+        return ThumbnailGenerateCommand;
+    }(AbstractCommand));
     AMCP.ThumbnailGenerateCommand = ThumbnailGenerateCommand;
     /**
      *
      */
-    class ThumbnailGenerateAllCommand extends AbstractCommand {
-    }
-    ThumbnailGenerateAllCommand.commandString = "THUMBNAIL GENERATE_ALL";
+    var ThumbnailGenerateAllCommand = (function (_super) {
+        __extends(ThumbnailGenerateAllCommand, _super);
+        function ThumbnailGenerateAllCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ThumbnailGenerateAllCommand.commandString = "THUMBNAIL GENERATE_ALL";
+        return ThumbnailGenerateAllCommand;
+    }(AbstractCommand));
     AMCP.ThumbnailGenerateAllCommand = ThumbnailGenerateAllCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * IInfo
+ *IInfo
  */
 (function (AMCP) {
     /**
      *
      */
-    class CinfCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "fileName", null, new ParameterValidator.ClipNameValidator())
+    var CinfCommand = (function (_super) {
+        __extends(CinfCommand, _super);
+        function CinfCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "fileName", null, new ParamValidators_1.Validation.ClipNameValidator())
             ];
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.CinfParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.CinfParser);
+            return _this;
         }
-    }
-    CinfCommand.commandString = "CINF";
+        CinfCommand.commandString = "CINF";
+        return CinfCommand;
+    }(AbstractCommand));
     AMCP.CinfCommand = CinfCommand;
     /**
      *
      */
-    class ClsCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser);
+    var ClsCommand = (function (_super) {
+        __extends(ClsCommand, _super);
+        function ClsCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
+            return _this;
         }
-    }
-    ClsCommand.commandString = "CLS";
+        ClsCommand.commandString = "CLS";
+        return ClsCommand;
+    }(AbstractCommand));
     AMCP.ClsCommand = ClsCommand;
     /**
      *
      */
-    class FlsCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser);
+    var FlsCommand = (function (_super) {
+        __extends(FlsCommand, _super);
+        function FlsCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
+            return _this;
         }
-    }
-    FlsCommand.commandString = "FLS";
+        FlsCommand.commandString = "FLS";
+        return FlsCommand;
+    }(AbstractCommand));
     AMCP.FlsCommand = FlsCommand;
     /**
      *
      */
-    class TlsCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser);
+    var TlsCommand = (function (_super) {
+        __extends(TlsCommand, _super);
+        function TlsCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ContentParser);
+            return _this;
         }
-    }
-    TlsCommand.commandString = "TLS";
+        TlsCommand.commandString = "TLS";
+        return TlsCommand;
+    }(AbstractCommand));
     AMCP.TlsCommand = TlsCommand;
     /**
      *
      */
-    class VersionCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(optional, "component", null, new ParameterValidator.EnumValidator(Enum.Version))
+    var VersionCommand = (function (_super) {
+        __extends(VersionCommand, _super);
+        function VersionCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, "component", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Version))
             ];
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.VersionParser);
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.StringValidator, ResponseParsers_1.Response.VersionParser);
+            return _this;
         }
-    }
-    VersionCommand.commandString = "VERSION";
+        VersionCommand.commandString = "VERSION";
+        return VersionCommand;
+    }(AbstractCommand));
     AMCP.VersionCommand = VersionCommand;
     /**
      *
      */
-    class InfoCommand extends AbstractOrChannelOrLayerCommand {
+    var InfoCommand = (function (_super) {
+        __extends(InfoCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ChannelParser);
-            if (this.channel && this.channel > -1) {
-                this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser);
+        function InfoCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.ChannelParser);
+            if (_this.channel && _this.channel > -1) {
+                _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoParser);
             }
+            return _this;
         }
-    }
-    InfoCommand.commandString = "INFO";
+        InfoCommand.commandString = "INFO";
+        return InfoCommand;
+    }(AbstractOrChannelOrLayerCommand));
     AMCP.InfoCommand = InfoCommand;
     /**
      *
      */
-    class InfoTemplateCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(required, "template", null, new ParameterValidator.TemplateNameValidator())
+    var InfoTemplateCommand = (function (_super) {
+        __extends(InfoTemplateCommand, _super);
+        function InfoTemplateCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "template", null, new ParamValidators_1.Validation.TemplateNameValidator())
             ];
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoTemplateParser);
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoTemplateParser);
+            return _this;
         }
-    }
-    InfoTemplateCommand.commandString = "INFO TEMPLATE";
+        InfoTemplateCommand.commandString = "INFO TEMPLATE";
+        return InfoTemplateCommand;
+    }(AbstractCommand));
     AMCP.InfoTemplateCommand = InfoTemplateCommand;
     /**
      *
      */
-    class InfoConfigCommand extends AbstractCommand {
+    var InfoConfigCommand = (function (_super) {
+        __extends(InfoConfigCommand, _super);
         /**
          *
          */
-        constructor(params, context) {
-            super(params, context);
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.ConfigParser);
+        function InfoConfigCommand(params, context) {
+            var _this = _super.call(this, params, context) || this;
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.ConfigParser);
+            return _this;
         }
-    }
-    InfoConfigCommand.commandString = "INFO CONFIG";
+        InfoConfigCommand.commandString = "INFO CONFIG";
+        return InfoConfigCommand;
+    }(AbstractCommand));
     AMCP.InfoConfigCommand = InfoConfigCommand;
     /**
      *
      */
-    class InfoPathsCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoPathsParser);
+    var InfoPathsCommand = (function (_super) {
+        __extends(InfoPathsCommand, _super);
+        function InfoPathsCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoPathsParser);
+            return _this;
         }
-    }
-    InfoPathsCommand.commandString = "INFO PATHS";
+        InfoPathsCommand.commandString = "INFO PATHS";
+        return InfoPathsCommand;
+    }(AbstractCommand));
     AMCP.InfoPathsCommand = InfoPathsCommand;
     /**
      *
      */
-    class InfoSystemCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoSystemParser);
+    var InfoSystemCommand = (function (_super) {
+        __extends(InfoSystemCommand, _super);
+        function InfoSystemCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoSystemParser);
+            return _this;
         }
-    }
-    InfoSystemCommand.commandString = "INFO SYSTEM";
+        InfoSystemCommand.commandString = "INFO SYSTEM";
+        return InfoSystemCommand;
+    }(AbstractCommand));
     AMCP.InfoSystemCommand = InfoSystemCommand;
     /**
      *
      */
-    class InfoServerCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoServerParser);
+    var InfoServerCommand = (function (_super) {
+        __extends(InfoServerCommand, _super);
+        function InfoServerCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoServerParser);
+            return _this;
         }
-    }
-    InfoServerCommand.commandString = "INFO SERVER";
+        InfoServerCommand.commandString = "INFO SERVER";
+        return InfoServerCommand;
+    }(AbstractCommand));
     AMCP.InfoServerCommand = InfoServerCommand;
     /**
      *
      */
-    class InfoQueuesCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoQueuesParser);
+    var InfoQueuesCommand = (function (_super) {
+        __extends(InfoQueuesCommand, _super);
+        function InfoQueuesCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoQueuesParser);
+            return _this;
         }
-    }
-    InfoQueuesCommand.commandString = "INFO QUEUES";
+        InfoQueuesCommand.commandString = "INFO QUEUES";
+        return InfoQueuesCommand;
+    }(AbstractCommand));
     AMCP.InfoQueuesCommand = InfoQueuesCommand;
     /**
      *
      */
-    class InfoThreadsCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.InfoThreadsParser);
+    var InfoThreadsCommand = (function (_super) {
+        __extends(InfoThreadsCommand, _super);
+        function InfoThreadsCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.InfoThreadsParser);
+            return _this;
         }
-    }
-    InfoThreadsCommand.commandString = "INFO THREADS";
+        InfoThreadsCommand.commandString = "INFO THREADS";
+        return InfoThreadsCommand;
+    }(AbstractCommand));
     AMCP.InfoThreadsCommand = InfoThreadsCommand;
     /**
      *
      */
-    class InfoDelayCommand extends AbstractChannelOrLayerCommand {
+    var InfoDelayCommand = (function (_super) {
+        __extends(InfoDelayCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "delay", null, new ParameterValidator.KeywordValidator("DELAY"))
+        function InfoDelayCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "delay", null, new ParamValidators_1.Validation.KeywordValidator("DELAY"))
             ];
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoDelayParser);
-            this._objectParams["delay"] = "DELAY";
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.InfoDelayParser);
+            _this._objectParams["delay"] = "DELAY";
+            return _this;
         }
-    }
-    InfoDelayCommand.commandString = "INFO";
+        InfoDelayCommand.commandString = "INFO";
+        return InfoDelayCommand;
+    }(AbstractChannelOrLayerCommand));
     AMCP.InfoDelayCommand = InfoDelayCommand;
     /**
-     * @todo: response validator/parser
+     *@todo: response validator/parser
      */
-    class CGInfoCommand extends AbstractLayerWithCgFallbackCommand {
+    var CGInfoCommand = (function (_super) {
+        __extends(CGInfoCommand, _super);
         /**
          *
          */
-        constructor(params) {
-            super(params);
-            this.paramProtocol = [
-                new ParamSignature(required, "info", null, new ParameterValidator.KeywordValidator("INFO")),
-                new ParamSignature(optional, "flashLayer", null, new ParameterValidator.PositiveNumberValidatorBetween(0))
+        function CGInfoCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, "info", null, new ParamValidators_1.Validation.KeywordValidator("INFO")),
+                new ParamSignature(optional, "flashLayer", null, new ParamValidators_1.Validation.PositiveNumberValidatorBetween(0))
             ];
-            this.responseProtocol = new ResponseSignature(201);
-            this._objectParams["info"] = "INFO";
+            _this.responseProtocol = new ResponseSignature(201);
+            _this._objectParams["info"] = "INFO";
+            return _this;
         }
-    }
-    CGInfoCommand.commandString = "CG";
+        CGInfoCommand.commandString = "CG";
+        return CGInfoCommand;
+    }(AbstractLayerWithCgFallbackCommand));
     AMCP.CGInfoCommand = CGInfoCommand;
     /**
      *
      */
-    class GlInfoCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.GLParser);
+    var GlInfoCommand = (function (_super) {
+        __extends(GlInfoCommand, _super);
+        function GlInfoCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.XMLValidator, ResponseParsers_1.Response.GLParser);
+            return _this;
         }
-    }
-    GlInfoCommand.commandString = "GL INFO";
+        GlInfoCommand.commandString = "GL INFO";
+        return GlInfoCommand;
+    }(AbstractCommand));
     AMCP.GlInfoCommand = GlInfoCommand;
     /**
      *
      */
-    class LogLevelCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(optional, "level", null, new ParameterValidator.EnumValidator(Enum.LogLevel))
+    var LogLevelCommand = (function (_super) {
+        __extends(LogLevelCommand, _super);
+        function LogLevelCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, "level", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.LogLevel))
             ];
+            return _this;
         }
-    }
-    LogLevelCommand.commandString = "LOG LEVEL";
+        LogLevelCommand.commandString = "LOG LEVEL";
+        return LogLevelCommand;
+    }(AbstractCommand));
     AMCP.LogLevelCommand = LogLevelCommand;
     /**
-     * @protocol	Needs either `calltrace` or `communication` parameter.
+     *@protocol	Needs either `calltrace` or `communication` parameter.
      */
-    class LogCategoryCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(optional, "calltrace", Enum.LogCategory.CALLTRACE.value, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-                new ParamSignature(optional, "communication", Enum.LogCategory.COMMUNICATION.value, new ParameterValidator.BooleanValidatorWithDefaults(1, 0))
+    var LogCategoryCommand = (function (_super) {
+        __extends(LogCategoryCommand, _super);
+        function LogCategoryCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, "calltrace", ServerStateEnum_1.Enum.LogCategory.CALLTRACE.value, new ParamValidators_1.Validation.BooleanValidatorWithDefaults(1, 0)),
+                new ParamSignature(optional, "communication", ServerStateEnum_1.Enum.LogCategory.COMMUNICATION.value, new ParamValidators_1.Validation.BooleanValidatorWithDefaults(1, 0))
             ];
+            return _this;
         }
-    }
-    LogCategoryCommand.commandString = "LOG CATEGORY";
-    LogCategoryCommand.protocolLogic = [
-        new OneOf("calltrace", "communication")
-    ];
+        LogCategoryCommand.commandString = "LOG CATEGORY";
+        LogCategoryCommand.protocolLogic = [
+            new OneOf("calltrace", "communication")
+        ];
+        return LogCategoryCommand;
+    }(AbstractCommand));
     AMCP.LogCategoryCommand = LogCategoryCommand;
     /**
      *
      */
-    class DiagCommand extends AbstractCommand {
-    }
-    DiagCommand.commandString = "DIAG";
+    var DiagCommand = (function (_super) {
+        __extends(DiagCommand, _super);
+        function DiagCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        DiagCommand.commandString = "DIAG";
+        return DiagCommand;
+    }(AbstractCommand));
     AMCP.DiagCommand = DiagCommand;
     /**
-     * @todo: mixed mode!!!!
-     * 202/201
+     *@todo: mixed mode!!!!
+     *202/201
      */
-    class HelpCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(optional, "command", null, new ParameterValidator.EnumValidator(Enum.Command))
+    var HelpCommand = (function (_super) {
+        __extends(HelpCommand, _super);
+        function HelpCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, "command", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Command))
             ];
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.HelpParser);
+            return _this;
         }
-    }
-    HelpCommand.commandString = "HELP";
+        HelpCommand.commandString = "HELP";
+        return HelpCommand;
+    }(AbstractCommand));
     AMCP.HelpCommand = HelpCommand;
     /**
      *
      */
-    class HelpProducerCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(optional, "producer", null, new ParameterValidator.EnumValidator(Enum.Producer))
+    var HelpProducerCommand = (function (_super) {
+        __extends(HelpProducerCommand, _super);
+        function HelpProducerCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, "producer", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Producer))
             ];
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.HelpParser);
+            return _this;
         }
-    }
-    HelpProducerCommand.commandString = "HELP PRODUCER";
+        HelpProducerCommand.commandString = "HELP PRODUCER";
+        return HelpProducerCommand;
+    }(AbstractCommand));
     AMCP.HelpProducerCommand = HelpProducerCommand;
     /**
      *
      */
-    class HelpConsumerCommand extends AbstractCommand {
-        constructor() {
-            super(...arguments);
-            this.paramProtocol = [
-                new ParamSignature(optional, "consumer", null, new ParameterValidator.EnumValidator(Enum.Consumer))
+    var HelpConsumerCommand = (function (_super) {
+        __extends(HelpConsumerCommand, _super);
+        function HelpConsumerCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, "consumer", null, new ParamValidators_1.Validation.EnumValidator(ServerStateEnum_1.Enum.Consumer))
             ];
-            this.responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser);
+            _this.responseProtocol = new ResponseSignature(200, ResponseValidators_1.Response.ListValidator, ResponseParsers_1.Response.HelpParser);
+            return _this;
         }
-    }
-    HelpConsumerCommand.commandString = "HELP CONSUMER";
+        HelpConsumerCommand.commandString = "HELP CONSUMER";
+        return HelpConsumerCommand;
+    }(AbstractCommand));
     AMCP.HelpConsumerCommand = HelpConsumerCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
 /**
- * IOperation
+ *IOperation
  */
 (function (AMCP) {
     /**
-     * @todo: response
+     *@todo: response
      */
-    class ByeCommand extends AbstractCommand {
-    }
-    ByeCommand.commandString = "BYE";
+    var ByeCommand = (function (_super) {
+        __extends(ByeCommand, _super);
+        function ByeCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ByeCommand.commandString = "BYE";
+        return ByeCommand;
+    }(AbstractCommand));
     AMCP.ByeCommand = ByeCommand;
     /**
-     * @todo: response
+     *@todo: response
      */
-    class KillCommand extends AbstractCommand {
-    }
-    KillCommand.commandString = "KILL";
+    var KillCommand = (function (_super) {
+        __extends(KillCommand, _super);
+        function KillCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        KillCommand.commandString = "KILL";
+        return KillCommand;
+    }(AbstractCommand));
     AMCP.KillCommand = KillCommand;
     /**
-     * @todo: response
+     *@todo: response
      */
-    class RestartCommand extends AbstractCommand {
-    }
-    RestartCommand.commandString = "RESTART";
+    var RestartCommand = (function (_super) {
+        __extends(RestartCommand, _super);
+        function RestartCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        RestartCommand.commandString = "RESTART";
+        return RestartCommand;
+    }(AbstractCommand));
     AMCP.RestartCommand = RestartCommand;
-})(AMCP || (AMCP = {}));
+})(AMCP = exports.AMCP || (exports.AMCP = {}));

@@ -1,5 +1,5 @@
 export declare namespace Response {
-    /** */
+    /***/
     class CasparCGPaths {
         media: string;
         data: string;
@@ -8,33 +8,33 @@ export declare namespace Response {
         thumbnail: string;
         font?: string | undefined;
         root: string;
-        /** */
+        /***/
         readonly thumbnails: string;
-        /** */
+        /***/
         readonly absoluteMedia: string;
-        /** */
+        /***/
         readonly absoluteData: string;
-        /** */
+        /***/
         readonly absoluteLog: string;
-        /** */
+        /***/
         readonly absoluteTemplate: string;
-        /** */
+        /***/
         readonly absoluteThumbnail: string;
-        /** */
+        /***/
         readonly absoluteThumbnails: string;
-        /** */
+        /***/
         readonly absoluteFont: string | undefined;
-        /** */
+        /***/
         private absolutePath(relativeOrAbsolutePath);
-        /** */
+        /***/
         static ensureTrailingSlash(path: string): string;
     }
-    /** */
+    /***/
     class ChannelRate {
         channelRate: number;
         frameRate: number;
         isInterlaced: boolean;
-        /** */
+        /***/
         constructor(rateExpression: string);
     }
     /**
@@ -59,9 +59,9 @@ export declare namespace Response {
          */
         parse(data: any): Object;
     }
-    /** */
+    /***/
     class ConfigParser extends AbstractParser implements IResponseParser {
-        /** */
+        /***/
         parse(data: Object): Object;
     }
     /**

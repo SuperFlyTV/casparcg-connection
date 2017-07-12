@@ -1,21 +1,24 @@
-export var Event;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Event;
 (function (Event) {
     /**
      *
      */
-    class BaseEvent {
+    var BaseEvent = (function () {
         /**
          *
          */
-        constructor(params) {
+        function BaseEvent(params) {
             this._val = params;
         }
         /**
          *
          */
-        valueOf() {
+        BaseEvent.prototype.valueOf = function () {
             return this._val;
-        }
-    }
+        };
+        return BaseEvent;
+    }());
     Event.BaseEvent = BaseEvent;
-})(Event || (Event = {}));
+})(Event = exports.Event || (exports.Event = {}));

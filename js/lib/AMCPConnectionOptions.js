@@ -1,12 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  *
  */
-export var Options;
+var Options;
 (function (Options) {
     /**
      *
      */
-    let QueueMode;
+    var QueueMode;
     (function (QueueMode) {
         // SALVO 		= 1,
         QueueMode[QueueMode["SEQUENTIAL"] = 2] = "SEQUENTIAL";
@@ -15,19 +17,19 @@ export var Options;
     /**
      *
      */
-    let ServerVersion;
+    var ServerVersion;
     (function (ServerVersion) {
         ServerVersion[ServerVersion["V2xx"] = 2000] = "V2xx";
         ServerVersion[ServerVersion["V207"] = 2007] = "V207";
         ServerVersion[ServerVersion["V21x"] = 2100] = "V21x";
         ServerVersion[ServerVersion["V210"] = 2110] = "V210";
     })(ServerVersion = Options.ServerVersion || (Options.ServerVersion = {}));
-})(Options || (Options = {}));
+})(Options = exports.Options || (exports.Options = {}));
 /**
  *
  */
-export class ConnectionOptions {
-    constructor(hostOrOptions, port) {
+var ConnectionOptions = (function () {
+    function ConnectionOptions(hostOrOptions, port) {
         this.host = "localhost";
         this.port = 5250;
         this.autoConnect = true;
@@ -47,8 +49,8 @@ export class ConnectionOptions {
         // if object
         if (hostOrOptions && typeof hostOrOptions === "object") {
             if (hostOrOptions.hasOwnProperty("host") && hostOrOptions.host !== undefined) {
-                let host = hostOrOptions.host;
-                let dnsValidation = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(host);
+                var host = hostOrOptions.host;
+                var dnsValidation = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(host);
                 if (dnsValidation) {
                     delete hostOrOptions["host"];
                     // host
@@ -62,7 +64,7 @@ export class ConnectionOptions {
                 }
             }
             // @todo: object assign
-            for (let key in hostOrOptions) {
+            for (var key in hostOrOptions) {
                 if (!hostOrOptions.hasOwnProperty(key)) {
                     continue;
                 }
@@ -74,7 +76,7 @@ export class ConnectionOptions {
         }
         // else
         if (typeof hostOrOptions === "string") {
-            let dnsValidation = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(hostOrOptions.toString());
+            var dnsValidation = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(hostOrOptions.toString());
             if (dnsValidation) {
                 // host
                 if (!!dnsValidation[1]) {
@@ -90,4 +92,6 @@ export class ConnectionOptions {
             }
         }
     }
-}
+    return ConnectionOptions;
+}());
+exports.ConnectionOptions = ConnectionOptions;

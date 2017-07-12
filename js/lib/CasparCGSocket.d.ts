@@ -107,7 +107,7 @@ export declare class CasparCGSocket extends NodeJS.EventEmitter implements ICasp
      */
     private _onTimeout();
     /**
-     * @todo:::
+     *@todo:::
      */
     private _onLookup();
     /**
@@ -119,11 +119,11 @@ export declare class CasparCGSocket extends NodeJS.EventEmitter implements ICasp
      */
     private _parseResponseGroups(i);
     /**
-     * @todo:::
+     *@todo:::
      */
     private _onError(error);
     /**
-     * @todo:::
+     *@todo:::
      */
     private _onDrain();
     /**

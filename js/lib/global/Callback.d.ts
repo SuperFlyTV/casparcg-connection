@@ -31,7 +31,7 @@ export declare namespace Callback {
         (value: IAMCPResponse): void;
     }
     /**
-     * @todo implement
+     *@todo implement
      */
     interface IErrorCallback {
         (error: Error): void;

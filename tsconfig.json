@@ -16,7 +16,8 @@
 		"lib": [
 			"es5",
 			"es6",
-			"scripthost"
+			"scripthost",
+			"dom"
 		]
 	},
 	"exclude": [

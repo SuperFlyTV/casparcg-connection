@@ -1,66 +1,113 @@
-import * as Path from "path";
-import { Options as OptionsNS } from "./AMCPConnectionOptions";
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Path = require("path");
+var AMCPConnectionOptions_1 = require("./AMCPConnectionOptions");
 // Options NS
-var ServerVersion = OptionsNS.ServerVersion;
+var ServerVersion = AMCPConnectionOptions_1.Options.ServerVersion;
 // config NS
-import { Config as ConfigNS } from "./Config";
-var CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
-export var Response;
+var Config_1 = require("./Config");
+var CasparCGConfig = Config_1.Config.Intermediate.CasparCGConfig;
+var Response;
 (function (Response) {
-    /** */
-    class CasparCGPaths {
-        /** */
-        get thumbnails() {
-            return this.thumbnail;
+    /***/
+    var CasparCGPaths = (function () {
+        function CasparCGPaths() {
         }
-        /** */
-        get absoluteMedia() {
-            return this.absolutePath(this.media);
-        }
-        /** */
-        get absoluteData() {
-            return this.absolutePath(this.data);
-        }
-        /** */
-        get absoluteLog() {
-            return this.absolutePath(this.log);
-        }
-        /** */
-        get absoluteTemplate() {
-            return this.absolutePath(this.template);
-        }
-        /** */
-        get absoluteThumbnail() {
-            return this.absolutePath(this.thumbnail);
-        }
-        /** */
-        get absoluteThumbnails() {
-            return this.absolutePath(this.thumbnails);
-        }
-        /** */
-        get absoluteFont() {
-            return this.font ? this.absolutePath(this.font) : undefined;
-        }
-        /** */
-        absolutePath(relativeOrAbsolutePath) {
+        Object.defineProperty(CasparCGPaths.prototype, "thumbnails", {
+            /***/
+            get: function () {
+                return this.thumbnail;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CasparCGPaths.prototype, "absoluteMedia", {
+            /***/
+            get: function () {
+                return this.absolutePath(this.media);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CasparCGPaths.prototype, "absoluteData", {
+            /***/
+            get: function () {
+                return this.absolutePath(this.data);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CasparCGPaths.prototype, "absoluteLog", {
+            /***/
+            get: function () {
+                return this.absolutePath(this.log);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CasparCGPaths.prototype, "absoluteTemplate", {
+            /***/
+            get: function () {
+                return this.absolutePath(this.template);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CasparCGPaths.prototype, "absoluteThumbnail", {
+            /***/
+            get: function () {
+                return this.absolutePath(this.thumbnail);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CasparCGPaths.prototype, "absoluteThumbnails", {
+            /***/
+            get: function () {
+                return this.absolutePath(this.thumbnails);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(CasparCGPaths.prototype, "absoluteFont", {
+            /***/
+            get: function () {
+                return this.font ? this.absolutePath(this.font) : undefined;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /***/
+        CasparCGPaths.prototype.absolutePath = function (relativeOrAbsolutePath) {
             if (relativeOrAbsolutePath.match(/\:\\|\:\//)) {
                 return CasparCGPaths.ensureTrailingSlash(relativeOrAbsolutePath);
             }
             return CasparCGPaths.ensureTrailingSlash(Path.join(this.root, relativeOrAbsolutePath));
-        }
-        /** */
-        static ensureTrailingSlash(path) {
+        };
+        /***/
+        CasparCGPaths.ensureTrailingSlash = function (path) {
             return ((path.slice(-1) === "/" || path.slice(-1) === "\\") ? path : path + "/");
-        }
-    }
+        };
+        return CasparCGPaths;
+    }());
     Response.CasparCGPaths = CasparCGPaths;
-    /** */
-    class ChannelRate {
-        /** */
-        constructor(rateExpression) {
+    /***/
+    var ChannelRate = (function () {
+        /***/
+        function ChannelRate(rateExpression) {
             this.isInterlaced = rateExpression.indexOf("i") > -1;
-            let rateMatch = rateExpression.match(/[0-9]+$/);
-            let rate = 0;
+            var rateMatch = rateExpression.match(/[0-9]+$/);
+            var rate = 0;
             if (rateMatch) {
                 rate = +rateMatch[0];
             }
@@ -83,200 +130,268 @@ export var Response;
                 this.frameRate = this.isInterlaced ? rate / 200 : this.channelRate;
             }
         }
-    }
+        return ChannelRate;
+    }());
     Response.ChannelRate = ChannelRate;
     /**
      *
      */
-    class AbstractParser {
-    }
+    var AbstractParser = (function () {
+        function AbstractParser() {
+        }
+        return AbstractParser;
+    }());
     Response.AbstractParser = AbstractParser;
     /**
      *
      */
-    class ChannelParser extends AbstractParser {
+    var ChannelParser = (function (_super) {
+        __extends(ChannelParser, _super);
+        function ChannelParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        ChannelParser.prototype.parse = function (data) {
             data = [].concat(data);
-            let result = [];
-            data.forEach((channel) => {
-                let components = channel.toString().split(/\s|,/);
-                let i = +components.shift();
-                let format = components.shift() || "";
-                let rates = new ChannelRate(format);
+            var result = [];
+            data.forEach(function (channel) {
+                var components = channel.toString().split(/\s|,/);
+                var i = +components.shift();
+                var format = components.shift() || "";
+                var rates = new ChannelRate(format);
                 result.push({ channel: i, format: format.toLowerCase(), channelRate: rates.channelRate, frameRate: rates.frameRate, interlaced: rates.isInterlaced });
             });
             if (result.length > 0) {
                 return result;
             }
             return {};
-        }
-    }
+        };
+        return ChannelParser;
+    }(AbstractParser));
     Response.ChannelParser = ChannelParser;
-    /** */
-    class ConfigParser extends AbstractParser {
-        /** */
-        parse(data) {
-            let serverVersion;
+    /***/
+    var ConfigParser = (function (_super) {
+        __extends(ConfigParser, _super);
+        function ConfigParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /***/
+        ConfigParser.prototype.parse = function (data) {
+            var serverVersion;
             if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
                 serverVersion = ServerVersion.V210;
             }
             else {
                 serverVersion = ServerVersion.V207;
             }
-            let configResult = new CasparCGConfig(serverVersion);
+            var configResult = new CasparCGConfig(serverVersion);
             configResult.import(data);
             return configResult;
-        }
-    }
+        };
+        return ConfigParser;
+    }(AbstractParser));
     Response.ConfigParser = ConfigParser;
     /**
      *
      */
-    class DataParser extends AbstractParser {
+    var DataParser = (function (_super) {
+        __extends(DataParser, _super);
+        function DataParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        DataParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return DataParser;
+    }(AbstractParser));
     Response.DataParser = DataParser;
     /**
      *
      */
-    class DataListParser extends AbstractParser {
+    var DataListParser = (function (_super) {
+        __extends(DataListParser, _super);
+        function DataListParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        DataListParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return DataListParser;
+    }(AbstractParser));
     Response.DataListParser = DataListParser;
     /**
      *
      */
-    class InfoTemplateParser extends AbstractParser {
+    var InfoTemplateParser = (function (_super) {
+        __extends(InfoTemplateParser, _super);
+        function InfoTemplateParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        InfoTemplateParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return InfoTemplateParser;
+    }(AbstractParser));
     Response.InfoTemplateParser = InfoTemplateParser;
     /**
      *
      */
-    class HelpParser extends AbstractParser {
+    var HelpParser = (function (_super) {
+        __extends(HelpParser, _super);
+        function HelpParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        HelpParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return HelpParser;
+    }(AbstractParser));
     Response.HelpParser = HelpParser;
     /**
      *
      */
-    class GLParser extends AbstractParser {
+    var GLParser = (function (_super) {
+        __extends(GLParser, _super);
+        function GLParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        GLParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return GLParser;
+    }(AbstractParser));
     Response.GLParser = GLParser;
     /**
      *
      */
-    class InfoDelayParser extends AbstractParser {
+    var InfoDelayParser = (function (_super) {
+        __extends(InfoDelayParser, _super);
+        function InfoDelayParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        InfoDelayParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return InfoDelayParser;
+    }(AbstractParser));
     Response.InfoDelayParser = InfoDelayParser;
     /**
      *
      */
-    class InfoParser extends AbstractParser {
+    var InfoParser = (function (_super) {
+        __extends(InfoParser, _super);
+        function InfoParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        InfoParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return InfoParser;
+    }(AbstractParser));
     Response.InfoParser = InfoParser;
     /**
      *
      */
-    class InfoThreadsParser extends AbstractParser {
+    var InfoThreadsParser = (function (_super) {
+        __extends(InfoThreadsParser, _super);
+        function InfoThreadsParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        InfoThreadsParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return InfoThreadsParser;
+    }(AbstractParser));
     Response.InfoThreadsParser = InfoThreadsParser;
     /**
      *
      */
-    class ThumbnailParser extends AbstractParser {
+    var ThumbnailParser = (function (_super) {
+        __extends(ThumbnailParser, _super);
+        function ThumbnailParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
-            return `data:image/png;base64,${data}`;
-        }
-    }
+        ThumbnailParser.prototype.parse = function (data) {
+            return "data:image/png;base64," + data;
+        };
+        return ThumbnailParser;
+    }(AbstractParser));
     Response.ThumbnailParser = ThumbnailParser;
     /**
      *
      */
-    class VersionParser extends AbstractParser {
+    var VersionParser = (function (_super) {
+        __extends(VersionParser, _super);
+        function VersionParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        VersionParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return VersionParser;
+    }(AbstractParser));
     Response.VersionParser = VersionParser;
     /**
      *
      */
-    class ContentParser extends AbstractParser {
-        static parseTimeString(timeDateString) {
-            timeDateString = timeDateString.replace(/[tT]/g, "");
-            let year = parseInt(timeDateString.slice(0, 4));
-            let month = parseInt(timeDateString.slice(4, 6));
-            let date = parseInt(timeDateString.slice(6, 8));
-            let hours = parseInt(timeDateString.slice(8, 10));
-            let minutes = parseInt(timeDateString.slice(10, 12));
-            let seconds = parseInt(timeDateString.slice(12, 14));
-            return new Date(year, month, date, hours, minutes, seconds).getTime();
+    var ContentParser = (function (_super) {
+        __extends(ContentParser, _super);
+        function ContentParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
+        ContentParser.parseTimeString = function (timeDateString) {
+            timeDateString = timeDateString.replace(/[tT]/g, "");
+            var year = parseInt(timeDateString.slice(0, 4));
+            var month = parseInt(timeDateString.slice(4, 6));
+            var date = parseInt(timeDateString.slice(6, 8));
+            var hours = parseInt(timeDateString.slice(8, 10));
+            var minutes = parseInt(timeDateString.slice(10, 12));
+            var seconds = parseInt(timeDateString.slice(12, 14));
+            return new Date(year, month, date, hours, minutes, seconds).getTime();
+        };
         /**
          *
          */
-        parse(data) {
-            return data.map((i) => {
-                let components = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
+        ContentParser.prototype.parse = function (data) {
+            return data.map(function (i) {
+                var components = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
                 if (components === null) {
                     return null;
                 }
-                let name = components[1].replace(/\\/g, "/");
-                let typeData = components[2].split(/\s+/);
+                var name = components[1].replace(/\\/g, "/");
+                var typeData = components[2].split(/\s+/);
                 // is font
                 if (typeData.length === 1) {
                     return { name: name,
@@ -302,10 +417,10 @@ export var Response;
                     };
                 }
                 // is media
-                let frames = parseInt(typeData[3]);
-                let frameRate = 0;
-                let duration = 0;
-                let frameTimeSegments = typeData[4].split("/");
+                var frames = parseInt(typeData[3]);
+                var frameRate = 0;
+                var duration = 0;
+                var frameTimeSegments = typeData[4].split("/");
                 if (frameTimeSegments[0] !== "0") {
                     frameRate = +(parseInt(frameTimeSegments[1]) / parseInt(frameTimeSegments[0])).toFixed(2);
                     duration = Math.round((frames / frameRate) * 100) / 100;
@@ -320,24 +435,29 @@ export var Response;
                     duration: duration
                 };
             });
-        }
-    }
+        };
+        return ContentParser;
+    }(AbstractParser));
     Response.ContentParser = ContentParser;
     /**
  *
  */
-    class ThumbnailListParser extends AbstractParser {
+    var ThumbnailListParser = (function (_super) {
+        __extends(ThumbnailListParser, _super);
+        function ThumbnailListParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
-            return data.map((i) => {
-                let components = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
+        ThumbnailListParser.prototype.parse = function (data) {
+            return data.map(function (i) {
+                var components = i.match(/\"([\s\S]*)\" +([\s\S]*)/);
                 if (components === null) {
                     return null;
                 }
-                let name = components[1].replace(/\\/g, "/");
-                let typeData = components[2].split(/\s+/);
+                var name = components[1].replace(/\\/g, "/");
+                var typeData = components[2].split(/\s+/);
                 return {
                     name: name,
                     type: "thumbnail",
@@ -345,63 +465,83 @@ export var Response;
                     size: parseInt(typeData[1]),
                 };
             });
-        }
-    }
+        };
+        return ThumbnailListParser;
+    }(AbstractParser));
     Response.ThumbnailListParser = ThumbnailListParser;
     /**
      *
      */
-    class CinfParser extends AbstractParser {
+    var CinfParser = (function (_super) {
+        __extends(CinfParser, _super);
+        function CinfParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        CinfParser.prototype.parse = function (data) {
             if (data && Array.isArray(data)) {
-                let components = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/);
+                var components = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/);
                 if (components === null) {
                     return {};
                 }
                 // let name: string = components[1].replace(/\\/g, "/");
-                let typeData = components[2].split(/\s+/);
+                var typeData = components[2].split(/\s+/);
                 return { size: parseInt(typeData[1]), changed: typeData[2], duration: parseInt(typeData[3]), fps: typeData[4] };
             }
             return {};
-        }
-    }
+        };
+        return CinfParser;
+    }(AbstractParser));
     Response.CinfParser = CinfParser;
     /**
      *
      */
-    class InfoQueuesParser extends AbstractParser {
+    var InfoQueuesParser = (function (_super) {
+        __extends(InfoQueuesParser, _super);
+        function InfoQueuesParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        InfoQueuesParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return InfoQueuesParser;
+    }(AbstractParser));
     Response.InfoQueuesParser = InfoQueuesParser;
     /**
         *
      */
-    class InfoServerParser extends AbstractParser {
+    var InfoServerParser = (function (_super) {
+        __extends(InfoServerParser, _super);
+        function InfoServerParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        InfoServerParser.prototype.parse = function (data) {
             return data;
-        }
-    }
+        };
+        return InfoServerParser;
+    }(AbstractParser));
     Response.InfoServerParser = InfoServerParser;
     /**
      *
      */
-    class InfoPathsParser extends AbstractParser {
+    var InfoPathsParser = (function (_super) {
+        __extends(InfoPathsParser, _super);
+        function InfoPathsParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
-            let paths = new CasparCGPaths();
+        InfoPathsParser.prototype.parse = function (data) {
+            var paths = new CasparCGPaths();
             if (data.hasOwnProperty("initial-path")) {
                 paths.root = data["initial-path"];
             }
@@ -427,17 +567,22 @@ export var Response;
                 paths.font = data["font-path"];
             }
             return paths;
-        }
-    }
+        };
+        return InfoPathsParser;
+    }(AbstractParser));
     Response.InfoPathsParser = InfoPathsParser;
     /**
      *
      */
-    class InfoSystemParser extends AbstractParser {
+    var InfoSystemParser = (function (_super) {
+        __extends(InfoSystemParser, _super);
+        function InfoSystemParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
         /**
          *
          */
-        parse(data) {
+        InfoSystemParser.prototype.parse = function (data) {
             // wrap devices in arrays (if single device of a type)
             if (data.hasOwnProperty("decklink") && data["decklink"].hasOwnProperty("device")) {
                 if (!Array.isArray(data["decklink"]["device"])) {
@@ -450,7 +595,8 @@ export var Response;
                 }
             }
             return data;
-        }
-    }
+        };
+        return InfoSystemParser;
+    }(AbstractParser));
     Response.InfoSystemParser = InfoSystemParser;
-})(Response || (Response = {}));
+})(Response = exports.Response || (exports.Response = {}));

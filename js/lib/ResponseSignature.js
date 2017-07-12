@@ -1,23 +1,29 @@
-import { Response as ResponseValidatorNS } from "./ResponseValidators";
-var StatusValidator = ResponseValidatorNS.StatusValidator;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var ResponseValidators_1 = require("./ResponseValidators");
+var StatusValidator = ResponseValidators_1.Response.StatusValidator;
 /**
  *
  */
-export var Response;
+var Response;
 (function (Response) {
     /**
      *
      */
-    class ResponseSignature {
+    var ResponseSignature = (function () {
         /**
          *
          */
         // @todo: change :any to "typeof IResponseValidator" and same for parser
-        constructor(code = 202, validator = StatusValidator, parser = null) {
+        function ResponseSignature(code, validator, parser) {
+            if (code === void 0) { code = 202; }
+            if (validator === void 0) { validator = StatusValidator; }
+            if (parser === void 0) { parser = null; }
             this.code = code;
             this.validator = validator;
             this.parser = parser;
         }
-    }
+        return ResponseSignature;
+    }());
     Response.ResponseSignature = ResponseSignature;
-})(Response || (Response = {}));
+})(Response = exports.Response || (exports.Response = {}));
