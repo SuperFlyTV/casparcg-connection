@@ -1,5 +1,5 @@
-import * as net from "net";
-import * as _ from "highland";
+import *as net from "net";
+import *as _ from "highland";
 import {AMCP, AMCPUtil} from "./AMCP";
 // Command NS
 import {Command as CommandNS} from "./AbstractCommand";
@@ -7,12 +7,12 @@ import IAMCPCommand = CommandNS.IAMCPCommand;
 import IAMCPStatus = CommandNS.IAMCPStatus;
 // Event NS
 import {CasparCGSocketStatusEvent, CasparCGSocketResponseEvent, SocketStatusOptions} from "./event/Events";
-// Param NS 
+// Param NS
 import {Param as ParamNS} from "./ParamSignature";
 import Payload = ParamNS.Payload;
 
 /**
- * 
+ *
  */
 export interface ICasparCGSocket {
 	connected: boolean;
@@ -29,7 +29,7 @@ export interface ICasparCGSocket {
 }
 
 /**
- * 
+ *
  */
 export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSocket {
 	public isRestarting: boolean = false;
@@ -47,7 +47,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	private _parsedResponse: AMCPUtil.CasparCGSocketResponse | undefined;
 
 	/**
-	 * 
+	 *
 	 */
 	public constructor(host: string, port: number, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number) {
 		super();
@@ -65,28 +65,28 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public set autoReconnect(autoReconnect: boolean) {
 		this._autoReconnect = autoReconnect;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public set autoReconnectInterval(autoReconnectInterval: number) {
 		this._reconnectDelay = autoReconnectInterval;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public set autoReconnectAttempts(autoReconnectAttempts: number) {
 		this._reconnectAttempts = autoReconnectAttempts;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public connect(): void {
 		this._client.connect(this._port, this._host);
@@ -96,7 +96,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public disconnect(): void {
 		if (this._client !== undefined) {
@@ -105,7 +105,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private _startReconnection(): void {
 		// create interval if doesn't exist
@@ -116,7 +116,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private _autoReconnection(): void {
 		if (this._autoReconnect) {
@@ -137,7 +137,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private _clearReconnectInterval(): void {
 		// @todo create event telling reconnection ended with result: true/false
@@ -148,7 +148,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public get host(): string{
 		if (this._client) {
@@ -158,7 +158,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public get port(): number{
 		if (this._client) {
@@ -168,7 +168,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public dispose(): void {
 		this._clearReconnectInterval();
@@ -176,7 +176,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public log(args: any): void {
 		// fallback, this method will be remapped to CasparCG.log by CasparCG on instantiation of socket oject
@@ -191,7 +191,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	get socketStatus(): SocketStatusOptions {
 		return {
@@ -200,14 +200,14 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public get reconnecting(): boolean {
 		return this._reconnectInterval !== undefined;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public executeCommand(command: IAMCPCommand): IAMCPCommand {
 		let commandString: string = command.constructor["commandString"] + (command.address ? " " + command.address : "");
@@ -227,8 +227,8 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 		return command;
 	}
 
-	/** 
-	 * 
+	/**
+	 *
 	 */
 	private _onTimeout() {
 		global.clearTimeout(this._commandTimeoutTimer);
@@ -236,14 +236,14 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * @todo:::
+	 *@todo:::
 	 */
 	private _onLookup() {
 		this.log("Socket event lookup");
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private _onConnected() {
 		this.isRestarting = false;
@@ -253,7 +253,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private _parseResponseGroups(i: string): void {
 		global.clearTimeout(this._commandTimeoutTimer);
@@ -291,7 +291,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * @todo:::
+	 *@todo:::
 	 */
 	private _onError(error: Error) {
 		// dispatch error!!!!!
@@ -299,7 +299,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * @todo:::
+	 *@todo:::
 	 */
 	private _onDrain() {
 		// @todo: implement
@@ -307,7 +307,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	private _onClose(hadError: boolean) {
 		this.connected = false;
@@ -322,4 +322,4 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 			this._clearReconnectInterval();
 		}
 	}
-} 
+}

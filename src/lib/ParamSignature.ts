@@ -4,16 +4,16 @@ import AbstractValidator = Validation.AbstractValidator;
 
 
 /**
- * 
+ *
  */
 export namespace Param {
 	/**
-	 * 
+	 *
 	 */
 	export class Optional {
 
 		/**
-		 * 
+		 *
 		 */
 		static valueOf(): boolean {
 			return false;
@@ -21,12 +21,12 @@ export namespace Param {
 	}
 
 	/**
-	 *  
+	 *
 	 */
 	export class Required {
 
 		/**
-		 * 
+		 *
 		 */
 		static valueOf(): boolean {
 			return true;
@@ -34,7 +34,7 @@ export namespace Param {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export interface IParamSignature {
 		required: (Required|Optional);
@@ -47,24 +47,24 @@ export namespace Param {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export type Param = {[k: string]: (string|number|boolean|Object|undefined)};
 	export type Payload = {key: string, value: (string|number|boolean|Object), raw: (string|number|boolean|Object|null)};
 	export type PayloadVO = {[k: string]: Payload};
 
 	/**
-	 * 
+	 *
 	 */
 	export type ParamData = (string|boolean|number|{raw: string|boolean|number, payload: string|boolean|number});
 
 	/**
-	 * 
+	 *
 	 */
 	export type TemplateData = Object|String;
 
 	/**
-	 * 
+	 *
 	 */
 	export class ParamSignature implements IParamSignature {
 		public validation: IValidator;
@@ -72,7 +72,7 @@ export namespace Param {
 		public raw: string | number | boolean | null = null;
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(public required: (Required|Optional),
 					public name: string,
@@ -87,7 +87,7 @@ export namespace Param {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		public get resolved(): boolean {
 			return this.validation.resolved;

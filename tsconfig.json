@@ -10,6 +10,7 @@
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
 		"suppressImplicitAnyIndexErrors": true,
+		"module": "commonjs",
 		"target": "es5",
 		"experimentalDecorators": true,
 		"lib": [

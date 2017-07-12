@@ -3,10 +3,10 @@ import {create as XMLBuilder} from "xmlbuilder";
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
 import ServerVersion = OptionsNS.ServerVersion;
 
-/** */
+/***/
 export namespace Config {
 
-	/** */
+	/***/
 	export namespace Utils {
 
 		export type factoryMembers = "config" | "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host"  | "channel-layout" | "mix-config";
@@ -133,15 +133,15 @@ export namespace Config {
 		}
 	}
 
-	/** */
+	/***/
 	export namespace v2xx {
-		/** */
+		/***/
 		export class CasparCGConfigVO {
 			public channelGrid: boolean = false;
 			public flash: v2xx.Flash = new v2xx.Flash();
 			public templateHosts: Array<v2xx.TemplateHost> = [];
 		}
-		/** */
+		/***/
 		export class Channel {
 			public _type: string = "channel";
 			public videoMode: string = "PAL";		// @todo: literal
@@ -150,12 +150,12 @@ export namespace Config {
 			public channelLayout: string = "stereo";
 		}
 
-		/** */
+		/***/
 		export class Consumer {
 			public _type: string;
 		}
 
-		/** */
+		/***/
 		export class DecklinkConsumer extends Consumer {
 			_type = "decklink";
 			public device: number = 1;
@@ -169,7 +169,7 @@ export namespace Config {
 		}
 
 
-		/** */
+		/***/
 		export class BluefishConsumer extends Consumer {
 			_type = "bluefish";
 			public device: number = 1;
@@ -178,12 +178,12 @@ export namespace Config {
 			public keyOnly: boolean = false;
 		}
 
-		/** */
+		/***/
 		export class SystemAudioConsumer extends Consumer {
 			_type = "system-audio";
 		}
 
-		/** */
+		/***/
 		export class ScreenConsumer extends Consumer {
 			_type = "screen";
 			public device: number = 1;		// @todo: wrong default implemented in caspar, should be 0:::
@@ -196,33 +196,33 @@ export namespace Config {
 			public borderless: boolean = false;
 		}
 
-		/** */
+		/***/
 		export class NewtekIvgaConsumer extends Consumer {
 			_type = "newtek-ivga";
 		}
 
-		/** */
+		/***/
 		export class Controller {
 			public _type: string = "tcp";
 			public port: number | null = null;
 			public protocol: string = "";
 		}
 
-		/** */
+		/***/
 		export class Mixer {
 			public blendModes: boolean = false;
 			public straightAlpha: boolean = false;
 			public mipmappingDefaultOn: boolean = false;
 		}
 
-		/** */
+		/***/
 		export class OscClient {
 			public _type: string = "predefined-client";
 			public address: string = "";
 			public port: number | null = null;
 		}
 
-		/** */
+		/***/
 		export class Thumbnails {
 			public generateThumbnails: boolean = true;
 			public width: number = 256;
@@ -234,12 +234,12 @@ export namespace Config {
 			public videoMode: string = "720p5000";		// @todo: literal
 		}
 
-		/** */
+		/***/
 		export class Flash {
 			bufferDepth: string | number = "auto";
 		}
 
-		/** */
+		/***/
 		export class TemplateHost {
 			public _type: string = "template-host";
 			public videoMode: string = "";				// @todo: literal
@@ -248,19 +248,19 @@ export namespace Config {
 			public height: number | null = null;
 		}
 
-		/**  */
+		/***/
 		export class Osc {
 			public defaultPort: number = 6250;
 			public predefinedClients: Array<OscClient> = [];
 		}
 
-		/** */
+		/***/
 		export const defaultAMCPController: v2xx.Controller = {_type: new v2xx.Controller()._type, port: 5250, protocol: "AMCP"};
 	}
 
-	/** */
+	/***/
 	export namespace v207 {
-		/** */
+		/***/
 		export class CasparCGConfigVO extends v2xx.CasparCGConfigVO {
 			public _version: number;
 			public paths: v207.Paths = new v207.Paths();
@@ -276,12 +276,12 @@ export namespace Config {
 			public audio: v207.Audio = new v207.Audio();
 		}
 
-		/** */
+		/***/
 		export class Channel extends v2xx.Channel {
 			public consumers: Array<v207.Consumer> = [];
 		}
 
-		/** */
+		/***/
 		export class Paths {
 			mediaPath: string = "media\\";
 			logPath: string = "log\\";
@@ -290,32 +290,32 @@ export namespace Config {
 			thumbnailsPath: string = "thumbnails\\";
 		}
 
-		/** */
+		/***/
 		export class Consumer extends v2xx.Consumer {}
 
-		/** */
+		/***/
 		export class DecklinkConsumer extends v2xx.DecklinkConsumer {
 			public customAllocator: boolean = true;
 		}
 
-		/** */
+		/***/
 		export class BluefishConsumer extends v2xx.BluefishConsumer {}
 
-		/** */
+		/***/
 		export class SystemAudioConsumer extends v2xx.SystemAudioConsumer {}
 
-		/** */
+		/***/
 		export class ScreenConsumer extends v2xx.ScreenConsumer {
 			public name: string = "Screen Consumer";
 		}
 
-		/** */
+		/***/
 		export class NewtekIvgaConsumer extends v2xx.NewtekIvgaConsumer {
 			public channelLayout: string = "stereo";
 			public provideSync: boolean = true;
 		}
 
-		/** */
+		/***/
 		export class FileConsumer extends v2xx.Consumer {
 			_type = "file";
 			public path: string = "";
@@ -323,25 +323,25 @@ export namespace Config {
 			public separateKey: boolean = false;
 		}
 
-		/** */
+		/***/
 		export class StreamConsumer extends v2xx.Consumer {
 			_type = "stream";
 			public path: string = "";
 			public args: string = "";
 		}
 
-		/** */
+		/***/
 		export class Thumbnails extends v2xx.Thumbnails {}
 
-		/** */
+		/***/
 		export class Mixer extends v2xx.Mixer {
 			public chromaKey: boolean = false;
 		}
 
-		/**  */
+		/***/
 		export class Osc extends v2xx.Osc {}
 
-		/**  */
+		/***/
 		export class ChannelLayout {
 			public _type: string = "channel-layout";
 			public name: string = "";
@@ -350,7 +350,7 @@ export namespace Config {
 			public channels: string = "";
 		}
 
-		/**  */
+		/***/
 		export class MixConfig {
 			public _type: string = "mix-config";
 			public from: string = "";
@@ -359,18 +359,18 @@ export namespace Config {
 			public mappings: Array<string> = [];
 		}
 
-		/**  */
+		/***/
 		export class Audio {
 			public channelLayouts: Array<v207.ChannelLayout> = [];
 			public mixConfigs: Array<v207.MixConfig> = [];
 		}
 	}
 
-	/** */
+	/***/
 	export namespace v21x {
 		export const defaultLOGController: v2xx.Controller = {_type: new v2xx.Controller()._type, port: 3250, protocol: "LOG"};
 
-		/** */
+		/***/
 		export class CasparCGConfigVO extends v2xx.CasparCGConfigVO {
 			public _version: number;
 			public paths: v21x.Paths = new v21x.Paths();
@@ -388,12 +388,12 @@ export namespace Config {
 			public audio: v21x.Audio = new v21x.Audio();
 		}
 
-		/** */
+		/***/
 		export class Channel extends v2xx.Channel {
 			public consumers: Array<v21x.Consumer> = [];
 		}
 
-		/** */
+		/***/
 		export class Paths {
 			mediaPath: string = "media/";
 			logPath: string = "log/";
@@ -403,30 +403,30 @@ export namespace Config {
 			fontPath: string = "font/";
 		}
 
-		/** */
+		/***/
 		export class Consumer extends v2xx.Consumer {}
 
-		/** */
+		/***/
 		export class DecklinkConsumer extends v2xx.DecklinkConsumer {}
 
-		/** */
+		/***/
 		export class BluefishConsumer extends v2xx.BluefishConsumer {}
 
-		/** */
+		/***/
 		export class SystemAudioConsumer extends v2xx.SystemAudioConsumer {
 			public channelLayout: string = "stereo";
 			public latency: number = 200;
 		}
 
-		/** */
+		/***/
 		export class ScreenConsumer extends v2xx.ScreenConsumer {
 			public interactive: boolean = true;
 		}
 
-		/** */
+		/***/
 		export class NewtekIvgaConsumer extends v2xx.NewtekIvgaConsumer {}
 
-		/** */
+		/***/
 		export class FfmpegConsumer extends v2xx.Consumer {
 			_type = "ffmpeg";
 			public path: string = "";
@@ -435,31 +435,31 @@ export namespace Config {
 			public monoStreams: boolean = false;
 		}
 
-		/** */
+		/***/
 		export class SynctoConsumer extends v2xx.Consumer {
 			_type = "syncto";
 			public channelId: Number | null = null;
 		}
 
-		/** */
+		/***/
 		export class Mixer extends v2xx.Mixer {}
 
-		/**  */
+		/***/
 		export class Thumbnails extends v2xx.Thumbnails {
 			public mipmap: boolean = true;
 		}
 
-		/** */
+		/***/
 		export class Html {
 			remoteDebuggingPort: number | null = null;
 		}
 
-		/**  */
+		/***/
 		export class Osc extends v2xx.Osc {
 			public disableSendToAmcpClients: boolean = false;
 		}
 
-		/**  */
+		/***/
 		export class ChannelLayout {
 			public _type: string = "channel-layout";
 			public name: string = "";
@@ -468,7 +468,7 @@ export namespace Config {
 			public channelOrder: string = "";
 		}
 
-		/**  */
+		/***/
 		export class MixConfig {
 			public _type: string = "mix-config";
 			public fromType: string = "";
@@ -476,25 +476,25 @@ export namespace Config {
 			public mix: string = "";
 		}
 
-		/**  */
+		/***/
 		export class Audio {
 			public channelLayouts: Array<v21x.ChannelLayout> = [];
 			public mixConfigs: Array<v21x.MixConfig> = [];
 		}
 	}
 
-	/** */
+	/***/
 	export namespace Intermediate {
 		import Config207VO = v207.CasparCGConfigVO;
 		import  Config210VO = v21x.CasparCGConfigVO;
 
-		/** */
+		/***/
 		export class Audio {
 			public channelLayouts: Array<v21x.ChannelLayout> = [];
 			public mixConfigs: Array<Intermediate.MixConfig> = [];
 		}
 
-		/**  */
+		/***/
 		export class MixConfig {
 			public _type: string = "mix-config";
 			public fromType: string = "";
@@ -502,12 +502,12 @@ export namespace Config {
 			public mix: {mixType: string, destinations: {[destination: string]: Array<{source: string, expression: string}>}};
 		}
 
-		/** */
-		export class Mixer extends v207.Mixer { 
+		/***/
+		export class Mixer extends v207.Mixer {
 			chromaKey: boolean;
 		}
 
-		/** */
+		/***/
 		export interface ICasparCGConfig {
 			import(configVO: Object): void;
 			importFromV207VO(configVO: Object): void;
@@ -544,7 +544,7 @@ export namespace Config {
 			audio: Intermediate.Audio;
 		}
 
-		/** */
+		/***/
 		export class CasparCGConfig implements ICasparCGConfig {
 			private __version: ServerVersion;
 			public paths: v21x.Paths = new v21x.Paths();
@@ -567,7 +567,7 @@ export namespace Config {
 			public osc: v21x.Osc = new v21x.Osc();
 			public audio: Intermediate.Audio = new Intermediate.Audio();
 
-			/** */
+			/***/
 			public constructor(version: ServerVersion);
 			public constructor(initConfigVO: Config207VO | Config210VO | {});
 			public constructor(initVersionOrConfigVO: Config207VO | Config210VO | {} | ServerVersion) {
@@ -597,7 +597,7 @@ export namespace Config {
 				}
 			}
 
-			/** */
+			/***/
 			public import(configVO: Object): void {
 				if (this.__version === ServerVersion.V207) {
 					this.importFromV207VO(configVO);
@@ -608,7 +608,7 @@ export namespace Config {
 				// @todo: throw error
 			}
 
-			/** */
+			/***/
 			public importFromV207VO(configVO: Object): void {
 				// root level
 				this.importValues(configVO, this, ["log-level", "channel-grid", "auto-deinterlace", "auto-transcode", "pipeline-tokens"]);
@@ -706,7 +706,7 @@ export namespace Config {
 				}
 			}
 
-			/** */
+			/***/
 			public importFromV210VO(configVO: Object): void {
 				// root level
 				this.importValues(configVO, this, ["lockClear-phrase", "log-level", "log-categories", "force-deinterlace", "channel-grid", "accelerator"]);
@@ -801,7 +801,7 @@ export namespace Config {
 				}
 			}
 
-			/** */
+			/***/
 			public get VO(): Config207VO | Config210VO{
 				if (this.__version === ServerVersion.V207) {
 					return this.v207VO;
@@ -811,7 +811,7 @@ export namespace Config {
 				throw new Error("@todo");	// @todo: throw
 			}
 
-			/** */
+			/***/
 			public get v207VO(): Config207VO {
 				// let configVO: Config207VO = {};
 				let configVO: Config207VO = new Config207VO;
@@ -886,7 +886,7 @@ export namespace Config {
 				return configVO;
 			}
 
-			/** */
+			/***/
 			public get v210VO(): Config210VO {
 				let configVO: Config210VO = new Config210VO();
 				configVO._version = this._version;
@@ -954,7 +954,7 @@ export namespace Config {
 				return configVO;
 			}
 
-			/** */
+			/***/
 			public get XML(): Object | null {
 				if (this.__version === ServerVersion.V207) {
 					return this.v207XML;
@@ -964,7 +964,7 @@ export namespace Config {
 				return null; // @todo: throw error
 			}
 
-			/** */
+			/***/
 			public get v207XML(): Object {
 				let xml = XMLBuilder("configuration");
 
@@ -1076,7 +1076,7 @@ export namespace Config {
 				return xml;
 			}
 
-			/** */
+			/***/
 			public get v210XML(): Object {
 				let xml = XMLBuilder("configuration");
 					// paths
@@ -1196,7 +1196,7 @@ export namespace Config {
 					return xml;
 			}
 
-			/** */
+			/***/
 			public get XMLString(): string {
 				if (this.__version === ServerVersion.V207) {
 					return this.v207XMLString;
@@ -1206,22 +1206,22 @@ export namespace Config {
 				return ""; // @todo: throw error
 			}
 
-			/** */
+			/***/
 			public get v207XMLString(): string {
 				return this.v207XML["end"]({pretty: true});
 			}
 
-			/** */
+			/***/
 			public get v210XMLString(): string {
 				return this.v210XML["end"]({pretty: true});
 			}
 
-			/** */
+			/***/
 			public get _version(): ServerVersion {
 				return this.__version;
 			}
 
-			/** */
+			/***/
 			private importAllValues(sourceRoot: Object, destRoot: Object): void {
 				let keys: Array<string> = [];
 				for (let i in sourceRoot) {
@@ -1230,7 +1230,7 @@ export namespace Config {
 				this.importValues(sourceRoot, destRoot, keys);
 			}
 
-			/** */
+			/***/
 			private importValues(sourceRoot: Object, destRoot: Object, values: Array<string>): void {
 				values.forEach((dashedKey) => {
 					let camelKey = CasparCGConfig.dashedToMixedCase(dashedKey);
@@ -1247,7 +1247,7 @@ export namespace Config {
 				});
 			}
 
-			/** */
+			/***/
 			private findListMembers(root: Object, childKey: string): Array<Object> {
 				let pairs: Array<Array<any>> = [];
 				for (let i in root) {
@@ -1290,7 +1290,7 @@ export namespace Config {
 				return [];
 			}
 
-			/** */
+			/***/
 			private importListMembers(root: Object, memberName: string, restrictedNamespace?: Object) {
 				let namespace: Object | undefined;
 				if (restrictedNamespace) {
@@ -1311,7 +1311,7 @@ export namespace Config {
 				}
 			}
 
-			/** */
+			/***/
 			static addFormattedXMLChildsFromObject(root: Object, data: Object, blacklist?: Array<string>): Object {
 				blacklist && blacklist.push("arrayNo", "array-no");
 				for (let key in data) {
@@ -1327,7 +1327,7 @@ export namespace Config {
 				return root;
 			}
 
-			/** */
+			/***/
 			static addFormattedXMLChildsFromArray(root: Object, data: Object, whitelist?: Array<string>): Object {
 				if (whitelist) {
 					whitelist.forEach((key) => {
@@ -1344,7 +1344,7 @@ export namespace Config {
 				return root;
 			}
 
-			/** */
+			/***/
 			static dashedToMixedCase(rawString: string): string {
 				let keyBlocks: Array<string> = rawString.split(/-/);
 				if (keyBlocks.length > 1) {
@@ -1362,7 +1362,7 @@ export namespace Config {
 				}
 			}
 
-			/** */
+			/***/
 			static dashedToCamelCase(rawString: string): string {
 				let keyBlocks: Array<string> = rawString.split(/-/);
 				if (keyBlocks.length > 1) {
@@ -1376,7 +1376,7 @@ export namespace Config {
 				}
 			}
 
-			/** */
+			/***/
 			static mixedCaseToDashed(mixedCased: string): string {
 				let keyBlocks: Array<string> = mixedCased.split(/(?=[A-Z])/);
 				return keyBlocks.map((i) => i.toLowerCase()).join("-");
@@ -1384,4 +1384,4 @@ export namespace Config {
 		}
 
 	}
-}	
+}

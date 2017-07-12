@@ -8,19 +8,19 @@ export namespace Event {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class CasparCGSocketStatusEvent extends BaseEventNS.BaseEvent {
 
 		/**
-		 * 
+		 *
 		 */
 		constructor(public socketStatus: SocketStatus) {
 			super(socketStatus);
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		valueOf(): SocketStatus {
 			return this.socketStatus;

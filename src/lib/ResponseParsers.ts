@@ -1,4 +1,4 @@
-import * as Path from "path";
+import *as Path from "path";
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
 // Options NS
 import ServerVersion = OptionsNS.ServerVersion;
@@ -7,7 +7,7 @@ import {Config as ConfigNS} from "./Config";
 import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
 export namespace Response {
 
-	/** */
+	/***/
 	export class CasparCGPaths {
 		media: string;
 		data: string;
@@ -17,47 +17,47 @@ export namespace Response {
 		font?: string | undefined;
 		root: string;
 
-		/** */
+		/***/
 		get thumbnails(): string {
 			return this.thumbnail;
 		}
 
-		/** */
+		/***/
 		get absoluteMedia(): string{
 			return this.absolutePath(this.media);
 		}
 
-		/** */
+		/***/
 		get absoluteData(): string {
 			return this.absolutePath(this.data);
 		}
 
-		/** */
+		/***/
 		get absoluteLog(): string {
 			return this.absolutePath(this.log);
 		}
 
-		/** */
+		/***/
 		get absoluteTemplate(): string {
 			return this.absolutePath(this.template);
 		}
 
-		/** */
+		/***/
 		get absoluteThumbnail(): string {
 			return this.absolutePath(this.thumbnail);
 		}
 
-		/** */
+		/***/
 		get absoluteThumbnails(): string {
 			return this.absolutePath(this.thumbnails);
 		}
 
-		/** */
+		/***/
 		get absoluteFont(): string | undefined {
 			return this.font ? this.absolutePath(this.font) : undefined;
 		}
 
-		/** */
+		/***/
 		private absolutePath(relativeOrAbsolutePath: string): string {
 			if (relativeOrAbsolutePath.match(/\:\\|\:\//)) {
 				return CasparCGPaths.ensureTrailingSlash(relativeOrAbsolutePath);
@@ -66,20 +66,20 @@ export namespace Response {
 			return CasparCGPaths.ensureTrailingSlash(Path.join(this.root, relativeOrAbsolutePath));
 		}
 
-		/** */
+		/***/
 		static ensureTrailingSlash(path: string): string {
 			return ((path.slice(-1) === "/" || path.slice(-1) === "\\") ? path : path + "/");
 		}
 	}
 
-	/** */
+	/***/
 	export class ChannelRate {
 
 		public channelRate: number;
 		public frameRate: number;
 		public isInterlaced: boolean;
 
-		/** */
+		/***/
 		constructor(rateExpression: string) {
 			this.isInterlaced = rateExpression.indexOf("i") > -1;
 			let rateMatch: RegExpMatchArray | null = rateExpression.match(/[0-9]+$/);
@@ -107,7 +107,7 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export interface IResponseParser {
 		context?: Object;
@@ -115,19 +115,19 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export abstract class AbstractParser {
 		context?: Object;
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ChannelParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: any): Object {
 			data = [].concat(data);
@@ -150,9 +150,9 @@ export namespace Response {
 		}
 	}
 
-	/** */
+	/***/
 	export class ConfigParser extends AbstractParser implements IResponseParser {
-		/** */
+		/***/
 		public parse(data: Object): Object {
 			let serverVersion: ServerVersion;
 			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
@@ -167,12 +167,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class DataParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -180,12 +180,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class DataListParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -193,12 +193,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoTemplateParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -206,12 +206,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class HelpParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -219,12 +219,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class GLParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -232,12 +232,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoDelayParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -245,12 +245,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -258,12 +258,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoThreadsParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -271,12 +271,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ThumbnailParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return `data:image/png;base64,${data}`;
@@ -284,12 +284,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class VersionParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -297,7 +297,7 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class ContentParser extends AbstractParser implements IResponseParser {
 
@@ -315,7 +315,7 @@ export namespace Response {
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Array<string>): Object {
 			return data.map((i: string) => {
@@ -380,12 +380,12 @@ export namespace Response {
 	}
 
 		/**
-	 * 
+	 *
 	 */
 	export class ThumbnailListParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Array<string>): Object {
 			return data.map((i: string) => {
@@ -410,12 +410,12 @@ export namespace Response {
 
 
 	/**
-	 * 
+	 *
 	 */
 	export class CinfParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			if (data && Array.isArray(data)) {
@@ -434,12 +434,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoQueuesParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -447,12 +447,12 @@ export namespace Response {
 	}
 
 	/**
-	 	* 
+	 	*
 	 */
 	export class InfoServerParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			return data;
@@ -460,12 +460,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoPathsParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 			let paths = new CasparCGPaths();
@@ -507,12 +507,12 @@ export namespace Response {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class InfoSystemParser extends AbstractParser implements IResponseParser {
 
 		/**
-		 * 
+		 *
 		 */
 		public parse(data: Object): Object {
 

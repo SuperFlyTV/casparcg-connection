@@ -6,12 +6,12 @@ import IStringCallback = CallbackNS.IStringCallback;
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback;
 
 /**
- * 
+ *
  */
 export namespace Options {
 
 	/**
-	 * 
+	 *
 	 */
 	export enum QueueMode  {
 		// SALVO 		= 1,
@@ -20,7 +20,7 @@ export namespace Options {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export enum ServerVersion  {
 		V2xx = 2000,
@@ -31,7 +31,7 @@ export namespace Options {
 }
 
 /**
- * 
+ *
  */
 export interface IConnectionOptions {
 	host?: string;
@@ -53,7 +53,7 @@ export interface IConnectionOptions {
 }
 
 /**
- * 
+ *
  */
 export class ConnectionOptions implements IConnectionOptions {
 	public host: string | undefined = "localhost";
@@ -74,7 +74,7 @@ export class ConnectionOptions implements IConnectionOptions {
 	public onError: IErrorCallback | undefined = undefined;
 
 	/**
-	 * 
+	 *
 	 */
 	constructor(host?: string, port?: number);
 	constructor(options?: IConnectionOptions);
