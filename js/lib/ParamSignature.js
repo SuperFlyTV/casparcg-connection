@@ -1,50 +1,42 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var ParamValidators_1 = require("./ParamValidators");
-var AbstractValidator = ParamValidators_1.Validation.AbstractValidator;
+import { Validation } from "./ParamValidators";
+var AbstractValidator = Validation.AbstractValidator;
 /**
  *
  */
-var Param;
+export var Param;
 (function (Param) {
     /**
      *
      */
-    var Optional = (function () {
-        function Optional() {
-        }
+    class Optional {
         /**
          *
          */
-        Optional.valueOf = function () {
+        static valueOf() {
             return false;
-        };
-        return Optional;
-    }());
+        }
+    }
     Param.Optional = Optional;
     /**
      *
      */
-    var Required = (function () {
-        function Required() {
-        }
+    class Required {
         /**
          *
          */
-        Required.valueOf = function () {
+        static valueOf() {
             return true;
-        };
-        return Required;
-    }());
+        }
+    }
     Param.Required = Required;
     /**
      *
      */
-    var ParamSignature = (function () {
+    class ParamSignature {
         /**
          *
          */
-        function ParamSignature(required, name, key, validation) {
+        constructor(required, name, key, validation) {
             this.required = required;
             this.name = name;
             this.key = key;
@@ -54,21 +46,16 @@ var Param;
                 this.validation = validation;
             }
             else if (typeof validation === "function") {
-                var proto = Object.create(validation["prototype"]);
+                let proto = Object.create(validation["prototype"]);
                 this.validation = new proto.constructor();
             }
         }
-        Object.defineProperty(ParamSignature.prototype, "resolved", {
-            /**
-             *
-             */
-            get: function () {
-                return this.validation.resolved;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        return ParamSignature;
-    }());
+        /**
+         *
+         */
+        get resolved() {
+            return this.validation.resolved;
+        }
+    }
     Param.ParamSignature = ParamSignature;
-})(Param = exports.Param || (exports.Param = {}));
+})(Param || (Param = {}));

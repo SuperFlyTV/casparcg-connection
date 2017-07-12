@@ -185,7 +185,7 @@ export declare namespace Validation {
         /**
          *
          */
-        constructor(_valueOnSuccess?: (string | number | boolean), _valueOnFail?: (string | number | boolean));
+        constructor(_valueOnSuccess?: string | number | boolean | undefined, _valueOnFail?: string | number | boolean | undefined);
         /**
          *
          */

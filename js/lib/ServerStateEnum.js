@@ -1,49 +1,31 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  *
  */
-var Enum;
+export var Enum;
 (function (Enum) {
     /**
      *
      */
-    var AbstractEnum = (function () {
+    class AbstractEnum {
         /**
          *
          */
-        function AbstractEnum(value) {
+        constructor(value) {
             this.value = value;
         }
         /**
          *
          */
-        AbstractEnum.prototype.toString = function () {
+        toString() {
             return this.value;
-        };
-        return AbstractEnum;
-    }());
+        }
+    }
     Enum.AbstractEnum = AbstractEnum;
     /**
      *
      */
-    var Command = (function (_super) {
-        __extends(Command, _super);
-        function Command() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Command;
-    }(AbstractEnum));
+    class Command extends AbstractEnum {
+    }
     Command.LOADBG = new Command("LOADBG");
     Command.LOAD = new Command("LOAD");
     Command.PLAY = new Command("PLAY");
@@ -126,13 +108,8 @@ var Enum;
     /**
      *
      */
-    var Producer = (function (_super) {
-        __extends(Producer, _super);
-        function Producer() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Producer;
-    }(AbstractEnum));
+    class Producer extends AbstractEnum {
+    }
     Producer.FFMPEG = new Producer("FFmpeg Producer");
     Producer.DECKLINK = new Producer("Decklink Producer");
     Producer.HTML = new Producer("HTML Producer");
@@ -150,13 +127,8 @@ var Enum;
     /**
      *
      */
-    var Consumer = (function (_super) {
-        __extends(Consumer, _super);
-        function Consumer() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Consumer;
-    }(AbstractEnum));
+    class Consumer extends AbstractEnum {
+    }
     Consumer.FFMPEG = new Consumer("FFMpeg Consumer");
     Consumer.STREAMING = new Consumer("Streaming Consumer");
     Consumer.ADUIO = new Consumer("System Audio Consumer");
@@ -170,13 +142,8 @@ var Enum;
      *
      *
      */
-    var Version = (function (_super) {
-        __extends(Version, _super);
-        function Version() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Version;
-    }(AbstractEnum));
+    class Version extends AbstractEnum {
+    }
     Version.SERVER = new Version("SERVER");
     Version.FLASH = new Version("FLASH");
     Version.TEMPLATEHOST = new Version("TEMPLATEHOST");
@@ -186,13 +153,8 @@ var Enum;
      *
      *
      */
-    var Lock = (function (_super) {
-        __extends(Lock, _super);
-        function Lock() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Lock;
-    }(AbstractEnum));
+    class Lock extends AbstractEnum {
+    }
     Lock.ACQUIRE = new Lock("ACQUIRE");
     Lock.RELEASE = new Lock("RELEASE");
     Lock.CLEAR = new Lock("CLEAR");
@@ -201,13 +163,8 @@ var Enum;
      *
      *
      */
-    var LogCategory = (function (_super) {
-        __extends(LogCategory, _super);
-        function LogCategory() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return LogCategory;
-    }(AbstractEnum));
+    class LogCategory extends AbstractEnum {
+    }
     LogCategory.CALLTRACE = new LogCategory("CALLTRACE");
     LogCategory.COMMUNICATION = new LogCategory("COMMUNICATION");
     Enum.LogCategory = LogCategory;
@@ -215,13 +172,8 @@ var Enum;
      *
      *
      */
-    var Chroma = (function (_super) {
-        __extends(Chroma, _super);
-        function Chroma() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Chroma;
-    }(AbstractEnum));
+    class Chroma extends AbstractEnum {
+    }
     Chroma.NONE = new Chroma("NONE");
     Chroma.GREEN = new Chroma("GREEN");
     Chroma.BLUE = new Chroma("BLUE");
@@ -230,13 +182,8 @@ var Enum;
      *
      *
      */
-    var LogLevel = (function (_super) {
-        __extends(LogLevel, _super);
-        function LogLevel() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return LogLevel;
-    }(AbstractEnum));
+    class LogLevel extends AbstractEnum {
+    }
     LogLevel.TRACE = new LogLevel("TRACE");
     LogLevel.DEBUG = new LogLevel("DEBUG");
     LogLevel.INFO = new LogLevel("INFO");
@@ -248,13 +195,8 @@ var Enum;
      *
      *
      */
-    var Transition = (function (_super) {
-        __extends(Transition, _super);
-        function Transition() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Transition;
-    }(AbstractEnum));
+    class Transition extends AbstractEnum {
+    }
     Transition.CUT = new Transition("CUT");
     Transition.MIX = new Transition("MIX");
     Transition.PUSH = new Transition("PUSH");
@@ -265,26 +207,16 @@ var Enum;
      *
      *
      */
-    var Direction = (function (_super) {
-        __extends(Direction, _super);
-        function Direction() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Direction;
-    }(AbstractEnum));
+    class Direction extends AbstractEnum {
+    }
     Direction.LEFT = new Direction("LEFT");
     Direction.RIGHT = new Direction("RIGHT");
     Enum.Direction = Direction;
     /**
      *
      */
-    var BlendMode = (function (_super) {
-        __extends(BlendMode, _super);
-        function BlendMode() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return BlendMode;
-    }(AbstractEnum));
+    class BlendMode extends AbstractEnum {
+    }
     BlendMode.NORMAL = new BlendMode("NORMAL");
     BlendMode.LIGHTEN = new BlendMode("LIGHTEN");
     BlendMode.DARKEN = new BlendMode("DARKEN");
@@ -318,13 +250,8 @@ var Enum;
     /**
      *
      */
-    var Ease = (function (_super) {
-        __extends(Ease, _super);
-        function Ease() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Ease;
-    }(AbstractEnum));
+    class Ease extends AbstractEnum {
+    }
     Ease.LINEAR = new Ease("LINEAR");
     Ease.EASELINEAR = Ease.LINEAR;
     Ease.NONE = new Ease("EASENONE");
@@ -413,13 +340,8 @@ var Enum;
     /**
      *
      */
-    var ChannelFormat = (function (_super) {
-        __extends(ChannelFormat, _super);
-        function ChannelFormat() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return ChannelFormat;
-    }(AbstractEnum));
+    class ChannelFormat extends AbstractEnum {
+    }
     ChannelFormat.INVALID = new ChannelFormat("invalid");
     ChannelFormat.PAL = new ChannelFormat("PAL");
     ChannelFormat.NTSC = new ChannelFormat("NTSC");
@@ -464,12 +386,7 @@ var Enum;
     /**
      *
      */
-    var ChannelLayout = (function (_super) {
-        __extends(ChannelLayout, _super);
-        function ChannelLayout() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return ChannelLayout;
-    }(AbstractEnum));
+    class ChannelLayout extends AbstractEnum {
+    }
     Enum.ChannelLayout = ChannelLayout;
-})(Enum = exports.Enum || (exports.Enum = {}));
+})(Enum || (Enum = {}));
