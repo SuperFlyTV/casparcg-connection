@@ -11,7 +11,7 @@ CasparCG is an open source graphics- and video server for broadcast and streamin
 - Node.js
 - npm package
 - TypeScript/Javascript, strongly typed
-- ES5 (easily compiled to ES6)
+- ES2015 (ES6), easily compiled to ES5 for compability on old Node.js-servers.
 - [API Docs](https://superflytv.github.io/casparcg-connection/)
 - [Getting started guide](https://www.gitbook.com/book/superfly-tv/casparcg-connection-getting-started-guide)
 - CasparCG AMCP 2.0 and 2.1 protocol implemented

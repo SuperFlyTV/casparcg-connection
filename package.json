@@ -5,7 +5,7 @@
   "main": "js/index.js",
   "typings": "js/index.d.ts",
   "scripts": {
-    "prepublish": "npm run cleanbuild && npm run doc",
+    "prepublishOnly": "npm run cleanbuild && npm run doc",
     "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
     "gulp": "gulp",
     "build": "gulp build",
@@ -35,7 +35,7 @@
     {
       "name": "Johan Nyman",
       "email": "johan@superfly.tv",
-    "url": "http://superfly.tv"
+      "url": "http://superfly.tv"
     },
     {
       "name": "Balte de Wit",
