@@ -10,8 +10,13 @@
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
 		"suppressImplicitAnyIndexErrors": true,
-		"target": "es6",
-		"experimentalDecorators": true
+		"target": "es5",
+		"experimentalDecorators": true,
+		"lib": [
+			"es5",
+			"es6",
+			"scripthost"
+		]
 	},
 	"exclude": [
 		"node_modules",
