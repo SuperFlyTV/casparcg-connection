@@ -1,6 +1,7 @@
 /// <reference types="node" />
 import { Command as CommandNS } from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
+import { SocketStatusOptions } from "./event/Events";
 /**
  *
  */
@@ -8,22 +9,14 @@ export interface ICasparCGSocket {
     connected: boolean;
     host: string;
     port: number;
-    socketStatus: SocketState;
     isRestarting: boolean;
+    reconnecting: boolean;
+    socketStatus: SocketStatusOptions;
     connect(): void;
     disconnect(): void;
     dispose(): void;
     log(args: any): void;
     executeCommand(command: IAMCPCommand): IAMCPCommand;
-}
-export declare enum SocketState {
-    unconfigured = 0,
-    configured = 1,
-    hostFound = 2,
-    connectionAttempt = 4,
-    connected = 8,
-    lostConnection = 32,
-    reconnecting = 64,
 }
 /**
  *
@@ -33,6 +26,7 @@ export declare class CasparCGSocket extends NodeJS.EventEmitter implements ICasp
     private _client;
     private _host;
     private _port;
+    private _connected;
     private _autoReconnect;
     private _reconnectDelay;
     private _reconnectAttempts;
@@ -40,7 +34,6 @@ export declare class CasparCGSocket extends NodeJS.EventEmitter implements ICasp
     private _reconnectInterval;
     private _commandTimeoutTimer;
     private _commandTimeout;
-    private _socketStatus;
     private _parsedResponse;
     /**
      *
@@ -89,13 +82,6 @@ export declare class CasparCGSocket extends NodeJS.EventEmitter implements ICasp
     /**
      *
      */
-    /**
-     *
-     */
-    socketStatus: SocketState;
-    /**
-     *
-     */
     dispose(): void;
     /**
      *
@@ -104,6 +90,14 @@ export declare class CasparCGSocket extends NodeJS.EventEmitter implements ICasp
     /**
      */
     connected: boolean;
+    /**
+     *
+     */
+    readonly socketStatus: SocketStatusOptions;
+    /**
+     *
+     */
+    readonly reconnecting: boolean;
     /**
      *
      */

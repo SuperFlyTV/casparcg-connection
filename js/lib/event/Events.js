@@ -7,8 +7,4 @@ var CasparCGSocketStatusEvent = CasparCGSocketStatusEventNS.CasparCGSocketStatus
 var CasparCGSocketCommandEvent = CasparCGSocketCommandEventNS.CasparCGSocketCommandEvent;
 var CasparCGSocketResponseEvent = CasparCGSocketCommandEventNS.CasparCGSocketResponseEvent;
 var LogEvent = LogEventNS.LogEvent;
-export { BaseEvent };
-export { CasparCGSocketStatusEvent };
-export { CasparCGSocketCommandEvent };
-export { CasparCGSocketResponseEvent };
-export { LogEvent };
+export { BaseEvent, CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent };

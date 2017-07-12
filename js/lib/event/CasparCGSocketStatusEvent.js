@@ -9,7 +9,7 @@ export var Event;
          *
          */
         constructor(socketStatus) {
-            super({ socketStatus });
+            super(socketStatus);
             this.socketStatus = socketStatus;
         }
         /**
@@ -22,6 +22,7 @@ export var Event;
     CasparCGSocketStatusEvent.STATUS = "casparcgsocketconnectioneventstatus";
     CasparCGSocketStatusEvent.STATUS_CHANGED = "casparcgsocketconnectioneventstatuschanged";
     CasparCGSocketStatusEvent.CONNECTED = "casparcgsocketconnectioneventstatusconnected";
+    CasparCGSocketStatusEvent.RECONNECTED = "casparcgsocketconnectioneventstatusreconnected";
     CasparCGSocketStatusEvent.DISCONNECTED = "casparcgsocketconnectioneventstatusdisconnected";
     CasparCGSocketStatusEvent.TIMEOUT = "casparcgsocketconnectioneventstatustimeout";
     Event.CasparCGSocketStatusEvent = CasparCGSocketStatusEvent;

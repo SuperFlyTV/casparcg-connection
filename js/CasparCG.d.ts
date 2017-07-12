@@ -1,5 +1,4 @@
 /// <reference types="node" />
-import { SocketState } from "./lib/CasparCGSocket";
 import { Enum } from "./lib/ServerStateEnum";
 import { IConnectionOptions, ConnectionOptions, Options as OptionsNS } from "./lib/AMCPConnectionOptions";
 import QueueMode = OptionsNS.QueueMode;
@@ -9,6 +8,7 @@ import IAMCPCommand = CommandNS.IAMCPCommand;
 import { Param as ParamNS } from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
+import { SocketStatusOptions } from "./lib/event/Events";
 import { Callback as CallbackNS } from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
@@ -209,7 +209,7 @@ export declare namespace CasparCGProtocols {
 export interface ICasparCGConnection {
     connectionOptions: ConnectionOptions;
     connected: boolean;
-    connectionStatus: SocketState;
+    connectionStatus: SocketStatusOptions;
     getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
     getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>;
     commandQueue: Array<IAMCPCommand>;
@@ -429,7 +429,7 @@ export declare class CasparCG extends NodeJS.EventEmitter implements ICasparCGCo
     /**
      *
      */
-    readonly connectionStatus: SocketState;
+    readonly connectionStatus: SocketStatusOptions;
     /**
      *
      */

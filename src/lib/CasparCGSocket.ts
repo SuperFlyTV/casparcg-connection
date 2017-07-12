@@ -6,7 +6,7 @@ import {Command as CommandNS} from "./AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
 import IAMCPStatus = CommandNS.IAMCPStatus;
 // Event NS
-import {CasparCGSocketStatusEvent, CasparCGSocketResponseEvent} from "./event/Events";
+import {CasparCGSocketStatusEvent, CasparCGSocketResponseEvent, SocketStatusOptions} from "./event/Events";
 // Param NS 
 import {Param as ParamNS} from "./ParamSignature";
 import Payload = ParamNS.Payload;
@@ -18,23 +18,14 @@ export interface ICasparCGSocket {
 	connected: boolean;
 	host: string;
 	port: number;
-	socketStatus: SocketState;
 	isRestarting: boolean;
+	reconnecting: boolean;
+	socketStatus: SocketStatusOptions;
 	connect(): void;
 	disconnect(): void;
 	dispose(): void;
 	log(args: any): void;
 	executeCommand(command: IAMCPCommand): IAMCPCommand;
-}
-
-export enum SocketState {
-		unconfigured	= 0,
-		configured		= 1 << 0,
-		hostFound		= 1 << 1,		// @todo: implement
-		connectionAttempt = 1 << 2,		// @todo: implement
-		connected		= 1 << 3,
-		lostConnection	= 1 << 5,
-		reconnecting	= 1 << 6
 }
 
 /**
@@ -45,6 +36,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	private _client: net.Socket;
 	private _host: string;
 	private _port: number;
+	private _connected: boolean;
 	private _autoReconnect: boolean;
 	private _reconnectDelay: number;
 	private _reconnectAttempts: number;
@@ -52,7 +44,6 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	private _reconnectInterval: NodeJS.Timer;
 	private _commandTimeoutTimer: NodeJS.Timer;
 	private _commandTimeout: number = 5000; // @todo make connectionOption!
-	private _socketStatus: SocketState = SocketState.unconfigured;
 	private _parsedResponse: AMCPUtil.CasparCGSocketResponse | undefined;
 
 	/**
@@ -71,7 +62,6 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 		this._client.on("error", (error: Error) => this._onError(error));
 		this._client.on("drain", () => this._onDrain());
 		this._client.on("close", (hadError: boolean) => this._onClose(hadError));
-		this.socketStatus = SocketState.configured;
 	}
 
 	/**
@@ -99,8 +89,6 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	 * 
 	 */
 	public connect(): void {
-		this.socketStatus |= SocketState.connectionAttempt;	// toggles triedConnection on
-		this.socketStatus &= ~SocketState.lostConnection;	// toggles triedConnection on
 		this._client.connect(this._port, this._host);
 		if (this._reconnectAttempt === 0) {
 			this._reconnectInterval = global.setInterval(() => this._autoReconnection(), this._reconnectDelay);
@@ -123,7 +111,6 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 		// create interval if doesn't exist
 		if (!this._reconnectInterval) {
 			// @todo: create event telling reconection is in action with interval time
-			this.socketStatus |= SocketState.reconnecting;
 			this._reconnectInterval = global.setInterval(() => this._autoReconnection(), this._reconnectDelay);
 		}
 	}
@@ -140,7 +127,7 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 					return;
 				}
 				// new attempt if not allready connected
-				if (!((this.socketStatus &  SocketState.connected) === SocketState.connected)) {
+				if (!this.connected) {
 					this.log("Socket attempting reconnection");
 					this._reconnectAttempt++;
 					this.connect();
@@ -157,7 +144,6 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 		// only in reconnectio intervall is true
 		this._reconnectAttempt = 0;
 		global.clearInterval(this._reconnectInterval);
-		this.socketStatus &= ~SocketState.reconnecting;
 		delete this._reconnectInterval;
 	}
 
@@ -184,23 +170,6 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	/**
 	 * 
 	 */
-	public get socketStatus(): SocketState{
-		return this._socketStatus;
-	}
-
-	/**
-	 * 
-	 */
-	public set socketStatus(statusMask: SocketState){
-		if (this._socketStatus !== statusMask) {
-			this._socketStatus = statusMask;
-			this.emit(CasparCGSocketStatusEvent.STATUS, new CasparCGSocketStatusEvent(this._socketStatus));
-		}
-	}
-
-	/**
-	 * 
-	 */
 	public dispose(): void {
 		this._clearReconnectInterval();
 		this._client.destroy();
@@ -217,7 +186,24 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	/**
 	 */
 	set connected(connected: boolean){
-		this.socketStatus = connected ? this.socketStatus | SocketState.connected : this.socketStatus &= ~SocketState.connected;
+		this._connected = connected === true;
+		this.emit(CasparCGSocketStatusEvent.STATUS, new CasparCGSocketStatusEvent(this.socketStatus));
+	}
+
+	/**
+	 * 
+	 */
+	get socketStatus(): SocketStatusOptions {
+		return {
+			connected: this._connected,
+		};
+	}
+
+	/**
+	 * 
+	 */
+	public get reconnecting(): boolean {
+		return this._reconnectInterval !== undefined;
 	}
 
 	/**
@@ -326,7 +312,6 @@ export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSock
 	private _onClose(hadError: boolean) {
 		this.connected = false;
 		if (hadError || this.isRestarting) {
-			this.socketStatus |= SocketState.lostConnection;
 			// error message, not "log"
 			// dispatch (is it done through error handler first????)
 			this.log(`Socket close with error: ${hadError}`);

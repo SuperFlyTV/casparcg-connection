@@ -1,4 +1,4 @@
-import {CasparCGSocket, SocketState} from "./lib/CasparCGSocket";
+import {CasparCGSocket} from "./lib/CasparCGSocket";
 import {AMCP, AMCPUtil as AMCPUtilNS} from "./lib/AMCP";
 // AMCPUtilNS
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
@@ -18,7 +18,7 @@ import {Param as ParamNS} from "./lib/ParamSignature";
 import Param = ParamNS.Param;
 import TemplateData = ParamNS.TemplateData;
 // Event NS
-import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent} from "./lib/event/Events";
+import {CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent, SocketStatusOptions} from "./lib/event/Events";
 // Callback NS
 import {Callback as CallbackNS} from "./lib/global/Callback";
 import IBooleanCallback = CallbackNS.IBooleanCallback;
@@ -240,7 +240,7 @@ export namespace CasparCGProtocols {
 export interface ICasparCGConnection {
 	connectionOptions: ConnectionOptions;
 	connected: boolean;
-	connectionStatus: SocketState;
+	connectionStatus: SocketStatusOptions;
 	getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
 	getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>;
 	commandQueue: Array<IAMCPCommand>;
@@ -523,7 +523,7 @@ export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection
 		if (this._host !== host) {
 			this._host = host;
 			if (this._socket !=  null) {
-				let shouldReconnect = (this.connected ||  ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
+				let shouldReconnect = (this.connected || this._socket.reconnecting);
 				this._createNewSocket();
 				if (shouldReconnect) {
 					this.connect();
@@ -548,7 +548,7 @@ export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection
 		if (this._port !== port) {
 			this._port = port;
 			if (this._socket !=  null) {
-				let shouldReconnect = (this.connected ||  ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
+				let shouldReconnect = (this.connected || this._socket.reconnecting);
 				this._createNewSocket();
 				if (shouldReconnect) {
 					this.connect();
@@ -580,7 +580,6 @@ export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection
 	public get autoReconnectInterval(): number {
 		return this._autoReconnectInterval;
 	}
-
 
 	/**
 	 * 
@@ -633,7 +632,7 @@ export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection
 	/**
 	 * 
 	 */
-	public get connectionStatus(): SocketState{
+	public get connectionStatus(): SocketStatusOptions{
 		return this._socket.socketStatus;
 	}
 
@@ -641,7 +640,7 @@ export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection
 	 * 
 	 */
 	private _onSocketStatusChange(socketStatus: CasparCGSocketStatusEvent): void {
-		let connected = (socketStatus.valueOf() &  SocketState.connected) === SocketState.connected;
+		let connected = socketStatus.valueOf().connected === true;
 
 		if (this.onConnectionStatus) {
 			this.onConnectionStatus(socketStatus.valueOf());

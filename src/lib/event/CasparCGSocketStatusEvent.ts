@@ -1,7 +1,11 @@
 import {Event as BaseEventNS} from "./BaseEvent";
-import {SocketState} from "../CasparCGSocket";
 
 export namespace Event {
+
+	export interface SocketStatus {
+		connected: boolean;
+		triggeredByConnectionLoss?: boolean;
+	}
 
 	/**
 	 * 
@@ -11,14 +15,14 @@ export namespace Event {
 		/**
 		 * 
 		 */
-		constructor(public socketStatus: SocketState) {
-			super({socketStatus});
+		constructor(public socketStatus: SocketStatus) {
+			super(socketStatus);
 		}
 
 		/**
 		 * 
 		 */
-		valueOf(): SocketState {
+		valueOf(): SocketStatus {
 			return this.socketStatus;
 		}
 

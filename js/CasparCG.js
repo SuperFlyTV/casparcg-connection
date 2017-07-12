@@ -1,4 +1,4 @@
-import { CasparCGSocket, SocketState } from "./lib/CasparCGSocket";
+import { CasparCGSocket } from "./lib/CasparCGSocket";
 import { AMCP } from "./lib/AMCP";
 import { Enum } from "./lib/ServerStateEnum";
 import { ConnectionOptions, Options as OptionsNS } from "./lib/AMCPConnectionOptions";
@@ -171,7 +171,7 @@ export class CasparCG extends NodeJS.EventEmitter {
         if (this._host !== host) {
             this._host = host;
             if (this._socket != null) {
-                let shouldReconnect = (this.connected || ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
+                let shouldReconnect = (this.connected || this._socket.reconnecting);
                 this._createNewSocket();
                 if (shouldReconnect) {
                     this.connect();
@@ -194,7 +194,7 @@ export class CasparCG extends NodeJS.EventEmitter {
         if (this._port !== port) {
             this._port = port;
             if (this._socket != null) {
-                let shouldReconnect = (this.connected || ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
+                let shouldReconnect = (this.connected || this._socket.reconnecting);
                 this._createNewSocket();
                 if (shouldReconnect) {
                     this.connect();
@@ -275,7 +275,7 @@ export class CasparCG extends NodeJS.EventEmitter {
      *
      */
     _onSocketStatusChange(socketStatus) {
-        let connected = (socketStatus.valueOf() & SocketState.connected) === SocketState.connected;
+        let connected = socketStatus.valueOf().connected === true;
         if (this.onConnectionStatus) {
             this.onConnectionStatus(socketStatus.valueOf());
         }
