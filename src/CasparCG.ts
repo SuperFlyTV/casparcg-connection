@@ -1,3 +1,4 @@
+import {EventEmitter} from "events";
 import {CasparCGSocket} from "./lib/CasparCGSocket";
 import {AMCP, AMCPUtil as AMCPUtilNS} from "./lib/AMCP";
 // AMCPUtilNS
@@ -258,7 +259,7 @@ export interface ICasparCGConnection {
  *There is a single [[CasparCGSocket]] pr. `CasparCG` object.
  *`CasparCG` should be the only public interface to interact directly with.
  */
-export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
+export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
 	private _connected: boolean;
 	private _host: string;
 	private _port: number;
@@ -422,10 +423,11 @@ export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection
 
 		this._createNewSocket(options);
 
-		this.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
-		this.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
-		this.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
-		this.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleInvalidSocketResponse(event.response));
+		this._socket.on("error", (error: Error) => this._onSocketError(error));
+		this._socket.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
+		this._socket.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
+		this._socket.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
+		this._socket.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleInvalidSocketResponse(event.response));
 
 		if (this.autoConnect) {
 			this.connect();
@@ -469,7 +471,6 @@ export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection
 			delete this._socket;
 		}
 		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
-		this._socket.on("error", (error: Error) => this._onSocketError(error));
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
@@ -711,7 +712,7 @@ export class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection
 	 *
 	 */
 	private _onSocketError(error: Error): void {
-		this._log(error);
+		this._log(error); // gets emited through the log function
 	}
 
 	/**

@@ -10,6 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var events_1 = require("events");
 var net = require("net");
 var _ = require("highland");
 var AMCP_1 = require("./AMCP");
@@ -322,5 +323,5 @@ var CasparCGSocket = (function (_super) {
         }
     };
     return CasparCGSocket;
-}(NodeJS.EventEmitter));
+}(events_1.EventEmitter));
 exports.CasparCGSocket = CasparCGSocket;

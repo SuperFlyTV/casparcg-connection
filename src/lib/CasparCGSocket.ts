@@ -1,5 +1,6 @@
-import *as net from "net";
-import *as _ from "highland";
+import {EventEmitter} from "events";
+import * as net from "net";
+import * as _ from "highland";
 import {AMCP, AMCPUtil} from "./AMCP";
 // Command NS
 import {Command as CommandNS} from "./AbstractCommand";
@@ -31,7 +32,7 @@ export interface ICasparCGSocket {
 /**
  *
  */
-export class CasparCGSocket extends NodeJS.EventEmitter implements ICasparCGSocket {
+export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	public isRestarting: boolean = false;
 	private _client: net.Socket;
 	private _host: string;

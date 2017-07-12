@@ -11,6 +11,7 @@
 		"strictNullChecks": true,
 		"suppressImplicitAnyIndexErrors": true,
 		"module": "commonjs",
+		"moduleResolution": "node",
 		"target": "es5",
 		"experimentalDecorators": true,
 		"lib": [

@@ -10,6 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var events_1 = require("events");
 var CasparCGSocket_1 = require("./lib/CasparCGSocket");
 var AMCP_1 = require("./lib/AMCP");
 var ServerStateEnum_1 = require("./lib/ServerStateEnum");
@@ -93,10 +94,11 @@ var CasparCG = (function (_super) {
             options.port = port;
         }
         _this._createNewSocket(options);
-        _this.on(Events_1.CasparCGSocketStatusEvent.STATUS, function (event) { return _this._onSocketStatusChange(event); });
-        _this.on(Events_1.CasparCGSocketStatusEvent.TIMEOUT, function () { return _this._onSocketStatusTimeout(); });
-        _this.on(Events_1.CasparCGSocketResponseEvent.RESPONSE, function (event) { return _this._handleSocketResponse(event.response); });
-        _this.on(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, function (event) { return _this._handleInvalidSocketResponse(event.response); });
+        _this._socket.on("error", function (error) { return _this._onSocketError(error); });
+        _this._socket.on(Events_1.CasparCGSocketStatusEvent.STATUS, function (event) { return _this._onSocketStatusChange(event); });
+        _this._socket.on(Events_1.CasparCGSocketStatusEvent.TIMEOUT, function () { return _this._onSocketStatusTimeout(); });
+        _this._socket.on(Events_1.CasparCGSocketResponseEvent.RESPONSE, function (event) { return _this._handleSocketResponse(event.response); });
+        _this._socket.on(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, function (event) { return _this._handleInvalidSocketResponse(event.response); });
         if (_this.autoConnect) {
             _this.connect();
         }
@@ -139,7 +141,6 @@ var CasparCG = (function (_super) {
             delete this._socket;
         }
         this._socket = new CasparCGSocket_1.CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
-        this._socket.on("error", function (error) { return _this._onSocketError(error); });
         // inherit log method
         this._socket.log = function (args) { return _this._log(args); };
     };
@@ -391,7 +392,7 @@ var CasparCG = (function (_super) {
      *
      */
     CasparCG.prototype._onSocketError = function (error) {
-        this._log(error);
+        this._log(error); // gets emited through the log function
     };
     /**
      *
@@ -1410,5 +1411,5 @@ var CasparCG = (function (_super) {
         return this.do(new AMCP_1.AMCP.RestartCommand());
     };
     return CasparCG;
-}(NodeJS.EventEmitter));
+}(events_1.EventEmitter));
 exports.CasparCG = CasparCG;
