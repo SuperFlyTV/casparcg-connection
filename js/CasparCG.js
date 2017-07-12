@@ -1,30 +1,17 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var hap_1 = require("hap");
-var CasparCGSocket_1 = require("./lib/CasparCGSocket");
-var AMCP_1 = require("./lib/AMCP");
-var ServerStateEnum_1 = require("./lib/ServerStateEnum");
-var AMCPConnectionOptions_1 = require("./lib/AMCPConnectionOptions");
+import { CasparCGSocket, SocketState } from "./lib/CasparCGSocket";
+import { AMCP } from "./lib/AMCP";
+import { Enum } from "./lib/ServerStateEnum";
+import { ConnectionOptions, Options as OptionsNS } from "./lib/AMCPConnectionOptions";
 // Options NS
-var QueueMode = AMCPConnectionOptions_1.Options.QueueMode;
-var ServerVersion = AMCPConnectionOptions_1.Options.ServerVersion;
+var QueueMode = OptionsNS.QueueMode;
+var ServerVersion = OptionsNS.ServerVersion;
 // Command NS
-var AbstractCommand_1 = require("./lib/AbstractCommand");
-var isIAMCPCommand = AbstractCommand_1.Command.isIAMCPCommand;
-var IAMCPStatus = AbstractCommand_1.Command.IAMCPStatus;
-var AMCPResponse = AbstractCommand_1.Command.AMCPResponse;
+import { Command as CommandNS } from "./lib/AbstractCommand";
+var isIAMCPCommand = CommandNS.isIAMCPCommand;
+var IAMCPStatus = CommandNS.IAMCPStatus;
+var AMCPResponse = CommandNS.AMCPResponse;
 // Event NS
-var Events_1 = require("./lib/event/Events");
+import { CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent } from "./lib/event/Events";
 /**
  * The main object and entrypoint for all interactions. `CasparCG` allows for flexible configuration, re-configuration and events/callbacks.
  * It implements all [[AMCP]] commands as high-level methods with convenient interfaces.
@@ -32,86 +19,82 @@ var Events_1 = require("./lib/event/Events");
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object.
  * `CasparCG` should be the only public interface to interact directly with.
  */
-var CasparCG = (function (_super) {
-    __extends(CasparCG, _super);
-    function CasparCG(hostOrOptions, port) {
-        var _this = _super.call(this) || this;
-        _this._queuedCommands = [];
-        _this._sentCommands = [];
+export class CasparCG extends NodeJS.EventEmitter {
+    constructor(hostOrOptions, port) {
+        super();
+        this._queuedCommands = [];
+        this._sentCommands = [];
         /**
          * Try to connect upon creation.
          */
-        _this.autoConnect = undefined;
+        this.autoConnect = undefined;
         /**
          * @todo: document
          */
-        _this.autoServerVersion = undefined;
+        this.autoServerVersion = undefined;
         /**
          * @todo: document
          */
-        _this.serverVersion = undefined;
+        this.serverVersion = undefined;
         /**
          * @todo: document
          */
-        _this.queueMode = undefined;
+        this.queueMode = undefined;
         /**
          * Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]].
          */
-        _this.debug = undefined;
+        this.debug = undefined;
         /**
          * Callback for all logging.
          */
-        _this.onLog = undefined;
+        this.onLog = undefined;
         /**
          * Callback for all status updates from the `CasparCGSocket`.
          */
-        _this.onConnectionStatus = undefined;
+        this.onConnectionStatus = undefined;
         /**
          * Callback for status updates from the `CasparCGSocket` if the `connected` property changes value.
          */
-        _this.onConnectionChanged = undefined;
+        this.onConnectionChanged = undefined;
         /**
          * Callback for status updates from the `CasparCGSocket` if the `connected` property is set to `true`.
          */
-        _this.onConnected = undefined;
+        this.onConnected = undefined;
         /**
          * Callback for status updates from the `CasparCGSocket` if the `connected` property is set to `false`.
          */
-        _this.onDisconnected = undefined;
+        this.onDisconnected = undefined;
         /**
          * Callback for general errors
          */
-        _this.onError = undefined;
-        var options;
+        this.onError = undefined;
+        let options;
         if (typeof hostOrOptions === "object") {
-            options = new AMCPConnectionOptions_1.ConnectionOptions(hostOrOptions);
+            options = new ConnectionOptions(hostOrOptions);
         }
         else {
-            options = new AMCPConnectionOptions_1.ConnectionOptions(hostOrOptions, port);
+            options = new ConnectionOptions(hostOrOptions, port);
         }
         // if both options and port specified, port overrides options
         if (port && (port !== options.port)) {
             options.port = port;
         }
-        _this._createNewSocket(options);
-        _this.on(Events_1.CasparCGSocketStatusEvent.STATUS, function (event) { return _this._onSocketStatusChange(event); });
-        _this.on(Events_1.CasparCGSocketStatusEvent.TIMEOUT, function () { return _this._onSocketStatusTimeout(); });
-        _this.on(Events_1.CasparCGSocketResponseEvent.RESPONSE, function (event) { return _this._handleSocketResponse(event.response); });
-        _this.on(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, function (event) { return _this._handleInvalidSocketResponse(event.response); });
-        if (_this.autoConnect) {
-            _this.connect();
+        this._createNewSocket(options);
+        this.on(CasparCGSocketStatusEvent.STATUS, (event) => this._onSocketStatusChange(event));
+        this.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
+        this.on(CasparCGSocketResponseEvent.RESPONSE, (event) => this._handleSocketResponse(event.response));
+        this.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, (event) => this._handleInvalidSocketResponse(event.response));
+        if (this.autoConnect) {
+            this.connect();
         }
-        return _this;
     }
     /**
      *
      */
-    CasparCG.prototype._createNewSocket = function (options, enforceRecreation) {
-        var _this = this;
-        if (enforceRecreation === void 0) { enforceRecreation = false; }
-        var hasNewOptions = false;
+    _createNewSocket(options, enforceRecreation = false) {
+        let hasNewOptions = false;
         if (options) {
-            for (var key in options) {
+            for (let key in options) {
                 if (!options.hasOwnProperty(key)) {
                     continue;
                 }
@@ -139,18 +122,17 @@ var CasparCG = (function (_super) {
             this._socket.dispose();
             delete this._socket;
         }
-        this._socket = new CasparCGSocket_1.CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
-        this.setParent(this._socket);
-        this._socket.on("error", function (error) { return _this._onSocketError(error); });
+        this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
+        this._socket.on("error", (error) => this._onSocketError(error));
         // inherit log method
-        this._socket.log = function (args) { return _this._log(args); };
-    };
+        this._socket.log = (args) => this._log(args);
+    }
     /**
      * Creates a new [[CasparCGSocket]] and connects.
      *
      * @param options	Setting new [[ICasparCGConnection]] properties will override each individual property allready defined on the `CasparCG` object. Existing properties not overwritten by this `options` object will remain.
      */
-    CasparCG.prototype.connect = function (options) {
+    connect(options) {
         // recreate socket if new options
         if (options) {
             this._createNewSocket(options);
@@ -158,181 +140,148 @@ var CasparCG = (function (_super) {
         if (this._socket) {
             this._socket.connect();
         }
-    };
+    }
     /**
      * Disconnects and disposes the [[CasparCGSocket]] connection.
      */
-    CasparCG.prototype.disconnect = function () {
+    disconnect() {
         if (this._socket) {
             this._socket.disconnect();
         }
-    };
+    }
     /**
      *
      */
-    CasparCG.prototype.reconnect = function () {
+    reconnect() {
         this._createNewSocket(undefined, true);
         this.connect();
-    };
-    Object.defineProperty(CasparCG.prototype, "host", {
-        /**
-         *
-         */
-        get: function () {
-            return this._host;
-        },
-        /**
-         * Setting the `host` will create a new [[CasparCGSocket]] connection.
-         *
-         * The new `CasparCGSocket` will `autoConnect` if the old socket was either successfully connected, or currently reconnecting. Changing the host resets the number of [[CasparCG.autoReconnectAttempts]].
-         */
-        set: function (host) {
-            if (this._host !== host) {
-                this._host = host;
-                if (this._socket != null) {
-                    var shouldReconnect = (this.connected || ((this._socket.socketStatus & CasparCGSocket_1.SocketState.reconnecting) === CasparCGSocket_1.SocketState.reconnecting));
-                    this._createNewSocket();
-                    if (shouldReconnect) {
-                        this.connect();
-                    }
-                }
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CasparCG.prototype, "port", {
-        /**
-         *
-         */
-        get: function () {
-            return this._port;
-        },
-        /**
-         * Setting the `port` will create a new [[CasparCGSocket]] connection.
-         *
-         * The new `CasparCGSocket` will `autoConnect` if the old socket was either successfully connected, or currently reconnecting. Changing the host resets the number of [[CasparCG.autoReconnectAttempts]].
-         */
-        set: function (port) {
-            if (this._port !== port) {
-                this._port = port;
-                if (this._socket != null) {
-                    var shouldReconnect = (this.connected || ((this._socket.socketStatus & CasparCGSocket_1.SocketState.reconnecting) === CasparCGSocket_1.SocketState.reconnecting));
-                    this._createNewSocket();
-                    if (shouldReconnect) {
-                        this.connect();
-                    }
-                }
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CasparCG.prototype, "autoReconnect", {
-        /**
-         * Try to reconnect in case of unintentionally loss of connection, or in case of failed connection in the first place.
-         */
-        get: function () {
-            return this._autoReconnect;
-        },
-        /**
-         *
-         */
-        set: function (autoReconnect) {
-            this._autoReconnect = autoReconnect;
-            if (this._socket) {
-                this._socket.autoReconnect = this._autoReconnect;
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CasparCG.prototype, "autoReconnectInterval", {
-        /**
-         * Timeout in milliseconds between each connection attempt during reconnection.
-         */
-        get: function () {
-            return this._autoReconnectInterval;
-        },
-        /**
-         *
-         */
-        set: function (autoReconnectInterval) {
-            this._autoReconnectInterval = autoReconnectInterval;
-            if (this._socket) {
-                this._socket.autoReconnectInterval = this._autoReconnectInterval;
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CasparCG.prototype, "autoReconnectAttempts", {
-        /**
-         * Max number of attempts of connection during reconnection. This value resets once the reconnection is over (either in case of successfully reconnecting, changed connection properties such as `host` or `port` or by being manually cancelled).
-         */
-        get: function () {
-            return this._autoReconnectAttempts;
-        },
-        /**
-         *
-         */
-        set: function (autoReconnectAttempts) {
-            this._autoReconnectAttempts = autoReconnectAttempts;
-            if (this._socket) {
-                this._socket.autoReconnectAttempts = this._autoReconnectAttempts;
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CasparCG.prototype, "connectionOptions", {
-        /**
-         *
-         */
-        get: function () {
-            var options = new AMCPConnectionOptions_1.ConnectionOptions({});
-            for (var key in options) {
-                if (this.hasOwnProperty(key) || CasparCG.hasOwnProperty(key)) {
-                    options[key] = this[key];
-                }
-            }
-            return options;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CasparCG.prototype, "connected", {
-        /**
-         *
-         */
-        get: function () {
-            return this._connected || false;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CasparCG.prototype, "connectionStatus", {
-        /**
-         *
-         */
-        get: function () {
-            return this._socket.socketStatus;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    }
     /**
      *
      */
-    CasparCG.prototype._onSocketStatusChange = function (socketStatus) {
-        var _this = this;
-        var connected = (socketStatus.valueOf() & CasparCGSocket_1.SocketState.connected) === CasparCGSocket_1.SocketState.connected;
+    get host() {
+        return this._host;
+    }
+    /**
+     * Setting the `host` will create a new [[CasparCGSocket]] connection.
+     *
+     * The new `CasparCGSocket` will `autoConnect` if the old socket was either successfully connected, or currently reconnecting. Changing the host resets the number of [[CasparCG.autoReconnectAttempts]].
+     */
+    set host(host) {
+        if (this._host !== host) {
+            this._host = host;
+            if (this._socket != null) {
+                let shouldReconnect = (this.connected || ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
+                this._createNewSocket();
+                if (shouldReconnect) {
+                    this.connect();
+                }
+            }
+        }
+    }
+    /**
+     *
+     */
+    get port() {
+        return this._port;
+    }
+    /**
+     * Setting the `port` will create a new [[CasparCGSocket]] connection.
+     *
+     * The new `CasparCGSocket` will `autoConnect` if the old socket was either successfully connected, or currently reconnecting. Changing the host resets the number of [[CasparCG.autoReconnectAttempts]].
+     */
+    set port(port) {
+        if (this._port !== port) {
+            this._port = port;
+            if (this._socket != null) {
+                let shouldReconnect = (this.connected || ((this._socket.socketStatus & SocketState.reconnecting) === SocketState.reconnecting));
+                this._createNewSocket();
+                if (shouldReconnect) {
+                    this.connect();
+                }
+            }
+        }
+    }
+    /**
+     * Try to reconnect in case of unintentionally loss of connection, or in case of failed connection in the first place.
+     */
+    get autoReconnect() {
+        return this._autoReconnect;
+    }
+    /**
+     *
+     */
+    set autoReconnect(autoReconnect) {
+        this._autoReconnect = autoReconnect;
+        if (this._socket) {
+            this._socket.autoReconnect = this._autoReconnect;
+        }
+    }
+    /**
+     * Timeout in milliseconds between each connection attempt during reconnection.
+     */
+    get autoReconnectInterval() {
+        return this._autoReconnectInterval;
+    }
+    /**
+     *
+     */
+    set autoReconnectInterval(autoReconnectInterval) {
+        this._autoReconnectInterval = autoReconnectInterval;
+        if (this._socket) {
+            this._socket.autoReconnectInterval = this._autoReconnectInterval;
+        }
+    }
+    /**
+     * Max number of attempts of connection during reconnection. This value resets once the reconnection is over (either in case of successfully reconnecting, changed connection properties such as `host` or `port` or by being manually cancelled).
+     */
+    get autoReconnectAttempts() {
+        return this._autoReconnectAttempts;
+    }
+    /**
+     *
+     */
+    set autoReconnectAttempts(autoReconnectAttempts) {
+        this._autoReconnectAttempts = autoReconnectAttempts;
+        if (this._socket) {
+            this._socket.autoReconnectAttempts = this._autoReconnectAttempts;
+        }
+    }
+    /**
+     *
+     */
+    get connectionOptions() {
+        let options = new ConnectionOptions({});
+        for (let key in options) {
+            if (this.hasOwnProperty(key) || CasparCG.hasOwnProperty(key)) {
+                options[key] = this[key];
+            }
+        }
+        return options;
+    }
+    /**
+     *
+     */
+    get connected() {
+        return this._connected || false;
+    }
+    /**
+     *
+     */
+    get connectionStatus() {
+        return this._socket.socketStatus;
+    }
+    /**
+     *
+     */
+    _onSocketStatusChange(socketStatus) {
+        let connected = (socketStatus.valueOf() & SocketState.connected) === SocketState.connected;
         if (this.onConnectionStatus) {
             this.onConnectionStatus(socketStatus.valueOf());
         }
         if (connected !== this._connected) {
             this._connected = connected;
-            this.fire(Events_1.CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
+            this.emit(CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
             if (this.onConnectionChanged) {
                 this.onConnectionChanged(this._connected);
             }
@@ -342,68 +291,64 @@ var CasparCG = (function (_super) {
                 delete this._configPromise;
                 delete this._pathsPromise;
                 if (this.autoServerVersion) {
-                    this.version(ServerStateEnum_1.Enum.Version.SERVER).then(function (result) {
-                        _this._setVersionFromServerResponse(result.response);
+                    this.version(Enum.Version.SERVER).then((result) => {
+                        this._setVersionFromServerResponse(result.response);
                     });
                 }
                 else {
                     this._expediteCommand(true);
                 }
-                this.fire(Events_1.CasparCGSocketStatusEvent.CONNECTED, socketStatus);
+                this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
                 if (this.onConnected) {
                     this.onConnected(this._connected);
                 }
             }
             if (!this._connected) {
-                this.fire(Events_1.CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
+                this.emit(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus);
                 if (this.onDisconnected) {
                     this.onDisconnected(this._connected);
                 }
             }
         }
-    };
+    }
     /**
      *
      */
-    CasparCG.prototype._onSocketStatusTimeout = function () {
-        var shouldReset = false;
+    _onSocketStatusTimeout() {
+        let shouldReset = false;
         while (this._sentCommands.length > 0) {
             shouldReset = true;
-            var i = void 0;
+            let i;
             i = this._sentCommands.shift();
-            this._log("Command timed out, " + this._sentCommands.length + " commands sent. Timeout: \"" + i.name + "\"");
+            this._log(`Command timed out, ${this._sentCommands.length} commands sent. Timeout: "${i.name}"`);
             i.status = IAMCPStatus.Timeout;
             i.reject(i);
         }
         if (shouldReset) {
             this.reconnect();
         }
-    };
-    Object.defineProperty(CasparCG.prototype, "commandQueue", {
-        /**
-         *
-         */
-        get: function () {
-            return this._queuedCommands;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    }
     /**
      *
      */
-    CasparCG.prototype._onSocketError = function (error) {
+    get commandQueue() {
+        return this._queuedCommands;
+    }
+    /**
+     *
+     */
+    _onSocketError(error) {
         this._log(error);
-    };
+    }
     /**
      *
      */
-    CasparCG.prototype._log = function (args) {
+    _log(args) {
         if (args instanceof Error) {
             console.error(args);
             if (this.onError) {
                 this.onError(args);
-                this.fire("error", args);
+                this.emit("error", args);
                 return;
             }
         }
@@ -413,24 +358,19 @@ var CasparCG = (function (_super) {
         if (this.onLog) {
             this.onLog(args);
         }
-        this.fire(Events_1.LogEvent.LOG, new Events_1.LogEvent(args));
-    };
-    CasparCG.prototype.do = function (commandOrString) {
-        var _this = this;
-        var params = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            params[_i - 1] = arguments[_i];
-        }
-        var command;
+        this.emit(LogEvent.LOG, new LogEvent(args));
+    }
+    do(commandOrString, ...params) {
+        let command;
         try {
             if (isIAMCPCommand(commandOrString)) {
                 command = commandOrString;
             }
             else if (typeof commandOrString === "string") {
-                if (AMCP_1.AMCP.hasOwnProperty(commandOrString)) {
+                if (AMCP.hasOwnProperty(commandOrString)) {
                     // @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
                     // @todo: typechecking with fallback
-                    command = Object.create(AMCP_1.AMCP[commandOrString]["prototype"]);
+                    command = Object.create(AMCP[commandOrString]["prototype"]);
                     // @todo: typechecking with fallback
                     if (command) {
                         command.constructor.apply(command, params);
@@ -453,46 +393,46 @@ var CasparCG = (function (_super) {
         catch (error) {
             return Promise.reject(error);
         }
-        var commandPromise = new Promise(function (resolve, reject) {
+        let commandPromise = new Promise((resolve, reject) => {
             command.resolve = resolve;
             command.reject = reject;
-            _this._addQueuedCommand(command);
+            this._addQueuedCommand(command);
         });
-        commandPromise.catch(function (error) {
+        commandPromise.catch((error) => {
             // @todo: global command error handler here
-            _this._log("Command error: " + error.toString());
+            this._log("Command error: " + error.toString());
         });
         return commandPromise;
-    };
+    }
     /**
      *
      */
-    CasparCG.prototype._addQueuedCommand = function (command) {
+    _addQueuedCommand(command) {
         this._queuedCommands.push(command);
-        this._log("New command added, " + this._queuedCommands.length + " on queue. Added: \"" + command.name + "\"");
+        this._log(`New command added, ${this._queuedCommands.length} on queue. Added: "${command.name}"`);
         command.status = IAMCPStatus.Queued;
         this._expediteCommand();
         return command;
-    };
+    }
     /**
      * @todo: document
      */
-    CasparCG.prototype.removeQueuedCommand = function (id) {
-        var removed;
-        for (var i = 0; i < this._queuedCommands.length; i++) {
-            var o = this._queuedCommands[i];
+    removeQueuedCommand(id) {
+        let removed;
+        for (let i = 0; i < this._queuedCommands.length; i++) {
+            let o = this._queuedCommands[i];
             if (o.id === id) {
                 removed = this._queuedCommands.splice(i, 1);
-                this._log("Command removed, " + this._queuedCommands.length + " on queue. Removed: \"" + removed[0].name + "\"");
+                this._log(`Command removed, ${this._queuedCommands.length} on queue. Removed: "${removed[0].name}"`);
                 break;
             }
         }
         return Array.isArray(removed) && removed.length > 0;
-    };
+    }
     /**
      *
      */
-    CasparCG.prototype._handleSocketResponse = function (socketResponse) {
+    _handleSocketResponse(socketResponse) {
         /*
         
         100 [action] - Information about an event.
@@ -523,8 +463,8 @@ var CasparCG = (function (_super) {
         if (this._sentCommands.length === 0) {
             return;
         }
-        var currentCommand = (this._sentCommands.shift());
-        this._log("Handling response, " + this._sentCommands.length + " commands sent. Handling: \"" + currentCommand.name + "\"");
+        let currentCommand = (this._sentCommands.shift());
+        this._log(`Handling response, ${this._sentCommands.length} commands sent. Handling: "${currentCommand.name}"`);
         if (!(currentCommand.response instanceof AMCPResponse)) {
             currentCommand.response = new AMCPResponse();
         }
@@ -536,30 +476,29 @@ var CasparCG = (function (_super) {
             currentCommand.status = IAMCPStatus.Failed;
             currentCommand.reject(currentCommand);
         }
-        this.fire(Events_1.CasparCGSocketCommandEvent.RESPONSE, new Events_1.CasparCGSocketCommandEvent(currentCommand));
+        this.emit(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
         if (this._socket.isRestarting) {
             return;
         }
         this._expediteCommand();
-    };
+    }
     /**
      *
      */
-    CasparCG.prototype._handleInvalidSocketResponse = function (socketResponse) {
+    _handleInvalidSocketResponse(socketResponse) {
         if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion && this.serverVersion < 2100) {
             this._expediteCommand(true);
         }
-    };
+    }
     /**
      *
      */
-    CasparCG.prototype._expediteCommand = function (flushSent) {
-        if (flushSent === void 0) { flushSent = false; }
+    _expediteCommand(flushSent = false) {
         if (flushSent) {
             while (this._sentCommands.length > 0) {
-                var i = (this._sentCommands.shift());
-                this._log("Flushing commands, " + this._sentCommands.length + " commands sent. Deleting: \"" + i.name + "\"");
-                if (i instanceof AMCP_1.AMCP.RestartCommand && this._socket.isRestarting) {
+                let i = (this._sentCommands.shift());
+                this._log(`Flushing commands, ${this._sentCommands.length} commands sent. Deleting: "${i.name}"`);
+                if (i instanceof AMCP.RestartCommand && this._socket.isRestarting) {
                     i.status = IAMCPStatus.Suceeded;
                     i.resolve(i);
                     continue;
@@ -583,9 +522,9 @@ var CasparCG = (function (_super) {
             // sequential mode
             if (this.queueMode === QueueMode.SEQUENTIAL) {
                 if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
-                    var nextCommand = (this._queuedCommands.shift());
+                    let nextCommand = (this._queuedCommands.shift());
                     this._sentCommands.push(nextCommand);
-                    this._log("Sending command, " + this._sentCommands.length + " commands sent, " + this._queuedCommands.length + " commands on queue. Sending: \"" + nextCommand.name + "\"");
+                    this._log(`Sending command, ${this._sentCommands.length} commands sent, ${this._queuedCommands.length} commands on queue. Sending: "${nextCommand.name}"`);
                     this._socket.executeCommand(nextCommand);
                 }
             }
@@ -596,10 +535,10 @@ var CasparCG = (function (_super) {
                 this.reconnect();
             }
         }
-    };
+    }
     /**	 */
-    CasparCG.prototype._setVersionFromServerResponse = function (serverVersionResponse) {
-        var versionString = serverVersionResponse.data.toString().slice(0, 5);
+    _setVersionFromServerResponse(serverVersionResponse) {
+        let versionString = serverVersionResponse.data.toString().slice(0, 5);
         switch (versionString) {
             case "2.0.7":
                 this.serverVersion = ServerVersion.V207;
@@ -608,689 +547,649 @@ var CasparCG = (function (_super) {
                 this.serverVersion = ServerVersion.V210;
                 break;
         }
-    };
+    }
     /** */
-    CasparCG.prototype.getCasparCGConfig = function (refresh) {
-        var _this = this;
-        if (refresh === void 0) { refresh = false; }
+    getCasparCGConfig(refresh = false) {
         if (!this._configPromise || refresh) {
-            this._configPromise = new Promise(function (resolve) {
-                _this.infoConfig().then(function (response) {
+            this._configPromise = new Promise((resolve) => {
+                this.infoConfig().then((response) => {
                     resolve(response.response.data);
                 });
             });
         }
         return this._configPromise;
-    };
+    }
     /** */
-    CasparCG.prototype.getCasparCGPaths = function (refresh) {
-        var _this = this;
-        if (refresh === void 0) { refresh = false; }
+    getCasparCGPaths(refresh = false) {
         if (!this._pathsPromise || refresh) {
-            this._pathsPromise = new Promise(function (resolve) {
-                _this.infoPaths().then(function (response) {
+            this._pathsPromise = new Promise((resolve) => {
+                this.infoPaths().then((response) => {
                     resolve(response.response.data);
                 });
             });
         }
         return this._pathsPromise;
-    };
+    }
     ///*********************////
     ///***		API		****////
     ///*********************///
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
      */
-    CasparCG.prototype.loadbg = function (channel, layer, clip, loop, transition, transitionDuration, transitionEasing, transitionDirection, seek, length, filter, auto) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadbgCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto }));
-    };
+    loadbg(channel, layer = NaN, clip, loop, transition, transitionDuration, transitionEasing, transitionDirection, seek, length, filter, auto) {
+        return this.do(new AMCP.LoadbgCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: auto }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
      */
-    CasparCG.prototype.loadbgAuto = function (channel, layer, clip, loop, transition, transitionDuration, transitionEasing, transitionDirection, seek, length, filter) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadbgCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: true }));
-    };
+    loadbgAuto(channel, layer = NaN, clip, loop, transition, transitionDuration, transitionEasing, transitionDirection, seek, length, filter) {
+        return this.do(new AMCP.LoadbgCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter, auto: true }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
      */
-    CasparCG.prototype.load = function (channel, layer, clip, loop, transition, transitionDuration, transitionEasing, transitionDirection, seek, length, filter) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter }));
-    };
-    CasparCG.prototype.play = function (channel, layer, clip, loop, transition, transitionDuration, transitionEasing, transitionDirection, seek, length, filter) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.PlayCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter }));
-    };
+    load(channel, layer = NaN, clip, loop, transition, transitionDuration, transitionEasing, transitionDirection, seek, length, filter) {
+        return this.do(new AMCP.LoadCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter }));
+    }
+    play(channel, layer = NaN, clip, loop, transition, transitionDuration, transitionEasing, transitionDirection, seek, length, filter) {
+        return this.do(new AMCP.PlayCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, seek: seek, length: length, filter: filter }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
      */
-    CasparCG.prototype.loadDecklinkBg = function (channel, layer, device, transition, transitionDuration, transitionEasing, transitionDirection, length, filter, format, channelLayout, auto) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadDecklinkBgCommand({ channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout, auto: auto }));
-    };
+    loadDecklinkBg(channel, layer = NaN, device, transition, transitionDuration, transitionEasing, transitionDirection, length, filter, format, channelLayout, auto) {
+        return this.do(new AMCP.LoadDecklinkBgCommand({ channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout, auto: auto }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
      */
-    CasparCG.prototype.loadDecklinkBgAuto = function (channel, layer, device, transition, transitionDuration, transitionEasing, transitionDirection, length, filter, format, channelLayout) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadDecklinkBgCommand({ channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout, auto: true }));
-    };
+    loadDecklinkBgAuto(channel, layer = NaN, device, transition, transitionDuration, transitionEasing, transitionDirection, length, filter, format, channelLayout) {
+        return this.do(new AMCP.LoadDecklinkBgCommand({ channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout, auto: true }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
      */
-    CasparCG.prototype.loadDecklink = function (channel, layer, device, transition, transitionDuration, transitionEasing, transitionDirection, length, filter, format, channelLayout) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadDecklinkCommand({ channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout }));
-    };
-    CasparCG.prototype.playDecklink = function (channel, layer, device, transition, transitionDuration, transitionEasing, transitionDirection, length, filter, format, channelLayout) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.PlayDecklinkCommand({ channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout }));
-    };
+    loadDecklink(channel, layer = NaN, device, transition, transitionDuration, transitionEasing, transitionDirection, length, filter, format, channelLayout) {
+        return this.do(new AMCP.LoadDecklinkCommand({ channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout }));
+    }
+    playDecklink(channel, layer = NaN, device, transition, transitionDuration, transitionEasing, transitionDirection, length, filter, format, channelLayout) {
+        return this.do(new AMCP.PlayDecklinkCommand({ channel: channel, layer: layer, device: device, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, length: length, filter: filter, format: format, channelLayout: channelLayout }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
      */
-    CasparCG.prototype.loadHtmlPageBg = function (channel, layer, clip, transition, transitionDuration, transitionEasing, transitionDirection, auto) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadHtmlPageBgCommand({ channel: channel, layer: layer, clip: clip, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, auto: auto }));
-    };
+    loadHtmlPageBg(channel, layer = NaN, clip, transition, transitionDuration, transitionEasing, transitionDirection, auto) {
+        return this.do(new AMCP.LoadHtmlPageBgCommand({ channel: channel, layer: layer, clip: clip, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, auto: auto }));
+    }
     /**
      *
      */
-    CasparCG.prototype.loadHtmlPageBgAuto = function (channel, layer, url, transition, transitionDuration, transitionEasing, transitionDirection) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadHtmlPageBgCommand({ channel: channel, layer: layer, url: url, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, auto: true }));
-    };
+    loadHtmlPageBgAuto(channel, layer = NaN, url, transition, transitionDuration, transitionEasing, transitionDirection) {
+        return this.do(new AMCP.LoadHtmlPageBgCommand({ channel: channel, layer: layer, url: url, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection, auto: true }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
      */
-    CasparCG.prototype.loadHtmlPage = function (channel, layer, url, transition, transitionDuration, transitionEasing, transitionDirection) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.LoadHtmlPageCommand({ channel: channel, layer: layer, url: url, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection }));
-    };
-    CasparCG.prototype.playHtmlPage = function (channel, layer, url, transition, transitionDuration, transitionEasing, transitionDirection) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.PlayHtmlPageCommand({ channel: channel, layer: layer, url: url, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection }));
-    };
+    loadHtmlPage(channel, layer = NaN, url, transition, transitionDuration, transitionEasing, transitionDirection) {
+        return this.do(new AMCP.LoadHtmlPageCommand({ channel: channel, layer: layer, url: url, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection }));
+    }
+    playHtmlPage(channel, layer = NaN, url, transition, transitionDuration, transitionEasing, transitionDirection) {
+        return this.do(new AMCP.PlayHtmlPageCommand({ channel: channel, layer: layer, url: url, transition: transition, transitionDuration: transitionDuration, transitionEasing: transitionEasing, transitionDirection: transitionDirection }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PAUSE>
      */
-    CasparCG.prototype.pause = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.PauseCommand({ channel: channel, layer: layer }));
-    };
+    pause(channel, layer) {
+        return this.do(new AMCP.PauseCommand({ channel: channel, layer: layer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#RESUME>
      */
-    CasparCG.prototype.resume = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.ResumeCommand({ channel: channel, layer: layer }));
-    };
+    resume(channel, layer) {
+        return this.do(new AMCP.ResumeCommand({ channel: channel, layer: layer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#STOP>
      */
-    CasparCG.prototype.stop = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.StopCommand({ channel: channel, layer: layer }));
-    };
+    stop(channel, layer) {
+        return this.do(new AMCP.StopCommand({ channel: channel, layer: layer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_ADD>
      */
-    CasparCG.prototype.cgAdd = function (channel, layer, flashLayer, templateName, playOnLoad, data) {
-        if (layer === void 0) { layer = NaN; }
-        if (flashLayer === void 0) { flashLayer = NaN; }
-        return this.do(new AMCP_1.AMCP.CGAddCommand({ channel: channel, layer: layer, flashLayer: flashLayer, templateName: templateName, playOnLoad: playOnLoad, data: data }));
-    };
+    cgAdd(channel, layer = NaN, flashLayer = NaN, templateName, playOnLoad, data) {
+        return this.do(new AMCP.CGAddCommand({ channel: channel, layer: layer, flashLayer: flashLayer, templateName: templateName, playOnLoad: playOnLoad, data: data }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_PLAY>
      */
-    CasparCG.prototype.cgPlay = function (channel, layer, flashLayer) {
-        return this.do(new AMCP_1.AMCP.CGPlayCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
-    };
+    cgPlay(channel, layer, flashLayer) {
+        return this.do(new AMCP.CGPlayCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_STOP>
      */
-    CasparCG.prototype.cgStop = function (channel, layer, flashLayer) {
-        return this.do(new AMCP_1.AMCP.CGStopCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
-    };
+    cgStop(channel, layer, flashLayer) {
+        return this.do(new AMCP.CGStopCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_NEXT>
      */
-    CasparCG.prototype.cgNext = function (channel, layer, flashLayer) {
-        return this.do(new AMCP_1.AMCP.CGNextCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
-    };
+    cgNext(channel, layer, flashLayer) {
+        return this.do(new AMCP.CGNextCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_REMOVE>
      */
-    CasparCG.prototype.cgRemove = function (channel, layer, flashLayer) {
-        return this.do(new AMCP_1.AMCP.CGRemoveCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
-    };
+    cgRemove(channel, layer, flashLayer) {
+        return this.do(new AMCP.CGRemoveCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_CLEAR>
      */
-    CasparCG.prototype.cgClear = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.CGClearCommand({ channel: channel, layer: layer }));
-    };
+    cgClear(channel, layer) {
+        return this.do(new AMCP.CGClearCommand({ channel: channel, layer: layer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_UPDATE>
      */
-    CasparCG.prototype.cgUpdate = function (channel, layer, flashLayer, data) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.CGUpdateCommand({ channel: channel, layer: layer, flashLayer: flashLayer, data: data }));
-    };
+    cgUpdate(channel, layer = NaN, flashLayer, data) {
+        return this.do(new AMCP.CGUpdateCommand({ channel: channel, layer: layer, flashLayer: flashLayer, data: data }));
+    }
     /*
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_INVOKE
      */
-    CasparCG.prototype.cgInvoke = function (channel, layer, flashLayer, method) {
-        return this.do(new AMCP_1.AMCP.CGInvokeCommand({ channel: channel, layer: layer, flashLayer: flashLayer, method: method }));
-    };
-    CasparCG.prototype.mixerKeyer = function (channel, layer, state, defer) {
-        return this.do(new AMCP_1.AMCP.MixerKeyerCommand({ channel: channel, layer: layer, keyer: state, defer: defer }));
-    };
+    cgInvoke(channel, layer, flashLayer, method) {
+        return this.do(new AMCP.CGInvokeCommand({ channel: channel, layer: layer, flashLayer: flashLayer, method: method }));
+    }
+    mixerKeyer(channel, layer, state, defer) {
+        return this.do(new AMCP.MixerKeyerCommand({ channel: channel, layer: layer, keyer: state, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_KEYER>
      */
-    CasparCG.prototype.mixerKeyerDeferred = function (channel, layer, state) {
+    mixerKeyerDeferred(channel, layer, state) {
         return this.mixerKeyer(channel, layer, state, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_KEYER>
      */
-    CasparCG.prototype.getMixerStatusKeyer = function (channel, layer) {
+    getMixerStatusKeyer(channel, layer) {
         return this.mixerKeyer(channel, layer);
-    };
-    CasparCG.prototype.mixerChroma = function (channel, layer, keyer, threshold, softness, spill, transitionDuration, transitionEasing, defer) {
-        if (layer === void 0) { layer = 0; }
-        return this.do(new AMCP_1.AMCP.MixerChromaCommand({ channel: channel, layer: layer, keyer: keyer, threshold: threshold, softness: softness, spill: spill, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
-    CasparCG.prototype.mixerChromaDeferred = function (channel, layer, keyer, threshold, softness, spill, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = 0; }
+    }
+    mixerChroma(channel, layer = 0, keyer, threshold, softness, spill, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerChromaCommand({ channel: channel, layer: layer, keyer: keyer, threshold: threshold, softness: softness, spill: spill, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
+    mixerChromaDeferred(channel, layer = 0, keyer, threshold, softness, spill, transitionDuration, transitionEasing) {
         return this.mixerChroma(channel, layer, keyer, threshold, softness, spill, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CHROMA>
      */
-    CasparCG.prototype.getMixerStatusChroma = function (channel, layer) {
+    getMixerStatusChroma(channel, layer) {
         return this.mixerChroma(channel, layer);
-    };
-    CasparCG.prototype.mixerBlend = function (channel, layer, blendmode, defer) {
-        return this.do(new AMCP_1.AMCP.MixerBlendCommand({ channel: channel, layer: layer, blendmode: blendmode, defer: defer }));
-    };
-    CasparCG.prototype.mixerBlendDeferred = function (channel, layer, blendmode) {
-        if (layer === void 0) { layer = NaN; }
+    }
+    mixerBlend(channel, layer, blendmode, defer) {
+        return this.do(new AMCP.MixerBlendCommand({ channel: channel, layer: layer, blendmode: blendmode, defer: defer }));
+    }
+    mixerBlendDeferred(channel, layer = NaN, blendmode) {
         return this.mixerBlend(channel, layer, blendmode, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_BLEND>
      */
-    CasparCG.prototype.getMixerStatusBlend = function (channel, layer) {
+    getMixerStatusBlend(channel, layer) {
         return this.mixerBlend(channel, layer);
-    };
-    CasparCG.prototype.mixerOpacity = function (channel, layer, opacity, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerOpacityCommand({ channel: channel, layer: layer, opacity: opacity, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerOpacity(channel, layer, opacity, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerOpacityCommand({ channel: channel, layer: layer, opacity: opacity, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_OPACITY>
      */
-    CasparCG.prototype.mixerOpacityDeferred = function (channel, layer, opacity, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerOpacityDeferred(channel, layer = NaN, opacity, transitionDuration, transitionEasing) {
         return this.mixerOpacity(channel, layer, opacity, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_OPACITY>
      */
-    CasparCG.prototype.getMixerStatusOpacity = function (channel, layer) {
+    getMixerStatusOpacity(channel, layer) {
         return this.mixerOpacity(channel, layer);
-    };
-    CasparCG.prototype.mixerBrightness = function (channel, layer, brightness, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerBrightnessCommand({ channel: channel, layer: layer, brightness: brightness, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerBrightness(channel, layer, brightness, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerBrightnessCommand({ channel: channel, layer: layer, brightness: brightness, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_BRIGHTNESS>
      */
-    CasparCG.prototype.mixerBrightnessDeferred = function (channel, layer, brightness, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerBrightnessDeferred(channel, layer = NaN, brightness, transitionDuration, transitionEasing) {
         return this.mixerBrightness(channel, layer, brightness, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_BRIGHTNESS>
      */
-    CasparCG.prototype.getMixerStatusBrightness = function (channel, layer) {
+    getMixerStatusBrightness(channel, layer) {
         return this.mixerBrightness(channel, layer);
-    };
-    CasparCG.prototype.mixerSaturation = function (channel, layer, saturation, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerSaturationCommand({ channel: channel, layer: layer, saturation: saturation, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerSaturation(channel, layer, saturation, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerSaturationCommand({ channel: channel, layer: layer, saturation: saturation, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_SATURATION>
      */
-    CasparCG.prototype.mixerSaturationDeferred = function (channel, layer, saturation, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerSaturationDeferred(channel, layer = NaN, saturation, transitionDuration, transitionEasing) {
         return this.mixerSaturation(channel, layer, saturation, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_SATURATION>
      */
-    CasparCG.prototype.getMixerStatusSaturation = function (channel, layer) {
+    getMixerStatusSaturation(channel, layer) {
         return this.mixerSaturation(channel, layer);
-    };
-    CasparCG.prototype.mixerContrast = function (channel, layer, contrast, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerContrastCommand({ channel: channel, layer: layer, contrast: contrast, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerContrast(channel, layer, contrast, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerContrastCommand({ channel: channel, layer: layer, contrast: contrast, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CONTRAST>
      */
-    CasparCG.prototype.mixerContrastDeferred = function (channel, layer, contrast, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerContrastDeferred(channel, layer = NaN, contrast, transitionDuration, transitionEasing) {
         return this.mixerContrast(channel, layer, contrast, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CONTRAST>
      */
-    CasparCG.prototype.getMixerStatusContrast = function (channel, layer) {
+    getMixerStatusContrast(channel, layer) {
         return this.mixerContrast(channel, layer);
-    };
-    CasparCG.prototype.mixerLevels = function (channel, layer, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing, defer) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerLevelsCommand({ channel: channel, layer: layer, minInput: minInput, maxInput: maxInput, gamma: gamma, minOutput: minOutput, maxOutput: maxOutput, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerLevels(channel, layer = NaN, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerLevelsCommand({ channel: channel, layer: layer, minInput: minInput, maxInput: maxInput, gamma: gamma, minOutput: minOutput, maxOutput: maxOutput, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_LEVELS>
      */
-    CasparCG.prototype.mixerLevelsDeferred = function (channel, layer, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerLevelsDeferred(channel, layer = NaN, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing) {
         return this.mixerLevels(channel, layer, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_LEVELS>
      */
-    CasparCG.prototype.getMixerStatusLevels = function (channel, layer) {
+    getMixerStatusLevels(channel, layer) {
         return this.mixerLevels(channel, layer);
-    };
-    CasparCG.prototype.mixerFill = function (channel, layer, x, y, xScale, yScale, transitionDuration, transitionEasing, defer) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerFillCommand({ channel: channel, layer: layer, x: x, y: y, xScale: xScale, yScale: yScale, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerFill(channel, layer = NaN, x, y, xScale, yScale, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerFillCommand({ channel: channel, layer: layer, x: x, y: y, xScale: xScale, yScale: yScale, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /*
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_FILL>
      */
-    CasparCG.prototype.mixerFillDeferred = function (channel, layer, x, y, xScale, yScale, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerFillDeferred(channel, layer = NaN, x, y, xScale, yScale, transitionDuration, transitionEasing) {
         return this.mixerFill(channel, layer, x, y, xScale, yScale, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_FILL>
      */
-    CasparCG.prototype.getMixerStatusFill = function (channel, layer) {
+    getMixerStatusFill(channel, layer) {
         return this.mixerFill(channel, layer);
-    };
-    CasparCG.prototype.mixerClip = function (channel, layer, x, y, width, height, transitionDuration, transitionEasing, defer) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerClipCommand({ channel: channel, layer: layer, x: x, y: y, width: width, height: height, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerClip(channel, layer = NaN, x, y, width, height, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerClipCommand({ channel: channel, layer: layer, x: x, y: y, width: width, height: height, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CLIP>
      */
-    CasparCG.prototype.mixerClipDeferred = function (channel, layer, x, y, width, height, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerClipDeferred(channel, layer = NaN, x, y, width, height, transitionDuration, transitionEasing) {
         return this.mixerClip(channel, layer, x, y, width, height, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CLIP>
      */
-    CasparCG.prototype.getMixerStatusClip = function (channel, layer) {
+    getMixerStatusClip(channel, layer) {
         return this.mixerClip(channel, layer);
-    };
-    CasparCG.prototype.mixerAnchor = function (channel, layer, x, y, transitionDuration, transitionEasing, defer) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerAnchorCommand({ channel: channel, layer: layer, x: x, y: y, ransition: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerAnchor(channel, layer = NaN, x, y, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerAnchorCommand({ channel: channel, layer: layer, x: x, y: y, ransition: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ANCHOR>
      */
-    CasparCG.prototype.mixerAnchorDeferred = function (channel, layer, x, y, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerAnchorDeferred(channel, layer = NaN, x, y, transitionDuration, transitionEasing) {
         return this.mixerAnchor(channel, layer, x, y, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ANCHOR>
      */
-    CasparCG.prototype.getMixerStatusAnchor = function (channel, layer) {
+    getMixerStatusAnchor(channel, layer) {
         return this.mixerAnchor(channel, layer);
-    };
-    CasparCG.prototype.mixerCrop = function (channel, layer, left, top, right, bottom, transitionDuration, transitionEasing, defer) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerCropCommand({ channel: channel, layer: layer, left: left, top: top, right: right, bottom: bottom, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerCrop(channel, layer = NaN, left, top, right, bottom, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerCropCommand({ channel: channel, layer: layer, left: left, top: top, right: right, bottom: bottom, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CROP>
      */
-    CasparCG.prototype.mixerCropDeferred = function (channel, layer, left, top, right, bottom, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerCropDeferred(channel, layer = NaN, left, top, right, bottom, transitionDuration, transitionEasing) {
         return this.mixerCrop(channel, layer, left, top, right, bottom, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CROP>
      */
-    CasparCG.prototype.getMixerStatusCrop = function (channel, layer) {
+    getMixerStatusCrop(channel, layer) {
         return this.mixerCrop(channel, layer);
-    };
-    CasparCG.prototype.mixerRotation = function (channel, layer, rotation, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerRotationCommand({ channel: channel, layer: layer, rotation: rotation, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerRotation(channel, layer, rotation, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerRotationCommand({ channel: channel, layer: layer, rotation: rotation, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ROTATION>
      */
-    CasparCG.prototype.mixerRotationDeferred = function (channel, layer, rotation, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerRotationDeferred(channel, layer = NaN, rotation, transitionDuration, transitionEasing) {
         return this.mixerRotation(channel, layer, rotation, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ROTATION>
      */
-    CasparCG.prototype.getMixerStatusRotation = function (channel, layer) {
+    getMixerStatusRotation(channel, layer) {
         return this.mixerRotation(channel, layer);
-    };
-    CasparCG.prototype.mixerPerspective = function (channel, layer, topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, defer) {
-        if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerPerspectiveCommand({ channel: channel, layer: layer, topLeftX: topLeftX, topLeftY: topLeftY, topRightX: topRightX, topRightY: topRightY, bottomRightX: bottomRightX, bottomRightY: bottomRightY, bottomLeftX: bottomLeftX, bottomLeftY: bottomLeftY, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerPerspective(channel, layer = NaN, topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerPerspectiveCommand({ channel: channel, layer: layer, topLeftX: topLeftX, topLeftY: topLeftY, topRightX: topRightX, topRightY: topRightY, bottomRightX: bottomRightX, bottomRightY: bottomRightY, bottomLeftX: bottomLeftX, bottomLeftY: bottomLeftY, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_PERSPECTIVE>
      */
-    CasparCG.prototype.mixerPerspectiveDeferred = function (channel, layer, topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerPerspectiveDeferred(channel, layer = NaN, topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing) {
         return this.mixerPerspective(channel, layer, topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_PERSPECTIVE>
      */
-    CasparCG.prototype.getMixerStatusPerspective = function (channel, layer) {
+    getMixerStatusPerspective(channel, layer) {
         return this.mixerPerspective(channel, layer);
-    };
-    CasparCG.prototype.mixerMipmap = function (channel, layer, state, defer) {
-        return this.do(new AMCP_1.AMCP.MixerMipmapCommand({ channel: channel, layer: layer, keyer: state, defer: defer }));
-    };
+    }
+    mixerMipmap(channel, layer, state, defer) {
+        return this.do(new AMCP.MixerMipmapCommand({ channel: channel, layer: layer, keyer: state, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_MIPMAP>
      */
-    CasparCG.prototype.mixerMipmapDeferred = function (channel, layer, state) {
+    mixerMipmapDeferred(channel, layer, state) {
         return this.mixerMipmap(channel, layer, state, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_MIPMAP>
      */
-    CasparCG.prototype.getMixerStatusMipmap = function (channel, layer) {
+    getMixerStatusMipmap(channel, layer) {
         return this.mixerMipmap(channel, layer);
-    };
-    CasparCG.prototype.mixerVolume = function (channel, layer, volume, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerVolumeCommand({ channel: channel, layer: layer, volume: volume, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerVolume(channel, layer, volume, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerVolumeCommand({ channel: channel, layer: layer, volume: volume, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_VOLUME>
      */
-    CasparCG.prototype.mixerVolumeDeferred = function (channel, layer, volume, transitionDuration, transitionEasing) {
-        if (layer === void 0) { layer = NaN; }
+    mixerVolumeDeferred(channel, layer = NaN, volume, transitionDuration, transitionEasing) {
         return this.mixerVolume(channel, layer, volume, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_VOLUME>
      */
-    CasparCG.prototype.getMixerStatusVolume = function (channel, layer) {
+    getMixerStatusVolume(channel, layer) {
         return this.mixerVolume(channel, layer);
-    };
-    CasparCG.prototype.mixerMastervolume = function (channel, mastervolume, defer) {
-        return this.do(new AMCP_1.AMCP.MixerMastervolumeCommand({ channel: channel, mastervolume: mastervolume, defer: defer }));
-    };
+    }
+    mixerMastervolume(channel, mastervolume, defer) {
+        return this.do(new AMCP.MixerMastervolumeCommand({ channel: channel, mastervolume: mastervolume, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_MASTERVOLUME>
      */
-    CasparCG.prototype.mixerMastervolumeDeferred = function (channel, mastervolume) {
+    mixerMastervolumeDeferred(channel, mastervolume) {
         return this.mixerMastervolume(channel, mastervolume, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_MASTERVOLUME>
      */
-    CasparCG.prototype.getMixerStatusMastervolume = function (channel) {
+    getMixerStatusMastervolume(channel) {
         return this.mixerMastervolume(channel);
-    };
-    CasparCG.prototype.mixerStraightAlphaOutput = function (channel, layer, state, defer) {
-        return this.do(new AMCP_1.AMCP.MixerKeyerCommand({ channel: channel, layer: layer, keyer: state, defer: defer }));
-    };
+    }
+    mixerStraightAlphaOutput(channel, layer, state, defer) {
+        return this.do(new AMCP.MixerKeyerCommand({ channel: channel, layer: layer, keyer: state, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_STRAIGHT_ALPHA_OUTPUT>
      */
-    CasparCG.prototype.mixerStraightAlphaOutputDeferred = function (channel, layer, state) {
+    mixerStraightAlphaOutputDeferred(channel, layer, state) {
         return this.mixerStraightAlphaOutput(channel, layer, state, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_STRAIGHT_ALPHA_OUTPUT>
      */
-    CasparCG.prototype.getMixerStatusStraightAlphaOutput = function (channel, layer) {
+    getMixerStatusStraightAlphaOutput(channel, layer) {
         return this.mixerStraightAlphaOutput(channel, layer);
-    };
-    CasparCG.prototype.mixerGrid = function (channel, resolution, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerGridCommand({ channel: channel, resolution: resolution, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
-    };
+    }
+    mixerGrid(channel, resolution, transitionDuration, transitionEasing, defer) {
+        return this.do(new AMCP.MixerGridCommand({ channel: channel, resolution: resolution, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_GRID>
      */
-    CasparCG.prototype.mixerGridDeferred = function (channel, resolution, transitionDuration, transitionEasing) {
+    mixerGridDeferred(channel, resolution, transitionDuration, transitionEasing) {
         return this.mixerGrid(channel, resolution, transitionDuration, transitionEasing, true);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_COMMIT>
      */
-    CasparCG.prototype.mixerCommit = function (channel) {
-        return this.do(new AMCP_1.AMCP.MixerCommitCommand({ channel: channel }));
-    };
+    mixerCommit(channel) {
+        return this.do(new AMCP.MixerCommitCommand({ channel: channel }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CLEAR>
      */
-    CasparCG.prototype.mixerClear = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.MixerClearCommand({ channel: channel, layer: layer }));
-    };
+    mixerClear(channel, layer) {
+        return this.do(new AMCP.MixerClearCommand({ channel: channel, layer: layer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CLEAR>
      */
-    CasparCG.prototype.clear = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.ClearCommand({ channel: channel, layer: layer }));
-    };
+    clear(channel, layer) {
+        return this.do(new AMCP.ClearCommand({ channel: channel, layer: layer }));
+    }
     /**
      * @todo	implement
      * @todo	document
      */
-    CasparCG.prototype.call = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.CallCommand({ channel: channel, layer: layer }));
-    };
+    call(channel, layer) {
+        return this.do(new AMCP.CallCommand({ channel: channel, layer: layer }));
+    }
     /**
      * @todo	implement
      * @todo	document
      */
-    CasparCG.prototype.swap = function () {
+    swap() {
         // @todo: overloading of origin/destination pairs
-        return this.do(new AMCP_1.AMCP.SwapCommand());
-    };
+        return this.do(new AMCP.SwapCommand());
+    }
     /**
      * @todo	implement
      * @todo	document
      */
-    CasparCG.prototype.add = function (channel) {
+    add(channel) {
         // remember index /layer
         // i suggest duplicating abstractchannelorlayer to avoid problems if the address logic changes for layers and not indicies
         // consumer factoruies parses "consumer"-string parameter
-        return this.do(new AMCP_1.AMCP.AddCommand({ channel: channel }));
-    };
+        return this.do(new AMCP.AddCommand({ channel: channel }));
+    }
     /**
      * @todo	implement
      * @todo	document
      */
-    CasparCG.prototype.remove = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.RemoveCommand({ channel: channel, layer: layer }));
-    };
+    remove(channel, layer) {
+        return this.do(new AMCP.RemoveCommand({ channel: channel, layer: layer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PRINT>
      */
-    CasparCG.prototype.print = function (channel) {
-        return this.do(new AMCP_1.AMCP.PrintCommand({ channel: channel }));
-    };
+    print(channel) {
+        return this.do(new AMCP.PrintCommand({ channel: channel }));
+    }
     /**
      * @todo	implement
      * @todo	document
      */
-    CasparCG.prototype.set = function (channel) {
+    set(channel) {
         // @todo:  param enum (only MODE and channelLayout for now)
         // @todo: switchable second parameter based on what to set:
         // mode = enum modes.......
         // layer = enum layouts..........
-        return this.do(new AMCP_1.AMCP.SetCommand({ channel: channel }));
-    };
-    CasparCG.prototype.lock = function (channel, action, lockPhrase) {
-        return this.do(new AMCP_1.AMCP.LockCommand({ channel: channel, action: action, phrase: lockPhrase }));
-    };
+        return this.do(new AMCP.SetCommand({ channel: channel }));
+    }
+    lock(channel, action, lockPhrase) {
+        return this.do(new AMCP.LockCommand({ channel: channel, action: action, phrase: lockPhrase }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CHANNEL_GRID>
      */
-    CasparCG.prototype.channelGrid = function () {
-        return this.do(new AMCP_1.AMCP.ChannelGridCommand());
-    };
+    channelGrid() {
+        return this.do(new AMCP.ChannelGridCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#GL_GC>
      */
-    CasparCG.prototype.glGC = function () {
-        return this.do(new AMCP_1.AMCP.GlGCCommand());
-    };
+    glGC() {
+        return this.do(new AMCP.GlGCCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#DATA_STORE>
      */
-    CasparCG.prototype.dataStore = function (fileName, data) {
-        return this.do(new AMCP_1.AMCP.DataStoreCommand({ fileName: fileName, data: data }));
-    };
+    dataStore(fileName, data) {
+        return this.do(new AMCP.DataStoreCommand({ fileName: fileName, data: data }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#DATA_RETRIEVE>
      */
-    CasparCG.prototype.dataRetrieve = function (fileName) {
-        return this.do(new AMCP_1.AMCP.DataRetrieveCommand({ fileName: fileName }));
-    };
+    dataRetrieve(fileName) {
+        return this.do(new AMCP.DataRetrieveCommand({ fileName: fileName }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#DATA_LIST>
      */
-    CasparCG.prototype.dataList = function () {
-        return this.do(new AMCP_1.AMCP.DataListCommand());
-    };
+    dataList() {
+        return this.do(new AMCP.DataListCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#DATA_REMOVE>
      */
-    CasparCG.prototype.dataRemove = function (fileName) {
-        return this.do(new AMCP_1.AMCP.DataRemoveCommand({ fileName: fileName }));
-    };
+    dataRemove(fileName) {
+        return this.do(new AMCP.DataRemoveCommand({ fileName: fileName }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#THUMBNAIL_LIST>
      */
-    CasparCG.prototype.thumbnailList = function () {
-        return this.do(new AMCP_1.AMCP.ThumbnailListCommand());
-    };
+    thumbnailList() {
+        return this.do(new AMCP.ThumbnailListCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#THUMBNAIL_RETRIEVE>
      */
-    CasparCG.prototype.thumbnailRetrieve = function (fileName) {
-        return this.do(new AMCP_1.AMCP.ThumbnailRetrieveCommand({ fileName: fileName }));
-    };
+    thumbnailRetrieve(fileName) {
+        return this.do(new AMCP.ThumbnailRetrieveCommand({ fileName: fileName }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#THUMBNAIL_GENERATE>
      */
-    CasparCG.prototype.thumbnailGenerate = function (fileName) {
-        return this.do(new AMCP_1.AMCP.ThumbnailGenerateCommand({ fileName: fileName }));
-    };
+    thumbnailGenerate(fileName) {
+        return this.do(new AMCP.ThumbnailGenerateCommand({ fileName: fileName }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#THUMBNAIL_GENERATE_ALL>
      */
-    CasparCG.prototype.thumbnailGenerateAll = function () {
-        return this.do(new AMCP_1.AMCP.ThumbnailGenerateAllCommand());
-    };
+    thumbnailGenerateAll() {
+        return this.do(new AMCP.ThumbnailGenerateAllCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CINF>
      */
-    CasparCG.prototype.cinf = function (fileName) {
-        return this.do(new AMCP_1.AMCP.CinfCommand({ fileName: fileName }));
-    };
+    cinf(fileName) {
+        return this.do(new AMCP.CinfCommand({ fileName: fileName }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CLS>
      */
-    CasparCG.prototype.cls = function () {
-        return this.do(new AMCP_1.AMCP.ClsCommand());
-    };
+    cls() {
+        return this.do(new AMCP.ClsCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#FLS>
      */
-    CasparCG.prototype.fls = function () {
-        return this.do(new AMCP_1.AMCP.FlsCommand());
-    };
+    fls() {
+        return this.do(new AMCP.FlsCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#TLS>
      */
-    CasparCG.prototype.tls = function () {
-        return this.do(new AMCP_1.AMCP.TlsCommand());
-    };
+    tls() {
+        return this.do(new AMCP.TlsCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#VERSION>
      */
-    CasparCG.prototype.version = function (component) {
-        return this.do(new AMCP_1.AMCP.VersionCommand({ component: component }));
-    };
+    version(component) {
+        return this.do(new AMCP.VersionCommand({ component: component }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO>
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_2>
      */
-    CasparCG.prototype.info = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.InfoCommand({ channel: channel, layer: layer }));
-    };
+    info(channel, layer) {
+        return this.do(new AMCP.InfoCommand({ channel: channel, layer: layer }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_TEMPLATE>
      */
-    CasparCG.prototype.infoTemplate = function (template) {
-        return this.do(new AMCP_1.AMCP.InfoTemplateCommand({ template: template }));
-    };
+    infoTemplate(template) {
+        return this.do(new AMCP.InfoTemplateCommand({ template: template }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_CONFIG>
      */
-    CasparCG.prototype.infoConfig = function () {
-        return this.do(new AMCP_1.AMCP.InfoConfigCommand([], { serverVersion: this.serverVersion }));
-    };
+    infoConfig() {
+        return this.do(new AMCP.InfoConfigCommand([], { serverVersion: this.serverVersion }));
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_PATHS>
      */
-    CasparCG.prototype.infoPaths = function () {
-        return this.do(new AMCP_1.AMCP.InfoPathsCommand());
-    };
+    infoPaths() {
+        return this.do(new AMCP.InfoPathsCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_SYSTEM>
      */
-    CasparCG.prototype.infoSystem = function () {
-        return this.do(new AMCP_1.AMCP.InfoSystemCommand());
-    };
+    infoSystem() {
+        return this.do(new AMCP.InfoSystemCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_SERVER>
      */
-    CasparCG.prototype.infoServer = function () {
-        return this.do(new AMCP_1.AMCP.InfoServerCommand());
-    };
+    infoServer() {
+        return this.do(new AMCP.InfoServerCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_QUEUES>
      */
-    CasparCG.prototype.infoQueues = function () {
-        return this.do(new AMCP_1.AMCP.InfoQueuesCommand());
-    };
+    infoQueues() {
+        return this.do(new AMCP.InfoQueuesCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_THREADS>
      */
-    CasparCG.prototype.infoThreads = function () {
-        return this.do(new AMCP_1.AMCP.InfoThreadsCommand());
-    };
+    infoThreads() {
+        return this.do(new AMCP.InfoThreadsCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_DELAY>
      */
-    CasparCG.prototype.infoDelay = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.InfoDelayCommand({ channel: channel, layer: layer }));
-    };
+    infoDelay(channel, layer) {
+        return this.do(new AMCP.InfoDelayCommand({ channel: channel, layer: layer }));
+    }
     /**
      * Retrieves information about a running template or the templatehost.
      *
@@ -1300,117 +1199,115 @@ var CasparCG = (function (_super) {
      *
      * @param flashLayer	If not specified, information about the `TemplateHost` will be returned.
      */
-    CasparCG.prototype.cgInfo = function (channel, layer, flashLayer) {
-        return this.do(new AMCP_1.AMCP.CGInfoCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
-    };
+    cgInfo(channel, layer, flashLayer) {
+        return this.do(new AMCP.CGInfoCommand({ channel: channel, layer: layer, flashLayer: flashLayer }));
+    }
     /**
      * Convenience method for calling [[cgInfo]] to return information about `TemplateHost` for a given layer.
      *
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_INFO>
      */
-    CasparCG.prototype.templateHostInfo = function (channel, layer) {
+    templateHostInfo(channel, layer) {
         return this.cgInfo(channel, layer);
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#GL_INFO>
      */
-    CasparCG.prototype.glInfo = function () {
-        return this.do(new AMCP_1.AMCP.GlInfoCommand());
-    };
+    glInfo() {
+        return this.do(new AMCP.GlInfoCommand());
+    }
     /**
      * Sets the server's [[LogLevel]].
      *
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOG_LEVEL>
      */
-    CasparCG.prototype.logLevel = function (enumOrString) {
-        return this.do(new AMCP_1.AMCP.LogLevelCommand({ level: enumOrString }));
-    };
-    CasparCG.prototype.logCategory = function (category, enabled) {
-        var params = {};
+    logLevel(enumOrString) {
+        return this.do(new AMCP.LogLevelCommand({ level: enumOrString }));
+    }
+    logCategory(category, enabled) {
+        let params = {};
         params[category.toString().toLowerCase()] = enabled;
-        return this.do(new AMCP_1.AMCP.LogCategoryCommand(params));
-    };
+        return this.do(new AMCP.LogCategoryCommand(params));
+    }
     /**
      * Convenience method for enabling or disabling logging for [[LogCategory.CALLTRACE]] through calling [[logCategory]].
      */
-    CasparCG.prototype.logCalltrace = function (enabled) {
-        return this.logCategory(ServerStateEnum_1.Enum.LogCategory.CALLTRACE, enabled);
-    };
+    logCalltrace(enabled) {
+        return this.logCategory(Enum.LogCategory.CALLTRACE, enabled);
+    }
     /**
      * Convenience method for enabling or disabling logging for [[LogCategory.COMMUNICATION]] through calling [[logCategory]].
      */
-    CasparCG.prototype.logCommunication = function (enabled) {
-        return this.logCategory(ServerStateEnum_1.Enum.LogCategory.COMMUNICATION, enabled);
-    };
+    logCommunication(enabled) {
+        return this.logCategory(Enum.LogCategory.COMMUNICATION, enabled);
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#DIAG>
      */
-    CasparCG.prototype.diag = function () {
-        return this.do(new AMCP_1.AMCP.DiagCommand());
-    };
-    CasparCG.prototype.help = function (commandOrName) {
-        var param = {};
+    diag() {
+        return this.do(new AMCP.DiagCommand());
+    }
+    help(commandOrName) {
+        let param = {};
         if (commandOrName) {
             param["command"] = commandOrName;
         }
-        return this.do(new AMCP_1.AMCP.HelpCommand(param));
-    };
+        return this.do(new AMCP.HelpCommand(param));
+    }
     /**
      * Convenience method for calling [[help]] with no parameters.
      *
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#HELP>
      */
-    CasparCG.prototype.getCommands = function () {
+    getCommands() {
         return this.help();
-    };
-    CasparCG.prototype.helpProducer = function (producerOrName) {
-        var param = {};
+    }
+    helpProducer(producerOrName) {
+        let param = {};
         if (producerOrName) {
             param["producer"] = producerOrName;
         }
-        return this.do(new AMCP_1.AMCP.HelpProducerCommand(param));
-    };
+        return this.do(new AMCP.HelpProducerCommand(param));
+    }
     /**
      * Convenience method for calling [[helpProducer]] with no parameters.
      *
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#HELP_PRODUCER>
      */
-    CasparCG.prototype.getProducers = function () {
+    getProducers() {
         return this.helpProducer();
-    };
-    CasparCG.prototype.helpConsumer = function (consumerOrName) {
-        var param = {};
+    }
+    helpConsumer(consumerOrName) {
+        let param = {};
         if (consumerOrName) {
             param["consumer"] = consumerOrName;
         }
-        return this.do(new AMCP_1.AMCP.HelpConsumerCommand(param));
-    };
+        return this.do(new AMCP.HelpConsumerCommand(param));
+    }
     /**
      * Convenience method for calling [[helpConsumer]] with no parameters.
      *
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#HELP_CONSUMER>
      */
-    CasparCG.prototype.getConsumers = function () {
+    getConsumers() {
         return this.helpConsumer();
-    };
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#BYE>
      */
-    CasparCG.prototype.bye = function () {
-        return this.do(new AMCP_1.AMCP.ByeCommand());
-    };
+    bye() {
+        return this.do(new AMCP.ByeCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#KILL>
      */
-    CasparCG.prototype.kill = function () {
-        return this.do(new AMCP_1.AMCP.KillCommand());
-    };
+    kill() {
+        return this.do(new AMCP.KillCommand());
+    }
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#RESTART>
      */
-    CasparCG.prototype.restart = function () {
-        return this.do(new AMCP_1.AMCP.RestartCommand());
-    };
-    return CasparCG;
-}(hap_1.EventEmitter));
-exports.CasparCG = CasparCG;
+    restart() {
+        return this.do(new AMCP.RestartCommand());
+    }
+}

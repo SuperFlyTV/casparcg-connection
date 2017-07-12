@@ -1,63 +1,45 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var BaseEvent_1 = require("./BaseEvent");
-var Event;
+import { Event as BaseEventNS } from "./BaseEvent";
+export var Event;
 (function (Event) {
     /**
      *
      */
-    var CasparCGSocketCommandEvent = (function (_super) {
-        __extends(CasparCGSocketCommandEvent, _super);
+    class CasparCGSocketCommandEvent extends BaseEventNS.BaseEvent {
         /**
          *
          */
-        function CasparCGSocketCommandEvent(command) {
-            var _this = _super.call(this, { command: command }) || this;
-            _this.command = command;
-            return _this;
+        constructor(command) {
+            super({ command });
+            this.command = command;
         }
         /**
          *
          */
-        CasparCGSocketCommandEvent.prototype.valueOf = function () {
+        valueOf() {
             return this.command;
-        };
-        return CasparCGSocketCommandEvent;
-    }(BaseEvent_1.Event.BaseEvent));
+        }
+    }
     CasparCGSocketCommandEvent.RESPONSE = "casparcgsocketcommandeventresponse";
     Event.CasparCGSocketCommandEvent = CasparCGSocketCommandEvent;
     /**
      *
      */
-    var CasparCGSocketResponseEvent = (function (_super) {
-        __extends(CasparCGSocketResponseEvent, _super);
+    class CasparCGSocketResponseEvent extends BaseEventNS.BaseEvent {
         /**
          *
          */
-        function CasparCGSocketResponseEvent(response) {
-            var _this = _super.call(this, { response: response }) || this;
-            _this.response = response;
-            return _this;
+        constructor(response) {
+            super({ response });
+            this.response = response;
         }
         /**
          *
          */
-        CasparCGSocketResponseEvent.prototype.valueOf = function () {
+        valueOf() {
             return this.response;
-        };
-        return CasparCGSocketResponseEvent;
-    }(BaseEvent_1.Event.BaseEvent));
+        }
+    }
     CasparCGSocketResponseEvent.RESPONSE = "casparcgsocketresponseeventresponse";
     CasparCGSocketResponseEvent.INVALID_RESPONSE = "casparcgsocketcommandeventresponseinvalid";
     Event.CasparCGSocketResponseEvent = CasparCGSocketResponseEvent;
-})(Event = exports.Event || (exports.Event = {}));
+})(Event || (Event = {}));

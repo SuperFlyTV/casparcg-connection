@@ -1,27 +1,25 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // Options NS
-var AMCPConnectionOptions_1 = require("./AMCPConnectionOptions");
-var ServerVersion = AMCPConnectionOptions_1.Options.ServerVersion;
+import { Options as OptionsNS } from "./AMCPConnectionOptions";
+var ServerVersion = OptionsNS.ServerVersion;
 // AMCPUtilNS
-var AMCP_1 = require("./AMCP");
-var CasparCGSocketResponse = AMCP_1.AMCPUtil.CasparCGSocketResponse;
+import { AMCPUtil as AMCPUtilNS } from "./AMCP";
+var CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
 // Validation NS
-var ResponseValidators_1 = require("./ResponseValidators");
-var XMLValidator = ResponseValidators_1.Response.XMLValidator;
+import { Response as validationNS } from "./ResponseValidators";
+var XMLValidator = validationNS.XMLValidator;
 // Response NS
-var ResponseParsers_1 = require("./ResponseParsers");
-var ConfigParser = ResponseParsers_1.Response.ConfigParser;
+import { Response as responseNS } from "./ResponseParsers";
+var ConfigParser = responseNS.ConfigParser;
 /** */
-var ConfigUtil;
+export var ConfigUtil;
 (function (ConfigUtil) {
     /** */
     function parseConfigFrom207XML(XMLString) {
-        var validator = new XMLValidator();
-        var parser = new ConfigParser();
+        let validator = new XMLValidator();
+        let parser = new ConfigParser();
         parser.context = { serverVersion: ServerVersion.V207 };
-        var fauxResponseData = new CasparCGSocketResponse(XMLString); // @todo: does this work?
-        var validData = {};
+        let fauxResponseData = new CasparCGSocketResponse(XMLString); // @todo: does this work?
+        let validData = {};
         if ((validData = validator.resolve(fauxResponseData)) === false) {
             return {};
         }
@@ -33,11 +31,11 @@ var ConfigUtil;
     ConfigUtil.parseConfigFrom207XML = parseConfigFrom207XML;
     /** */
     function parseConfigFrom210XML(XMLString) {
-        var validator = new XMLValidator();
-        var parser = new ConfigParser();
+        let validator = new XMLValidator();
+        let parser = new ConfigParser();
         parser.context = { serverVersion: ServerVersion.V207 };
-        var fauxResponseData = new CasparCGSocketResponse(XMLString); // @todo: does this work?
-        var validData = {};
+        let fauxResponseData = new CasparCGSocketResponse(XMLString); // @todo: does this work?
+        let validData = {};
         if ((validData = validator.resolve(fauxResponseData)) === false) {
             return {};
         }
@@ -47,4 +45,4 @@ var ConfigUtil;
         return validData;
     }
     ConfigUtil.parseConfigFrom210XML = parseConfigFrom210XML;
-})(ConfigUtil = exports.ConfigUtil || (exports.ConfigUtil = {}));
+})(ConfigUtil || (ConfigUtil = {}));

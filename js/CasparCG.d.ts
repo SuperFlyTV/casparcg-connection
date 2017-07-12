@@ -1,4 +1,4 @@
-import { EventEmitter } from "hap";
+/// <reference types="node" />
 import { SocketState } from "./lib/CasparCGSocket";
 import { Enum } from "./lib/ServerStateEnum";
 import { IConnectionOptions, ConnectionOptions, Options as OptionsNS } from "./lib/AMCPConnectionOptions";
@@ -226,7 +226,7 @@ export interface ICasparCGConnection {
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object.
  * `CasparCG` should be the only public interface to interact directly with.
  */
-export declare class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
+export declare class CasparCG extends NodeJS.EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
     private _connected;
     private _host;
     private _port;
