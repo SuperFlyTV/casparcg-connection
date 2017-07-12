@@ -31,7 +31,7 @@ gulp.task('dist', function () {
 //compile
 gulp.task('compile', function () {
   var tsResult = project.src() 
-        .pipe(ts(project));
+        .pipe(project());
 
          tsResult.dts
 			.pipe(gulp.dest(DIST_DIR));
