@@ -36,6 +36,7 @@ var CasparCG = (function (_super) {
     __extends(CasparCG, _super);
     function CasparCG(hostOrOptions, port) {
         var _this = _super.call(this) || this;
+        _this._connected = false;
         _this._queuedCommands = [];
         _this._sentCommands = [];
         /**

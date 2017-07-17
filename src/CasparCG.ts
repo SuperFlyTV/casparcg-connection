@@ -260,7 +260,7 @@ export interface ICasparCGConnection {
  *`CasparCG` should be the only public interface to interact directly with.
  */
 export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
-	private _connected: boolean;
+	private _connected: boolean = false;
 	private _host: string;
 	private _port: number;
 	private _autoReconnect: boolean;
