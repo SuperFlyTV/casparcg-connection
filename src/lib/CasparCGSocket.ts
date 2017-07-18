@@ -40,7 +40,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _lastConnectionAttempt: number;
 	private _reconnectAttempts: number;
 	private _reconnectAttempt: number = 0;
-	private _reconnectInterval: NodeJS.Timer;
+	private _connectionAttemptTimer: NodeJS.Timer;
 	private _commandTimeoutTimer: NodeJS.Timer;
 	private _commandTimeout: number = 5000; // @todo make connectionOption!
 	private _parsedResponse: AMCPUtil.CasparCGSocketResponse | undefined;
@@ -95,8 +95,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			this._lastConnectionAttempt = Date.now();
 		}
 
-		if (!this.connected && !this._reconnectInterval) {
-			this._reconnectInterval = global.setInterval(() => this._autoReconnection(), this._reconnectDelay);
+		if (!this.connected && !this._connectionAttemptTimer) {
+			this._connectionAttemptTimer = global.setInterval(() => this._autoReconnectionAttempt(), this._reconnectDelay);
 		}
 	}
 
@@ -112,12 +112,12 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	/**
 	 *
 	 */
-	private _autoReconnection(): void {
+	private _autoReconnectionAttempt(): void {
 		if (this._autoReconnect) {
 			if (this._reconnectAttempts > 0) {								// no reconnection if no valid reconnectionAttemps is set
 				if ((this._reconnectAttempt >= this._reconnectAttempts)) {	// if current attempt is not less than max attempts
 					// reset reconnection behaviour
-					this._clearReconnectInterval();
+					this._clearConnectionAttemptTimer();
 					return;
 				}
 				// new attempt if not allready connected
@@ -132,12 +132,12 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	/**
 	 *
 	 */
-	private _clearReconnectInterval(): void {
+	private _clearConnectionAttemptTimer(): void {
 		// @todo create event telling reconnection ended with result: true/false
 		// only if reconnection interval is true
 		this._reconnectAttempt = 0;
-		global.clearInterval(this._reconnectInterval);
-		delete this._reconnectInterval;
+		global.clearInterval(this._connectionAttemptTimer);
+		delete this._connectionAttemptTimer;
 	}
 
 	/**
@@ -164,7 +164,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 *
 	 */
 	public dispose(): void {
-		this._clearReconnectInterval();
+		this._clearConnectionAttemptTimer();
 		this._client.destroy();
 	}
 
@@ -233,7 +233,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	private _onConnected() {
 		this.isRestarting = false;
-		this._clearReconnectInterval();
+		this._clearConnectionAttemptTimer();
 		_(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => this._parseResponseGroups(i));
 		this.connected = true;
 	}
