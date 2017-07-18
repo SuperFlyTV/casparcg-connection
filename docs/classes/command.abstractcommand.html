@@ -7,7 +7,6 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
-	<script src="../assets/js/modernizr.js"></script>
 </head>
 <body>
 <header>
@@ -239,6 +238,7 @@
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="command.abstractcommand.html#channel" class="tsd-kind-icon">channel</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="command.abstractcommand.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="command.abstractcommand.html#layer" class="tsd-kind-icon">layer</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="command.abstractcommand.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="command.abstractcommand.html#payload" class="tsd-kind-icon">payload</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="command.abstractcommand.html#protocollogic" class="tsd-kind-icon">protocol<wbr>Logic</a></li>
 								<li class="tsd-kind-accessor tsd-parent-kind-class"><a href="command.abstractcommand.html#status" class="tsd-kind-icon">status</a></li>
@@ -267,19 +267,19 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Abstract<wbr>Command<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../modules/param.html" class="tsd-signature-type">Param</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="command.abstractcommand.html" class="tsd-signature-type">AbstractCommand</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Abstract<wbr>Command<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../modules/param.html" class="tsd-signature-type">Param</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span>, context<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="command.abstractcommand.html" class="tsd-signature-type">AbstractCommand</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L140">lib/AbstractCommand.ts:140</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L141">lib/AbstractCommand.ts:141</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../modules/param.html" class="tsd-signature-type">Param</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><a href="../modules/param.html" class="tsd-signature-type">Param</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> context: <span class="tsd-signature-type">Object</span></h5>
@@ -298,7 +298,7 @@
 					<div class="tsd-signature tsd-kind-icon">_channel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L135">lib/AbstractCommand.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L136">lib/AbstractCommand.ts:136</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -308,7 +308,7 @@
 					<div class="tsd-signature tsd-kind-icon">_id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L137">lib/AbstractCommand.ts:137</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L138">lib/AbstractCommand.ts:138</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -318,7 +318,7 @@
 					<div class="tsd-signature tsd-kind-icon">_layer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L136">lib/AbstractCommand.ts:136</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L137">lib/AbstractCommand.ts:137</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -328,27 +328,27 @@
 					<div class="tsd-signature tsd-kind-icon">_object<wbr>Params<span class="tsd-signature-symbol">:</span> <a href="../modules/param.html" class="tsd-signature-type">Param</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L140">lib/AbstractCommand.ts:140</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L141">lib/AbstractCommand.ts:141</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="_payload" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> _payload</h3>
-					<div class="tsd-signature tsd-kind-icon">_payload<span class="tsd-signature-symbol">:</span> <a href="../index.html#payloadvo" class="tsd-signature-type">PayloadVO</a></div>
+					<div class="tsd-signature tsd-kind-icon">_payload<span class="tsd-signature-symbol">:</span> <a href="../modules/param.html#payloadvo" class="tsd-signature-type">PayloadVO</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L138">lib/AbstractCommand.ts:138</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L139">lib/AbstractCommand.ts:139</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="_status" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _status</h3>
-					<div class="tsd-signature tsd-kind-icon">_status<span class="tsd-signature-symbol">:</span> <a href="../enums/command.iamcpstatus.html" class="tsd-signature-type">IAMCPStatus</a></div>
+					<div class="tsd-signature tsd-kind-icon">_status<span class="tsd-signature-symbol">:</span> <a href="../enums/command.iamcpstatus.html" class="tsd-signature-type">IAMCPStatus</a><span class="tsd-signature-symbol"> =&nbsp;IAMCPStatus.New</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L134">lib/AbstractCommand.ts:134</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L135">lib/AbstractCommand.ts:135</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -358,7 +358,7 @@
 					<div class="tsd-signature tsd-kind-icon">_string<wbr>Params<wbr>Array<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L139">lib/AbstractCommand.ts:139</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L140">lib/AbstractCommand.ts:140</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -368,7 +368,7 @@
 					<div class="tsd-signature tsd-kind-icon">context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L159">lib/AbstractCommand.ts:159</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L160">lib/AbstractCommand.ts:160</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -379,7 +379,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#onstatuschanged">onStatusChanged</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L131">lib/AbstractCommand.ts:131</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L132">lib/AbstractCommand.ts:132</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -390,7 +390,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#paramprotocol">paramProtocol</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L129">lib/AbstractCommand.ts:129</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L130">lib/AbstractCommand.ts:130</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -401,7 +401,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#reject">reject</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L133">lib/AbstractCommand.ts:133</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L134">lib/AbstractCommand.ts:134</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -433,7 +433,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#resolve">resolve</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L132">lib/AbstractCommand.ts:132</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L133">lib/AbstractCommand.ts:133</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -461,22 +461,22 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="response" class="tsd-anchor"></a>
 					<h3>response</h3>
-					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <a href="../interfaces/command.iamcpresponse.html" class="tsd-signature-type">IAMCPResponse</a></div>
+					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <a href="../interfaces/command.iamcpresponse.html" class="tsd-signature-type">IAMCPResponse</a><span class="tsd-signature-symbol"> =&nbsp;new AMCPResponse()</span></div>
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#response">response</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L128">lib/AbstractCommand.ts:128</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L129">lib/AbstractCommand.ts:129</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="responseprotocol" class="tsd-anchor"></a>
 					<h3>response<wbr>Protocol</h3>
-					<div class="tsd-signature tsd-kind-icon">response<wbr>Protocol<span class="tsd-signature-symbol">:</span> <a href="response.responsesignature.html" class="tsd-signature-type">ResponseSignature</a></div>
+					<div class="tsd-signature tsd-kind-icon">response<wbr>Protocol<span class="tsd-signature-symbol">:</span> <a href="response.responsesignature.html" class="tsd-signature-type">ResponseSignature</a><span class="tsd-signature-symbol"> =&nbsp;new ResponseSignature()</span></div>
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#responseprotocol">responseProtocol</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L130">lib/AbstractCommand.ts:130</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L131">lib/AbstractCommand.ts:131</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -493,7 +493,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L402">lib/AbstractCommand.ts:402</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L410">lib/AbstractCommand.ts:410</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -510,7 +510,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L388">lib/AbstractCommand.ts:388</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L396">lib/AbstractCommand.ts:396</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -527,7 +527,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L331">lib/AbstractCommand.ts:331</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L332">lib/AbstractCommand.ts:332</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -544,7 +544,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L395">lib/AbstractCommand.ts:395</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L403">lib/AbstractCommand.ts:403</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -552,19 +552,36 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="payload" class="tsd-anchor"></a>
-					<h3>payload</h3>
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> payload<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../index.html#payloadvo" class="tsd-signature-type">PayloadVO</a></li>
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> name<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L324">lib/AbstractCommand.ts:324</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L339">lib/AbstractCommand.ts:339</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="../index.html#payloadvo" class="tsd-signature-type">PayloadVO</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
+					<a name="payload" class="tsd-anchor"></a>
+					<h3>payload</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> payload<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../modules/param.html#payloadvo" class="tsd-signature-type">PayloadVO</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L325">lib/AbstractCommand.ts:325</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="../modules/param.html#payloadvo" class="tsd-signature-type">PayloadVO</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -578,7 +595,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L381">lib/AbstractCommand.ts:381</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L389">lib/AbstractCommand.ts:389</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/protocol.iprotocollogic.html" class="tsd-signature-type">IProtocolLogic</a><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -596,7 +613,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L409">lib/AbstractCommand.ts:409</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L417">lib/AbstractCommand.ts:417</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../enums/command.iamcpstatus.html" class="tsd-signature-type">IAMCPStatus</a></h4>
@@ -604,7 +621,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L416">lib/AbstractCommand.ts:416</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L424">lib/AbstractCommand.ts:424</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -631,7 +648,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#populate">populate</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L444">lib/AbstractCommand.ts:444</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L452">lib/AbstractCommand.ts:452</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -658,7 +675,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#serialize">serialize</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L428">lib/AbstractCommand.ts:428</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L436">lib/AbstractCommand.ts:436</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/command.iamcpcommandvo.html" class="tsd-signature-type">IAMCPCommandVO</a></h4>
@@ -675,7 +692,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L454">lib/AbstractCommand.ts:454</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L462">lib/AbstractCommand.ts:462</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -692,7 +709,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L338">lib/AbstractCommand.ts:338</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L346">lib/AbstractCommand.ts:346</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -709,7 +726,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L360">lib/AbstractCommand.ts:360</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L368">lib/AbstractCommand.ts:368</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -732,7 +749,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L231">lib/AbstractCommand.ts:231</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L232">lib/AbstractCommand.ts:232</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -756,7 +773,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#validateparams">validateParams</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L190">lib/AbstractCommand.ts:190</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L191">lib/AbstractCommand.ts:191</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -773,7 +790,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L269">lib/AbstractCommand.ts:269</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L270">lib/AbstractCommand.ts:270</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -791,7 +808,7 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/command.iamcpcommand.html">IAMCPCommand</a>.<a href="../interfaces/command.iamcpcommand.html#validateresponse">validateResponse</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/AbstractCommand.ts#L289">lib/AbstractCommand.ts:289</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/AbstractCommand.ts#L290">lib/AbstractCommand.ts:290</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -939,6 +956,9 @@
 								<a href="command.abstractcommand.html#layer" class="tsd-kind-icon">layer</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
+								<a href="command.abstractcommand.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
 								<a href="command.abstractcommand.html#payload" class="tsd-kind-icon">payload</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
@@ -1070,7 +1090,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
@@ -1081,7 +1101,7 @@
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-83648715-1', 'auto');
+        ga('create', 'UA-83648715-1', '');
         ga('send', 'pageview');
     </script>
 </body>

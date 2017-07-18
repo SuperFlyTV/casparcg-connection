@@ -7,7 +7,6 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
-	<script src="../assets/js/modernizr.js"></script>
 </head>
 <body>
 <header>
@@ -74,24 +73,19 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">EventFacade</span>
+						<span class="target">BaseEvent</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">BaseEvent</span>
-								<ul class="tsd-hierarchy">
-									<li>
-										<a href="event.casparcgsocketstatusevent.html" class="tsd-signature-type">CasparCGSocketStatusEvent</a>
-									</li>
-									<li>
-										<a href="event.casparcgsocketcommandevent.html" class="tsd-signature-type">CasparCGSocketCommandEvent</a>
-									</li>
-									<li>
-										<a href="event.casparcgsocketresponseevent.html" class="tsd-signature-type">CasparCGSocketResponseEvent</a>
-									</li>
-									<li>
-										<a href="event.logevent.html" class="tsd-signature-type">LogEvent</a>
-									</li>
-								</ul>
+								<a href="event.casparcgsocketstatusevent.html" class="tsd-signature-type">CasparCGSocketStatusEvent</a>
+							</li>
+							<li>
+								<a href="event.casparcgsocketcommandevent.html" class="tsd-signature-type">CasparCGSocketCommandEvent</a>
+							</li>
+							<li>
+								<a href="event.casparcgsocketresponseevent.html" class="tsd-signature-type">CasparCGSocketResponseEvent</a>
+							</li>
+							<li>
+								<a href="event.logevent.html" class="tsd-signature-type">LogEvent</a>
 							</li>
 						</ul>
 					</li>
@@ -104,13 +98,18 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="event.baseevent.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="event.baseevent.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="event.baseevent.html#_val" class="tsd-kind-icon">_val</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="event.baseevent.html#val" class="tsd-kind-icon">val</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="event.baseevent.html#valueof" class="tsd-kind-icon">value<wbr>Of</a></li>
 							</ul>
 						</section>
@@ -119,18 +118,17 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">new <wbr>Base<wbr>Event<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="event.baseevent.html" class="tsd-signature-type">BaseEvent</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overwrites EventFacade.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/BaseEvent.ts#L7">lib/event/BaseEvent.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/BaseEvent.ts#L6">lib/event/BaseEvent.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -145,31 +143,20 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="val" class="tsd-anchor"></a>
-					<h3>val</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">val<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from EventFacade.val</p>
-								<ul>
-									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:19</li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">Object</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Object</span></h4>
-						</li>
-					</ul>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="_val" class="tsd-anchor"></a>
+					<h3>_val</h3>
+					<div class="tsd-signature tsd-kind-icon">_val<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/BaseEvent.ts#L6">lib/event/BaseEvent.ts:6</a></li>
+						</ul>
+					</aside>
 				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="valueof" class="tsd-anchor"></a>
 					<h3>value<wbr>Of</h3>
@@ -180,7 +167,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/BaseEvent.ts#L20">lib/event/BaseEvent.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/BaseEvent.ts#L18">lib/event/BaseEvent.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Object</span></h4>
@@ -252,11 +239,11 @@
 					<li class="current tsd-kind-class tsd-parent-kind-module">
 						<a href="event.baseevent.html" class="tsd-kind-icon">Base<wbr>Event</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="event.baseevent.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="event.baseevent.html#val" class="tsd-kind-icon">val</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="event.baseevent.html#_val" class="tsd-kind-icon">_val</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="event.baseevent.html#valueof" class="tsd-kind-icon">value<wbr>Of</a>
@@ -276,6 +263,9 @@
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="event.logevent.html" class="tsd-kind-icon">Log<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/event.socketstatus.html" class="tsd-kind-icon">Socket<wbr>Status</a>
 					</li>
 				</ul>
 			</nav>
@@ -342,7 +332,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
@@ -353,7 +343,7 @@
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-83648715-1', 'auto');
+        ga('create', 'UA-83648715-1', '');
         ga('send', 'pageview');
     </script>
 </body>

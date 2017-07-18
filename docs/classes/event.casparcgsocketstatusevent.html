@@ -7,7 +7,6 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
-	<script src="../assets/js/modernizr.js"></script>
 </head>
 <body>
 <header>
@@ -96,6 +95,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="event.casparcgsocketstatusevent.html#_val" class="tsd-kind-icon">_val</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="event.casparcgsocketstatusevent.html#socketstatus" class="tsd-kind-icon">socket<wbr>Status</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="event.casparcgsocketstatusevent.html#connected" class="tsd-kind-icon">CONNECTED</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="event.casparcgsocketstatusevent.html#disconnected" class="tsd-kind-icon">DISCONNECTED</a></li>
@@ -107,7 +107,6 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="event.casparcgsocketstatusevent.html#val" class="tsd-kind-icon">val</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="event.casparcgsocketstatusevent.html#valueof" class="tsd-kind-icon">value<wbr>Of</a></li>
 							</ul>
 						</section>
@@ -120,20 +119,20 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>CasparCGSocket<wbr>Status<wbr>Event<span class="tsd-signature-symbol">(</span>socketStatus<span class="tsd-signature-symbol">: </span><a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="event.casparcgsocketstatusevent.html" class="tsd-signature-type">CasparCGSocketStatusEvent</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>CasparCGSocket<wbr>Status<wbr>Event<span class="tsd-signature-symbol">(</span>socketStatus<span class="tsd-signature-symbol">: </span><a href="../interfaces/event.socketstatus.html" class="tsd-signature-type">SocketStatus</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="event.casparcgsocketstatusevent.html" class="tsd-signature-type">CasparCGSocketStatusEvent</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overwrites <a href="event.baseevent.html">BaseEvent</a>.<a href="event.baseevent.html#constructor">constructor</a></p>
+								<p>Overrides <a href="event.baseevent.html">BaseEvent</a>.<a href="event.baseevent.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/CasparCGSocketStatusEvent.ts#L9">lib/event/CasparCGSocketStatusEvent.ts:9</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/CasparCGSocketStatusEvent.ts#L13">lib/event/CasparCGSocketStatusEvent.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>socketStatus: <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></h5>
+									<h5>socketStatus: <a href="../interfaces/event.socketstatus.html" class="tsd-signature-type">SocketStatus</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="event.casparcgsocketstatusevent.html" class="tsd-signature-type">CasparCGSocketStatusEvent</a></h4>
@@ -143,108 +142,95 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="_val" class="tsd-anchor"></a>
+					<h3>_val</h3>
+					<div class="tsd-signature tsd-kind-icon">_val<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Object</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="event.baseevent.html">BaseEvent</a>.<a href="event.baseevent.html#_val">_val</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/BaseEvent.ts#L6">lib/event/BaseEvent.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="socketstatus" class="tsd-anchor"></a>
 					<h3>socket<wbr>Status</h3>
-					<div class="tsd-signature tsd-kind-icon">socket<wbr>Status<span class="tsd-signature-symbol">:</span> <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></div>
+					<div class="tsd-signature tsd-kind-icon">socket<wbr>Status<span class="tsd-signature-symbol">:</span> <a href="../interfaces/event.socketstatus.html" class="tsd-signature-type">SocketStatus</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/CasparCGSocketStatusEvent.ts#L14">lib/event/CasparCGSocketStatusEvent.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/CasparCGSocketStatusEvent.ts#L18">lib/event/CasparCGSocketStatusEvent.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="connected" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> CONNECTED</h3>
-					<div class="tsd-signature tsd-kind-icon">CONNECTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">CONNECTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;casparcgsocketconnectioneventstatusconnected&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/CasparCGSocketStatusEvent.ts#L27">lib/event/CasparCGSocketStatusEvent.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/CasparCGSocketStatusEvent.ts#L31">lib/event/CasparCGSocketStatusEvent.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="disconnected" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> DISCONNECTED</h3>
-					<div class="tsd-signature tsd-kind-icon">DISCONNECTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">DISCONNECTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;casparcgsocketconnectioneventstatusdisconnected&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/CasparCGSocketStatusEvent.ts#L28">lib/event/CasparCGSocketStatusEvent.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/CasparCGSocketStatusEvent.ts#L32">lib/event/CasparCGSocketStatusEvent.ts:32</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="status" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> STATUS</h3>
-					<div class="tsd-signature tsd-kind-icon">STATUS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">STATUS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;casparcgsocketconnectioneventstatus&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/CasparCGSocketStatusEvent.ts#L25">lib/event/CasparCGSocketStatusEvent.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/CasparCGSocketStatusEvent.ts#L29">lib/event/CasparCGSocketStatusEvent.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="status_changed" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> STATUS_<wbr>CHANGED</h3>
-					<div class="tsd-signature tsd-kind-icon">STATUS_<wbr>CHANGED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">STATUS_<wbr>CHANGED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;casparcgsocketconnectioneventstatuschanged&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/CasparCGSocketStatusEvent.ts#L26">lib/event/CasparCGSocketStatusEvent.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/CasparCGSocketStatusEvent.ts#L30">lib/event/CasparCGSocketStatusEvent.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
 					<a name="timeout" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> TIMEOUT</h3>
-					<div class="tsd-signature tsd-kind-icon">TIMEOUT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">TIMEOUT<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;casparcgsocketconnectioneventstatustimeout&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/CasparCGSocketStatusEvent.ts#L29">lib/event/CasparCGSocketStatusEvent.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/CasparCGSocketStatusEvent.ts#L33">lib/event/CasparCGSocketStatusEvent.ts:33</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-					<a name="val" class="tsd-anchor"></a>
-					<h3>val</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-						<li class="tsd-signature tsd-kind-icon">val<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Object</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from EventFacade.val</p>
-								<ul>
-									<li>Defined in /Users/Jesper/Git/casparcgconnection/node_modules/hap/typings/index.d.ts:19</li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">Object</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Object</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a name="valueof" class="tsd-anchor"></a>
 					<h3>value<wbr>Of</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">value<wbr>Of<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></li>
+						<li class="tsd-signature tsd-kind-icon">value<wbr>Of<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/event.socketstatus.html" class="tsd-signature-type">SocketStatus</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overwrites <a href="event.baseevent.html">BaseEvent</a>.<a href="event.baseevent.html#valueof">valueOf</a></p>
+								<p>Overrides <a href="event.baseevent.html">BaseEvent</a>.<a href="event.baseevent.html#valueof">valueOf</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/event/CasparCGSocketStatusEvent.ts#L21">lib/event/CasparCGSocketStatusEvent.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/41531f5/src/lib/event/CasparCGSocketStatusEvent.ts#L25">lib/event/CasparCGSocketStatusEvent.ts:25</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="../enums/socketstate.html" class="tsd-signature-type">SocketState</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/event.socketstatus.html" class="tsd-signature-type">SocketStatus</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -325,6 +311,9 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 								<a href="event.casparcgsocketstatusevent.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="event.casparcgsocketstatusevent.html#_val" class="tsd-kind-icon">_val</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="event.casparcgsocketstatusevent.html#socketstatus" class="tsd-kind-icon">socket<wbr>Status</a>
 							</li>
@@ -343,9 +332,6 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
 								<a href="event.casparcgsocketstatusevent.html#timeout" class="tsd-kind-icon">TIMEOUT</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
-								<a href="event.casparcgsocketstatusevent.html#val" class="tsd-kind-icon">val</a>
-							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="event.casparcgsocketstatusevent.html#valueof" class="tsd-kind-icon">value<wbr>Of</a>
 							</li>
@@ -355,6 +341,9 @@
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="event.logevent.html" class="tsd-kind-icon">Log<wbr>Event</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/event.socketstatus.html" class="tsd-kind-icon">Socket<wbr>Status</a>
 					</li>
 				</ul>
 			</nav>
@@ -421,7 +410,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
@@ -432,7 +421,7 @@
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-83648715-1', 'auto');
+        ga('create', 'UA-83648715-1', '');
         ga('send', 'pageview');
     </script>
 </body>
