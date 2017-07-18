@@ -213,7 +213,7 @@ export interface ICasparCGConnection {
     connectionStatus: SocketStatusOptions;
     getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
     getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>;
-    commandQueue: Array<IAMCPCommand>;
+    queuedCommands: Array<IAMCPCommand>;
     removeQueuedCommand(id: string): boolean;
     connect(options?: IConnectionOptions): void;
     disconnect(): void;
@@ -442,7 +442,7 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
     /**
      *
      */
-    readonly commandQueue: Array<IAMCPCommand>;
+    readonly queuedCommands: Array<IAMCPCommand>;
     /**
      *
      */
@@ -472,7 +472,7 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
     /**
      *
      */
-    private _handleInvalidSocketResponse(socketResponse);
+    private _handleInvalidSocketResponse();
     /**
      *
      */

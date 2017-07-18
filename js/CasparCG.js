@@ -36,6 +36,7 @@ var CasparCG = (function (_super) {
     __extends(CasparCG, _super);
     function CasparCG(hostOrOptions, port) {
         var _this = _super.call(this) || this;
+        _this._connected = false;
         _this._queuedCommands = [];
         _this._sentCommands = [];
         /**
@@ -98,7 +99,7 @@ var CasparCG = (function (_super) {
         _this._socket.on(Events_1.CasparCGSocketStatusEvent.STATUS, function (event) { return _this._onSocketStatusChange(event); });
         _this._socket.on(Events_1.CasparCGSocketStatusEvent.TIMEOUT, function () { return _this._onSocketStatusTimeout(); });
         _this._socket.on(Events_1.CasparCGSocketResponseEvent.RESPONSE, function (event) { return _this._handleSocketResponse(event.response); });
-        _this._socket.on(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, function (event) { return _this._handleInvalidSocketResponse(event.response); });
+        _this._socket.on(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, function () { return _this._handleInvalidSocketResponse(); });
         if (_this.autoConnect) {
             _this.connect();
         }
@@ -189,7 +190,7 @@ var CasparCG = (function (_super) {
             if (this._host !== host) {
                 this._host = host;
                 if (this._socket != null) {
-                    var shouldReconnect = (this.connected || this._socket.reconnecting);
+                    var shouldReconnect = this.connected;
                     this._createNewSocket();
                     if (shouldReconnect) {
                         this.connect();
@@ -216,7 +217,7 @@ var CasparCG = (function (_super) {
             if (this._port !== port) {
                 this._port = port;
                 if (this._socket != null) {
-                    var shouldReconnect = (this.connected || this._socket.reconnecting);
+                    var shouldReconnect = this.connected;
                     this._createNewSocket();
                     if (shouldReconnect) {
                         this.connect();
@@ -346,7 +347,7 @@ var CasparCG = (function (_super) {
                     });
                 }
                 else {
-                    this._expediteCommand(true);
+                    this._expediteCommand(true); // gets going on commands already on queue. in the if-autoServerVersion above this explicitly happens once the Version command responds
                 }
                 this.emit(Events_1.CasparCGSocketStatusEvent.CONNECTED, socketStatus);
                 if (this.onConnected) {
@@ -365,20 +366,12 @@ var CasparCG = (function (_super) {
      *
      */
     CasparCG.prototype._onSocketStatusTimeout = function () {
-        var shouldReset = false;
-        while (this._sentCommands.length > 0) {
-            shouldReset = true;
-            var i = void 0;
-            i = this._sentCommands.shift();
-            this._log("Command timed out, " + this._sentCommands.length + " commands sent. Timeout: \"" + i.name + "\"");
-            i.status = IAMCPStatus.Timeout;
-            i.reject(i);
+        if (this._sentCommands.length > 0) {
+            this._log("Command timed out: \"" + this._sentCommands[0].name + "\". Starting flush procedure, with " + this._sentCommands.length + " command(s) in sentCommands.");
         }
-        if (shouldReset) {
-            this.reconnect();
-        }
+        this._expediteCommand(true);
     };
-    Object.defineProperty(CasparCG.prototype, "commandQueue", {
+    Object.defineProperty(CasparCG.prototype, "queuedCommands", {
         /**
          *
          */
@@ -468,7 +461,7 @@ var CasparCG = (function (_super) {
      */
     CasparCG.prototype._addQueuedCommand = function (command) {
         this._queuedCommands.push(command);
-        this._log("New command added, " + this._queuedCommands.length + " on queue. Added: \"" + command.name + "\"");
+        this._log("New command added, \"" + command.name + "\". " + this._queuedCommands.length + " command(s) in queuedCommands.");
         command.status = IAMCPStatus.Queued;
         this._expediteCommand();
         return command;
@@ -482,7 +475,7 @@ var CasparCG = (function (_super) {
             var o = this._queuedCommands[i];
             if (o.id === id) {
                 removed = this._queuedCommands.splice(i, 1);
-                this._log("Command removed, " + this._queuedCommands.length + " on queue. Removed: \"" + removed[0].name + "\"");
+                this._log("Command removed, \"" + removed[0].name + "\". " + this._queuedCommands.length + " command(s) left in queuedCommands.");
                 break;
             }
         }
@@ -523,7 +516,7 @@ var CasparCG = (function (_super) {
             return;
         }
         var currentCommand = (this._sentCommands.shift());
-        this._log("Handling response, " + this._sentCommands.length + " commands sent. Handling: \"" + currentCommand.name + "\"");
+        this._log("Handling response, \"" + currentCommand.name + "\". " + this._sentCommands.length + " command(s) left in sentCommands, " + this._queuedCommands.length + " command(s) left in queuedCommands.");
         if (!(currentCommand.response instanceof AMCPResponse)) {
             currentCommand.response = new AMCPResponse();
         }
@@ -536,18 +529,14 @@ var CasparCG = (function (_super) {
             currentCommand.reject(currentCommand);
         }
         this.emit(Events_1.CasparCGSocketCommandEvent.RESPONSE, new Events_1.CasparCGSocketCommandEvent(currentCommand));
-        if (this._socket.isRestarting) {
-            return;
-        }
         this._expediteCommand();
     };
     /**
      *
      */
-    CasparCG.prototype._handleInvalidSocketResponse = function (socketResponse) {
-        if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion && this.serverVersion < 2100) {
-            this._expediteCommand(true);
-        }
+    CasparCG.prototype._handleInvalidSocketResponse = function () {
+        // @todo: in the future, perhaps we could better predict that the connection is in a restart-state, and act accordingly, to
+        // gracefully keep/fall back data and/or speed up reconnection??
     };
     /**
      *
@@ -557,20 +546,12 @@ var CasparCG = (function (_super) {
         if (flushSent) {
             while (this._sentCommands.length > 0) {
                 var i = (this._sentCommands.shift());
-                this._log("Flushing commands, " + this._sentCommands.length + " commands sent. Deleting: \"" + i.name + "\"");
-                if (i instanceof AMCP_1.AMCP.RestartCommand && this._socket.isRestarting) {
-                    i.status = IAMCPStatus.Suceeded;
-                    i.resolve(i);
-                    continue;
-                }
-                else {
-                    i.status = IAMCPStatus.Failed;
-                    i.reject(i);
-                }
+                this._log("Flushing commands from sent-queue. Deleting: \"" + i.name + "\", " + this._sentCommands.length + " command(s) left in sentCommands.");
+                i.status = IAMCPStatus.Failed;
+                i.reject(i);
             }
         }
         if (this.connected) {
-            // @todo add TTL for cleanup on stuck commands
             // salvo mode
             /*if (this.queueMode === QueueMode.SALVO) {
                 if (this._queuedCommands.length > 0) {
@@ -584,15 +565,14 @@ var CasparCG = (function (_super) {
                 if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
                     var nextCommand = (this._queuedCommands.shift());
                     this._sentCommands.push(nextCommand);
-                    this._log("Sending command, " + this._sentCommands.length + " commands sent, " + this._queuedCommands.length + " commands on queue. Sending: \"" + nextCommand.name + "\"");
+                    this._log("Sending command, " + this._sentCommands.length + " commands sent, " + this._queuedCommands.length + " commands in commandsQueue. Sending: \"" + nextCommand.name + "\"");
                     this._socket.executeCommand(nextCommand);
                 }
             }
         }
         else {
-            // reconnect on missing connection, if  not restating
-            if (!this._socket.isRestarting) {
-                this.reconnect();
+            if (this._queuedCommands.length > 0) {
+                this._log("Can't process commands, socket not connected. " + this._queuedCommands.length + " commands left in commandsQueue, the first one being \"" + this._queuedCommands[0].name + "\".");
             }
         }
     };
