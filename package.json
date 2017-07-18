@@ -12,6 +12,7 @@
     "cleanbuild": "gulp clean && gulp build",
     "clean": "gulp clean",
     "doc": "gulp typedoc",
+    "prerelease": "npm run prepublishOnly",
     "release": "standard-version"
   },
   "repository": {

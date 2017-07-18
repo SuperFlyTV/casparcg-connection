@@ -472,7 +472,7 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
     /**
      *
      */
-    private _handleInvalidSocketResponse(socketResponse);
+    private _handleInvalidSocketResponse();
     /**
      *
      */

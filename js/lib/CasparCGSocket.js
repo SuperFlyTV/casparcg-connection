@@ -247,7 +247,6 @@ var CasparCGSocket = (function (_super) {
      *
      */
     CasparCGSocket.prototype._parseResponseGroups = function (i) {
-        global.clearTimeout(this._commandTimeoutTimer);
         i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
         if (AMCP_1.AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
             this._parsedResponse = new AMCP_1.AMCPUtil.CasparCGSocketResponse(i);
@@ -261,6 +260,7 @@ var CasparCGSocket = (function (_super) {
             else {
                 this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(this._parsedResponse));
                 this._parsedResponse = undefined;
+                global.clearTimeout(this._commandTimeoutTimer);
                 return;
             }
         }
@@ -272,17 +272,20 @@ var CasparCGSocket = (function (_super) {
             this._parsedResponse.items.push(i);
             this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(this._parsedResponse));
             this._parsedResponse = undefined;
+            global.clearTimeout(this._commandTimeoutTimer);
             return;
         }
         else {
             var parsedResponse = new AMCP_1.AMCPUtil.CasparCGSocketResponse(i);
             if (!isNaN(parsedResponse.statusCode)) {
                 this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(parsedResponse));
+                global.clearTimeout(this._commandTimeoutTimer);
+                return;
             }
             else {
                 this.emit(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, new Events_1.CasparCGSocketResponseEvent(parsedResponse));
+                return;
             }
-            return;
         }
     };
     /**
