@@ -12,8 +12,9 @@
     "cleanbuild": "gulp clean && gulp build",
     "clean": "gulp clean",
     "doc": "gulp typedoc",
-    "prerelease": "npm run prepublishOnly",
-    "release": "standard-version"
+    "prerelease": "npm run prepublishOnly && git add docs/ && git commit -m 'chore(Docs): Updated docs to release'",
+    "release": "standard-version",
+    "release:dry": "standard-version --dry-run"
   },
   "repository": {
     "type": "git",
