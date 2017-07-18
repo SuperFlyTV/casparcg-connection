@@ -7,8 +7,11 @@ import { SocketStatusOptions } from "./event/Events";
  *
  */
 export interface ICasparCGSocket {
+    connected: boolean;
     host: string;
     port: number;
+    isRestarting: boolean;
+    reconnecting: boolean;
     socketStatus: SocketStatusOptions;
     connect(): void;
     disconnect(): void;
@@ -20,20 +23,19 @@ export interface ICasparCGSocket {
  *
  */
 export declare class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
+    isRestarting: boolean;
     private _client;
     private _host;
     private _port;
     private _connected;
     private _autoReconnect;
     private _reconnectDelay;
-    private _lastConnectionAttempt;
     private _reconnectAttempts;
     private _reconnectAttempt;
-    private _connectionAttemptTimer;
+    private _reconnectInterval;
     private _commandTimeoutTimer;
     private _commandTimeout;
     private _parsedResponse;
-    private _shouldBeConnected;
     /**
      *
      */
@@ -61,11 +63,15 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
     /**
      *
      */
-    private _autoReconnectionAttempt();
+    private _startReconnection();
     /**
      *
      */
-    private _clearConnectionAttemptTimer();
+    private _autoReconnection();
+    /**
+     *
+     */
+    private _clearReconnectInterval();
     /**
      *
      */
@@ -83,15 +89,16 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
      */
     log(args: any): void;
     /**
-     *
      */
-    /**
-     */
-    private connected;
+    connected: boolean;
     /**
      *
      */
     readonly socketStatus: SocketStatusOptions;
+    /**
+     *
+     */
+    readonly reconnecting: boolean;
     /**
      *
      */
@@ -100,6 +107,10 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
      *
      */
     private _onTimeout();
+    /**
+     *@todo:::
+     */
+    private _onLookup();
     /**
      *
      */
