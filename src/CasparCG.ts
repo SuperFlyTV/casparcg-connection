@@ -244,7 +244,7 @@ export interface ICasparCGConnection {
 	connectionStatus: SocketStatusOptions;
 	getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
 	getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>;
-	commandQueue: Array<IAMCPCommand>;
+	queuedCommands: Array<IAMCPCommand>;
 	removeQueuedCommand(id: string): boolean;
 	connect(options?: IConnectionOptions): void;
 	disconnect(): void;
@@ -686,7 +686,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	private _onSocketStatusTimeout(): void {
 		if (this._sentCommands.length > 0) {
-			this._log(`Command timed out: "${this._sentCommands[0].name}". Starting flush procedure, with ${this._sentCommands.length} command(s) in sentQueue.`);
+			this._log(`Command timed out: "${this._sentCommands[0].name}". Starting flush procedure, with ${this._sentCommands.length} command(s) in sentCommands.`);
 		}
 		this._expediteCommand(true);
 	}
@@ -694,7 +694,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 *
 	 */
-	public get commandQueue(): Array<IAMCPCommand> {
+	public get queuedCommands(): Array<IAMCPCommand> {
 		return this._queuedCommands;
 	}
 
@@ -783,7 +783,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	private _addQueuedCommand(command: IAMCPCommand): IAMCPCommand {
 		this._queuedCommands.push(command);
-		this._log(`New command added, "${command.name}". ${this._queuedCommands.length} command(s) in commandQueue.`);
+		this._log(`New command added, "${command.name}". ${this._queuedCommands.length} command(s) in queuedCommands.`);
 		command.status = IAMCPStatus.Queued;
 		this._expediteCommand();
 		return command;
@@ -798,7 +798,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			let o: IAMCPCommand = this._queuedCommands[i];
 			if (o.id === id) {
 				removed = this._queuedCommands.splice(i, 1);
-				this._log(`Command removed, "${removed[0].name}". ${this._queuedCommands.length} command(s) left in commandQueue.`);
+				this._log(`Command removed, "${removed[0].name}". ${this._queuedCommands.length} command(s) left in queuedCommands.`);
 				break;
 			}
 		}
@@ -843,7 +843,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 
 		let currentCommand: IAMCPCommand = (this._sentCommands.shift())!;
-		this._log(`Handling response, "${currentCommand!.name}". ${this._sentCommands.length} command(s) left in sentQueue, ${this._queuedCommands.length} command(s) left in commandQueue.`);
+		this._log(`Handling response, "${currentCommand!.name}". ${this._sentCommands.length} command(s) left in sentCommands, ${this._queuedCommands.length} command(s) left in queuedCommands.`);
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
 		}
@@ -875,7 +875,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (flushSent) {
 			while (this._sentCommands.length > 0) {
 				let i: IAMCPCommand = (this._sentCommands.shift())!;
-				this._log(`Flushing commands from sent-queue. Deleting: "${i.name}", ${this._sentCommands.length} command(s) left in sentQueue.`);
+				this._log(`Flushing commands from sent-queue. Deleting: "${i.name}", ${this._sentCommands.length} command(s) left in sentCommands.`);
 				i.status =  IAMCPStatus.Failed;
 				i.reject(i);
 			}

@@ -367,11 +367,11 @@ var CasparCG = (function (_super) {
      */
     CasparCG.prototype._onSocketStatusTimeout = function () {
         if (this._sentCommands.length > 0) {
-            this._log("Command timed out: \"" + this._sentCommands[0].name + "\". Starting flush procedure, with " + this._sentCommands.length + " command(s) in sentQueue.");
+            this._log("Command timed out: \"" + this._sentCommands[0].name + "\". Starting flush procedure, with " + this._sentCommands.length + " command(s) in sentCommands.");
         }
         this._expediteCommand(true);
     };
-    Object.defineProperty(CasparCG.prototype, "commandQueue", {
+    Object.defineProperty(CasparCG.prototype, "queuedCommands", {
         /**
          *
          */
@@ -461,7 +461,7 @@ var CasparCG = (function (_super) {
      */
     CasparCG.prototype._addQueuedCommand = function (command) {
         this._queuedCommands.push(command);
-        this._log("New command added, \"" + command.name + "\". " + this._queuedCommands.length + " command(s) in commandQueue.");
+        this._log("New command added, \"" + command.name + "\". " + this._queuedCommands.length + " command(s) in queuedCommands.");
         command.status = IAMCPStatus.Queued;
         this._expediteCommand();
         return command;
@@ -475,7 +475,7 @@ var CasparCG = (function (_super) {
             var o = this._queuedCommands[i];
             if (o.id === id) {
                 removed = this._queuedCommands.splice(i, 1);
-                this._log("Command removed, \"" + removed[0].name + "\". " + this._queuedCommands.length + " command(s) left in commandQueue.");
+                this._log("Command removed, \"" + removed[0].name + "\". " + this._queuedCommands.length + " command(s) left in queuedCommands.");
                 break;
             }
         }
@@ -516,7 +516,7 @@ var CasparCG = (function (_super) {
             return;
         }
         var currentCommand = (this._sentCommands.shift());
-        this._log("Handling response, \"" + currentCommand.name + "\". " + this._sentCommands.length + " command(s) left in sentQueue, " + this._queuedCommands.length + " command(s) left in commandQueue.");
+        this._log("Handling response, \"" + currentCommand.name + "\". " + this._sentCommands.length + " command(s) left in sentCommands, " + this._queuedCommands.length + " command(s) left in queuedCommands.");
         if (!(currentCommand.response instanceof AMCPResponse)) {
             currentCommand.response = new AMCPResponse();
         }
@@ -546,7 +546,7 @@ var CasparCG = (function (_super) {
         if (flushSent) {
             while (this._sentCommands.length > 0) {
                 var i = (this._sentCommands.shift());
-                this._log("Flushing commands from sent-queue. Deleting: \"" + i.name + "\", " + this._sentCommands.length + " command(s) left in sentQueue.");
+                this._log("Flushing commands from sent-queue. Deleting: \"" + i.name + "\", " + this._sentCommands.length + " command(s) left in sentCommands.");
                 i.status = IAMCPStatus.Failed;
                 i.reject(i);
             }
