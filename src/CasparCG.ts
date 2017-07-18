@@ -524,7 +524,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this._host !== host) {
 			this._host = host;
 			if (this._socket !=  null) {
-				let shouldReconnect = (this.connected || this._socket.reconnecting);
+				let shouldReconnect = this.connected;
 				this._createNewSocket();
 				if (shouldReconnect) {
 					this.connect();
@@ -549,7 +549,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this._port !== port) {
 			this._port = port;
 			if (this._socket !=  null) {
-				let shouldReconnect = (this.connected || this._socket.reconnecting);
+				let shouldReconnect = this.connected;
 				this._createNewSocket();
 				if (shouldReconnect) {
 					this.connect();
