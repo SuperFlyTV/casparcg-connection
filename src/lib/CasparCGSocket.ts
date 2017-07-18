@@ -255,7 +255,6 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 *
 	 */
 	private _parseResponseGroups(i: string): void {
-		global.clearTimeout(this._commandTimeoutTimer);
 		i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
 		if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
 			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i);
@@ -267,6 +266,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			} else {
 				this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
 				this._parsedResponse = undefined;
+				global.clearTimeout(this._commandTimeoutTimer);
 				return;
 			}
 		}
@@ -277,15 +277,18 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			this._parsedResponse.items.push(i);
 			this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse));
 			this._parsedResponse = undefined;
+			global.clearTimeout(this._commandTimeoutTimer);
 			return;
 		} else {
 			let parsedResponse: AMCPUtil.CasparCGSocketResponse = new AMCPUtil.CasparCGSocketResponse(i);
 			if (!isNaN(parsedResponse.statusCode)) {
 				this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
+				global.clearTimeout(this._commandTimeoutTimer);
+				return;
 			}else {
 				this.emit(CasparCGSocketResponseEvent.INVALID_RESPONSE, new CasparCGSocketResponseEvent(parsedResponse));
+				return;
 			}
-			return;
 		}
 	}
 

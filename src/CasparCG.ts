@@ -427,7 +427,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this._socket.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
 		this._socket.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
 		this._socket.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
-		this._socket.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleInvalidSocketResponse(event.response));
+		this._socket.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, () => this._handleInvalidSocketResponse());
 
 		if (this.autoConnect) {
 			this.connect();
@@ -664,9 +664,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					this.version(Enum.Version.SERVER).then((result: IAMCPCommand) => {
 						this._setVersionFromServerResponse(result.response);
 					});
-
 				}else {
-					this._expediteCommand(true);
+					this._expediteCommand(true); // gets going on commands already on queue. in the if-autoServerVersion above this explicitly happens once the Version command responds
 				}
 				this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
 				if (this.onConnected) {
@@ -686,19 +685,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 */
 	private _onSocketStatusTimeout(): void {
-		let shouldReset: Boolean = false;
-		while (this._sentCommands.length > 0) {
-			shouldReset = true;
-			let i: IAMCPCommand;
-			i = this._sentCommands.shift()!;
-			this._log(`Command timed out, ${this._sentCommands.length} commands sent. Timeout: "${i.name}"`);
-			i.status =  IAMCPStatus.Timeout;
-			i.reject(i);
+		if (this._sentCommands.length > 0) {
+			this._log(`Command timed out: "${this._sentCommands[0].name}". Starting flush procedure, with ${this._sentCommands.length} command(s) in sentQueue.`);
 		}
-
-		if (shouldReset) {
-			this.reconnect();
-		}
+		this._expediteCommand(true);
 	}
 
 	/**
@@ -793,7 +783,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	private _addQueuedCommand(command: IAMCPCommand): IAMCPCommand {
 		this._queuedCommands.push(command);
-		this._log(`New command added, ${this._queuedCommands.length} on queue. Added: "${command.name}"`);
+		this._log(`New command added, "${command.name}". ${this._queuedCommands.length} command(s) in commandQueue.`);
 		command.status = IAMCPStatus.Queued;
 		this._expediteCommand();
 		return command;
@@ -808,7 +798,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			let o: IAMCPCommand = this._queuedCommands[i];
 			if (o.id === id) {
 				removed = this._queuedCommands.splice(i, 1);
-				this._log(`Command removed, ${this._queuedCommands.length} on queue. Removed: "${removed[0].name}"`);
+				this._log(`Command removed, "${removed[0].name}". ${this._queuedCommands.length} command(s) left in commandQueue.`);
 				break;
 			}
 		}
@@ -853,7 +843,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 
 		let currentCommand: IAMCPCommand = (this._sentCommands.shift())!;
-		this._log(`Handling response, ${this._sentCommands.length} commands sent. Handling: "${currentCommand.name}"`);
+		this._log(`Handling response, "${currentCommand!.name}". ${this._sentCommands.length} command(s) left in sentQueue, ${this._queuedCommands.length} command(s) left in commandQueue.`);
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
 		}
@@ -867,45 +857,30 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 		this.emit(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
 
-
-		if (this._socket.isRestarting) {
-			return;
-		}
-
 		this._expediteCommand();
 	}
 
 	/**
 	 *
 	 */
-	private _handleInvalidSocketResponse(socketResponse: CasparCGSocketResponse): void {
-		if (socketResponse.responseString === "\r\n" && this._socket.isRestarting && this.serverVersion && this.serverVersion < 2100) {
-			this._expediteCommand(true);
-		}
+	private _handleInvalidSocketResponse(): void {
+		// @todo: in the future, perhaps we could better predict that the connection is in a restart-state, and act accordingly, to
+		// gracefully keep/fall back data and/or speed up reconnection??
 	}
 
 	/**
 	 *
 	 */
 	private _expediteCommand(flushSent: boolean = false): void {
-
 		if (flushSent) {
 			while (this._sentCommands.length > 0) {
 				let i: IAMCPCommand = (this._sentCommands.shift())!;
-				this._log(`Flushing commands, ${this._sentCommands.length} commands sent. Deleting: "${i.name}"`);
-				if (i instanceof AMCP.RestartCommand && this._socket.isRestarting) {
-					i.status =  IAMCPStatus.Suceeded;
-					i.resolve(i);
-					continue;
-				}else {
-					i.status =  IAMCPStatus.Failed;
-					i.reject(i);
-				}
+				this._log(`Flushing commands from sent-queue. Deleting: "${i.name}", ${this._sentCommands.length} command(s) left in sentQueue.`);
+				i.status =  IAMCPStatus.Failed;
+				i.reject(i);
 			}
 		}
 		if (this.connected) {
-			// @todo add TTL for cleanup on stuck commands
-
 			// salvo mode
 			/*if (this.queueMode === QueueMode.SALVO) {
 				if (this._queuedCommands.length > 0) {
@@ -920,14 +895,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
 					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
 					this._sentCommands.push(nextCommand);
-					this._log(`Sending command, ${this._sentCommands.length} commands sent, ${this._queuedCommands.length} commands on queue. Sending: "${nextCommand.name}"`);
+					this._log(`Sending command, ${this._sentCommands.length} commands sent, ${this._queuedCommands.length} commands in commandsQueue. Sending: "${nextCommand.name}"`);
 					this._socket.executeCommand(nextCommand);
 				}
 			}
 		} else {
-			// reconnect on missing connection, if  not restating
-			if (!this._socket.isRestarting) {
-				this.reconnect();
+			if (this._queuedCommands.length > 0) {
+				this._log(`Can't process commands, socket not connected. ${this._queuedCommands.length} commands left in commandsQueue, the first one being "${this._queuedCommands[0].name}".`);
 			}
 		}
 	}
