@@ -29,20 +29,14 @@ var CasparCGSocket = (function (_super) {
      */
     function CasparCGSocket(host, port, autoReconnect, autoReconnectInterval, autoReconnectAttempts) {
         var _this = _super.call(this) || this;
-        _this.isRestarting = false;
         _this._reconnectAttempt = 0;
         _this._commandTimeout = 5000; // @todo make connectionOption!
+        _this._shouldBeConnected = false;
         _this._host = host;
         _this._port = port;
         _this._reconnectDelay = autoReconnectInterval;
         _this._autoReconnect = autoReconnect;
         _this._reconnectAttempts = autoReconnectAttempts;
-        _this._client = new net.Socket();
-        _this._client.on("lookup", function () { return _this._onLookup(); });
-        _this._client.on("connect", function () { return _this._onConnected(); });
-        _this._client.on("error", function (error) { return _this._onError(error); });
-        _this._client.on("drain", function () { return _this._onDrain(); });
-        _this._client.on("close", function (hadError) { return _this._onClose(hadError); });
         return _this;
     }
     Object.defineProperty(CasparCGSocket.prototype, "autoReconnect", {
@@ -80,9 +74,34 @@ var CasparCGSocket = (function (_super) {
      */
     CasparCGSocket.prototype.connect = function () {
         var _this = this;
-        this._client.connect(this._port, this._host);
-        if (this._reconnectAttempt === 0) {
-            this._reconnectInterval = global.setInterval(function () { return _this._autoReconnection(); }, this._reconnectDelay);
+        // prevents manipulation of active socket
+        if (!this.connected) {
+            // throthling attempts
+            if (!this._lastConnectionAttempt || (Date.now() - this._lastConnectionAttempt) >= this._reconnectDelay) {
+                // recereates client if new attempt
+                if (this._client && this._client.connecting) {
+                    this._client.destroy();
+                    this._client.removeAllListeners();
+                    delete this._client;
+                }
+                // (re)creates client, either on first run or new attempt
+                if (!this._client) {
+                    this._client = new net.Socket();
+                    this._client.on("connect", function () { return _this._onConnected(); });
+                    this._client.on("error", function (error) { return _this._onError(error); });
+                    this._client.on("drain", function () { return _this._onDrain(); });
+                    this._client.on("close", function (hadError) { return _this._onClose(hadError); });
+                }
+                // connects
+                this.log("Socket attempting connection");
+                this._client.connect(this._port, this._host);
+                this._shouldBeConnected = true;
+                this._lastConnectionAttempt = Date.now();
+            }
+            // sets timer to retry when needed
+            if (!this._connectionAttemptTimer) {
+                this._connectionAttemptTimer = global.setInterval(function () { return _this._autoReconnectionAttempt(); }, this._reconnectDelay);
+            }
         }
     };
     /**
@@ -96,28 +115,16 @@ var CasparCGSocket = (function (_super) {
     /**
      *
      */
-    CasparCGSocket.prototype._startReconnection = function () {
-        var _this = this;
-        // create interval if doesn't exist
-        if (!this._reconnectInterval) {
-            // @todo: create event telling reconection is in action with interval time
-            this._reconnectInterval = global.setInterval(function () { return _this._autoReconnection(); }, this._reconnectDelay);
-        }
-    };
-    /**
-     *
-     */
-    CasparCGSocket.prototype._autoReconnection = function () {
+    CasparCGSocket.prototype._autoReconnectionAttempt = function () {
         if (this._autoReconnect) {
             if (this._reconnectAttempts > 0) {
                 if ((this._reconnectAttempt >= this._reconnectAttempts)) {
                     // reset reconnection behaviour
-                    this._clearReconnectInterval();
+                    this._clearConnectionAttemptTimer();
                     return;
                 }
                 // new attempt if not allready connected
                 if (!this.connected) {
-                    this.log("Socket attempting reconnection");
                     this._reconnectAttempt++;
                     this.connect();
                 }
@@ -127,12 +134,12 @@ var CasparCGSocket = (function (_super) {
     /**
      *
      */
-    CasparCGSocket.prototype._clearReconnectInterval = function () {
+    CasparCGSocket.prototype._clearConnectionAttemptTimer = function () {
         // @todo create event telling reconnection ended with result: true/false
-        // only in reconnectio intervall is true
+        // only if reconnection interval is true
         this._reconnectAttempt = 0;
-        global.clearInterval(this._reconnectInterval);
-        delete this._reconnectInterval;
+        global.clearInterval(this._connectionAttemptTimer);
+        delete this._connectionAttemptTimer;
     };
     Object.defineProperty(CasparCGSocket.prototype, "host", {
         /**
@@ -164,7 +171,8 @@ var CasparCGSocket = (function (_super) {
      *
      */
     CasparCGSocket.prototype.dispose = function () {
-        this._clearReconnectInterval();
+        this._shouldBeConnected = false;
+        this._clearConnectionAttemptTimer();
         this._client.destroy();
     };
     /**
@@ -175,6 +183,12 @@ var CasparCGSocket = (function (_super) {
         console.log(args);
     };
     Object.defineProperty(CasparCGSocket.prototype, "connected", {
+        /**
+         *
+         */
+        get: function () {
+            return this._connected;
+        },
         /**
          */
         set: function (connected) {
@@ -196,16 +210,6 @@ var CasparCGSocket = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CasparCGSocket.prototype, "reconnecting", {
-        /**
-         *
-         */
-        get: function () {
-            return this._reconnectInterval !== undefined;
-        },
-        enumerable: true,
-        configurable: true
-    });
     /**
      *
      */
@@ -216,9 +220,6 @@ var CasparCGSocket = (function (_super) {
             var payload = command.payload[i];
             commandString += (commandString.length > 0 ? " " : "");
             commandString += (payload.key ? payload.key + " " : "") + payload.value;
-        }
-        if (command instanceof AMCP_1.AMCP.RestartCommand) {
-            this.isRestarting = true;
         }
         this._commandTimeoutTimer = global.setTimeout(function () { return _this._onTimeout(); }, this._commandTimeout);
         this._client.write(commandString + "\r\n");
@@ -234,18 +235,11 @@ var CasparCGSocket = (function (_super) {
         this.emit(Events_1.CasparCGSocketStatusEvent.TIMEOUT, new Events_1.CasparCGSocketStatusEvent(this.socketStatus));
     };
     /**
-     *@todo:::
-     */
-    CasparCGSocket.prototype._onLookup = function () {
-        this.log("Socket event lookup");
-    };
-    /**
      *
      */
     CasparCGSocket.prototype._onConnected = function () {
         var _this = this;
-        this.isRestarting = false;
-        this._clearReconnectInterval();
+        this._clearConnectionAttemptTimer();
         _(this._client).splitBy(/(?=\r\n)/).errors(function (error) { return _this._onError(error); }).each(function (i) { return _this._parseResponseGroups(i); });
         this.connected = true;
     };
@@ -310,16 +304,15 @@ var CasparCGSocket = (function (_super) {
      */
     CasparCGSocket.prototype._onClose = function (hadError) {
         this.connected = false;
-        if (hadError || this.isRestarting) {
-            // error message, not "log"
-            // dispatch (is it done through error handler first????)
-            this.log("Socket close with error: " + hadError);
-            if (this._autoReconnect) {
-                this._startReconnection();
-            }
+        if (hadError) {
+            this.log("Socket closed with error");
         }
         else {
-            this._clearReconnectInterval();
+            this.log("Socket closed without error");
+        }
+        if (this._shouldBeConnected === true) {
+            this.log("Socket should reconnect");
+            this.connect();
         }
     };
     return CasparCGSocket;
