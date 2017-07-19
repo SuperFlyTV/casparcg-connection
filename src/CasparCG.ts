@@ -422,13 +422,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 
 		this._createNewSocket(options);
-
-		this._socket.on("error", (error: Error) => this._onSocketError(error));
-		this._socket.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
-		this._socket.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
-		this._socket.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
-		this._socket.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, () => this._handleInvalidSocketResponse());
-
 		if (this.autoConnect) {
 			this.connect();
 		}
@@ -471,6 +464,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			delete this._socket;
 		}
 		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
+		this._socket.on("error", (error: Error) => this._onSocketError(error));
+		this._socket.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event));
+		this._socket.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout());
+		this._socket.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response));
+		this._socket.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, () => this._handleInvalidSocketResponse());
 
 		// inherit log method
 		this._socket.log = (args) => this._log(args);
