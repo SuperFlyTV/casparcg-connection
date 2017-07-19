@@ -653,18 +653,18 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				this.onConnectionChanged(this._connected);
 			}
 			if (this._connected) {
-				// @todo: handle flush SENT-buffer + shift/push version command in queue.
+				// @todo: handle flush SENT-buffer + shift/push version command in queue. (add back the sent command (retry strategy)) + make sure VERSION comes first after reconnect
 
 				// reset cached data
 				delete this._configPromise;
 				delete this._pathsPromise;
+				this._expediteCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
 				if (this.autoServerVersion) {
 					this.version(Enum.Version.SERVER).then((result: IAMCPCommand) => {
 						this._setVersionFromServerResponse(result.response);
 					});
-				}else {
-					this._expediteCommand(true); // gets going on commands already on queue. in the if-autoServerVersion above this explicitly happens once the Version command responds
 				}
+
 				this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
 				if (this.onConnected) {
 					this.onConnected(this._connected);
@@ -686,9 +686,22 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (this._sentCommands.length > 0) {
 			this._log(`Command timed out: "${this._sentCommands[0].name}". Starting flush procedure, with ${this._sentCommands.length} command(s) in sentCommands.`);
 		}
-		this._expediteCommand(true);
-	}
 
+		// @todo: implement retry strategy #81
+
+		// 1) discard
+		// this._expediteCommand(true);
+
+		// 2) retry (max attempts missing)
+		this.reconnect();
+
+		// 3) smart/probe
+			// try to send INFO
+				// -> SUCCESS
+					// discard that single command, procees
+				// -> FAIL
+					// reconncet
+	}
 	/**
 	 *
 	 */
