@@ -96,10 +96,9 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 				// (re)creates client, either on first run or new attempt
 				if (!this._client) {
 					this._client = new net.Socket();
+					this._client.on("close", (hadError: boolean) => this._onClose(hadError));
 					this._client.on("connect", () => this._onConnected());
 					this._client.on("error", (error: Error) => this._onError(error));
-					this._client.on("drain", () => this._onDrain());
-					this._client.on("close", (hadError: boolean) => this._onClose(hadError));
 				}
 
 				// connects
@@ -299,14 +298,6 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _onError(error: Error) {
 		// dispatch error!!!!!
 		this.log(`Socket event error: ${error.message}`);
-	}
-
-	/**
-	 *@todo:::
-	 */
-	private _onDrain() {
-		// @todo: implement
-		this.log("Socket event drain");
 	}
 
 	/**
