@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v2.1.0...v2.2.0) (2017-07-19)
+
+
+### Bug Fixes
+
+* **Command:** Critical error with command timeouts ([6caeacb](https://github.com/SuperFlyTV/casparcg-connection/commit/6caeacb))
+* **Events:** Critical bug introduced in v1.0.0 ([7dcd9fe](https://github.com/SuperFlyTV/casparcg-connection/commit/7dcd9fe))
+
+
+### Features
+
+* **Command:** Planned for better timeout retry strategy ([b0b5f19](https://github.com/SuperFlyTV/casparcg-connection/commit/b0b5f19))
+
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v2.0.3...v2.1.0) (2017-07-18)
 
