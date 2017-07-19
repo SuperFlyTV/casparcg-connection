@@ -221,6 +221,7 @@ var CasparCGSocket = (function (_super) {
             commandString += (commandString.length > 0 ? " " : "");
             commandString += (payload.key ? payload.key + " " : "") + payload.value;
         }
+        global.clearTimeout(this._commandTimeoutTimer);
         this._commandTimeoutTimer = global.setTimeout(function () { return _this._onTimeout(); }, this._commandTimeout);
         this._client.write(commandString + "\r\n");
         command.status = IAMCPStatus.Sent;

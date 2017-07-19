@@ -95,11 +95,6 @@ var CasparCG = (function (_super) {
             options.port = port;
         }
         _this._createNewSocket(options);
-        _this._socket.on("error", function (error) { return _this._onSocketError(error); });
-        _this._socket.on(Events_1.CasparCGSocketStatusEvent.STATUS, function (event) { return _this._onSocketStatusChange(event); });
-        _this._socket.on(Events_1.CasparCGSocketStatusEvent.TIMEOUT, function () { return _this._onSocketStatusTimeout(); });
-        _this._socket.on(Events_1.CasparCGSocketResponseEvent.RESPONSE, function (event) { return _this._handleSocketResponse(event.response); });
-        _this._socket.on(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, function () { return _this._handleInvalidSocketResponse(); });
         if (_this.autoConnect) {
             _this.connect();
         }
@@ -142,6 +137,11 @@ var CasparCG = (function (_super) {
             delete this._socket;
         }
         this._socket = new CasparCGSocket_1.CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
+        this._socket.on("error", function (error) { return _this._onSocketError(error); });
+        this._socket.on(Events_1.CasparCGSocketStatusEvent.STATUS, function (event) { return _this._onSocketStatusChange(event); });
+        this._socket.on(Events_1.CasparCGSocketStatusEvent.TIMEOUT, function () { return _this._onSocketStatusTimeout(); });
+        this._socket.on(Events_1.CasparCGSocketResponseEvent.RESPONSE, function (event) { return _this._handleSocketResponse(event.response); });
+        this._socket.on(Events_1.CasparCGSocketResponseEvent.INVALID_RESPONSE, function () { return _this._handleInvalidSocketResponse(); });
         // inherit log method
         this._socket.log = function (args) { return _this._log(args); };
     };
@@ -337,17 +337,15 @@ var CasparCG = (function (_super) {
                 this.onConnectionChanged(this._connected);
             }
             if (this._connected) {
-                // @todo: handle flush SENT-buffer + shift/push version command in queue.
+                // @todo: handle flush SENT-buffer + shift/push version command in queue. (add back the sent command (retry strategy)) + make sure VERSION comes first after reconnect
                 // reset cached data
                 delete this._configPromise;
                 delete this._pathsPromise;
+                this._expediteCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
                 if (this.autoServerVersion) {
                     this.version(ServerStateEnum_1.Enum.Version.SERVER).then(function (result) {
                         _this._setVersionFromServerResponse(result.response);
                     });
-                }
-                else {
-                    this._expediteCommand(true); // gets going on commands already on queue. in the if-autoServerVersion above this explicitly happens once the Version command responds
                 }
                 this.emit(Events_1.CasparCGSocketStatusEvent.CONNECTED, socketStatus);
                 if (this.onConnected) {
@@ -369,7 +367,17 @@ var CasparCG = (function (_super) {
         if (this._sentCommands.length > 0) {
             this._log("Command timed out: \"" + this._sentCommands[0].name + "\". Starting flush procedure, with " + this._sentCommands.length + " command(s) in sentCommands.");
         }
-        this._expediteCommand(true);
+        // @todo: implement retry strategy #81
+        // 1) discard
+        // this._expediteCommand(true);
+        // 2) retry (max attempts missing)
+        this.reconnect();
+        // 3) smart/probe
+        // try to send INFO
+        // -> SUCCESS
+        // discard that single command, procees
+        // -> FAIL
+        // reconncet
     };
     Object.defineProperty(CasparCG.prototype, "queuedCommands", {
         /**
