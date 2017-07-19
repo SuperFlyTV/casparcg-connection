@@ -227,6 +227,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			commandString += (payload.key ? payload.key + " " : "") + payload.value;
 		}
 
+		global.clearTimeout(this._commandTimeoutTimer);
 		this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout);
 		this._client.write(`${commandString}\r\n`);
 		command.status = IAMCPStatus.Sent;
