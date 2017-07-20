@@ -513,9 +513,11 @@ export namespace Config {
 			importFromV207VO(configVO: Object): void;
 			importFromV210VO(configVO: Object): void;
 			readonly VO: v207.CasparCGConfigVO | v21x.CasparCGConfigVO;
+			readonly vo: v207.CasparCGConfigVO | v21x.CasparCGConfigVO;
 			readonly v207VO: v207.CasparCGConfigVO;
 			readonly v210VO: v21x.CasparCGConfigVO;
 			readonly XML: Object | null;
+			readonly xml: Object | null;
 			readonly v207XML: Object;
 			readonly v210XML: Object;
 			readonly XMLString: string;
@@ -812,6 +814,11 @@ export namespace Config {
 			}
 
 			/***/
+			public get vo(): Config207VO | Config210VO{
+				return this.VO;
+			}
+
+			/***/
 			public get v207VO(): Config207VO {
 				// let configVO: Config207VO = {};
 				let configVO: Config207VO = new Config207VO;
@@ -962,6 +969,11 @@ export namespace Config {
 					return this.v210XML;
 				}
 				return null; // @todo: throw error
+			}
+
+			/***/
+			public get xml(): Object | null {
+				return this.XML;
 			}
 
 			/***/
