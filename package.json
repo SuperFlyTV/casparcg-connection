@@ -14,6 +14,7 @@
     "doc": "gulp typedoc",
     "prerelease": "npm run prepublishOnly && git add -f docs/ && git commit -m 'chore(Docs): Updated docs to release' && git add -f js/ && git commit -m 'build(JS): Build for release'",
     "release": "standard-version",
+    "release:next": "npm run prerelease && standard-version --prerelease next",
     "release:dry": "standard-version --dry-run"
   },
   "repository": {
