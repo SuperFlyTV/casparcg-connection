@@ -7,7 +7,7 @@ import {Enum} from "./lib/ServerStateEnum";
 import {IConnectionOptions, ConnectionOptions, Options as OptionsNS} from "./lib/AMCPConnectionOptions";
 // Options NS
 import QueueMode = OptionsNS.QueueMode;
-import ServerVersion = OptionsNS.ServerVersion;
+import CasparCGVersion = OptionsNS.CasparCGVersion;
 // Command NS
 import {Command as CommandNS} from "./lib/AbstractCommand";
 import IAMCPCommand = CommandNS.IAMCPCommand;
@@ -285,7 +285,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 *@todo: document
 	 */
-	public serverVersion: ServerVersion | undefined = undefined;
+	public serverVersion: CasparCGVersion | undefined = undefined;
 
 	/**
 	 *@todo: document

@@ -1,7 +1,7 @@
 import {create as XMLBuilder} from "xmlbuilder";
 // Options NS
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
-import ServerVersion = OptionsNS.ServerVersion;
+import CasparCGVersion = OptionsNS.CasparCGVersion;
 
 /***/
 export namespace Config {
@@ -12,7 +12,7 @@ export namespace Config {
 		export type factoryMembers = "config" | "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host"  | "channel-layout" | "mix-config";
 		export type FactyoryTypes = v207.CasparCGConfigVO | v21x.CasparCGConfigVO | v2xx.Consumer | v2xx.Channel | v2xx.Controller | v2xx.OscClient | v2xx.TemplateHost | v207.ChannelLayout | v207.MixConfig | v21x.ChannelLayout | v21x.MixConfig | undefined;
 
-		export function configMemberFactory(version: ServerVersion, memberName: factoryMembers | string, initValues?: Object): FactyoryTypes {
+		export function configMemberFactory(version: CasparCGVersion, memberName: factoryMembers | string, initValues?: Object): FactyoryTypes {
 			let member: FactyoryTypes = undefined;
 
 			switch (memberName) {
@@ -521,7 +521,7 @@ export namespace Config {
 			readonly XMLString: string;
 			readonly v207XMLString: string;
 			readonly v210XMLString: string;
-			readonly _version: ServerVersion;
+			readonly _version: CasparCGVersion;
 
 			paths: v21x.Paths;
 			channels: Array<v2xx.Channel>;
@@ -546,7 +546,7 @@ export namespace Config {
 
 		/***/
 		export class CasparCGConfig implements ICasparCGConfig {
-			private __version: ServerVersion;
+			private __version: CasparCGVersion;
 			public paths: v21x.Paths = new v21x.Paths();
 			public channels: Array<v2xx.Channel> = [];
 			public controllers: Array<v2xx.Controller> = [];
@@ -568,29 +568,29 @@ export namespace Config {
 			public audio: Intermediate.Audio = new Intermediate.Audio();
 
 			/***/
-			public constructor(version: ServerVersion);
+			public constructor(version: CasparCGVersion);
 			public constructor(initConfigVO: Config207VO | Config210VO | {});
-			public constructor(initVersionOrConfigVO: Config207VO | Config210VO | {} | ServerVersion) {
+			public constructor(initVersionOrConfigVO: Config207VO | Config210VO | {} | CasparCGVersion) {
 				// is a version
 				if (typeof initVersionOrConfigVO === "number") {
 					if (initVersionOrConfigVO >= 2100) {
-						this.__version = ServerVersion.V210;
+						this.__version = CasparCGVersion.V210;
 					} else if (initVersionOrConfigVO === 2007) {
-						this.__version = ServerVersion.V207;
+						this.__version = CasparCGVersion.V207;
 					}
 					return;
 				}
 				// is initVO
 				if (initVersionOrConfigVO) {
 					if (initVersionOrConfigVO instanceof Config207VO) {
-						this.__version = ServerVersion.V207;
+						this.__version = CasparCGVersion.V207;
 					} else if (initVersionOrConfigVO instanceof Config210VO) {
-						this.__version = ServerVersion.V210;
+						this.__version = CasparCGVersion.V210;
 					} else if ((typeof initVersionOrConfigVO === "object") && initVersionOrConfigVO["_version"]) {
 						if (initVersionOrConfigVO["_version"] >= 2100) {
-							this.__version = ServerVersion.V210;
+							this.__version = CasparCGVersion.V210;
 						} else if (initVersionOrConfigVO["_version"] >= 2007) {
-							this.__version = ServerVersion.V207;
+							this.__version = CasparCGVersion.V207;
 						}
 					}
 					this.import(initVersionOrConfigVO);
@@ -599,9 +599,9 @@ export namespace Config {
 
 			/***/
 			public import(configVO: Object): void {
-				if (this.__version === ServerVersion.V207) {
+				if (this.__version === CasparCGVersion.V207) {
 					this.importFromV207VO(configVO);
-				} else if (this.__version === ServerVersion.V210) {
+				} else if (this.__version === CasparCGVersion.V210) {
 					this.importFromV210VO(configVO);
 				}
 
@@ -803,9 +803,9 @@ export namespace Config {
 
 			/***/
 			public get VO(): Config207VO | Config210VO{
-				if (this.__version === ServerVersion.V207) {
+				if (this.__version === CasparCGVersion.V207) {
 					return this.v207VO;
-				} else if (this.__version === ServerVersion.V210) {
+				} else if (this.__version === CasparCGVersion.V210) {
 					return this.v210VO;
 				}
 				throw new Error("@todo");	// @todo: throw
@@ -956,9 +956,9 @@ export namespace Config {
 
 			/***/
 			public get XML(): Object | null {
-				if (this.__version === ServerVersion.V207) {
+				if (this.__version === CasparCGVersion.V207) {
 					return this.v207XML;
-				} else if (this.__version === ServerVersion.V210) {
+				} else if (this.__version === CasparCGVersion.V210) {
 					return this.v210XML;
 				}
 				return null; // @todo: throw error
@@ -1198,9 +1198,9 @@ export namespace Config {
 
 			/***/
 			public get XMLString(): string {
-				if (this.__version === ServerVersion.V207) {
+				if (this.__version === CasparCGVersion.V207) {
 					return this.v207XMLString;
-				} else if (this.__version === ServerVersion.V210) {
+				} else if (this.__version === CasparCGVersion.V210) {
 					return this.v210XMLString;
 				}
 				return ""; // @todo: throw error
@@ -1217,7 +1217,7 @@ export namespace Config {
 			}
 
 			/***/
-			public get _version(): ServerVersion {
+			public get _version(): CasparCGVersion {
 				return this.__version;
 			}
 

@@ -2,7 +2,7 @@
 import {Config} from "./Config";
 // Options NS
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
-import ServerVersion = OptionsNS.ServerVersion;
+import CasparCGVersion = OptionsNS.CasparCGVersion;
 // AMCPUtilNS
 import {AMCPUtil as AMCPUtilNS} from "./AMCP";
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
@@ -19,7 +19,7 @@ export namespace ConfigUtil {
 	export function parseConfigFrom207XML(XMLString: string): Config.Intermediate.CasparCGConfig | {} {
 		let validator: XMLValidator = new XMLValidator();
 		let parser: ConfigParser = new ConfigParser();
-		parser.context = {serverVersion: ServerVersion.V207};
+		parser.context = {serverVersion: CasparCGVersion.V207};
 		let fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString);	// @todo: does this work?
 		let validData: Object = {};
 

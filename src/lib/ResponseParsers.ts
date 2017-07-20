@@ -1,7 +1,7 @@
 import *as Path from "path";
 import {Options as OptionsNS} from "./AMCPConnectionOptions";
 // Options NS
-import ServerVersion = OptionsNS.ServerVersion;
+import CasparCGVersion = OptionsNS.CasparCGVersion;
 // config NS
 import {Config as ConfigNS} from "./Config";
 import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
@@ -154,12 +154,13 @@ export namespace Response {
 	export class ConfigParser extends AbstractParser implements IResponseParser {
 		/***/
 		public parse(data: Object): Object {
-			let serverVersion: ServerVersion;
-			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > ServerVersion.V21x) {
-				serverVersion = ServerVersion.V210;
+			let serverVersion: CasparCGVersion;
+			if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > CasparCGVersion.V21x) {
+				serverVersion = CasparCGVersion.V210;
 			}else {
-				serverVersion = ServerVersion.V207;
+				serverVersion = CasparCGVersion.V207;
 			}
+
 			let configResult: CasparCGConfig = new CasparCGConfig(serverVersion);
 			configResult.import(data);
 			return configResult;

@@ -22,7 +22,7 @@ export namespace Options {
 	/**
 	 *
 	 */
-	export enum ServerVersion  {
+	export enum CasparCGVersion  {
 		V2xx = 2000,
 		V207 = 2007,
 		V21x = 2100,
@@ -41,7 +41,7 @@ export interface IConnectionOptions {
 	autoReconnectInterval?: number;
 	autoReconnectAttempts?: number;
 	autoServerVersion?: boolean;
-	serverVersion?: Options.ServerVersion;
+	serverVersion?: Options.CasparCGVersion;
 	queueMode?: Options.QueueMode;
 	debug?: boolean;
 	onLog?: IStringCallback;
