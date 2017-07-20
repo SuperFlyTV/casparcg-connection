@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0-next.1"></a>
+# [3.0.0-next.1](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.0...v3.0.0-next.1) (2017-07-20)
+
+
+### Features
+
+* **VirginServer:** Report server's virgin-state on connected events ([a8f3b61](https://github.com/SuperFlyTV/casparcg-connection/commit/a8f3b61))
+
+
+
 <a name="3.0.0-next.0"></a>
 # [3.0.0-next.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v2.1.0...v3.0.0-next.0) (2017-07-20)
 
