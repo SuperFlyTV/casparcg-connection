@@ -2,6 +2,40 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0-next.0"></a>
+# [3.0.0-next.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v2.1.0...v3.0.0-next.0) (2017-07-20)
+
+
+### Bug Fixes
+
+* **Command:** Critical error with command timeouts ([6caeacb](https://github.com/SuperFlyTV/casparcg-connection/commit/6caeacb))
+* **Config:** Bugfix with manual operations parsing config XML ([e80117b](https://github.com/SuperFlyTV/casparcg-connection/commit/e80117b))
+* **Events:** Critical bug introduced in v1.0.0 ([7dcd9fe](https://github.com/SuperFlyTV/casparcg-connection/commit/7dcd9fe))
+* **Logging:** Better handling of errors ([d80c794](https://github.com/SuperFlyTV/casparcg-connection/commit/d80c794))
+* **Socket:** Prevents timeout of extremely long responses ([613c629](https://github.com/SuperFlyTV/casparcg-connection/commit/613c629))
+* **Socket:** Removed unused internal event ([5eb343c](https://github.com/SuperFlyTV/casparcg-connection/commit/5eb343c))
+* **Version:** bugfix for setting manuel ServerVersion ([8362a22](https://github.com/SuperFlyTV/casparcg-connection/commit/8362a22))
+
+
+### Code Refactoring
+
+* **Enum:** Changed the public enum ServerVersion ([b7aadea](https://github.com/SuperFlyTV/casparcg-connection/commit/b7aadea))
+
+
+### Features
+
+* **Command:** Planned for better timeout retry strategy ([b0b5f19](https://github.com/SuperFlyTV/casparcg-connection/commit/b0b5f19))
+* **Config:** Added members "vo" and "xml" as aliases to "VO" and "XML" on Config objects ([65dffde](https://github.com/SuperFlyTV/casparcg-connection/commit/65dffde))
+* **Queue:** Added prioritized queues ([929e4ad](https://github.com/SuperFlyTV/casparcg-connection/commit/929e4ad)), closes [#15](https://github.com/SuperFlyTV/casparcg-connection/issues/15)
+* **Version:** Added version promise to CasparCG ([554ea41](https://github.com/SuperFlyTV/casparcg-connection/commit/554ea41)), closes [#73](https://github.com/SuperFlyTV/casparcg-connection/issues/73)
+
+
+### BREAKING CHANGES
+
+* **Enum:** enum ServerVersion is now CasparCGVersion, for consistency.
+
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v2.0.3...v2.1.0) (2017-07-18)
 
