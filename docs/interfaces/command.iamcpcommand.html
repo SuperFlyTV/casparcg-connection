@@ -1,0 +1,737 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>IAMCPCommand | casparcg-connection</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">casparcg-connection</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../index.html">Globals</a>
+				</li>
+				<li>
+					<a href="../modules/command.html">Command</a>
+				</li>
+				<li>
+					<a href="command.iamcpcommand.html">IAMCPCommand</a>
+				</li>
+			</ul>
+			<h1>Interface IAMCPCommand</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<a href="command.iamcpcommanddata.html" class="tsd-signature-type">IAMCPCommandData</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">IAMCPCommand</span>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel">
+				<h3>Implemented by</h3>
+				<ul class="tsd-hierarchy">
+					<li><a href="../classes/command.abstractchannelcommand.html" class="tsd-signature-type">AbstractChannelCommand</a></li>
+					<li><a href="../classes/command.abstractchannelorlayercommand.html" class="tsd-signature-type">AbstractChannelOrLayerCommand</a></li>
+					<li><a href="../classes/command.abstractcommand.html" class="tsd-signature-type">AbstractCommand</a></li>
+					<li><a href="../classes/command.abstractlayercommand.html" class="tsd-signature-type">AbstractLayerCommand</a></li>
+					<li><a href="../classes/command.abstractlayerwithcgfallbackcommand.html" class="tsd-signature-type">AbstractLayerWithCgFallbackCommand</a></li>
+					<li><a href="../classes/command.abstractlayerwithfallbackcommand.html" class="tsd-signature-type">AbstractLayerWithFallbackCommand</a></li>
+					<li><a href="../classes/command.abstractorchannelorlayercommand.html" class="tsd-signature-type">AbstractOrChannelOrLayerCommand</a></li>
+					<li><a href="../classes/amcp.addcommand.html" class="tsd-signature-type">AddCommand</a></li>
+					<li><a href="../classes/amcp.byecommand.html" class="tsd-signature-type">ByeCommand</a></li>
+					<li><a href="../classes/amcp.cgaddcommand.html" class="tsd-signature-type">CGAddCommand</a></li>
+					<li><a href="../classes/amcp.cgclearcommand.html" class="tsd-signature-type">CGClearCommand</a></li>
+					<li><a href="../classes/amcp.cginfocommand.html" class="tsd-signature-type">CGInfoCommand</a></li>
+					<li><a href="../classes/amcp.cginvokecommand.html" class="tsd-signature-type">CGInvokeCommand</a></li>
+					<li><a href="../classes/amcp.cgnextcommand.html" class="tsd-signature-type">CGNextCommand</a></li>
+					<li><a href="../classes/amcp.cgplaycommand.html" class="tsd-signature-type">CGPlayCommand</a></li>
+					<li><a href="../classes/amcp.cgremovecommand.html" class="tsd-signature-type">CGRemoveCommand</a></li>
+					<li><a href="../classes/amcp.cgstopcommand.html" class="tsd-signature-type">CGStopCommand</a></li>
+					<li><a href="../classes/amcp.cgupdatecommand.html" class="tsd-signature-type">CGUpdateCommand</a></li>
+					<li><a href="../classes/amcp.callcommand.html" class="tsd-signature-type">CallCommand</a></li>
+					<li><a href="../classes/amcp.channelgridcommand.html" class="tsd-signature-type">ChannelGridCommand</a></li>
+					<li><a href="../classes/amcp.cinfcommand.html" class="tsd-signature-type">CinfCommand</a></li>
+					<li><a href="../classes/amcp.clearcommand.html" class="tsd-signature-type">ClearCommand</a></li>
+					<li><a href="../classes/amcp.clscommand.html" class="tsd-signature-type">ClsCommand</a></li>
+					<li><a href="../classes/amcp.customcommand.html" class="tsd-signature-type">CustomCommand</a></li>
+					<li><a href="../classes/amcp.datalistcommand.html" class="tsd-signature-type">DataListCommand</a></li>
+					<li><a href="../classes/amcp.dataremovecommand.html" class="tsd-signature-type">DataRemoveCommand</a></li>
+					<li><a href="../classes/amcp.dataretrievecommand.html" class="tsd-signature-type">DataRetrieveCommand</a></li>
+					<li><a href="../classes/amcp.datastorecommand.html" class="tsd-signature-type">DataStoreCommand</a></li>
+					<li><a href="../classes/amcp.diagcommand.html" class="tsd-signature-type">DiagCommand</a></li>
+					<li><a href="../classes/amcp.flscommand.html" class="tsd-signature-type">FlsCommand</a></li>
+					<li><a href="../classes/amcp.glgccommand.html" class="tsd-signature-type">GlGCCommand</a></li>
+					<li><a href="../classes/amcp.glinfocommand.html" class="tsd-signature-type">GlInfoCommand</a></li>
+					<li><a href="../classes/amcp.helpcommand.html" class="tsd-signature-type">HelpCommand</a></li>
+					<li><a href="../classes/amcp.helpconsumercommand.html" class="tsd-signature-type">HelpConsumerCommand</a></li>
+					<li><a href="../classes/amcp.helpproducercommand.html" class="tsd-signature-type">HelpProducerCommand</a></li>
+					<li><a href="../classes/amcp.infocommand.html" class="tsd-signature-type">InfoCommand</a></li>
+					<li><a href="../classes/amcp.infoconfigcommand.html" class="tsd-signature-type">InfoConfigCommand</a></li>
+					<li><a href="../classes/amcp.infodelaycommand.html" class="tsd-signature-type">InfoDelayCommand</a></li>
+					<li><a href="../classes/amcp.infopathscommand.html" class="tsd-signature-type">InfoPathsCommand</a></li>
+					<li><a href="../classes/amcp.infoqueuescommand.html" class="tsd-signature-type">InfoQueuesCommand</a></li>
+					<li><a href="../classes/amcp.infoservercommand.html" class="tsd-signature-type">InfoServerCommand</a></li>
+					<li><a href="../classes/amcp.infosystemcommand.html" class="tsd-signature-type">InfoSystemCommand</a></li>
+					<li><a href="../classes/amcp.infotemplatecommand.html" class="tsd-signature-type">InfoTemplateCommand</a></li>
+					<li><a href="../classes/amcp.infothreadscommand.html" class="tsd-signature-type">InfoThreadsCommand</a></li>
+					<li><a href="../classes/amcp.killcommand.html" class="tsd-signature-type">KillCommand</a></li>
+					<li><a href="../classes/amcp.loadcommand.html" class="tsd-signature-type">LoadCommand</a></li>
+					<li><a href="../classes/amcp.loaddecklinkbgcommand.html" class="tsd-signature-type">LoadDecklinkBgCommand</a></li>
+					<li><a href="../classes/amcp.loaddecklinkcommand.html" class="tsd-signature-type">LoadDecklinkCommand</a></li>
+					<li><a href="../classes/amcp.loadhtmlpagebgcommand.html" class="tsd-signature-type">LoadHtmlPageBgCommand</a></li>
+					<li><a href="../classes/amcp.loadhtmlpagecommand.html" class="tsd-signature-type">LoadHtmlPageCommand</a></li>
+					<li><a href="../classes/amcp.loadbgcommand.html" class="tsd-signature-type">LoadbgCommand</a></li>
+					<li><a href="../classes/amcp.lockcommand.html" class="tsd-signature-type">LockCommand</a></li>
+					<li><a href="../classes/amcp.logcategorycommand.html" class="tsd-signature-type">LogCategoryCommand</a></li>
+					<li><a href="../classes/amcp.loglevelcommand.html" class="tsd-signature-type">LogLevelCommand</a></li>
+					<li><a href="../classes/amcp.mixeranchorcommand.html" class="tsd-signature-type">MixerAnchorCommand</a></li>
+					<li><a href="../classes/amcp.mixerblendcommand.html" class="tsd-signature-type">MixerBlendCommand</a></li>
+					<li><a href="../classes/amcp.mixerbrightnesscommand.html" class="tsd-signature-type">MixerBrightnessCommand</a></li>
+					<li><a href="../classes/amcp.mixerchromacommand.html" class="tsd-signature-type">MixerChromaCommand</a></li>
+					<li><a href="../classes/amcp.mixerclearcommand.html" class="tsd-signature-type">MixerClearCommand</a></li>
+					<li><a href="../classes/amcp.mixerclipcommand.html" class="tsd-signature-type">MixerClipCommand</a></li>
+					<li><a href="../classes/amcp.mixercommitcommand.html" class="tsd-signature-type">MixerCommitCommand</a></li>
+					<li><a href="../classes/amcp.mixercontrastcommand.html" class="tsd-signature-type">MixerContrastCommand</a></li>
+					<li><a href="../classes/amcp.mixercropcommand.html" class="tsd-signature-type">MixerCropCommand</a></li>
+					<li><a href="../classes/amcp.mixerfillcommand.html" class="tsd-signature-type">MixerFillCommand</a></li>
+					<li><a href="../classes/amcp.mixergridcommand.html" class="tsd-signature-type">MixerGridCommand</a></li>
+					<li><a href="../classes/amcp.mixerkeyercommand.html" class="tsd-signature-type">MixerKeyerCommand</a></li>
+					<li><a href="../classes/amcp.mixerlevelscommand.html" class="tsd-signature-type">MixerLevelsCommand</a></li>
+					<li><a href="../classes/amcp.mixermastervolumecommand.html" class="tsd-signature-type">MixerMastervolumeCommand</a></li>
+					<li><a href="../classes/amcp.mixermipmapcommand.html" class="tsd-signature-type">MixerMipmapCommand</a></li>
+					<li><a href="../classes/amcp.mixeropacitycommand.html" class="tsd-signature-type">MixerOpacityCommand</a></li>
+					<li><a href="../classes/amcp.mixerperspectivecommand.html" class="tsd-signature-type">MixerPerspectiveCommand</a></li>
+					<li><a href="../classes/amcp.mixerrotationcommand.html" class="tsd-signature-type">MixerRotationCommand</a></li>
+					<li><a href="../classes/amcp.mixersaturationcommand.html" class="tsd-signature-type">MixerSaturationCommand</a></li>
+					<li><a href="../classes/amcp.mixerstraightalphaoutputcommand.html" class="tsd-signature-type">MixerStraightAlphaOutputCommand</a></li>
+					<li><a href="../classes/amcp.mixervolumecommand.html" class="tsd-signature-type">MixerVolumeCommand</a></li>
+					<li><a href="../classes/amcp.pausecommand.html" class="tsd-signature-type">PauseCommand</a></li>
+					<li><a href="../classes/amcp.playcommand.html" class="tsd-signature-type">PlayCommand</a></li>
+					<li><a href="../classes/amcp.playdecklinkcommand.html" class="tsd-signature-type">PlayDecklinkCommand</a></li>
+					<li><a href="../classes/amcp.playhtmlpagecommand.html" class="tsd-signature-type">PlayHtmlPageCommand</a></li>
+					<li><a href="../classes/amcp.printcommand.html" class="tsd-signature-type">PrintCommand</a></li>
+					<li><a href="../classes/amcp.removecommand.html" class="tsd-signature-type">RemoveCommand</a></li>
+					<li><a href="../classes/amcp.restartcommand.html" class="tsd-signature-type">RestartCommand</a></li>
+					<li><a href="../classes/amcp.resumecommand.html" class="tsd-signature-type">ResumeCommand</a></li>
+					<li><a href="../classes/amcp.setcommand.html" class="tsd-signature-type">SetCommand</a></li>
+					<li><a href="../classes/amcp.stopcommand.html" class="tsd-signature-type">StopCommand</a></li>
+					<li><a href="../classes/amcp.swapcommand.html" class="tsd-signature-type">SwapCommand</a></li>
+					<li><a href="../classes/amcp.thumbnailgenerateallcommand.html" class="tsd-signature-type">ThumbnailGenerateAllCommand</a></li>
+					<li><a href="../classes/amcp.thumbnailgeneratecommand.html" class="tsd-signature-type">ThumbnailGenerateCommand</a></li>
+					<li><a href="../classes/amcp.thumbnaillistcommand.html" class="tsd-signature-type">ThumbnailListCommand</a></li>
+					<li><a href="../classes/amcp.thumbnailretrievecommand.html" class="tsd-signature-type">ThumbnailRetrieveCommand</a></li>
+					<li><a href="../classes/amcp.tlscommand.html" class="tsd-signature-type">TlsCommand</a></li>
+					<li><a href="../classes/amcp.versioncommand.html" class="tsd-signature-type">VersionCommand</a></li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Properties</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="command.iamcpcommand.html#address" class="tsd-kind-icon">address</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="command.iamcpcommand.html#channel" class="tsd-kind-icon">channel</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="command.iamcpcommand.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="command.iamcpcommand.html#layer" class="tsd-kind-icon">layer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="command.iamcpcommand.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpcommand.html#onstatuschanged" class="tsd-kind-icon">on<wbr>Status<wbr>Changed</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpcommand.html#paramprotocol" class="tsd-kind-icon">param<wbr>Protocol</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="command.iamcpcommand.html#payload" class="tsd-kind-icon">payload</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpcommand.html#protocollogic" class="tsd-kind-icon">protocol<wbr>Logic</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpcommand.html#reject" class="tsd-kind-icon">reject</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpcommand.html#resolve" class="tsd-kind-icon">resolve</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="command.iamcpcommand.html#response" class="tsd-kind-icon">response</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="command.iamcpcommand.html#responseprotocol" class="tsd-kind-icon">response<wbr>Protocol</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="command.iamcpcommand.html#status" class="tsd-kind-icon">status</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="command.iamcpcommand.html#populate" class="tsd-kind-icon">populate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="command.iamcpcommand.html#serialize" class="tsd-kind-icon">serialize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="command.iamcpcommand.html#validateparams" class="tsd-kind-icon">validate<wbr>Params</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="command.iamcpcommand.html#validateresponse" class="tsd-kind-icon">validate<wbr>Response</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="address" class="tsd-anchor"></a>
+					<h3>address</h3>
+					<div class="tsd-signature tsd-kind-icon">address<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="command.iamcpcommanddata.html">IAMCPCommandData</a>.<a href="command.iamcpcommanddata.html#address">address</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L77">lib/AbstractCommand.ts:77</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="channel" class="tsd-anchor"></a>
+					<h3>channel</h3>
+					<div class="tsd-signature tsd-kind-icon">channel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="command.iamcpcommanddata.html">IAMCPCommandData</a>.<a href="command.iamcpcommanddata.html#channel">channel</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L78">lib/AbstractCommand.ts:78</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="id" class="tsd-anchor"></a>
+					<h3>id</h3>
+					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="command.iamcpcommanddata.html">IAMCPCommandData</a>.<a href="command.iamcpcommanddata.html#id">id</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L83">lib/AbstractCommand.ts:83</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="layer" class="tsd-anchor"></a>
+					<h3>layer</h3>
+					<div class="tsd-signature tsd-kind-icon">layer<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="command.iamcpcommanddata.html">IAMCPCommandData</a>.<a href="command.iamcpcommanddata.html#layer">layer</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L79">lib/AbstractCommand.ts:79</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="command.iamcpcommanddata.html">IAMCPCommandData</a>.<a href="command.iamcpcommanddata.html#name">name</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L84">lib/AbstractCommand.ts:84</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="onstatuschanged" class="tsd-anchor"></a>
+					<h3>on<wbr>Status<wbr>Changed</h3>
+					<div class="tsd-signature tsd-kind-icon">on<wbr>Status<wbr>Changed<span class="tsd-signature-symbol">:</span> <a href="callback.icommandstatuscallback.html" class="tsd-signature-type">ICommandStatusCallback</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L109">lib/AbstractCommand.ts:109</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="paramprotocol" class="tsd-anchor"></a>
+					<h3>param<wbr>Protocol</h3>
+					<div class="tsd-signature tsd-kind-icon">param<wbr>Protocol<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="param.iparamsignature.html" class="tsd-signature-type">IParamSignature</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L104">lib/AbstractCommand.ts:104</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="payload" class="tsd-anchor"></a>
+					<h3>payload</h3>
+					<div class="tsd-signature tsd-kind-icon">payload<span class="tsd-signature-symbol">:</span> <a href="../modules/param.html#payloadvo" class="tsd-signature-type">PayloadVO</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="command.iamcpcommanddata.html">IAMCPCommandData</a>.<a href="command.iamcpcommanddata.html#payload">payload</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L80">lib/AbstractCommand.ts:80</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="protocollogic" class="tsd-anchor"></a>
+					<h3>protocol<wbr>Logic</h3>
+					<div class="tsd-signature tsd-kind-icon">protocol<wbr>Logic<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="protocol.iprotocollogic.html" class="tsd-signature-type">IProtocolLogic</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L105">lib/AbstractCommand.ts:105</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="reject" class="tsd-anchor"></a>
+					<h3>reject</h3>
+					<div class="tsd-signature tsd-kind-icon">reject<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L108">lib/AbstractCommand.ts:108</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>command<span class="tsd-signature-symbol">: </span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>command: <a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="resolve" class="tsd-anchor"></a>
+					<h3>resolve</h3>
+					<div class="tsd-signature tsd-kind-icon">resolve<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L107">lib/AbstractCommand.ts:107</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>command<span class="tsd-signature-symbol">: </span><a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>command: <a href="command.iamcpcommand.html" class="tsd-signature-type">IAMCPCommand</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="response" class="tsd-anchor"></a>
+					<h3>response</h3>
+					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <a href="command.iamcpresponse.html" class="tsd-signature-type">IAMCPResponse</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="command.iamcpcommanddata.html">IAMCPCommandData</a>.<a href="command.iamcpcommanddata.html#response">response</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L81">lib/AbstractCommand.ts:81</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="responseprotocol" class="tsd-anchor"></a>
+					<h3>response<wbr>Protocol</h3>
+					<div class="tsd-signature tsd-kind-icon">response<wbr>Protocol<span class="tsd-signature-symbol">:</span> <a href="../classes/response.responsesignature.html" class="tsd-signature-type">ResponseSignature</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L106">lib/AbstractCommand.ts:106</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="status" class="tsd-anchor"></a>
+					<h3>status</h3>
+					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <a href="../enums/command.iamcpstatus.html" class="tsd-signature-type">IAMCPStatus</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="command.iamcpcommanddata.html">IAMCPCommandData</a>.<a href="command.iamcpcommanddata.html#status">status</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L82">lib/AbstractCommand.ts:82</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="populate" class="tsd-anchor"></a>
+					<h3>populate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">populate<span class="tsd-signature-symbol">(</span>cmdVO<span class="tsd-signature-symbol">: </span><a href="command.iamcpcommandvo.html" class="tsd-signature-type">IAMCPCommandVO</a>, id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L103">lib/AbstractCommand.ts:103</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>cmdVO: <a href="command.iamcpcommandvo.html" class="tsd-signature-type">IAMCPCommandVO</a></h5>
+								</li>
+								<li>
+									<h5>id: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="serialize" class="tsd-anchor"></a>
+					<h3>serialize</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">serialize<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="command.iamcpcommandvo.html" class="tsd-signature-type">IAMCPCommandVO</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L102">lib/AbstractCommand.ts:102</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="command.iamcpcommandvo.html" class="tsd-signature-type">IAMCPCommandVO</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="validateparams" class="tsd-anchor"></a>
+					<h3>validate<wbr>Params</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Params<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L100">lib/AbstractCommand.ts:100</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="validateresponse" class="tsd-anchor"></a>
+					<h3>validate<wbr>Response</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">validate<wbr>Response<span class="tsd-signature-symbol">(</span>response<span class="tsd-signature-symbol">: </span><a href="../classes/amcputil.casparcgsocketresponse.html" class="tsd-signature-type">CasparCGSocketResponse</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/48fa1e5/src/lib/AbstractCommand.ts#L101">lib/AbstractCommand.ts:101</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>response: <a href="../classes/amcputil.casparcgsocketresponse.html" class="tsd-signature-type">CasparCGSocketResponse</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../index.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/amcp.html">AMCP</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/amcputil.html">AMCPUtil</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/callback.html">Callback</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/casparcgprotocols.html">CasparCGProtocols</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/command.html">Command</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/config.html">Config</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/configutil.html">Config<wbr>Util</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/enum.html">Enum</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/event.html">Event</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/options.html">Options</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/param.html">Param</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/protocol.html">Protocol</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/response.html">Response</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/validation.html">Validation</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/v21x.html">v21x</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/v2xx.html">v2xx</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/command.iamcpstatus.html" class="tsd-kind-icon">IAMCPStatus</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/command.amcpresponse.html" class="tsd-kind-icon">AMCPResponse</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/command.abstractchannelcommand.html" class="tsd-kind-icon">Abstract<wbr>Channel<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/command.abstractchannelorlayercommand.html" class="tsd-kind-icon">Abstract<wbr>Channel<wbr>OrLayer<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/command.abstractcommand.html" class="tsd-kind-icon">Abstract<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/command.abstractlayercommand.html" class="tsd-kind-icon">Abstract<wbr>Layer<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/command.abstractlayerwithcgfallbackcommand.html" class="tsd-kind-icon">Abstract<wbr>Layer<wbr>With<wbr>CgFallback<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/command.abstractlayerwithfallbackcommand.html" class="tsd-kind-icon">Abstract<wbr>Layer<wbr>With<wbr>Fallback<wbr>Command</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/command.abstractorchannelorlayercommand.html" class="tsd-kind-icon">Abstract<wbr>OrChannel<wbr>OrLayer<wbr>Command</a>
+					</li>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="command.iamcpcommand.html" class="tsd-kind-icon">IAMCPCommand</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="command.iamcpcommand.html#address" class="tsd-kind-icon">address</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="command.iamcpcommand.html#channel" class="tsd-kind-icon">channel</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="command.iamcpcommand.html#id" class="tsd-kind-icon">id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="command.iamcpcommand.html#layer" class="tsd-kind-icon">layer</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="command.iamcpcommand.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#onstatuschanged" class="tsd-kind-icon">on<wbr>Status<wbr>Changed</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#paramprotocol" class="tsd-kind-icon">param<wbr>Protocol</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="command.iamcpcommand.html#payload" class="tsd-kind-icon">payload</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#protocollogic" class="tsd-kind-icon">protocol<wbr>Logic</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#reject" class="tsd-kind-icon">reject</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#resolve" class="tsd-kind-icon">resolve</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="command.iamcpcommand.html#response" class="tsd-kind-icon">response</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#responseprotocol" class="tsd-kind-icon">response<wbr>Protocol</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="command.iamcpcommand.html#status" class="tsd-kind-icon">status</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#populate" class="tsd-kind-icon">populate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#serialize" class="tsd-kind-icon">serialize</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#validateparams" class="tsd-kind-icon">validate<wbr>Params</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="command.iamcpcommand.html#validateresponse" class="tsd-kind-icon">validate<wbr>Response</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="command.iamcpcommanddata.html" class="tsd-kind-icon">IAMCPCommand<wbr>Data</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="command.iamcpcommandvo.html" class="tsd-kind-icon">IAMCPCommandVO</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="command.iamcpresponse.html" class="tsd-kind-icon">IAMCPResponse</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="../modules/command.html#isiamcpcommand" class="tsd-kind-icon">isIAMCPCommand</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
+<script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-83648715-1', '');
+        ga('send', 'pageview');
+    </script>
+</body>
+</html>

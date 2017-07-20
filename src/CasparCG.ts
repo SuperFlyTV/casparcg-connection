@@ -301,6 +301,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public queueMode: QueueMode | undefined = undefined;
 
 	/**
+	 * Setting this to true will investigate all connections to assess if the server is freshly booted, or have been used before the connection
+	 */
+	public virginServerCheck: boolean | undefined = undefined;
+
+	/**
 	 *Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]]
 	 */
 	public debug: boolean | undefined = undefined;
@@ -669,13 +674,46 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				delete this._versionPromise;
 				this._executeNextCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
 
-				// if (this.checkReconnectionType) {
+				// do checks to see if the server has been alive and used before this connection, or is in a untouched state
+				if (this.virginServerCheck) {
+					this.doNow(new AMCP.InfoCommand())
+						.then((info) => {
+							let channelPromises: Promise<IAMCPCommand>[] = [];
+							let channelLength: number = info.response.data["length"];
 
-				// }
+							for (let i: number = 1; i <= channelLength; i++) {	// 1-based index for channels
+								channelPromises.push(this.doNow(new AMCP.InfoCommand({channel: i})));
+							}
 
-				this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
-				if (this.onConnected) {
-					this.onConnected(this._connected);
+							let virgin: boolean = true;
+
+							Promise.all(channelPromises).then((channels) => {
+								for (let i: number = 0; i < channels.length; i++) {
+									let channelInfo: IAMCPCommand = channels[i];
+									if (channelInfo.response.data["stage"]) {
+										virgin = false;
+										break;
+									}
+								}
+								this.emit(CasparCGSocketStatusEvent.CONNECTED, {connected: this._connected, virginServer: virgin});
+								if (this.onConnected) {
+									this.onConnected(this._connected);
+								}
+							});
+						})
+						.catch(() => {
+							this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
+							if (this.onConnected) {
+								this.onConnected(this._connected);
+							}
+						});
+
+				// don't check virgin state, just inform about the connection asap
+				}else {
+					this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
+					if (this.onConnected) {
+						this.onConnected(this._connected);
+					}
 				}
 			}
 			if (!this._connected) {

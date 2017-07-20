@@ -4,7 +4,7 @@ export namespace Event {
 
 	export interface SocketStatus {
 		connected: boolean;
-		triggeredByConnectionLoss?: boolean;
+		virginServer?: boolean;
 	}
 
 	/**
