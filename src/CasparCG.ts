@@ -273,16 +273,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _configPromise: Promise<CasparCGConfig>;
 	private _pathsPromise: Promise<CasparCGPaths>;
 	private _versionPromise: Promise<CasparCGVersion>;
+	private _userConfigServerVersion: CasparCGVersion;
 
 	/**
 	 *Try to connect upon creation.
 	 */
 	public autoConnect: boolean | undefined = undefined;
-
-	/**
-	 *@todo: document
-	 */
-	public serverVersion: CasparCGVersion | undefined = undefined;
 
 	/**
 	 *@todo: document
@@ -658,6 +654,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				delete this._versionPromise;
 				this._executeNextCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
 
+				// if (this.checkReconnectionType) {
+
+				// }
+
 				this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
 				if (this.onConnected) {
 					this.onConnected(this._connected);
@@ -701,6 +701,26 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public get queuedCommands(): Array<IAMCPCommand> {
 		return this._queuedCommands;
+	}
+
+	/**
+	 *
+	 */
+	public set serverVersion(version: CasparCGVersion | undefined) {
+		if (version) {
+			this._userConfigServerVersion;
+		}
+	}
+
+	/**
+	 *
+	 */
+	public get serverVersion(): CasparCGVersion | undefined {
+		if (this._userConfigServerVersion) {
+			return this._userConfigServerVersion;
+		}
+
+		return undefined;
 	}
 
 	/**
@@ -939,8 +959,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public getCasparCGVersion(refresh: boolean = false): Promise<CasparCGVersion> {
 		if (!this._versionPromise || refresh) {
 			// use configed version
-			if (this.serverVersion) {
-				this._versionPromise = new Promise<CasparCGVersion>((resolve) => resolve(this.serverVersion));
+			if (this._userConfigServerVersion) {
+				this._versionPromise = new Promise<CasparCGVersion>((resolve) => resolve(this._userConfigServerVersion));
 			// generate version
 			} else {
 				this._versionPromise = new Promise<CasparCGVersion>((resolve) => {
