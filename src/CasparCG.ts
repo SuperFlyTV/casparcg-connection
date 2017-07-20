@@ -33,6 +33,12 @@ import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig;
 import {Response as ResponseNS} from "./lib/ResponseParsers";
 import CasparCGPaths = ResponseNS.CasparCGPaths;
 
+export enum Priority  {
+	LOW = 0,
+	NORMAL = 1,
+	HIGH = 2,
+}
+
 /**
  *CasparCG Protocols
  */
@@ -242,15 +248,25 @@ export interface ICasparCGConnection {
 	connectionOptions: ConnectionOptions;
 	connected: boolean;
 	connectionStatus: SocketStatusOptions;
+	readonly queuedCommands: Array<IAMCPCommand>;
+	readonly queuedCommandsLowPriority: Array<IAMCPCommand>;
+	readonly queuedCommandsHighPriority: Array<IAMCPCommand>;
 	getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
 	getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>;
 	getCasparCGVersion(refresh: boolean): Promise<CasparCGVersion>;
-	queuedCommands: Array<IAMCPCommand>;
 	removeQueuedCommand(id: string): boolean;
 	connect(options?: IConnectionOptions): void;
 	disconnect(): void;
+
+	createCommand(command: IAMCPCommand): IAMCPCommand | undefined;
+	createCommand(commandString: string, ...params: (string|Param)[]): IAMCPCommand | undefined;
+	queueCommand(command: IAMCPCommand, priority: Priority): Promise<IAMCPCommand>;
 	do(command: IAMCPCommand): Promise<IAMCPCommand>;
 	do(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
+	doNow(command: IAMCPCommand): Promise<IAMCPCommand>;
+	doNow(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
+	doLater(command: IAMCPCommand): Promise<IAMCPCommand>;
+	doLater(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
 }
 
 /**
@@ -269,6 +285,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _autoReconnectAttempts: number;
 	private _socket: CasparCGSocket;
 	private _queuedCommands: Array<IAMCPCommand> = [];
+	private _queuedCommandsLowPriority: Array<IAMCPCommand> = [];
+	private _queuedCommandsHighPriority: Array<IAMCPCommand> = [];
 	private _sentCommands: Array<IAMCPCommand> = [];
 	private _configPromise: Promise<CasparCGConfig>;
 	private _pathsPromise: Promise<CasparCGPaths>;
@@ -706,6 +724,20 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 *
 	 */
+	public get queuedCommandsLowPriority(): Array<IAMCPCommand> {
+		return this._queuedCommandsLowPriority;
+	}
+
+	/**
+	 *
+	 */
+	public get queuedCommandsHighPriority(): Array<IAMCPCommand> {
+		return this._queuedCommandsHighPriority;
+	}
+
+	/**
+	 *
+	 */
 	public set serverVersion(version: CasparCGVersion | undefined) {
 		if (version) {
 			this._userConfigServerVersion = version;
@@ -758,11 +790,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public do(command: IAMCPCommand): Promise<IAMCPCommand>;
 	public do(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
-	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> | void {
+	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> | undefined {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params);
 		if (command) {
 			return this.queueCommand(command);
 		}
+		return;
 	}
 
 	/**
@@ -771,29 +804,39 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public doNow(command: IAMCPCommand): Promise<IAMCPCommand>;
 	public doNow(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
-	public doNow(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> | void {
+	public doNow(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> | undefined {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params);
 		if (command) {
 			return this.queueCommand(command, Priority.HIGH);
 		}
+		return;
 	}
 
 	/**
 	 *@todo	implement
 	 *@todo	document
 	 */
-	public do(command: IAMCPCommand): Promise<IAMCPCommand>;
-	public do(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
-	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand|void> {
-		let command: IAMCPCommand | undefined;
+	public doLater(command: IAMCPCommand): Promise<IAMCPCommand>;
+	public doLater(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
+	public doLater(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> | undefined {
+		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params);
+		if (command) {
+			return this.queueCommand(command, Priority.LOW);
+		}
+		return;
+	}
 
+	/**
+	 *
+	 */
+	public createCommand(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): IAMCPCommand | undefined {
+		let command: IAMCPCommand | undefined;
 		try {
 			if (isIAMCPCommand(commandOrString)) {
 				command = commandOrString as IAMCPCommand;
 			}else if (typeof commandOrString === "string") {
 				if (AMCP.hasOwnProperty(commandOrString)) {
 					// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
-
 					// @todo: typechecking with fallback
 					command = Object.create(AMCP[commandOrString]["prototype"]);
 					// @todo: typechecking with fallback
@@ -812,32 +855,34 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				// @todo: Handle, return?
 				throw new Error("Invalid command parameters");
 			}
+
+			return command;
 		}catch (error) {
-			return Promise.reject(error);
+			this._log(error);
 		}
-
-		let commandPromise: Promise<IAMCPCommand> = new Promise<IAMCPCommand>((resolve, reject) => {
-			command!.resolve = resolve;
-			command!.reject = reject;
-			this._addQueuedCommand(command!);
-		});
-		commandPromise.catch((error: any) => {
-			// @todo: global command error handler here
-			this._log("Command error: " + error.toString());
-		});
-		return commandPromise;
+		return undefined;
 	}
-
 
 	/**
 	 *
 	 */
-	private _addQueuedCommand(command: IAMCPCommand): IAMCPCommand {
+	public queueCommand(command: IAMCPCommand, priority: Priority = Priority.NORMAL): Promise<IAMCPCommand> {
+		let commandPromise: Promise<IAMCPCommand> = new Promise<IAMCPCommand>((resolve, reject) => {
+			command.resolve = resolve;
+			command.reject = reject;
+		});
+		commandPromise.catch((error: any) => {
+			// @todo: global command error handler here
+			this._log(new Error("Command error: " + error.toString()));
+		});
+
+
 		this._queuedCommands.push(command);
 		this._log(`New command added, "${command.name}". ${this._queuedCommands.length} command(s) in queuedCommands.`);
 		command.status = IAMCPStatus.Queued;
+
 		this._executeNextCommand();
-		return command;
+		return commandPromise;
 	}
 
 	/**
