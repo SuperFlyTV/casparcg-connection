@@ -34,6 +34,7 @@ export interface IConnectionOptions {
     autoReconnectInterval?: number;
     autoReconnectAttempts?: number;
     serverVersion?: Options.CasparCGVersion;
+    virginServerCheck?: boolean;
     queueMode?: Options.QueueMode;
     debug?: boolean;
     onLog?: IStringCallback;
@@ -53,8 +54,9 @@ export declare class ConnectionOptions implements IConnectionOptions {
     autoReconnect: boolean | undefined;
     autoReconnectInterval: number | undefined;
     autoReconnectAttempts: number | undefined;
-    serverVersion?: Options.CasparCGVersion | undefined;
+    serverVersion: Options.CasparCGVersion | undefined;
     queueMode: Options.QueueMode | undefined;
+    virginServerCheck: boolean | undefined;
     debug: boolean | undefined;
     onLog: IStringCallback | undefined;
     onConnectionStatus: ISocketStatusCallback | undefined;

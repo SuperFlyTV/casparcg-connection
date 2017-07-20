@@ -265,6 +265,10 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      */
     queueMode: QueueMode | undefined;
     /**
+     * Setting this to true will investigate all connections to assess if the server is freshly booted, or have been used before the connection
+     */
+    virginServerCheck: boolean | undefined;
+    /**
      *Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]]
      */
     debug: boolean | undefined;

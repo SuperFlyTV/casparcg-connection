@@ -38,6 +38,7 @@ var ConnectionOptions = (function () {
         this.autoReconnectAttempts = Infinity;
         this.serverVersion = undefined;
         this.queueMode = Options.QueueMode.SEQUENTIAL; // @todo: change to SALVO once server has command UIDs https://github.com/CasparCG/Server/issues/475
+        this.virginServerCheck = false;
         this.debug = false;
         this.onLog = undefined;
         this.onConnectionStatus = undefined;

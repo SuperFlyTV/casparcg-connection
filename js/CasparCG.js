@@ -56,6 +56,10 @@ var CasparCG = (function (_super) {
          */
         _this.queueMode = undefined;
         /**
+         * Setting this to true will investigate all connections to assess if the server is freshly booted, or have been used before the connection
+         */
+        _this.virginServerCheck = undefined;
+        /**
          *Setting this to true will print out logging to the `Console`, in addition to the optinal [[onLog]] and [[LogEvent.LOG]]
          */
         _this.debug = undefined;
@@ -325,6 +329,7 @@ var CasparCG = (function (_super) {
      *
      */
     CasparCG.prototype._onSocketStatusChange = function (socketStatus) {
+        var _this = this;
         var connected = socketStatus.valueOf().connected === true;
         if (this.onConnectionStatus) {
             this.onConnectionStatus(socketStatus.valueOf());
@@ -342,11 +347,43 @@ var CasparCG = (function (_super) {
                 delete this._pathsPromise;
                 delete this._versionPromise;
                 this._executeNextCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
-                // if (this.checkReconnectionType) {
-                // }
-                this.emit(Events_1.CasparCGSocketStatusEvent.CONNECTED, socketStatus);
-                if (this.onConnected) {
-                    this.onConnected(this._connected);
+                // do checks to see if the server has been alive and used before this connection, or is in a untouched state
+                if (this.virginServerCheck) {
+                    this.doNow(new AMCP_1.AMCP.InfoCommand())
+                        .then(function (info) {
+                        var channelPromises = [];
+                        var channelLength = info.response.data["length"];
+                        for (var i = 1; i <= channelLength; i++) {
+                            channelPromises.push(_this.doNow(new AMCP_1.AMCP.InfoCommand({ channel: i })));
+                        }
+                        var virgin = true;
+                        Promise.all(channelPromises).then(function (channels) {
+                            for (var i = 0; i < channels.length; i++) {
+                                var channelInfo = channels[i];
+                                if (channelInfo.response.data["stage"]) {
+                                    virgin = false;
+                                    break;
+                                }
+                            }
+                            _this.emit(Events_1.CasparCGSocketStatusEvent.CONNECTED, { connected: _this._connected, virginServer: virgin });
+                            if (_this.onConnected) {
+                                _this.onConnected(_this._connected);
+                            }
+                        });
+                    })
+                        .catch(function () {
+                        _this.emit(Events_1.CasparCGSocketStatusEvent.CONNECTED, socketStatus);
+                        if (_this.onConnected) {
+                            _this.onConnected(_this._connected);
+                        }
+                    });
+                    // don't check virgin state, just inform about the connection asap
+                }
+                else {
+                    this.emit(Events_1.CasparCGSocketStatusEvent.CONNECTED, socketStatus);
+                    if (this.onConnected) {
+                        this.onConnected(this._connected);
+                    }
                 }
             }
             if (!this._connected) {

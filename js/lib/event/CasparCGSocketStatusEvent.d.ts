@@ -2,7 +2,7 @@ import { Event as BaseEventNS } from "./BaseEvent";
 export declare namespace Event {
     interface SocketStatus {
         connected: boolean;
-        triggeredByConnectionLoss?: boolean;
+        virginServer?: boolean;
     }
     /**
      *
