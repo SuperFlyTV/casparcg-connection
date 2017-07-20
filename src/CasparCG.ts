@@ -735,21 +735,47 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	private _log(args: any): void {
 		if (args instanceof Error) {
-			console.error(args);
+			if (this.listenerCount("error") > 0) {
+				this.emit("error", args);
+			}
 			if (this.onError) {
 				this.onError(args);
-				this.emit("error", args);
-				return;
 			}
+		}else {
+			if (this.debug) {
+				console.log(args);
+			}
+			if (this.onLog) {
+				this.onLog(args);
+			}
+			this.emit(LogEvent.LOG, new LogEvent(args));
 		}
+	}
 
-		if (this.debug) {
-			console.log(args);
+	/**
+	 *@todo	implement
+	 *@todo	document
+	 */
+	public do(command: IAMCPCommand): Promise<IAMCPCommand>;
+	public do(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
+	public do(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> | void {
+		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params);
+		if (command) {
+			return this.queueCommand(command);
 		}
-		if (this.onLog) {
-			this.onLog(args);
+	}
+
+	/**
+	 *@todo	implement
+	 *@todo	document
+	 */
+	public doNow(command: IAMCPCommand): Promise<IAMCPCommand>;
+	public doNow(commandString: string, ...params: (string|Param)[]): Promise<IAMCPCommand>;
+	public doNow(commandOrString: (IAMCPCommand|string), ...params: (string|Param)[]): Promise<IAMCPCommand> | void {
+		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params);
+		if (command) {
+			return this.queueCommand(command, Priority.HIGH);
 		}
-		this.emit(LogEvent.LOG, new LogEvent(args));
 	}
 
 	/**
