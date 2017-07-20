@@ -656,7 +656,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				delete this._configPromise;
 				delete this._pathsPromise;
 				delete this._versionPromise;
-				this._expediteCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
+				this._executeNextCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
 
 				this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
 				if (this.onConnected) {
@@ -790,7 +790,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this._queuedCommands.push(command);
 		this._log(`New command added, "${command.name}". ${this._queuedCommands.length} command(s) in queuedCommands.`);
 		command.status = IAMCPStatus.Queued;
-		this._expediteCommand();
+		this._executeNextCommand();
 		return command;
 	}
 
@@ -862,7 +862,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 		this.emit(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand));
 
-		this._expediteCommand();
+		this._executeNextCommand();
 	}
 
 	/**
@@ -876,7 +876,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 *
 	 */
-	private _expediteCommand(flushSent: boolean = false): void {
+	private _executeNextCommand(flushSent: boolean = false): void {
 		if (flushSent) {
 			while (this._sentCommands.length > 0) {
 				let i: IAMCPCommand = (this._sentCommands.shift())!;
