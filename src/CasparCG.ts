@@ -248,16 +248,13 @@ export interface ICasparCGConnection {
 	connectionOptions: ConnectionOptions;
 	connected: boolean;
 	connectionStatus: SocketStatusOptions;
-	readonly queuedCommands: Array<IAMCPCommand>;
-	readonly queuedCommandsLowPriority: Array<IAMCPCommand>;
-	readonly queuedCommandsHighPriority: Array<IAMCPCommand>;
+	readonly commandQueueLength: number;
 	getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
 	getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>;
 	getCasparCGVersion(refresh: boolean): Promise<CasparCGVersion>;
 	removeQueuedCommand(id: string): boolean;
 	connect(options?: IConnectionOptions): void;
 	disconnect(): void;
-
 	createCommand(command: IAMCPCommand): IAMCPCommand | undefined;
 	createCommand(commandString: string, ...params: (string|Param)[]): IAMCPCommand | undefined;
 	queueCommand(command: IAMCPCommand, priority: Priority): Promise<IAMCPCommand>;
@@ -717,27 +714,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 *
 	 */
-	public get queuedCommands(): Array<IAMCPCommand> {
-		return this._queuedCommands;
-	}
-
-	/**
-	 *
-	 */
-	public get queuedCommandsLowPriority(): Array<IAMCPCommand> {
-		return this._queuedCommandsLowPriority;
-	}
-
-	/**
-	 *
-	 */
-	public get queuedCommandsHighPriority(): Array<IAMCPCommand> {
-		return this._queuedCommandsHighPriority;
-	}
-
-	/**
-	 *
-	 */
 	public set serverVersion(version: CasparCGVersion | undefined) {
 		if (version) {
 			this._userConfigServerVersion = version;
@@ -753,6 +729,43 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 
 		return undefined;
+	}
+
+	/**
+	 *
+	 */
+	public get commandQueueLength(): number {
+		return this._queuedCommands.length + this._queuedCommandsLowPriority.length + this._queuedCommandsHighPriority.length;
+	}
+
+	/**
+	 *
+	 */
+	private _fetchNextCommand(): {cmd: IAMCPCommand, priority: Priority} | null {
+		let VO: {cmd: IAMCPCommand, priority: Priority} | null = null;
+			if (this._queuedCommandsHighPriority.length > 0) {
+				VO = {cmd: this._queuedCommandsHighPriority.shift()!, priority: Priority.HIGH};
+			} else if (this._queuedCommands.length > 0) {
+				VO = {cmd: this._queuedCommands.shift()!, priority: Priority.NORMAL};
+			} else if (this._queuedCommandsLowPriority.length > 0) {
+				VO = {cmd: this._queuedCommandsLowPriority.shift()!, priority: Priority.LOW};
+			}
+		return VO;
+	}
+
+	/**
+	 *
+	 */
+	private get _nextCommand(): {cmd: IAMCPCommand, priority: Priority} | null {
+		let VO: {cmd: IAMCPCommand, priority: Priority} | null = null;
+			if (this._queuedCommandsHighPriority.length > 0) {
+				VO = {cmd: this._queuedCommandsHighPriority[0]!, priority: Priority.HIGH};
+			} else if (this._queuedCommands.length > 0) {
+				VO = {cmd: this._queuedCommands[0]!, priority: Priority.NORMAL};
+			} else if (this._queuedCommandsLowPriority.length > 0) {
+				VO = {cmd: this._queuedCommandsLowPriority[0]!, priority: Priority.LOW};
+			}
+		return VO;
 	}
 
 	/**
@@ -876,9 +889,19 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			this._log(new Error("Command error: " + error.toString()));
 		});
 
+		switch (priority) {
+			case Priority.NORMAL:
+				this._queuedCommands.push(command);
+				break;
+			case Priority.HIGH:
+				this._queuedCommandsHighPriority.push(command);
+				break;
+			case Priority.LOW:
+				this._queuedCommandsLowPriority.push(command);
+				break;
+		}
 
-		this._queuedCommands.push(command);
-		this._log(`New command added, "${command.name}". ${this._queuedCommands.length} command(s) in queuedCommands.`);
+		this._log(`New command added, "${command.name}". ${this.commandQueueLength} command(s) in command queues.`);
 		command.status = IAMCPStatus.Queued;
 
 		this._executeNextCommand();
@@ -890,12 +913,35 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public removeQueuedCommand(id: string): boolean {
 		let removed: Array<IAMCPCommand> | undefined;
+		// normal priority
 		for (let i: number = 0; i < this._queuedCommands.length; i++) {
 			let o: IAMCPCommand = this._queuedCommands[i];
 			if (o.id === id) {
 				removed = this._queuedCommands.splice(i, 1);
-				this._log(`Command removed, "${removed[0].name}". ${this._queuedCommands.length} command(s) left in queuedCommands.`);
+				this._log(`Command removed, "${removed[0].name}". ${this.commandQueueLength} command(s) left in command queues.`);
 				break;
+			}
+		}
+		// high priority
+		if (!removed) {
+			for (let i: number = 0; i < this._queuedCommandsHighPriority.length; i++) {
+				let o: IAMCPCommand = this._queuedCommandsHighPriority[i];
+				if (o.id === id) {
+					removed = this._queuedCommandsHighPriority.splice(i, 1);
+					this._log(`Command removed, "${removed[0].name}". ${this.commandQueueLength} command(s) left in command queues.`);
+					break;
+				}
+			}
+		}
+		// low priority
+		if (!removed) {
+			for (let i: number = 0; i < this._queuedCommandsLowPriority.length; i++) {
+				let o: IAMCPCommand = this._queuedCommandsLowPriority[i];
+				if (o.id === id) {
+					removed = this._queuedCommandsLowPriority.splice(i, 1);
+					this._log(`Command removed, "${removed[0].name}". ${this.commandQueueLength} command(s) left in command queues.`);
+					break;
+				}
 			}
 		}
 		return Array.isArray(removed) && removed.length > 0;
@@ -939,7 +985,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 
 		let currentCommand: IAMCPCommand = (this._sentCommands.shift())!;
-		this._log(`Handling response, "${currentCommand!.name}". ${this._sentCommands.length} command(s) left in sentCommands, ${this._queuedCommands.length} command(s) left in queuedCommands.`);
+		this._log(`Handling response, "${currentCommand!.name}". ${this._sentCommands.length} command(s) left in sentCommands, ${this.commandQueueLength} command(s) left in command queues.`);
 		if (!(currentCommand.response instanceof AMCPResponse)) {
 			currentCommand.response = new AMCPResponse();
 		}
@@ -988,16 +1034,18 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 			// sequential mode
 			if (this.queueMode === QueueMode.SEQUENTIAL) {
-				if (this._queuedCommands.length > 0 && this._sentCommands.length === 0) {
-					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
-					this._sentCommands.push(nextCommand);
-					this._log(`Sending command, ${this._sentCommands.length} commands sent, ${this._queuedCommands.length} commands in commandsQueue. Sending: "${nextCommand.name}"`);
-					this._socket.executeCommand(nextCommand);
+				if (this.commandQueueLength > 0 && this._sentCommands.length === 0) {
+					let nextCommand: {cmd: IAMCPCommand, priority: Priority} | null = this._fetchNextCommand();
+					if (nextCommand) {
+						this._sentCommands.push(nextCommand.cmd);
+						this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? "NORMAL" : nextCommand.priority === 2 ? "HIGH" : nextCommand.priority === 0 ? "LOW" : "unknown"}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`);
+						this._socket.executeCommand(nextCommand.cmd);
+					}
 				}
 			}
 		} else {
-			if (this._queuedCommands.length > 0) {
-				this._log(`Can't process commands, socket not connected. ${this._queuedCommands.length} commands left in commandsQueue, the first one being "${this._queuedCommands[0].name}".`);
+			if (this.commandQueueLength > 0) {
+				this._log(`Can't process commands, socket not connected. ${this.commandQueueLength} commands left in commandsQueue, the first one being "${this._nextCommand ? this._nextCommand.cmd.name : "null"}".`);
 			}
 		}
 	}
@@ -1035,7 +1083,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			// generate version
 			} else {
 				this._versionPromise = new Promise<CasparCGVersion>((resolve) => {
-					this.version(Enum.Version.SERVER).then((response) => {
+					this.doNow(new AMCP.VersionCommand({component: Enum.Version.SERVER})).then((response) => {
 						let versionString: string = response.response.data.toString().slice(0, 5);
 						let version: CasparCGVersion = CasparCGVersion.V2xx;
 						switch (versionString) {
