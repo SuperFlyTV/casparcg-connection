@@ -38,7 +38,7 @@ export namespace ConfigUtil {
 	export function parseConfigFrom210XML(XMLString: string): Config.Intermediate.CasparCGConfig | {} {
 		let validator: XMLValidator = new XMLValidator();
 		let parser: ConfigParser = new ConfigParser();
-		parser.context = {serverVersion: ServerVersion.V207};
+		parser.context = {serverVersion: CasparCGVersion.V210};
 		let fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString);	// @todo: does this work?
 		let validData: Object = {};
 
