@@ -40,7 +40,6 @@ export interface IConnectionOptions {
 	autoReconnect?: boolean;
 	autoReconnectInterval?: number;
 	autoReconnectAttempts?: number;
-	autoServerVersion?: boolean;
 	serverVersion?: Options.CasparCGVersion;
 	queueMode?: Options.QueueMode;
 	debug?: boolean;
@@ -62,8 +61,7 @@ export class ConnectionOptions implements IConnectionOptions {
 	public autoReconnect: boolean | undefined = true;
 	public autoReconnectInterval: number | undefined = 1000;
 	public autoReconnectAttempts: number | undefined = Infinity;
-	public autoServerVersion?: boolean = true;
-	public serverVersion?: Options.ServerVersion | undefined = Options.ServerVersion.V2xx;
+	public serverVersion?: Options.CasparCGVersion | undefined = undefined;
 	public queueMode: Options.QueueMode | undefined = Options.QueueMode.SEQUENTIAL;	// @todo: change to SALVO once server has command UIDs https://github.com/CasparCG/Server/issues/475
 	public debug: boolean | undefined = false;
 	public onLog: IStringCallback | undefined = undefined;

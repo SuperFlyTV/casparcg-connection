@@ -244,6 +244,7 @@ export interface ICasparCGConnection {
 	connectionStatus: SocketStatusOptions;
 	getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>;
 	getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>;
+	getCasparCGVersion(refresh: boolean): Promise<CasparCGVersion>;
 	queuedCommands: Array<IAMCPCommand>;
 	removeQueuedCommand(id: string): boolean;
 	connect(options?: IConnectionOptions): void;
@@ -271,16 +272,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _sentCommands: Array<IAMCPCommand> = [];
 	private _configPromise: Promise<CasparCGConfig>;
 	private _pathsPromise: Promise<CasparCGPaths>;
+	private _versionPromise: Promise<CasparCGVersion>;
 
 	/**
 	 *Try to connect upon creation.
 	 */
 	public autoConnect: boolean | undefined = undefined;
-
-	/**
-	 *@todo: document
-	 */
-	public autoServerVersion: boolean | undefined = undefined;
 
 	/**
 	 *@todo: document
@@ -658,12 +655,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				// reset cached data
 				delete this._configPromise;
 				delete this._pathsPromise;
+				delete this._versionPromise;
 				this._expediteCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
-				if (this.autoServerVersion) {
-					this.version(Enum.Version.SERVER).then((result: IAMCPCommand) => {
-						this._setVersionFromServerResponse(result.response);
-					});
-				}
 
 				this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus);
 				if (this.onConnected) {
@@ -702,6 +695,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				// -> FAIL
 					// reconncet
 	}
+
 	/**
 	 *
 	 */
@@ -917,19 +911,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 	}
 
-	/**	 */
-	private _setVersionFromServerResponse(serverVersionResponse: AMCPResponse): void {
-		let versionString: string = serverVersionResponse.data.toString().slice(0, 5);
-		switch (versionString) {
-			case "2.0.7":
-				this.serverVersion = ServerVersion.V207;
-				break;
-			case "2.1.0":
-				this.serverVersion = ServerVersion.V210;
-				break;
-		}
-	}
-
 	/***/
 	public getCasparCGConfig(refresh: boolean = false): Promise<CasparCGConfig> {
 		if (!this._configPromise || refresh) {
@@ -942,7 +923,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		return this._configPromise;
 	}
 
-		/***/
+	/***/
 	public getCasparCGPaths(refresh: boolean = false): Promise<CasparCGPaths> {
 		if (!this._pathsPromise || refresh) {
 			this._pathsPromise = new Promise<CasparCGPaths>((resolve) => {
@@ -952,6 +933,35 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			});
 		}
 		return this._pathsPromise;
+	}
+
+	/***/
+	public getCasparCGVersion(refresh: boolean = false): Promise<CasparCGVersion> {
+		if (!this._versionPromise || refresh) {
+			// use configed version
+			if (this.serverVersion) {
+				this._versionPromise = new Promise<CasparCGVersion>((resolve) => resolve(this.serverVersion));
+			// generate version
+			} else {
+				this._versionPromise = new Promise<CasparCGVersion>((resolve) => {
+					this.version(Enum.Version.SERVER).then((response) => {
+						let versionString: string = response.response.data.toString().slice(0, 5);
+						let version: CasparCGVersion = CasparCGVersion.V2xx;
+						switch (versionString) {
+							case "2.0.7":
+								version = CasparCGVersion.V207;
+								break;
+							case "2.1.0":
+								version = CasparCGVersion.V210;
+								break;
+						}
+
+						resolve(version);
+					});
+				});
+			}
+		}
+		return this._versionPromise;
 	}
 
 
@@ -1799,7 +1809,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *<http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_CONFIG>
 	 */
 	public infoConfig(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoConfigCommand([], {serverVersion: this.serverVersion}));
+
+		return new Promise<IAMCPCommand>((resolve) => {
+			this.getCasparCGVersion().then((version) => {
+				console.log("version:", version);
+				resolve(this.do(new AMCP.InfoConfigCommand([], {serverVersion: version})));
+			});
+		});
 	}
 
 	/**
