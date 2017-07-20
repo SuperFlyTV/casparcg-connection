@@ -708,7 +708,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public set serverVersion(version: CasparCGVersion | undefined) {
 		if (version) {
-			this._userConfigServerVersion;
+			this._userConfigServerVersion = version;
 		}
 	}
 
@@ -1829,10 +1829,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *<http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#INFO_CONFIG>
 	 */
 	public infoConfig(): Promise<IAMCPCommand> {
-
 		return new Promise<IAMCPCommand>((resolve) => {
 			this.getCasparCGVersion().then((version) => {
-				console.log("version:", version);
 				resolve(this.do(new AMCP.InfoConfigCommand([], {serverVersion: version})));
 			});
 		});
