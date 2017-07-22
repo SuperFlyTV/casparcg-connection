@@ -2,7 +2,7 @@ import {Event as BaseEventNS} from "./BaseEvent";
 
 export namespace Event {
 
-	export interface SocketStatus {
+	export interface ConnectionStatus {
 		connected: boolean;
 		virginServer?: boolean;
 	}
@@ -15,14 +15,14 @@ export namespace Event {
 		/**
 		 *
 		 */
-		constructor(public socketStatus: SocketStatus) {
+		constructor(public socketStatus: ConnectionStatus) {
 			super(socketStatus);
 		}
 
 		/**
 		 *
 		 */
-		valueOf(): SocketStatus {
+		valueOf(): ConnectionStatus {
 			return this.socketStatus;
 		}
 

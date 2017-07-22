@@ -4,7 +4,7 @@ import {Event as CasparCGSocketCommandEventNS} from "./CasparCGSocketCommandEven
 import {Event as LogEventNS} from "./LogEvent";
 import BaseEvent = BaseEventNS.BaseEvent;
 import CasparCGSocketStatusEvent = CasparCGSocketStatusEventNS.CasparCGSocketStatusEvent;
-import SocketStatusOptions = CasparCGSocketStatusEventNS.SocketStatus;
+import SocketStatusOptions = CasparCGSocketStatusEventNS.ConnectionStatus;
 import CasparCGSocketCommandEvent = CasparCGSocketCommandEventNS.CasparCGSocketCommandEvent;
 import CasparCGSocketResponseEvent = CasparCGSocketCommandEventNS.CasparCGSocketResponseEvent;
 import LogEvent = LogEventNS.LogEvent;
