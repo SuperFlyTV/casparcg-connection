@@ -26,10 +26,10 @@ export namespace Event {
 			return this.socketStatus;
 		}
 
-		static STATUS = "casparcgsocketconnectioneventstatus";
-		static STATUS_CHANGED = "casparcgsocketconnectioneventstatuschanged";
-		static CONNECTED = "casparcgsocketconnectioneventstatusconnected";
-		static DISCONNECTED = "casparcgsocketconnectioneventstatusdisconnected";
-		static TIMEOUT = "casparcgsocketconnectioneventstatustimeout";
+		static readonly STATUS = "casparcgsocketconnectioneventstatus";
+		static readonly STATUS_CHANGED = "casparcgsocketconnectioneventstatuschanged";
+		static readonly CONNECTED = "casparcgsocketconnectioneventstatusconnected";
+		static readonly DISCONNECTED = "casparcgsocketconnectioneventstatusdisconnected";
+		static readonly TIMEOUT = "casparcgsocketconnectioneventstatustimeout";
 	}
 }

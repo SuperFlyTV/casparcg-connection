@@ -26,7 +26,7 @@ export namespace Event {
 			return this.command;
 		}
 
-		static RESPONSE = "casparcgsocketcommandeventresponse";
+		static readonly RESPONSE = "casparcgsocketcommandeventresponse";
 	}
 
 	/**
@@ -48,7 +48,7 @@ export namespace Event {
 			return this.response;
 		}
 
-		static RESPONSE = "casparcgsocketresponseeventresponse";
-		static INVALID_RESPONSE = "casparcgsocketcommandeventresponseinvalid";
+		static readonly RESPONSE = "casparcgsocketresponseeventresponse";
+		static readonly INVALID_RESPONSE = "casparcgsocketcommandeventresponseinvalid";
 	}
 }

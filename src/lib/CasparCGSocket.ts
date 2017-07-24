@@ -91,6 +91,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 					this._client.destroy();
 					this._client.removeAllListeners();
 					delete this._client;
+					// @todo: fire event telling it gives up!
 				}
 
 				// (re)creates client, either on first run or new attempt
