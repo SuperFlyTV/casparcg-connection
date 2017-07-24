@@ -5,6 +5,8 @@
   "main": "js/index.js",
   "typings": "js/index.d.ts",
   "scripts": {
+    "lint": "tslint './src/**/*.ts' --exclude './**/*.d.ts' -c tslint.json -p tsconfig.json",
+    "pretest": "npm run lint",
     "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
     "gulp": "gulp",
     "build": "gulp build",
@@ -85,6 +87,7 @@
     "jasmine-ts": "0.1.3",
     "standard-version": "^4.2.0",
     "tslint": "^5.5.0",
+    "tslint-config-standard": "^6.0.1",
     "typedoc": "^0.7.1",
     "typescript": "^2.0.6"
   }
