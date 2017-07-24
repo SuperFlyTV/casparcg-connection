@@ -1,5 +1,5 @@
-import { BaseEvent, SocketStatusOptions } from "../event/Events";
-import { Command as CommandNS } from "../AbstractCommand";
+import { BaseEvent, SocketStatusOptions } from '../event/Events';
+import { Command as CommandNS } from '../AbstractCommand';
 import IAMCPResponse = CommandNS.IAMCPResponse;
 import IAMCPStatus = CommandNS.IAMCPStatus;
 /**
@@ -31,7 +31,7 @@ export declare namespace Callback {
         (value: IAMCPResponse): void;
     }
     /**
-     *@todo implement
+     * @todo implement
      */
     interface IErrorCallback {
         (error: Error): void;

@@ -1,8 +1,8 @@
 /// <reference types="node" />
-import { EventEmitter } from "events";
-import { Command as CommandNS } from "./AbstractCommand";
+import { EventEmitter } from 'events';
+import { Command as CommandNS } from './AbstractCommand';
 import IAMCPCommand = CommandNS.IAMCPCommand;
-import { SocketStatusOptions } from "./event/Events";
+import { SocketStatusOptions } from './event/Events';
 /**
  *
  */
@@ -61,14 +61,6 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
     /**
      *
      */
-    private _autoReconnectionAttempt();
-    /**
-     *
-     */
-    private _clearConnectionAttemptTimer();
-    /**
-     *
-     */
     readonly host: string;
     /**
      *
@@ -99,6 +91,14 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
     /**
      *
      */
+    private _autoReconnectionAttempt();
+    /**
+     *
+     */
+    private _clearConnectionAttemptTimer();
+    /**
+     *
+     */
     private _onTimeout();
     /**
      *
@@ -109,7 +109,7 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
      */
     private _parseResponseGroups(i);
     /**
-     *@todo:::
+     * @todo:::
      */
     private _onError(error);
     /**

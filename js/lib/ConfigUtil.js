@@ -21,11 +21,12 @@ var ConfigUtil;
         var parser = new ConfigParser();
         parser.context = { serverVersion: CasparCGVersion.V207 };
         var fauxResponseData = new CasparCGSocketResponse(XMLString); // @todo: does this work?
-        var validData = {};
-        if ((validData = validator.resolve(fauxResponseData)) === false) {
+        var validData = validator.resolve(fauxResponseData);
+        if (validData === false) {
             return {};
         }
-        if ((validData = parser.parse(validData)) === false) {
+        validData = parser.parse(validData);
+        if (validData === false) {
             return {};
         }
         return validData;
@@ -38,10 +39,12 @@ var ConfigUtil;
         parser.context = { serverVersion: CasparCGVersion.V210 };
         var fauxResponseData = new CasparCGSocketResponse(XMLString); // @todo: does this work?
         var validData = {};
-        if ((validData = validator.resolve(fauxResponseData)) === false) {
+        validData = validator.resolve(fauxResponseData);
+        if (validData === false) {
             return {};
         }
-        if ((validData = parser.parse(validData)) === false) {
+        validData = parser.parse(validData);
+        if (validData === false) {
             return {};
         }
         return validData;

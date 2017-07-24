@@ -23,6 +23,10 @@ var Response;
     var CasparCGPaths = (function () {
         function CasparCGPaths() {
         }
+        /***/
+        CasparCGPaths.ensureTrailingSlash = function (path) {
+            return ((path.slice(-1) === '/' || path.slice(-1) === '\\') ? path : path + '/');
+        };
         Object.defineProperty(CasparCGPaths.prototype, "thumbnails", {
             /***/
             get: function () {
@@ -94,10 +98,6 @@ var Response;
             }
             return CasparCGPaths.ensureTrailingSlash(Path.join(this.root, relativeOrAbsolutePath));
         };
-        /***/
-        CasparCGPaths.ensureTrailingSlash = function (path) {
-            return ((path.slice(-1) === "/" || path.slice(-1) === "\\") ? path : path + "/");
-        };
         return CasparCGPaths;
     }());
     Response.CasparCGPaths = CasparCGPaths;
@@ -105,7 +105,7 @@ var Response;
     var ChannelRate = (function () {
         /***/
         function ChannelRate(rateExpression) {
-            this.isInterlaced = rateExpression.indexOf("i") > -1;
+            this.isInterlaced = rateExpression.indexOf('i') > -1;
             var rateMatch = rateExpression.match(/[0-9]+$/);
             var rate = 0;
             if (rateMatch) {
@@ -115,12 +115,12 @@ var Response;
                 this.channelRate = 60 * 1000 / 1001;
                 this.frameRate = this.isInterlaced ? 30 * 1000 / 1001 : this.channelRate;
             }
-            else if (rateExpression.toLowerCase() === "pal") {
+            else if (rateExpression.toLowerCase() === 'pal') {
                 this.isInterlaced = true;
                 this.channelRate = 50;
                 this.frameRate = 25;
             }
-            else if (rateExpression.toLowerCase() === "ntsc") {
+            else if (rateExpression.toLowerCase() === 'ntsc') {
                 this.isInterlaced = true;
                 this.channelRate = 60 * 1000 / 1001;
                 this.frameRate = 30 * 1000 / 1001;
@@ -159,7 +159,7 @@ var Response;
             data.forEach(function (channel) {
                 var components = channel.toString().split(/\s|,/);
                 var i = +components.shift();
-                var format = components.shift() || "";
+                var format = components.shift() || '';
                 var rates = new ChannelRate(format);
                 result.push({ channel: i, format: format.toLowerCase(), channelRate: rates.channelRate, frameRate: rates.frameRate, interlaced: rates.isInterlaced });
             });
@@ -180,7 +180,7 @@ var Response;
         /***/
         ConfigParser.prototype.parse = function (data) {
             var serverVersion;
-            if (this.context && this.context.hasOwnProperty("serverVersion") && this.context["serverVersion"] > CasparCGVersion.V21x) {
+            if (this.context && this.context.hasOwnProperty('serverVersion') && this.context['serverVersion'] > CasparCGVersion.V21x) {
                 serverVersion = CasparCGVersion.V210;
             }
             else {
@@ -372,13 +372,13 @@ var Response;
             return _super !== null && _super.apply(this, arguments) || this;
         }
         ContentParser.parseTimeString = function (timeDateString) {
-            timeDateString = timeDateString.replace(/[tT]/g, "");
-            var year = parseInt(timeDateString.slice(0, 4));
-            var month = parseInt(timeDateString.slice(4, 6));
-            var date = parseInt(timeDateString.slice(6, 8));
-            var hours = parseInt(timeDateString.slice(8, 10));
-            var minutes = parseInt(timeDateString.slice(10, 12));
-            var seconds = parseInt(timeDateString.slice(12, 14));
+            timeDateString = timeDateString.replace(/[tT]/g, '');
+            var year = parseInt(timeDateString.slice(0, 4), 10);
+            var month = parseInt(timeDateString.slice(4, 6), 10);
+            var date = parseInt(timeDateString.slice(6, 8), 10);
+            var hours = parseInt(timeDateString.slice(8, 10), 10);
+            var minutes = parseInt(timeDateString.slice(10, 12), 10);
+            var seconds = parseInt(timeDateString.slice(12, 14), 10);
             return new Date(year, month, date, hours, minutes, seconds).getTime();
         };
         /**
@@ -390,20 +390,20 @@ var Response;
                 if (components === null) {
                     return null;
                 }
-                var name = components[1].replace(/\\/g, "/");
+                var name = components[1].replace(/\\/g, '/');
                 var typeData = components[2].split(/\s+/);
                 // is font
                 if (typeData.length === 1) {
                     return { name: name,
-                        type: "font",
-                        fileName: typeData[0].replace(/\"/g, "")
+                        type: 'font',
+                        fileName: typeData[0].replace(/\"/g, '')
                     };
                 }
                 // is 2.1.0 template
                 if (typeData.length === 3) {
                     return { name: name,
-                        type: "template",
-                        size: parseInt(typeData[0]),
+                        type: 'template',
+                        size: parseInt(typeData[0], 10),
                         changed: ContentParser.parseTimeString(typeData[1]),
                         format: typeData[2]
                     };
@@ -411,23 +411,23 @@ var Response;
                 // is 2.0.7 template
                 if (typeData.length === 2) {
                     return { name: name,
-                        type: "template",
-                        size: parseInt(typeData[0]),
-                        changed: ContentParser.parseTimeString(typeData[1]),
+                        type: 'template',
+                        size: parseInt(typeData[0], 10),
+                        changed: ContentParser.parseTimeString(typeData[1])
                     };
                 }
                 // is media
-                var frames = parseInt(typeData[3]);
+                var frames = parseInt(typeData[3], 10);
                 var frameRate = 0;
                 var duration = 0;
-                var frameTimeSegments = typeData[4].split("/");
-                if (frameTimeSegments[0] !== "0") {
-                    frameRate = +(parseInt(frameTimeSegments[1]) / parseInt(frameTimeSegments[0])).toFixed(2);
+                var frameTimeSegments = typeData[4].split('/');
+                if (frameTimeSegments[0] !== '0') {
+                    frameRate = +(parseInt(frameTimeSegments[1], 10) / parseInt(frameTimeSegments[0], 10)).toFixed(2);
                     duration = Math.round((frames / frameRate) * 100) / 100;
                 }
                 return { name: name,
-                    type: typeData[0].toLowerCase() === "movie" ? "video" : typeData[0].toLowerCase() === "still" ? "image" : typeData[0].toLowerCase(),
-                    size: parseInt(typeData[1]),
+                    type: typeData[0].toLowerCase() === 'movie' ? 'video' : typeData[0].toLowerCase() === 'still' ? 'image' : typeData[0].toLowerCase(),
+                    size: parseInt(typeData[1], 10),
                     changed: ContentParser.parseTimeString(typeData[2]),
                     frames: frames,
                     frameTime: typeData[4],
@@ -440,8 +440,8 @@ var Response;
     }(AbstractParser));
     Response.ContentParser = ContentParser;
     /**
- *
- */
+     *
+     */
     var ThumbnailListParser = (function (_super) {
         __extends(ThumbnailListParser, _super);
         function ThumbnailListParser() {
@@ -456,13 +456,13 @@ var Response;
                 if (components === null) {
                     return null;
                 }
-                var name = components[1].replace(/\\/g, "/");
+                var name = components[1].replace(/\\/g, '/');
                 var typeData = components[2].split(/\s+/);
                 return {
                     name: name,
-                    type: "thumbnail",
+                    type: 'thumbnail',
                     changed: ContentParser.parseTimeString(typeData[0]),
-                    size: parseInt(typeData[1]),
+                    size: parseInt(typeData[1], 10)
                 };
             });
         };
@@ -488,7 +488,7 @@ var Response;
                 }
                 // let name: string = components[1].replace(/\\/g, "/");
                 var typeData = components[2].split(/\s+/);
-                return { size: parseInt(typeData[1]), changed: typeData[2], duration: parseInt(typeData[3]), fps: typeData[4] };
+                return { size: parseInt(typeData[1], 10), changed: typeData[2], duration: parseInt(typeData[3], 10), fps: typeData[4] };
             }
             return {};
         };
@@ -513,7 +513,7 @@ var Response;
     }(AbstractParser));
     Response.InfoQueuesParser = InfoQueuesParser;
     /**
-        *
+     *
      */
     var InfoServerParser = (function (_super) {
         __extends(InfoServerParser, _super);
@@ -542,29 +542,29 @@ var Response;
          */
         InfoPathsParser.prototype.parse = function (data) {
             var paths = new CasparCGPaths();
-            if (data.hasOwnProperty("initial-path")) {
-                paths.root = data["initial-path"];
+            if (data.hasOwnProperty('initial-path')) {
+                paths.root = data['initial-path'];
             }
-            if (data.hasOwnProperty("media-path")) {
-                paths.media = data["media-path"];
+            if (data.hasOwnProperty('media-path')) {
+                paths.media = data['media-path'];
             }
-            if (data.hasOwnProperty("data-path")) {
-                paths.data = data["data-path"];
+            if (data.hasOwnProperty('data-path')) {
+                paths.data = data['data-path'];
             }
-            if (data.hasOwnProperty("log-path")) {
-                paths.log = data["log-path"];
+            if (data.hasOwnProperty('log-path')) {
+                paths.log = data['log-path'];
             }
-            if (data.hasOwnProperty("template-path")) {
-                paths.template = data["template-path"];
+            if (data.hasOwnProperty('template-path')) {
+                paths.template = data['template-path'];
             }
-            if (data.hasOwnProperty("thumbnails-path")) {
-                paths.thumbnail = data["thumbnails-path"];
+            if (data.hasOwnProperty('thumbnails-path')) {
+                paths.thumbnail = data['thumbnails-path'];
             }
-            if (data.hasOwnProperty("thumbnail-path")) {
-                paths.thumbnail = data["thumbnail-path"];
+            if (data.hasOwnProperty('thumbnail-path')) {
+                paths.thumbnail = data['thumbnail-path'];
             }
-            if (data.hasOwnProperty("font-path")) {
-                paths.font = data["font-path"];
+            if (data.hasOwnProperty('font-path')) {
+                paths.font = data['font-path'];
             }
             return paths;
         };
@@ -584,14 +584,14 @@ var Response;
          */
         InfoSystemParser.prototype.parse = function (data) {
             // wrap devices in arrays (if single device of a type)
-            if (data.hasOwnProperty("decklink") && data["decklink"].hasOwnProperty("device")) {
-                if (!Array.isArray(data["decklink"]["device"])) {
-                    data["decklink"]["device"] = [data["decklink"]["device"]];
+            if (data.hasOwnProperty('decklink') && data['decklink'].hasOwnProperty('device')) {
+                if (!Array.isArray(data['decklink']['device'])) {
+                    data['decklink']['device'] = [data['decklink']['device']];
                 }
             }
-            if (data.hasOwnProperty("bluefish") && data["bluefish"].hasOwnProperty("device")) {
-                if (!Array.isArray(data["bluefish"]["device"])) {
-                    data["bluefish"]["device"] = [data["bluefish"]["device"]];
+            if (data.hasOwnProperty('bluefish') && data['bluefish'].hasOwnProperty('device')) {
+                if (!Array.isArray(data['bluefish']['device'])) {
+                    data['bluefish']['device'] = [data['bluefish']['device']];
                 }
             }
             return data;

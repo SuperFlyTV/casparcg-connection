@@ -1,7 +1,7 @@
-import { Event as BaseEventNS } from "./BaseEvent";
-import { Command as CommandNS } from "../AbstractCommand";
+import { Event as BaseEventNS } from './BaseEvent';
+import { Command as CommandNS } from '../AbstractCommand';
 import IAMCPCommand = CommandNS.IAMCPCommand;
-import { AMCPUtil as AMCPUtilNS } from "../AMCP";
+import { AMCPUtil as AMCPUtilNS } from '../AMCP';
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
 export declare namespace Event {
     /**
@@ -9,6 +9,7 @@ export declare namespace Event {
      */
     class CasparCGSocketCommandEvent extends BaseEventNS.BaseEvent {
         command: IAMCPCommand;
+        static readonly RESPONSE: string;
         /**
          *
          */
@@ -17,13 +18,14 @@ export declare namespace Event {
          *
          */
         valueOf(): IAMCPCommand;
-        static RESPONSE: string;
     }
     /**
      *
      */
     class CasparCGSocketResponseEvent extends BaseEventNS.BaseEvent {
         response: CasparCGSocketResponse;
+        static readonly RESPONSE: string;
+        static readonly INVALID_RESPONSE: string;
         /**
          *
          */
@@ -32,7 +34,5 @@ export declare namespace Event {
          *
          */
         valueOf(): CasparCGSocketResponse;
-        static RESPONSE: string;
-        static INVALID_RESPONSE: string;
     }
 }

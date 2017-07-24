@@ -1,5 +1,5 @@
-import { Response as ResponseSignatureNS } from "./ResponseSignature";
-import { Command as CommandNS } from "./AbstractCommand";
+import { Response as ResponseSignatureNS } from './ResponseSignature';
+import { Command as CommandNS } from './AbstractCommand';
 import IAMCPCommand = CommandNS.IAMCPCommand;
 import IAMCPCommandVO = CommandNS.IAMCPCommandVO;
 import AbstractCommand = CommandNS.AbstractCommand;
@@ -8,11 +8,11 @@ import AbstractChannelCommand = CommandNS.AbstractChannelCommand;
 import AbstractChannelOrLayerCommand = CommandNS.AbstractChannelOrLayerCommand;
 import AbstractLayerWithFallbackCommand = CommandNS.AbstractLayerWithFallbackCommand;
 import AbstractLayerWithCgFallbackCommand = CommandNS.AbstractLayerWithCgFallbackCommand;
-import { Param as ParamNS } from "./ParamSignature";
+import { Param as ParamNS } from './ParamSignature';
 import Param = ParamNS.Param;
-import { Protocol as ProtocolNS } from "./ProtocolLogic";
+import { Protocol as ProtocolNS } from './ProtocolLogic';
 /**
- *Factory
+ * Factory
  */
 export declare namespace AMCPUtil {
     /**
@@ -37,158 +37,158 @@ export declare namespace AMCPUtil {
     }
 }
 /**
- *Internal
+ * Internal
  */
 export declare namespace AMCP {
     class CustomCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
 }
 /**
- *IVideo
+ * IVideo
  */
 export declare namespace AMCP {
     /**
      *
      */
     class LoadbgCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
     /**
      *
      */
     class LoadCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
     /**
      *
      */
     class PlayCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
     /**
      *
      */
     class PauseCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class ResumeCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class StopCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
 }
 /**
- *IInputOutput
+ * IInputOutput
  */
 export declare namespace AMCP {
     /**
      *
      */
     class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
     /**
      *
      */
     class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
     /**
      *
      */
     class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
     /**
      *
      */
     class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
     /**
      *
      */
     class LoadHtmlPageCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
     /**
      *
      */
     class PlayHtmlPageCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
     }
 }
 /**
- *ICG
+ * ICG
  */
 export declare namespace AMCP {
     /**
      *
      */
     class CGAddCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *
      */
     class CGPlayCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *
      */
     class CGStopCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *
      */
     class CGNextCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *
      */
     class CGRemoveCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *
      */
     class CGClearCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -199,42 +199,42 @@ export declare namespace AMCP {
      *
      */
     class CGUpdateCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
-     *@todo: 201 response code, parsing???????
+     * @todo: 201 response code, parsing???????
      */
     class CGInvokeCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
 }
 /**
- *IMixer
- *@todo: switch 201/202 based on mode
+ * IMixer
+ * @todo: switch 201/202 based on mode
  */
 export declare namespace AMCP {
     /**
      *
      */
     class MixerKeyerCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
         constructor(params: (string | Param | (string | Param)[]));
     }
     /**
-     *@todo	Validata/clamp lamp number range?
+     * @todo	Validata/clamp lamp number range?
      */
     class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.IProtocolLogic[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.IProtocolLogic[];
         /**
          *
          */
@@ -244,9 +244,9 @@ export declare namespace AMCP {
      *
      */
     class MixerBlendCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -256,9 +256,9 @@ export declare namespace AMCP {
      *
      */
     class MixerOpacityCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -268,9 +268,9 @@ export declare namespace AMCP {
      *
      */
     class MixerBrightnessCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -280,9 +280,9 @@ export declare namespace AMCP {
      *
      */
     class MixerSaturationCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -292,21 +292,21 @@ export declare namespace AMCP {
      *
      */
     class MixerContrastCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
         constructor(params: (string | Param | (string | Param)[]));
     }
     /**
-     *@todo:	verify `gamma` value range
+     * @todo:	verify `gamma` value range
      */
     class MixerLevelsCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Coupled[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Coupled[];
         /**
          *
          */
@@ -316,9 +316,9 @@ export declare namespace AMCP {
      *
      */
     class MixerFillCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Coupled[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Coupled[];
         /**
          *
          */
@@ -328,9 +328,9 @@ export declare namespace AMCP {
      *
      */
     class MixerClipCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Coupled[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Coupled[];
         /**
          *
          */
@@ -340,9 +340,9 @@ export declare namespace AMCP {
      *
      */
     class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Coupled[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Coupled[];
         /**
          *
          */
@@ -352,9 +352,9 @@ export declare namespace AMCP {
      *
      */
     class MixerCropCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Coupled[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Coupled[];
         /**
          *
          */
@@ -364,9 +364,9 @@ export declare namespace AMCP {
      *
      */
     class MixerRotationCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -376,9 +376,9 @@ export declare namespace AMCP {
      *
      */
     class MixerPerspectiveCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Coupled[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Coupled[];
         /**
          *
          */
@@ -388,9 +388,9 @@ export declare namespace AMCP {
      *
      */
     class MixerMipmapCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -400,9 +400,9 @@ export declare namespace AMCP {
      *
      */
     class MixerVolumeCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -412,9 +412,9 @@ export declare namespace AMCP {
      *
      */
     class MixerMastervolumeCommand extends AbstractChannelCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -424,9 +424,9 @@ export declare namespace AMCP {
      *
      */
     class MixerStraightAlphaOutputCommand extends AbstractChannelCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.Depends[];
         /**
          *
          */
@@ -436,7 +436,7 @@ export declare namespace AMCP {
      *
      */
     class MixerGridCommand extends AbstractChannelCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -447,7 +447,7 @@ export declare namespace AMCP {
      *
      */
     class MixerCommitCommand extends AbstractChannelCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -458,7 +458,7 @@ export declare namespace AMCP {
      *
      */
     class MixerClearCommand extends AbstractChannelOrLayerCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -467,26 +467,26 @@ export declare namespace AMCP {
     }
 }
 /**
- *IChannel
+ * IChannel
  */
 export declare namespace AMCP {
     /**
      *
      */
     class ClearCommand extends AbstractChannelOrLayerCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class CallCommand extends AbstractLayerWithFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class SwapCommand extends AbstractChannelOrLayerCommand {
-        static commandString: string;
+        static readonly commandString: string;
         /**
          *
          */
@@ -496,63 +496,63 @@ export declare namespace AMCP {
      *
      */
     class AddCommand extends AbstractChannelCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class RemoveCommand extends AbstractChannelOrLayerCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class PrintCommand extends AbstractChannelCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class SetCommand extends AbstractChannelCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class LockCommand extends AbstractChannelCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.IProtocolLogic[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.IProtocolLogic[];
     }
     /**
      *
      */
     class ChannelGridCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
      *
      */
     class GlGCCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
 }
 /**
- *IData
+ * IData
  */
 export declare namespace AMCP {
     /**
      *
      */
     class DataStoreCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *
      */
     class DataRetrieveCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
@@ -560,33 +560,33 @@ export declare namespace AMCP {
      *
      */
     class DataListCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class DataRemoveCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
 }
 /**
- *IThumbnail
+ * IThumbnail
  */
 export declare namespace AMCP {
     /**
      *
      */
     class ThumbnailListCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class ThumbnailRetrieveCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
@@ -594,25 +594,25 @@ export declare namespace AMCP {
      *
      */
     class ThumbnailGenerateCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *
      */
     class ThumbnailGenerateAllCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
 }
 /**
- *IInfo
+ * IInfo
  */
 export declare namespace AMCP {
     /**
      *
      */
     class CinfCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
@@ -620,28 +620,28 @@ export declare namespace AMCP {
      *
      */
     class ClsCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class FlsCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class TlsCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class VersionCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
@@ -649,7 +649,7 @@ export declare namespace AMCP {
      *
      */
     class InfoCommand extends AbstractOrChannelOrLayerCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
@@ -660,7 +660,7 @@ export declare namespace AMCP {
      *
      */
     class InfoTemplateCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
@@ -668,7 +668,7 @@ export declare namespace AMCP {
      *
      */
     class InfoConfigCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
@@ -679,42 +679,42 @@ export declare namespace AMCP {
      *
      */
     class InfoPathsCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class InfoSystemCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class InfoServerCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class InfoQueuesCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class InfoThreadsCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class InfoDelayCommand extends AbstractChannelOrLayerCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
@@ -723,10 +723,10 @@ export declare namespace AMCP {
         constructor(params: (string | Param | (string | Param)[]));
     }
     /**
-     *@todo: response validator/parser
+     * @todo: response validator/parser
      */
     class CGInfoCommand extends AbstractLayerWithCgFallbackCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
@@ -738,36 +738,36 @@ export declare namespace AMCP {
      *
      */
     class GlInfoCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     /**
      *
      */
     class LogLevelCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
     }
     /**
-     *@protocol	Needs either `calltrace` or `communication` parameter.
+     * @protocol	Needs either `calltrace` or `communication` parameter.
      */
     class LogCategoryCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
+        static readonly protocolLogic: ProtocolNS.OneOf[];
         paramProtocol: ParamNS.ParamSignature[];
-        static protocolLogic: ProtocolNS.OneOf[];
     }
     /**
      *
      */
     class DiagCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
-     *@todo: mixed mode!!!!
-     *202/201
+     * @todo: mixed mode!!!!
+     * 202/201
      */
     class HelpCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
@@ -775,7 +775,7 @@ export declare namespace AMCP {
      *
      */
     class HelpProducerCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
@@ -783,31 +783,31 @@ export declare namespace AMCP {
      *
      */
     class HelpConsumerCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];
         responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
 }
 /**
- *IOperation
+ * IOperation
  */
 export declare namespace AMCP {
     /**
-     *@todo: response
+     * @todo: response
      */
     class ByeCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
-     *@todo: response
+     * @todo: response
      */
     class KillCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
     /**
-     *@todo: response
+     * @todo: response
      */
     class RestartCommand extends AbstractCommand {
-        static commandString: string;
+        static readonly commandString: string;
     }
 }

@@ -30,7 +30,7 @@ var Options;
  */
 var ConnectionOptions = (function () {
     function ConnectionOptions(hostOrOptions, port) {
-        this.host = "localhost";
+        this.host = 'localhost';
         this.port = 5250;
         this.autoConnect = true;
         this.autoReconnect = true;
@@ -47,18 +47,18 @@ var ConnectionOptions = (function () {
         this.onDisconnected = undefined;
         this.onError = undefined;
         // if object
-        if (hostOrOptions && typeof hostOrOptions === "object") {
-            if (hostOrOptions.hasOwnProperty("host") && hostOrOptions.host !== undefined) {
+        if (hostOrOptions && typeof hostOrOptions === 'object') {
+            if (hostOrOptions.hasOwnProperty('host') && hostOrOptions.host !== undefined) {
                 var host = hostOrOptions.host;
                 var dnsValidation = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(host);
                 if (dnsValidation) {
-                    delete hostOrOptions["host"];
+                    delete hostOrOptions['host'];
                     // host
-                    if (!!dnsValidation[1]) {
+                    if (dnsValidation[1]) {
                         this.host = dnsValidation[1];
                     }
                     // port
-                    if (!!dnsValidation[2]) {
+                    if (dnsValidation[2]) {
                         this.port = parseInt(dnsValidation[2], 10);
                     }
                 }
@@ -75,15 +75,15 @@ var ConnectionOptions = (function () {
             return;
         }
         // else
-        if (typeof hostOrOptions === "string") {
+        if (typeof hostOrOptions === 'string') {
             var dnsValidation = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(hostOrOptions.toString());
             if (dnsValidation) {
                 // host
-                if (!!dnsValidation[1]) {
+                if (dnsValidation[1]) {
                     this.host = dnsValidation[1];
                 }
                 // port
-                if (!!dnsValidation[2]) {
+                if (dnsValidation[2]) {
                     this.port = parseInt(dnsValidation[2], 10);
                 }
             }

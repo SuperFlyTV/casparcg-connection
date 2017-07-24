@@ -1,4 +1,4 @@
-import { Callback as CallbackNS } from "./global/Callback";
+import { Callback as CallbackNS } from './global/Callback';
 import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
 import IStringCallback = CallbackNS.IStringCallback;

@@ -41,16 +41,16 @@ var Validation;
          *
          */
         StringValidator.prototype.resolve = function (data) {
-            var textstring = "";
+            var textstring = '';
             function checkTextstring(rawClipNameString) {
                 if (rawClipNameString == null) {
-                    return "";
+                    return '';
                 }
                 // trim all non-textual content
-                rawClipNameString = rawClipNameString.replace(/(^[\s\W]+|[\s\W]+$)/gi, "");
+                rawClipNameString = rawClipNameString.replace(/(^[\s\W]+|[\s\W]+$)/gi, '');
                 // check length
                 if (rawClipNameString.length === 0) {
-                    return "";
+                    return '';
                 }
                 return rawClipNameString;
             }
@@ -66,15 +66,15 @@ var Validation;
                 }
                 else {
                     // greedy
-                    textstring = "";
+                    textstring = '';
                     data.forEach(function (i) {
                         var o = checkTextstring(i);
-                        textstring += (o) ? o + " " : "";
+                        textstring += (o) ? o + ' ' : '';
                     });
                 }
             }
-            else if (typeof data === "object" || typeof data === "string") {
-                textstring = data !== null ? data.toString() : "";
+            else if (typeof data === 'object' || typeof data === 'string') {
+                textstring = data !== null ? data.toString() : '';
             }
             if (!checkTextstring(textstring)) {
                 return false;
@@ -129,16 +129,16 @@ var Validation;
          *
          */
         ClipNameValidator.prototype.resolve = function (data) {
-            var clipName = "";
+            var clipName = '';
             function checkClipNameString(rawClipNameString) {
                 if (rawClipNameString == null) {
-                    return "";
+                    return '';
                 }
                 // trim all non-textual content
-                rawClipNameString = rawClipNameString.replace(/(^[\s\W]+|[\s\W]+$)/gi, "");
+                rawClipNameString = rawClipNameString.replace(/(^[\s\W]+|[\s\W]+$)/gi, '');
                 // check length
                 if (rawClipNameString.length === 0) {
-                    return "";
+                    return '';
                 }
                 return rawClipNameString;
             }
@@ -149,8 +149,8 @@ var Validation;
                     i++;
                 } while (clipName == null);
             }
-            else if (typeof data === "object" || typeof data === "string") {
-                clipName = data !== null ? data.toString() : "";
+            else if (typeof data === 'object' || typeof data === 'string') {
+                clipName = data !== null ? data.toString() : '';
             }
             if (!checkClipNameString(clipName)) {
                 return false;
@@ -204,11 +204,11 @@ var Validation;
             if (data instanceof this._enumClass) {
                 return data.value;
             }
-            else if (typeof data === "string") {
-                var stringCast = data !== null ? data.toString() : "";
+            else if (typeof data === 'string') {
+                var stringCast = data !== null ? data.toString() : '';
                 // format stringy enum value
                 stringCast = stringCast.toUpperCase();
-                stringCast = stringCast.replace(" ", "_");
+                stringCast = stringCast.replace(' ', '_');
                 if (this._enumClass.hasOwnProperty(stringCast)) {
                     return this._enumClass[stringCast].value;
                 }
@@ -236,22 +236,22 @@ var Validation;
             if (data instanceof ServerStateEnum_1.Enum.ChannelFormat) {
                 return data.value;
             }
-            else if (typeof data === "string") {
-                var stringCast = data !== null ? data.toString() : "";
+            else if (typeof data === 'string') {
+                var stringCast = data !== null ? data.toString() : '';
                 // format stringy enum value
                 stringCast = stringCast.toUpperCase();
-                stringCast = stringCast.replace(" ", "_");
+                stringCast = stringCast.replace(' ', '_');
                 if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty(stringCast)) {
                     return ServerStateEnum_1.Enum.ChannelFormat[stringCast].value;
                 }
-                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("SD_" + stringCast)) {
-                    return ServerStateEnum_1.Enum.ChannelFormat["SD_" + stringCast].value;
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty('SD_' + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat['SD_' + stringCast].value;
                 }
-                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("HD_" + stringCast)) {
-                    return ServerStateEnum_1.Enum.ChannelFormat["HD_" + stringCast].value;
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty('HD_' + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat['HD_' + stringCast].value;
                 }
-                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty("UHD_" + stringCast)) {
-                    return ServerStateEnum_1.Enum.ChannelFormat["UHD_" + stringCast].value;
+                else if (ServerStateEnum_1.Enum.ChannelFormat.hasOwnProperty('UHD_' + stringCast)) {
+                    return ServerStateEnum_1.Enum.ChannelFormat['UHD_' + stringCast].value;
                 }
             }
             return false;
@@ -290,7 +290,7 @@ var Validation;
                     return this._keyword;
                 }
             }
-            else if (typeof data === "object" && data !== null) {
+            else if (typeof data === 'object' && data !== null) {
                 var objectCast = data;
                 if (!this._caseSensitive) {
                     for (var key in objectCast) {
@@ -301,7 +301,7 @@ var Validation;
                     return this._keyword;
                 }
             }
-            else if (typeof data === "string") {
+            else if (typeof data === 'string') {
                 if (!this._caseSensitive) {
                     data = String(data).toLowerCase();
                 }
@@ -332,24 +332,24 @@ var Validation;
          */
         FrameValidator.prototype.resolve = function (data) {
             if (Array.isArray(data)) {
-                var index = void 0;
                 data = data.map(function (element) { return String(element).toLowerCase(); });
-                if ((index = data.indexOf(this._keyword.toLowerCase())) > -1) {
+                var index = data.indexOf(this._keyword.toLowerCase());
+                if (index > -1) {
                     data = parseInt(data[index + 1], 10);
                 }
             }
-            else if (typeof data === "object" && data !== null) {
+            else if (typeof data === 'object' && data !== null) {
                 var objectCast = data;
                 if (objectCast.hasOwnProperty(this._keyword)) {
-                    (data = objectCast[this._keyword]);
+                    data = objectCast[this._keyword];
                 }
             }
-            else if (typeof data === "string") {
+            else if (typeof data === 'string') {
                 data = Number(data);
             }
-            if (typeof data === "number") {
-                var numberCast = void 0;
-                if ((numberCast = data) >= 0) {
+            if (typeof data === 'number') {
+                var numberCast = data;
+                if (numberCast >= 0) {
                     return numberCast;
                 }
             }
@@ -378,7 +378,7 @@ var Validation;
          *
          */
         PositiveNumberValidatorBetween.prototype.resolve = function (data) {
-            if (typeof data === "number") {
+            if (typeof data === 'number') {
                 var numberCast = Math.max(Math.min(data, this._max), this._min);
                 if (numberCast >= 0) {
                     return numberCast;
@@ -443,7 +443,7 @@ var Validation;
          *
          */
         NumberValidatorBetween.prototype.resolve = function (data) {
-            if (typeof data === "number") {
+            if (typeof data === 'number') {
                 var numberCast = Math.max(Math.min(data, this._max), this._min);
                 return numberCast;
             }
@@ -494,13 +494,15 @@ var Validation;
          */
         BooleanValidatorWithDefaults.prototype.resolve = function (data, key) {
             if (Array.isArray(data)) {
-                var index = void 0;
                 data = data.map(function (element) { return String(element).toLowerCase(); });
-                if ((index = data.indexOf(key.toLowerCase())) > -1) {
+                var index = data.indexOf(key.toLowerCase());
+                if (index > -1) {
                     data = data[index + 1];
                     if (data === undefined) {
                         data = data[index];
                     }
+                    // @todo: probably add some string-parsing logic:
+                    // if just a single boolean param in protocol, try to parse arrayCast[0] which should hold it
                 }
                 else {
                     // can't resolve array
@@ -508,11 +510,11 @@ var Validation;
                 }
             }
             var isValid = false;
-            if (typeof data === "string") {
-                if (data === "true") {
+            if (typeof data === 'string') {
+                if (data === 'true') {
                     isValid = true;
                 }
-                else if (data === "1") {
+                else if (data === '1') {
                     isValid = true;
                 }
                 else if (data === key) {
@@ -560,7 +562,7 @@ var Validation;
         TemplateDataValidator.prototype.resolve = function (data) {
             var stringCast = data.toString();
             // data is object: serialize
-            if (typeof data === "object" && data !== null) {
+            if (typeof data === 'object' && data !== null) {
                 stringCast = JSON.stringify(data);
             }
             /*	// data is string, try to de-serialize to validate as JSON
@@ -580,7 +582,7 @@ var Validation;
                     return stringCast;
                 }*/
             // add qoutation
-            stringCast = stringCast.replace(/\"/g, "\\\"");
+            stringCast = stringCast.replace(/\"/g, '\\"');
             var quotedString = "\"" + stringCast + "\"";
             return { raw: stringCast, payload: quotedString };
         };
