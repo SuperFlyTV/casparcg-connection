@@ -32,7 +32,7 @@ import OneOf = ProtocolNS.OneOf
 /**
  * Factory
  */
-export namespace AMCPUtil {
+export namespace AMCPUtil   {
 
 	/**
 	 *
