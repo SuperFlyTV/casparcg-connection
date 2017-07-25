@@ -6,7 +6,7 @@ before_install:
 install:
 - npm install --ignore-scripts
 script:
-- gulp build
+- npm run lint && gulp build
 before_deploy:
 - gulp dist
 deploy:
