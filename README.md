@@ -8,18 +8,24 @@
 
 CasparCG is an open source graphics- and video server for broadcast and streaming productions. This library lets you connect and interact with CasparCG servers from Node.js in Javascript.
 
-- Node.js
-- npm package
-- TypeScript/Javascript, strongly typed
-- ES5 target, easily compiled to ES2015 (ES6) or higher for more modern syntax [as described here](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/es6-compilation.html).
-- [API Docs](https://superflytv.github.io/casparcg-connection/)
-- [Getting started guide](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/)
+### Features
+
 - CasparCG AMCP 2.0 and 2.1 protocol implemented
 - Parsing and validation of command parameters and response
 - Queueing of commands
 - Promise-based commands for easy chaining and sequences
 - Helper functions for parsing of Config, Version and System info
-- MIT license
+ 
+### Project
+
+- Node.js
+- npm package
+- TypeScript/Javascript, strongly typed
+- ES5 target, easily compiled to ES2015 (ES6) or higher for more modern syntax [as described here](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/es6-compilation.html)
+- Linted with standard ESLint rules (TSLint)
+- [API Docs](https://superflytv.github.io/casparcg-connection/)
+- [Getting started guide](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/)
+- [MIT license](https://raw.githubusercontent.com/SuperFlyTV/casparcg-connection/master/LICENSE)
 
 ## Getting started
 
@@ -47,6 +53,7 @@ Installing from NPM adds the dev-dependencies needed to compile TypeScript and u
 * **`npm run clean`** Empties the `/js` directory.
 * **`npm run build`** Runs a single build command without watching for changes.
 * **`npm run cleanBuild`**  Runs the clean command before a build command.
+* **`npm run lint`** Runs code linting. Pull Requests won't be accepted without lint compliance.
 * **`npm run test`** Runs code tests through Jasmine.
 
 ## Documentation
