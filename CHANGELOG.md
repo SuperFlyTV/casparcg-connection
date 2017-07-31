@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0-next.3"></a>
+# [3.0.0-next.3](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.2...v3.0.0-next.3) (2017-07-31)
+
+
+### Bug Fixes
+
+* **Socket:** Fixed bug with disposing socket clients before they are created ([7a0a510](https://github.com/SuperFlyTV/casparcg-connection/commit/7a0a510))
+
+
+
 <a name="3.0.0-next.2"></a>
 # [3.0.0-next.2](https://github.com/SuperFlyTV/casparcg-connection/compare/3.0.0-next.1...v3.0.0-next.2) (2017-07-24)
 
