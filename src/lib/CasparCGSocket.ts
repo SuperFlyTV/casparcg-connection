@@ -120,9 +120,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 *
 	 */
   public disconnect (): void {
-    if (this._client !== undefined) {
-      this.dispose()
-    }
+    this.dispose()
   }
 
 	/**
@@ -151,7 +149,10 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
   public dispose (): void {
     this._shouldBeConnected = false
     this._clearConnectionAttemptTimer()
-    this._client.destroy()
+    if (this._client) {
+      this._client.destroy()
+      delete this._client
+    }
   }
 
 	/**
