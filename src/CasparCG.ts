@@ -2025,7 +2025,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
         this.onConnectionChanged(this._connected)
       }
       if (this._connected) {
-        this._executeNextCommand(true) // gets going on commands already on queue, also cleans up sent command buffers
+        this._executeNextCommand() // gets going on commands already on queue, also cleans up sent command buffers
 
 				// do checks to see if the server has been alive and used before this connection, or is in a untouched state
         if (this.virginServerCheck) {
