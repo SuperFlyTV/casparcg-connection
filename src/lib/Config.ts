@@ -672,14 +672,15 @@ export class CasparCGConfig implements ICasparCGConfig {
   }
 
 			/***/
-  public import (configVO: Object): void {
-    if (this.__version === CasparCGVersion.V207) {
+  public import (configVO: any): void {
+    let version = configVO._version || this._version
+    if (version === CasparCGVersion.V207) {
       this.importFromV207VO(configVO)
-    } else if (this.__version === CasparCGVersion.V210) {
+    } else if (version === CasparCGVersion.V210) {
       this.importFromV210VO(configVO)
+    }else {
+      throw new Error(`Unsupported CasparCGVersion in 'configVO': {$version}`)
     }
-
-				// @todo: throw error
   }
 
 			/***/
@@ -877,9 +878,9 @@ export class CasparCGConfig implements ICasparCGConfig {
 
 			/***/
   public get VO (): Config207VO | Config210VO {
-    if (this.__version === CasparCGVersion.V207) {
+    if (this._version === CasparCGVersion.V207) {
       return this.v207VO
-    } else if (this.__version === CasparCGVersion.V210) {
+    } else if (this._version === CasparCGVersion.V210) {
       return this.v210VO
     }
     throw new Error('@todo')	// @todo: throw
@@ -1035,9 +1036,9 @@ export class CasparCGConfig implements ICasparCGConfig {
 
 			/***/
   public get XML (): Object | null {
-    if (this.__version === CasparCGVersion.V207) {
+    if (this._version === CasparCGVersion.V207) {
       return this.v207XML
-    } else if (this.__version === CasparCGVersion.V210) {
+    } else if (this._version === CasparCGVersion.V210) {
       return this.v210XML
     }
     return null // @todo: throw error
@@ -1282,9 +1283,9 @@ export class CasparCGConfig implements ICasparCGConfig {
 
 			/***/
   public get XMLString (): string {
-    if (this.__version === CasparCGVersion.V207) {
+    if (this._version === CasparCGVersion.V207) {
       return this.v207XMLString
-    } else if (this.__version === CasparCGVersion.V210) {
+    } else if (this._version === CasparCGVersion.V210) {
       return this.v210XMLString
     }
     return '' // @todo: throw error
