@@ -1129,5 +1129,9 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
     /**
      *
      */
-    private _executeNextCommand(flushSent?);
+    private _flushSentCommands();
+    /**
+     *
+     */
+    private _executeNextCommand();
 }
