@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0-next.4"></a>
+# [3.0.0-next.4](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.3...v3.0.0-next.4) (2017-10-03)
+
+
+### Bug Fixes
+
+* **Config:** Correct cross-version-import between configVOs ([bdcedfd](https://github.com/SuperFlyTV/casparcg-connection/commit/bdcedfd))
+* **onConnection:** Bug with promise resolve and queue conducting on initial connection ([4504cb9](https://github.com/SuperFlyTV/casparcg-connection/commit/4504cb9))
+
+
+
 <a name="3.0.0-next.3"></a>
 # [3.0.0-next.3](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.2...v3.0.0-next.3) (2017-07-31)
 
