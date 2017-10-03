@@ -1411,18 +1411,21 @@ var CasparCG = (function (_super) {
             this.onConnectionStatus(socketStatus.valueOf());
         }
         if (connected !== this._connected) {
+            if (connected) {
+                // @todo: handle flush SENT-buffer + shift/push version command in queue. (add back the sent command (retry strategy)) + make sure VERSION comes first after reconnect
+                this._flushSentCommands();
+                // reset cached data
+                delete this._configPromise;
+                delete this._pathsPromise;
+                delete this._versionPromise;
+            }
             this._connected = connected;
             this.emit(Events_1.CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus);
             if (this.onConnectionChanged) {
                 this.onConnectionChanged(this._connected);
             }
             if (this._connected) {
-                // @todo: handle flush SENT-buffer + shift/push version command in queue. (add back the sent command (retry strategy)) + make sure VERSION comes first after reconnect
-                // reset cached data
-                delete this._configPromise;
-                delete this._pathsPromise;
-                delete this._versionPromise;
-                this._executeNextCommand(true); // gets going on commands already on queue, also cleans up sent command buffers
+                this._executeNextCommand(); // gets going on commands already on queue, also cleans up sent command buffers
                 // do checks to see if the server has been alive and used before this connection, or is in a untouched state
                 if (this.virginServerCheck) {
                     this.doNow(new AMCP_1.AMCP.InfoCommand())
@@ -1549,16 +1552,18 @@ var CasparCG = (function (_super) {
     /**
      *
      */
-    CasparCG.prototype._executeNextCommand = function (flushSent) {
-        if (flushSent === void 0) { flushSent = false; }
-        if (flushSent) {
-            while (this._sentCommands.length > 0) {
-                var i = (this._sentCommands.shift());
-                this._log("Flushing commands from sent-queue. Deleting: \"" + i.name + "\", " + this._sentCommands.length + " command(s) left in sentCommands.");
-                i.status = IAMCPStatus.Failed;
-                i.reject(i);
-            }
+    CasparCG.prototype._flushSentCommands = function () {
+        while (this._sentCommands.length > 0) {
+            var i = (this._sentCommands.shift());
+            this._log("Flushing commands from sent-queue. Deleting: \"" + i.name + "\", " + this._sentCommands.length + " command(s) left in sentCommands.");
+            i.status = IAMCPStatus.Failed;
+            i.reject(i);
         }
+    };
+    /**
+     *
+     */
+    CasparCG.prototype._executeNextCommand = function () {
         if (this.connected) {
             // salvo mode
             /*if (this.queueMode === QueueMode.SALVO) {

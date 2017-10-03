@@ -417,7 +417,7 @@ export declare namespace Config {
             /***/
             static mixedCaseToDashed(mixedCased: string): string;
             /***/
-            import(configVO: Object): void;
+            import(configVO: any): void;
             /***/
             importFromV207VO(configVO: Object): void;
             /***/

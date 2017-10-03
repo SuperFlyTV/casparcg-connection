@@ -880,13 +880,16 @@ var Config;
             };
             /***/
             CasparCGConfig.prototype.import = function (configVO) {
-                if (this.__version === CasparCGVersion.V207) {
+                var version = configVO._version || this._version;
+                if (version === CasparCGVersion.V207) {
                     this.importFromV207VO(configVO);
                 }
-                else if (this.__version === CasparCGVersion.V210) {
+                else if (version === CasparCGVersion.V210) {
                     this.importFromV210VO(configVO);
                 }
-                // @todo: throw error
+                else {
+                    throw new Error("Unsupported CasparCGVersion in 'configVO': {$version}");
+                }
             };
             /***/
             CasparCGConfig.prototype.importFromV207VO = function (configVO) {
@@ -1062,10 +1065,10 @@ var Config;
             Object.defineProperty(CasparCGConfig.prototype, "VO", {
                 /***/
                 get: function () {
-                    if (this.__version === CasparCGVersion.V207) {
+                    if (this._version === CasparCGVersion.V207) {
                         return this.v207VO;
                     }
-                    else if (this.__version === CasparCGVersion.V210) {
+                    else if (this._version === CasparCGVersion.V210) {
                         return this.v210VO;
                     }
                     throw new Error('@todo'); // @todo: throw
@@ -1219,10 +1222,10 @@ var Config;
             Object.defineProperty(CasparCGConfig.prototype, "XML", {
                 /***/
                 get: function () {
-                    if (this.__version === CasparCGVersion.V207) {
+                    if (this._version === CasparCGVersion.V207) {
                         return this.v207XML;
                     }
-                    else if (this.__version === CasparCGVersion.V210) {
+                    else if (this._version === CasparCGVersion.V210) {
                         return this.v210XML;
                     }
                     return null; // @todo: throw error
@@ -1467,10 +1470,10 @@ var Config;
             Object.defineProperty(CasparCGConfig.prototype, "XMLString", {
                 /***/
                 get: function () {
-                    if (this.__version === CasparCGVersion.V207) {
+                    if (this._version === CasparCGVersion.V207) {
                         return this.v207XMLString;
                     }
-                    else if (this.__version === CasparCGVersion.V210) {
+                    else if (this._version === CasparCGVersion.V210) {
                         return this.v210XMLString;
                     }
                     return ''; // @todo: throw error
