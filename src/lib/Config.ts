@@ -673,7 +673,7 @@ export class CasparCGConfig implements ICasparCGConfig {
 
 			/***/
   public import (configVO: any): void {
-    let version = configVO._version || this._version
+    let version = configVO._version || this._version
     if (version === CasparCGVersion.V207) {
       this.importFromV207VO(configVO)
     } else if (version === CasparCGVersion.V210) {
