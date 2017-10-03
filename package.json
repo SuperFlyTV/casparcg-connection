@@ -14,7 +14,7 @@
     "clean": "gulp clean",
     "doc": "gulp typedoc",
     "license:crawl": "npm-license-crawler --json .licensetree.json",
-    "prerelease": "npm run cleanbuild && npm run lint && npm run doc && npm run license:crawl && git add -f docs/ && git commit -m 'chore(Docs): Updated docs to release' && git add -f js/ && git commit -m 'build(JS): Build for release'",
+    "prerelease": "npm run build:clean && npm run lint && npm run doc && npm run license:crawl && git add -f docs/ && git commit -m 'chore(Docs): Updated docs to release' && git add -f js/ && git commit -m 'build(JS): Build for release'",
     "release": "standard-version",
     "release:next": "npm run prerelease && standard-version --prerelease next",
     "release:dry": "standard-version --dry-run"
