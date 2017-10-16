@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.4...v3.0.0) (2017-10-16)
+
+
+### Bug Fixes
+
+* **TemplateData:** Correct double escaping of quotes xml strings ([5bda229](https://github.com/SuperFlyTV/casparcg-connection/commit/5bda229))
+
+
+
 <a name="3.0.0-next.4"></a>
 # [3.0.0-next.4](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.3...v3.0.0-next.4) (2017-10-03)
 
