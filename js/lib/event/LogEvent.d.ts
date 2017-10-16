@@ -1,10 +1,11 @@
-import { Event as BaseEventNS } from "./BaseEvent";
+import { Event as BaseEventNS } from './BaseEvent';
 export declare namespace Event {
     /**
      *
      */
     class LogEvent extends BaseEventNS.BaseEvent {
         logString: string;
+        static readonly LOG: string;
         /**
          *
          */
@@ -13,6 +14,5 @@ export declare namespace Event {
          *
          */
         valueOf(): string;
-        static LOG: string;
     }
 }

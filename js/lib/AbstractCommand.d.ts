@@ -1,14 +1,14 @@
-import { AMCPUtil as AMCPUtilNS } from "./AMCP";
+import { AMCPUtil as AMCPUtilNS } from './AMCP';
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
-import { Response as ResponseNS } from "./ResponseSignature";
+import { Response as ResponseNS } from './ResponseSignature';
 import ResponseSignature = ResponseNS.ResponseSignature;
-import { Param as ParamNS } from "./ParamSignature";
+import { Param as ParamNS } from './ParamSignature';
 import PayloadVO = ParamNS.PayloadVO;
 import Param = ParamNS.Param;
 import IParamSignature = ParamNS.IParamSignature;
-import { Protocol as ProtocolNS } from "./ProtocolLogic";
+import { Protocol as ProtocolNS } from './ProtocolLogic';
 import IProtocolLogic = ProtocolNS.IProtocolLogic;
-import { Callback as CallbackNS } from "./global/Callback";
+import { Callback as CallbackNS } from './global/Callback';
 import ICommandStatusCallback = CallbackNS.ICommandStatusCallback;
 /**
  *
@@ -20,8 +20,8 @@ export declare namespace Command {
     interface IAMCPResponse {
         code: number;
         raw: string;
-        toString(): string;
         data: Object;
+        toString(): string;
     }
     /**
      *
@@ -70,16 +70,16 @@ export declare namespace Command {
      *
      */
     interface IAMCPCommand extends IAMCPCommandData {
+        paramProtocol: Array<IParamSignature>;
+        protocolLogic: Array<IProtocolLogic>;
+        responseProtocol: ResponseSignature;
+        onStatusChanged: ICommandStatusCallback;
+        resolve: (command: IAMCPCommand) => void;
+        reject: (command: IAMCPCommand) => void;
         validateParams(): boolean;
         validateResponse(response: CasparCGSocketResponse): boolean;
         serialize(): IAMCPCommandVO;
         populate(cmdVO: IAMCPCommandVO, id: string): void;
-        paramProtocol: Array<IParamSignature>;
-        protocolLogic: Array<IProtocolLogic>;
-        responseProtocol: ResponseSignature;
-        resolve: (command: IAMCPCommand) => void;
-        reject: (command: IAMCPCommand) => void;
-        onStatusChanged: ICommandStatusCallback;
     }
     /**
      *
@@ -96,13 +96,13 @@ export declare namespace Command {
         onStatusChanged: ICommandStatusCallback;
         resolve: (command: IAMCPCommand) => void;
         reject: (command: IAMCPCommand) => void;
-        private _status;
         protected _channel: number;
         protected _layer: number;
         protected _id: string;
         protected _payload: PayloadVO;
         protected _stringParamsArray: Array<string>;
         protected _objectParams: Param;
+        private _status;
         /**
          *
          */
@@ -111,14 +111,6 @@ export declare namespace Command {
          *
          */
         validateParams(): boolean;
-        /**
-         *
-         */
-        protected validateParam(signature: IParamSignature): boolean;
-        /**
-         *
-         */
-        protected validateProtocolLogic(): boolean;
         /**
          *
          */
@@ -135,14 +127,6 @@ export declare namespace Command {
          *
          */
         readonly name: string;
-        /**
-         *
-         */
-        protected validateChannel(): number;
-        /**
-         *
-         */
-        protected validateLayer(fallback?: number): number;
         /**
          *
          */
@@ -178,6 +162,22 @@ export declare namespace Command {
          *
          */
         toString(): string;
+        /**
+         *
+         */
+        protected validateParam(signature: IParamSignature): boolean;
+        /**
+         *
+         */
+        protected validateProtocolLogic(): boolean;
+        /**
+         *
+         */
+        protected validateChannel(): number;
+        /**
+         *
+         */
+        protected validateLayer(fallback?: number): number;
     }
     /**
      *

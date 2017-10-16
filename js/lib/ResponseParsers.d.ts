@@ -9,6 +9,8 @@ export declare namespace Response {
         font?: string | undefined;
         root: string;
         /***/
+        static ensureTrailingSlash(path: string): string;
+        /***/
         readonly thumbnails: string;
         /***/
         readonly absoluteMedia: string;
@@ -26,8 +28,6 @@ export declare namespace Response {
         readonly absoluteFont: string | undefined;
         /***/
         private absolutePath(relativeOrAbsolutePath);
-        /***/
-        static ensureTrailingSlash(path: string): string;
     }
     /***/
     class ChannelRate {
@@ -165,8 +165,8 @@ export declare namespace Response {
         parse(data: Array<string>): Object;
     }
     /**
- *
- */
+     *
+     */
     class ThumbnailListParser extends AbstractParser implements IResponseParser {
         /**
          *
@@ -192,7 +192,7 @@ export declare namespace Response {
         parse(data: Object): Object;
     }
     /**
-        *
+     *
      */
     class InfoServerParser extends AbstractParser implements IResponseParser {
         /**

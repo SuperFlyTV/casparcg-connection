@@ -1,19 +1,22 @@
 {
   "name": "casparcg-connection",
-  "version": "2.1.0",
+  "version": "3.0.0-next.4",
   "description": "Node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
   "scripts": {
-    "prepublishOnly": "npm run cleanbuild && npm run doc",
+    "lint": "tslint './src/**/*.ts' --exclude './**/*.d.ts' -c tslint.json -p tsconfig.json",
+    "pretest": "npm run lint",
     "test": "JASMINE_CONFIG_PATH=jasmine.json jasmine-ts 'tests/**/*[sS]pec.ts'",
     "gulp": "gulp",
     "build": "gulp build",
-    "cleanbuild": "gulp clean && gulp build",
+    "build:clean": "gulp clean && gulp build",
     "clean": "gulp clean",
     "doc": "gulp typedoc",
-    "prerelease": "npm run prepublishOnly && git add -f docs/ && git commit -m 'chore(Docs): Docs to release' && git add -f js/ && git commit -m 'build(Js): Build for release'",
+    "license:crawl": "npm-license-crawler --json .licensetree.json",
+    "prerelease": "npm run build:clean && npm run lint && npm run doc && npm run license:crawl && git add -f docs/ && git commit -m 'chore(Docs): Updated docs to release' && git add -f js/ && git commit -m 'build(JS): Build for release'",
     "release": "standard-version",
+    "release:next": "npm run prerelease && standard-version --prerelease next",
     "release:dry": "standard-version --dry-run"
   },
   "repository": {
@@ -85,6 +88,7 @@
     "jasmine-ts": "0.1.3",
     "standard-version": "^4.2.0",
     "tslint": "^5.5.0",
+    "tslint-config-standard": "^6.0.1",
     "typedoc": "^0.7.1",
     "typescript": "^2.0.6"
   }

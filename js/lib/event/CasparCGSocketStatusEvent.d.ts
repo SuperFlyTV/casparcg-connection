@@ -1,26 +1,26 @@
-import { Event as BaseEventNS } from "./BaseEvent";
+import { Event as BaseEventNS } from './BaseEvent';
 export declare namespace Event {
-    interface SocketStatus {
+    interface ConnectionStatus {
         connected: boolean;
-        triggeredByConnectionLoss?: boolean;
+        virginServer?: boolean;
     }
     /**
      *
      */
     class CasparCGSocketStatusEvent extends BaseEventNS.BaseEvent {
-        socketStatus: SocketStatus;
+        socketStatus: ConnectionStatus;
+        static readonly STATUS: string;
+        static readonly STATUS_CHANGED: string;
+        static readonly CONNECTED: string;
+        static readonly DISCONNECTED: string;
+        static readonly TIMEOUT: string;
         /**
          *
          */
-        constructor(socketStatus: SocketStatus);
+        constructor(socketStatus: ConnectionStatus);
         /**
          *
          */
-        valueOf(): SocketStatus;
-        static STATUS: string;
-        static STATUS_CHANGED: string;
-        static CONNECTED: string;
-        static DISCONNECTED: string;
-        static TIMEOUT: string;
+        valueOf(): ConnectionStatus;
     }
 }

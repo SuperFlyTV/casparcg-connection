@@ -1,54 +1,55 @@
-import {Event as BaseEventNS} from "./BaseEvent";
-import {Command as CommandNS} from "../AbstractCommand";
-import IAMCPCommand = CommandNS.IAMCPCommand;
-import {AMCPUtil as AMCPUtilNS} from "../AMCP";
+import {Event as BaseEventNS } from './BaseEvent'
+import {Command as CommandNS } from '../AbstractCommand'
+import IAMCPCommand = CommandNS.IAMCPCommand
+import {AMCPUtil as AMCPUtilNS } from '../AMCP'
 // AMCPUtilNS
-import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
+import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse
 
 export namespace Event {
 
 	/**
 	 *
 	 */
-	export class CasparCGSocketCommandEvent extends BaseEventNS.BaseEvent {
+export class CasparCGSocketCommandEvent extends BaseEventNS.BaseEvent {
 
-		/**
-		 *
-		 */
-		constructor(public command: IAMCPCommand) {
-			super({command});
-		}
+  static readonly RESPONSE = 'casparcgsocketcommandeventresponse'
 
-		/**
-		 *
-		 */
-		valueOf(): IAMCPCommand {
-			return this.command;
-		}
+/**
+ *
+ */
+  constructor (public command: IAMCPCommand) {
+    super({command})
+  }
 
-		static RESPONSE = "casparcgsocketcommandeventresponse";
-	}
+  /**
+   *
+   */
+  valueOf (): IAMCPCommand {
+    return this.command
+  }
+}
 
-	/**
-	 *
-	 */
-	export class CasparCGSocketResponseEvent extends BaseEventNS.BaseEvent {
+/**
+ *
+ */
+export class CasparCGSocketResponseEvent extends BaseEventNS.BaseEvent {
 
-		/**
-		 *
-		 */
-		constructor(public response: CasparCGSocketResponse) {
-			super({response});
-		}
+  static readonly RESPONSE = 'casparcgsocketresponseeventresponse'
+  static readonly INVALID_RESPONSE = 'casparcgsocketcommandeventresponseinvalid'
 
-		/**
-		 *
-		 */
-		valueOf(): CasparCGSocketResponse {
-			return this.response;
-		}
+  /**
+   *
+   */
+  constructor (public response: CasparCGSocketResponse) {
+    super({response})
+  }
 
-		static RESPONSE = "casparcgsocketresponseeventresponse";
-		static INVALID_RESPONSE = "casparcgsocketcommandeventresponseinvalid";
-	}
+  /**
+   *
+   */
+  valueOf (): CasparCGSocketResponse {
+    return this.response
+  }
+
+}
 }

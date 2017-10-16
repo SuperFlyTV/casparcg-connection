@@ -1,4 +1,4 @@
-import { Callback as CallbackNS } from "./global/Callback";
+import { Callback as CallbackNS } from './global/Callback';
 import IBooleanCallback = CallbackNS.IBooleanCallback;
 import IErrorCallback = CallbackNS.IErrorCallback;
 import IStringCallback = CallbackNS.IStringCallback;
@@ -16,7 +16,7 @@ export declare namespace Options {
     /**
      *
      */
-    enum ServerVersion {
+    enum CasparCGVersion {
         V2xx = 2000,
         V207 = 2007,
         V21x = 2100,
@@ -33,8 +33,8 @@ export interface IConnectionOptions {
     autoReconnect?: boolean;
     autoReconnectInterval?: number;
     autoReconnectAttempts?: number;
-    autoServerVersion?: boolean;
-    serverVersion?: Options.ServerVersion;
+    serverVersion?: Options.CasparCGVersion;
+    virginServerCheck?: boolean;
     queueMode?: Options.QueueMode;
     debug?: boolean;
     onLog?: IStringCallback;
@@ -54,9 +54,9 @@ export declare class ConnectionOptions implements IConnectionOptions {
     autoReconnect: boolean | undefined;
     autoReconnectInterval: number | undefined;
     autoReconnectAttempts: number | undefined;
-    autoServerVersion?: boolean;
-    serverVersion?: Options.ServerVersion | undefined;
+    serverVersion: Options.CasparCGVersion | undefined;
     queueMode: Options.QueueMode | undefined;
+    virginServerCheck: boolean | undefined;
     debug: boolean | undefined;
     onLog: IStringCallback | undefined;
     onConnectionStatus: ISocketStatusCallback | undefined;

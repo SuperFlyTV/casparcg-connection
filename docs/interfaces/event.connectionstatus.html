@@ -3,11 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>StreamConsumer | casparcg-connection</title>
+	<title>ConnectionStatus | casparcg-connection</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
-	<script src="../assets/js/modernizr.js"></script>
 </head>
 <body>
 <header>
@@ -57,16 +56,13 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/config.html">Config</a>
+					<a href="../modules/event.html">Event</a>
 				</li>
 				<li>
-					<a href="../modules/config.v2xx.html">v2xx</a>
-				</li>
-				<li>
-					<a href="config.v2xx.streamconsumer.html">StreamConsumer</a>
+					<a href="event.connectionstatus.html">ConnectionStatus</a>
 				</li>
 			</ul>
-			<h1>Class StreamConsumer</h1>
+			<h1>Interface ConnectionStatus</h1>
 		</div>
 	</div>
 </header>
@@ -77,12 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="config.v2xx.consumer.html" class="tsd-signature-type">Consumer</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">StreamConsumer</span>
-							</li>
-						</ul>
+						<span class="target">ConnectionStatus</span>
 					</li>
 				</ul>
 			</section>
@@ -93,9 +84,8 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="config.v2xx.streamconsumer.html#_type" class="tsd-kind-icon">_type</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="config.v2xx.streamconsumer.html#args" class="tsd-kind-icon">args</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="config.v2xx.streamconsumer.html#path" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="event.connectionstatus.html#connected" class="tsd-kind-icon">connected</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="event.connectionstatus.html#virginserver" class="tsd-kind-icon">virgin<wbr>Server</a></li>
 							</ul>
 						</section>
 					</div>
@@ -103,34 +93,23 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-					<a name="_type" class="tsd-anchor"></a>
-					<h3>_type</h3>
-					<div class="tsd-signature tsd-kind-icon">_type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="connected" class="tsd-anchor"></a>
+					<h3>connected</h3>
+					<div class="tsd-signature tsd-kind-icon">connected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Overwrites <a href="config.v2xx.consumer.html">Consumer</a>.<a href="config.v2xx.consumer.html#_type">_type</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/Config.ts#L227">lib/Config.ts:227</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/33ac839/src/lib/event/CasparCGSocketStatusEvent.ts#L6">lib/event/CasparCGSocketStatusEvent.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="args" class="tsd-anchor"></a>
-					<h3>args</h3>
-					<div class="tsd-signature tsd-kind-icon">args<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="virginserver" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> virgin<wbr>Server</h3>
+					<div class="tsd-signature tsd-kind-icon">virgin<wbr>Server<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/Config.ts#L233">lib/Config.ts:233</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="path" class="tsd-anchor"></a>
-					<h3>path</h3>
-					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/develop/src/lib/Config.ts#L230">lib/Config.ts:230</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/33ac839/src/lib/event/CasparCGSocketStatusEvent.ts#L7">lib/event/CasparCGSocketStatusEvent.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -157,27 +136,16 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/command.html">Command</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/config.html">Config</a>
-						<ul>
-							<li class=" tsd-kind-module tsd-parent-kind-module">
-								<a href="../modules/config.casparcgabstract.html">CasparCGAbstract</a>
-							</li>
-							<li class=" tsd-kind-module tsd-parent-kind-module">
-								<a href="../modules/config.v207.html">v207</a>
-							</li>
-							<li class=" tsd-kind-module tsd-parent-kind-module">
-								<a href="../modules/config.v21x.html">v21x</a>
-							</li>
-							<li class="current tsd-kind-module tsd-parent-kind-module">
-								<a href="../modules/config.v2xx.html">v2xx</a>
-							</li>
-						</ul>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="../modules/configutil.html">Config<wbr>Util</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/enum.html">Enum</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/event.html">Event</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -205,93 +173,36 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-module">
-						<a href="../enums/config.v2xx.channellayoutenum.html" class="tsd-kind-icon">Channel<wbr>Layout<wbr>Enum</a>
-					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-module">
-						<a href="../enums/config.v2xx.videomodeenum.html" class="tsd-kind-icon">Video<wbr>Mode<wbr>Enum</a>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/event.baseevent.html" class="tsd-kind-icon">Base<wbr>Event</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.audio.html" class="tsd-kind-icon">Audio</a>
+						<a href="../classes/event.casparcgsocketcommandevent.html" class="tsd-kind-icon">CasparCGSocket<wbr>Command<wbr>Event</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.bluefishconsumer.html" class="tsd-kind-icon">Bluefish<wbr>Consumer</a>
+						<a href="../classes/event.casparcgsocketresponseevent.html" class="tsd-kind-icon">CasparCGSocket<wbr>Response<wbr>Event</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.channel.html" class="tsd-kind-icon">Channel</a>
+						<a href="../classes/event.casparcgsocketstatusevent.html" class="tsd-kind-icon">CasparCGSocket<wbr>Status<wbr>Event</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.channellayout.html" class="tsd-kind-icon">Channel<wbr>Layout</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.consumer.html" class="tsd-kind-icon">Consumer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.controller.html" class="tsd-kind-icon">Controller</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.decklinkconsumer.html" class="tsd-kind-icon">Decklink<wbr>Consumer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.ffmpegconsumer.html" class="tsd-kind-icon">Ffmpeg<wbr>Consumer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.fileconsumer.html" class="tsd-kind-icon">File<wbr>Consumer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.flash.html" class="tsd-kind-icon">Flash</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.mixconfig.html" class="tsd-kind-icon">Mix<wbr>Config</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.mixer.html" class="tsd-kind-icon">Mixer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.newtekivgaconsumer.html" class="tsd-kind-icon">Newtek<wbr>Ivga<wbr>Consumer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.osc.html" class="tsd-kind-icon">Osc</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.oscclient.html" class="tsd-kind-icon">Osc<wbr>Client</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.paths.html" class="tsd-kind-icon">Paths</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.screenconsumer.html" class="tsd-kind-icon">Screen<wbr>Consumer</a>
+						<a href="../classes/event.logevent.html" class="tsd-kind-icon">Log<wbr>Event</a>
 					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.streamconsumer.html" class="tsd-kind-icon">Stream<wbr>Consumer</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="event.connectionstatus.html" class="tsd-kind-icon">Connection<wbr>Status</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-								<a href="config.v2xx.streamconsumer.html#_type" class="tsd-kind-icon">_type</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="event.connectionstatus.html#connected" class="tsd-kind-icon">connected</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="config.v2xx.streamconsumer.html#args" class="tsd-kind-icon">args</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="config.v2xx.streamconsumer.html#path" class="tsd-kind-icon">path</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="event.connectionstatus.html#virginserver" class="tsd-kind-icon">virgin<wbr>Server</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.synctoconsumer.html" class="tsd-kind-icon">Syncto<wbr>Consumer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.systemaudioconsumer.html" class="tsd-kind-icon">System<wbr>Audio<wbr>Consumer</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.templatehost.html" class="tsd-kind-icon">Template<wbr>Host</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="config.v2xx.thumbnails.html" class="tsd-kind-icon">Thumbnails</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
@@ -357,7 +268,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
@@ -368,7 +279,7 @@
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-83648715-1', 'auto');
+        ga('create', 'UA-83648715-1', '');
         ga('send', 'pageview');
     </script>
 </body>

@@ -1,4 +1,4 @@
-import { AMCPUtil as AMCPUtilNS } from "./AMCP";
+import { AMCPUtil as AMCPUtilNS } from './AMCP';
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse;
 export declare namespace Response {
     /**

@@ -1,4 +1,4 @@
-import { Validation } from "./ParamValidators";
+import { Validation } from './ParamValidators';
 import IValidator = Validation.IValidator;
 /**
  *

@@ -2,24 +2,30 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/SuperFlyTV/casparcg-connection/master/LICENSE) [![npm](https://img.shields.io/npm/v/casparcg-connection.svg?style=flat-square)](https://www.npmjs.com/package/casparcg-connection) [![Travis](https://img.shields.io/travis/SuperFlyTV/casparcg-connection.svg?style=flat-square)](https://travis-ci.org/SuperFlyTV/casparcg-connection) [![David](https://img.shields.io/david/superflytv/casparcg-connection.svg?style=flat-square)](https://david-dm.org/superflytv/casparcg-connection)
 
-[![API Docs](https://img.shields.io/badge/Docs-Api-orange.svg?style=flat-square)](https://superflytv.github.io/casparcg-connection/) [![Guide](https://img.shields.io/badge/Docs-Getting%20started%20guide-orange.svg?style=flat-square)](https://www.gitbook.com/book/superfly-tv/casparcg-connection-getting-started-guide)
+[![API Docs](https://img.shields.io/badge/Docs-Api-orange.svg?style=flat-square)](https://superflytv.github.io/casparcg-connection/) [![Guide](https://img.shields.io/badge/Docs-Getting%20started%20guide-orange.svg?style=flat-square)](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/)
 
 ## Introduction
 
 CasparCG is an open source graphics- and video server for broadcast and streaming productions. This library lets you connect and interact with CasparCG servers from Node.js in Javascript.
 
-- Node.js
-- npm package
-- TypeScript/Javascript, strongly typed
-- ES2015 (ES6), easily compiled to ES5 for compability on old Node.js-servers.
-- [API Docs](https://superflytv.github.io/casparcg-connection/)
-- [Getting started guide](https://www.gitbook.com/book/superfly-tv/casparcg-connection-getting-started-guide)
+### Features
+
 - CasparCG AMCP 2.0 and 2.1 protocol implemented
 - Parsing and validation of command parameters and response
 - Queueing of commands
 - Promise-based commands for easy chaining and sequences
 - Helper functions for parsing of Config, Version and System info
-- MIT license
+ 
+### Project
+
+- Node.js
+- npm package
+- TypeScript/Javascript, strongly typed
+- ES5 target, easily compiled to ES2015 (ES6) or higher for more modern syntax [as described here](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/es6-compilation.html)
+- Linted with standard ESLint rules (TSLint)
+- [API Docs](https://superflytv.github.io/casparcg-connection/)
+- [Getting started guide](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/)
+- [MIT license](https://raw.githubusercontent.com/SuperFlyTV/casparcg-connection/master/LICENSE)
 
 ## Getting started
 
@@ -47,6 +53,7 @@ Installing from NPM adds the dev-dependencies needed to compile TypeScript and u
 * **`npm run clean`** Empties the `/js` directory.
 * **`npm run build`** Runs a single build command without watching for changes.
 * **`npm run cleanBuild`**  Runs the clean command before a build command.
+* **`npm run lint`** Runs code linting. Pull Requests won't be accepted without lint compliance.
 * **`npm run test`** Runs code tests through Jasmine.
 
 ## Documentation
@@ -54,7 +61,7 @@ Join the discussion in the [CasparCG Forum thread](http://casparcg.com/forum/vie
 
 Visit [https://superflytv.github.io/casparcg-connection/](https://superflytv.github.io/casparcg-connection/) for API documentation.
 
-Visit [https://www.gitbook.com/book/superfly-tv/casparcg-connection-getting-started-guide](https://www.gitbook.com/book/superfly-tv/casparcg-connection-getting-started-guide) for Getting started guide.
+Visit [https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/) for Getting started guide.
 
 ## About
 

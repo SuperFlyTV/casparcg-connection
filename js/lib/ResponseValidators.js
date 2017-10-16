@@ -51,10 +51,10 @@ var Response;
                 return str;
             };
             var parseBooleans = function (str) {
-                if (str === true || str.toString().toLowerCase() === "true") {
+                if (str === true || str.toString().toLowerCase() === 'true') {
                     return true;
                 }
-                else if (str === false || str.toString().toLowerCase() === "false") {
+                else if (str === false || str.toString().toLowerCase() === 'false') {
                     return false;
                 }
                 return str;
@@ -64,7 +64,7 @@ var Response;
             };
             var returnFalse;
             var returnData;
-            xml2js_1.parseString(response.items[0].replace("\n", ""), { explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, attrValueProcessors: [parseNumbers], valueProcessors: [parseNumbers, parseBooleans], tagNameProcessors: [parseLowerCase], attrNameProcessors: [parseLowerCase] }, function (error, result) {
+            xml2js_1.parseString(response.items[0].replace('\n', ''), { explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, attrValueProcessors: [parseNumbers], valueProcessors: [parseNumbers, parseBooleans], tagNameProcessors: [parseLowerCase], attrNameProcessors: [parseLowerCase] }, function (error, result) {
                 returnFalse = error;
                 returnData = result;
             });
@@ -84,7 +84,7 @@ var Response;
          */
         ListValidator.prototype.resolve = function (response) {
             // filters on stringitems in items-list and validates if any items present
-            var stringItems = response.items.filter(function (i) { return typeof i === "string"; });
+            var stringItems = response.items.filter(function (i) { return typeof i === 'string'; });
             return stringItems;
         };
         return ListValidator;
