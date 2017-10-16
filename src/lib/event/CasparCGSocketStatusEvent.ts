@@ -1,35 +1,36 @@
-import {Event as BaseEventNS} from "./BaseEvent";
+import {Event as BaseEventNS } from './BaseEvent'
 
 export namespace Event {
 
-	export interface SocketStatus {
-		connected: boolean;
-		triggeredByConnectionLoss?: boolean;
-	}
+export interface ConnectionStatus {
+  connected: boolean
+  virginServer?: boolean
+}
 
 	/**
 	 *
 	 */
-	export class CasparCGSocketStatusEvent extends BaseEventNS.BaseEvent {
+export class CasparCGSocketStatusEvent extends BaseEventNS.BaseEvent {
 
-		/**
-		 *
-		 */
-		constructor(public socketStatus: SocketStatus) {
-			super(socketStatus);
-		}
+  static readonly STATUS = 'casparcgsocketconnectioneventstatus'
+  static readonly STATUS_CHANGED = 'casparcgsocketconnectioneventstatuschanged'
+  static readonly CONNECTED = 'casparcgsocketconnectioneventstatusconnected'
+  static readonly DISCONNECTED = 'casparcgsocketconnectioneventstatusdisconnected'
+  static readonly TIMEOUT = 'casparcgsocketconnectioneventstatustimeout'
 
-		/**
-		 *
-		 */
-		valueOf(): SocketStatus {
-			return this.socketStatus;
-		}
+  /**
+   *
+   */
+  constructor (public socketStatus: ConnectionStatus) {
+    super(socketStatus)
+  }
 
-		static STATUS = "casparcgsocketconnectioneventstatus";
-		static STATUS_CHANGED = "casparcgsocketconnectioneventstatuschanged";
-		static CONNECTED = "casparcgsocketconnectioneventstatusconnected";
-		static DISCONNECTED = "casparcgsocketconnectioneventstatusdisconnected";
-		static TIMEOUT = "casparcgsocketconnectioneventstatustimeout";
-	}
+ /**
+  *
+  */
+  valueOf (): ConnectionStatus {
+    return this.socketStatus
+  }
+
+}
 }

@@ -1,14 +1,14 @@
-import { Param as ParamNS } from "./ParamSignature";
+import { Param as ParamNS } from './ParamSignature';
 import ParamData = ParamNS.ParamData;
-import { Enum } from "./ServerStateEnum";
+import { Enum } from './ServerStateEnum';
 import AbstractEnum = Enum.AbstractEnum;
 export declare namespace Validation {
     /**
      *
      */
     interface IValidator {
-        resolve(data: Object, key?: string): ParamData;
         resolved: boolean;
+        resolve(data: Object, key?: string): ParamData;
     }
     /**
      *

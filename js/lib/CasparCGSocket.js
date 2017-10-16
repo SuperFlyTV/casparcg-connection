@@ -83,17 +83,17 @@ var CasparCGSocket = (function (_super) {
                     this._client.destroy();
                     this._client.removeAllListeners();
                     delete this._client;
+                    // @todo: fire event telling it gives up!
                 }
                 // (re)creates client, either on first run or new attempt
                 if (!this._client) {
                     this._client = new net.Socket();
-                    this._client.on("connect", function () { return _this._onConnected(); });
-                    this._client.on("error", function (error) { return _this._onError(error); });
-                    this._client.on("drain", function () { return _this._onDrain(); });
-                    this._client.on("close", function (hadError) { return _this._onClose(hadError); });
+                    this._client.on('close', function (hadError) { return _this._onClose(hadError); });
+                    this._client.on('connect', function () { return _this._onConnected(); });
+                    this._client.on('error', function (error) { return _this._onError(error); });
                 }
                 // connects
-                this.log("Socket attempting connection");
+                this.log('Socket attempting connection');
                 this._client.connect(this._port, this._host);
                 this._shouldBeConnected = true;
                 this._lastConnectionAttempt = Date.now();
@@ -108,38 +108,7 @@ var CasparCGSocket = (function (_super) {
      *
      */
     CasparCGSocket.prototype.disconnect = function () {
-        if (this._client !== undefined) {
-            this.dispose();
-        }
-    };
-    /**
-     *
-     */
-    CasparCGSocket.prototype._autoReconnectionAttempt = function () {
-        if (this._autoReconnect) {
-            if (this._reconnectAttempts > 0) {
-                if ((this._reconnectAttempt >= this._reconnectAttempts)) {
-                    // reset reconnection behaviour
-                    this._clearConnectionAttemptTimer();
-                    return;
-                }
-                // new attempt if not allready connected
-                if (!this.connected) {
-                    this._reconnectAttempt++;
-                    this.connect();
-                }
-            }
-        }
-    };
-    /**
-     *
-     */
-    CasparCGSocket.prototype._clearConnectionAttemptTimer = function () {
-        // @todo create event telling reconnection ended with result: true/false
-        // only if reconnection interval is true
-        this._reconnectAttempt = 0;
-        global.clearInterval(this._connectionAttemptTimer);
-        delete this._connectionAttemptTimer;
+        this.dispose();
     };
     Object.defineProperty(CasparCGSocket.prototype, "host", {
         /**
@@ -173,7 +142,10 @@ var CasparCGSocket = (function (_super) {
     CasparCGSocket.prototype.dispose = function () {
         this._shouldBeConnected = false;
         this._clearConnectionAttemptTimer();
-        this._client.destroy();
+        if (this._client) {
+            this._client.destroy();
+            delete this._client;
+        }
     };
     /**
      *
@@ -204,7 +176,7 @@ var CasparCGSocket = (function (_super) {
          */
         get: function () {
             return {
-                connected: this._connected,
+                connected: this._connected
             };
         },
         enumerable: true,
@@ -215,11 +187,11 @@ var CasparCGSocket = (function (_super) {
      */
     CasparCGSocket.prototype.executeCommand = function (command) {
         var _this = this;
-        var commandString = command.constructor["commandString"] + (command.address ? " " + command.address : "");
+        var commandString = command.constructor['commandString'] + (command.address ? ' ' + command.address : '');
         for (var i in command.payload) {
             var payload = command.payload[i];
-            commandString += (commandString.length > 0 ? " " : "");
-            commandString += (payload.key ? payload.key + " " : "") + payload.value;
+            commandString += (commandString.length > 0 ? ' ' : '');
+            commandString += (payload.key ? payload.key + ' ' : '') + payload.value;
         }
         global.clearTimeout(this._commandTimeoutTimer);
         this._commandTimeoutTimer = global.setTimeout(function () { return _this._onTimeout(); }, this._commandTimeout);
@@ -227,6 +199,35 @@ var CasparCGSocket = (function (_super) {
         command.status = IAMCPStatus.Sent;
         this.log(commandString);
         return command;
+    };
+    /**
+     *
+     */
+    CasparCGSocket.prototype._autoReconnectionAttempt = function () {
+        if (this._autoReconnect) {
+            if (this._reconnectAttempts > 0) {
+                if ((this._reconnectAttempt >= this._reconnectAttempts)) {
+                    // reset reconnection behaviour
+                    this._clearConnectionAttemptTimer();
+                    return;
+                }
+                // new attempt if not allready connected
+                if (!this.connected) {
+                    this._reconnectAttempt++;
+                    this.connect();
+                }
+            }
+        }
+    };
+    /**
+     *
+     */
+    CasparCGSocket.prototype._clearConnectionAttemptTimer = function () {
+        // @todo create event telling reconnection ended with result: true/false
+        // only if reconnection interval is true
+        this._reconnectAttempt = 0;
+        global.clearInterval(this._connectionAttemptTimer);
+        delete this._connectionAttemptTimer;
     };
     /**
      *
@@ -248,39 +249,41 @@ var CasparCGSocket = (function (_super) {
      *
      */
     CasparCGSocket.prototype._parseResponseGroups = function (i) {
-        i = (i.length > 2 && i.slice(0, 2) === "\r\n") ? i.slice(2) : i;
+        var _this = this;
+        global.clearTimeout(this._commandTimeoutTimer);
+        i = (i.length > 2 && i.slice(0, 2) === '\r\n') ? i.slice(2) : i;
         if (AMCP_1.AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
             this._parsedResponse = new AMCP_1.AMCPUtil.CasparCGSocketResponse(i);
+            this._commandTimeoutTimer = global.setTimeout(function () { return _this._onTimeout(); }, this._commandTimeout);
             return;
         }
         else if (this._parsedResponse && this._parsedResponse.statusCode === 200) {
-            if (i !== "\r\n") {
+            if (i !== '\r\n') {
                 this._parsedResponse.items.push(i);
+                this._commandTimeoutTimer = global.setTimeout(function () { return _this._onTimeout(); }, this._commandTimeout);
                 return;
             }
             else {
                 this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(this._parsedResponse));
                 this._parsedResponse = undefined;
-                global.clearTimeout(this._commandTimeoutTimer);
                 return;
             }
         }
-        if (AMCP_1.AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 201 || AMCP_1.AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 400 || AMCP_1.AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 101) {
+        else if (AMCP_1.AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 201 || AMCP_1.AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 400 || AMCP_1.AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 101) {
             this._parsedResponse = new AMCP_1.AMCPUtil.CasparCGSocketResponse(i);
+            this._commandTimeoutTimer = global.setTimeout(function () { return _this._onTimeout(); }, this._commandTimeout);
             return;
         }
         else if (this._parsedResponse && this._parsedResponse.statusCode === 201 || this._parsedResponse && this._parsedResponse.statusCode === 400 || this._parsedResponse && this._parsedResponse.statusCode === 101) {
             this._parsedResponse.items.push(i);
             this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(this._parsedResponse));
             this._parsedResponse = undefined;
-            global.clearTimeout(this._commandTimeoutTimer);
             return;
         }
         else {
             var parsedResponse = new AMCP_1.AMCPUtil.CasparCGSocketResponse(i);
             if (!isNaN(parsedResponse.statusCode)) {
                 this.emit(Events_1.CasparCGSocketResponseEvent.RESPONSE, new Events_1.CasparCGSocketResponseEvent(parsedResponse));
-                global.clearTimeout(this._commandTimeoutTimer);
                 return;
             }
             else {
@@ -290,18 +293,11 @@ var CasparCGSocket = (function (_super) {
         }
     };
     /**
-     *@todo:::
+     * @todo:::
      */
     CasparCGSocket.prototype._onError = function (error) {
         // dispatch error!!!!!
         this.log("Socket event error: " + error.message);
-    };
-    /**
-     *@todo:::
-     */
-    CasparCGSocket.prototype._onDrain = function () {
-        // @todo: implement
-        this.log("Socket event drain");
     };
     /**
      *
@@ -309,13 +305,13 @@ var CasparCGSocket = (function (_super) {
     CasparCGSocket.prototype._onClose = function (hadError) {
         this.connected = false;
         if (hadError) {
-            this.log("Socket closed with error");
+            this.log('Socket closed with error');
         }
         else {
-            this.log("Socket closed without error");
+            this.log('Socket closed without error');
         }
         if (this._shouldBeConnected === true) {
-            this.log("Socket should reconnect");
+            this.log('Socket should reconnect');
             this.connect();
         }
     };

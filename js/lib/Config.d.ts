@@ -1,12 +1,12 @@
-import { Options as OptionsNS } from "./AMCPConnectionOptions";
-import ServerVersion = OptionsNS.ServerVersion;
+import { Options as OptionsNS } from './AMCPConnectionOptions';
+import CasparCGVersion = OptionsNS.CasparCGVersion;
 /***/
 export declare namespace Config {
     /***/
     namespace Utils {
-        type factoryMembers = "config" | "channel" | "decklink" | "bluefish" | "system-audio" | "screen" | "newtek-ivga" | "ffmpeg" | "file" | "ffmpeg" | "stream" | "syncto" | "tcp" | "predefined-client" | "template-host" | "channel-layout" | "mix-config";
+        type factoryMembers = 'config' | 'channel' | 'decklink' | 'bluefish' | 'system-audio' | 'screen' | 'newtek-ivga' | 'ffmpeg' | 'file' | 'ffmpeg' | 'stream' | 'syncto' | 'tcp' | 'predefined-client' | 'template-host' | 'channel-layout' | 'mix-config';
         type FactyoryTypes = v207.CasparCGConfigVO | v21x.CasparCGConfigVO | v2xx.Consumer | v2xx.Channel | v2xx.Controller | v2xx.OscClient | v2xx.TemplateHost | v207.ChannelLayout | v207.MixConfig | v21x.ChannelLayout | v21x.MixConfig | undefined;
-        function configMemberFactory(version: ServerVersion, memberName: factoryMembers | string, initValues?: Object): FactyoryTypes;
+        function configMemberFactory(version: CasparCGVersion, memberName: factoryMembers | string, initValues?: Object): FactyoryTypes;
     }
     /***/
     namespace v2xx {
@@ -346,19 +346,6 @@ export declare namespace Config {
         }
         /***/
         interface ICasparCGConfig {
-            import(configVO: Object): void;
-            importFromV207VO(configVO: Object): void;
-            importFromV210VO(configVO: Object): void;
-            readonly VO: v207.CasparCGConfigVO | v21x.CasparCGConfigVO;
-            readonly v207VO: v207.CasparCGConfigVO;
-            readonly v210VO: v21x.CasparCGConfigVO;
-            readonly XML: Object | null;
-            readonly v207XML: Object;
-            readonly v210XML: Object;
-            readonly XMLString: string;
-            readonly v207XMLString: string;
-            readonly v210XMLString: string;
-            readonly _version: ServerVersion;
             paths: v21x.Paths;
             channels: Array<v2xx.Channel>;
             controllers: Array<v2xx.Controller>;
@@ -378,10 +365,24 @@ export declare namespace Config {
             templateHosts: Array<v2xx.TemplateHost>;
             osc: v2xx.Osc;
             audio: Intermediate.Audio;
+            readonly VO: v207.CasparCGConfigVO | v21x.CasparCGConfigVO;
+            readonly vo: v207.CasparCGConfigVO | v21x.CasparCGConfigVO;
+            readonly v207VO: v207.CasparCGConfigVO;
+            readonly v210VO: v21x.CasparCGConfigVO;
+            readonly XML: Object | null;
+            readonly xml: Object | null;
+            readonly v207XML: Object;
+            readonly v210XML: Object;
+            readonly XMLString: string;
+            readonly v207XMLString: string;
+            readonly v210XMLString: string;
+            readonly _version: CasparCGVersion;
+            import(configVO: Object): void;
+            importFromV207VO(configVO: Object): void;
+            importFromV210VO(configVO: Object): void;
         }
         /***/
         class CasparCGConfig implements ICasparCGConfig {
-            private __version;
             paths: v21x.Paths;
             channels: Array<v2xx.Channel>;
             controllers: Array<v2xx.Controller>;
@@ -401,11 +402,22 @@ export declare namespace Config {
             templateHosts: Array<v2xx.TemplateHost>;
             osc: v21x.Osc;
             audio: Intermediate.Audio;
+            private __version;
             /***/
-            constructor(version: ServerVersion);
+            constructor(version: CasparCGVersion);
             constructor(initConfigVO: Config207VO | Config210VO | {});
             /***/
-            import(configVO: Object): void;
+            static addFormattedXMLChildsFromObject(root: Object, data: Object, blacklist?: Array<string>): Object;
+            /***/
+            static addFormattedXMLChildsFromArray(root: Object, data: Object, whitelist?: Array<string>): Object;
+            /***/
+            static dashedToMixedCase(rawString: string): string;
+            /***/
+            static dashedToCamelCase(rawString: string): string;
+            /***/
+            static mixedCaseToDashed(mixedCased: string): string;
+            /***/
+            import(configVO: any): void;
             /***/
             importFromV207VO(configVO: Object): void;
             /***/
@@ -413,11 +425,15 @@ export declare namespace Config {
             /***/
             readonly VO: Config207VO | Config210VO;
             /***/
+            readonly vo: Config207VO | Config210VO;
+            /***/
             readonly v207VO: Config207VO;
             /***/
             readonly v210VO: Config210VO;
             /***/
             readonly XML: Object | null;
+            /***/
+            readonly xml: Object | null;
             /***/
             readonly v207XML: Object;
             /***/
@@ -429,7 +445,7 @@ export declare namespace Config {
             /***/
             readonly v210XMLString: string;
             /***/
-            readonly _version: ServerVersion;
+            readonly _version: CasparCGVersion;
             /***/
             private importAllValues(sourceRoot, destRoot);
             /***/
@@ -438,16 +454,6 @@ export declare namespace Config {
             private findListMembers(root, childKey);
             /***/
             private importListMembers(root, memberName, restrictedNamespace?);
-            /***/
-            static addFormattedXMLChildsFromObject(root: Object, data: Object, blacklist?: Array<string>): Object;
-            /***/
-            static addFormattedXMLChildsFromArray(root: Object, data: Object, whitelist?: Array<string>): Object;
-            /***/
-            static dashedToMixedCase(rawString: string): string;
-            /***/
-            static dashedToCamelCase(rawString: string): string;
-            /***/
-            static mixedCaseToDashed(mixedCased: string): string;
         }
     }
 }

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // Options NS
 var AMCPConnectionOptions_1 = require("./AMCPConnectionOptions");
-var ServerVersion = AMCPConnectionOptions_1.Options.ServerVersion;
+var CasparCGVersion = AMCPConnectionOptions_1.Options.CasparCGVersion;
 // AMCPUtilNS
 var AMCP_1 = require("./AMCP");
 var CasparCGSocketResponse = AMCP_1.AMCPUtil.CasparCGSocketResponse;
@@ -19,13 +19,14 @@ var ConfigUtil;
     function parseConfigFrom207XML(XMLString) {
         var validator = new XMLValidator();
         var parser = new ConfigParser();
-        parser.context = { serverVersion: ServerVersion.V207 };
+        parser.context = { serverVersion: CasparCGVersion.V207 };
         var fauxResponseData = new CasparCGSocketResponse(XMLString); // @todo: does this work?
-        var validData = {};
-        if ((validData = validator.resolve(fauxResponseData)) === false) {
+        var validData = validator.resolve(fauxResponseData);
+        if (validData === false) {
             return {};
         }
-        if ((validData = parser.parse(validData)) === false) {
+        validData = parser.parse(validData);
+        if (validData === false) {
             return {};
         }
         return validData;
@@ -35,13 +36,15 @@ var ConfigUtil;
     function parseConfigFrom210XML(XMLString) {
         var validator = new XMLValidator();
         var parser = new ConfigParser();
-        parser.context = { serverVersion: ServerVersion.V207 };
+        parser.context = { serverVersion: CasparCGVersion.V210 };
         var fauxResponseData = new CasparCGSocketResponse(XMLString); // @todo: does this work?
         var validData = {};
-        if ((validData = validator.resolve(fauxResponseData)) === false) {
+        validData = validator.resolve(fauxResponseData);
+        if (validData === false) {
             return {};
         }
-        if ((validData = parser.parse(validData)) === false) {
+        validData = parser.parse(validData);
+        if (validData === false) {
             return {};
         }
         return validData;

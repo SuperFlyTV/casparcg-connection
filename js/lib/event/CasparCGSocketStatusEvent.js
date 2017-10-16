@@ -32,11 +32,11 @@ var Event;
         CasparCGSocketStatusEvent.prototype.valueOf = function () {
             return this.socketStatus;
         };
-        CasparCGSocketStatusEvent.STATUS = "casparcgsocketconnectioneventstatus";
-        CasparCGSocketStatusEvent.STATUS_CHANGED = "casparcgsocketconnectioneventstatuschanged";
-        CasparCGSocketStatusEvent.CONNECTED = "casparcgsocketconnectioneventstatusconnected";
-        CasparCGSocketStatusEvent.DISCONNECTED = "casparcgsocketconnectioneventstatusdisconnected";
-        CasparCGSocketStatusEvent.TIMEOUT = "casparcgsocketconnectioneventstatustimeout";
+        CasparCGSocketStatusEvent.STATUS = 'casparcgsocketconnectioneventstatus';
+        CasparCGSocketStatusEvent.STATUS_CHANGED = 'casparcgsocketconnectioneventstatuschanged';
+        CasparCGSocketStatusEvent.CONNECTED = 'casparcgsocketconnectioneventstatusconnected';
+        CasparCGSocketStatusEvent.DISCONNECTED = 'casparcgsocketconnectioneventstatusdisconnected';
+        CasparCGSocketStatusEvent.TIMEOUT = 'casparcgsocketconnectioneventstatustimeout';
         return CasparCGSocketStatusEvent;
     }(BaseEvent_1.Event.BaseEvent));
     Event.CasparCGSocketStatusEvent = CasparCGSocketStatusEvent;

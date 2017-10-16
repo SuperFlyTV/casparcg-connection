@@ -53,8 +53,8 @@ var Param;
             if (validation instanceof AbstractValidator) {
                 this.validation = validation;
             }
-            else if (typeof validation === "function") {
-                var proto = Object.create(validation["prototype"]);
+            else if (typeof validation === 'function') {
+                var proto = Object.create(validation['prototype']);
                 this.validation = new proto.constructor();
             }
         }

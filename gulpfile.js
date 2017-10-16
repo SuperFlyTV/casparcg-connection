@@ -18,7 +18,7 @@ gulp.task('static', function () {
 
 //dist zip
 gulp.task('dist', function () {
-  return gulp.src(['js', 'js/**/*.**', 'license', 'readme.md'], {base: '.'})
+  return gulp.src(['js', 'js/**/*.**', 'license', 'readme.md', 'changelog.md'], {base: '.'})
         .pipe(zip('casparcg-connection-js.zip'))
         .pipe(gulp.dest('tmp'));
   //return gulp.src('**/**/**.*', {base: '.'})

@@ -1,6 +1,6 @@
-import { Enum as EnumNS } from "./ServerStateEnum";
+import { Enum as EnumNS } from './ServerStateEnum';
 import AbstractEnum = EnumNS.AbstractEnum;
-import { Param as ParamNS } from "./ParamSignature";
+import { Param as ParamNS } from './ParamSignature';
 import IParamSignature = ParamNS.IParamSignature;
 /**
  *
@@ -33,16 +33,16 @@ export declare namespace Protocol {
         /**
          *
          */
+        constructor(dependant: string | AbstractEnum, dependee: string | AbstractEnum);
+        constructor(...fields: Array<string | AbstractEnum>);
+        /**
+         *
+         */
         if(target: string, mustBe: AbstractEnum | string): IProtocolLogic;
         /**
          *
          */
         ifNot(target: string, cantBe: AbstractEnum | string): IProtocolLogic;
-        /**
-         *
-         */
-        constructor(dependant: string | AbstractEnum, dependee: string | AbstractEnum);
-        constructor(...fields: Array<string | AbstractEnum>);
         /**
          *
          */

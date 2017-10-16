@@ -2,19 +2,83 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-<a name="2.2.0"></a>
-# [2.2.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v2.1.0...v2.2.0) (2017-07-19)
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.4...v3.0.0) (2017-10-16)
+
+
+### Bug Fixes
+
+* **TemplateData:** Correct double escaping of quotes xml strings ([5bda229](https://github.com/SuperFlyTV/casparcg-connection/commit/5bda229))
+
+
+
+<a name="3.0.0-next.4"></a>
+# [3.0.0-next.4](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.3...v3.0.0-next.4) (2017-10-03)
+
+
+### Bug Fixes
+
+* **Config:** Correct cross-version-import between configVOs ([bdcedfd](https://github.com/SuperFlyTV/casparcg-connection/commit/bdcedfd))
+* **onConnection:** Bug with promise resolve and queue conducting on initial connection ([4504cb9](https://github.com/SuperFlyTV/casparcg-connection/commit/4504cb9))
+
+
+
+<a name="3.0.0-next.3"></a>
+# [3.0.0-next.3](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.2...v3.0.0-next.3) (2017-07-31)
+
+
+### Bug Fixes
+
+* **Socket:** Fixed bug with disposing socket clients before they are created ([7a0a510](https://github.com/SuperFlyTV/casparcg-connection/commit/7a0a510))
+
+
+
+<a name="3.0.0-next.2"></a>
+# [3.0.0-next.2](https://github.com/SuperFlyTV/casparcg-connection/compare/3.0.0-next.1...v3.0.0-next.2) (2017-07-24)
+
+
+
+<a name="3.0.0-next.1"></a>
+# [3.0.0-next.1](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0-next.0...v3.0.0-next.1) (2017-07-20)
+
+
+### Features
+
+* **VirginServer:** Report server's virgin-state on connected events ([a8f3b61](https://github.com/SuperFlyTV/casparcg-connection/commit/a8f3b61))
+
+
+
+<a name="3.0.0-next.0"></a>
+# [3.0.0-next.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v2.1.0...v3.0.0-next.0) (2017-07-20)
 
 
 ### Bug Fixes
 
 * **Command:** Critical error with command timeouts ([6caeacb](https://github.com/SuperFlyTV/casparcg-connection/commit/6caeacb))
+* **Config:** Bugfix with manual operations parsing config XML ([e80117b](https://github.com/SuperFlyTV/casparcg-connection/commit/e80117b))
 * **Events:** Critical bug introduced in v1.0.0 ([7dcd9fe](https://github.com/SuperFlyTV/casparcg-connection/commit/7dcd9fe))
+* **Logging:** Better handling of errors ([d80c794](https://github.com/SuperFlyTV/casparcg-connection/commit/d80c794))
+* **Socket:** Prevents timeout of extremely long responses ([613c629](https://github.com/SuperFlyTV/casparcg-connection/commit/613c629))
+* **Socket:** Removed unused internal event ([5eb343c](https://github.com/SuperFlyTV/casparcg-connection/commit/5eb343c))
+* **Version:** bugfix for setting manuel ServerVersion ([8362a22](https://github.com/SuperFlyTV/casparcg-connection/commit/8362a22))
+
+
+### Code Refactoring
+
+* **Enum:** Changed the public enum ServerVersion ([b7aadea](https://github.com/SuperFlyTV/casparcg-connection/commit/b7aadea))
 
 
 ### Features
 
 * **Command:** Planned for better timeout retry strategy ([b0b5f19](https://github.com/SuperFlyTV/casparcg-connection/commit/b0b5f19))
+* **Config:** Added members "vo" and "xml" as aliases to "VO" and "XML" on Config objects ([65dffde](https://github.com/SuperFlyTV/casparcg-connection/commit/65dffde))
+* **Queue:** Added prioritized queues ([929e4ad](https://github.com/SuperFlyTV/casparcg-connection/commit/929e4ad)), closes [#15](https://github.com/SuperFlyTV/casparcg-connection/issues/15)
+* **Version:** Added version promise to CasparCG ([554ea41](https://github.com/SuperFlyTV/casparcg-connection/commit/554ea41)), closes [#73](https://github.com/SuperFlyTV/casparcg-connection/issues/73)
+
+
+### BREAKING CHANGES
+
+* **Enum:** enum ServerVersion is now CasparCGVersion, for consistency.
 
 
 

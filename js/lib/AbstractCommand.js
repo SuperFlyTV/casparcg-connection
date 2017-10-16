@@ -28,10 +28,10 @@ var Command;
         function AMCPResponse() {
         }
         AMCPResponse.prototype.toString = function () {
-            if (typeof this.raw === "string") {
-                return this.raw.replace(/\r?\n|\r/gi, "");
+            if (typeof this.raw === 'string') {
+                return this.raw.replace(/\r?\n|\r/gi, '');
             }
-            return "";
+            return '';
         };
         return AMCPResponse;
     }());
@@ -84,8 +84,8 @@ var Command;
             this.context = context;
             this.response = new AMCPResponse();
             this.responseProtocol = new ResponseSignature();
-            this._status = IAMCPStatus.New;
             this._payload = {};
+            this._status = IAMCPStatus.New;
             // parse params to objects
             var paramsArray = [];
             // conform params to array
@@ -102,11 +102,11 @@ var Command;
                 if (element === undefined) {
                     continue;
                 }
-                if (typeof element === "string") {
+                if (typeof element === 'string') {
                     element = element.toString().trim();
                     this._stringParamsArray = this._stringParamsArray.concat(element.toString().split(/\s+/).slice()); // @todo: string delimiter pairing (,;) -> objectArray
                 }
-                else if (typeof element === "object") {
+                else if (typeof element === 'object') {
                     for (var prop in element) {
                         this._objectParams[prop] = element[prop];
                     }
@@ -140,69 +140,12 @@ var Command;
                 return false;
             }
             validParams.forEach(function (param) {
-                var payload = { key: "", value: {}, raw: null };
-                payload.key = param.key || "";
+                var payload = { key: '', value: {}, raw: null };
+                payload.key = param.key || '';
                 payload.value = param.payload !== undefined && param.payload !== null ? param.payload : {};
                 payload.raw = param.raw;
                 _this.payload[param.name] = payload;
             });
-            return true;
-        };
-        /**
-         *
-         */
-        AbstractCommand.prototype.validateParam = function (signature) {
-            var result;
-            var param;
-            // objectParams parsing
-            if (this._objectParams.hasOwnProperty(signature.name)) {
-                param = this._objectParams[signature.name];
-            }
-            else {
-                // stringParam parsing
-                if (this._stringParamsArray.length > 0) {
-                    param = this._stringParamsArray;
-                }
-                else {
-                    return false;
-                }
-            }
-            // filter out undefined object params
-            if (param === undefined) {
-                return false;
-            }
-            if ((result = signature.validation.resolve(param, (signature.key || signature.name))) !== false) {
-                signature.validation.resolved = true;
-                if (typeof result === "object" && result.hasOwnProperty("raw") && result.hasOwnProperty("payload")) {
-                    signature.payload = result.payload;
-                    signature.raw = result.raw;
-                }
-                else {
-                    signature.payload = result;
-                }
-                return true;
-            }
-            else {
-                return false;
-            }
-        };
-        /**
-         *
-         */
-        AbstractCommand.prototype.validateProtocolLogic = function () {
-            if (!this.protocolLogic) {
-                return true;
-            }
-            var result;
-            for (var _i = 0, _a = this.protocolLogic; _i < _a.length; _i++) {
-                var rule = _a[_i];
-                if ((result = rule.resolve(this.paramProtocol)) !== null) {
-                    this.paramProtocol = result;
-                }
-                else {
-                    return false;
-                }
-            }
             return true;
         };
         /**
@@ -220,16 +163,18 @@ var Command;
             // data is valid
             var validData = {};
             if (this.responseProtocol.validator) {
-                var validator = Object.create(this.responseProtocol.validator["prototype"]);
-                if ((validData = validator.resolve(response)) === false) {
+                var validator = Object.create(this.responseProtocol.validator['prototype']);
+                validData = validator.resolve(response);
+                if (validData === false) {
                     return false;
                 }
             }
             // data gets parsed
             if (this.responseProtocol.parser && validData) {
-                var parser = Object.create(this.responseProtocol.parser["prototype"]);
+                var parser = Object.create(this.responseProtocol.parser['prototype']);
                 parser.context = this.context;
-                if ((validData = parser.parse(validData)) === false) {
+                validData = parser.parse(validData);
+                if (validData === false) {
                     return false;
                 }
             }
@@ -261,55 +206,17 @@ var Command;
              *
              */
             get: function () {
-                return this.constructor["name"];
+                return this.constructor['name'];
             },
             enumerable: true,
             configurable: true
         });
-        /**
-         *
-         */
-        AbstractCommand.prototype.validateChannel = function () {
-            var result;
-            var validator = new PositiveNumberValidatorBetween(1, 9999);
-            var param;
-            if (this._objectParams.hasOwnProperty("channel")) {
-                param = this._objectParams["channel"];
-            }
-            else {
-                param = NaN;
-            }
-            if ((result = validator.resolve(param)) !== false) {
-                return Number(result);
-            }
-            // @todo: dispatch error
-            return NaN;
-        };
-        /**
-         *
-         */
-        AbstractCommand.prototype.validateLayer = function (fallback) {
-            var result;
-            var validator = new PositiveNumberValidatorBetween(0, 9999);
-            var param;
-            if (this._objectParams.hasOwnProperty("layer")) {
-                param = this._objectParams["layer"];
-            }
-            else {
-                param = fallback;
-            }
-            if ((result = validator.resolve(param)) !== false) {
-                return Number(result);
-            }
-            // @todo: dispatch error
-            return 0;
-        };
         Object.defineProperty(AbstractCommand.prototype, "protocolLogic", {
             /**
              *
              */
             get: function () {
-                return this.constructor["protocolLogic"] || [];
+                return this.constructor['protocolLogic'] || [];
             },
             enumerable: true,
             configurable: true
@@ -339,7 +246,7 @@ var Command;
              *
              */
             get: function () {
-                return "";
+                return '';
             },
             enumerable: true,
             configurable: true
@@ -375,7 +282,7 @@ var Command;
                 payload: this.payload,
                 response: this.response,
                 status: this.status,
-                _commandName: this.constructor["name"],
+                _commandName: this.constructor['name'],
                 _objectParams: this._objectParams,
                 _stringParamsArray: this._stringParamsArray
             };
@@ -393,28 +300,127 @@ var Command;
          *
          */
         AbstractCommand.prototype.toString = function () {
-            var message = "";
+            var message = '';
             switch (this.status) {
                 case IAMCPStatus.Invalid:
-                    message = "Invalid command";
+                    message = 'Invalid command';
                     break;
                 case IAMCPStatus.New:
-                    message = "New command";
+                    message = 'New command';
                     break;
                 case IAMCPStatus.Queued:
-                    message = "Queued command";
+                    message = 'Queued command';
                     break;
                 case IAMCPStatus.Sent:
-                    message = "Sent command";
+                    message = 'Sent command';
                     break;
                 case IAMCPStatus.Suceeded:
-                    message = "Succeeded command";
+                    message = 'Succeeded command';
                     break;
                 case IAMCPStatus.Failed:
-                    message = "Failed command";
+                    message = 'Failed command';
                     break;
             }
             return message;
+        };
+        /**
+         *
+         */
+        AbstractCommand.prototype.validateParam = function (signature) {
+            var result;
+            var param;
+            // objectParams parsing
+            if (this._objectParams.hasOwnProperty(signature.name)) {
+                param = this._objectParams[signature.name];
+            }
+            else {
+                // stringParam parsing
+                if (this._stringParamsArray.length > 0) {
+                    param = this._stringParamsArray;
+                }
+                else {
+                    return false;
+                }
+            }
+            // filter out undefined object params
+            if (param === undefined) {
+                return false;
+            }
+            result = signature.validation.resolve(param, (signature.key || signature.name));
+            if (result !== false) {
+                signature.validation.resolved = true;
+                if (typeof result === 'object' && result.hasOwnProperty('raw') && result.hasOwnProperty('payload')) {
+                    signature.payload = result.payload;
+                    signature.raw = result.raw;
+                }
+                else {
+                    signature.payload = result;
+                }
+                return true;
+            }
+            else {
+                return false;
+            }
+        };
+        /**
+         *
+         */
+        AbstractCommand.prototype.validateProtocolLogic = function () {
+            if (!this.protocolLogic) {
+                return true;
+            }
+            var result;
+            for (var _i = 0, _a = this.protocolLogic; _i < _a.length; _i++) {
+                var rule = _a[_i];
+                result = rule.resolve(this.paramProtocol);
+                if (result !== null) {
+                    this.paramProtocol = result;
+                }
+                else {
+                    return false;
+                }
+            }
+            return true;
+        };
+        /**
+         *
+         */
+        AbstractCommand.prototype.validateChannel = function () {
+            var result;
+            var validator = new PositiveNumberValidatorBetween(1, 9999);
+            var param;
+            if (this._objectParams.hasOwnProperty('channel')) {
+                param = this._objectParams['channel'];
+            }
+            else {
+                param = NaN;
+            }
+            result = validator.resolve(param);
+            if (result !== false) {
+                return Number(result);
+            }
+            // @todo: dispatch error
+            return NaN;
+        };
+        /**
+         *
+         */
+        AbstractCommand.prototype.validateLayer = function (fallback) {
+            var result;
+            var validator = new PositiveNumberValidatorBetween(0, 9999);
+            var param;
+            if (this._objectParams.hasOwnProperty('layer')) {
+                param = this._objectParams['layer'];
+            }
+            else {
+                param = fallback;
+            }
+            result = validator.resolve(param);
+            if (result !== false) {
+                return Number(result);
+            }
+            // @todo: dispatch error
+            return 0;
         };
         return AbstractCommand;
     }());
@@ -464,7 +470,7 @@ var Command;
              *
              */
             get: function () {
-                var address = "";
+                var address = '';
                 if (this.channel && (this.channel > -1)) {
                     address = this.channel.toString();
                 }
@@ -498,7 +504,7 @@ var Command;
                 _this._layer = -1;
             }
             else {
-                throw new Error("Needs channel"); // @todo: dispatch
+                throw new Error('Needs channel'); // @todo: dispatch
             }
             return _this;
         }
@@ -531,7 +537,7 @@ var Command;
                     return this.channel.toString();
                 }
                 else {
-                    return "";
+                    return '';
                     // @todo throw???
                 }
             },
@@ -558,7 +564,7 @@ var Command;
                 _this._layer = layer;
             }
             else {
-                throw new Error("Needs both channel and layer"); // @todo: dispatch
+                throw new Error('Needs both channel and layer'); // @todo: dispatch
             }
             return _this;
         }
@@ -592,14 +598,14 @@ var Command;
                     address = this.channel.toString();
                 }
                 else {
-                    return "";
+                    return '';
                     // @todo throw???
                 }
                 if (this.layer && (this.layer > -1)) {
                     address = address + "-" + this.layer;
                 }
                 else {
-                    return "";
+                    return '';
                     // @todo throw???
                 }
                 return address;
@@ -629,7 +635,7 @@ var Command;
                 }
             }
             else {
-                throw new Error("Needs at least channel"); // @todo: dispatch
+                throw new Error('Needs at least channel'); // @todo: dispatch
             }
             return _this;
         }
@@ -663,7 +669,7 @@ var Command;
                     address = this.channel.toString();
                 }
                 else {
-                    return "";
+                    return '';
                     // @todo throw???
                 }
                 if (this.layer && (this.layer > -1)) {
@@ -694,7 +700,7 @@ var Command;
                 _this._layer = layer;
             }
             else {
-                throw new Error("Needs at least channel, layer will default to 0 if not specified"); // @todo: dispatch
+                throw new Error('Needs at least channel, layer will default to 0 if not specified'); // @todo: dispatch
             }
             return _this;
         }
@@ -728,7 +734,7 @@ var Command;
                     address = this.channel.toString();
                 }
                 else {
-                    return "";
+                    return '';
                     // @todo throw???
                 }
                 if (this.layer && (this.layer > -1)) {
@@ -759,7 +765,7 @@ var Command;
                 _this._layer = layer;
             }
             else {
-                throw new Error("Needs at least channel, layer will default to 9999 if not specified"); // @todo: dispatch
+                throw new Error('Needs at least channel, layer will default to 9999 if not specified'); // @todo: dispatch
             }
             return _this;
         }
@@ -793,7 +799,7 @@ var Command;
                     address = this.channel.toString();
                 }
                 else {
-                    return "";
+                    return '';
                     // @todo throw???
                 }
                 if (this.layer && (this.layer > -1)) {

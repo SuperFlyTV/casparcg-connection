@@ -32,7 +32,7 @@ var Event;
         LogEvent.prototype.valueOf = function () {
             return this.logString;
         };
-        LogEvent.LOG = "logeventlog";
+        LogEvent.LOG = 'logeventlog';
         return LogEvent;
     }(BaseEvent_1.Event.BaseEvent));
     Event.LogEvent = LogEvent;

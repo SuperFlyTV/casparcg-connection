@@ -32,7 +32,7 @@ var Event;
         CasparCGSocketCommandEvent.prototype.valueOf = function () {
             return this.command;
         };
-        CasparCGSocketCommandEvent.RESPONSE = "casparcgsocketcommandeventresponse";
+        CasparCGSocketCommandEvent.RESPONSE = 'casparcgsocketcommandeventresponse';
         return CasparCGSocketCommandEvent;
     }(BaseEvent_1.Event.BaseEvent));
     Event.CasparCGSocketCommandEvent = CasparCGSocketCommandEvent;
@@ -55,8 +55,8 @@ var Event;
         CasparCGSocketResponseEvent.prototype.valueOf = function () {
             return this.response;
         };
-        CasparCGSocketResponseEvent.RESPONSE = "casparcgsocketresponseeventresponse";
-        CasparCGSocketResponseEvent.INVALID_RESPONSE = "casparcgsocketcommandeventresponseinvalid";
+        CasparCGSocketResponseEvent.RESPONSE = 'casparcgsocketresponseeventresponse';
+        CasparCGSocketResponseEvent.INVALID_RESPONSE = 'casparcgsocketcommandeventresponseinvalid';
         return CasparCGSocketResponseEvent;
     }(BaseEvent_1.Event.BaseEvent));
     Event.CasparCGSocketResponseEvent = CasparCGSocketResponseEvent;
