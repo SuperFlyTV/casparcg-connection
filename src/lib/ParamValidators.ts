@@ -46,7 +46,7 @@ export class StringValidator extends AbstractValidator {
       }
 
 				// trim all non-textual content
-      rawClipNameString = rawClipNameString.replace(/(^[\s\W]+|[\s\W]+$)/gi, '')
+      rawClipNameString = rawClipNameString.trim()
 
 				// check length
       if (rawClipNameString.length === 0) {
@@ -123,7 +123,7 @@ export class ClipNameValidator extends AbstractValidator {
       }
 
 				// trim all non-textual content
-      rawClipNameString = rawClipNameString.replace(/(^[\s\W]+|[\s\W]+$)/gi, '')
+      rawClipNameString = rawClipNameString.trim()
 
 				// check length
       if (rawClipNameString.length === 0) {
@@ -528,9 +528,10 @@ export class TemplateDataValidator extends AbstractValidator {
 				return stringCast;
 			}*/
 
-			// add qoutation
-    stringCast = stringCast.replace(/\"/g, '\\"')
+     // escaping
+    stringCast = stringCast.replace(/([\\\"])/g,'\\$1')
 
+     // add qoutation
     let quotedString: string = `"${stringCast}"`
     return {raw: stringCast, payload: quotedString}
   }
