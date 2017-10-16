@@ -369,7 +369,7 @@
         "licenseUrl": "https://github.com/mikeal/caseless/raw/master/LICENSE",
         "parents": "fsevents:gulp-watch:casparcg-connection"
     },
-    "casparcg-connection@3.0.0-next.3": {
+    "casparcg-connection@3.0.0-next.4": {
         "licenses": "MIT",
         "repository": "https://github.com/SuperFlyTV/casparcg-connection",
         "licenseUrl": "https://github.com/SuperFlyTV/casparcg-connection/raw/master/.licensetree.json",
@@ -2506,6 +2506,12 @@
         "parents": "casparcg-connection"
     },
     "rimraf@2.6.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/rimraf",
+        "licenseUrl": "https://github.com/isaacs/rimraf/raw/master/LICENSE",
+        "parents": "fsevents:gulp-watch:casparcg-connection"
+    },
+    "rimraf@2.6.2": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/rimraf",
         "licenseUrl": "https://github.com/isaacs/rimraf/raw/master/LICENSE",
