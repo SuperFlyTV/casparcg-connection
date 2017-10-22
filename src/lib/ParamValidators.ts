@@ -65,7 +65,7 @@ export class StringValidator extends AbstractValidator {
           textstring = checkTextstring(data[i])
           i++
         }while (textstring == null)
-      }else {
+      } else {
 					// greedy
         textstring = ''
         data.forEach(i => {
@@ -74,7 +74,7 @@ export class StringValidator extends AbstractValidator {
         })
       }
 
-    }else if (typeof data === 'object' || typeof data === 'string') {
+    } else if (typeof data === 'object' || typeof data === 'string') {
       textstring = data !== null ? data.toString() : ''
     }
 
@@ -139,7 +139,7 @@ export class ClipNameValidator extends AbstractValidator {
         i++
       }while (clipName == null)
 
-    }else if (typeof data === 'object' || typeof data === 'string') {
+    } else if (typeof data === 'object' || typeof data === 'string') {
       clipName = data !== null ? data.toString() : ''
     }
 
@@ -183,7 +183,7 @@ export class EnumValidator extends AbstractValidator {
   resolve (data: Object): ParamData {
     if (data instanceof this._enumClass) {
       return data.value
-    }else if (typeof data === 'string') {
+    } else if (typeof data === 'string') {
       let stringCast = data !== null ? data.toString() : ''
 				// format stringy enum value
       stringCast = stringCast.toUpperCase()
@@ -214,18 +214,18 @@ export class ChannelFormatValidator extends AbstractValidator {
   resolve (data: Object): ParamData {
     if (data instanceof Enum.ChannelFormat) {
       return data.value
-    }else if (typeof data === 'string') {
+    } else if (typeof data === 'string') {
       let stringCast = data !== null ? data.toString() : ''
 				// format stringy enum value
       stringCast = stringCast.toUpperCase()
       stringCast = stringCast.replace(' ', '_')
       if (Enum.ChannelFormat.hasOwnProperty(stringCast)) {
         return Enum.ChannelFormat[stringCast].value
-      }else if (Enum.ChannelFormat.hasOwnProperty('SD_' + stringCast)) {
+      } else if (Enum.ChannelFormat.hasOwnProperty('SD_' + stringCast)) {
         return Enum.ChannelFormat['SD_' + stringCast].value
-      }else if (Enum.ChannelFormat.hasOwnProperty('HD_' + stringCast)) {
+      } else if (Enum.ChannelFormat.hasOwnProperty('HD_' + stringCast)) {
         return Enum.ChannelFormat['HD_' + stringCast].value
-      }else if (Enum.ChannelFormat.hasOwnProperty('UHD_' + stringCast)) {
+      } else if (Enum.ChannelFormat.hasOwnProperty('UHD_' + stringCast)) {
         return Enum.ChannelFormat['UHD_' + stringCast].value
       }
     }
@@ -265,7 +265,7 @@ export class KeywordValidator extends AbstractValidator {
       if ((data as Array<string>).indexOf(keywordCopy) > -1) {
         return this._keyword
       }
-    }else if (typeof data === 'object' && data !== null) {
+    } else if (typeof data === 'object' && data !== null) {
       let objectCast = data
       if (!this._caseSensitive) {
         for (let key in objectCast) {
@@ -276,7 +276,7 @@ export class KeywordValidator extends AbstractValidator {
         return this._keyword
       }
 
-    }else if (typeof data === 'string') {
+    } else if (typeof data === 'string') {
       if (!this._caseSensitive) {
         data = String(data).toLowerCase()
       }
@@ -313,12 +313,12 @@ export class FrameValidator extends AbstractValidator {
       if (index > -1) {
         data = parseInt(data[index + 1], 10)
       }
-    }else if (typeof data === 'object' && data !== null) {
+    } else if (typeof data === 'object' && data !== null) {
       let objectCast = data
       if (objectCast.hasOwnProperty(this._keyword)) {
         data = objectCast[this._keyword] as number
       }
-    }else if (typeof data === 'string') {
+    } else if (typeof data === 'string') {
       data = Number(data)
     }
 
@@ -466,17 +466,17 @@ export class BooleanValidatorWithDefaults extends AbstractValidator {
     if (typeof data === 'string') {
       if (data === 'true') {
         isValid = true
-      }else if (data === '1') {
+      } else if (data === '1') {
         isValid = true
-      }else if (data === key) {
+      } else if (data === key) {
         isValid = true
       }
-    }else {
+    } else {
       isValid = (!!data.valueOf())
     }
     if (isValid) {
       return (this._valueOnSuccess !== undefined) ? this._valueOnSuccess : isValid
-    }else {
+    } else {
       return (this._valueOnFail !== undefined) ? this._valueOnFail : isValid
     }
   }

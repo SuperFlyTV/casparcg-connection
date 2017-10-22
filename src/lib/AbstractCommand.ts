@@ -163,7 +163,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
 			// conform params to array
     if (Array.isArray(params)) {
       paramsArray = params
-    }else {
+    } else {
       paramsArray = [params as string|Param]
     }
     this._stringParamsArray = []
@@ -176,7 +176,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
       if (typeof element === 'string') {
         element = element.toString().trim()
         this._stringParamsArray = this._stringParamsArray.concat([...element.toString().split(/\s+/)]) // @todo: string delimiter pairing (,;) -> objectArray
-      }else if (typeof element === 'object') {
+      } else if (typeof element === 'object') {
         for (let prop in element) {
           this._objectParams[prop] = element[prop]
         }
@@ -396,11 +396,11 @@ export abstract class AbstractCommand implements IAMCPCommand {
 			// objectParams parsing
     if (this._objectParams.hasOwnProperty(signature.name)) {
       param = this._objectParams[signature.name]
-    }else {
+    } else {
 				// stringParam parsing
       if (this._stringParamsArray.length > 0) {
         param = this._stringParamsArray
-      }else {
+      } else {
         return false
       }
     }
@@ -415,11 +415,11 @@ export abstract class AbstractCommand implements IAMCPCommand {
       if (typeof result === 'object' && result.hasOwnProperty('raw') && result.hasOwnProperty('payload')) {
         signature.payload = result.payload
         signature.raw = result.raw
-      }else {
+      } else {
         signature.payload = result
       }
       return true
-    }else {
+    } else {
       return false
     }
   }
@@ -438,7 +438,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
       result = rule.resolve(this.paramProtocol)
       if (result !== null) {
         this.paramProtocol = result
-      }else {
+      } else {
         return false
       }
     }
@@ -455,7 +455,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
 
     if (this._objectParams.hasOwnProperty('channel')) {
       param = this._objectParams['channel']
-    }else {
+    } else {
       param = NaN
     }
     result = validator.resolve(param)
@@ -477,7 +477,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
 
     if (this._objectParams.hasOwnProperty('layer')) {
       param = this._objectParams['layer']
-    }else {
+    } else {
       param = fallback
     }
     result = validator.resolve(param)
@@ -532,7 +532,7 @@ export abstract class AbstractOrChannelOrLayerCommand extends AbstractCommand {
 
     if (this.channel && (this.channel > -1)) {
       address = this.channel.toString()
-    }else {
+    } else {
       return address
     }
     if (this.layer && (this.layer > -1)) {
@@ -556,7 +556,7 @@ export abstract class AbstractChannelCommand extends AbstractCommand {
     if (channel) {
       this._channel = channel
       this._layer = -1
-    }else {
+    } else {
       throw new Error('Needs channel') // @todo: dispatch
     }
   }
@@ -581,7 +581,7 @@ export abstract class AbstractChannelCommand extends AbstractCommand {
   get address (): string {
     if (this.channel) {
       return this.channel.toString()
-    }else {
+    } else {
       return ''
 						// @todo throw???
     }
@@ -603,7 +603,7 @@ export abstract class AbstractLayerCommand extends AbstractCommand {
     if (channel && layer) {
       this._channel = channel
       this._layer = layer
-    }else {
+    } else {
       throw new Error('Needs both channel and layer') // @todo: dispatch
     }
   }
@@ -629,13 +629,13 @@ export abstract class AbstractLayerCommand extends AbstractCommand {
     let address: string
     if (this.channel && (this.channel > -1)) {
       address = this.channel.toString()
-    }else {
+    } else {
       return ''
 						// @todo throw???
     }
     if (this.layer && (this.layer > -1)) {
       address = `${address}-${this.layer}`
-    }else {
+    } else {
       return ''
 						// @todo throw???
     }
@@ -663,7 +663,7 @@ export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
         this._layer = layer
       }
 
-    }else {
+    } else {
       throw new Error('Needs at least channel') // @todo: dispatch
     }
   }
@@ -689,7 +689,7 @@ export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
     let address: string
     if (this.channel) {
       address = this.channel.toString()
-    }else {
+    } else {
       return ''
 						// @todo throw???
     }
@@ -716,7 +716,7 @@ export abstract class AbstractLayerWithFallbackCommand extends AbstractCommand {
     if (channel) {
       this._channel = channel
       this._layer = layer
-    }else {
+    } else {
       throw new Error('Needs at least channel, layer will default to 0 if not specified') // @todo: dispatch
     }
   }
@@ -742,7 +742,7 @@ export abstract class AbstractLayerWithFallbackCommand extends AbstractCommand {
     let address: string
     if (this.channel) {
       address = this.channel.toString()
-    }else {
+    } else {
       return ''
 						// @todo throw???
     }
@@ -769,7 +769,7 @@ export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand
     if (channel) {
       this._channel = channel
       this._layer = layer
-    }else {
+    } else {
       throw new Error('Needs at least channel, layer will default to 9999 if not specified') // @todo: dispatch
     }
   }
@@ -795,7 +795,7 @@ export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand
     let address: string
     if (this.channel) {
       address = this.channel.toString()
-    }else {
+    } else {
       return ''
 						// @todo throw???
     }

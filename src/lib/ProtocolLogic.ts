@@ -89,7 +89,7 @@ export class Depends extends AbstractProtocolLogic {
     let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && param.name === this.fields[1])
     if (valids.length === 1) {
       return protocol
-    }else {
+    } else {
       return protocol.map((param) => {
         if (param.name === this.fields[0]) {
           param.payload = null
@@ -148,7 +148,7 @@ export class Coupled extends AbstractProtocolLogic {
     let valids: Array<IParamSignature> = protocol.filter((param) => this.fields.indexOf(param.name) > -1 && param.resolved === true)
     if (valids.length >= this.fields.length) {
       return protocol
-    }else {
+    } else {
       return protocol.map((param) => {
         if (this.fields.indexOf(param.name) > -1) {
           param.payload = null

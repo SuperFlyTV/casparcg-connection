@@ -57,7 +57,7 @@ export class XMLValidator implements IResponseValidator {
     let parseBooleans = function (str: any) {
       if (str === true || str.toString().toLowerCase() === 'true') {
         return true
-      }else if (str === false || str.toString().toLowerCase() === 'false') {
+      } else if (str === false || str.toString().toLowerCase() === 'false') {
         return false
       }
       return str

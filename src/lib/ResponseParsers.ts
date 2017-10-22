@@ -156,7 +156,7 @@ export class ConfigParser extends AbstractParser implements IResponseParser {
     let serverVersion: CasparCGVersion
     if (this.context && this.context.hasOwnProperty('serverVersion') && this.context['serverVersion'] > CasparCGVersion.V21x) {
       serverVersion = CasparCGVersion.V210
-    }else {
+    } else {
       serverVersion = CasparCGVersion.V207
     }
 

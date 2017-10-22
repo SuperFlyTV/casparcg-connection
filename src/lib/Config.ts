@@ -641,12 +641,12 @@ export class CasparCGConfig implements ICasparCGConfig {
         if (o > 0) {
           i = i.toLowerCase()
           i = i.slice(0, 1).toUpperCase() + i.slice(1)
-        }else {
+        } else {
           i = i.toLowerCase()
         }
         return i
       }).join('')
-    }else {
+    } else {
       return rawString
     }
   }
@@ -660,7 +660,7 @@ export class CasparCGConfig implements ICasparCGConfig {
         i = i.slice(0, 1).toUpperCase() + i.slice(1)
         return i
       }).join('')
-    }else {
+    } else {
       return rawString
     }
   }
@@ -678,7 +678,7 @@ export class CasparCGConfig implements ICasparCGConfig {
       this.importFromV207VO(configVO)
     } else if (version === CasparCGVersion.V210) {
       this.importFromV210VO(configVO)
-    }else {
+    } else {
       throw new Error(`Unsupported CasparCGVersion in 'configVO': {$version}`)
     }
   }
@@ -862,7 +862,7 @@ export class CasparCGConfig implements ICasparCGConfig {
               if (exprSplit.length > 1) {
                 expr = exprSplit[0].replace(/^\s*|\s*$/g, '')
                 src = exprSplit[1].replace(/^\s*|\s*$/g, '')
-              }else {
+              } else {
                 src = exprSplit[0].replace(/^\s*|\s*$/g, '')
                 expr = '1.0'
               }
@@ -1365,7 +1365,7 @@ export class CasparCGConfig implements ICasparCGConfig {
               flatArray.push(innerValue)
             }
 							// update outer member with transformed array of inner members
-          }else {
+          } else {
             flatArray.push({_type: innerKey})
           }
         }
@@ -1380,7 +1380,7 @@ export class CasparCGConfig implements ICasparCGConfig {
     let namespace: Object | undefined
     if (restrictedNamespace) {
       namespace = restrictedNamespace
-    }else {
+    } else {
       if (v21x[memberName]) {
         namespace = v2xx
       } else if (v207[memberName]) {

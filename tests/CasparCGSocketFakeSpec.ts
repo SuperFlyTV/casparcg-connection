@@ -1,5 +1,5 @@
 import "jasmine";
-import {CasparCGSocket} from "../src/lib/CasparCGSocket";
+import {CasparCGSocket} from '../src/lib/CasparCGSocket';
 
 describe("CasparCG Socket", () => {
 
@@ -99,7 +99,7 @@ describe("CasparCG Socket", () => {
 			spyOn(this.instance, "connect").and.callFake(() => {
 				if (i < successAttempt) {
 					this.instance["_onClose"](true);
-				}else {
+				} else {
 					this.instance["_onConnected"]();
 				}
 				i++;
@@ -119,7 +119,7 @@ describe("CasparCG Socket", () => {
 			spyOn(this.instance, "connect").and.callFake(() => {
 				if (i < successAttempt) {
 					this.instance["_onClose"](true);
-				}else {
+				} else {
 					this.instance["_onConnected"]();
 				}
 				i++;
@@ -138,7 +138,7 @@ describe("CasparCG Socket", () => {
 			spyOn(this.instance, "connect").and.callFake(() => {
 				if (i < successAttempt) {
 					this.instance["_onClose"](true);
-				}else {
+				} else {
 					this.instance["_onConnected"]();
 				}
 				i++;
@@ -156,7 +156,7 @@ describe("CasparCG Socket", () => {
 			spyOn(this.instance, "connect").and.callFake(() => {
 				if (i < successAttempt) {
 					this.instance["_onClose"](true);
-				}else {
+				} else {
 					this.instance.disconnect();
 				}
 				i++;

@@ -79,7 +79,7 @@ export class ParamSignature implements IParamSignature {
 					validation: (IValidator|Object)) {
     if (validation instanceof AbstractValidator) {
       this.validation = validation
-    }else if (typeof validation === 'function') {
+    } else if (typeof validation === 'function') {
       let proto = Object.create(validation['prototype'])
       this.validation = new proto.constructor()
     }

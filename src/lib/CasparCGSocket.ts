@@ -273,7 +273,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
         this._parsedResponse = undefined
         return
       }
-    }else if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 201 || AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 400 || AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 101) {
+    } else if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 201 || AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 400 || AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 101) {
       this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i)
       this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout)
       return
@@ -287,7 +287,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
       if (!isNaN(parsedResponse.statusCode)) {
         this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse))
         return
-      }else {
+      } else {
         this.emit(CasparCGSocketResponseEvent.INVALID_RESPONSE, new CasparCGSocketResponseEvent(parsedResponse))
         return
       }
@@ -309,7 +309,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
     this.connected = false
     if (hadError) {
       this.log('Socket closed with error')
-    }else {
+    } else {
       this.log('Socket closed without error')
     }
     if (this._shouldBeConnected === true) {

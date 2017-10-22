@@ -424,7 +424,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
     let options: ConnectionOptions
     if (typeof hostOrOptions === 'object') {
       options = new ConnectionOptions(hostOrOptions)
-    }else {
+    } else {
       options = new ConnectionOptions(hostOrOptions, port)
     }
 
@@ -677,7 +677,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
     try {
       if (isIAMCPCommand(commandOrString)) {
         command = commandOrString as IAMCPCommand
-      }else if (typeof commandOrString === 'string') {
+      } else if (typeof commandOrString === 'string') {
         if (AMCP.hasOwnProperty(commandOrString)) {
 					// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
 					// @todo: typechecking with fallback
@@ -685,11 +685,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					// @todo: typechecking with fallback
           if (command) {
             command.constructor.apply(command, params)
-          }else {
+          } else {
             throw new Error('Invalid command constructor')
           }
         }
-      }else {
+      } else {
 				// @todo: Handle, return?
         throw new Error('Invalid command or commandstring')
       }
@@ -1987,7 +1987,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
       if (this.onError) {
         this.onError(args)
       }
-    }else {
+    } else {
       if (this.debug) {
         console.log(args)
       }
@@ -2062,7 +2062,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 })
 
 				// don't check virgin state, just inform about the connection asap
-        }else {
+        } else {
           this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus)
           if (this.onConnected) {
             this.onConnected(this._connected)
