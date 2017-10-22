@@ -756,9 +756,9 @@ export class MixerCropCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
     new Coupled('left', 'top', 'right', 'bottom'),
-    new Depends('transitionDuration', 'x'),
-    new Depends('transitionEasing', 'x'),
-    new Depends('defer', 'x')
+    new Depends('transitionDuration', 'left'),
+    new Depends('transitionEasing', 'left'),
+    new Depends('defer', 'left')
   ]
   paramProtocol = [
     new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CROP')),
