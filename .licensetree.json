@@ -369,7 +369,7 @@
         "licenseUrl": "https://github.com/mikeal/caseless/raw/master/LICENSE",
         "parents": "fsevents:gulp-watch:casparcg-connection"
     },
-    "casparcg-connection@3.0.0-next.4": {
+    "casparcg-connection@3.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/SuperFlyTV/casparcg-connection",
         "licenseUrl": "https://github.com/SuperFlyTV/casparcg-connection/raw/master/.licensetree.json",
