@@ -700,7 +700,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
       }
 
       return command
-    }catch (error) {
+    } catch (error) {
       this._log(error)
     }
     return undefined
