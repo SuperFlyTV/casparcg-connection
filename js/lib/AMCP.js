@@ -918,9 +918,9 @@ var AMCP;
         MixerCropCommand.commandString = 'MIXER';
         MixerCropCommand.protocolLogic = [
             new Coupled('left', 'top', 'right', 'bottom'),
-            new Depends('transitionDuration', 'x'),
-            new Depends('transitionEasing', 'x'),
-            new Depends('defer', 'x')
+            new Depends('transitionDuration', 'left'),
+            new Depends('transitionEasing', 'left'),
+            new Depends('defer', 'left')
         ];
         return MixerCropCommand;
     }(AbstractLayerWithFallbackCommand));

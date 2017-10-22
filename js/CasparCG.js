@@ -675,7 +675,7 @@ var CasparCG = (function (_super) {
     };
     CasparCG.prototype.mixerChroma = function (channel, layer, keyer, threshold, softness, spill, transitionDuration, transitionEasing, defer) {
         if (layer === void 0) { layer = 0; }
-        return this.do(new AMCP_1.AMCP.MixerChromaCommand({ channel: channel, layer: layer, keyer: keyer, threshold: threshold, softness: softness, spill: spill, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerChromaCommand({ channel: channel, layer: layer, keyer: keyer, threshold: threshold, softness: softness, spill: spill, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     CasparCG.prototype.mixerChromaDeferred = function (channel, layer, keyer, threshold, softness, spill, transitionDuration, transitionEasing) {
         if (layer === void 0) { layer = 0; }
@@ -701,7 +701,7 @@ var CasparCG = (function (_super) {
         return this.mixerBlend(channel, layer);
     };
     CasparCG.prototype.mixerOpacity = function (channel, layer, opacity, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerOpacityCommand({ channel: channel, layer: layer, opacity: opacity, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerOpacityCommand({ channel: channel, layer: layer, opacity: opacity, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_OPACITY>
@@ -717,7 +717,7 @@ var CasparCG = (function (_super) {
         return this.mixerOpacity(channel, layer);
     };
     CasparCG.prototype.mixerBrightness = function (channel, layer, brightness, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerBrightnessCommand({ channel: channel, layer: layer, brightness: brightness, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerBrightnessCommand({ channel: channel, layer: layer, brightness: brightness, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_BRIGHTNESS>
@@ -733,7 +733,7 @@ var CasparCG = (function (_super) {
         return this.mixerBrightness(channel, layer);
     };
     CasparCG.prototype.mixerSaturation = function (channel, layer, saturation, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerSaturationCommand({ channel: channel, layer: layer, saturation: saturation, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerSaturationCommand({ channel: channel, layer: layer, saturation: saturation, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_SATURATION>
@@ -749,7 +749,7 @@ var CasparCG = (function (_super) {
         return this.mixerSaturation(channel, layer);
     };
     CasparCG.prototype.mixerContrast = function (channel, layer, contrast, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerContrastCommand({ channel: channel, layer: layer, contrast: contrast, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerContrastCommand({ channel: channel, layer: layer, contrast: contrast, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CONTRAST>
@@ -766,7 +766,7 @@ var CasparCG = (function (_super) {
     };
     CasparCG.prototype.mixerLevels = function (channel, layer, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing, defer) {
         if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerLevelsCommand({ channel: channel, layer: layer, minInput: minInput, maxInput: maxInput, gamma: gamma, minOutput: minOutput, maxOutput: maxOutput, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerLevelsCommand({ channel: channel, layer: layer, minInput: minInput, maxInput: maxInput, gamma: gamma, minOutput: minOutput, maxOutput: maxOutput, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_LEVELS>
@@ -783,7 +783,7 @@ var CasparCG = (function (_super) {
     };
     CasparCG.prototype.mixerFill = function (channel, layer, x, y, xScale, yScale, transitionDuration, transitionEasing, defer) {
         if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerFillCommand({ channel: channel, layer: layer, x: x, y: y, xScale: xScale, yScale: yScale, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerFillCommand({ channel: channel, layer: layer, x: x, y: y, xScale: xScale, yScale: yScale, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /*
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_FILL>
@@ -800,7 +800,7 @@ var CasparCG = (function (_super) {
     };
     CasparCG.prototype.mixerClip = function (channel, layer, x, y, width, height, transitionDuration, transitionEasing, defer) {
         if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerClipCommand({ channel: channel, layer: layer, x: x, y: y, width: width, height: height, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerClipCommand({ channel: channel, layer: layer, x: x, y: y, width: width, height: height, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CLIP>
@@ -817,7 +817,7 @@ var CasparCG = (function (_super) {
     };
     CasparCG.prototype.mixerAnchor = function (channel, layer, x, y, transitionDuration, transitionEasing, defer) {
         if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerAnchorCommand({ channel: channel, layer: layer, x: x, y: y, ransition: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerAnchorCommand({ channel: channel, layer: layer, x: x, y: y, ransition: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ANCHOR>
@@ -834,7 +834,7 @@ var CasparCG = (function (_super) {
     };
     CasparCG.prototype.mixerCrop = function (channel, layer, left, top, right, bottom, transitionDuration, transitionEasing, defer) {
         if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerCropCommand({ channel: channel, layer: layer, left: left, top: top, right: right, bottom: bottom, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerCropCommand({ channel: channel, layer: layer, left: left, top: top, right: right, bottom: bottom, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CROP>
@@ -850,7 +850,7 @@ var CasparCG = (function (_super) {
         return this.mixerCrop(channel, layer);
     };
     CasparCG.prototype.mixerRotation = function (channel, layer, rotation, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerRotationCommand({ channel: channel, layer: layer, rotation: rotation, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerRotationCommand({ channel: channel, layer: layer, rotation: rotation, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_ROTATION>
@@ -867,7 +867,7 @@ var CasparCG = (function (_super) {
     };
     CasparCG.prototype.mixerPerspective = function (channel, layer, topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, defer) {
         if (layer === void 0) { layer = NaN; }
-        return this.do(new AMCP_1.AMCP.MixerPerspectiveCommand({ channel: channel, layer: layer, topLeftX: topLeftX, topLeftY: topLeftY, topRightX: topRightX, topRightY: topRightY, bottomRightX: bottomRightX, bottomRightY: bottomRightY, bottomLeftX: bottomLeftX, bottomLeftY: bottomLeftY, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerPerspectiveCommand({ channel: channel, layer: layer, topLeftX: topLeftX, topLeftY: topLeftY, topRightX: topRightX, topRightY: topRightY, bottomRightX: bottomRightX, bottomRightY: bottomRightY, bottomLeftX: bottomLeftX, bottomLeftY: bottomLeftY, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_PERSPECTIVE>
@@ -898,7 +898,7 @@ var CasparCG = (function (_super) {
         return this.mixerMipmap(channel, layer);
     };
     CasparCG.prototype.mixerVolume = function (channel, layer, volume, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerVolumeCommand({ channel: channel, layer: layer, volume: volume, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerVolumeCommand({ channel: channel, layer: layer, volume: volume, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_VOLUME>
@@ -944,7 +944,7 @@ var CasparCG = (function (_super) {
         return this.mixerStraightAlphaOutput(channel, layer);
     };
     CasparCG.prototype.mixerGrid = function (channel, resolution, transitionDuration, transitionEasing, defer) {
-        return this.do(new AMCP_1.AMCP.MixerGridCommand({ channel: channel, resolution: resolution, transitionDuration: transitionDuration, easing: transitionEasing, defer: defer }));
+        return this.do(new AMCP_1.AMCP.MixerGridCommand({ channel: channel, resolution: resolution, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_GRID>
