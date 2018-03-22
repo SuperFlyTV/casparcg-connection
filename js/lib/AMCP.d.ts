@@ -501,8 +501,64 @@ export declare namespace AMCP {
     /**
      *
      */
+    class AddDecklinkCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class AddImageCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class AddFileCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class AddStreamCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
     class RemoveCommand extends AbstractChannelOrLayerCommand {
         static readonly commandString: string;
+    }
+    /**
+     *
+     */
+    class RemoveDecklinkCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class RemoveImageCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class RemoveFileCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class RemoveStreamCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *

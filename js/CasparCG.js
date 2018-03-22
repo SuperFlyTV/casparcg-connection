@@ -996,11 +996,58 @@ var CasparCG = (function (_super) {
         return this.do(new AMCP_1.AMCP.AddCommand({ channel: channel }));
     };
     /**
-     * @todo	implement
-     * @todo	document
+     *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#ADD>
      */
-    CasparCG.prototype.remove = function (channel, layer) {
-        return this.do(new AMCP_1.AMCP.RemoveCommand({ channel: channel, layer: layer }));
+    CasparCG.prototype.addDecklink = function (channel, device, id) {
+        return this.do(new AMCP_1.AMCP.AddDecklinkCommand({ channel: channel, layer: id, device: device }));
+    };
+    /**
+     *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#ADD>
+     */
+    CasparCG.prototype.addImage = function (channel, fileName, id) {
+        return this.do(new AMCP_1.AMCP.AddImageCommand({ channel: channel, layer: id, fileName: fileName }));
+    };
+    /**
+     *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#ADD>
+     */
+    CasparCG.prototype.addFile = function (channel, fileName, id) {
+        return this.do(new AMCP_1.AMCP.AddFileCommand({ channel: channel, layer: id, fileName: fileName }));
+    };
+    /**
+     *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#ADD>
+     */
+    CasparCG.prototype.addStream = function (channel, uri, params, id) {
+        return this.do(new AMCP_1.AMCP.AddStreamCommand({ channel: channel, layer: id, uri: uri, params: params }));
+    };
+    /**
+     * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+     */
+    CasparCG.prototype.remove = function (channel, id) {
+        return this.do(new AMCP_1.AMCP.RemoveCommand({ channel: channel, layer: id }));
+    };
+    /**
+     *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+     */
+    CasparCG.prototype.removeDecklink = function (channel, device) {
+        return this.do(new AMCP_1.AMCP.AddDecklinkCommand({ channel: channel, device: device }));
+    };
+    /**
+     * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+     */
+    CasparCG.prototype.removeImage = function (channel, fileName) {
+        return this.do(new AMCP_1.AMCP.AddImageCommand({ channel: channel, fileName: fileName }));
+    };
+    /**
+     *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+     */
+    CasparCG.prototype.removeFile = function (channel, fileName) {
+        return this.do(new AMCP_1.AMCP.AddFileCommand({ channel: channel, fileName: fileName }));
+    };
+    /**
+     *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+     */
+    CasparCG.prototype.removeStream = function (channel, uri) {
+        return this.do(new AMCP_1.AMCP.AddStreamCommand({ channel: channel, uri: uri }));
     };
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PRINT>
