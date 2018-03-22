@@ -1552,7 +1552,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
 	 */
-  public remove (channel: number, id?: number): Promise<IAMCPCommand> {
+  public remove (channel: number, id: number): Promise<IAMCPCommand> {
     return this.do(new AMCP.RemoveCommand({channel: channel, layer: id}))
   }
 
