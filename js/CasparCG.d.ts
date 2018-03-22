@@ -905,7 +905,7 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
     /**
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
      */
-    remove(channel: number, id?: number): Promise<IAMCPCommand>;
+    remove(channel: number, id: number): Promise<IAMCPCommand>;
     /**
      *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
      */
