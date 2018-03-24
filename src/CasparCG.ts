@@ -948,7 +948,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#CG_ADD>
 	 */
-  public cgAdd (channel: number, layer: number = NaN, flashLayer: number = NaN, templateName: string, playOnLoad?: boolean|number|string, data?: TemplateData): Promise<IAMCPCommand> {
+  public cgAdd (channel: number, layer: number = NaN, flashLayer: number = NaN, templateName: string, playOnLoad: boolean|number|string, data?: TemplateData): Promise<IAMCPCommand> {
     return this.do(new AMCP.CGAddCommand({channel: channel, layer: layer, flashLayer: flashLayer, templateName: templateName, playOnLoad: playOnLoad, data: data}))
   }
 
