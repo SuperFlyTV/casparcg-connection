@@ -11,9 +11,9 @@ before_deploy:
 - gulp dist
 deploy:
 - provider: npm
-  email: jesper@superfly.tv
+  email: jesper@starkar.no
   api_key:
-    secure: NEBXS9TANvOz4VVFJ1g0GJMbXbV0UIhGvWn2HUCTAFZhLezeMAooe70Cq5SGW9YfG7pIhrVQjV+WS4JST7Ej3dkNEsy5pPBsCao4wAvigUZ2jutzlC3Ayb+7dbi0O12hwJLKPpEKkJBzFHAirpKLtDwbV+OR+WtEP0JSXiMIQ576m5KrNmFkF7P2uLa4ZdTf1MUZyk6ieQmRoMMyaKv536ytSDUzqAIpzcgRTmBEUJ3kpj0q9LMQ+IETZ1IylMuvlOUKdgLg/eOaDnCDGQhnR9V7jaErmOm8Ognw4aUtVz6G+WwvIxKR3p2WqnA9oOw8MTf4qQHkbIYEmQuq1o4Y9iVyPvZ6mErHl0jQrBxGT7PcWxhcqyb/9tfjFCua9H+SYJbhX3sPX4yeFPYAw3QJZAPX4kuK114dM6Ar9Dp0mxzrrAFeVjwZRFsVvvWMT6ILHEZUiodGxq5sIw0b1EIGhd+gJ5Mo0dMmiNWZHQ1VjN5IEoghKYvv/GYfnZXHndIcKKhph4mlKzXlvp2ILr65LNQ7086BEhbEbwvg4DiQT4cdmP0GAFYeb5zZR2ACY5ayf/p9im5OMCf7Jy9kpSe+lvXo6oH/eNYaAzoqUNturNZ4/zyntUa03MfLIj0CkuLnJ9L3f4LfpNzOVFofX49qdh8EcckXjhmt//MU4RiP2CY=
+    secure: $NPM_TOKEN
   skip_cleanup: true
   on:
     tags: true
@@ -27,4 +27,4 @@ notifications:
     on_success: change
     on_failure: change
   slack:
-    secure: AosyVI/J6Drv9TeM6yMm9rOKJR90B6abPuQjM/TZ4s4ZvoG8xyMe7vmm1CFqmQLvaUsC33N7fye9dSJgO9M4z3YrVCmq6yYC6eCxDMWqMsJQWsM8bcuxb8EAdMLKZsANOLAxug5l6EPteaZyJUjaaEm4hMyx232ZSzOxmBS1VSmblgcR0VM7dGvwxEXqc+ADASEZqEKqF1SS0NPRIgQ4PXFsyJ0DjYdMQvTSEHBefs1tBPi7+wwmvdo+NwklCQ1k0tPDDwjQvXA0AO4ERSczBWAByBLy8yDZ9zHCSuInTYmwJbQ6cRE5YqXxRRd2GChm3hYlIjK/OPEmJTJssf4YnZJh76ukpFajIBMdk7msUvzdwuLHU+Bc4fQMn9TUGRcUsJtbSJVlD4E5pmvRnr1jA+1WchyBAtGPMNuktZwZAPQY14DSk+2NLYXtk3pSt2swcWhjvFl+VmXMcde6cy3mUBtEFiyMEzGU0gJUi6+KkMDWBYruK8Mj1z/aT4tAAaHFzWxilHtkE8/b7K/XSKdWDVun/0zlzK+AZVDg2Hyplgxu1J4atbSag7kOeDR6tGqMMFe+iJCNCDi2FXnaZmCY0CJqImCcfIN1pd5uUdn7eefQQhCuwkbM+6HIqn8MB2Y5K5B6fECmHqOMIOokWDaVRVAPhIXblWy+ubri0ojBP2A=
+    secure: $SLACK_TOKEN
