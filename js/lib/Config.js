@@ -138,7 +138,7 @@ var Config;
     var v2xx;
     (function (v2xx) {
         /***/
-        var CasparCGConfigVO = (function () {
+        var CasparCGConfigVO = /** @class */ (function () {
             function CasparCGConfigVO() {
                 this.channelGrid = false;
                 this.flash = new v2xx.Flash();
@@ -148,7 +148,7 @@ var Config;
         }());
         v2xx.CasparCGConfigVO = CasparCGConfigVO;
         /***/
-        var Channel = (function () {
+        var Channel = /** @class */ (function () {
             function Channel() {
                 this._type = 'channel';
                 this.videoMode = 'PAL'; // @todo: literal
@@ -160,14 +160,14 @@ var Config;
         }());
         v2xx.Channel = Channel;
         /***/
-        var Consumer = (function () {
+        var Consumer = /** @class */ (function () {
             function Consumer() {
             }
             return Consumer;
         }());
         v2xx.Consumer = Consumer;
         /***/
-        var DecklinkConsumer = (function (_super) {
+        var DecklinkConsumer = /** @class */ (function (_super) {
             __extends(DecklinkConsumer, _super);
             function DecklinkConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -186,7 +186,7 @@ var Config;
         }(Consumer));
         v2xx.DecklinkConsumer = DecklinkConsumer;
         /***/
-        var BluefishConsumer = (function (_super) {
+        var BluefishConsumer = /** @class */ (function (_super) {
             __extends(BluefishConsumer, _super);
             function BluefishConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -201,7 +201,7 @@ var Config;
         }(Consumer));
         v2xx.BluefishConsumer = BluefishConsumer;
         /***/
-        var SystemAudioConsumer = (function (_super) {
+        var SystemAudioConsumer = /** @class */ (function (_super) {
             __extends(SystemAudioConsumer, _super);
             function SystemAudioConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -212,7 +212,7 @@ var Config;
         }(Consumer));
         v2xx.SystemAudioConsumer = SystemAudioConsumer;
         /***/
-        var ScreenConsumer = (function (_super) {
+        var ScreenConsumer = /** @class */ (function (_super) {
             __extends(ScreenConsumer, _super);
             function ScreenConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -231,7 +231,7 @@ var Config;
         }(Consumer));
         v2xx.ScreenConsumer = ScreenConsumer;
         /***/
-        var NewtekIvgaConsumer = (function (_super) {
+        var NewtekIvgaConsumer = /** @class */ (function (_super) {
             __extends(NewtekIvgaConsumer, _super);
             function NewtekIvgaConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -242,7 +242,7 @@ var Config;
         }(Consumer));
         v2xx.NewtekIvgaConsumer = NewtekIvgaConsumer;
         /***/
-        var Controller = (function () {
+        var Controller = /** @class */ (function () {
             function Controller() {
                 this._type = 'tcp';
                 this.port = null;
@@ -252,7 +252,7 @@ var Config;
         }());
         v2xx.Controller = Controller;
         /***/
-        var Mixer = (function () {
+        var Mixer = /** @class */ (function () {
             function Mixer() {
                 this.blendModes = false;
                 this.straightAlpha = false;
@@ -262,7 +262,7 @@ var Config;
         }());
         v2xx.Mixer = Mixer;
         /***/
-        var OscClient = (function () {
+        var OscClient = /** @class */ (function () {
             function OscClient() {
                 this._type = 'predefined-client';
                 this.address = '';
@@ -272,7 +272,7 @@ var Config;
         }());
         v2xx.OscClient = OscClient;
         /***/
-        var Thumbnails = (function () {
+        var Thumbnails = /** @class */ (function () {
             function Thumbnails() {
                 this.generateThumbnails = true;
                 this.width = 256;
@@ -287,7 +287,7 @@ var Config;
         }());
         v2xx.Thumbnails = Thumbnails;
         /***/
-        var Flash = (function () {
+        var Flash = /** @class */ (function () {
             function Flash() {
                 this.bufferDepth = 'auto';
             }
@@ -295,7 +295,7 @@ var Config;
         }());
         v2xx.Flash = Flash;
         /***/
-        var TemplateHost = (function () {
+        var TemplateHost = /** @class */ (function () {
             function TemplateHost() {
                 this._type = 'template-host';
                 this.videoMode = ''; // @todo: literal
@@ -307,7 +307,7 @@ var Config;
         }());
         v2xx.TemplateHost = TemplateHost;
         /***/
-        var Osc = (function () {
+        var Osc = /** @class */ (function () {
             function Osc() {
                 this.defaultPort = 6250;
                 this.predefinedClients = [];
@@ -322,7 +322,7 @@ var Config;
     var v207;
     (function (v207) {
         /***/
-        var CasparCGConfigVO = (function (_super) {
+        var CasparCGConfigVO = /** @class */ (function (_super) {
             __extends(CasparCGConfigVO, _super);
             function CasparCGConfigVO() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -343,7 +343,7 @@ var Config;
         }(v2xx.CasparCGConfigVO));
         v207.CasparCGConfigVO = CasparCGConfigVO;
         /***/
-        var Channel = (function (_super) {
+        var Channel = /** @class */ (function (_super) {
             __extends(Channel, _super);
             function Channel() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -354,7 +354,7 @@ var Config;
         }(v2xx.Channel));
         v207.Channel = Channel;
         /***/
-        var Paths = (function () {
+        var Paths = /** @class */ (function () {
             function Paths() {
                 this.mediaPath = 'media\\';
                 this.logPath = 'log\\';
@@ -366,7 +366,7 @@ var Config;
         }());
         v207.Paths = Paths;
         /***/
-        var Consumer = (function (_super) {
+        var Consumer = /** @class */ (function (_super) {
             __extends(Consumer, _super);
             function Consumer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -375,7 +375,7 @@ var Config;
         }(v2xx.Consumer));
         v207.Consumer = Consumer;
         /***/
-        var DecklinkConsumer = (function (_super) {
+        var DecklinkConsumer = /** @class */ (function (_super) {
             __extends(DecklinkConsumer, _super);
             function DecklinkConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -386,7 +386,7 @@ var Config;
         }(v2xx.DecklinkConsumer));
         v207.DecklinkConsumer = DecklinkConsumer;
         /***/
-        var BluefishConsumer = (function (_super) {
+        var BluefishConsumer = /** @class */ (function (_super) {
             __extends(BluefishConsumer, _super);
             function BluefishConsumer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -395,7 +395,7 @@ var Config;
         }(v2xx.BluefishConsumer));
         v207.BluefishConsumer = BluefishConsumer;
         /***/
-        var SystemAudioConsumer = (function (_super) {
+        var SystemAudioConsumer = /** @class */ (function (_super) {
             __extends(SystemAudioConsumer, _super);
             function SystemAudioConsumer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -404,7 +404,7 @@ var Config;
         }(v2xx.SystemAudioConsumer));
         v207.SystemAudioConsumer = SystemAudioConsumer;
         /***/
-        var ScreenConsumer = (function (_super) {
+        var ScreenConsumer = /** @class */ (function (_super) {
             __extends(ScreenConsumer, _super);
             function ScreenConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -415,7 +415,7 @@ var Config;
         }(v2xx.ScreenConsumer));
         v207.ScreenConsumer = ScreenConsumer;
         /***/
-        var NewtekIvgaConsumer = (function (_super) {
+        var NewtekIvgaConsumer = /** @class */ (function (_super) {
             __extends(NewtekIvgaConsumer, _super);
             function NewtekIvgaConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -427,7 +427,7 @@ var Config;
         }(v2xx.NewtekIvgaConsumer));
         v207.NewtekIvgaConsumer = NewtekIvgaConsumer;
         /***/
-        var FileConsumer = (function (_super) {
+        var FileConsumer = /** @class */ (function (_super) {
             __extends(FileConsumer, _super);
             function FileConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -441,7 +441,7 @@ var Config;
         }(v2xx.Consumer));
         v207.FileConsumer = FileConsumer;
         /***/
-        var StreamConsumer = (function (_super) {
+        var StreamConsumer = /** @class */ (function (_super) {
             __extends(StreamConsumer, _super);
             function StreamConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -454,7 +454,7 @@ var Config;
         }(v2xx.Consumer));
         v207.StreamConsumer = StreamConsumer;
         /***/
-        var Thumbnails = (function (_super) {
+        var Thumbnails = /** @class */ (function (_super) {
             __extends(Thumbnails, _super);
             function Thumbnails() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -463,7 +463,7 @@ var Config;
         }(v2xx.Thumbnails));
         v207.Thumbnails = Thumbnails;
         /***/
-        var Mixer = (function (_super) {
+        var Mixer = /** @class */ (function (_super) {
             __extends(Mixer, _super);
             function Mixer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -474,7 +474,7 @@ var Config;
         }(v2xx.Mixer));
         v207.Mixer = Mixer;
         /***/
-        var Osc = (function (_super) {
+        var Osc = /** @class */ (function (_super) {
             __extends(Osc, _super);
             function Osc() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -483,7 +483,7 @@ var Config;
         }(v2xx.Osc));
         v207.Osc = Osc;
         /***/
-        var ChannelLayout = (function () {
+        var ChannelLayout = /** @class */ (function () {
             function ChannelLayout() {
                 this._type = 'channel-layout';
                 this.name = '';
@@ -495,7 +495,7 @@ var Config;
         }());
         v207.ChannelLayout = ChannelLayout;
         /***/
-        var MixConfig = (function () {
+        var MixConfig = /** @class */ (function () {
             function MixConfig() {
                 this._type = 'mix-config';
                 this.from = '';
@@ -507,7 +507,7 @@ var Config;
         }());
         v207.MixConfig = MixConfig;
         /***/
-        var Audio = (function () {
+        var Audio = /** @class */ (function () {
             function Audio() {
                 this.channelLayouts = [];
                 this.mixConfigs = [];
@@ -521,7 +521,7 @@ var Config;
     (function (v21x) {
         v21x.defaultLOGController = { _type: new v2xx.Controller()._type, port: 3250, protocol: 'LOG' };
         /***/
-        var CasparCGConfigVO = (function (_super) {
+        var CasparCGConfigVO = /** @class */ (function (_super) {
             __extends(CasparCGConfigVO, _super);
             function CasparCGConfigVO() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -544,7 +544,7 @@ var Config;
         }(v2xx.CasparCGConfigVO));
         v21x.CasparCGConfigVO = CasparCGConfigVO;
         /***/
-        var Channel = (function (_super) {
+        var Channel = /** @class */ (function (_super) {
             __extends(Channel, _super);
             function Channel() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -555,7 +555,7 @@ var Config;
         }(v2xx.Channel));
         v21x.Channel = Channel;
         /***/
-        var Paths = (function () {
+        var Paths = /** @class */ (function () {
             function Paths() {
                 this.mediaPath = 'media/';
                 this.logPath = 'log/';
@@ -568,7 +568,7 @@ var Config;
         }());
         v21x.Paths = Paths;
         /***/
-        var Consumer = (function (_super) {
+        var Consumer = /** @class */ (function (_super) {
             __extends(Consumer, _super);
             function Consumer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -577,7 +577,7 @@ var Config;
         }(v2xx.Consumer));
         v21x.Consumer = Consumer;
         /***/
-        var DecklinkConsumer = (function (_super) {
+        var DecklinkConsumer = /** @class */ (function (_super) {
             __extends(DecklinkConsumer, _super);
             function DecklinkConsumer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -586,7 +586,7 @@ var Config;
         }(v2xx.DecklinkConsumer));
         v21x.DecklinkConsumer = DecklinkConsumer;
         /***/
-        var BluefishConsumer = (function (_super) {
+        var BluefishConsumer = /** @class */ (function (_super) {
             __extends(BluefishConsumer, _super);
             function BluefishConsumer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -595,7 +595,7 @@ var Config;
         }(v2xx.BluefishConsumer));
         v21x.BluefishConsumer = BluefishConsumer;
         /***/
-        var SystemAudioConsumer = (function (_super) {
+        var SystemAudioConsumer = /** @class */ (function (_super) {
             __extends(SystemAudioConsumer, _super);
             function SystemAudioConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -607,7 +607,7 @@ var Config;
         }(v2xx.SystemAudioConsumer));
         v21x.SystemAudioConsumer = SystemAudioConsumer;
         /***/
-        var ScreenConsumer = (function (_super) {
+        var ScreenConsumer = /** @class */ (function (_super) {
             __extends(ScreenConsumer, _super);
             function ScreenConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -618,7 +618,7 @@ var Config;
         }(v2xx.ScreenConsumer));
         v21x.ScreenConsumer = ScreenConsumer;
         /***/
-        var NewtekIvgaConsumer = (function (_super) {
+        var NewtekIvgaConsumer = /** @class */ (function (_super) {
             __extends(NewtekIvgaConsumer, _super);
             function NewtekIvgaConsumer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -627,7 +627,7 @@ var Config;
         }(v2xx.NewtekIvgaConsumer));
         v21x.NewtekIvgaConsumer = NewtekIvgaConsumer;
         /***/
-        var FfmpegConsumer = (function (_super) {
+        var FfmpegConsumer = /** @class */ (function (_super) {
             __extends(FfmpegConsumer, _super);
             function FfmpegConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -642,7 +642,7 @@ var Config;
         }(v2xx.Consumer));
         v21x.FfmpegConsumer = FfmpegConsumer;
         /***/
-        var SynctoConsumer = (function (_super) {
+        var SynctoConsumer = /** @class */ (function (_super) {
             __extends(SynctoConsumer, _super);
             function SynctoConsumer() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -654,7 +654,7 @@ var Config;
         }(v2xx.Consumer));
         v21x.SynctoConsumer = SynctoConsumer;
         /***/
-        var Mixer = (function (_super) {
+        var Mixer = /** @class */ (function (_super) {
             __extends(Mixer, _super);
             function Mixer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -663,7 +663,7 @@ var Config;
         }(v2xx.Mixer));
         v21x.Mixer = Mixer;
         /***/
-        var Thumbnails = (function (_super) {
+        var Thumbnails = /** @class */ (function (_super) {
             __extends(Thumbnails, _super);
             function Thumbnails() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -674,7 +674,7 @@ var Config;
         }(v2xx.Thumbnails));
         v21x.Thumbnails = Thumbnails;
         /***/
-        var Html = (function () {
+        var Html = /** @class */ (function () {
             function Html() {
                 this.remoteDebuggingPort = null;
             }
@@ -682,7 +682,7 @@ var Config;
         }());
         v21x.Html = Html;
         /***/
-        var Osc = (function (_super) {
+        var Osc = /** @class */ (function (_super) {
             __extends(Osc, _super);
             function Osc() {
                 var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -693,7 +693,7 @@ var Config;
         }(v2xx.Osc));
         v21x.Osc = Osc;
         /***/
-        var ChannelLayout = (function () {
+        var ChannelLayout = /** @class */ (function () {
             function ChannelLayout() {
                 this._type = 'channel-layout';
                 this.name = '';
@@ -705,7 +705,7 @@ var Config;
         }());
         v21x.ChannelLayout = ChannelLayout;
         /***/
-        var MixConfig = (function () {
+        var MixConfig = /** @class */ (function () {
             function MixConfig() {
                 this._type = 'mix-config';
                 this.fromType = '';
@@ -716,7 +716,7 @@ var Config;
         }());
         v21x.MixConfig = MixConfig;
         /***/
-        var Audio = (function () {
+        var Audio = /** @class */ (function () {
             function Audio() {
                 this.channelLayouts = [];
                 this.mixConfigs = [];
@@ -731,7 +731,7 @@ var Config;
         var Config207VO = v207.CasparCGConfigVO;
         var Config210VO = v21x.CasparCGConfigVO;
         /***/
-        var Audio = (function () {
+        var Audio = /** @class */ (function () {
             function Audio() {
                 this.channelLayouts = [];
                 this.mixConfigs = [];
@@ -740,7 +740,7 @@ var Config;
         }());
         Intermediate.Audio = Audio;
         /***/
-        var MixConfig = (function () {
+        var MixConfig = /** @class */ (function () {
             function MixConfig() {
                 this._type = 'mix-config';
                 this.fromType = '';
@@ -750,7 +750,7 @@ var Config;
         }());
         Intermediate.MixConfig = MixConfig;
         /***/
-        var Mixer = (function (_super) {
+        var Mixer = /** @class */ (function (_super) {
             __extends(Mixer, _super);
             function Mixer() {
                 return _super !== null && _super.apply(this, arguments) || this;
@@ -759,7 +759,7 @@ var Config;
         }(v207.Mixer));
         Intermediate.Mixer = Mixer;
         /***/
-        var CasparCGConfig = (function () {
+        var CasparCGConfig = /** @class */ (function () {
             function CasparCGConfig(initVersionOrConfigVO) {
                 this.paths = new v21x.Paths();
                 this.channels = [];

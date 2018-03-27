@@ -56,7 +56,7 @@ var AMCPUtil;
     /**
      *
      */
-    var CasparCGSocketResponse = (function () {
+    var CasparCGSocketResponse = /** @class */ (function () {
         /**
          *
          */
@@ -80,7 +80,7 @@ var AMCPUtil;
  */
 var AMCP;
 (function (AMCP) {
-    var CustomCommand = (function (_super) {
+    var CustomCommand = /** @class */ (function (_super) {
         __extends(CustomCommand, _super);
         function CustomCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -101,7 +101,7 @@ var AMCP;
     /**
      *
      */
-    var LoadbgCommand = (function (_super) {
+    var LoadbgCommand = /** @class */ (function (_super) {
         __extends(LoadbgCommand, _super);
         function LoadbgCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -131,7 +131,7 @@ var AMCP;
     /**
      *
      */
-    var LoadCommand = (function (_super) {
+    var LoadCommand = /** @class */ (function (_super) {
         __extends(LoadCommand, _super);
         function LoadCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -160,7 +160,7 @@ var AMCP;
     /**
      *
      */
-    var PlayCommand = (function (_super) {
+    var PlayCommand = /** @class */ (function (_super) {
         __extends(PlayCommand, _super);
         function PlayCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -197,7 +197,7 @@ var AMCP;
     /**
      *
      */
-    var PauseCommand = (function (_super) {
+    var PauseCommand = /** @class */ (function (_super) {
         __extends(PauseCommand, _super);
         function PauseCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -209,7 +209,7 @@ var AMCP;
     /**
      *
      */
-    var ResumeCommand = (function (_super) {
+    var ResumeCommand = /** @class */ (function (_super) {
         __extends(ResumeCommand, _super);
         function ResumeCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -221,7 +221,7 @@ var AMCP;
     /**
      *
      */
-    var StopCommand = (function (_super) {
+    var StopCommand = /** @class */ (function (_super) {
         __extends(StopCommand, _super);
         function StopCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -238,7 +238,7 @@ var AMCP;
     /**
      *
      */
-    var LoadDecklinkBgCommand = (function (_super) {
+    var LoadDecklinkBgCommand = /** @class */ (function (_super) {
         __extends(LoadDecklinkBgCommand, _super);
         function LoadDecklinkBgCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -268,7 +268,7 @@ var AMCP;
     /**
      *
      */
-    var LoadDecklinkCommand = (function (_super) {
+    var LoadDecklinkCommand = /** @class */ (function (_super) {
         __extends(LoadDecklinkCommand, _super);
         function LoadDecklinkCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -297,7 +297,7 @@ var AMCP;
     /**
      *
      */
-    var PlayDecklinkCommand = (function (_super) {
+    var PlayDecklinkCommand = /** @class */ (function (_super) {
         __extends(PlayDecklinkCommand, _super);
         function PlayDecklinkCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -334,7 +334,7 @@ var AMCP;
     /**
      *
      */
-    var LoadHtmlPageBgCommand = (function (_super) {
+    var LoadHtmlPageBgCommand = /** @class */ (function (_super) {
         __extends(LoadHtmlPageBgCommand, _super);
         function LoadHtmlPageBgCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -360,7 +360,7 @@ var AMCP;
     /**
      *
      */
-    var LoadHtmlPageCommand = (function (_super) {
+    var LoadHtmlPageCommand = /** @class */ (function (_super) {
         __extends(LoadHtmlPageCommand, _super);
         function LoadHtmlPageCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -385,7 +385,7 @@ var AMCP;
     /**
      *
      */
-    var PlayHtmlPageCommand = (function (_super) {
+    var PlayHtmlPageCommand = /** @class */ (function (_super) {
         __extends(PlayHtmlPageCommand, _super);
         function PlayHtmlPageCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -419,7 +419,7 @@ var AMCP;
     /**
      *
      */
-    var CGAddCommand = (function (_super) {
+    var CGAddCommand = /** @class */ (function (_super) {
         __extends(CGAddCommand, _super);
         function CGAddCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -438,7 +438,7 @@ var AMCP;
     /**
      *
      */
-    var CGPlayCommand = (function (_super) {
+    var CGPlayCommand = /** @class */ (function (_super) {
         __extends(CGPlayCommand, _super);
         function CGPlayCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -454,7 +454,7 @@ var AMCP;
     /**
      *
      */
-    var CGStopCommand = (function (_super) {
+    var CGStopCommand = /** @class */ (function (_super) {
         __extends(CGStopCommand, _super);
         function CGStopCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -470,7 +470,7 @@ var AMCP;
     /**
      *
      */
-    var CGNextCommand = (function (_super) {
+    var CGNextCommand = /** @class */ (function (_super) {
         __extends(CGNextCommand, _super);
         function CGNextCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -486,7 +486,7 @@ var AMCP;
     /**
      *
      */
-    var CGRemoveCommand = (function (_super) {
+    var CGRemoveCommand = /** @class */ (function (_super) {
         __extends(CGRemoveCommand, _super);
         function CGRemoveCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -502,7 +502,7 @@ var AMCP;
     /**
      *
      */
-    var CGClearCommand = (function (_super) {
+    var CGClearCommand = /** @class */ (function (_super) {
         __extends(CGClearCommand, _super);
         /**
          *
@@ -522,7 +522,7 @@ var AMCP;
     /**
      *
      */
-    var CGUpdateCommand = (function (_super) {
+    var CGUpdateCommand = /** @class */ (function (_super) {
         __extends(CGUpdateCommand, _super);
         function CGUpdateCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -539,7 +539,7 @@ var AMCP;
     /**
      * @todo: 201 response code, parsing???????
      */
-    var CGInvokeCommand = (function (_super) {
+    var CGInvokeCommand = /** @class */ (function (_super) {
         __extends(CGInvokeCommand, _super);
         function CGInvokeCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -563,7 +563,7 @@ var AMCP;
     /**
      *
      */
-    var MixerKeyerCommand = (function (_super) {
+    var MixerKeyerCommand = /** @class */ (function (_super) {
         __extends(MixerKeyerCommand, _super);
         /**
          *
@@ -588,7 +588,7 @@ var AMCP;
     /**
      * @todo	Validata/clamp lamp number range?
      */
-    var MixerChromaCommand = (function (_super) {
+    var MixerChromaCommand = /** @class */ (function (_super) {
         __extends(MixerChromaCommand, _super);
         /**
          *
@@ -623,7 +623,7 @@ var AMCP;
     /**
      *
      */
-    var MixerBlendCommand = (function (_super) {
+    var MixerBlendCommand = /** @class */ (function (_super) {
         __extends(MixerBlendCommand, _super);
         /**
          *
@@ -648,7 +648,7 @@ var AMCP;
     /**
      *
      */
-    var MixerOpacityCommand = (function (_super) {
+    var MixerOpacityCommand = /** @class */ (function (_super) {
         __extends(MixerOpacityCommand, _super);
         /**
          *
@@ -677,7 +677,7 @@ var AMCP;
     /**
      *
      */
-    var MixerBrightnessCommand = (function (_super) {
+    var MixerBrightnessCommand = /** @class */ (function (_super) {
         __extends(MixerBrightnessCommand, _super);
         /**
          *
@@ -706,7 +706,7 @@ var AMCP;
     /**
      *
      */
-    var MixerSaturationCommand = (function (_super) {
+    var MixerSaturationCommand = /** @class */ (function (_super) {
         __extends(MixerSaturationCommand, _super);
         /**
          *
@@ -735,7 +735,7 @@ var AMCP;
     /**
      *
      */
-    var MixerContrastCommand = (function (_super) {
+    var MixerContrastCommand = /** @class */ (function (_super) {
         __extends(MixerContrastCommand, _super);
         /**
          *
@@ -764,7 +764,7 @@ var AMCP;
     /**
      * @todo:	verify `gamma` value range
      */
-    var MixerLevelsCommand = (function (_super) {
+    var MixerLevelsCommand = /** @class */ (function (_super) {
         __extends(MixerLevelsCommand, _super);
         /**
          *
@@ -798,7 +798,7 @@ var AMCP;
     /**
      *
      */
-    var MixerFillCommand = (function (_super) {
+    var MixerFillCommand = /** @class */ (function (_super) {
         __extends(MixerFillCommand, _super);
         /**
          *
@@ -831,7 +831,7 @@ var AMCP;
     /**
      *
      */
-    var MixerClipCommand = (function (_super) {
+    var MixerClipCommand = /** @class */ (function (_super) {
         __extends(MixerClipCommand, _super);
         /**
          *
@@ -864,7 +864,7 @@ var AMCP;
     /**
      *
      */
-    var MixerAnchorCommand = (function (_super) {
+    var MixerAnchorCommand = /** @class */ (function (_super) {
         __extends(MixerAnchorCommand, _super);
         /**
          *
@@ -895,7 +895,7 @@ var AMCP;
     /**
      *
      */
-    var MixerCropCommand = (function (_super) {
+    var MixerCropCommand = /** @class */ (function (_super) {
         __extends(MixerCropCommand, _super);
         /**
          *
@@ -928,7 +928,7 @@ var AMCP;
     /**
      *
      */
-    var MixerRotationCommand = (function (_super) {
+    var MixerRotationCommand = /** @class */ (function (_super) {
         __extends(MixerRotationCommand, _super);
         /**
          *
@@ -957,7 +957,7 @@ var AMCP;
     /**
      *
      */
-    var MixerPerspectiveCommand = (function (_super) {
+    var MixerPerspectiveCommand = /** @class */ (function (_super) {
         __extends(MixerPerspectiveCommand, _super);
         /**
          *
@@ -994,7 +994,7 @@ var AMCP;
     /**
      *
      */
-    var MixerMipmapCommand = (function (_super) {
+    var MixerMipmapCommand = /** @class */ (function (_super) {
         __extends(MixerMipmapCommand, _super);
         /**
          *
@@ -1019,7 +1019,7 @@ var AMCP;
     /**
      *
      */
-    var MixerVolumeCommand = (function (_super) {
+    var MixerVolumeCommand = /** @class */ (function (_super) {
         __extends(MixerVolumeCommand, _super);
         /**
          *
@@ -1048,7 +1048,7 @@ var AMCP;
     /**
      *
      */
-    var MixerMastervolumeCommand = (function (_super) {
+    var MixerMastervolumeCommand = /** @class */ (function (_super) {
         __extends(MixerMastervolumeCommand, _super);
         /**
          *
@@ -1075,7 +1075,7 @@ var AMCP;
     /**
      *
      */
-    var MixerStraightAlphaOutputCommand = (function (_super) {
+    var MixerStraightAlphaOutputCommand = /** @class */ (function (_super) {
         __extends(MixerStraightAlphaOutputCommand, _super);
         /**
          *
@@ -1100,7 +1100,7 @@ var AMCP;
     /**
      *
      */
-    var MixerGridCommand = (function (_super) {
+    var MixerGridCommand = /** @class */ (function (_super) {
         __extends(MixerGridCommand, _super);
         /**
          *
@@ -1124,7 +1124,7 @@ var AMCP;
     /**
      *
      */
-    var MixerCommitCommand = (function (_super) {
+    var MixerCommitCommand = /** @class */ (function (_super) {
         __extends(MixerCommitCommand, _super);
         /**
          *
@@ -1144,7 +1144,7 @@ var AMCP;
     /**
      *
      */
-    var MixerClearCommand = (function (_super) {
+    var MixerClearCommand = /** @class */ (function (_super) {
         __extends(MixerClearCommand, _super);
         /**
          *
@@ -1169,7 +1169,7 @@ var AMCP;
     /**
      *
      */
-    var ClearCommand = (function (_super) {
+    var ClearCommand = /** @class */ (function (_super) {
         __extends(ClearCommand, _super);
         function ClearCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1181,7 +1181,7 @@ var AMCP;
     /**
      *
      */
-    var CallCommand = (function (_super) {
+    var CallCommand = /** @class */ (function (_super) {
         __extends(CallCommand, _super);
         function CallCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1193,7 +1193,7 @@ var AMCP;
     /**
      *
      */
-    var SwapCommand = (function (_super) {
+    var SwapCommand = /** @class */ (function (_super) {
         __extends(SwapCommand, _super);
         /**
          *
@@ -1210,7 +1210,7 @@ var AMCP;
     /**
      *
      */
-    var AddCommand = (function (_super) {
+    var AddCommand = /** @class */ (function (_super) {
         __extends(AddCommand, _super);
         function AddCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1222,7 +1222,7 @@ var AMCP;
     /**
      *
      */
-    var RemoveCommand = (function (_super) {
+    var RemoveCommand = /** @class */ (function (_super) {
         __extends(RemoveCommand, _super);
         function RemoveCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1234,7 +1234,7 @@ var AMCP;
     /**
      *
      */
-    var PrintCommand = (function (_super) {
+    var PrintCommand = /** @class */ (function (_super) {
         __extends(PrintCommand, _super);
         function PrintCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1246,7 +1246,7 @@ var AMCP;
     /**
      *
      */
-    var SetCommand = (function (_super) {
+    var SetCommand = /** @class */ (function (_super) {
         __extends(SetCommand, _super);
         function SetCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1258,7 +1258,7 @@ var AMCP;
     /**
      *
      */
-    var LockCommand = (function (_super) {
+    var LockCommand = /** @class */ (function (_super) {
         __extends(LockCommand, _super);
         function LockCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1278,7 +1278,7 @@ var AMCP;
     /**
      *
      */
-    var ChannelGridCommand = (function (_super) {
+    var ChannelGridCommand = /** @class */ (function (_super) {
         __extends(ChannelGridCommand, _super);
         function ChannelGridCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1290,7 +1290,7 @@ var AMCP;
     /**
      *
      */
-    var GlGCCommand = (function (_super) {
+    var GlGCCommand = /** @class */ (function (_super) {
         __extends(GlGCCommand, _super);
         function GlGCCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1307,7 +1307,7 @@ var AMCP;
     /**
      *
      */
-    var DataStoreCommand = (function (_super) {
+    var DataStoreCommand = /** @class */ (function (_super) {
         __extends(DataStoreCommand, _super);
         function DataStoreCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1324,7 +1324,7 @@ var AMCP;
     /**
      *
      */
-    var DataRetrieveCommand = (function (_super) {
+    var DataRetrieveCommand = /** @class */ (function (_super) {
         __extends(DataRetrieveCommand, _super);
         function DataRetrieveCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1341,7 +1341,7 @@ var AMCP;
     /**
      *
      */
-    var DataListCommand = (function (_super) {
+    var DataListCommand = /** @class */ (function (_super) {
         __extends(DataListCommand, _super);
         function DataListCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1355,7 +1355,7 @@ var AMCP;
     /**
      *
      */
-    var DataRemoveCommand = (function (_super) {
+    var DataRemoveCommand = /** @class */ (function (_super) {
         __extends(DataRemoveCommand, _super);
         function DataRemoveCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1376,7 +1376,7 @@ var AMCP;
     /**
      *
      */
-    var ThumbnailListCommand = (function (_super) {
+    var ThumbnailListCommand = /** @class */ (function (_super) {
         __extends(ThumbnailListCommand, _super);
         function ThumbnailListCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1391,7 +1391,7 @@ var AMCP;
     /**
      *
      */
-    var ThumbnailRetrieveCommand = (function (_super) {
+    var ThumbnailRetrieveCommand = /** @class */ (function (_super) {
         __extends(ThumbnailRetrieveCommand, _super);
         function ThumbnailRetrieveCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1408,7 +1408,7 @@ var AMCP;
     /**
      *
      */
-    var ThumbnailGenerateCommand = (function (_super) {
+    var ThumbnailGenerateCommand = /** @class */ (function (_super) {
         __extends(ThumbnailGenerateCommand, _super);
         function ThumbnailGenerateCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1424,7 +1424,7 @@ var AMCP;
     /**
      *
      */
-    var ThumbnailGenerateAllCommand = (function (_super) {
+    var ThumbnailGenerateAllCommand = /** @class */ (function (_super) {
         __extends(ThumbnailGenerateAllCommand, _super);
         function ThumbnailGenerateAllCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1441,7 +1441,7 @@ var AMCP;
     /**
      *
      */
-    var CinfCommand = (function (_super) {
+    var CinfCommand = /** @class */ (function (_super) {
         __extends(CinfCommand, _super);
         function CinfCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1458,7 +1458,7 @@ var AMCP;
     /**
      *
      */
-    var ClsCommand = (function (_super) {
+    var ClsCommand = /** @class */ (function (_super) {
         __extends(ClsCommand, _super);
         function ClsCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1472,7 +1472,7 @@ var AMCP;
     /**
      *
      */
-    var FlsCommand = (function (_super) {
+    var FlsCommand = /** @class */ (function (_super) {
         __extends(FlsCommand, _super);
         function FlsCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1486,7 +1486,7 @@ var AMCP;
     /**
      *
      */
-    var TlsCommand = (function (_super) {
+    var TlsCommand = /** @class */ (function (_super) {
         __extends(TlsCommand, _super);
         function TlsCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1500,7 +1500,7 @@ var AMCP;
     /**
      *
      */
-    var VersionCommand = (function (_super) {
+    var VersionCommand = /** @class */ (function (_super) {
         __extends(VersionCommand, _super);
         function VersionCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1517,7 +1517,7 @@ var AMCP;
     /**
      *
      */
-    var InfoCommand = (function (_super) {
+    var InfoCommand = /** @class */ (function (_super) {
         __extends(InfoCommand, _super);
         /**
          *
@@ -1537,7 +1537,7 @@ var AMCP;
     /**
      *
      */
-    var InfoTemplateCommand = (function (_super) {
+    var InfoTemplateCommand = /** @class */ (function (_super) {
         __extends(InfoTemplateCommand, _super);
         function InfoTemplateCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1554,7 +1554,7 @@ var AMCP;
     /**
      *
      */
-    var InfoConfigCommand = (function (_super) {
+    var InfoConfigCommand = /** @class */ (function (_super) {
         __extends(InfoConfigCommand, _super);
         /**
          *
@@ -1571,7 +1571,7 @@ var AMCP;
     /**
      *
      */
-    var InfoPathsCommand = (function (_super) {
+    var InfoPathsCommand = /** @class */ (function (_super) {
         __extends(InfoPathsCommand, _super);
         function InfoPathsCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1585,7 +1585,7 @@ var AMCP;
     /**
      *
      */
-    var InfoSystemCommand = (function (_super) {
+    var InfoSystemCommand = /** @class */ (function (_super) {
         __extends(InfoSystemCommand, _super);
         function InfoSystemCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1599,7 +1599,7 @@ var AMCP;
     /**
      *
      */
-    var InfoServerCommand = (function (_super) {
+    var InfoServerCommand = /** @class */ (function (_super) {
         __extends(InfoServerCommand, _super);
         function InfoServerCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1613,7 +1613,7 @@ var AMCP;
     /**
      *
      */
-    var InfoQueuesCommand = (function (_super) {
+    var InfoQueuesCommand = /** @class */ (function (_super) {
         __extends(InfoQueuesCommand, _super);
         function InfoQueuesCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1627,7 +1627,7 @@ var AMCP;
     /**
      *
      */
-    var InfoThreadsCommand = (function (_super) {
+    var InfoThreadsCommand = /** @class */ (function (_super) {
         __extends(InfoThreadsCommand, _super);
         function InfoThreadsCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1641,7 +1641,7 @@ var AMCP;
     /**
      *
      */
-    var InfoDelayCommand = (function (_super) {
+    var InfoDelayCommand = /** @class */ (function (_super) {
         __extends(InfoDelayCommand, _super);
         /**
          *
@@ -1662,7 +1662,7 @@ var AMCP;
     /**
      * @todo: response validator/parser
      */
-    var CGInfoCommand = (function (_super) {
+    var CGInfoCommand = /** @class */ (function (_super) {
         __extends(CGInfoCommand, _super);
         /**
          *
@@ -1684,7 +1684,7 @@ var AMCP;
     /**
      *
      */
-    var GlInfoCommand = (function (_super) {
+    var GlInfoCommand = /** @class */ (function (_super) {
         __extends(GlInfoCommand, _super);
         function GlInfoCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1698,7 +1698,7 @@ var AMCP;
     /**
      *
      */
-    var LogLevelCommand = (function (_super) {
+    var LogLevelCommand = /** @class */ (function (_super) {
         __extends(LogLevelCommand, _super);
         function LogLevelCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1714,7 +1714,7 @@ var AMCP;
     /**
      * @protocol	Needs either `calltrace` or `communication` parameter.
      */
-    var LogCategoryCommand = (function (_super) {
+    var LogCategoryCommand = /** @class */ (function (_super) {
         __extends(LogCategoryCommand, _super);
         function LogCategoryCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1734,7 +1734,7 @@ var AMCP;
     /**
      *
      */
-    var DiagCommand = (function (_super) {
+    var DiagCommand = /** @class */ (function (_super) {
         __extends(DiagCommand, _super);
         function DiagCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1747,7 +1747,7 @@ var AMCP;
      * @todo: mixed mode!!!!
      * 202/201
      */
-    var HelpCommand = (function (_super) {
+    var HelpCommand = /** @class */ (function (_super) {
         __extends(HelpCommand, _super);
         function HelpCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1764,7 +1764,7 @@ var AMCP;
     /**
      *
      */
-    var HelpProducerCommand = (function (_super) {
+    var HelpProducerCommand = /** @class */ (function (_super) {
         __extends(HelpProducerCommand, _super);
         function HelpProducerCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1781,7 +1781,7 @@ var AMCP;
     /**
      *
      */
-    var HelpConsumerCommand = (function (_super) {
+    var HelpConsumerCommand = /** @class */ (function (_super) {
         __extends(HelpConsumerCommand, _super);
         function HelpConsumerCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1803,7 +1803,7 @@ var AMCP;
     /**
      * @todo: response
      */
-    var ByeCommand = (function (_super) {
+    var ByeCommand = /** @class */ (function (_super) {
         __extends(ByeCommand, _super);
         function ByeCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1815,7 +1815,7 @@ var AMCP;
     /**
      * @todo: response
      */
-    var KillCommand = (function (_super) {
+    var KillCommand = /** @class */ (function (_super) {
         __extends(KillCommand, _super);
         function KillCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1827,7 +1827,7 @@ var AMCP;
     /**
      * @todo: response
      */
-    var RestartCommand = (function (_super) {
+    var RestartCommand = /** @class */ (function (_super) {
         __extends(RestartCommand, _super);
         function RestartCommand() {
             return _super !== null && _super.apply(this, arguments) || this;

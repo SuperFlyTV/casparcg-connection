@@ -305,7 +305,7 @@ export declare namespace AMCP {
      */
     class MixerLevelsCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -317,7 +317,7 @@ export declare namespace AMCP {
      */
     class MixerFillCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -329,7 +329,7 @@ export declare namespace AMCP {
      */
     class MixerClipCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -341,7 +341,7 @@ export declare namespace AMCP {
      */
     class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -353,7 +353,7 @@ export declare namespace AMCP {
      */
     class MixerCropCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -377,7 +377,7 @@ export declare namespace AMCP {
      */
     class MixerPerspectiveCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *

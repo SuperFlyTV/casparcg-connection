@@ -18,7 +18,7 @@ var Protocol;
     /**
      *
      */
-    var AbstractProtocolLogic = (function () {
+    var AbstractProtocolLogic = /** @class */ (function () {
         /**
          *
          */
@@ -35,7 +35,7 @@ var Protocol;
     /**
      *
      */
-    var Depends = (function (_super) {
+    var Depends = /** @class */ (function (_super) {
         __extends(Depends, _super);
         function Depends() {
             var fields = [];
@@ -102,7 +102,7 @@ var Protocol;
     /**
      *
      */
-    var OneOf = (function (_super) {
+    var OneOf = /** @class */ (function (_super) {
         __extends(OneOf, _super);
         function OneOf() {
             var fields = [];
@@ -128,7 +128,7 @@ var Protocol;
     /**
      *
      */
-    var Coupled = (function (_super) {
+    var Coupled = /** @class */ (function (_super) {
         __extends(Coupled, _super);
         function Coupled() {
             var fields = [];

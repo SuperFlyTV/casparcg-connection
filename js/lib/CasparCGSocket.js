@@ -22,7 +22,7 @@ var Events_1 = require("./event/Events");
 /**
  *
  */
-var CasparCGSocket = (function (_super) {
+var CasparCGSocket = /** @class */ (function (_super) {
     __extends(CasparCGSocket, _super);
     /**
      *
