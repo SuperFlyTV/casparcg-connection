@@ -1892,6 +1892,48 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
     return this.do(new AMCP.RestartCommand())
   }
 
+  /**
+   * Undocumented, but implemented by Julusian.
+   */
+  public ping (): Promise<IAMCPCommand> {
+    return this.do(new AMCP.PingCommand())
+  }
+
+  /**
+   * Undocumented, but implemented by Julusian.
+   */
+  public time (): Promise<IAMCPCommand> {
+    return this.do(new AMCP.TimeCommand)
+  }
+
+  /**
+   * https://github.com/CasparCG/server/issues/872
+   */
+  public scheduleSet (token: string, timecode: string, command: IAMCPCommand): Promise<IAMCPCommand> {
+    return this.do(new AMCP.ScheduleSetCommand({token, timecode, command}))
+  }
+
+  /**
+   * https://github.com/CasparCG/server/issues/872
+   */
+  public scheduleRemove (token: string): Promise<IAMCPCommand> {
+    return this.do(new AMCP.ScheduleRemoveCommand({token}))
+  }
+
+  /**
+   * https://github.com/CasparCG/server/issues/872
+   */
+  public scheduleClear (): Promise<IAMCPCommand> {
+    return this.do(new AMCP.ScheduleClearCommand())
+  }
+
+  /**
+   * https://github.com/CasparCG/server/issues/872
+   */
+  public scheduleList (timecode?: string): Promise<IAMCPCommand> {
+    return this.do(new AMCP.ScheduleListCommand({timecode}))
+  }
+
 	/**
 	 *
 	 */

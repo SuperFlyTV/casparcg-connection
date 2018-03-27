@@ -810,4 +810,30 @@ export declare namespace AMCP {
     class RestartCommand extends AbstractCommand {
         static readonly commandString: string;
     }
+    class PingCommand extends AbstractCommand {
+        static readonly commandString: string;
+    }
+}
+/**
+ * IScheduling
+ */
+export declare namespace AMCP {
+    class TimeCommand extends AbstractCommand {
+        static readonly commandString: string;
+    }
+    class ScheduleSetCommand extends AbstractCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    class ScheduleRemoveCommand extends AbstractCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    class ScheduleClearCommand extends AbstractCommand {
+        static readonly commandString: string;
+    }
+    class ScheduleListCommand extends AbstractCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
 }

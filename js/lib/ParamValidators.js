@@ -11,6 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var ServerStateEnum_1 = require("./ServerStateEnum");
+var AbstractCommand_1 = require("./AbstractCommand");
 var Validation;
 (function (Validation) {
     /**
@@ -590,4 +591,36 @@ var Validation;
         return TemplateDataValidator;
     }(AbstractValidator));
     Validation.TemplateDataValidator = TemplateDataValidator;
+    var TimecodeValidator = (function (_super) {
+        __extends(TimecodeValidator, _super);
+        function TimecodeValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return TimecodeValidator;
+    }(StringValidator));
+    Validation.TimecodeValidator = TimecodeValidator;
+    var CommandValidator = (function (_super) {
+        __extends(CommandValidator, _super);
+        function CommandValidator() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        CommandValidator.prototype.resolve = function (command) {
+            if (AbstractCommand_1.Command.isIAMCPCommand(command)) {
+                console.log(command);
+                command.validateParams();
+                var commandString = command.constructor['commandString'] + (command.address ? ' ' + command.address : '');
+                for (var i in command.payload) {
+                    var payload = command.payload[i];
+                    commandString += (commandString.length > 0 ? ' ' : '');
+                    commandString += (payload.key ? payload.key + ' ' : '') + payload.value;
+                }
+                return commandString;
+            }
+            else {
+                throw 'Argument 0 was not an amcp command.';
+            }
+        };
+        return CommandValidator;
+    }(AbstractValidator));
+    Validation.CommandValidator = CommandValidator;
 })(Validation = exports.Validation || (exports.Validation = {}));

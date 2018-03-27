@@ -1293,6 +1293,18 @@ var CasparCG = (function (_super) {
         return this.do(new AMCP_1.AMCP.RestartCommand());
     };
     /**
+     * Undocumented, but implemented by Julusian.
+     */
+    CasparCG.prototype.ping = function () {
+        return this.do(new AMCP_1.AMCP.PingCommand);
+    };
+    /**
+     * Undocumented, but implemented by Julusian.
+     */
+    CasparCG.prototype.time = function () {
+        return this.do(new AMCP_1.AMCP.TimeCommand);
+    };
+    /**
      *
      */
     CasparCG.prototype._createNewSocket = function (options, enforceRecreation) {

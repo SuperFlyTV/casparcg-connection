@@ -1450,4 +1450,39 @@ export class KillCommand extends AbstractCommand {
 export class RestartCommand extends AbstractCommand {
   static readonly commandString = 'RESTART'
 }
+export class PingCommand extends AbstractCommand {
+  static readonly commandString = 'PING'
+}
+}
+
+/**
+ * IScheduling
+ */
+export namespace AMCP {
+export class TimeCommand extends AbstractCommand {
+  static readonly commandString = 'TIME'
+}
+export class ScheduleSetCommand extends AbstractCommand {
+  static readonly commandString = 'SCHEDULE SET'
+  paramProtocol = [
+    new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator()),
+    new ParamSignature(required, 'timecode', null, new ParameterValidator.TimecodeValidator()),
+    new ParamSignature(required, 'command', null, new ParameterValidator.CommandValidator()),
+  ]
+}
+export class ScheduleRemoveCommand extends AbstractCommand {
+  static readonly commandString = 'SCHEDULE REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator())
+  ]
+}
+export class ScheduleClearCommand extends AbstractCommand {
+  static readonly commandString = 'SCHEDULE CLEAR'
+}
+export class ScheduleListCommand extends AbstractCommand {
+  static readonly commandString = 'SCHEDULE LIST'
+  paramProtocol = [
+    new ParamSignature(optional, 'token', null, new ParameterValidator.StringValidator()),
+  ]
+}
 }

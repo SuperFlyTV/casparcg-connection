@@ -1836,4 +1836,77 @@ var AMCP;
         return RestartCommand;
     }(AbstractCommand));
     AMCP.RestartCommand = RestartCommand;
+    var PingCommand = (function (_super) {
+        __extends(PingCommand, _super);
+        function PingCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        PingCommand.commandString = 'PING';
+        return PingCommand;
+    }(AbstractCommand));
+    AMCP.PingCommand = PingCommand;
+})(AMCP = exports.AMCP || (exports.AMCP = {}));
+/**
+ * IScheduling
+ */
+(function (AMCP) {
+    var TimeCommand = (function (_super) {
+        __extends(TimeCommand, _super);
+        function TimeCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        TimeCommand.commandString = 'TIME';
+        return TimeCommand;
+    }(AbstractCommand));
+    AMCP.TimeCommand = TimeCommand;
+    var ScheduleSetCommand = (function (_super) {
+        __extends(ScheduleSetCommand, _super);
+        function ScheduleSetCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'token', null, new ParamValidators_1.Validation.StringValidator()),
+                new ParamSignature(required, 'timecode', null, new ParamValidators_1.Validation.TimecodeValidator()),
+                new ParamSignature(required, 'command', null, new ParamValidators_1.Validation.CommandValidator()),
+            ];
+            return _this;
+        }
+        ScheduleSetCommand.commandString = 'SCHEDULE SET';
+        return ScheduleSetCommand;
+    }(AbstractCommand));
+    AMCP.ScheduleSetCommand = ScheduleSetCommand;
+    var ScheduleRemoveCommand = (function (_super) {
+        __extends(ScheduleRemoveCommand, _super);
+        function ScheduleRemoveCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'token', null, new ParamValidators_1.Validation.StringValidator())
+            ];
+            return _this;
+        }
+        ScheduleRemoveCommand.commandString = 'SCHEDULE REMOVE';
+        return ScheduleRemoveCommand;
+    }(AbstractCommand));
+    AMCP.ScheduleRemoveCommand = ScheduleRemoveCommand;
+    var ScheduleClearCommand = (function (_super) {
+        __extends(ScheduleClearCommand, _super);
+        function ScheduleClearCommand() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ScheduleClearCommand.commandString = 'SCHEDULE CLEAR';
+        return ScheduleClearCommand;
+    }(AbstractCommand));
+    AMCP.ScheduleClearCommand = ScheduleClearCommand;
+    var ScheduleListCommand = (function (_super) {
+        __extends(ScheduleListCommand, _super);
+        function ScheduleListCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(optional, 'token', null, new ParamValidators_1.Validation.StringValidator()),
+            ];
+            return _this;
+        }
+        ScheduleListCommand.commandString = 'SCHEDULE LIST';
+        return ScheduleListCommand;
+    }(AbstractCommand));
+    AMCP.ScheduleListCommand = ScheduleListCommand;
 })(AMCP = exports.AMCP || (exports.AMCP = {}));

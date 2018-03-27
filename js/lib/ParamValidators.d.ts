@@ -2,13 +2,14 @@ import { Param as ParamNS } from './ParamSignature';
 import ParamData = ParamNS.ParamData;
 import { Enum } from './ServerStateEnum';
 import AbstractEnum = Enum.AbstractEnum;
+import { Command as CommandNS } from './AbstractCommand';
 export declare namespace Validation {
     /**
      *
      */
     interface IValidator {
         resolved: boolean;
-        resolve(data: Object, key?: string): ParamData;
+        resolve(data: Object | CommandNS.IAMCPCommand, key?: string): ParamData;
     }
     /**
      *
@@ -208,5 +209,10 @@ export declare namespace Validation {
          *
          */
         resolve(data: Object): ParamData;
+    }
+    class TimecodeValidator extends StringValidator {
+    }
+    class CommandValidator extends AbstractValidator {
+        resolve(command: Object): ParamData;
     }
 }

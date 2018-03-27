@@ -3,13 +3,15 @@ import ParamData = ParamNS.ParamData
 import { Enum } from './ServerStateEnum'
 import AbstractEnum = Enum.AbstractEnum
 
+import { Command as CommandNS } from './AbstractCommand'
+
 export namespace Validation {
 	/**
 	 *
 	 */
 export interface IValidator {
   resolved: boolean
-  resolve (data: Object, key?: string): ParamData
+  resolve (data: Object | CommandNS.IAMCPCommand, key?: string): ParamData
 }
 
 	/**
@@ -534,6 +536,26 @@ export class TemplateDataValidator extends AbstractValidator {
      // add qoutation
     let quotedString: string = `"${stringCast}"`
     return {raw: stringCast, payload: quotedString}
+  }
+}
+export class TimecodeValidator extends StringValidator {
+  // nothing
+}
+export class CommandValidator extends AbstractValidator {
+  resolve (command: Object): ParamData {
+    if (CommandNS.isIAMCPCommand(command)) {
+      console.log(command)
+      command.validateParams()
+      let commandString: string = command.constructor['commandString'] + (command.address ? ' ' + command.address : '')
+      for (let i in command.payload) {
+        let payload: ParamNS.Payload = command.payload[i]
+        commandString += (commandString.length > 0 ? ' ' : '')
+        commandString += (payload.key ? payload.key + ' ' : '') + payload.value
+      }
+      return commandString
+    } else {
+      throw 'Argument 0 was not an amcp command.'
+    }
   }
 }
 }
