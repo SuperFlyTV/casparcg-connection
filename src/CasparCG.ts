@@ -168,12 +168,20 @@ export interface IChannel {
 		//// call(channel: number, layer: number): Promise<IAMCPCommand>;
 		//// swap(): Promise<IAMCPCommand>;
 		//// add(channel: number): Promise<IAMCPCommand>;
-		//// remove(channel: number): Promise<IAMCPCommand>;
   print (channel: number): Promise<IAMCPCommand>
 		//// set(channel: number): Promise<IAMCPCommand>;
   lock (channel: number, action: Enum.Lock|string, lockPhrase?: string): Promise<IAMCPCommand>
   channelGrid (): Promise<IAMCPCommand>
   glGC (): Promise<IAMCPCommand>
+  addDecklink (channel: number, device: number, id?: number): Promise<IAMCPCommand>
+  addImage (channel: number, fileName: string, id?: number): Promise<IAMCPCommand>
+  addFile (channel: number, fileName: string, id?: number): Promise<IAMCPCommand>
+  addStream (channel: number, uri: string, params: string, id?: number): Promise<IAMCPCommand>
+  remove (channel: number, id: number): Promise<IAMCPCommand>
+  removeDecklink (channel: number, device: number): Promise<IAMCPCommand>
+  removeImage (channel: number, fileName: string): Promise<IAMCPCommand>
+  removeFile (channel: number, fileName: string): Promise<IAMCPCommand>
+  removeStream (channel: number, uri: string): Promise<IAMCPCommand>
 }
 
 		/**
@@ -1513,12 +1521,67 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
     return this.do(new AMCP.AddCommand({channel: channel}))
   }
 
+  /**
+   *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#ADD>
+   */
+  public addDecklink (channel: number, device: number, id?: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.AddDecklinkCommand({channel: channel, layer: id, device: device}))
+  }
+
+  /**
+   *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#ADD>
+   */
+  public addImage (channel: number, fileName: string, id?: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.AddImageCommand({channel: channel, layer: id, fileName: fileName}))
+  }
+
+  /**
+   *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#ADD>
+   */
+  public addFile (channel: number, fileName: string, id?: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.AddFileCommand({channel: channel, layer: id, fileName: fileName}))
+  }
+
+  /**
+   *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#ADD>
+   */
+  public addStream (channel: number, uri: string, params: string, id?: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.AddStreamCommand({channel: channel, layer: id, uri: uri, params: params}))
+  }
+
 	/**
-	 * @todo	implement
-	 * @todo	document
+	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
 	 */
-  public remove (channel: number, layer?: number): Promise<IAMCPCommand> {
-    return this.do(new AMCP.RemoveCommand({channel: channel, layer: layer}))
+  public remove (channel: number, id: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.RemoveCommand({channel: channel, layer: id}))
+  }
+
+  /**
+   *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+   */
+  public removeDecklink (channel: number, device: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.RemoveDecklinkCommand({channel: channel, device: device}))
+  }
+
+  /**
+   * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+   */
+  public removeImage (channel: number, fileName: string): Promise<IAMCPCommand> {
+    return this.do(new AMCP.RemoveImageCommand({channel: channel, fileName: fileName}))
+  }
+
+  /**
+   *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+   */
+  public removeFile (channel: number, fileName: string): Promise<IAMCPCommand> {
+    return this.do(new AMCP.RemoveFileCommand({channel: channel, fileName: fileName}))
+  }
+
+  /**
+   *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
+   */
+  public removeStream (channel: number, uri: string): Promise<IAMCPCommand> {
+    return this.do(new AMCP.RemoveStreamCommand({channel: channel, uri: uri}))
   }
 
 	/**

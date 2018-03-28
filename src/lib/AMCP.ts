@@ -1041,11 +1041,88 @@ export class AddCommand extends AbstractChannelCommand {
   static readonly commandString = 'ADD'
 }
 
+  /**
+   *
+   */
+export class AddDecklinkCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'ADD'
+  paramProtocol = [
+    new ParamSignature(required, 'device', 'DECKLINK', new ParameterValidator.DecklinkDeviceValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class AddImageCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'ADD'
+  paramProtocol = [
+    new ParamSignature(required, 'fileName', 'IMAGE', new ParameterValidator.StringValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class AddFileCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'ADD'
+  paramProtocol = [
+    new ParamSignature(required, 'fileName', 'FILE', new ParameterValidator.StringValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class AddStreamCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'ADD'
+  paramProtocol = [
+    new ParamSignature(required, 'uri', 'STREAM', new ParameterValidator.StringValidator()),
+    new ParamSignature(required, 'params', null, new ParameterValidator.StringValidator())
+  ]
+}
+
 	/**
 	 *
 	 */
 export class RemoveCommand extends AbstractChannelOrLayerCommand {
   static readonly commandString = 'REMOVE'
+}
+export class RemoveDecklinkCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'device', 'DECKLINK', new ParameterValidator.DecklinkDeviceValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class RemoveImageCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'fileName', 'IMAGE', new ParameterValidator.StringValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class RemoveFileCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'fileName', 'FILE', new ParameterValidator.StringValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class RemoveStreamCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'uri', 'STREAM', new ParameterValidator.StringValidator())
+  ]
 }
 
 	/**
