@@ -1222,7 +1222,72 @@ var AMCP;
     /**
      *
      */
-    var RemoveCommand = /** @class */ (function (_super) {
+    var AddDecklinkCommand = (function (_super) {
+        __extends(AddDecklinkCommand, _super);
+        function AddDecklinkCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'device', 'DECKLINK', new ParamValidators_1.Validation.DecklinkDeviceValidator())
+            ];
+            return _this;
+        }
+        AddDecklinkCommand.commandString = 'ADD';
+        return AddDecklinkCommand;
+    }(AbstractChannelOrLayerCommand));
+    AMCP.AddDecklinkCommand = AddDecklinkCommand;
+    /**
+     *
+     */
+    var AddImageCommand = (function (_super) {
+        __extends(AddImageCommand, _super);
+        function AddImageCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'fileame', 'IMAGE', new ParamValidators_1.Validation.StringValidator())
+            ];
+            return _this;
+        }
+        AddImageCommand.commandString = 'ADD';
+        return AddImageCommand;
+    }(AbstractChannelOrLayerCommand));
+    AMCP.AddImageCommand = AddImageCommand;
+    /**
+     *
+     */
+    var AddFileCommand = (function (_super) {
+        __extends(AddFileCommand, _super);
+        function AddFileCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'fileName', 'FILE', new ParamValidators_1.Validation.StringValidator())
+            ];
+            return _this;
+        }
+        AddFileCommand.commandString = 'ADD';
+        return AddFileCommand;
+    }(AbstractChannelOrLayerCommand));
+    AMCP.AddFileCommand = AddFileCommand;
+    /**
+     *
+     */
+    var AddStreamCommand = (function (_super) {
+        __extends(AddStreamCommand, _super);
+        function AddStreamCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'uri', 'STREAM', new ParamValidators_1.Validation.StringValidator()),
+                new ParamSignature(required, 'params', null, new ParamValidators_1.Validation.StringValidator())
+            ];
+            return _this;
+        }
+        AddStreamCommand.commandString = 'ADD';
+        return AddStreamCommand;
+    }(AbstractChannelOrLayerCommand));
+    AMCP.AddStreamCommand = AddStreamCommand;
+    /**
+     *
+     */
+    var RemoveCommand = (function (_super) {
         __extends(RemoveCommand, _super);
         function RemoveCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1234,7 +1299,71 @@ var AMCP;
     /**
      *
      */
-    var PrintCommand = /** @class */ (function (_super) {
+    var RemoveDecklinkCommand = (function (_super) {
+        __extends(RemoveDecklinkCommand, _super);
+        function RemoveDecklinkCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'device', 'DECKLINK', new ParamValidators_1.Validation.DecklinkDeviceValidator())
+            ];
+            return _this;
+        }
+        RemoveDecklinkCommand.commandString = 'REMOVE';
+        return RemoveDecklinkCommand;
+    }(AbstractChannelOrLayerCommand));
+    AMCP.RemoveDecklinkCommand = RemoveDecklinkCommand;
+    /**
+     *
+     */
+    var RemoveImageCommand = (function (_super) {
+        __extends(RemoveImageCommand, _super);
+        function RemoveImageCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'fileame', 'IMAGE', new ParamValidators_1.Validation.StringValidator())
+            ];
+            return _this;
+        }
+        RemoveImageCommand.commandString = 'REMOVE';
+        return RemoveImageCommand;
+    }(AbstractChannelOrLayerCommand));
+    AMCP.RemoveImageCommand = RemoveImageCommand;
+    /**
+     *
+     */
+    var RemoveFileCommand = (function (_super) {
+        __extends(RemoveFileCommand, _super);
+        function RemoveFileCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'fileName', 'FILE', new ParamValidators_1.Validation.StringValidator())
+            ];
+            return _this;
+        }
+        RemoveFileCommand.commandString = 'REMOVE';
+        return RemoveFileCommand;
+    }(AbstractChannelOrLayerCommand));
+    AMCP.RemoveFileCommand = RemoveFileCommand;
+    /**
+     *
+     */
+    var RemoveStreamCommand = (function (_super) {
+        __extends(RemoveStreamCommand, _super);
+        function RemoveStreamCommand() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'uri', 'STREAM', new ParamValidators_1.Validation.StringValidator())
+            ];
+            return _this;
+        }
+        RemoveStreamCommand.commandString = 'REMOVE';
+        return RemoveStreamCommand;
+    }(AbstractChannelOrLayerCommand));
+    AMCP.RemoveStreamCommand = RemoveStreamCommand;
+    /**
+     *
+     */
+    var PrintCommand = (function (_super) {
         __extends(PrintCommand, _super);
         function PrintCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
