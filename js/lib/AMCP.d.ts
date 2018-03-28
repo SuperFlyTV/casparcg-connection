@@ -532,9 +532,6 @@ export declare namespace AMCP {
     class RemoveCommand extends AbstractChannelOrLayerCommand {
         static readonly commandString: string;
     }
-    /**
-     *
-     */
     class RemoveDecklinkCommand extends AbstractChannelOrLayerCommand {
         static readonly commandString: string;
         paramProtocol: ParamNS.ParamSignature[];

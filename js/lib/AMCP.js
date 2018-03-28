@@ -1222,7 +1222,7 @@ var AMCP;
     /**
      *
      */
-    var AddDecklinkCommand = (function (_super) {
+    var AddDecklinkCommand = /** @class */ (function (_super) {
         __extends(AddDecklinkCommand, _super);
         function AddDecklinkCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1238,12 +1238,12 @@ var AMCP;
     /**
      *
      */
-    var AddImageCommand = (function (_super) {
+    var AddImageCommand = /** @class */ (function (_super) {
         __extends(AddImageCommand, _super);
         function AddImageCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
-                new ParamSignature(required, 'fileame', 'IMAGE', new ParamValidators_1.Validation.StringValidator())
+                new ParamSignature(required, 'fileName', 'IMAGE', new ParamValidators_1.Validation.StringValidator())
             ];
             return _this;
         }
@@ -1254,7 +1254,7 @@ var AMCP;
     /**
      *
      */
-    var AddFileCommand = (function (_super) {
+    var AddFileCommand = /** @class */ (function (_super) {
         __extends(AddFileCommand, _super);
         function AddFileCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1270,7 +1270,7 @@ var AMCP;
     /**
      *
      */
-    var AddStreamCommand = (function (_super) {
+    var AddStreamCommand = /** @class */ (function (_super) {
         __extends(AddStreamCommand, _super);
         function AddStreamCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1287,7 +1287,7 @@ var AMCP;
     /**
      *
      */
-    var RemoveCommand = (function (_super) {
+    var RemoveCommand = /** @class */ (function (_super) {
         __extends(RemoveCommand, _super);
         function RemoveCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1296,10 +1296,7 @@ var AMCP;
         return RemoveCommand;
     }(AbstractChannelOrLayerCommand));
     AMCP.RemoveCommand = RemoveCommand;
-    /**
-     *
-     */
-    var RemoveDecklinkCommand = (function (_super) {
+    var RemoveDecklinkCommand = /** @class */ (function (_super) {
         __extends(RemoveDecklinkCommand, _super);
         function RemoveDecklinkCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1315,12 +1312,12 @@ var AMCP;
     /**
      *
      */
-    var RemoveImageCommand = (function (_super) {
+    var RemoveImageCommand = /** @class */ (function (_super) {
         __extends(RemoveImageCommand, _super);
         function RemoveImageCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
-                new ParamSignature(required, 'fileame', 'IMAGE', new ParamValidators_1.Validation.StringValidator())
+                new ParamSignature(required, 'fileName', 'IMAGE', new ParamValidators_1.Validation.StringValidator())
             ];
             return _this;
         }
@@ -1331,7 +1328,7 @@ var AMCP;
     /**
      *
      */
-    var RemoveFileCommand = (function (_super) {
+    var RemoveFileCommand = /** @class */ (function (_super) {
         __extends(RemoveFileCommand, _super);
         function RemoveFileCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1347,7 +1344,7 @@ var AMCP;
     /**
      *
      */
-    var RemoveStreamCommand = (function (_super) {
+    var RemoveStreamCommand = /** @class */ (function (_super) {
         __extends(RemoveStreamCommand, _super);
         function RemoveStreamCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -1363,7 +1360,7 @@ var AMCP;
     /**
      *
      */
-    var PrintCommand = (function (_super) {
+    var PrintCommand = /** @class */ (function (_super) {
         __extends(PrintCommand, _super);
         function PrintCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
