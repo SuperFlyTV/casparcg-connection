@@ -10,7 +10,7 @@ var Response;
     /**
      *
      */
-    var ResponseSignature = (function () {
+    var ResponseSignature = /** @class */ (function () {
         /**
          *
          */

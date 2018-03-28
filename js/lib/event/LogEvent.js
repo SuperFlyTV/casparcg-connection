@@ -16,7 +16,7 @@ var Event;
     /**
      *
      */
-    var LogEvent = (function (_super) {
+    var LogEvent = /** @class */ (function (_super) {
         __extends(LogEvent, _super);
         /**
          *

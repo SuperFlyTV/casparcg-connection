@@ -10,7 +10,7 @@ var Param;
     /**
      *
      */
-    var Optional = (function () {
+    var Optional = /** @class */ (function () {
         function Optional() {
         }
         /**
@@ -25,7 +25,7 @@ var Param;
     /**
      *
      */
-    var Required = (function () {
+    var Required = /** @class */ (function () {
         function Required() {
         }
         /**
@@ -40,7 +40,7 @@ var Param;
     /**
      *
      */
-    var ParamSignature = (function () {
+    var ParamSignature = /** @class */ (function () {
         /**
          *
          */

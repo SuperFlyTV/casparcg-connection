@@ -24,7 +24,7 @@ var Command;
     /**
      *
      */
-    var AMCPResponse = (function () {
+    var AMCPResponse = /** @class */ (function () {
         function AMCPResponse() {
         }
         AMCPResponse.prototype.toString = function () {
@@ -66,7 +66,7 @@ var Command;
     /**
      *
      */
-    var AbstractCommand = (function () {
+    var AbstractCommand = /** @class */ (function () {
         // @todo: add concept of "variants", adding an ENUM to variants of the same (query) verb-command. INFO x INFO y, but not Thumbnail Retriece and thumbnail generate, different verbs
         // not LOG (action, not query)
         // INFO, HELP
@@ -428,7 +428,7 @@ var Command;
     /**
      *
      */
-    var AbstractOrChannelOrLayerCommand = (function (_super) {
+    var AbstractOrChannelOrLayerCommand = /** @class */ (function (_super) {
         __extends(AbstractOrChannelOrLayerCommand, _super);
         /**
          *
@@ -491,7 +491,7 @@ var Command;
     /**
      *
      */
-    var AbstractChannelCommand = (function (_super) {
+    var AbstractChannelCommand = /** @class */ (function (_super) {
         __extends(AbstractChannelCommand, _super);
         /**
          *
@@ -550,7 +550,7 @@ var Command;
     /**
      *
      */
-    var AbstractLayerCommand = (function (_super) {
+    var AbstractLayerCommand = /** @class */ (function (_super) {
         __extends(AbstractLayerCommand, _super);
         /**
          *
@@ -619,7 +619,7 @@ var Command;
     /**
      *
      */
-    var AbstractChannelOrLayerCommand = (function (_super) {
+    var AbstractChannelOrLayerCommand = /** @class */ (function (_super) {
         __extends(AbstractChannelOrLayerCommand, _super);
         /**
          *
@@ -686,7 +686,7 @@ var Command;
     /**
      *
      */
-    var AbstractLayerWithFallbackCommand = (function (_super) {
+    var AbstractLayerWithFallbackCommand = /** @class */ (function (_super) {
         __extends(AbstractLayerWithFallbackCommand, _super);
         /**
          *
@@ -751,7 +751,7 @@ var Command;
     /**
      *
      */
-    var AbstractLayerWithCgFallbackCommand = (function (_super) {
+    var AbstractLayerWithCgFallbackCommand = /** @class */ (function (_super) {
         __extends(AbstractLayerWithCgFallbackCommand, _super);
         /**
          *

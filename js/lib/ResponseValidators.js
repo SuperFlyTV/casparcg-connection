@@ -6,7 +6,7 @@ var Response;
     /**
      *
      */
-    var StatusValidator = (function () {
+    var StatusValidator = /** @class */ (function () {
         function StatusValidator() {
         }
         /**
@@ -21,7 +21,7 @@ var Response;
     /**
      *
      */
-    var StringValidator = (function () {
+    var StringValidator = /** @class */ (function () {
         function StringValidator() {
         }
         /**
@@ -37,7 +37,7 @@ var Response;
     /**
      *
      */
-    var XMLValidator = (function () {
+    var XMLValidator = /** @class */ (function () {
         function XMLValidator() {
         }
         /**
@@ -76,7 +76,7 @@ var Response;
     /**
      *
      */
-    var ListValidator = (function () {
+    var ListValidator = /** @class */ (function () {
         function ListValidator() {
         }
         /**
@@ -93,7 +93,7 @@ var Response;
     /**
      *
      */
-    var DataValidator = (function () {
+    var DataValidator = /** @class */ (function () {
         function DataValidator() {
         }
         /**
@@ -109,7 +109,7 @@ var Response;
     /**
      *
      */
-    var Base64Validator = (function () {
+    var Base64Validator = /** @class */ (function () {
         function Base64Validator() {
         }
         /**

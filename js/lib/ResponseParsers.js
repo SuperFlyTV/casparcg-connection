@@ -20,7 +20,7 @@ var CasparCGConfig = Config_1.Config.Intermediate.CasparCGConfig;
 var Response;
 (function (Response) {
     /***/
-    var CasparCGPaths = (function () {
+    var CasparCGPaths = /** @class */ (function () {
         function CasparCGPaths() {
         }
         /***/
@@ -102,7 +102,7 @@ var Response;
     }());
     Response.CasparCGPaths = CasparCGPaths;
     /***/
-    var ChannelRate = (function () {
+    var ChannelRate = /** @class */ (function () {
         /***/
         function ChannelRate(rateExpression) {
             this.isInterlaced = rateExpression.indexOf('i') > -1;
@@ -136,7 +136,7 @@ var Response;
     /**
      *
      */
-    var AbstractParser = (function () {
+    var AbstractParser = /** @class */ (function () {
         function AbstractParser() {
         }
         return AbstractParser;
@@ -145,7 +145,7 @@ var Response;
     /**
      *
      */
-    var ChannelParser = (function (_super) {
+    var ChannelParser = /** @class */ (function (_super) {
         __extends(ChannelParser, _super);
         function ChannelParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -172,7 +172,7 @@ var Response;
     }(AbstractParser));
     Response.ChannelParser = ChannelParser;
     /***/
-    var ConfigParser = (function (_super) {
+    var ConfigParser = /** @class */ (function (_super) {
         __extends(ConfigParser, _super);
         function ConfigParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -196,7 +196,7 @@ var Response;
     /**
      *
      */
-    var DataParser = (function (_super) {
+    var DataParser = /** @class */ (function (_super) {
         __extends(DataParser, _super);
         function DataParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -213,7 +213,7 @@ var Response;
     /**
      *
      */
-    var DataListParser = (function (_super) {
+    var DataListParser = /** @class */ (function (_super) {
         __extends(DataListParser, _super);
         function DataListParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -230,7 +230,7 @@ var Response;
     /**
      *
      */
-    var InfoTemplateParser = (function (_super) {
+    var InfoTemplateParser = /** @class */ (function (_super) {
         __extends(InfoTemplateParser, _super);
         function InfoTemplateParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -247,7 +247,7 @@ var Response;
     /**
      *
      */
-    var HelpParser = (function (_super) {
+    var HelpParser = /** @class */ (function (_super) {
         __extends(HelpParser, _super);
         function HelpParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -264,7 +264,7 @@ var Response;
     /**
      *
      */
-    var GLParser = (function (_super) {
+    var GLParser = /** @class */ (function (_super) {
         __extends(GLParser, _super);
         function GLParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -281,7 +281,7 @@ var Response;
     /**
      *
      */
-    var InfoDelayParser = (function (_super) {
+    var InfoDelayParser = /** @class */ (function (_super) {
         __extends(InfoDelayParser, _super);
         function InfoDelayParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -298,7 +298,7 @@ var Response;
     /**
      *
      */
-    var InfoParser = (function (_super) {
+    var InfoParser = /** @class */ (function (_super) {
         __extends(InfoParser, _super);
         function InfoParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -315,7 +315,7 @@ var Response;
     /**
      *
      */
-    var InfoThreadsParser = (function (_super) {
+    var InfoThreadsParser = /** @class */ (function (_super) {
         __extends(InfoThreadsParser, _super);
         function InfoThreadsParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -332,7 +332,7 @@ var Response;
     /**
      *
      */
-    var ThumbnailParser = (function (_super) {
+    var ThumbnailParser = /** @class */ (function (_super) {
         __extends(ThumbnailParser, _super);
         function ThumbnailParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -349,7 +349,7 @@ var Response;
     /**
      *
      */
-    var VersionParser = (function (_super) {
+    var VersionParser = /** @class */ (function (_super) {
         __extends(VersionParser, _super);
         function VersionParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -366,7 +366,7 @@ var Response;
     /**
      *
      */
-    var ContentParser = (function (_super) {
+    var ContentParser = /** @class */ (function (_super) {
         __extends(ContentParser, _super);
         function ContentParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -442,7 +442,7 @@ var Response;
     /**
      *
      */
-    var ThumbnailListParser = (function (_super) {
+    var ThumbnailListParser = /** @class */ (function (_super) {
         __extends(ThumbnailListParser, _super);
         function ThumbnailListParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -472,7 +472,7 @@ var Response;
     /**
      *
      */
-    var CinfParser = (function (_super) {
+    var CinfParser = /** @class */ (function (_super) {
         __extends(CinfParser, _super);
         function CinfParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -498,7 +498,7 @@ var Response;
     /**
      *
      */
-    var InfoQueuesParser = (function (_super) {
+    var InfoQueuesParser = /** @class */ (function (_super) {
         __extends(InfoQueuesParser, _super);
         function InfoQueuesParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -515,7 +515,7 @@ var Response;
     /**
      *
      */
-    var InfoServerParser = (function (_super) {
+    var InfoServerParser = /** @class */ (function (_super) {
         __extends(InfoServerParser, _super);
         function InfoServerParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -532,7 +532,7 @@ var Response;
     /**
      *
      */
-    var InfoPathsParser = (function (_super) {
+    var InfoPathsParser = /** @class */ (function (_super) {
         __extends(InfoPathsParser, _super);
         function InfoPathsParser() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -574,7 +574,7 @@ var Response;
     /**
      *
      */
-    var InfoSystemParser = (function (_super) {
+    var InfoSystemParser = /** @class */ (function (_super) {
         __extends(InfoSystemParser, _super);
         function InfoSystemParser() {
             return _super !== null && _super.apply(this, arguments) || this;

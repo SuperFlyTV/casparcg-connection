@@ -18,7 +18,7 @@ var Enum;
     /**
      *
      */
-    var AbstractEnum = (function () {
+    var AbstractEnum = /** @class */ (function () {
         /**
          *
          */
@@ -37,7 +37,7 @@ var Enum;
     /**
      *
      */
-    var Command = (function (_super) {
+    var Command = /** @class */ (function (_super) {
         __extends(Command, _super);
         function Command() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -126,7 +126,7 @@ var Enum;
     /**
      *
      */
-    var Producer = (function (_super) {
+    var Producer = /** @class */ (function (_super) {
         __extends(Producer, _super);
         function Producer() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -150,7 +150,7 @@ var Enum;
     /**
      *
      */
-    var Consumer = (function (_super) {
+    var Consumer = /** @class */ (function (_super) {
         __extends(Consumer, _super);
         function Consumer() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -170,7 +170,7 @@ var Enum;
      *
      *
      */
-    var Version = (function (_super) {
+    var Version = /** @class */ (function (_super) {
         __extends(Version, _super);
         function Version() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -186,7 +186,7 @@ var Enum;
      *
      *
      */
-    var Lock = (function (_super) {
+    var Lock = /** @class */ (function (_super) {
         __extends(Lock, _super);
         function Lock() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -201,7 +201,7 @@ var Enum;
      *
      *
      */
-    var LogCategory = (function (_super) {
+    var LogCategory = /** @class */ (function (_super) {
         __extends(LogCategory, _super);
         function LogCategory() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -215,7 +215,7 @@ var Enum;
      *
      *
      */
-    var Chroma = (function (_super) {
+    var Chroma = /** @class */ (function (_super) {
         __extends(Chroma, _super);
         function Chroma() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -230,7 +230,7 @@ var Enum;
      *
      *
      */
-    var LogLevel = (function (_super) {
+    var LogLevel = /** @class */ (function (_super) {
         __extends(LogLevel, _super);
         function LogLevel() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -248,7 +248,7 @@ var Enum;
      *
      *
      */
-    var Transition = (function (_super) {
+    var Transition = /** @class */ (function (_super) {
         __extends(Transition, _super);
         function Transition() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -265,7 +265,7 @@ var Enum;
      *
      *
      */
-    var Direction = (function (_super) {
+    var Direction = /** @class */ (function (_super) {
         __extends(Direction, _super);
         function Direction() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -278,7 +278,7 @@ var Enum;
     /**
      *
      */
-    var BlendMode = (function (_super) {
+    var BlendMode = /** @class */ (function (_super) {
         __extends(BlendMode, _super);
         function BlendMode() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -318,7 +318,7 @@ var Enum;
     /**
      *
      */
-    var Ease = (function (_super) {
+    var Ease = /** @class */ (function (_super) {
         __extends(Ease, _super);
         function Ease() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -413,7 +413,7 @@ var Enum;
     /**
      *
      */
-    var ChannelFormat = (function (_super) {
+    var ChannelFormat = /** @class */ (function (_super) {
         __extends(ChannelFormat, _super);
         function ChannelFormat() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -464,7 +464,7 @@ var Enum;
     /**
      *
      */
-    var ChannelLayout = (function (_super) {
+    var ChannelLayout = /** @class */ (function (_super) {
         __extends(ChannelLayout, _super);
         function ChannelLayout() {
             return _super !== null && _super.apply(this, arguments) || this;

@@ -38,7 +38,7 @@ var Priority;
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object.
  * `CasparCG` should be the only public interface to interact directly with.
  */
-var CasparCG = (function (_super) {
+var CasparCG = /** @class */ (function (_super) {
     __extends(CasparCG, _super);
     function CasparCG(hostOrOptions, port) {
         var _this = _super.call(this) || this;
