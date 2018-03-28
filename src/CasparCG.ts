@@ -1560,28 +1560,28 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
    *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
    */
   public removeDecklink (channel: number, device: number): Promise<IAMCPCommand> {
-    return this.do(new AMCP.AddDecklinkCommand({channel: channel, device: device}))
+    return this.do(new AMCP.RemoveDecklinkCommand({channel: channel, device: device}))
   }
 
   /**
    * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
    */
   public removeImage (channel: number, fileName: string): Promise<IAMCPCommand> {
-    return this.do(new AMCP.AddImageCommand({channel: channel, fileName: fileName}))
+    return this.do(new AMCP.RemoveImageCommand({channel: channel, fileName: fileName}))
   }
 
   /**
    *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
    */
   public removeFile (channel: number, fileName: string): Promise<IAMCPCommand> {
-    return this.do(new AMCP.AddFileCommand({channel: channel, fileName: fileName}))
+    return this.do(new AMCP.RemoveFileCommand({channel: channel, fileName: fileName}))
   }
 
   /**
    *  <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#REMOVE>
    */
   public removeStream (channel: number, uri: string): Promise<IAMCPCommand> {
-    return this.do(new AMCP.AddStreamCommand({channel: channel, uri: uri}))
+    return this.do(new AMCP.RemoveStreamCommand({channel: channel, uri: uri}))
   }
 
 	/**

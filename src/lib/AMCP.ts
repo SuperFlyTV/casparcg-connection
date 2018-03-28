@@ -1057,7 +1057,7 @@ export class AddDecklinkCommand extends AbstractChannelOrLayerCommand {
 export class AddImageCommand extends AbstractChannelOrLayerCommand {
   static readonly commandString = 'ADD'
   paramProtocol = [
-    new ParamSignature(required, 'fileame', 'IMAGE', new ParameterValidator.StringValidator())
+    new ParamSignature(required, 'fileName', 'IMAGE', new ParameterValidator.StringValidator())
   ]
 }
 
@@ -1088,10 +1088,6 @@ export class AddStreamCommand extends AbstractChannelOrLayerCommand {
 export class RemoveCommand extends AbstractChannelOrLayerCommand {
   static readonly commandString = 'REMOVE'
 }
-
-/**
- *
- */
 export class RemoveDecklinkCommand extends AbstractChannelOrLayerCommand {
   static readonly commandString = 'REMOVE'
   paramProtocol = [
@@ -1105,7 +1101,7 @@ export class RemoveDecklinkCommand extends AbstractChannelOrLayerCommand {
 export class RemoveImageCommand extends AbstractChannelOrLayerCommand {
   static readonly commandString = 'REMOVE'
   paramProtocol = [
-    new ParamSignature(required, 'fileame', 'IMAGE', new ParameterValidator.StringValidator())
+    new ParamSignature(required, 'fileName', 'IMAGE', new ParameterValidator.StringValidator())
   ]
 }
 
