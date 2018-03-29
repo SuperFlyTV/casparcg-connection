@@ -342,7 +342,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
   private _queuedCommands: Array<IAMCPCommand> = []
   private _queuedCommandsLowPriority: Array<IAMCPCommand> = []
   private _queuedCommandsHighPriority: Array<IAMCPCommand> = []
-  private _sentCommands: Array<IAMCPCommand> = []
+  private _sentCommands: {[token: string]: IAMCPCommand} = {}
   private _configPromise: Promise<CasparCGConfig>
   private _pathsPromise: Promise<CasparCGPaths>
   private _versionPromise: Promise<CasparCGVersion>
@@ -2145,8 +2145,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 */
   private _onSocketStatusTimeout (): void {
-    if (this._sentCommands.length > 0) {
-      this._log(`Command timed out: "${this._sentCommands[0].name}". Starting flush procedure, with ${this._sentCommands.length} command(s) in sentCommands.`)
+    if (Object.keys(this._sentCommands).length > 0) {
+      this._log(`Command timed out. Starting flush procedure, with ${Object.keys(this._sentCommands).length} command(s) in sentCommands.`)
     }
 
 		// @todo: implement retry strategy #81
@@ -2195,15 +2195,17 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			// create error object for response codes 400 to 502
 				// reject with error object
 				// create response object for response codes 200 to 202
-					// resolve with response object
+          // resolve with response object
 
-		// handle empty responses
-    if (this._sentCommands.length === 0) {
+    // handle unkown tokens:
+    if (!this._sentCommands[socketResponse.token]) {
+      this._log(`Received a response from an unknown command with token ${socketResponse.token}`)
       return
     }
 
-    let currentCommand: IAMCPCommand = (this._sentCommands.shift())!
-    this._log(`Handling response, "${currentCommand!.name}". ${this._sentCommands.length} command(s) left in sentCommands, ${this.commandQueueLength} command(s) left in command queues.`)
+    let currentCommand: IAMCPCommand = (this._sentCommands[socketResponse.token])!
+    delete this._sentCommands[socketResponse.token]
+    this._log(`Handling response, "${currentCommand!.name}" with token "${currentCommand!.token}"`)
     if (!(currentCommand.response instanceof AMCPResponse)) {
       currentCommand.response = new AMCPResponse()
     }
@@ -2232,9 +2234,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
    *
    */
   private _flushSentCommands (): void {
-    while (this._sentCommands.length > 0) {
-      let i: IAMCPCommand = (this._sentCommands.shift())!
-      this._log(`Flushing commands from sent-queue. Deleting: "${i.name}", ${this._sentCommands.length} command(s) left in sentCommands.`)
+    for (let token in this._sentCommands) {
+      let i = this._sentCommands[token]
+      delete this._sentCommands[token]
+      this._log(`Flushing commands from sent-queue. Deleting: "${i.name}" with token "${i.token}".`)
       i.status = IAMCPStatus.Failed
       i.reject(i)
     }
@@ -2245,24 +2248,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
   private _executeNextCommand (): void {
     if (this.connected) {
-			// salvo mode
-			/*if (this.queueMode === QueueMode.SALVO) {
-				if (this._queuedCommands.length > 0) {
-					let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
-					this._sentCommands.push(nextCommand);
-					this._socket.executeCommand(nextCommand);
-				}
-			}*/
-
-			// sequential mode
-      if (this.queueMode === QueueMode.SEQUENTIAL) {
-        if (this.commandQueueLength > 0 && this._sentCommands.length === 0) {
-          let nextCommand: {cmd: IAMCPCommand, priority: Priority} | null = this._fetchNextCommand()
-          if (nextCommand) {
-            this._sentCommands.push(nextCommand.cmd)
-            this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
-            this._socket.executeCommand(nextCommand.cmd)
-          }
+      while (this.commandQueueLength > 0) {
+        let nextCommand: {cmd: IAMCPCommand, priority: Priority} | null = this._fetchNextCommand()
+        if (nextCommand) {
+          this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
+          this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
+          this._socket.executeCommand(nextCommand.cmd)
         }
       }
     } else {

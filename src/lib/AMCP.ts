@@ -53,6 +53,7 @@ export namespace AMCPUtil {
 	 */
 export class CasparCGSocketResponse {
   public statusCode: number
+  public token: string
   public responseString: string
   public items: Array<string> = []
 
@@ -60,6 +61,7 @@ export class CasparCGSocketResponse {
 		 *
 		 */
   constructor (responseString: string) {
+    this.token = CasparCGSocketResponse.parseToken(responseString)
     this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString)
     this.responseString = responseString
   }
@@ -68,7 +70,15 @@ export class CasparCGSocketResponse {
 		 *
 		 */
   static evaluateStatusCode (responseString: string): number {
-    return parseInt(responseString.substr(0, 3), 10)
+    let index: number = responseString.substr(4).split(' ')[0].length + 5
+    return parseInt(responseString.substr(index, index + 3), 10)
+  }
+
+    /**
+     *
+     */
+  static parseToken (responseString: string): string {
+    return responseString.substr(4).split(' ')[0] // RES [token] RESPONSE
   }
 }
 }
