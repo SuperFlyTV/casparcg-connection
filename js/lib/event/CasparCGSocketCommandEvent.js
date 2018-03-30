@@ -16,7 +16,7 @@ var Event;
     /**
      *
      */
-    var CasparCGSocketCommandEvent = (function (_super) {
+    var CasparCGSocketCommandEvent = /** @class */ (function (_super) {
         __extends(CasparCGSocketCommandEvent, _super);
         /**
          *
@@ -39,7 +39,7 @@ var Event;
     /**
      *
      */
-    var CasparCGSocketResponseEvent = (function (_super) {
+    var CasparCGSocketResponseEvent = /** @class */ (function (_super) {
         __extends(CasparCGSocketResponseEvent, _super);
         /**
          *

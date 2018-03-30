@@ -28,7 +28,7 @@ var Options;
 /**
  *
  */
-var ConnectionOptions = (function () {
+var ConnectionOptions = /** @class */ (function () {
     function ConnectionOptions(hostOrOptions, port) {
         this.host = 'localhost';
         this.port = 5250;

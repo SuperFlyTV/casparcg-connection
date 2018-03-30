@@ -17,7 +17,7 @@ var Validation;
     /**
      *
      */
-    var AbstractValidator = (function () {
+    var AbstractValidator = /** @class */ (function () {
         function AbstractValidator() {
             this.resolved = false;
         }
@@ -27,7 +27,7 @@ var Validation;
     /**
      *
      */
-    var StringValidator = (function (_super) {
+    var StringValidator = /** @class */ (function (_super) {
         __extends(StringValidator, _super);
         /**
          *
@@ -86,7 +86,7 @@ var Validation;
     }(AbstractValidator));
     Validation.StringValidator = StringValidator;
     /***/
-    var FilterValidator = (function (_super) {
+    var FilterValidator = /** @class */ (function (_super) {
         __extends(FilterValidator, _super);
         function FilterValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -95,7 +95,7 @@ var Validation;
     }(StringValidator));
     Validation.FilterValidator = FilterValidator;
     /***/
-    var URLValidator = (function (_super) {
+    var URLValidator = /** @class */ (function (_super) {
         __extends(URLValidator, _super);
         function URLValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -110,7 +110,7 @@ var Validation;
     }(StringValidator));
     Validation.URLValidator = URLValidator;
     /***/
-    var ChannelLayoutValidator = (function (_super) {
+    var ChannelLayoutValidator = /** @class */ (function (_super) {
         __extends(ChannelLayoutValidator, _super);
         function ChannelLayoutValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -121,7 +121,7 @@ var Validation;
     /**
      *
      */
-    var ClipNameValidator = (function (_super) {
+    var ClipNameValidator = /** @class */ (function (_super) {
         __extends(ClipNameValidator, _super);
         function ClipNameValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -166,7 +166,7 @@ var Validation;
     /**
      *
      */
-    var TemplateNameValidator = (function (_super) {
+    var TemplateNameValidator = /** @class */ (function (_super) {
         __extends(TemplateNameValidator, _super);
         function TemplateNameValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -177,7 +177,7 @@ var Validation;
     /**
      *
      */
-    var DataNameValidator = (function (_super) {
+    var DataNameValidator = /** @class */ (function (_super) {
         __extends(DataNameValidator, _super);
         function DataNameValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -188,7 +188,7 @@ var Validation;
     /**
      *
      */
-    var EnumValidator = (function (_super) {
+    var EnumValidator = /** @class */ (function (_super) {
         __extends(EnumValidator, _super);
         /**
          *
@@ -222,7 +222,7 @@ var Validation;
     /**
      *
      */
-    var ChannelFormatValidator = (function (_super) {
+    var ChannelFormatValidator = /** @class */ (function (_super) {
         __extends(ChannelFormatValidator, _super);
         /**
          *
@@ -263,7 +263,7 @@ var Validation;
     /**
      *
      */
-    var KeywordValidator = (function (_super) {
+    var KeywordValidator = /** @class */ (function (_super) {
         __extends(KeywordValidator, _super);
         /**
          *
@@ -318,7 +318,7 @@ var Validation;
     /**
      *
      */
-    var FrameValidator = (function (_super) {
+    var FrameValidator = /** @class */ (function (_super) {
         __extends(FrameValidator, _super);
         /**
          *
@@ -362,7 +362,7 @@ var Validation;
     /**
      *
      */
-    var PositiveNumberValidatorBetween = (function (_super) {
+    var PositiveNumberValidatorBetween = /** @class */ (function (_super) {
         __extends(PositiveNumberValidatorBetween, _super);
         /**
          *
@@ -393,7 +393,7 @@ var Validation;
     /**
      *
      */
-    var PositiveNumberValidator = (function (_super) {
+    var PositiveNumberValidator = /** @class */ (function (_super) {
         __extends(PositiveNumberValidator, _super);
         /**
          *
@@ -407,7 +407,7 @@ var Validation;
     /**
      *
      */
-    var PositiveNumberRoundValidatorBetween = (function (_super) {
+    var PositiveNumberRoundValidatorBetween = /** @class */ (function (_super) {
         __extends(PositiveNumberRoundValidatorBetween, _super);
         function PositiveNumberRoundValidatorBetween() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -427,7 +427,7 @@ var Validation;
     /**
      *
      */
-    var NumberValidatorBetween = (function (_super) {
+    var NumberValidatorBetween = /** @class */ (function (_super) {
         __extends(NumberValidatorBetween, _super);
         /**
          *
@@ -456,7 +456,7 @@ var Validation;
     /**
      *
      */
-    var NumberValidator = (function (_super) {
+    var NumberValidator = /** @class */ (function (_super) {
         __extends(NumberValidator, _super);
         /**
          *
@@ -468,7 +468,7 @@ var Validation;
     }(NumberValidatorBetween));
     Validation.NumberValidator = NumberValidator;
     /***/
-    var DecklinkDeviceValidator = (function (_super) {
+    var DecklinkDeviceValidator = /** @class */ (function (_super) {
         __extends(DecklinkDeviceValidator, _super);
         function DecklinkDeviceValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -479,7 +479,7 @@ var Validation;
     /**
      *
      */
-    var BooleanValidatorWithDefaults = (function (_super) {
+    var BooleanValidatorWithDefaults = /** @class */ (function (_super) {
         __extends(BooleanValidatorWithDefaults, _super);
         /**
          *
@@ -538,7 +538,7 @@ var Validation;
     /**
      *
      */
-    var BooleanValidator = (function (_super) {
+    var BooleanValidator = /** @class */ (function (_super) {
         __extends(BooleanValidator, _super);
         /**
          *
@@ -552,7 +552,7 @@ var Validation;
     /**
      *
      */
-    var TemplateDataValidator = (function (_super) {
+    var TemplateDataValidator = /** @class */ (function (_super) {
         __extends(TemplateDataValidator, _super);
         function TemplateDataValidator() {
             return _super !== null && _super.apply(this, arguments) || this;

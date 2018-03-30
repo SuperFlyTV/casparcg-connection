@@ -5,7 +5,7 @@ var Event;
     /**
      *
      */
-    var BaseEvent = (function () {
+    var BaseEvent = /** @class */ (function () {
         /**
          *
          */

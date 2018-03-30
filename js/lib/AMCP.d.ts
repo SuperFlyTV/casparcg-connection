@@ -305,7 +305,7 @@ export declare namespace AMCP {
      */
     class MixerLevelsCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -317,7 +317,7 @@ export declare namespace AMCP {
      */
     class MixerFillCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -329,7 +329,7 @@ export declare namespace AMCP {
      */
     class MixerClipCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -341,7 +341,7 @@ export declare namespace AMCP {
      */
     class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -353,7 +353,7 @@ export declare namespace AMCP {
      */
     class MixerCropCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -377,7 +377,7 @@ export declare namespace AMCP {
      */
     class MixerPerspectiveCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
-        static readonly protocolLogic: ProtocolNS.Coupled[];
+        static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
         /**
          *
@@ -501,8 +501,61 @@ export declare namespace AMCP {
     /**
      *
      */
+    class AddDecklinkCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class AddImageCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class AddFileCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class AddStreamCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
     class RemoveCommand extends AbstractChannelOrLayerCommand {
         static readonly commandString: string;
+    }
+    class RemoveDecklinkCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class RemoveImageCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class RemoveFileCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
+    }
+    /**
+     *
+     */
+    class RemoveStreamCommand extends AbstractChannelOrLayerCommand {
+        static readonly commandString: string;
+        paramProtocol: ParamNS.ParamSignature[];
     }
     /**
      *

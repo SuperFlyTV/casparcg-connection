@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.2...v3.1.0) (2018-03-28)
+
+
+### Features
+
+* **Add/Remove Commands:** Merge branch 'Besedin86/master' into develop ([ca772e6](https://github.com/SuperFlyTV/casparcg-connection/commit/ca772e6))
+
+
+
+<a name="3.0.2"></a>
+## [3.0.2](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.1...v3.0.2) (2018-03-27)
+
+
+### Bug Fixes
+
+* **CGAddCommand:** playOnLoad is required ([3fc9300](https://github.com/SuperFlyTV/casparcg-connection/commit/3fc9300)), closes [#93](https://github.com/SuperFlyTV/casparcg-connection/issues/93)
+
+
+
 <a name="3.0.1"></a>
 ## [3.0.1](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.0...v3.0.1) (2017-10-22)
 

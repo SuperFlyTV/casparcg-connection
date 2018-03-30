@@ -16,7 +16,7 @@ var Event;
     /**
      *
      */
-    var CasparCGSocketStatusEvent = (function (_super) {
+    var CasparCGSocketStatusEvent = /** @class */ (function (_super) {
         __extends(CasparCGSocketStatusEvent, _super);
         /**
          *

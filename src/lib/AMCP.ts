@@ -53,6 +53,7 @@ export namespace AMCPUtil {
 	 */
 export class CasparCGSocketResponse {
   public statusCode: number
+  public token: string
   public responseString: string
   public items: Array<string> = []
 
@@ -60,6 +61,7 @@ export class CasparCGSocketResponse {
 		 *
 		 */
   constructor (responseString: string) {
+    this.token = CasparCGSocketResponse.parseToken(responseString)
     this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString)
     this.responseString = responseString
   }
@@ -68,7 +70,15 @@ export class CasparCGSocketResponse {
 		 *
 		 */
   static evaluateStatusCode (responseString: string): number {
-    return parseInt(responseString.substr(0, 3), 10)
+    let index: number = responseString.substr(4).split(' ')[0].length + 5
+    return parseInt(responseString.substr(index, index + 3), 10)
+  }
+
+    /**
+     *
+     */
+  static parseToken (responseString: string): string {
+    return responseString.substr(4).split(' ')[0] // RES [token] RESPONSE
   }
 }
 }
@@ -1041,11 +1051,88 @@ export class AddCommand extends AbstractChannelCommand {
   static readonly commandString = 'ADD'
 }
 
+  /**
+   *
+   */
+export class AddDecklinkCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'ADD'
+  paramProtocol = [
+    new ParamSignature(required, 'device', 'DECKLINK', new ParameterValidator.DecklinkDeviceValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class AddImageCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'ADD'
+  paramProtocol = [
+    new ParamSignature(required, 'fileName', 'IMAGE', new ParameterValidator.StringValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class AddFileCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'ADD'
+  paramProtocol = [
+    new ParamSignature(required, 'fileName', 'FILE', new ParameterValidator.StringValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class AddStreamCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'ADD'
+  paramProtocol = [
+    new ParamSignature(required, 'uri', 'STREAM', new ParameterValidator.StringValidator()),
+    new ParamSignature(required, 'params', null, new ParameterValidator.StringValidator())
+  ]
+}
+
 	/**
 	 *
 	 */
 export class RemoveCommand extends AbstractChannelOrLayerCommand {
   static readonly commandString = 'REMOVE'
+}
+export class RemoveDecklinkCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'device', 'DECKLINK', new ParameterValidator.DecklinkDeviceValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class RemoveImageCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'fileName', 'IMAGE', new ParameterValidator.StringValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class RemoveFileCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'fileName', 'FILE', new ParameterValidator.StringValidator())
+  ]
+}
+
+  /**
+   *
+   */
+export class RemoveStreamCommand extends AbstractChannelOrLayerCommand {
+  static readonly commandString = 'REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'uri', 'STREAM', new ParameterValidator.StringValidator())
+  ]
 }
 
 	/**
