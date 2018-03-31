@@ -1966,14 +1966,38 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
    * Undocumented, but implemented by Julusian.
    */
   public time (): Promise<IAMCPCommand> {
-    return this.do(new AMCP.TimeCommand)
+    return this.do(new AMCP.TimeCommand())
   }
 
   /**
    * https://github.com/CasparCG/server/issues/872
    */
-  public scheduleSet (token: string, timecode: string, command: IAMCPCommand): Promise<IAMCPCommand> {
-    return this.do(new AMCP.ScheduleSetCommand({token, timecode, command}))
+  public scheduleSet (timecode: string, command: IAMCPCommand): Promise<IAMCPCommand[]> {
+    let scheduleCommand = this.createCommand(new AMCP.ScheduleSetCommand({token: command.token, timecode, command}))
+    if (scheduleCommand === undefined) {
+      throw new Error('Could not create a valid command from arguments')
+    }
+
+    let commandPromise: Array<Promise<IAMCPCommand>> = [new Promise<IAMCPCommand>((resolve, reject) => {
+      scheduleCommand!.resolve = resolve
+      scheduleCommand!.reject = reject
+    }), new Promise<IAMCPCommand>((resolve, reject) => {
+      command.resolve = resolve
+      command.reject = reject
+    })]
+
+    commandPromise[0]!.catch((error: any) => {
+			// @todo: global command error handler here
+      this._log(new Error('Command error: ' + error.toString()))
+    })
+
+    this._queuedCommands.push(scheduleCommand)
+
+    this._log(`New command added, "${scheduleCommand.name}". ${this.commandQueueLength} command(s) in command queues.`)
+    scheduleCommand.status = IAMCPStatus.Queued
+
+    this._executeNextCommand()
+    return Promise.all(commandPromise)
   }
 
   /**
@@ -2253,6 +2277,15 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
     }
 
     if (currentCommand.validateResponse(socketResponse)) {
+      if (currentCommand.name === 'ScheduleSetCommand') {
+        let scheduledCommand: IAMCPCommand = currentCommand.getParam('command') as IAMCPCommand
+
+        scheduledCommand.status = IAMCPStatus.Sent
+        this._sentCommands[scheduledCommand.token] = scheduledCommand
+
+        this._log(`New command scheduled, "${scheduledCommand.name}".`)
+      }
+
       currentCommand.status = IAMCPStatus.Suceeded
       currentCommand.resolve(currentCommand)
     } else {

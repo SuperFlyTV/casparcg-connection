@@ -544,7 +544,6 @@ export class TimecodeValidator extends StringValidator {
 export class CommandValidator extends AbstractValidator {
   resolve (command: Object): ParamData {
     if (CommandNS.isIAMCPCommand(command)) {
-      console.log(command)
       command.validateParams()
       let commandString: string = command.constructor['commandString'] + (command.address ? ' ' + command.address : '')
       for (let i in command.payload) {
@@ -554,7 +553,7 @@ export class CommandValidator extends AbstractValidator {
       }
       return commandString
     } else {
-      throw 'Argument 0 was not an amcp command.'
+      throw new Error('Argument 0 was not an amcp command.')
     }
   }
 }

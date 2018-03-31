@@ -102,8 +102,9 @@ export interface IAMCPCommand extends IAMCPCommandData {
   responseProtocol: ResponseSignature
   onStatusChanged: ICommandStatusCallback
   token: string
-  resolve: (command: IAMCPCommand) => void
+  resolve: (command: IAMCPCommand, scheduled?: () => Promise<IAMCPCommand>) => void
   reject: (command: IAMCPCommand) => void
+  getParam: (name: string) => string|number|boolean|Object|undefined
   validateParams (): boolean
   validateResponse (response: CasparCGSocketResponse): boolean
   serialize (): IAMCPCommandVO
@@ -131,7 +132,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
   paramProtocol: Array<IParamSignature>
   responseProtocol: ResponseSignature = new ResponseSignature()
   onStatusChanged: ICommandStatusCallback
-  resolve: (command: IAMCPCommand) => void
+  resolve: (command: IAMCPCommand, scheduled?: () => Promise<IAMCPCommand>) => void
   reject: (command: IAMCPCommand) => void
   protected _channel: number
   protected _layer: number
@@ -226,6 +227,13 @@ export abstract class AbstractCommand implements IAMCPCommand {
     })
 
     return true
+  }
+
+  public getParam (name: string): string|number|boolean|Object|undefined {
+    if (this._objectParams[name]) {
+      return this._objectParams[name]
+    }
+    return undefined
   }
 
 		/**
