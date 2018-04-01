@@ -71,7 +71,7 @@ export class CasparCGSocketResponse {
 		 */
   static evaluateStatusCode (responseString: string): number {
     let index: number = responseString.substr(4).split(' ')[0].length + 5
-    return parseInt(responseString.substr(index, index + 3), 10)
+    return parseInt(responseString.substr(index, 3), 10)
   }
 
     /**

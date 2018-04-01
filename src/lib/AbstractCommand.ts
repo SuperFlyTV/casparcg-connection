@@ -102,7 +102,7 @@ export interface IAMCPCommand extends IAMCPCommandData {
   responseProtocol: ResponseSignature
   onStatusChanged: ICommandStatusCallback
   token: string
-  resolve: (command: IAMCPCommand, scheduled?: () => Promise<IAMCPCommand>) => void
+  resolve: (command: IAMCPCommand) => void
   reject: (command: IAMCPCommand) => void
   getParam: (name: string) => string|number|boolean|Object|undefined
   validateParams (): boolean
@@ -132,7 +132,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
   paramProtocol: Array<IParamSignature>
   responseProtocol: ResponseSignature = new ResponseSignature()
   onStatusChanged: ICommandStatusCallback
-  resolve: (command: IAMCPCommand, scheduled?: () => Promise<IAMCPCommand>) => void
+  resolve: (command: IAMCPCommand) => void
   reject: (command: IAMCPCommand) => void
   protected _channel: number
   protected _layer: number

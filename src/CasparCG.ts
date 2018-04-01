@@ -718,10 +718,21 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 */
   public queueCommand (command: IAMCPCommand, priority: Priority = Priority.NORMAL): Promise<IAMCPCommand> {
-    let commandPromise: Promise<IAMCPCommand> = new Promise<IAMCPCommand>((resolve, reject) => {
+    let commandPromise: Promise<IAMCPCommand[]>
+    let commandPromiseArray: Array<Promise<IAMCPCommand>> = [ new Promise<IAMCPCommand>((resolve, reject) => {
       command.resolve = resolve
       command.reject = reject
-    })
+    }) ]
+
+    if (command.name === 'ScheduleSetCommand') {
+      let subCommand = command.getParam('command') as IAMCPCommand
+      commandPromiseArray.push(new Promise<IAMCPCommand>((resolve, reject) => {
+        subCommand.resolve = resolve
+        subCommand.reject = reject
+      }))
+    }
+
+    commandPromise = Promise.all(commandPromiseArray)
     commandPromise.catch((error: any) => {
 			// @todo: global command error handler here
       this._log(new Error('Command error: ' + error.toString()))
@@ -743,7 +754,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
     command.status = IAMCPStatus.Queued
 
     this._executeNextCommand()
-    return commandPromise
+    return new Promise((outerResolve, outerReject) => {
+      commandPromise.then((cmds) => [
+        outerResolve(cmds[cmds.length - 1]) // resolve with last executed command
+      ]).catch((err) => {
+        outerReject(err)
+      })
+    })
   }
 
 	/**
@@ -1972,32 +1989,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
   /**
    * https://github.com/CasparCG/server/issues/872
    */
-  public scheduleSet (timecode: string, command: IAMCPCommand): Promise<IAMCPCommand[]> {
-    let scheduleCommand = this.createCommand(new AMCP.ScheduleSetCommand({token: command.token, timecode, command}))
-    if (scheduleCommand === undefined) {
-      throw new Error('Could not create a valid command from arguments')
-    }
-
-    let commandPromise: Array<Promise<IAMCPCommand>> = [new Promise<IAMCPCommand>((resolve, reject) => {
-      scheduleCommand!.resolve = resolve
-      scheduleCommand!.reject = reject
-    }), new Promise<IAMCPCommand>((resolve, reject) => {
-      command.resolve = resolve
-      command.reject = reject
-    })]
-
-    commandPromise[0]!.catch((error: any) => {
-			// @todo: global command error handler here
-      this._log(new Error('Command error: ' + error.toString()))
-    })
-
-    this._queuedCommands.push(scheduleCommand)
-
-    this._log(`New command added, "${scheduleCommand.name}". ${this.commandQueueLength} command(s) in command queues.`)
-    scheduleCommand.status = IAMCPStatus.Queued
-
-    this._executeNextCommand()
-    return Promise.all(commandPromise)
+  public scheduleSet (timecode: string, command: IAMCPCommand): Promise<IAMCPCommand> {
+    return this.do(new AMCP.ScheduleSetCommand({ token: command.token, timecode, command }))
   }
 
   /**
