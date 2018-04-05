@@ -1553,7 +1553,7 @@ export class PingCommand extends AbstractCommand {
  * IScheduling
  */
 export namespace AMCP {
-export class TimeCommand extends AbstractCommand {
+export class TimeCommand extends AbstractChannelCommand {
   static readonly commandString = 'TIME'
   responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.InfoParser)
 }

@@ -1994,8 +1994,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
   /**
    * Undocumented, but implemented by Julusian.
    */
-  public time (): Promise<IAMCPCommand> {
-    return this.do(new AMCP.TimeCommand())
+  public time (channel: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.TimeCommand({ channel }))
   }
 
   /**
@@ -2350,10 +2350,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
           }
         }
       } else if (this._queueMode === QueueMode.SEQUENTIAL) {
-        let nextCommand: {cmd: IAMCPCommand, priority: Priority} | null = this._fetchNextCommand() 
+        let nextCommand: {cmd: IAMCPCommand, priority: Priority} | null = this._fetchNextCommand()
         if (nextCommand) {
           this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
-          this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`) 
+          this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
           this._socket.executeCommand(nextCommand.cmd)
         }
       }
