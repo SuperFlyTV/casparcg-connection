@@ -638,6 +638,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
       // @todo: await for current command to return, and then set queue mode.
     }
     this._queueMode = mode
+    this._socket.queueMode = mode
   }
 
 	/**
@@ -2062,7 +2063,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
       this._socket.dispose()
       delete this._socket
     }
-    this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts)
+    this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts, this.queueMode)
     this._socket.on('error', (error: Error) => this._onSocketError(error))
     this._socket.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event))
     this._socket.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout())
