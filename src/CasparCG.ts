@@ -288,11 +288,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
   public autoConnect: boolean | undefined = undefined
 
 	/**
-	 * @todo: document
-	 */
-  public queueMode: QueueMode | undefined = undefined
-
-	/**
 	 * Setting this to true will investigate all connections to assess if the server is freshly booted, or have been used before the connection
 	 */
   public virginServerCheck: boolean | undefined = undefined
@@ -331,6 +326,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * Callback for general errors
 	 */
   public onError: IErrorCallback | undefined = undefined
+
+	/**
+	 * @todo: document
+	 */
+  private _queueMode: QueueMode
 
   private _connected: boolean = false
   private _host: string
@@ -626,6 +626,18 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
     }
 
     return undefined
+  }
+
+  public get queueMode (): QueueMode {
+    return this._queueMode
+  }
+
+  public set queueMode (mode: QueueMode) {
+    if (this._queueMode === QueueMode.SEQUENTIAL && mode === QueueMode.SALVO && Object.keys(this._sentCommands).length) {
+      this._log('Warning: setting queuemode to SALVO while there is a sequential command being sent will return undocumente behaviour!')
+      // @todo: await for current command to return, and then set queue mode.
+    }
+    this._queueMode = mode
   }
 
 	/**
@@ -2259,7 +2271,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
     // handle unkown tokens:
     let currentCommand: IAMCPCommand
     if (socketResponse.token) {
-      if (this.queueMode === QueueMode.SALVO && !this._sentCommands[socketResponse.token]) {
+      if (this._queueMode === QueueMode.SALVO && !this._sentCommands[socketResponse.token]) {
         this._log(`Received a response from an unknown command with token ${socketResponse.token}`)
         return
       }
@@ -2328,7 +2340,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
   private _executeNextCommand (): void {
     if (this.connected) {
-      if (this.queueMode === QueueMode.SALVO) {
+      if (this._queueMode === QueueMode.SALVO) {
         while (this.commandQueueLength > 0) {
           let nextCommand: {cmd: IAMCPCommand, priority: Priority} | null = this._fetchNextCommand()
           if (nextCommand) {
@@ -2337,7 +2349,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
             this._socket.executeCommand(nextCommand.cmd)
           }
         }
-      } else if (this.queueMode === QueueMode.SEQUENTIAL) {
+      } else if (this._queueMode === QueueMode.SEQUENTIAL) {
         let nextCommand: {cmd: IAMCPCommand, priority: Priority} | null = this._fetchNextCommand() 
         if (nextCommand) {
           this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
