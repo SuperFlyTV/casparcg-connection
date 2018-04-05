@@ -53,7 +53,7 @@ export namespace AMCPUtil {
 	 */
 export class CasparCGSocketResponse {
   public statusCode: number
-  public token: string
+  public token: string | undefined
   public responseString: string
   public items: Array<string> = []
 
@@ -70,15 +70,22 @@ export class CasparCGSocketResponse {
 		 *
 		 */
   static evaluateStatusCode (responseString: string): number {
-    let index: number = responseString.substr(4).split(' ')[0].length + 5
+    let token = CasparCGSocketResponse.parseToken(responseString)
+    let index: number
+    if (token) index = token.length + 5
+    else index = 0
     return parseInt(responseString.substr(index, 3), 10)
   }
 
     /**
      *
      */
-  static parseToken (responseString: string): string {
-    return responseString.substr(4).split(' ')[0] // RES [token] RESPONSE
+  static parseToken (responseString: string): string | undefined {
+    if (responseString.substr(0, 3) === 'RES') {
+      return responseString.substr(4).split(' ')[0] // RES [token] RESPONSE
+    } else {
+      return undefined
+    }
   }
 }
 }
@@ -1548,6 +1555,7 @@ export class PingCommand extends AbstractCommand {
 export namespace AMCP {
 export class TimeCommand extends AbstractCommand {
   static readonly commandString = 'TIME'
+  responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.InfoParser)
 }
 export class ScheduleSetCommand extends AbstractCommand {
   static readonly commandString = 'SCHEDULE SET'
