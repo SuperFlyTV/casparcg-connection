@@ -2289,7 +2289,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
       delete this._sentCommands[token]
     }
 
-    this._log(`Handling response, "${currentCommand!.name}" with token "${currentCommand!.token}"`)
+    this._log(`Handling response, "${currentCommand.name}" with token "${currentCommand.token}"`)
     if (!(currentCommand.response instanceof AMCPResponse)) {
       currentCommand.response = new AMCPResponse()
     }
