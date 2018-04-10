@@ -97,6 +97,7 @@ var Command;
             }
             this._stringParamsArray = [];
             this._objectParams = {};
+            this._token = Math.random().toString(35).substr(2, 7);
             for (var _i = 0, paramsArray_1 = paramsArray; _i < paramsArray_1.length; _i++) {
                 var element = paramsArray_1[_i];
                 if (element === undefined) {
@@ -147,6 +148,12 @@ var Command;
                 _this.payload[param.name] = payload;
             });
             return true;
+        };
+        AbstractCommand.prototype.getParam = function (name) {
+            if (this._objectParams[name]) {
+                return this._objectParams[name];
+            }
+            return undefined;
         };
         /**
          *
@@ -247,6 +254,13 @@ var Command;
              */
             get: function () {
                 return '';
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(AbstractCommand.prototype, "token", {
+            get: function () {
+                return this._token;
             },
             enumerable: true,
             configurable: true

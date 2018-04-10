@@ -591,7 +591,7 @@ var Validation;
         return TemplateDataValidator;
     }(AbstractValidator));
     Validation.TemplateDataValidator = TemplateDataValidator;
-    var TimecodeValidator = (function (_super) {
+    var TimecodeValidator = /** @class */ (function (_super) {
         __extends(TimecodeValidator, _super);
         function TimecodeValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -599,14 +599,13 @@ var Validation;
         return TimecodeValidator;
     }(StringValidator));
     Validation.TimecodeValidator = TimecodeValidator;
-    var CommandValidator = (function (_super) {
+    var CommandValidator = /** @class */ (function (_super) {
         __extends(CommandValidator, _super);
         function CommandValidator() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         CommandValidator.prototype.resolve = function (command) {
             if (AbstractCommand_1.Command.isIAMCPCommand(command)) {
-                console.log(command);
                 command.validateParams();
                 var commandString = command.constructor['commandString'] + (command.address ? ' ' + command.address : '');
                 for (var i in command.payload) {
@@ -617,7 +616,7 @@ var Validation;
                 return commandString;
             }
             else {
-                throw 'Argument 0 was not an amcp command.';
+                throw new Error('Argument 0 was not an amcp command.');
             }
         };
         return CommandValidator;

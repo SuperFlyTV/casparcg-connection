@@ -11,6 +11,7 @@ export declare namespace Options {
      *
      */
     enum QueueMode {
+        SALVO = 1,
         SEQUENTIAL = 2,
     }
     /**

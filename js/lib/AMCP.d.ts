@@ -24,6 +24,7 @@ export declare namespace AMCPUtil {
      */
     class CasparCGSocketResponse {
         statusCode: number;
+        token: string | undefined;
         responseString: string;
         items: Array<string>;
         /**
@@ -34,6 +35,10 @@ export declare namespace AMCPUtil {
          *
          */
         static evaluateStatusCode(responseString: string): number;
+        /**
+         *
+         */
+        static parseToken(responseString: string): string | undefined;
     }
 }
 /**
@@ -871,8 +876,9 @@ export declare namespace AMCP {
  * IScheduling
  */
 export declare namespace AMCP {
-    class TimeCommand extends AbstractCommand {
+    class TimeCommand extends AbstractChannelCommand {
         static readonly commandString: string;
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
     }
     class ScheduleSetCommand extends AbstractCommand {
         static readonly commandString: string;

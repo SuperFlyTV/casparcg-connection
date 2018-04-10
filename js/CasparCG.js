@@ -47,10 +47,6 @@ var CasparCG = /** @class */ (function (_super) {
          */
         _this.autoConnect = undefined;
         /**
-         * @todo: document
-         */
-        _this.queueMode = undefined;
-        /**
          * Setting this to true will investigate all connections to assess if the server is freshly booted, or have been used before the connection
          */
         _this.virginServerCheck = undefined;
@@ -86,7 +82,7 @@ var CasparCG = /** @class */ (function (_super) {
         _this._queuedCommands = [];
         _this._queuedCommandsLowPriority = [];
         _this._queuedCommandsHighPriority = [];
-        _this._sentCommands = [];
+        _this._sentCommands = {};
         var options;
         if (typeof hostOrOptions === 'object') {
             options = new AMCPConnectionOptions_1.ConnectionOptions(hostOrOptions);
@@ -301,6 +297,21 @@ var CasparCG = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(CasparCG.prototype, "queueMode", {
+        get: function () {
+            return this._queueMode;
+        },
+        set: function (mode) {
+            if (this._queueMode === QueueMode.SEQUENTIAL && mode === QueueMode.SALVO && Object.keys(this._sentCommands).length) {
+                this._log('Warning: setting queuemode to SALVO while there is a sequential command being sent will return undocumente behaviour!');
+                // @todo: await for current command to return, and then set queue mode.
+            }
+            this._queueMode = mode;
+            this._socket.queueMode = mode;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(CasparCG.prototype, "commandQueueLength", {
         /**
          *
@@ -393,10 +404,19 @@ var CasparCG = /** @class */ (function (_super) {
     CasparCG.prototype.queueCommand = function (command, priority) {
         var _this = this;
         if (priority === void 0) { priority = Priority.NORMAL; }
-        var commandPromise = new Promise(function (resolve, reject) {
-            command.resolve = resolve;
-            command.reject = reject;
-        });
+        var commandPromise;
+        var commandPromiseArray = [new Promise(function (resolve, reject) {
+                command.resolve = resolve;
+                command.reject = reject;
+            })];
+        if (command.name === 'ScheduleSetCommand') {
+            var subCommand_1 = command.getParam('command');
+            commandPromiseArray.push(new Promise(function (resolve, reject) {
+                subCommand_1.resolve = resolve;
+                subCommand_1.reject = reject;
+            }));
+        }
+        commandPromise = Promise.all(commandPromiseArray);
         commandPromise.catch(function (error) {
             // @todo: global command error handler here
             _this._log(new Error('Command error: ' + error.toString()));
@@ -415,7 +435,13 @@ var CasparCG = /** @class */ (function (_super) {
         this._log("New command added, \"" + command.name + "\". " + this.commandQueueLength + " command(s) in command queues.");
         command.status = IAMCPStatus.Queued;
         this._executeNextCommand();
-        return commandPromise;
+        return new Promise(function (outerResolve, outerReject) {
+            commandPromise.then(function (cmds) { return [
+                outerResolve(cmds[cmds.length - 1]) // resolve with last executed command
+            ]; }).catch(function (err) {
+                outerReject(err);
+            });
+        });
     };
     /**
      * @todo: document
@@ -1343,13 +1369,37 @@ var CasparCG = /** @class */ (function (_super) {
      * Undocumented, but implemented by Julusian.
      */
     CasparCG.prototype.ping = function () {
-        return this.do(new AMCP_1.AMCP.PingCommand);
+        return this.do(new AMCP_1.AMCP.PingCommand());
     };
     /**
      * Undocumented, but implemented by Julusian.
      */
-    CasparCG.prototype.time = function () {
-        return this.do(new AMCP_1.AMCP.TimeCommand);
+    CasparCG.prototype.time = function (channel) {
+        return this.do(new AMCP_1.AMCP.TimeCommand({ channel: channel }));
+    };
+    /**
+     * https://github.com/CasparCG/server/issues/872
+     */
+    CasparCG.prototype.scheduleSet = function (timecode, command) {
+        return this.do(new AMCP_1.AMCP.ScheduleSetCommand({ token: command.token, timecode: timecode, command: command }));
+    };
+    /**
+     * https://github.com/CasparCG/server/issues/872
+     */
+    CasparCG.prototype.scheduleRemove = function (token) {
+        return this.do(new AMCP_1.AMCP.ScheduleRemoveCommand({ token: token }));
+    };
+    /**
+     * https://github.com/CasparCG/server/issues/872
+     */
+    CasparCG.prototype.scheduleClear = function () {
+        return this.do(new AMCP_1.AMCP.ScheduleClearCommand());
+    };
+    /**
+     * https://github.com/CasparCG/server/issues/872
+     */
+    CasparCG.prototype.scheduleList = function (timecode) {
+        return this.do(new AMCP_1.AMCP.ScheduleListCommand({ timecode: timecode }));
     };
     /**
      *
@@ -1387,7 +1437,7 @@ var CasparCG = /** @class */ (function (_super) {
             this._socket.dispose();
             delete this._socket;
         }
-        this._socket = new CasparCGSocket_1.CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts);
+        this._socket = new CasparCGSocket_1.CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts, this.queueMode);
         this._socket.on('error', function (error) { return _this._onSocketError(error); });
         this._socket.on(Events_1.CasparCGSocketStatusEvent.STATUS, function (event) { return _this._onSocketStatusChange(event); });
         this._socket.on(Events_1.CasparCGSocketStatusEvent.TIMEOUT, function () { return _this._onSocketStatusTimeout(); });
@@ -1536,8 +1586,8 @@ var CasparCG = /** @class */ (function (_super) {
      *
      */
     CasparCG.prototype._onSocketStatusTimeout = function () {
-        if (this._sentCommands.length > 0) {
-            this._log("Command timed out: \"" + this._sentCommands[0].name + "\". Starting flush procedure, with " + this._sentCommands.length + " command(s) in sentCommands.");
+        if (Object.keys(this._sentCommands).length > 0) {
+            this._log("Command timed out. Starting flush procedure, with " + Object.keys(this._sentCommands).length + " command(s) in sentCommands.");
         }
         // @todo: implement retry strategy #81
         // 1) discard
@@ -1581,16 +1631,36 @@ var CasparCG = /** @class */ (function (_super) {
         // reject with error object
         // create response object for response codes 200 to 202
         // resolve with response object
-        // handle empty responses
-        if (this._sentCommands.length === 0) {
-            return;
+        // handle unkown tokens:
+        var currentCommand;
+        if (socketResponse.token) {
+            if (this._queueMode === QueueMode.SALVO && !this._sentCommands[socketResponse.token]) {
+                this._log("Received a response from an unknown command with token " + socketResponse.token);
+                return;
+            }
+            currentCommand = (this._sentCommands[socketResponse.token]);
+            delete this._sentCommands[socketResponse.token];
         }
-        var currentCommand = (this._sentCommands.shift());
-        this._log("Handling response, \"" + currentCommand.name + "\". " + this._sentCommands.length + " command(s) left in sentCommands, " + this.commandQueueLength + " command(s) left in command queues.");
+        else {
+            if (Object.keys(this._sentCommands).length === 0) {
+                this._log("Received a response without knowlingy having sent anyting.");
+                return;
+            }
+            var token = Object.keys(this._sentCommands)[0];
+            currentCommand = (this._sentCommands[token]);
+            delete this._sentCommands[token];
+        }
+        this._log("Handling response, \"" + currentCommand.name + "\" with token \"" + currentCommand.token + "\"");
         if (!(currentCommand.response instanceof AMCPResponse)) {
             currentCommand.response = new AMCPResponse();
         }
         if (currentCommand.validateResponse(socketResponse)) {
+            if (currentCommand.name === 'ScheduleSetCommand') {
+                var scheduledCommand = currentCommand.getParam('command');
+                scheduledCommand.status = IAMCPStatus.Sent;
+                this._sentCommands[scheduledCommand.token] = scheduledCommand;
+                this._log("New command scheduled, \"" + scheduledCommand.name + "\".");
+            }
             currentCommand.status = IAMCPStatus.Suceeded;
             currentCommand.resolve(currentCommand);
         }
@@ -1612,9 +1682,10 @@ var CasparCG = /** @class */ (function (_super) {
      *
      */
     CasparCG.prototype._flushSentCommands = function () {
-        while (this._sentCommands.length > 0) {
-            var i = (this._sentCommands.shift());
-            this._log("Flushing commands from sent-queue. Deleting: \"" + i.name + "\", " + this._sentCommands.length + " command(s) left in sentCommands.");
+        for (var token in this._sentCommands) {
+            var i = this._sentCommands[token];
+            delete this._sentCommands[token];
+            this._log("Flushing commands from sent-queue. Deleting: \"" + i.name + "\" with token \"" + i.token + "\".");
             i.status = IAMCPStatus.Failed;
             i.reject(i);
         }
@@ -1624,23 +1695,22 @@ var CasparCG = /** @class */ (function (_super) {
      */
     CasparCG.prototype._executeNextCommand = function () {
         if (this.connected) {
-            // salvo mode
-            /*if (this.queueMode === QueueMode.SALVO) {
-                if (this._queuedCommands.length > 0) {
-                    let nextCommand: IAMCPCommand = (this._queuedCommands.shift())!;
-                    this._sentCommands.push(nextCommand);
-                    this._socket.executeCommand(nextCommand);
-                }
-            }*/
-            // sequential mode
-            if (this.queueMode === QueueMode.SEQUENTIAL) {
-                if (this.commandQueueLength > 0 && this._sentCommands.length === 0) {
+            if (this._queueMode === QueueMode.SALVO) {
+                while (this.commandQueueLength > 0) {
                     var nextCommand = this._fetchNextCommand();
                     if (nextCommand) {
-                        this._sentCommands.push(nextCommand.cmd);
+                        this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd;
                         this._log("Sending command, \"" + nextCommand.cmd.name + "\" with priority \"" + (nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown') + "\". " + this._sentCommands.length + " command(s) in sentCommands, " + this.commandQueueLength + " command(s) in command queues.");
                         this._socket.executeCommand(nextCommand.cmd);
                     }
+                }
+            }
+            else if (this._queueMode === QueueMode.SEQUENTIAL) {
+                var nextCommand = this._fetchNextCommand();
+                if (nextCommand) {
+                    this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd;
+                    this._log("Sending command, \"" + nextCommand.cmd.name + "\" with priority \"" + (nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown') + "\". " + this._sentCommands.length + " command(s) in sentCommands, " + this.commandQueueLength + " command(s) in command queues.");
+                    this._socket.executeCommand(nextCommand.cmd);
                 }
             }
         }

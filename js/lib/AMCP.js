@@ -62,6 +62,7 @@ var AMCPUtil;
          */
         function CasparCGSocketResponse(responseString) {
             this.items = [];
+            this.token = CasparCGSocketResponse.parseToken(responseString);
             this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString);
             this.responseString = responseString;
         }
@@ -69,7 +70,24 @@ var AMCPUtil;
          *
          */
         CasparCGSocketResponse.evaluateStatusCode = function (responseString) {
-            return parseInt(responseString.substr(0, 3), 10);
+            var token = CasparCGSocketResponse.parseToken(responseString);
+            var index;
+            if (token)
+                index = token.length + 5;
+            else
+                index = 0;
+            return parseInt(responseString.substr(index, 3), 10);
+        };
+        /**
+         *
+         */
+        CasparCGSocketResponse.parseToken = function (responseString) {
+            if (responseString.substr(0, 3) === 'RES') {
+                return responseString.substr(4).split(' ')[0]; // RES [token] RESPONSE
+            }
+            else {
+                return undefined;
+            }
         };
         return CasparCGSocketResponse;
     }());
@@ -1962,7 +1980,7 @@ var AMCP;
         return RestartCommand;
     }(AbstractCommand));
     AMCP.RestartCommand = RestartCommand;
-    var PingCommand = (function (_super) {
+    var PingCommand = /** @class */ (function (_super) {
         __extends(PingCommand, _super);
         function PingCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -1976,23 +1994,25 @@ var AMCP;
  * IScheduling
  */
 (function (AMCP) {
-    var TimeCommand = (function (_super) {
+    var TimeCommand = /** @class */ (function (_super) {
         __extends(TimeCommand, _super);
         function TimeCommand() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.StringValidator, ResponseParsers_1.Response.InfoParser);
+            return _this;
         }
         TimeCommand.commandString = 'TIME';
         return TimeCommand;
-    }(AbstractCommand));
+    }(AbstractChannelCommand));
     AMCP.TimeCommand = TimeCommand;
-    var ScheduleSetCommand = (function (_super) {
+    var ScheduleSetCommand = /** @class */ (function (_super) {
         __extends(ScheduleSetCommand, _super);
         function ScheduleSetCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
                 new ParamSignature(required, 'token', null, new ParamValidators_1.Validation.StringValidator()),
                 new ParamSignature(required, 'timecode', null, new ParamValidators_1.Validation.TimecodeValidator()),
-                new ParamSignature(required, 'command', null, new ParamValidators_1.Validation.CommandValidator()),
+                new ParamSignature(required, 'command', null, new ParamValidators_1.Validation.CommandValidator())
             ];
             return _this;
         }
@@ -2000,7 +2020,7 @@ var AMCP;
         return ScheduleSetCommand;
     }(AbstractCommand));
     AMCP.ScheduleSetCommand = ScheduleSetCommand;
-    var ScheduleRemoveCommand = (function (_super) {
+    var ScheduleRemoveCommand = /** @class */ (function (_super) {
         __extends(ScheduleRemoveCommand, _super);
         function ScheduleRemoveCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
@@ -2013,7 +2033,7 @@ var AMCP;
         return ScheduleRemoveCommand;
     }(AbstractCommand));
     AMCP.ScheduleRemoveCommand = ScheduleRemoveCommand;
-    var ScheduleClearCommand = (function (_super) {
+    var ScheduleClearCommand = /** @class */ (function (_super) {
         __extends(ScheduleClearCommand, _super);
         function ScheduleClearCommand() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -2022,12 +2042,12 @@ var AMCP;
         return ScheduleClearCommand;
     }(AbstractCommand));
     AMCP.ScheduleClearCommand = ScheduleClearCommand;
-    var ScheduleListCommand = (function (_super) {
+    var ScheduleListCommand = /** @class */ (function (_super) {
         __extends(ScheduleListCommand, _super);
         function ScheduleListCommand() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.paramProtocol = [
-                new ParamSignature(optional, 'token', null, new ParamValidators_1.Validation.StringValidator()),
+                new ParamSignature(optional, 'token', null, new ParamValidators_1.Validation.StringValidator())
             ];
             return _this;
         }

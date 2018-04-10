@@ -3,6 +3,7 @@ import { EventEmitter } from 'events';
 import { Command as CommandNS } from './AbstractCommand';
 import IAMCPCommand = CommandNS.IAMCPCommand;
 import { SocketStatusOptions } from './event/Events';
+import { Options as OptionsNS } from './AMCPConnectionOptions';
 /**
  *
  */
@@ -20,6 +21,7 @@ export interface ICasparCGSocket {
  *
  */
 export declare class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
+    queueMode: OptionsNS.QueueMode;
     private _client;
     private _host;
     private _port;
@@ -37,7 +39,7 @@ export declare class CasparCGSocket extends EventEmitter implements ICasparCGSoc
     /**
      *
      */
-    constructor(host: string, port: number, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number);
+    constructor(host: string, port: number, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number, queueMode: OptionsNS.QueueMode);
     /**
      *
      */
