@@ -11,6 +11,7 @@ import { CasparCGSocketStatusEvent, CasparCGSocketResponseEvent, SocketStatusOpt
 // Param NS
 import {Param as ParamNS } from './ParamSignature'
 import Payload = ParamNS.Payload
+import { Options as OptionsNS } from './AMCPConnectionOptions'
 
 /**
  *
@@ -30,6 +31,7 @@ export interface ICasparCGSocket {
  *
  */
 export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
+  public queueMode: OptionsNS.QueueMode
   private _client: net.Socket
   private _host: string
   private _port: number
@@ -48,13 +50,14 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	/**
 	 *
 	 */
-  public constructor (host: string, port: number, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number) {
+  public constructor (host: string, port: number, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number, queueMode: OptionsNS.QueueMode) {
     super()
     this._host = host
     this._port = port
     this._reconnectDelay = autoReconnectInterval
     this._autoReconnect = autoReconnect
     this._reconnectAttempts = autoReconnectAttempts
+    this.queueMode = queueMode
   }
 
 	/**
@@ -190,7 +193,10 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 *
 	 */
   public executeCommand (command: IAMCPCommand): IAMCPCommand {
-    let commandString: string = command.constructor['commandString'] + (command.address ? ' ' + command.address : '')
+    let commandString: string
+    if (this.queueMode === OptionsNS.QueueMode.SALVO) commandString = `REQ ${command.token} ` + command.constructor['commandString'] + (command.address ? ' ' + command.address : '')
+    else commandString = command.constructor['commandString'] + (command.address ? ' ' + command.address : '')
+
     for (let i in command.payload) {
       let payload: Payload = command.payload[i]
       commandString += (commandString.length > 0 ? ' ' : '')

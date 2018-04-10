@@ -255,10 +255,6 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      */
     autoConnect: boolean | undefined;
     /**
-     * @todo: document
-     */
-    queueMode: QueueMode | undefined;
-    /**
      * Setting this to true will investigate all connections to assess if the server is freshly booted, or have been used before the connection
      */
     virginServerCheck: boolean | undefined;
@@ -290,6 +286,10 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      * Callback for general errors
      */
     onError: IErrorCallback | undefined;
+    /**
+     * @todo: document
+     */
+    private _queueMode;
     private _connected;
     private _host;
     private _port;
@@ -456,6 +456,7 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      *
      */
     serverVersion: CasparCGVersion | undefined;
+    queueMode: QueueMode;
     /**
      *
      */
@@ -1130,6 +1131,30 @@ export declare class CasparCG extends EventEmitter implements ICasparCGConnectio
      * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#RESTART>
      */
     restart(): Promise<IAMCPCommand>;
+    /**
+     * Undocumented, but implemented by Julusian.
+     */
+    ping(): Promise<IAMCPCommand>;
+    /**
+     * Undocumented, but implemented by Julusian.
+     */
+    time(channel: number): Promise<IAMCPCommand>;
+    /**
+     * https://github.com/CasparCG/server/issues/872
+     */
+    scheduleSet(timecode: string, command: IAMCPCommand): Promise<IAMCPCommand>;
+    /**
+     * https://github.com/CasparCG/server/issues/872
+     */
+    scheduleRemove(token: string): Promise<IAMCPCommand>;
+    /**
+     * https://github.com/CasparCG/server/issues/872
+     */
+    scheduleClear(): Promise<IAMCPCommand>;
+    /**
+     * https://github.com/CasparCG/server/issues/872
+     */
+    scheduleList(timecode?: string): Promise<IAMCPCommand>;
     /**
      *
      */

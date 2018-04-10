@@ -46,6 +46,8 @@ var connection = new CasparCG();
 connection.play(1, 1, "amb");
 ```
 
+_Note: starting with version 4.0.0 the default queue mode is now SALVO. You can optionally set the queue mode back to sequential if you need compatibility with CasparCG 2.0.7 or earlier. Note that the implementation of scheduled commands requires asynchronous behaviour and therefore only works in salvo mode._
+
 ### Build from source
 Installing from NPM adds the dev-dependencies needed to compile TypeScript and using Gulp as build tool. A set of commands help you managing development and testing:
 

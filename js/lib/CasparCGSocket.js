@@ -19,6 +19,7 @@ var AbstractCommand_1 = require("./AbstractCommand");
 var IAMCPStatus = AbstractCommand_1.Command.IAMCPStatus;
 // Event NS
 var Events_1 = require("./event/Events");
+var AMCPConnectionOptions_1 = require("./AMCPConnectionOptions");
 /**
  *
  */
@@ -27,7 +28,7 @@ var CasparCGSocket = /** @class */ (function (_super) {
     /**
      *
      */
-    function CasparCGSocket(host, port, autoReconnect, autoReconnectInterval, autoReconnectAttempts) {
+    function CasparCGSocket(host, port, autoReconnect, autoReconnectInterval, autoReconnectAttempts, queueMode) {
         var _this = _super.call(this) || this;
         _this._reconnectAttempt = 0;
         _this._commandTimeout = 5000; // @todo make connectionOption!
@@ -37,6 +38,7 @@ var CasparCGSocket = /** @class */ (function (_super) {
         _this._reconnectDelay = autoReconnectInterval;
         _this._autoReconnect = autoReconnect;
         _this._reconnectAttempts = autoReconnectAttempts;
+        _this.queueMode = queueMode;
         return _this;
     }
     Object.defineProperty(CasparCGSocket.prototype, "autoReconnect", {
@@ -187,7 +189,11 @@ var CasparCGSocket = /** @class */ (function (_super) {
      */
     CasparCGSocket.prototype.executeCommand = function (command) {
         var _this = this;
-        var commandString = command.constructor['commandString'] + (command.address ? ' ' + command.address : '');
+        var commandString;
+        if (this.queueMode === AMCPConnectionOptions_1.Options.QueueMode.SALVO)
+            commandString = "REQ " + command.token + " " + command.constructor['commandString'] + (command.address ? ' ' + command.address : '');
+        else
+            commandString = command.constructor['commandString'] + (command.address ? ' ' + command.address : '');
         for (var i in command.payload) {
             var payload = command.payload[i];
             commandString += (commandString.length > 0 ? ' ' : '');

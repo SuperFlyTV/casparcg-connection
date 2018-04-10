@@ -93,12 +93,14 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="amcputil.casparcgsocketresponse.html#items" class="tsd-kind-icon">items</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="amcputil.casparcgsocketresponse.html#responsestring" class="tsd-kind-icon">response<wbr>String</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="amcputil.casparcgsocketresponse.html#statuscode" class="tsd-kind-icon">status<wbr>Code</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="amcputil.casparcgsocketresponse.html#token" class="tsd-kind-icon">token</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="amcputil.casparcgsocketresponse.html#evaluatestatuscode" class="tsd-kind-icon">evaluate<wbr>Status<wbr>Code</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="amcputil.casparcgsocketresponse.html#parsetoken" class="tsd-kind-icon">parse<wbr>Token</a></li>
 							</ul>
 						</section>
 					</div>
@@ -116,7 +118,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/ccb55e9/src/lib/AMCP.ts#L57">lib/AMCP.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7a8d4c6/src/lib/AMCP.ts#L58">lib/AMCP.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -138,7 +140,7 @@
 					<div class="tsd-signature tsd-kind-icon">items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/ccb55e9/src/lib/AMCP.ts#L57">lib/AMCP.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7a8d4c6/src/lib/AMCP.ts#L58">lib/AMCP.ts:58</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -148,7 +150,7 @@
 					<div class="tsd-signature tsd-kind-icon">response<wbr>String<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/ccb55e9/src/lib/AMCP.ts#L56">lib/AMCP.ts:56</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7a8d4c6/src/lib/AMCP.ts#L57">lib/AMCP.ts:57</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -158,7 +160,17 @@
 					<div class="tsd-signature tsd-kind-icon">status<wbr>Code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/ccb55e9/src/lib/AMCP.ts#L55">lib/AMCP.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7a8d4c6/src/lib/AMCP.ts#L55">lib/AMCP.ts:55</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="token" class="tsd-anchor"></a>
+					<h3>token</h3>
+					<div class="tsd-signature tsd-kind-icon">token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7a8d4c6/src/lib/AMCP.ts#L56">lib/AMCP.ts:56</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -175,7 +187,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/ccb55e9/src/lib/AMCP.ts#L70">lib/AMCP.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7a8d4c6/src/lib/AMCP.ts#L72">lib/AMCP.ts:72</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -185,6 +197,32 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a name="parsetoken" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> parse<wbr>Token</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>Token<span class="tsd-signature-symbol">(</span>responseString<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7a8d4c6/src/lib/AMCP.ts#L83">lib/AMCP.ts:83</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>responseString: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
 						</li>
 					</ul>
 				</section>
@@ -265,8 +303,14 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="amcputil.casparcgsocketresponse.html#statuscode" class="tsd-kind-icon">status<wbr>Code</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="amcputil.casparcgsocketresponse.html#token" class="tsd-kind-icon">token</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="amcputil.casparcgsocketresponse.html#evaluatestatuscode" class="tsd-kind-icon">evaluate<wbr>Status<wbr>Code</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+								<a href="amcputil.casparcgsocketresponse.html#parsetoken" class="tsd-kind-icon">parse<wbr>Token</a>
 							</li>
 						</ul>
 					</li>

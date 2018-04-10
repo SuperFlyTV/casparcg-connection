@@ -1,6 +1,6 @@
 {
   "name": "casparcg-connection",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "Node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "js/index.js",
   "typings": "js/index.d.ts",
@@ -51,6 +51,11 @@
       "name": "Andreas Jeansson",
       "email": "andreas.jeansson@svt.se",
       "url": "http://svt.se"
+    },
+    {
+      "name": "Aleksandr Besedin",
+      "email": "sasha.besedin@gmail.com",
+      "url": "http://cosmonova.net"
     }
   ],
   "homepage": "http://superfly.tv",

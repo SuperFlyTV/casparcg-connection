@@ -74,8 +74,10 @@ export declare namespace Command {
         protocolLogic: Array<IProtocolLogic>;
         responseProtocol: ResponseSignature;
         onStatusChanged: ICommandStatusCallback;
+        token: string;
         resolve: (command: IAMCPCommand) => void;
         reject: (command: IAMCPCommand) => void;
+        getParam: (name: string) => string | number | boolean | Object | undefined;
         validateParams(): boolean;
         validateResponse(response: CasparCGSocketResponse): boolean;
         serialize(): IAMCPCommandVO;
@@ -102,6 +104,7 @@ export declare namespace Command {
         protected _payload: PayloadVO;
         protected _stringParamsArray: Array<string>;
         protected _objectParams: Param;
+        protected _token: string;
         private _status;
         /**
          *
@@ -111,6 +114,7 @@ export declare namespace Command {
          *
          */
         validateParams(): boolean;
+        getParam(name: string): string | number | boolean | Object | undefined;
         /**
          *
          */
@@ -143,6 +147,7 @@ export declare namespace Command {
          *
          */
         readonly address: string;
+        readonly token: string;
         /**
          *
          */

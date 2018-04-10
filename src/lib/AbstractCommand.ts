@@ -101,8 +101,10 @@ export interface IAMCPCommand extends IAMCPCommandData {
   protocolLogic: Array<IProtocolLogic>
   responseProtocol: ResponseSignature
   onStatusChanged: ICommandStatusCallback
+  token: string
   resolve: (command: IAMCPCommand) => void
   reject: (command: IAMCPCommand) => void
+  getParam: (name: string) => string|number|boolean|Object|undefined
   validateParams (): boolean
   validateResponse (response: CasparCGSocketResponse): boolean
   serialize (): IAMCPCommandVO
@@ -138,6 +140,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
   protected _payload: PayloadVO = {}
   protected _stringParamsArray: Array<string>
   protected _objectParams: Param
+  protected _token: string
   private _status: IAMCPStatus = IAMCPStatus.New
 
 		// @todo: add concept of "variants", adding an ENUM to variants of the same (query) verb-command. INFO x INFO y, but not Thumbnail Retriece and thumbnail generate, different verbs
@@ -168,6 +171,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
     }
     this._stringParamsArray = []
     this._objectParams = {}
+    this._token = Math.random().toString(35).substr(2, 7)
 
     for (let element of paramsArray) {
       if (element === undefined) {
@@ -223,6 +227,13 @@ export abstract class AbstractCommand implements IAMCPCommand {
     })
 
     return true
+  }
+
+  public getParam (name: string): string|number|boolean|Object|undefined {
+    if (this._objectParams[name]) {
+      return this._objectParams[name]
+    }
+    return undefined
   }
 
 		/**
@@ -309,6 +320,10 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		 */
   get address (): string {
     return ''
+  }
+
+  get token (): string {
+    return this._token
   }
 
 		/**

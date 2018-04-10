@@ -353,7 +353,7 @@
         "licenseUrl": "https://github.com/sindresorhus/camelcase/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "casparcg-connection@3.0.2": {
+    "casparcg-connection@3.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/SuperFlyTV/casparcg-connection",
         "licenseUrl": "https://github.com/SuperFlyTV/casparcg-connection/raw/master/.licensetree.json",
@@ -423,7 +423,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/pvorb/node-clone",
         "licenseUrl": "https://github.com/pvorb/node-clone/raw/master/LICENSE",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "gulp:casparcg-connection"
     },
     "clone@1.0.4": {
         "licenses": "MIT",
@@ -621,7 +621,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/felixge/node-dateformat",
         "licenseUrl": "https://github.com/felixge/node-dateformat/raw/master/LICENSE",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "gulp:casparcg-connection"
     },
     "dateformat@2.2.0": {
         "licenses": "MIT",
@@ -825,7 +825,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/js-cli/fancy-log",
         "licenseUrl": "https://github.com/js-cli/fancy-log/raw/master/LICENSE",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "gulp:casparcg-connection"
     },
     "fancy-log@1.3.2": {
         "licenses": "MIT",
@@ -1101,7 +1101,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/undertakerjs/glogg",
         "licenseUrl": "https://github.com/undertakerjs/glogg/raw/master/LICENSE",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "gulp:casparcg-connection"
     },
     "glogg@1.0.1": {
         "licenses": "MIT",
@@ -2241,7 +2241,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/calvinmetcalf/process-nextick-args",
         "licenseUrl": "https://github.com/calvinmetcalf/process-nextick-args/raw/master/license.md",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "gulp:casparcg-connection"
     },
     "process-nextick-args@2.0.0": {
         "licenses": "MIT",
@@ -2367,7 +2367,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/regex-cache",
         "licenseUrl": "https://github.com/jonschlinkert/regex-cache/raw/master/LICENSE",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "gulp:casparcg-connection"
     },
     "regex-cache@0.4.4": {
         "licenses": "MIT",
@@ -2379,7 +2379,7 @@
         "licenses": "ISC",
         "repository": "https://github.com/darsain/remove-trailing-separator",
         "licenseUrl": "https://github.com/darsain/remove-trailing-separator/raw/master/license",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "gulp:casparcg-connection"
     },
     "remove-trailing-separator@1.1.0": {
         "licenses": "ISC",

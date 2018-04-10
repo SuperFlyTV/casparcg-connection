@@ -10,7 +10,7 @@ var Options;
      */
     var QueueMode;
     (function (QueueMode) {
-        // SALVO 		= 1,
+        QueueMode[QueueMode["SALVO"] = 1] = "SALVO";
         QueueMode[QueueMode["SEQUENTIAL"] = 2] = "SEQUENTIAL";
         // SMART 		= 3
     })(QueueMode = Options.QueueMode || (Options.QueueMode = {}));
@@ -37,7 +37,7 @@ var ConnectionOptions = /** @class */ (function () {
         this.autoReconnectInterval = 1000;
         this.autoReconnectAttempts = Infinity;
         this.serverVersion = undefined;
-        this.queueMode = Options.QueueMode.SEQUENTIAL; // @todo: change to SALVO once server has command UIDs https://github.com/CasparCG/Server/issues/475
+        this.queueMode = Options.QueueMode.SALVO;
         this.virginServerCheck = false;
         this.debug = false;
         this.onLog = undefined;

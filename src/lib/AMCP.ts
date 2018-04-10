@@ -53,6 +53,7 @@ export namespace AMCPUtil {
 	 */
 export class CasparCGSocketResponse {
   public statusCode: number
+  public token: string | undefined
   public responseString: string
   public items: Array<string> = []
 
@@ -60,6 +61,7 @@ export class CasparCGSocketResponse {
 		 *
 		 */
   constructor (responseString: string) {
+    this.token = CasparCGSocketResponse.parseToken(responseString)
     this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString)
     this.responseString = responseString
   }
@@ -68,7 +70,22 @@ export class CasparCGSocketResponse {
 		 *
 		 */
   static evaluateStatusCode (responseString: string): number {
-    return parseInt(responseString.substr(0, 3), 10)
+    let token = CasparCGSocketResponse.parseToken(responseString)
+    let index: number
+    if (token) index = token.length + 5
+    else index = 0
+    return parseInt(responseString.substr(index, 3), 10)
+  }
+
+    /**
+     *
+     */
+  static parseToken (responseString: string): string | undefined {
+    if (responseString.substr(0, 3) === 'RES') {
+      return responseString.substr(4).split(' ')[0] // RES [token] RESPONSE
+    } else {
+      return undefined
+    }
   }
 }
 }
@@ -1526,5 +1543,41 @@ export class KillCommand extends AbstractCommand {
 	 */
 export class RestartCommand extends AbstractCommand {
   static readonly commandString = 'RESTART'
+}
+export class PingCommand extends AbstractCommand {
+  static readonly commandString = 'PING'
+}
+}
+
+/**
+ * IScheduling
+ */
+export namespace AMCP {
+export class TimeCommand extends AbstractChannelCommand {
+  static readonly commandString = 'TIME'
+  responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.InfoParser)
+}
+export class ScheduleSetCommand extends AbstractCommand {
+  static readonly commandString = 'SCHEDULE SET'
+  paramProtocol = [
+    new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator()),
+    new ParamSignature(required, 'timecode', null, new ParameterValidator.TimecodeValidator()),
+    new ParamSignature(required, 'command', null, new ParameterValidator.CommandValidator())
+  ]
+}
+export class ScheduleRemoveCommand extends AbstractCommand {
+  static readonly commandString = 'SCHEDULE REMOVE'
+  paramProtocol = [
+    new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator())
+  ]
+}
+export class ScheduleClearCommand extends AbstractCommand {
+  static readonly commandString = 'SCHEDULE CLEAR'
+}
+export class ScheduleListCommand extends AbstractCommand {
+  static readonly commandString = 'SCHEDULE LIST'
+  paramProtocol = [
+    new ParamSignature(optional, 'token', null, new ParameterValidator.StringValidator())
+  ]
 }
 }
