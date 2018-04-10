@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.1.0...v4.0.0) (2018-04-10)
+
+
+### Features
+
+* **Asynchronous commands:** refactor the internal command execution ([7b10d43](https://github.com/SuperFlyTV/casparcg-connection/commit/7b10d43))
+* **QueueMode:** allow runtime configuration ([f39f7ea](https://github.com/SuperFlyTV/casparcg-connection/commit/f39f7ea))
+* **Scheduled Commands:** keep sequential mode for compatibility ([48a760f](https://github.com/SuperFlyTV/casparcg-connection/commit/48a760f))
+* **Scheduled Commands:** schedule and resolve scheduled commands ([5a9f0fb](https://github.com/SuperFlyTV/casparcg-connection/commit/5a9f0fb))
+
+
+* . ([7a8d4c6](https://github.com/SuperFlyTV/casparcg-connection/commit/7a8d4c6))
+
+
+### BREAKING CHANGES
+
+* set default queue mode to SALVO, making the library fully asynchronous.
+
+
+
 <a name="3.1.0"></a>
 # [3.1.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.2...v3.1.0) (2018-03-28)
 
