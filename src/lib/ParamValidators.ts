@@ -511,11 +511,9 @@ export class TemplateDataValidator extends AbstractValidator {
 			// data is object: serialize
     if (typeof data === 'object' && data !== null) {
       stringCast = JSON.stringify(data)
-    }
-    // data is string: escape \r\n characters
-    else if (typeof data === 'string' && data !== null) {
+    } else if (typeof data === 'string' && data !== null) {
       stringCast = stringCast.replace(/\r|\n/g, charToEscape => {
-        return charToEscape === "\r" ? "\\r" : "\\n"
+        return charToEscape === '\r' ? '\\r' : '\\n'
       });
     }
 
