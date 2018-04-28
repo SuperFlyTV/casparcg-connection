@@ -514,7 +514,7 @@ export class TemplateDataValidator extends AbstractValidator {
     } else if (typeof data === 'string' && data !== null) {
       stringCast = stringCast.replace(/\r|\n/g, charToEscape => {
         return charToEscape === '\r' ? '\\r' : '\\n'
-      });
+      })
     }
 
 		/*	// data is string, try to de-serialize to validate as JSON
