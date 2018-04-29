@@ -1541,7 +1541,7 @@ var CasparCG = /** @class */ (function (_super) {
                         .then(function (info) {
                         var channelPromises = [];
                         var channelLength = info.response.data['length'];
-                        for (var i = 1; i <= channelLength; i++) {
+                        for (var i = 1; i <= channelLength; i++) { // 1-based index for channels
                             channelPromises.push(_this.doNow(new AMCP_1.AMCP.InfoCommand({ channel: i })));
                         }
                         var virgin = true;

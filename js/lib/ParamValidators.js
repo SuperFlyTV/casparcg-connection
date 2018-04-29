@@ -566,6 +566,11 @@ var Validation;
             if (typeof data === 'object' && data !== null) {
                 stringCast = JSON.stringify(data);
             }
+            else if (typeof data === 'string' && data !== null) {
+                stringCast = stringCast.replace(/\r|\n/g, function (charToEscape) {
+                    return charToEscape === '\r' ? '\\r' : '\\n';
+                });
+            }
             /*	// data is string, try to de-serialize to validate as JSON
                 try {
                     let objectCast = JSON.parse(stringCast);
