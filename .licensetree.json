@@ -17,13 +17,13 @@
         "licenseUrl": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
         "parents": "casparcg-connection"
     },
-    "@types/handlebars@4.0.36": {
+    "@types/handlebars@4.0.37": {
         "licenses": "MIT",
         "repository": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
         "licenseUrl": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
         "parents": "casparcg-connection"
     },
-    "@types/highland@2.10.7": {
+    "@types/highland@2.10.8": {
         "licenses": "MIT",
         "repository": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
         "licenseUrl": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
@@ -41,7 +41,7 @@
         "licenseUrl": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
         "parents": "casparcg-connection"
     },
-    "@types/lodash@4.14.106": {
+    "@types/lodash@4.14.108": {
         "licenses": "MIT",
         "repository": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
         "licenseUrl": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
@@ -59,7 +59,7 @@
         "licenseUrl": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
         "parents": "casparcg-connection"
     },
-    "@types/node@8.10.0": {
+    "@types/node@8.10.10": {
         "licenses": "MIT",
         "repository": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
         "licenseUrl": "https://wwwhub.com/DefinitelyTyped/DefinitelyTyped",
@@ -88,6 +88,12 @@
         "repository": "https://github.com/dominictarr/JSONStream",
         "licenseUrl": "https://github.com/dominictarr/JSONStream/raw/master/LICENSE.APACHE2",
         "parents": "casparcg-connection"
+    },
+    "abbrev@1.1.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/abbrev-js",
+        "licenseUrl": "https://github.com/isaacs/abbrev-js/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "align-text@0.1.4": {
         "licenses": "MIT",
@@ -155,17 +161,29 @@
         "licenseUrl": "https://github.com/jonschlinkert/ansi-wrap/blob/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "anymatch@1.3.0": {
+    "anymatch@1.3.2": {
         "licenses": "ISC",
         "repository": "https://github.com/es128/anymatch",
         "licenseUrl": "https://github.com/es128/anymatch/raw/master/LICENSE",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "aproba@1.2.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/iarna/aproba",
+        "licenseUrl": "https://github.com/iarna/aproba/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "archy@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/substack/node-archy",
         "licenseUrl": "https://github.com/substack/node-archy/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "are-we-there-yet@1.1.4": {
+        "licenses": "ISC",
+        "repository": "https://github.com/iarna/are-we-there-yet",
+        "licenseUrl": "https://github.com/iarna/are-we-there-yet/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "argparse@1.0.10": {
         "licenses": "MIT",
@@ -183,6 +201,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/arr-diff",
         "licenseUrl": "https://github.com/jonschlinkert/arr-diff/raw/master/LICENSE",
+        "parents": "anymatch:casparcg-connection"
+    },
+    "arr-diff@4.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/arr-diff",
+        "licenseUrl": "https://github.com/jonschlinkert/arr-diff/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "arr-flatten@1.1.0": {
@@ -192,6 +216,12 @@
         "parents": "casparcg-connection"
     },
     "arr-union@2.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/arr-union",
+        "licenseUrl": "https://github.com/jonschlinkert/arr-union/raw/master/LICENSE",
+        "parents": "plugin-error:casparcg-connection"
+    },
+    "arr-union@3.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/arr-union",
         "licenseUrl": "https://github.com/jonschlinkert/arr-union/raw/master/LICENSE",
@@ -227,7 +257,7 @@
         "licenseUrl": "https://github.com/jonschlinkert/array-slice/blob/master/LICENSE",
         "parents": "plugin-error:casparcg-connection"
     },
-    "array-slice@1.0.0": {
+    "array-slice@1.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/array-slice",
         "licenseUrl": "https://github.com/jonschlinkert/array-slice/raw/master/LICENSE",
@@ -249,6 +279,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/array-unique",
         "licenseUrl": "https://github.com/jonschlinkert/array-unique/blob/master/LICENSE",
+        "parents": "anymatch:casparcg-connection"
+    },
+    "array-unique@0.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/array-unique",
+        "licenseUrl": "https://github.com/jonschlinkert/array-unique/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "arrify@1.0.1": {
@@ -257,16 +293,28 @@
         "licenseUrl": "https://github.com/sindresorhus/arrify/raw/master/license",
         "parents": "casparcg-connection"
     },
+    "assign-symbols@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/assign-symbols",
+        "licenseUrl": "https://github.com/jonschlinkert/assign-symbols/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "async-each@1.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/paulmillr/async-each",
         "licenseUrl": "https://github.com/paulmillr/async-each",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "async@1.5.2": {
         "licenses": "MIT",
         "repository": "https://github.com/caolan/async",
         "licenseUrl": "https://github.com/caolan/async/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "atob@2.1.1": {
+        "licenses": "(MIT OR Apache-2.0)",
+        "repository": "git://git.coolaj86.com/coolaj86/atob.js",
+        "licenseUrl": "https://git.coolaj86.com/coolaj86/atob.js",
         "parents": "casparcg-connection"
     },
     "babel-code-frame@6.26.0": {
@@ -281,28 +329,40 @@
         "licenseUrl": "https://github.com/juliangruber/balanced-match/raw/master/LICENSE.md",
         "parents": "casparcg-connection"
     },
+    "base@0.11.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/node-base/base",
+        "licenseUrl": "https://github.com/node-base/base/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "beeper@1.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/beeper",
         "licenseUrl": "https://github.com/sindresorhus/beeper/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "binary-extensions@1.8.0": {
+    "binary-extensions@1.11.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/binary-extensions",
         "licenseUrl": "https://github.com/sindresorhus/binary-extensions/raw/master/license",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "brace-expansion@1.1.8": {
+    "brace-expansion@1.1.11": {
         "licenses": "MIT",
         "repository": "https://github.com/juliangruber/brace-expansion",
-        "licenseUrl": "https://github.com/juliangruber/brace-expansion",
+        "licenseUrl": "https://github.com/juliangruber/brace-expansion/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "braces@1.8.5": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/braces",
         "licenseUrl": "https://github.com/jonschlinkert/braces/raw/master/LICENSE",
+        "parents": "anymatch:casparcg-connection"
+    },
+    "braces@2.3.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/micromatch/braces",
+        "licenseUrl": "https://github.com/micromatch/braces/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "buffer-crc32@0.2.13": {
@@ -321,6 +381,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/builtin-modules",
         "licenseUrl": "https://github.com/sindresorhus/builtin-modules/raw/master/license",
+        "parents": "casparcg-connection"
+    },
+    "cache-base@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/cache-base",
+        "licenseUrl": "https://github.com/jonschlinkert/cache-base/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "camelcase-keys@2.1.0": {
@@ -353,7 +419,7 @@
         "licenseUrl": "https://github.com/sindresorhus/camelcase/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "casparcg-connection@3.1.0": {
+    "casparcg-connection@4.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/SuperFlyTV/casparcg-connection",
         "licenseUrl": "https://github.com/SuperFlyTV/casparcg-connection/raw/master/.licensetree.json",
@@ -371,7 +437,7 @@
         "licenseUrl": "https://github.com/chalk/chalk/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "chalk@2.3.2": {
+    "chalk@2.4.1": {
         "licenses": "MIT",
         "repository": "https://github.com/chalk/chalk",
         "licenseUrl": "https://github.com/chalk/chalk/raw/master/license",
@@ -381,7 +447,19 @@
         "licenses": "MIT",
         "repository": "https://github.com/paulmillr/chokidar",
         "licenseUrl": "https://github.com/paulmillr/chokidar",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "chownr@1.0.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/chownr",
+        "licenseUrl": "https://github.com/isaacs/chownr/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "class-utils@0.3.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/class-utils",
+        "licenseUrl": "https://github.com/jonschlinkert/class-utils/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "cliui@2.1.0": {
         "licenses": "ISC",
@@ -417,13 +495,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/pvorb/node-clone",
         "licenseUrl": "https://github.com/pvorb/node-clone/raw/master/LICENSE",
-        "parents": "vinyl-fs:gulp:casparcg-connection"
-    },
-    "clone@1.0.2": {
-        "licenses": "MIT",
-        "repository": "https://github.com/pvorb/node-clone",
-        "licenseUrl": "https://github.com/pvorb/node-clone/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "vinyl-fs:casparcg-connection"
     },
     "clone@1.0.4": {
         "licenses": "MIT",
@@ -431,7 +503,7 @@
         "licenseUrl": "https://github.com/pvorb/node-clone/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "clone@2.1.2": {
+    "clone@2.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/pvorb/node-clone",
         "licenseUrl": "https://github.com/pvorb/node-clone/raw/master/LICENSE",
@@ -447,6 +519,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/code-point-at",
         "licenseUrl": "https://github.com/sindresorhus/code-point-at/raw/master/license",
+        "parents": "casparcg-connection"
+    },
+    "collection-visit@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/collection-visit",
+        "licenseUrl": "https://github.com/jonschlinkert/collection-visit/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "color-convert@1.9.1": {
@@ -479,6 +557,12 @@
         "licenseUrl": "https://github.com/stevemao/compare-func",
         "parents": "casparcg-connection"
     },
+    "component-emitter@1.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/component/emitter",
+        "licenseUrl": "https://github.com/component/emitter/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "concat-map@0.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/substack/node-concat-map",
@@ -491,37 +575,43 @@
         "licenseUrl": "https://github.com/maxogden/concat-stream/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
+    "console-control-strings@1.1.0": {
+        "licenses": "ISC",
+        "repository": "https://github.com/iarna/console-control-strings",
+        "licenseUrl": "https://github.com/iarna/console-control-strings/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
     "conventional-changelog-angular@1.6.6": {
         "licenses": "ISC",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog",
         "parents": "casparcg-connection"
     },
-    "conventional-changelog-atom@0.2.7": {
+    "conventional-changelog-atom@0.2.8": {
         "licenses": "ISC",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
         "parents": "casparcg-connection"
     },
-    "conventional-changelog-codemirror@0.3.7": {
+    "conventional-changelog-codemirror@0.3.8": {
         "licenses": "ISC",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
         "parents": "casparcg-connection"
     },
-    "conventional-changelog-core@2.0.9": {
+    "conventional-changelog-core@2.0.11": {
         "licenses": "MIT",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
         "parents": "casparcg-connection"
     },
-    "conventional-changelog-ember@0.3.10": {
+    "conventional-changelog-ember@0.3.12": {
         "licenses": "ISC",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
         "parents": "casparcg-connection"
     },
-    "conventional-changelog-eslint@1.0.8": {
+    "conventional-changelog-eslint@1.0.9": {
         "licenses": "ISC",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
@@ -545,7 +635,7 @@
         "licenseUrl": "https://github.com/stevemao/conventional-changelog-jscs",
         "parents": "casparcg-connection"
     },
-    "conventional-changelog-jshint@0.3.7": {
+    "conventional-changelog-jshint@0.3.8": {
         "licenses": "ISC",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
@@ -557,13 +647,13 @@
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
         "parents": "casparcg-connection"
     },
-    "conventional-changelog-writer@3.0.8": {
+    "conventional-changelog-writer@3.0.9": {
         "licenses": "MIT",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
         "parents": "casparcg-connection"
     },
-    "conventional-changelog@1.1.22": {
+    "conventional-changelog@1.1.24": {
         "licenses": "MIT",
         "repository": "https://github.com/conventional-changelog/conventional-changelog",
         "licenseUrl": "https://github.com/conventional-changelog/conventional-changelog/raw/master/LICENSE.md",
@@ -593,13 +683,19 @@
         "licenseUrl": "https://github.com/thlorenz/convert-source-map/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
+    "copy-descriptor@0.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/copy-descriptor",
+        "licenseUrl": "https://github.com/jonschlinkert/copy-descriptor/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "core-util-is@1.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/isaacs/core-util-is",
         "licenseUrl": "https://github.com/isaacs/core-util-is/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "cross-spawn@4.0.2": {
+    "cross-spawn@5.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/IndigoUnited/node-cross-spawn",
         "licenseUrl": "https://github.com/IndigoUnited/node-cross-spawn/raw/master/LICENSE",
@@ -617,12 +713,6 @@
         "licenseUrl": "https://github.com/sindresorhus/dargs/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "dateformat@2.0.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/felixge/node-dateformat",
-        "licenseUrl": "https://github.com/felixge/node-dateformat/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
     "dateformat@2.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/felixge/node-dateformat",
@@ -634,6 +724,12 @@
         "repository": "https://github.com/felixge/node-dateformat",
         "licenseUrl": "https://github.com/felixge/node-dateformat/raw/master/LICENSE",
         "parents": "conventional-changelog-writer:casparcg-connection"
+    },
+    "debug@2.6.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/visionmedia/debug",
+        "licenseUrl": "https://github.com/visionmedia/debug/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "decamelize-keys@1.1.0": {
         "licenses": "MIT",
@@ -647,11 +743,41 @@
         "licenseUrl": "https://github.com/sindresorhus/decamelize/raw/master/license",
         "parents": "casparcg-connection"
     },
+    "decode-uri-component@0.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/SamVerschueren/decode-uri-component",
+        "licenseUrl": "https://github.com/SamVerschueren/decode-uri-component/raw/master/license",
+        "parents": "casparcg-connection"
+    },
+    "deep-extend@0.4.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/unclechu/node-deep-extend",
+        "licenseUrl": "https://github.com/unclechu/node-deep-extend/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
     "defaults@1.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/tmpvar/defaults",
         "licenseUrl": "https://github.com/tmpvar/defaults/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "define-property@0.2.5": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/define-property",
+        "licenseUrl": "https://github.com/jonschlinkert/define-property/raw/master/LICENSE",
+        "parents": "class-utils:casparcg-connection"
+    },
+    "define-property@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/define-property",
+        "licenseUrl": "https://github.com/jonschlinkert/define-property/raw/master/LICENSE",
+        "parents": "base:casparcg-connection"
+    },
+    "define-property@2.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/define-property",
+        "licenseUrl": "https://github.com/jonschlinkert/define-property/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "del@3.0.0": {
         "licenses": "MIT",
@@ -659,19 +785,31 @@
         "licenseUrl": "https://github.com/sindresorhus/del/raw/master/license",
         "parents": "casparcg-connection"
     },
+    "delegates@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/visionmedia/node-delegates",
+        "licenseUrl": "https://github.com/visionmedia/node-delegates/raw/master/License",
+        "parents": "fsevents:casparcg-connection"
+    },
     "deprecated@0.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/wearefractal/deprecated",
         "licenseUrl": "http://github.com/wearefractal/deprecated/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "detect-file@0.1.0": {
+    "detect-file@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/doowb/detect-file",
         "licenseUrl": "https://github.com/doowb/detect-file/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "diff@3.3.0": {
+    "detect-libc@1.0.3": {
+        "licenses": "Apache-2.0",
+        "repository": "https://github.com/lovell/detect-libc",
+        "licenseUrl": "https://github.com/lovell/detect-libc/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "diff@3.5.0": {
         "licenses": "BSD-3-Clause",
         "repository": "https://github.com/kpdecker/jsdiff",
         "licenseUrl": "https://github.com/kpdecker/jsdiff/raw/master/LICENSE",
@@ -717,13 +855,13 @@
         "licenses": "MIT",
         "repository": "https://github.com/mafintosh/end-of-stream",
         "licenseUrl": "https://github.com/mafintosh/end-of-stream",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "end-of-stream@1.4.1": {
         "licenses": "MIT",
         "repository": "https://github.com/mafintosh/end-of-stream",
         "licenseUrl": "https://github.com/mafintosh/end-of-stream/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "duplexify:casparcg-connection"
     },
     "error-ex@1.3.1": {
         "licenses": "MIT",
@@ -761,7 +899,7 @@
         "licenseUrl": "https://github.com/dominictarr/event-stream/raw/master/LICENCE",
         "parents": "casparcg-connection"
     },
-    "execa@0.5.1": {
+    "execa@0.7.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/execa",
         "licenseUrl": "https://github.com/sindresorhus/execa/raw/master/license",
@@ -777,6 +915,12 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/expand-brackets",
         "licenseUrl": "https://github.com/jonschlinkert/expand-brackets/raw/master/LICENSE",
+        "parents": "anymatch:casparcg-connection"
+    },
+    "expand-brackets@2.1.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/expand-brackets",
+        "licenseUrl": "https://github.com/jonschlinkert/expand-brackets/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "expand-range@1.8.2": {
@@ -785,17 +929,11 @@
         "licenseUrl": "https://github.com/jonschlinkert/expand-range/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "expand-tilde@1.2.2": {
-        "licenses": "MIT",
-        "repository": "https://github.com/jonschlinkert/expand-tilde",
-        "licenseUrl": "https://github.com/jonschlinkert/expand-tilde/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
     "expand-tilde@2.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/expand-tilde",
         "licenseUrl": "https://github.com/jonschlinkert/expand-tilde/raw/master/LICENSE",
-        "parents": "fined:gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "extend-shallow@1.1.4": {
         "licenses": "MIT",
@@ -804,6 +942,12 @@
         "parents": "plugin-error:casparcg-connection"
     },
     "extend-shallow@2.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/extend-shallow",
+        "licenseUrl": "https://github.com/jonschlinkert/extend-shallow/raw/master/LICENSE",
+        "parents": "set-value:casparcg-connection"
+    },
+    "extend-shallow@3.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/extend-shallow",
         "licenseUrl": "https://github.com/jonschlinkert/extend-shallow/raw/master/LICENSE",
@@ -819,13 +963,13 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/extglob",
         "licenseUrl": "https://github.com/jonschlinkert/extglob/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "anymatch:casparcg-connection"
     },
-    "fancy-log@1.3.0": {
+    "extglob@2.0.4": {
         "licenses": "MIT",
-        "repository": "https://github.com/js-cli/fancy-log",
-        "licenseUrl": "https://github.com/js-cli/fancy-log/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "repository": "https://github.com/micromatch/extglob",
+        "licenseUrl": "https://github.com/micromatch/extglob/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "fancy-log@1.3.2": {
         "licenses": "MIT",
@@ -849,13 +993,19 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/fill-range",
         "licenseUrl": "https://github.com/jonschlinkert/fill-range/raw/master/LICENSE",
+        "parents": "expand-range:casparcg-connection"
+    },
+    "fill-range@4.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/fill-range",
+        "licenseUrl": "https://github.com/jonschlinkert/fill-range/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "find-index@0.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/jsdf/find-index",
         "licenseUrl": "https://github.com/jsdf/find-index",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "find-up@1.1.2": {
         "licenses": "MIT",
@@ -869,17 +1019,17 @@
         "licenseUrl": "https://github.com/sindresorhus/find-up/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "findup-sync@0.4.3": {
+    "findup-sync@2.0.0": {
         "licenses": "MIT",
-        "repository": "https://github.com/cowboy/node-findup-sync",
-        "licenseUrl": "https://github.com/cowboy/node-findup-sync",
-        "parents": "gulp:casparcg-connection"
+        "repository": "https://github.com/js-cli/node-findup-sync",
+        "licenseUrl": "https://github.com/js-cli/node-findup-sync",
+        "parents": "casparcg-connection"
     },
     "fined@1.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/js-cli/fined",
         "licenseUrl": "https://github.com/js-cli/fined/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "first-chunk-stream@1.0.0": {
         "licenses": "MIT",
@@ -891,13 +1041,13 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/first-chunk-stream",
         "licenseUrl": "https://github.com/sindresorhus/first-chunk-stream/raw/master/license",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "vinyl-file:casparcg-connection"
     },
-    "flagged-respawn@0.3.2": {
+    "flagged-respawn@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/js-cli/js-flagged-respawn",
-        "licenseUrl": "https://github.com/js-cli/js-flagged-respawn/blob/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "licenseUrl": "https://github.com/js-cli/js-flagged-respawn/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "for-in@1.0.2": {
         "licenses": "MIT",
@@ -909,13 +1059,19 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/for-own",
         "licenseUrl": "https://github.com/jonschlinkert/for-own/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "object.omit:casparcg-connection"
     },
     "for-own@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/for-own",
         "licenseUrl": "https://github.com/jonschlinkert/for-own/raw/master/LICENSE",
-        "parents": "object.defaults:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "fragment-cache@0.2.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/fragment-cache",
+        "licenseUrl": "https://github.com/jonschlinkert/fragment-cache/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "from@0.1.7": {
         "licenses": "MIT",
@@ -929,17 +1085,17 @@
         "licenseUrl": "https://github.com/sindresorhus/fs-access/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "fs-exists-sync@0.1.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/jonschlinkert/fs-exists-sync",
-        "licenseUrl": "https://github.com/jonschlinkert/fs-exists-sync/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
     "fs-extra@3.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/jprichardson/node-fs-extra",
         "licenseUrl": "https://github.com/jprichardson/node-fs-extra/raw/master/LICENSE",
         "parents": "casparcg-connection"
+    },
+    "fs-minipass@1.2.5": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/fs-minipass",
+        "licenseUrl": "https://github.com/npm/fs-minipass/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "fs.realpath@1.0.0": {
         "licenses": "ISC",
@@ -947,11 +1103,23 @@
         "licenseUrl": "https://github.com/isaacs/fs.realpath/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
+    "fsevents@1.2.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/strongloop/fsevents",
+        "licenseUrl": "https://github.com/strongloop/fsevents/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "gauge@2.7.4": {
+        "licenses": "ISC",
+        "repository": "https://github.com/iarna/gauge",
+        "licenseUrl": "https://github.com/iarna/gauge/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
     "gaze@0.5.2": {
         "licenses": "MIT",
         "repository": "https://github.com/shama/gaze",
         "licenseUrl": "https://github.com/shama/gaze/blob/master/LICENSE-MIT",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "get-caller-file@1.0.2": {
         "licenses": "ISC",
@@ -971,16 +1139,16 @@
         "licenseUrl": "https://github.com/sindresorhus/get-stdin",
         "parents": "casparcg-connection"
     },
-    "get-stream@2.3.1": {
-        "licenses": "MIT",
-        "repository": "https://github.com/sindresorhus/get-stream",
-        "licenseUrl": "https://github.com/sindresorhus/get-stream/raw/master/license",
-        "parents": "execa:casparcg-connection"
-    },
     "get-stream@3.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/get-stream",
         "licenseUrl": "https://github.com/sindresorhus/get-stream/raw/master/license",
+        "parents": "casparcg-connection"
+    },
+    "get-value@2.0.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/get-value",
+        "licenseUrl": "https://github.com/jonschlinkert/get-value/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "git-raw-commits@1.3.6": {
@@ -1029,43 +1197,43 @@
         "licenses": "MIT",
         "repository": "https://github.com/wearefractal/glob-stream",
         "licenseUrl": "http://github.com/wearefractal/glob-stream/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "glob-stream@5.3.5": {
         "licenses": "MIT",
         "repository": "https://github.com/gulpjs/glob-stream",
         "licenseUrl": "https://github.com/gulpjs/glob-stream/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "gulp-typescript:casparcg-connection"
     },
     "glob-watcher@0.0.6": {
         "licenses": "MIT",
         "repository": "https://github.com/wearefractal/glob-watcher",
         "licenseUrl": "http://github.com/wearefractal/glob-watcher/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "glob2base@0.0.12": {
         "licenses": "MIT",
         "repository": "https://github.com/wearefractal/glob2base",
         "licenseUrl": "http://github.com/wearefractal/glob2base/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "glob@3.1.21": {
         "licenses": "BSD",
         "repository": "https://github.com/isaacs/node-glob",
         "licenseUrl": "https://github.com/isaacs/node-glob/raw/master/LICENSE",
-        "parents": "globule:gulp:casparcg-connection"
+        "parents": "globule:casparcg-connection"
     },
     "glob@4.5.3": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/node-glob",
         "licenseUrl": "https://github.com/isaacs/node-glob/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "glob-stream:casparcg-connection"
     },
     "glob@5.0.15": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/node-glob",
         "licenseUrl": "https://github.com/isaacs/node-glob/raw/master/LICENSE",
-        "parents": "glob-stream:casparcg-connection"
+        "parents": "gulp-typescript:casparcg-connection"
     },
     "glob@7.1.2": {
         "licenses": "ISC",
@@ -1073,17 +1241,17 @@
         "licenseUrl": "https://github.com/isaacs/node-glob/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "global-modules@0.2.3": {
+    "global-modules@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/global-modules",
         "licenseUrl": "https://github.com/jonschlinkert/global-modules/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "global-prefix@0.1.5": {
+    "global-prefix@1.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/global-prefix",
         "licenseUrl": "https://github.com/jonschlinkert/global-prefix/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "globby@6.1.0": {
         "licenses": "MIT",
@@ -1095,13 +1263,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/cowboy/node-globule",
         "licenseUrl": "https://github.com/cowboy/node-globule/blob/master/LICENSE-MIT",
-        "parents": "gulp:casparcg-connection"
-    },
-    "glogg@1.0.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/undertakerjs/glogg",
-        "licenseUrl": "https://github.com/undertakerjs/glogg/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "glogg@1.0.1": {
         "licenses": "MIT",
@@ -1113,19 +1275,19 @@
         "licenses": "BSD",
         "repository": "https://github.com/isaacs/node-graceful-fs",
         "licenseUrl": "https://github.com/isaacs/node-graceful-fs/raw/master/LICENSE",
-        "parents": "globule:gulp:casparcg-connection"
+        "parents": "globule:casparcg-connection"
     },
     "graceful-fs@3.0.11": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/node-graceful-fs",
         "licenseUrl": "https://github.com/isaacs/node-graceful-fs/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "graceful-fs@4.1.11": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/node-graceful-fs",
         "licenseUrl": "https://github.com/isaacs/node-graceful-fs/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "meow:casparcg-connection"
     },
     "gulp-sourcemaps@1.6.0": {
         "licenses": "ISC",
@@ -1199,6 +1361,36 @@
         "licenseUrl": "https://github.com/gulpjs/has-gulplog/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
+    "has-unicode@2.0.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/iarna/has-unicode",
+        "licenseUrl": "https://github.com/iarna/has-unicode/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "has-value@0.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/has-value",
+        "licenseUrl": "https://github.com/jonschlinkert/has-value/raw/master/LICENSE",
+        "parents": "unset-value:casparcg-connection"
+    },
+    "has-value@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/has-value",
+        "licenseUrl": "https://github.com/jonschlinkert/has-value/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "has-values@0.1.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/has-values",
+        "licenseUrl": "https://github.com/jonschlinkert/has-values/raw/master/LICENSE",
+        "parents": "unset-value:casparcg-connection"
+    },
+    "has-values@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/has-values",
+        "licenseUrl": "https://github.com/jonschlinkert/has-values/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "highland@3.0.0-beta.6": {
         "licenses": "Apache-2.0",
         "repository": "https://github.com/caolan/highland",
@@ -1215,13 +1407,25 @@
         "licenses": "MIT",
         "repository": "https://github.com/doowb/homedir-polyfill",
         "licenseUrl": "https://github.com/doowb/homedir-polyfill/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "hosted-git-info@2.5.0": {
+    "hosted-git-info@2.6.0": {
         "licenses": "ISC",
         "repository": "https://github.com/npm/hosted-git-info",
         "licenseUrl": "https://github.com/npm/hosted-git-info/raw/master/LICENSE",
         "parents": "casparcg-connection"
+    },
+    "iconv-lite@0.4.21": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ashtuchkin/iconv-lite",
+        "licenseUrl": "https://github.com/ashtuchkin/iconv-lite/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "ignore-walk@3.0.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/ignore-walk",
+        "licenseUrl": "https://github.com/isaacs/ignore-walk/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "indent-string@2.1.0": {
         "licenses": "MIT",
@@ -1245,7 +1449,7 @@
         "licenses": "UNKNOWN",
         "repository": "https://github.com/isaacs/inherits",
         "licenseUrl": "https://github.com/isaacs/inherits/raw/master/LICENSE",
-        "parents": "globule:gulp:casparcg-connection"
+        "parents": "globule:casparcg-connection"
     },
     "inherits@2.0.3": {
         "licenses": "ISC",
@@ -1253,23 +1457,11 @@
         "licenseUrl": "https://github.com/isaacs/inherits/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "ini@1.3.4": {
-        "licenses": "ISC",
-        "repository": "https://github.com/isaacs/ini",
-        "licenseUrl": "https://github.com/isaacs/ini/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
     "ini@1.3.5": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/ini",
         "licenseUrl": "https://github.com/isaacs/ini/raw/master/LICENSE",
         "parents": "casparcg-connection"
-    },
-    "interpret@1.0.3": {
-        "licenses": "MIT",
-        "repository": "https://github.com/tkellen/node-interpret",
-        "licenseUrl": "https://github.com/tkellen/node-interpret/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
     },
     "interpret@1.1.0": {
         "licenses": "MIT",
@@ -1283,11 +1475,23 @@
         "licenseUrl": "https://github.com/sindresorhus/invert-kv",
         "parents": "casparcg-connection"
     },
-    "is-absolute@0.2.6": {
+    "is-absolute@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/is-absolute",
         "licenseUrl": "https://github.com/jonschlinkert/is-absolute/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "is-accessor-descriptor@0.1.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-accessor-descriptor",
+        "licenseUrl": "https://github.com/jonschlinkert/is-accessor-descriptor/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "is-accessor-descriptor@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-accessor-descriptor",
+        "licenseUrl": "https://github.com/jonschlinkert/is-accessor-descriptor/raw/master/LICENSE",
+        "parents": "base:casparcg-connection"
     },
     "is-arrayish@0.2.1": {
         "licenses": "MIT",
@@ -1299,9 +1503,9 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/is-binary-path",
         "licenseUrl": "https://github.com/sindresorhus/is-binary-path/raw/master/license",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "is-buffer@1.1.5": {
+    "is-buffer@1.1.6": {
         "licenses": "MIT",
         "repository": "https://github.com/feross/is-buffer",
         "licenseUrl": "https://github.com/feross/is-buffer/raw/master/LICENSE",
@@ -1312,6 +1516,30 @@
         "repository": "https://github.com/sindresorhus/is-builtin-module",
         "licenseUrl": "https://github.com/sindresorhus/is-builtin-module/raw/master/license",
         "parents": "casparcg-connection"
+    },
+    "is-data-descriptor@0.1.4": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-data-descriptor",
+        "licenseUrl": "https://github.com/jonschlinkert/is-data-descriptor/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "is-data-descriptor@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-data-descriptor",
+        "licenseUrl": "https://github.com/jonschlinkert/is-data-descriptor/raw/master/LICENSE",
+        "parents": "base:casparcg-connection"
+    },
+    "is-descriptor@0.1.6": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-descriptor",
+        "licenseUrl": "https://github.com/jonschlinkert/is-descriptor/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "is-descriptor@1.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-descriptor",
+        "licenseUrl": "https://github.com/jonschlinkert/is-descriptor/raw/master/LICENSE",
+        "parents": "base:casparcg-connection"
     },
     "is-dotfile@1.0.3": {
         "licenses": "MIT",
@@ -1331,11 +1559,17 @@
         "licenseUrl": "https://github.com/jonschlinkert/is-extendable/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
+    "is-extendable@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-extendable",
+        "licenseUrl": "https://github.com/jonschlinkert/is-extendable/raw/master/LICENSE",
+        "parents": "extend-shallow:casparcg-connection"
+    },
     "is-extglob@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/is-extglob",
         "licenseUrl": "https://github.com/jonschlinkert/is-extglob/raw/master/LICENSE",
-        "parents": "extglob:casparcg-connection"
+        "parents": "anymatch:casparcg-connection"
     },
     "is-extglob@2.1.1": {
         "licenses": "MIT",
@@ -1365,7 +1599,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/is-glob",
         "licenseUrl": "https://github.com/jonschlinkert/is-glob/raw/master/LICENSE",
-        "parents": "micromatch:casparcg-connection"
+        "parents": "anymatch:casparcg-connection"
     },
     "is-glob@3.1.0": {
         "licenses": "MIT",
@@ -1377,18 +1611,30 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/is-number",
         "licenseUrl": "https://github.com/jonschlinkert/is-number/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "expand-range:casparcg-connection"
     },
     "is-number@3.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/is-number",
         "licenseUrl": "https://github.com/jonschlinkert/is-number/raw/master/LICENSE",
-        "parents": "randomatic:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "is-number@4.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-number",
+        "licenseUrl": "https://github.com/jonschlinkert/is-number/raw/master/LICENSE",
+        "parents": "is-odd:casparcg-connection"
     },
     "is-obj@1.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/is-obj",
         "licenseUrl": "https://github.com/sindresorhus/is-obj/raw/master/license",
+        "parents": "casparcg-connection"
+    },
+    "is-odd@2.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/is-odd",
+        "licenseUrl": "https://github.com/jonschlinkert/is-odd/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "is-path-cwd@1.0.0": {
@@ -1397,16 +1643,16 @@
         "licenseUrl": "https://github.com/sindresorhus/is-path-cwd",
         "parents": "casparcg-connection"
     },
-    "is-path-in-cwd@1.0.0": {
+    "is-path-in-cwd@1.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/is-path-in-cwd",
-        "licenseUrl": "https://github.com/sindresorhus/is-path-in-cwd",
+        "licenseUrl": "https://github.com/sindresorhus/is-path-in-cwd/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "is-path-inside@1.0.0": {
+    "is-path-inside@1.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/is-path-inside",
-        "licenseUrl": "https://github.com/sindresorhus/is-path-inside",
+        "licenseUrl": "https://github.com/sindresorhus/is-path-inside/raw/master/license",
         "parents": "casparcg-connection"
     },
     "is-plain-obj@1.1.0": {
@@ -1433,11 +1679,11 @@
         "licenseUrl": "https://github.com/jonschlinkert/is-primitive/blob/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "is-relative@0.2.1": {
+    "is-relative@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/is-relative",
         "licenseUrl": "https://github.com/jonschlinkert/is-relative/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "is-stream@1.1.0": {
         "licenses": "MIT",
@@ -1457,11 +1703,11 @@
         "licenseUrl": "https://github.com/sindresorhus/is-text-path/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "is-unc-path@0.1.2": {
+    "is-unc-path@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/is-unc-path",
         "licenseUrl": "https://github.com/jonschlinkert/is-unc-path/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "is-utf8@0.2.1": {
         "licenses": "MIT",
@@ -1475,11 +1721,11 @@
         "licenseUrl": "https://github.com/jonschlinkert/is-valid-glob/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "is-windows@0.2.0": {
+    "is-windows@1.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/is-windows",
         "licenseUrl": "https://github.com/jonschlinkert/is-windows/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "isarray@0.0.1": {
         "licenses": "MIT",
@@ -1491,7 +1737,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/juliangruber/isarray",
         "licenseUrl": "https://github.com/juliangruber/isarray",
-        "parents": "isobject:casparcg-connection"
+        "parents": "unset-value:casparcg-connection"
     },
     "isexe@2.0.0": {
         "licenses": "ISC",
@@ -1503,15 +1749,15 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/isobject",
         "licenseUrl": "https://github.com/jonschlinkert/isobject/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "has-value:unset-value:casparcg-connection"
     },
     "isobject@3.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/isobject",
         "licenseUrl": "https://github.com/jonschlinkert/isobject/raw/master/LICENSE",
-        "parents": "is-plain-object:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "jasmine-core@2.6.4": {
+    "jasmine-core@2.99.1": {
         "licenses": "MIT",
         "repository": "https://github.com/jasmine/jasmine",
         "licenseUrl": "https://github.com/jasmine/jasmine/raw/master/MIT.LICENSE",
@@ -1523,7 +1769,7 @@
         "licenseUrl": "https://github.com/svi3c/jasmine-ts/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "jasmine@2.6.0": {
+    "jasmine@2.99.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jasmine/jasmine-npm",
         "licenseUrl": "https://github.com/jasmine/jasmine-npm/raw/master/MIT.LICENSE",
@@ -1541,7 +1787,7 @@
         "licenseUrl": "https://github.com/nodeca/js-yaml/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "json-parse-better-errors@1.0.1": {
+    "json-parse-better-errors@1.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/zkat/json-parse-better-errors",
         "licenseUrl": "https://github.com/zkat/json-parse-better-errors/raw/master/LICENSE.md",
@@ -1587,13 +1833,25 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/kind-of",
         "licenseUrl": "https://github.com/jonschlinkert/kind-of/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "is-number:casparcg-connection"
     },
     "kind-of@4.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/kind-of",
         "licenseUrl": "https://github.com/jonschlinkert/kind-of/raw/master/LICENSE",
-        "parents": "randomatic:casparcg-connection"
+        "parents": "has-values:casparcg-connection"
+    },
+    "kind-of@5.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/kind-of",
+        "licenseUrl": "https://github.com/jonschlinkert/kind-of/raw/master/LICENSE",
+        "parents": "is-descriptor:casparcg-connection"
+    },
+    "kind-of@6.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/kind-of",
+        "licenseUrl": "https://github.com/jonschlinkert/kind-of/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "lazy-cache@1.0.4": {
         "licenses": "MIT",
@@ -1613,11 +1871,11 @@
         "licenseUrl": "https://github.com/sindresorhus/lcid/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "liftoff@2.3.0": {
+    "liftoff@2.5.0": {
         "licenses": "MIT",
         "repository": "https://github.com/js-cli/js-liftoff",
         "licenseUrl": "https://github.com/js-cli/js-liftoff/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "load-json-file@1.1.0": {
         "licenses": "MIT",
@@ -1721,29 +1979,11 @@
         "licenseUrl": "https://github.com/lodash/lodash/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "lodash.isplainobject@4.0.6": {
-        "licenses": "MIT",
-        "repository": "https://github.com/lodash/lodash",
-        "licenseUrl": "https://github.com/lodash/lodash/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
-    "lodash.isstring@4.0.1": {
-        "licenses": "MIT",
-        "repository": "https://github.com/lodash/lodash",
-        "licenseUrl": "https://github.com/lodash/lodash/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
     "lodash.keys@3.1.2": {
         "licenses": "MIT",
         "repository": "https://github.com/lodash/lodash",
         "licenseUrl": "https://github.com/lodash/lodash/raw/master/LICENSE",
         "parents": "casparcg-connection"
-    },
-    "lodash.mapvalues@4.6.0": {
-        "licenses": "MIT",
-        "repository": "https://github.com/lodash/lodash",
-        "licenseUrl": "https://github.com/lodash/lodash/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
     },
     "lodash.restparam@3.6.1": {
         "licenses": "MIT",
@@ -1779,13 +2019,13 @@
         "licenses": "MIT",
         "repository": "https://github.com/lodash/lodash",
         "licenseUrl": "https://github.com/lodash/lodash/raw/master/LICENSE.txt",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "lodash@4.17.5": {
+    "lodash@4.17.10": {
         "licenses": "MIT",
         "repository": "https://github.com/lodash/lodash",
         "licenseUrl": "https://github.com/lodash/lodash/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "conventional-changelog-writer:casparcg-connection"
     },
     "longest@1.0.1": {
         "licenses": "MIT",
@@ -1803,25 +2043,31 @@
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/node-lru-cache",
         "licenseUrl": "https://github.com/isaacs/node-lru-cache/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "lru-cache@4.1.1": {
+    "lru-cache@4.1.2": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/node-lru-cache",
         "licenseUrl": "https://github.com/isaacs/node-lru-cache/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "cross-spawn:casparcg-connection"
     },
-    "make-error@1.3.0": {
+    "make-error@1.3.4": {
         "licenses": "ISC",
         "repository": "https://github.com/JsCommunity/make-error",
         "licenseUrl": "https://github.com/JsCommunity/make-error",
+        "parents": "casparcg-connection"
+    },
+    "make-iterator@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/make-iterator",
+        "licenseUrl": "https://github.com/jonschlinkert/make-iterator/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "map-cache@0.2.2": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/map-cache",
         "licenseUrl": "https://github.com/jonschlinkert/map-cache/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "map-obj@1.0.1": {
         "licenses": "MIT",
@@ -1839,6 +2085,12 @@
         "licenses": "UNKNOWN",
         "repository": "https://github.com/dominictarr/map-stream",
         "licenseUrl": "https://github.com/dominictarr/map-stream/raw/master/LICENCE",
+        "parents": "casparcg-connection"
+    },
+    "map-visit@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/map-visit",
+        "licenseUrl": "https://github.com/jonschlinkert/map-visit/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "marked@0.3.19": {
@@ -1859,7 +2111,7 @@
         "licenseUrl": "https://github.com/sindresorhus/meow/raw/master/license",
         "parents": "get-pkg-repo:casparcg-connection"
     },
-    "meow@4.0.0": {
+    "meow@4.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/meow",
         "licenseUrl": "https://github.com/sindresorhus/meow/raw/master/license",
@@ -1875,9 +2127,15 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/micromatch",
         "licenseUrl": "https://github.com/jonschlinkert/micromatch/raw/master/LICENSE",
+        "parents": "anymatch:casparcg-connection"
+    },
+    "micromatch@3.1.10": {
+        "licenses": "MIT",
+        "repository": "https://github.com/micromatch/micromatch",
+        "licenseUrl": "https://github.com/micromatch/micromatch/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "mimic-fn@1.1.0": {
+    "mimic-fn@1.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/mimic-fn",
         "licenseUrl": "https://github.com/sindresorhus/mimic-fn/raw/master/license",
@@ -1887,13 +2145,13 @@
         "licenses": "MIT",
         "repository": "https://github.com/isaacs/minimatch",
         "licenseUrl": "http://github.com/isaacs/minimatch/raw/master/LICENSE",
-        "parents": "globule:gulp:casparcg-connection"
+        "parents": "globule:casparcg-connection"
     },
     "minimatch@2.0.10": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/minimatch",
         "licenseUrl": "https://github.com/isaacs/minimatch/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "glob-stream:casparcg-connection"
     },
     "minimatch@3.0.4": {
         "licenses": "ISC",
@@ -1925,6 +2183,24 @@
         "licenseUrl": "https://github.com/substack/minimist/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
+    "minipass@2.2.4": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/minipass",
+        "licenseUrl": "https://github.com/isaacs/minipass",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "minizlib@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/isaacs/minizlib",
+        "licenseUrl": "https://github.com/isaacs/minizlib/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "mixin-deep@1.3.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/mixin-deep",
+        "licenseUrl": "https://github.com/jonschlinkert/mixin-deep/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "mkdirp@0.5.1": {
         "licenses": "MIT",
         "repository": "https://github.com/substack/node-mkdirp",
@@ -1937,17 +2213,53 @@
         "licenseUrl": "https://github.com/sindresorhus/modify-values/raw/master/license",
         "parents": "casparcg-connection"
     },
+    "ms@2.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/zeit/ms",
+        "licenseUrl": "https://github.com/zeit/ms/raw/master/license.md",
+        "parents": "casparcg-connection"
+    },
     "multipipe@0.1.2": {
         "licenses": "MIT",
         "repository": "https://github.com/juliangruber/multipipe",
         "licenseUrl": "https://github.com/juliangruber/multipipe",
         "parents": "casparcg-connection"
     },
-    "natives@1.1.0": {
+    "nan@2.10.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/nodejs/nan",
+        "licenseUrl": "https://github.com/nodejs/nan/raw/master/LICENSE.md",
+        "parents": "casparcg-connection"
+    },
+    "nanomatch@1.2.9": {
+        "licenses": "MIT",
+        "repository": "https://github.com/micromatch/nanomatch",
+        "licenseUrl": "https://github.com/micromatch/nanomatch/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "natives@1.1.3": {
         "licenses": "ISC",
-        "repository": "https://github.com/isaacs/natives",
-        "licenseUrl": "https://github.com/isaacs/natives",
-        "parents": "gulp:casparcg-connection"
+        "repository": "https://github.com/addaleax/natives",
+        "licenseUrl": "https://github.com/addaleax/natives",
+        "parents": "casparcg-connection"
+    },
+    "needle@2.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/tomas/needle",
+        "licenseUrl": "https://github.com/tomas/needle/raw/master/license.txt",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "node-pre-gyp@0.9.1": {
+        "licenses": "BSD-3-Clause",
+        "repository": "https://github.com/mapbox/node-pre-gyp",
+        "licenseUrl": "https://github.com/mapbox/node-pre-gyp/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "nopt@4.0.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/nopt",
+        "licenseUrl": "https://github.com/npm/nopt/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "normalize-package-data@2.4.0": {
         "licenses": "BSD-2-Clause",
@@ -1961,11 +2273,29 @@
         "licenseUrl": "https://github.com/jonschlinkert/normalize-path/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
+    "npm-bundled@1.0.3": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/npm-bundled",
+        "licenseUrl": "https://github.com/npm/npm-bundled",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "npm-packlist@1.1.10": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/npm-packlist",
+        "licenseUrl": "https://github.com/npm/npm-packlist/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
     "npm-run-path@2.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/npm-run-path",
         "licenseUrl": "https://github.com/sindresorhus/npm-run-path/raw/master/license",
         "parents": "casparcg-connection"
+    },
+    "npmlog@4.1.2": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/npmlog",
+        "licenseUrl": "https://github.com/npm/npmlog/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "null-check@1.0.0": {
         "licenses": "MIT",
@@ -1991,10 +2321,28 @@
         "licenseUrl": "https://github.com/sindresorhus/object-assign/raw/master/license",
         "parents": "casparcg-connection"
     },
+    "object-copy@0.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/object-copy",
+        "licenseUrl": "https://github.com/jonschlinkert/object-copy/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "object-visit@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/object-visit",
+        "licenseUrl": "https://github.com/jonschlinkert/object-visit/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "object.defaults@1.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/object.defaults",
         "licenseUrl": "https://github.com/jonschlinkert/object.defaults/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "object.map@1.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/object.map",
+        "licenseUrl": "https://github.com/jonschlinkert/object.map/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "object.omit@2.0.1": {
@@ -2003,7 +2351,7 @@
         "licenseUrl": "https://github.com/jonschlinkert/object.omit/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "object.pick@1.2.0": {
+    "object.pick@1.3.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/object.pick",
         "licenseUrl": "https://github.com/jonschlinkert/object.pick/raw/master/LICENSE",
@@ -2013,7 +2361,7 @@
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/once",
         "licenseUrl": "https://github.com/isaacs/once/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "end-of-stream:casparcg-connection"
     },
     "once@1.4.0": {
         "licenses": "ISC",
@@ -2031,31 +2379,43 @@
         "licenses": "MIT",
         "repository": "https://github.com/robrich/orchestrator",
         "licenseUrl": "https://github.com/robrich/orchestrator/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "ordered-read-streams@0.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/armed/ordered-read-streams",
         "licenseUrl": "https://github.com/armed/ordered-read-streams/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "ordered-read-streams@0.3.0": {
         "licenses": "MIT",
         "repository": "https://github.com/armed/ordered-read-streams",
         "licenseUrl": "https://github.com/armed/ordered-read-streams/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "gulp-typescript:casparcg-connection"
     },
     "os-homedir@1.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/os-homedir",
         "licenseUrl": "https://github.com/sindresorhus/os-homedir/raw/master/license",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "os-locale@2.0.0": {
+    "os-locale@2.1.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/os-locale",
         "licenseUrl": "https://github.com/sindresorhus/os-locale/raw/master/license",
         "parents": "casparcg-connection"
+    },
+    "os-tmpdir@1.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sindresorhus/os-tmpdir",
+        "licenseUrl": "https://github.com/sindresorhus/os-tmpdir/raw/master/license",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "osenv@0.1.5": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/osenv",
+        "licenseUrl": "https://github.com/npm/osenv/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "p-finally@1.0.0": {
         "licenses": "MIT",
@@ -2063,7 +2423,7 @@
         "licenseUrl": "https://github.com/sindresorhus/p-finally/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "p-limit@1.1.0": {
+    "p-limit@1.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/p-limit",
         "licenseUrl": "https://github.com/sindresorhus/p-limit/raw/master/license",
@@ -2075,17 +2435,23 @@
         "licenseUrl": "https://github.com/sindresorhus/p-locate/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "p-map@1.1.1": {
+    "p-map@1.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/p-map",
         "licenseUrl": "https://github.com/sindresorhus/p-map/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "parse-filepath@1.0.1": {
+    "p-try@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sindresorhus/p-try",
+        "licenseUrl": "https://github.com/sindresorhus/p-try/raw/master/license",
+        "parents": "casparcg-connection"
+    },
+    "parse-filepath@1.0.2": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/parse-filepath",
         "licenseUrl": "https://github.com/jonschlinkert/parse-filepath/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "parse-github-repo-url@1.4.1": {
         "licenses": "MIT",
@@ -2115,7 +2481,13 @@
         "licenses": "MIT",
         "repository": "https://github.com/doowb/parse-passwd",
         "licenseUrl": "https://github.com/doowb/parse-passwd/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "pascalcase@0.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/pascalcase",
+        "licenseUrl": "https://github.com/jonschlinkert/pascalcase/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "path-dirname@1.0.2": {
         "licenses": "MIT",
@@ -2163,13 +2535,13 @@
         "licenses": "MIT",
         "repository": "https://github.com/regexhq/path-root-regex",
         "licenseUrl": "https://github.com/regexhq/path-root-regex/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "path-root@0.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/path-root",
         "licenseUrl": "https://github.com/jonschlinkert/path-root/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "path-type@1.1.0": {
         "licenses": "MIT",
@@ -2225,6 +2597,12 @@
         "licenseUrl": "https://github.com/jonschlinkert/plugin-error/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
+    "posix-character-classes@0.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/posix-character-classes",
+        "licenseUrl": "https://github.com/jonschlinkert/posix-character-classes/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "preserve@0.2.0": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/preserve",
@@ -2235,13 +2613,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/robrich/pretty-hrtime",
         "licenseUrl": "https://github.com/robrich/pretty-hrtime/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
-    "process-nextick-args@1.0.7": {
-        "licenses": "MIT",
-        "repository": "https://github.com/calvinmetcalf/process-nextick-args",
-        "licenseUrl": "https://github.com/calvinmetcalf/process-nextick-args/raw/master/license.md",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "process-nextick-args@2.0.0": {
         "licenses": "MIT",
@@ -2278,6 +2650,12 @@
         "repository": "https://github.com/jonschlinkert/randomatic",
         "licenseUrl": "https://github.com/jonschlinkert/randomatic/raw/master/LICENSE",
         "parents": "casparcg-connection"
+    },
+    "rc@1.2.6": {
+        "licenses": "(BSD-2-Clause OR MIT OR Apache-2.0)",
+        "repository": "https://github.com/dominictarr/rc",
+        "licenseUrl": "https://github.com/dominictarr/rc/raw/master/LICENSE.APACHE2",
+        "parents": "fsevents:casparcg-connection"
     },
     "read-pkg-up@1.0.1": {
         "licenses": "MIT",
@@ -2327,13 +2705,7 @@
         "licenseUrl": "https://github.com/isaacs/readable-stream/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "readable-stream@2.3.3": {
-        "licenses": "MIT",
-        "repository": "https://github.com/nodejs/readable-stream",
-        "licenseUrl": "https://github.com/nodejs/readable-stream/raw/master/LICENSE",
-        "parents": "gulp-watch:casparcg-connection"
-    },
-    "readable-stream@2.3.5": {
+    "readable-stream@2.3.6": {
         "licenses": "MIT",
         "repository": "https://github.com/nodejs/readable-stream",
         "licenseUrl": "https://github.com/nodejs/readable-stream/raw/master/LICENSE",
@@ -2343,7 +2715,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/thlorenz/readdirp",
         "licenseUrl": "https://github.com/thlorenz/readdirp/raw/master/LICENSE",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "rechoir@0.6.2": {
         "licenses": "MIT",
@@ -2363,23 +2735,17 @@
         "licenseUrl": "https://github.com/sindresorhus/redent/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "regex-cache@0.4.3": {
-        "licenses": "MIT",
-        "repository": "https://github.com/jonschlinkert/regex-cache",
-        "licenseUrl": "https://github.com/jonschlinkert/regex-cache/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
     "regex-cache@0.4.4": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/regex-cache",
         "licenseUrl": "https://github.com/jonschlinkert/regex-cache/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "remove-trailing-separator@1.0.2": {
-        "licenses": "ISC",
-        "repository": "https://github.com/darsain/remove-trailing-separator",
-        "licenseUrl": "https://github.com/darsain/remove-trailing-separator/raw/master/license",
-        "parents": "gulp:casparcg-connection"
+    "regex-not@1.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/regex-not",
+        "licenseUrl": "https://github.com/jonschlinkert/regex-not/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "remove-trailing-separator@1.1.0": {
         "licenses": "ISC",
@@ -2429,16 +2795,28 @@
         "licenseUrl": "https://github.com/yargs/require-main-filename/raw/master/LICENSE.txt",
         "parents": "casparcg-connection"
     },
-    "resolve-dir@0.1.1": {
+    "resolve-dir@1.0.1": {
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/resolve-dir",
         "licenseUrl": "https://github.com/jonschlinkert/resolve-dir/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "resolve@1.3.3": {
+    "resolve-url@0.2.1": {
         "licenses": "MIT",
-        "repository": "https://github.com/substack/node-resolve",
-        "licenseUrl": "https://github.com/substack/node-resolve/raw/master/LICENSE",
+        "repository": "https://github.com/lydell/resolve-url",
+        "licenseUrl": "https://github.com/lydell/resolve-url/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "resolve@1.7.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/browserify/resolve",
+        "licenseUrl": "https://github.com/browserify/resolve/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "ret@0.1.15": {
+        "licenses": "MIT",
+        "repository": "https://github.com/fent/ret.js",
+        "licenseUrl": "https://github.com/fent/ret.js/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "right-align@0.1.3": {
@@ -2457,7 +2835,25 @@
         "licenses": "MIT",
         "repository": "https://github.com/feross/safe-buffer",
         "licenseUrl": "https://github.com/feross/safe-buffer/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
+    },
+    "safe-buffer@5.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/feross/safe-buffer",
+        "licenseUrl": "https://github.com/feross/safe-buffer/raw/master/LICENSE",
         "parents": "casparcg-connection"
+    },
+    "safe-regex@1.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/substack/safe-regex",
+        "licenseUrl": "https://github.com/substack/safe-regex/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "safer-buffer@2.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/ChALkeR/safer-buffer",
+        "licenseUrl": "https://github.com/ChALkeR/safer-buffer/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "sax@1.2.4": {
         "licenses": "ISC",
@@ -2466,12 +2862,6 @@
         "parents": "casparcg-connection"
     },
     "semver@4.3.6": {
-        "licenses": "ISC",
-        "repository": "https://github.com/npm/node-semver",
-        "licenseUrl": "https://github.com/npm/node-semver/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
-    },
-    "semver@5.3.0": {
         "licenses": "ISC",
         "repository": "https://github.com/npm/node-semver",
         "licenseUrl": "https://github.com/npm/node-semver/raw/master/LICENSE",
@@ -2487,7 +2877,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/robrich/sequencify",
         "licenseUrl": "http://github.com/robrich/sequencify/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "set-blocking@2.0.0": {
         "licenses": "ISC",
@@ -2499,7 +2889,31 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/set-immediate-shim",
         "licenseUrl": "https://github.com/sindresorhus/set-immediate-shim",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "set-value@0.4.3": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/set-value",
+        "licenseUrl": "https://github.com/jonschlinkert/set-value/raw/master/LICENSE",
+        "parents": "union-value:casparcg-connection"
+    },
+    "set-value@2.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/set-value",
+        "licenseUrl": "https://github.com/jonschlinkert/set-value/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "shebang-command@1.2.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/kevva/shebang-command",
+        "licenseUrl": "https://github.com/kevva/shebang-command/raw/master/license",
+        "parents": "casparcg-connection"
+    },
+    "shebang-regex@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/sindresorhus/shebang-regex",
+        "licenseUrl": "https://github.com/sindresorhus/shebang-regex/raw/master/license",
+        "parents": "casparcg-connection"
     },
     "shelljs@0.7.8": {
         "licenses": "BSD-3-Clause",
@@ -2511,7 +2925,7 @@
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/sigmund",
         "licenseUrl": "https://github.com/isaacs/sigmund/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "signal-exit@3.0.2": {
         "licenses": "ISC",
@@ -2523,12 +2937,42 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/slash",
         "licenseUrl": "https://github.com/sindresorhus/slash",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
     },
-    "source-map-support@0.4.15": {
+    "snapdragon-node@2.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/snapdragon-node",
+        "licenseUrl": "https://github.com/jonschlinkert/snapdragon-node/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "snapdragon-util@3.0.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/snapdragon-util",
+        "licenseUrl": "https://github.com/jonschlinkert/snapdragon-util/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "snapdragon@0.8.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/snapdragon",
+        "licenseUrl": "https://github.com/jonschlinkert/snapdragon/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "source-map-resolve@0.5.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/lydell/source-map-resolve",
+        "licenseUrl": "https://github.com/lydell/source-map-resolve/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "source-map-support@0.4.18": {
         "licenses": "MIT",
         "repository": "https://github.com/evanw/node-source-map-support",
         "licenseUrl": "https://github.com/evanw/node-source-map-support/raw/master/LICENSE.md",
+        "parents": "casparcg-connection"
+    },
+    "source-map-url@0.4.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/lydell/source-map-url",
+        "licenseUrl": "https://github.com/lydell/source-map-url/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "source-map@0.4.4": {
@@ -2537,7 +2981,7 @@
         "licenseUrl": "https://github.com/mozilla/source-map",
         "parents": "handlebars:casparcg-connection"
     },
-    "source-map@0.5.6": {
+    "source-map@0.5.7": {
         "licenses": "BSD-3-Clause",
         "repository": "https://github.com/mozilla/source-map",
         "licenseUrl": "https://github.com/mozilla/source-map/raw/master/LICENSE",
@@ -2549,22 +2993,34 @@
         "licenseUrl": "https://github.com/phated/sparkles/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "spdx-correct@1.0.2": {
+    "spdx-correct@3.0.0": {
         "licenses": "Apache-2.0",
-        "repository": "https://github.com/kemitchell/spdx-correct.js",
-        "licenseUrl": "https://github.com/kemitchell/spdx-correct.js/raw/master/LICENSE",
+        "repository": "https://github.com/jslicense/spdx-correct.js",
+        "licenseUrl": "https://github.com/jslicense/spdx-correct.js/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "spdx-expression-parse@1.0.4": {
-        "licenses": "(MIT AND CC-BY-3.0)",
-        "repository": "https://github.com/kemitchell/spdx-expression-parse.js",
-        "licenseUrl": "https://github.com/kemitchell/spdx-expression-parse.js/raw/master/LICENSE",
+    "spdx-exceptions@2.1.0": {
+        "licenses": "CC-BY-3.0",
+        "repository": "https://github.com/kemitchell/spdx-exceptions.json",
+        "licenseUrl": "https://github.com/kemitchell/spdx-exceptions.json",
         "parents": "casparcg-connection"
     },
-    "spdx-license-ids@1.2.2": {
-        "licenses": "Unlicense",
+    "spdx-expression-parse@3.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jslicense/spdx-expression-parse.js",
+        "licenseUrl": "https://github.com/jslicense/spdx-expression-parse.js/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "spdx-license-ids@3.0.0": {
+        "licenses": "CC0-1.0",
         "repository": "https://github.com/shinnn/spdx-license-ids",
-        "licenseUrl": "https://github.com/shinnn/spdx-license-ids/raw/master/LICENSE",
+        "licenseUrl": "https://github.com/shinnn/spdx-license-ids",
+        "parents": "casparcg-connection"
+    },
+    "split-string@3.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/split-string",
+        "licenseUrl": "https://github.com/jonschlinkert/split-string/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "split2@2.2.0": {
@@ -2597,17 +3053,23 @@
         "licenseUrl": "https://github.com/conventional-changelog/standard-version/raw/master/LICENSE.txt",
         "parents": "casparcg-connection"
     },
+    "static-extend@0.1.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/static-extend",
+        "licenseUrl": "https://github.com/jonschlinkert/static-extend/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
     "stream-combiner@0.0.4": {
         "licenses": "MIT",
         "repository": "https://github.com/dominictarr/stream-combiner",
         "licenseUrl": "https://github.com/dominictarr/stream-combiner/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "stream-consume@0.1.0": {
+    "stream-consume@0.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/aroneous/stream-consume",
         "licenseUrl": "https://github.com/aroneous/stream-consume",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "stream-shift@1.0.0": {
         "licenses": "MIT",
@@ -2621,7 +3083,7 @@
         "licenseUrl": "https://github.com/sindresorhus/string-width/raw/master/license",
         "parents": "cliui:casparcg-connection"
     },
-    "string-width@2.1.0": {
+    "string-width@2.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/string-width",
         "licenseUrl": "https://github.com/sindresorhus/string-width/raw/master/license",
@@ -2633,10 +3095,10 @@
         "licenseUrl": "https://github.com/rvagg/string_decoder/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "string_decoder@1.0.3": {
+    "string_decoder@1.1.1": {
         "licenses": "MIT",
-        "repository": "https://github.com/rvagg/string_decoder",
-        "licenseUrl": "https://github.com/rvagg/string_decoder/raw/master/LICENSE",
+        "repository": "https://github.com/nodejs/string_decoder",
+        "licenseUrl": "https://github.com/nodejs/string_decoder/raw/master/LICENSE",
         "parents": "through2:casparcg-connection"
     },
     "strip-ansi@3.0.1": {
@@ -2661,19 +3123,19 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/strip-bom-stream",
         "licenseUrl": "https://github.com/sindresorhus/strip-bom-stream/raw/master/license",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "vinyl-file:casparcg-connection"
     },
     "strip-bom@1.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/strip-bom",
         "licenseUrl": "https://github.com/sindresorhus/strip-bom",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "strip-bom@2.0.0": {
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/strip-bom",
         "licenseUrl": "https://github.com/sindresorhus/strip-bom/raw/master/license",
-        "parents": "casparcg-connection"
+        "parents": "get-pkg-repo:casparcg-connection"
     },
     "strip-bom@3.0.0": {
         "licenses": "MIT",
@@ -2711,11 +3173,17 @@
         "licenseUrl": "https://github.com/chalk/supports-color/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "supports-color@5.3.0": {
+    "supports-color@5.4.0": {
         "licenses": "MIT",
         "repository": "https://github.com/chalk/supports-color",
         "licenseUrl": "https://github.com/chalk/supports-color/raw/master/license",
         "parents": "tslint:casparcg-connection"
+    },
+    "tar@4.4.1": {
+        "licenses": "ISC",
+        "repository": "https://github.com/npm/node-tar",
+        "licenseUrl": "https://github.com/npm/node-tar/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "text-extensions@1.7.0": {
         "licenses": "MIT",
@@ -2751,7 +3219,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/tildify",
         "licenseUrl": "https://github.com/sindresorhus/tildify/raw/master/license",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "time-stamp@1.1.0": {
         "licenses": "MIT",
@@ -2763,6 +3231,24 @@
         "licenses": "MIT",
         "repository": "https://github.com/jonschlinkert/to-absolute-glob",
         "licenseUrl": "https://github.com/jonschlinkert/to-absolute-glob/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "to-object-path@0.3.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/to-object-path",
+        "licenseUrl": "https://github.com/jonschlinkert/to-object-path/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "to-regex-range@2.1.1": {
+        "licenses": "MIT",
+        "repository": "https://github.com/micromatch/to-regex-range",
+        "licenseUrl": "https://github.com/micromatch/to-regex-range/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "to-regex@3.0.2": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/to-regex",
+        "licenseUrl": "https://github.com/jonschlinkert/to-regex/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "trim-newlines@1.0.0": {
@@ -2795,17 +3281,11 @@
         "licenseUrl": "https://github.com/TypeStrong/tsconfig/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "tslib@1.7.1": {
-        "licenses": "Apache-2.0",
-        "repository": "https://github.com/Microsoft/tslib",
-        "licenseUrl": "https://github.com/Microsoft/tslib/raw/master/LICENSE.txt",
-        "parents": "casparcg-connection"
-    },
     "tslib@1.9.0": {
         "licenses": "Apache-2.0",
         "repository": "https://github.com/Microsoft/tslib",
         "licenseUrl": "https://github.com/Microsoft/tslib/raw/master/LICENSE.txt",
-        "parents": "tsutils:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "tslint-config-standard@6.0.1": {
         "licenses": "Apache-2.0",
@@ -2817,7 +3297,7 @@
         "licenses": "MIT",
         "repository": "https://github.com/buzinas/tslint-eslint-rules",
         "licenseUrl": "https://github.com/buzinas/tslint-eslint-rules/raw/master/LICENSE",
-        "parents": "tslint-config-standard:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "tslint@5.9.1": {
         "licenses": "Apache-2.0",
@@ -2829,9 +3309,9 @@
         "licenses": "MIT",
         "repository": "https://github.com/ajafff/tsutils",
         "licenseUrl": "https://github.com/ajafff/tsutils/raw/master/LICENSE",
-        "parents": "tslint-eslint-rules:tslint-config-standard:casparcg-connection"
+        "parents": "tslint-eslint-rules:casparcg-connection"
     },
-    "tsutils@2.22.2": {
+    "tsutils@2.26.2": {
         "licenses": "MIT",
         "repository": "https://github.com/ajafff/tsutils",
         "licenseUrl": "https://github.com/ajafff/tsutils/raw/master/LICENSE",
@@ -2861,7 +3341,7 @@
         "licenseUrl": "https://github.com/Microsoft/TypeScript/raw/master/LICENSE.txt",
         "parents": "typedoc:casparcg-connection"
     },
-    "typescript@2.7.2": {
+    "typescript@2.8.3": {
         "licenses": "Apache-2.0",
         "repository": "https://github.com/Microsoft/TypeScript",
         "licenseUrl": "https://github.com/Microsoft/TypeScript/raw/master/LICENSE.txt",
@@ -2883,24 +3363,48 @@
         "licenses": "MIT",
         "repository": "https://github.com/regexhq/unc-path-regex",
         "licenseUrl": "https://github.com/regexhq/unc-path-regex/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
+    },
+    "union-value@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/union-value",
+        "licenseUrl": "https://github.com/jonschlinkert/union-value/raw/master/LICENSE",
+        "parents": "casparcg-connection"
     },
     "unique-stream@1.0.0": {
         "licenses": "BSD",
         "repository": "https://github.com/eugeneware/unique-stream",
         "licenseUrl": "https://github.com/eugeneware/unique-stream/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "unique-stream@2.2.1": {
         "licenses": "MIT",
         "repository": "https://github.com/eugeneware/unique-stream",
         "licenseUrl": "https://github.com/eugeneware/unique-stream/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "gulp-typescript:casparcg-connection"
     },
     "universalify@0.1.1": {
         "licenses": "MIT",
         "repository": "https://github.com/RyanZim/universalify",
         "licenseUrl": "https://github.com/RyanZim/universalify/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "unset-value@1.0.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/unset-value",
+        "licenseUrl": "https://github.com/jonschlinkert/unset-value/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "urix@0.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/lydell/urix",
+        "licenseUrl": "https://github.com/lydell/urix/raw/master/LICENSE",
+        "parents": "casparcg-connection"
+    },
+    "use@3.1.0": {
+        "licenses": "MIT",
+        "repository": "https://github.com/jonschlinkert/use",
+        "licenseUrl": "https://github.com/jonschlinkert/use/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
     "user-home@1.1.1": {
@@ -2927,7 +3431,7 @@
         "licenseUrl": "https://github.com/SamVerschueren/vali-date/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "validate-npm-package-license@3.0.1": {
+    "validate-npm-package-license@3.0.3": {
         "licenses": "Apache-2.0",
         "repository": "https://github.com/kemitchell/validate-npm-package-license.js",
         "licenseUrl": "https://github.com/kemitchell/validate-npm-package-license.js/raw/master/LICENSE",
@@ -2937,25 +3441,25 @@
         "licenses": "MIT",
         "repository": "https://github.com/sindresorhus/vinyl-file",
         "licenseUrl": "https://github.com/sindresorhus/vinyl-file/raw/master/license",
-        "parents": "gulp-watch:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "vinyl-fs@0.3.14": {
         "licenses": "MIT",
         "repository": "https://github.com/wearefractal/vinyl-fs",
         "licenseUrl": "http://github.com/wearefractal/vinyl-fs/raw/master/LICENSE",
-        "parents": "gulp:casparcg-connection"
+        "parents": "casparcg-connection"
     },
     "vinyl-fs@2.4.4": {
         "licenses": "MIT",
         "repository": "https://github.com/wearefractal/vinyl-fs",
         "licenseUrl": "https://github.com/wearefractal/vinyl-fs/raw/master/LICENSE",
-        "parents": "casparcg-connection"
+        "parents": "gulp-typescript:casparcg-connection"
     },
     "vinyl@0.4.6": {
         "licenses": "MIT",
         "repository": "https://github.com/wearefractal/vinyl",
         "licenseUrl": "http://github.com/wearefractal/vinyl/raw/master/LICENSE",
-        "parents": "vinyl-fs:gulp:casparcg-connection"
+        "parents": "vinyl-fs:casparcg-connection"
     },
     "vinyl@0.5.3": {
         "licenses": "MIT",
@@ -2981,11 +3485,17 @@
         "licenseUrl": "https://github.com/nexdrew/which-module/raw/master/LICENSE",
         "parents": "casparcg-connection"
     },
-    "which@1.2.14": {
+    "which@1.3.0": {
         "licenses": "ISC",
         "repository": "https://github.com/isaacs/node-which",
         "licenseUrl": "https://github.com/isaacs/node-which/raw/master/LICENSE",
         "parents": "casparcg-connection"
+    },
+    "wide-align@1.1.2": {
+        "licenses": "ISC",
+        "repository": "https://github.com/iarna/wide-align",
+        "licenseUrl": "https://github.com/iarna/wide-align/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "window-size@0.1.0": {
         "licenses": "MIT",
@@ -3046,6 +3556,12 @@
         "repository": "https://github.com/isaacs/yallist",
         "licenseUrl": "https://github.com/isaacs/yallist/raw/master/LICENSE",
         "parents": "casparcg-connection"
+    },
+    "yallist@3.0.2": {
+        "licenses": "ISC",
+        "repository": "https://github.com/isaacs/yallist",
+        "licenseUrl": "https://github.com/isaacs/yallist/raw/master/LICENSE",
+        "parents": "fsevents:casparcg-connection"
     },
     "yargs-parser@7.0.0": {
         "licenses": "ISC",
