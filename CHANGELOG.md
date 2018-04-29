@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.0.1"></a>
+## [4.0.1](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.0.1...v4.0.1) (2018-04-29)
+
+
+### Bug Fixes
+
+* **TemplateData):** PR from Craig Sweaton escaping \r\n from template data. Prevents breaking the AMCP communication. 
+
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v3.1.0...v4.0.0) (2018-04-10)
 
