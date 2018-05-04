@@ -1650,6 +1650,10 @@ var CasparCG = /** @class */ (function (_super) {
             currentCommand = (this._sentCommands[token]);
             delete this._sentCommands[token];
         }
+        if (currentCommand === undefined) {
+            this._log("Missing command for token \"" + socketResponse.token + "\"");
+            return;
+        }
         this._log("Handling response, \"" + currentCommand.name + "\" with token \"" + currentCommand.token + "\"");
         if (!(currentCommand.response instanceof AMCPResponse)) {
             currentCommand.response = new AMCPResponse();
@@ -1660,6 +1664,9 @@ var CasparCG = /** @class */ (function (_super) {
                 scheduledCommand.status = IAMCPStatus.Sent;
                 this._sentCommands[scheduledCommand.token] = scheduledCommand;
                 this._log("New command scheduled, \"" + scheduledCommand.name + "\".");
+            }
+            else if (currentCommand.name === 'ScheduleRemoveCommand') {
+                delete this._sentCommands[currentCommand.getParam('token')];
             }
             currentCommand.status = IAMCPStatus.Suceeded;
             currentCommand.resolve(currentCommand);
