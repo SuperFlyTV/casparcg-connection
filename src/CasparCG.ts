@@ -2289,6 +2289,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
       delete this._sentCommands[token]
     }
 
+    if (currentCommand === undefined) {
+      this._log(`Missing command for token "${socketResponse.token}"`)
+      return
+    }
+
     this._log(`Handling response, "${currentCommand.name}" with token "${currentCommand.token}"`)
     if (!(currentCommand.response instanceof AMCPResponse)) {
       currentCommand.response = new AMCPResponse()
@@ -2302,6 +2307,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
         this._sentCommands[scheduledCommand.token] = scheduledCommand
 
         this._log(`New command scheduled, "${scheduledCommand.name}".`)
+      } else if (currentCommand.name === 'ScheduleRemoveCommand') {
+        delete this._sentCommands[currentCommand.getParam('token') as string]
       }
 
       currentCommand.status = IAMCPStatus.Suceeded
