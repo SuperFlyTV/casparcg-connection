@@ -79,13 +79,14 @@ export class ConnectionOptions implements IConnectionOptions {
   constructor (host?: string, port?: number);
   constructor (options?: IConnectionOptions);
   constructor (hostOrOptions?: IConnectionOptions|string, port?: number) {
-		// if object
+    // if object
+    let hasSetHostAndPort: boolean = false
     if (hostOrOptions && typeof hostOrOptions === 'object') {
       if (hostOrOptions.hasOwnProperty('host') && hostOrOptions.host !== undefined) {
         let host: string = hostOrOptions!.host!
         let dnsValidation: Array<string> | null = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(host)
         if (dnsValidation) {
-          delete hostOrOptions['host']
+          hasSetHostAndPort = true
 					// host
           if (dnsValidation[1]) {
             this.host = dnsValidation[1]
@@ -99,6 +100,7 @@ export class ConnectionOptions implements IConnectionOptions {
 
 			// @todo: object assign
       for (let key in hostOrOptions) {
+        if (hasSetHostAndPort && (key === 'host' || key === 'port')) continue
         if (!hostOrOptions.hasOwnProperty(key)) {
           continue
         }
