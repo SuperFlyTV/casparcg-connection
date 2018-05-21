@@ -530,4 +530,42 @@ export class InfoSystemParser extends AbstractParser implements IResponseParser 
   }
 }
 
+	/**
+	 *
+	 */
+export class MixerStatusKeyerParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      keyer: data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusChromaParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      enable: !!data[0],
+      targetHue: data[1],
+      hueWidth: data[2],
+      minSaturation: data[3],
+      minBrightness: data[4],
+      softness: data[5],
+      spillSuppress: data[6],
+      spillSuppressSaturation: data[7],
+      showMask: data[8]
+    }
+  }
+}
+
 }

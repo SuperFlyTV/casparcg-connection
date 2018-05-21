@@ -122,4 +122,18 @@ export class Base64Validator implements IResponseValidator {
     return response.items[0]
   }
 }
+
+/**
+ *
+ */
+export class MixerStatusValidator implements IResponseValidator {
+
+    /**
+     *
+     */
+  public resolve (response: CasparCGSocketResponse): Object {
+    let result: Array<number> = response.items[0].toString().split(' ').map(value => Number.parseFloat(value))
+    return result.length > 0 && result.every(value => !isNaN(value)) ? result : false
+  }
+}
 }

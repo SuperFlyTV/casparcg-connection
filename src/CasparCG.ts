@@ -1042,7 +1042,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_KEYER>
 	 */
-  public mixerKeyer (channel: number, layer?: number): Promise<IAMCPCommand>
+  public mixerStatusKeyer (channel: number, layer?: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.MixerStatusKeyerCommand({channel: channel, layer: layer}))
+  }
   public mixerKeyer (channel: number, layer: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand>
   public mixerKeyer (channel: number, layer?: number, state?: number|boolean, defer?: boolean): Promise<IAMCPCommand> {
     return this.do(new AMCP.MixerKeyerCommand({channel: channel, layer: layer, keyer: state, defer: defer}))
@@ -1059,13 +1061,15 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_KEYER>
 	 */
   public getMixerStatusKeyer (channel: number, layer?: number): Promise<IAMCPCommand> {
-    return this.mixerKeyer(channel, layer)
+    return this.mixerStatusKeyer(channel, layer)
   }
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CHROMA>
 	 */
-  public mixerChroma (channel: number, layer?: number): Promise<IAMCPCommand>
+  public mixerStatusChroma (channel: number, layer?: number): Promise<IAMCPCommand> {
+    return this.do(new AMCP.MixerStatusChromaCommand({channel: channel, layer: layer}))
+  }
   public mixerChroma (channel: number, layer: number, keyer: Enum.Chroma, threshold: number, softness: number, spill: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>
   public mixerChroma (channel: number, layer: number, keyer: string, threshold: number, softness: number, spill: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>
   public mixerChroma (channel: number, layer: number, keyer?: Enum.Chroma|string, threshold?: number, softness?: number, spill?: number, transitionDuration?: number, transitionEasing?: Enum.Ease|string, defer?: boolean): Promise<IAMCPCommand>
@@ -1086,7 +1090,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#MIXER_CHROMA>
 	 */
   public getMixerStatusChroma (channel: number, layer?: number): Promise<IAMCPCommand> {
-    return this.mixerChroma(channel, layer)
+    return this.mixerStatusChroma(channel, layer)
   }
 
 	/**

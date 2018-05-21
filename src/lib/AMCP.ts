@@ -480,6 +480,26 @@ export class MixerKeyerCommand extends AbstractLayerWithFallbackCommand {
 }
 
 	/**
+	 *
+	 */
+export class MixerStatusKeyerCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('KEYER'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusKeyerParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'KEYER'
+  }
+}
+
+	/**
 	 * @todo	Validata/clamp lamp number range?
 	 */
 export class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
@@ -502,6 +522,26 @@ export class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
     new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
     new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
   ]
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'CHROMA'
+  }
+}
+
+	/**
+	 * @todo	Validata/clamp lamp number range?
+	 */
+export class MixerStatusChromaCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CHROMA')),
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusChromaParser)
 
 		/**
 		 *
