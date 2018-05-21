@@ -539,7 +539,7 @@ export class MixerStatusChromaCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = []
   paramProtocol = [
-    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CHROMA')),
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CHROMA'))
   ]
   responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusChromaParser)
 
