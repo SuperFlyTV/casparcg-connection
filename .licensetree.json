@@ -419,7 +419,7 @@
         "licenseUrl": "https://github.com/sindresorhus/camelcase/raw/master/license",
         "parents": "casparcg-connection"
     },
-    "casparcg-connection@4.0.2": {
+    "casparcg-connection@4.0.3": {
         "licenses": "MIT",
         "repository": "https://github.com/SuperFlyTV/casparcg-connection",
         "licenseUrl": "https://github.com/SuperFlyTV/casparcg-connection/raw/master/.licensetree.json",
