@@ -47,24 +47,32 @@ var ConnectionOptions = /** @class */ (function () {
         this.onDisconnected = undefined;
         this.onError = undefined;
         // if object
+        var hasSetHostOrPort = false;
         if (hostOrOptions && typeof hostOrOptions === 'object') {
             if (hostOrOptions.hasOwnProperty('host') && hostOrOptions.host !== undefined) {
                 var host = hostOrOptions.host;
                 var dnsValidation = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(host);
                 if (dnsValidation) {
-                    delete hostOrOptions['host'];
                     // host
                     if (dnsValidation[1]) {
+                        // port gets set directly, and we need to ignore it in the loop setting all other options
+                        hasSetHostOrPort = true;
                         this.host = dnsValidation[1];
                     }
                     // port
                     if (dnsValidation[2]) {
+                        // port gets set directly, and we need to ignore it in the loop setting all other options
+                        hasSetHostOrPort = true;
                         this.port = parseInt(dnsValidation[2], 10);
                     }
                 }
             }
             // @todo: object assign
             for (var key in hostOrOptions) {
+                // host or port has been set directly and should not be overridden again
+                if (hasSetHostOrPort && (key === 'host' || key === 'port')) {
+                    continue;
+                }
                 if (!hostOrOptions.hasOwnProperty(key)) {
                     continue;
                 }

@@ -530,4 +530,317 @@ export class InfoSystemParser extends AbstractParser implements IResponseParser 
   }
 }
 
+	/**
+	 *
+	 */
+export class MixerStatusKeyerParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      keyer: !!data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusChromaParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      chroma: {
+        enable: !!data[0],
+        targetHue: data[1],
+        hueWidth: data[2],
+        minSaturation: data[3],
+        minBrightness: data[4],
+        softness: data[5],
+        spillSuppress: data[6],
+        spillSuppressSaturation: data[7],
+        showMask: !!data[8]
+      }
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusBlendParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      blend: data
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusOpacityParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      opacity: data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusBrightnessParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      brightness: data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusSaturationParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      saturation: data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusContrastParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      contrast: data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusLevelsParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      levels: {
+        minInput: data[0],
+        maxInput: data[1],
+        gamma: data[2],
+        minOutput: data[3],
+        maxOutput: data[4]
+      }
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusFillParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      fill: {
+        x: data[0],
+        y: data[1],
+        xScale: data[2],
+        yScale: data[3]
+      }
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusClipParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      clip: {
+        x: data[0],
+        y: data[1],
+        width: data[2],
+        height: data[3]
+      }
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusAnchorParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      anchor: {
+        x: data[0],
+        y: data[1]
+      }
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusCropParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      crop: {
+        left: data[0],
+        top: data[1],
+        right: data[2],
+        bottom: data[3]
+      }
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusRotationParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      rotation: data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusPerspectiveParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      perspective: {
+        topLeftX: data[0],
+        topLeftY: data[1],
+        topRightX: data[2],
+        topRightY: data[3],
+        bottomRightX: data[6],
+        bottomRightY: data[7],
+        bottomLeftX: data[4],
+        bottomLeftY: data[5]
+      }
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusMipmapParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      mipmap: !!data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusVolumeParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      volume: data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusMastervolumeParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      mastervolume: data[0]
+    }
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusStraightAlphaOutputParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+  public parse (data: Array<number>): Object {
+    return {
+      straightAlphaOutput: !!data[0]
+    }
+  }
+}
+
 }
