@@ -532,9 +532,6 @@ export class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
   }
 }
 
-	/**
-	 * @todo	Validata/clamp lamp number range?
-	 */
 export class MixerStatusChromaCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = []
@@ -578,6 +575,26 @@ export class MixerBlendCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
+export class MixerStatusBlendCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BLEND'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.MixerStatusBlendParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'BLEND'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerOpacityCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -592,6 +609,26 @@ export class MixerOpacityCommand extends AbstractLayerWithFallbackCommand {
     new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
     new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
   ]
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'OPACITY'
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusOpacityCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('OPACITY'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusOpacityParser)
 
 		/**
 		 *
@@ -632,6 +669,26 @@ export class MixerBrightnessCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
+export class MixerStatusBrightnessCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BRIGHTNESS'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusBrightnessParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'BRIGHTNESS'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerSaturationCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -659,6 +716,26 @@ export class MixerSaturationCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
+export class MixerStatusSaturationCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('SATURATION'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusSaturationParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'SATURATION'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerContrastCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -673,6 +750,26 @@ export class MixerContrastCommand extends AbstractLayerWithFallbackCommand {
     new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
     new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
   ]
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'CONTRAST'
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusContrastCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CONTRAST'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusContrastParser)
 
 		/**
 		 *
@@ -718,6 +815,26 @@ export class MixerLevelsCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
+export class MixerStatusLevelsCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('LEVELS'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusLevelsParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'LEVELS'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerFillCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -736,6 +853,26 @@ export class MixerFillCommand extends AbstractLayerWithFallbackCommand {
     new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
     new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
   ]
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'FILL'
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusFillCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('FILL'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusFillParser)
 
 		/**
 		 *
@@ -780,6 +917,26 @@ export class MixerClipCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
+export class MixerStatusClipCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLIP'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusClipParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'CLIP'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -796,6 +953,26 @@ export class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
     new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
     new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
   ]
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'ANCHOR'
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusAnchorCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ANCHOR'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusAnchorParser)
 
 		/**
 		 *
@@ -840,6 +1017,26 @@ export class MixerCropCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
+export class MixerStatusCropCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CROP'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusCropParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'CROP'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerRotationCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -854,6 +1051,26 @@ export class MixerRotationCommand extends AbstractLayerWithFallbackCommand {
     new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
     new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
   ]
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'ROTATION'
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusRotationCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ROTATION'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusRotationParser)
 
 		/**
 		 *
@@ -902,6 +1119,26 @@ export class MixerPerspectiveCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
+export class MixerStatusPerspectiveCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('PERSPECTIVE'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusPerspectiveParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'PERSPECTIVE'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerMipmapCommand extends AbstractLayerWithFallbackCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -912,6 +1149,26 @@ export class MixerMipmapCommand extends AbstractLayerWithFallbackCommand {
     new ParamSignature(optional, 'mipmap', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
     new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
   ]
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'MIPMAP'
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusMipmapCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MIPMAP'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMipmapParser)
 
 		/**
 		 *
@@ -952,6 +1209,26 @@ export class MixerVolumeCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
+export class MixerStatusVolumeCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('VOLUME'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusVolumeParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'VOLUME'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerMastervolumeCommand extends AbstractChannelCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -977,6 +1254,26 @@ export class MixerMastervolumeCommand extends AbstractChannelCommand {
 	/**
 	 *
 	 */
+export class MixerStatusMastervolumeCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MASTERVOLUME'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMastervolumeParser)
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'MASTERVOLUME'
+  }
+}
+
+	/**
+	 *
+	 */
 export class MixerStraightAlphaOutputCommand extends AbstractChannelCommand {
   static readonly commandString = 'MIXER'
   static readonly protocolLogic = [
@@ -987,6 +1284,26 @@ export class MixerStraightAlphaOutputCommand extends AbstractChannelCommand {
     new ParamSignature(optional, 'straight_alpha_output', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
     new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
   ]
+
+		/**
+		 *
+		 */
+  constructor (params: (string|Param|(string|Param)[])) {
+    super(params)
+    this._objectParams['keyword'] = 'STRAIGHT_ALPHA_OUTPUT'
+  }
+}
+
+	/**
+	 *
+	 */
+export class MixerStatusStraightAlphaOutputCommand extends AbstractLayerWithFallbackCommand {
+  static readonly commandString = 'MIXER'
+  static readonly protocolLogic = []
+  paramProtocol = [
+    new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('STRAIGHT_ALPHA_OUTPUT'))
+  ]
+  responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusStraightAlphaOutputParser)
 
 		/**
 		 *
