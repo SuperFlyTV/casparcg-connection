@@ -599,4 +599,389 @@ var Response;
         return InfoSystemParser;
     }(AbstractParser));
     Response.InfoSystemParser = InfoSystemParser;
+    /**
+     *
+     */
+    var MixerStatusKeyerParser = /** @class */ (function (_super) {
+        __extends(MixerStatusKeyerParser, _super);
+        function MixerStatusKeyerParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusKeyerParser.prototype.parse = function (data) {
+            return {
+                keyer: !!data[0]
+            };
+        };
+        return MixerStatusKeyerParser;
+    }(AbstractParser));
+    Response.MixerStatusKeyerParser = MixerStatusKeyerParser;
+    /**
+     *
+     */
+    var MixerStatusChromaParser = /** @class */ (function (_super) {
+        __extends(MixerStatusChromaParser, _super);
+        function MixerStatusChromaParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusChromaParser.prototype.parse = function (data) {
+            return {
+                chroma: {
+                    enable: !!data[0],
+                    targetHue: data[1],
+                    hueWidth: data[2],
+                    minSaturation: data[3],
+                    minBrightness: data[4],
+                    softness: data[5],
+                    spillSuppress: data[6],
+                    spillSuppressSaturation: data[7],
+                    showMask: !!data[8]
+                }
+            };
+        };
+        return MixerStatusChromaParser;
+    }(AbstractParser));
+    Response.MixerStatusChromaParser = MixerStatusChromaParser;
+    /**
+     *
+     */
+    var MixerStatusBlendParser = /** @class */ (function (_super) {
+        __extends(MixerStatusBlendParser, _super);
+        function MixerStatusBlendParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusBlendParser.prototype.parse = function (data) {
+            return {
+                blend: data
+            };
+        };
+        return MixerStatusBlendParser;
+    }(AbstractParser));
+    Response.MixerStatusBlendParser = MixerStatusBlendParser;
+    /**
+     *
+     */
+    var MixerStatusOpacityParser = /** @class */ (function (_super) {
+        __extends(MixerStatusOpacityParser, _super);
+        function MixerStatusOpacityParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusOpacityParser.prototype.parse = function (data) {
+            return {
+                opacity: data[0]
+            };
+        };
+        return MixerStatusOpacityParser;
+    }(AbstractParser));
+    Response.MixerStatusOpacityParser = MixerStatusOpacityParser;
+    /**
+     *
+     */
+    var MixerStatusBrightnessParser = /** @class */ (function (_super) {
+        __extends(MixerStatusBrightnessParser, _super);
+        function MixerStatusBrightnessParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusBrightnessParser.prototype.parse = function (data) {
+            return {
+                brightness: data[0]
+            };
+        };
+        return MixerStatusBrightnessParser;
+    }(AbstractParser));
+    Response.MixerStatusBrightnessParser = MixerStatusBrightnessParser;
+    /**
+     *
+     */
+    var MixerStatusSaturationParser = /** @class */ (function (_super) {
+        __extends(MixerStatusSaturationParser, _super);
+        function MixerStatusSaturationParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusSaturationParser.prototype.parse = function (data) {
+            return {
+                saturation: data[0]
+            };
+        };
+        return MixerStatusSaturationParser;
+    }(AbstractParser));
+    Response.MixerStatusSaturationParser = MixerStatusSaturationParser;
+    /**
+     *
+     */
+    var MixerStatusContrastParser = /** @class */ (function (_super) {
+        __extends(MixerStatusContrastParser, _super);
+        function MixerStatusContrastParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusContrastParser.prototype.parse = function (data) {
+            return {
+                contrast: data[0]
+            };
+        };
+        return MixerStatusContrastParser;
+    }(AbstractParser));
+    Response.MixerStatusContrastParser = MixerStatusContrastParser;
+    /**
+     *
+     */
+    var MixerStatusLevelsParser = /** @class */ (function (_super) {
+        __extends(MixerStatusLevelsParser, _super);
+        function MixerStatusLevelsParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusLevelsParser.prototype.parse = function (data) {
+            return {
+                levels: {
+                    minInput: data[0],
+                    maxInput: data[1],
+                    gamma: data[2],
+                    minOutput: data[3],
+                    maxOutput: data[4]
+                }
+            };
+        };
+        return MixerStatusLevelsParser;
+    }(AbstractParser));
+    Response.MixerStatusLevelsParser = MixerStatusLevelsParser;
+    /**
+     *
+     */
+    var MixerStatusFillParser = /** @class */ (function (_super) {
+        __extends(MixerStatusFillParser, _super);
+        function MixerStatusFillParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusFillParser.prototype.parse = function (data) {
+            return {
+                fill: {
+                    x: data[0],
+                    y: data[1],
+                    xScale: data[2],
+                    yScale: data[3]
+                }
+            };
+        };
+        return MixerStatusFillParser;
+    }(AbstractParser));
+    Response.MixerStatusFillParser = MixerStatusFillParser;
+    /**
+     *
+     */
+    var MixerStatusClipParser = /** @class */ (function (_super) {
+        __extends(MixerStatusClipParser, _super);
+        function MixerStatusClipParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusClipParser.prototype.parse = function (data) {
+            return {
+                clip: {
+                    x: data[0],
+                    y: data[1],
+                    width: data[2],
+                    height: data[3]
+                }
+            };
+        };
+        return MixerStatusClipParser;
+    }(AbstractParser));
+    Response.MixerStatusClipParser = MixerStatusClipParser;
+    /**
+     *
+     */
+    var MixerStatusAnchorParser = /** @class */ (function (_super) {
+        __extends(MixerStatusAnchorParser, _super);
+        function MixerStatusAnchorParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusAnchorParser.prototype.parse = function (data) {
+            return {
+                anchor: {
+                    x: data[0],
+                    y: data[1]
+                }
+            };
+        };
+        return MixerStatusAnchorParser;
+    }(AbstractParser));
+    Response.MixerStatusAnchorParser = MixerStatusAnchorParser;
+    /**
+     *
+     */
+    var MixerStatusCropParser = /** @class */ (function (_super) {
+        __extends(MixerStatusCropParser, _super);
+        function MixerStatusCropParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusCropParser.prototype.parse = function (data) {
+            return {
+                crop: {
+                    left: data[0],
+                    top: data[1],
+                    right: data[2],
+                    bottom: data[3]
+                }
+            };
+        };
+        return MixerStatusCropParser;
+    }(AbstractParser));
+    Response.MixerStatusCropParser = MixerStatusCropParser;
+    /**
+     *
+     */
+    var MixerStatusRotationParser = /** @class */ (function (_super) {
+        __extends(MixerStatusRotationParser, _super);
+        function MixerStatusRotationParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusRotationParser.prototype.parse = function (data) {
+            return {
+                rotation: data[0]
+            };
+        };
+        return MixerStatusRotationParser;
+    }(AbstractParser));
+    Response.MixerStatusRotationParser = MixerStatusRotationParser;
+    /**
+     *
+     */
+    var MixerStatusPerspectiveParser = /** @class */ (function (_super) {
+        __extends(MixerStatusPerspectiveParser, _super);
+        function MixerStatusPerspectiveParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusPerspectiveParser.prototype.parse = function (data) {
+            return {
+                perspective: {
+                    topLeftX: data[0],
+                    topLeftY: data[1],
+                    topRightX: data[2],
+                    topRightY: data[3],
+                    bottomRightX: data[6],
+                    bottomRightY: data[7],
+                    bottomLeftX: data[4],
+                    bottomLeftY: data[5]
+                }
+            };
+        };
+        return MixerStatusPerspectiveParser;
+    }(AbstractParser));
+    Response.MixerStatusPerspectiveParser = MixerStatusPerspectiveParser;
+    /**
+     *
+     */
+    var MixerStatusMipmapParser = /** @class */ (function (_super) {
+        __extends(MixerStatusMipmapParser, _super);
+        function MixerStatusMipmapParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusMipmapParser.prototype.parse = function (data) {
+            return {
+                mipmap: !!data[0]
+            };
+        };
+        return MixerStatusMipmapParser;
+    }(AbstractParser));
+    Response.MixerStatusMipmapParser = MixerStatusMipmapParser;
+    /**
+     *
+     */
+    var MixerStatusVolumeParser = /** @class */ (function (_super) {
+        __extends(MixerStatusVolumeParser, _super);
+        function MixerStatusVolumeParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusVolumeParser.prototype.parse = function (data) {
+            return {
+                volume: data[0]
+            };
+        };
+        return MixerStatusVolumeParser;
+    }(AbstractParser));
+    Response.MixerStatusVolumeParser = MixerStatusVolumeParser;
+    /**
+     *
+     */
+    var MixerStatusMastervolumeParser = /** @class */ (function (_super) {
+        __extends(MixerStatusMastervolumeParser, _super);
+        function MixerStatusMastervolumeParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusMastervolumeParser.prototype.parse = function (data) {
+            return {
+                mastervolume: data[0]
+            };
+        };
+        return MixerStatusMastervolumeParser;
+    }(AbstractParser));
+    Response.MixerStatusMastervolumeParser = MixerStatusMastervolumeParser;
+    /**
+     *
+     */
+    var MixerStatusStraightAlphaOutputParser = /** @class */ (function (_super) {
+        __extends(MixerStatusStraightAlphaOutputParser, _super);
+        function MixerStatusStraightAlphaOutputParser() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         *
+         */
+        MixerStatusStraightAlphaOutputParser.prototype.parse = function (data) {
+            return {
+                straightAlphaOutput: !!data[0]
+            };
+        };
+        return MixerStatusStraightAlphaOutputParser;
+    }(AbstractParser));
+    Response.MixerStatusStraightAlphaOutputParser = MixerStatusStraightAlphaOutputParser;
 })(Response = exports.Response || (exports.Response = {}));

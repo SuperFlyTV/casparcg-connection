@@ -61,4 +61,13 @@ export declare namespace Response {
          */
         resolve(response: CasparCGSocketResponse): Object;
     }
+    /**
+     *
+     */
+    class MixerStatusValidator implements IResponseValidator {
+        /**
+         *
+         */
+        resolve(response: CasparCGSocketResponse): Object;
+    }
 }

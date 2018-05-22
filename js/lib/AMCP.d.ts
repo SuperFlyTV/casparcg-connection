@@ -234,12 +234,35 @@ export declare namespace AMCP {
         constructor(params: (string | Param | (string | Param)[]));
     }
     /**
+     *
+     */
+    class MixerStatusKeyerCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
      * @todo	Validata/clamp lamp number range?
      */
     class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
         static readonly protocolLogic: ProtocolNS.IProtocolLogic[];
         paramProtocol: ParamNS.ParamSignature[];
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    class MixerStatusChromaCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
          */
@@ -260,10 +283,36 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusBlendCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerOpacityCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
         static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
+    class MixerStatusOpacityCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
          */
@@ -284,6 +333,19 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusBrightnessCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerSaturationCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
         static readonly protocolLogic: ProtocolNS.Depends[];
@@ -296,10 +358,36 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusSaturationCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerContrastCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
         static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
+    class MixerStatusContrastCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
          */
@@ -320,10 +408,36 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusLevelsCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerFillCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
         static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
+    class MixerStatusFillCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
          */
@@ -344,10 +458,36 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusClipCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
         static readonly protocolLogic: (ProtocolNS.Depends | ProtocolNS.Coupled)[];
         paramProtocol: ParamNS.ParamSignature[];
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
+    class MixerStatusAnchorCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
          */
@@ -368,10 +508,36 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusCropCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerRotationCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
         static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
+    class MixerStatusRotationCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
          */
@@ -392,10 +558,36 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusPerspectiveCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerMipmapCommand extends AbstractLayerWithFallbackCommand {
         static readonly commandString: string;
         static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
+    class MixerStatusMipmapCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
          */
@@ -416,6 +608,19 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusVolumeCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerMastervolumeCommand extends AbstractChannelCommand {
         static readonly commandString: string;
         static readonly protocolLogic: ProtocolNS.Depends[];
@@ -428,10 +633,36 @@ export declare namespace AMCP {
     /**
      *
      */
+    class MixerStatusMastervolumeCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
     class MixerStraightAlphaOutputCommand extends AbstractChannelCommand {
         static readonly commandString: string;
         static readonly protocolLogic: ProtocolNS.Depends[];
         paramProtocol: ParamNS.ParamSignature[];
+        /**
+         *
+         */
+        constructor(params: (string | Param | (string | Param)[]));
+    }
+    /**
+     *
+     */
+    class MixerStatusStraightAlphaOutputCommand extends AbstractLayerWithFallbackCommand {
+        static readonly commandString: string;
+        static readonly protocolLogic: never[];
+        paramProtocol: ParamNS.ParamSignature[];
+        responseProtocol: ResponseSignatureNS.ResponseSignature;
         /**
          *
          */

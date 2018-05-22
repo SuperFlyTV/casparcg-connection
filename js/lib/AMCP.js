@@ -604,6 +604,28 @@ var AMCP;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerKeyerCommand = MixerKeyerCommand;
     /**
+     *
+     */
+    var MixerStatusKeyerCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusKeyerCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusKeyerCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('KEYER'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusKeyerParser);
+            _this._objectParams['keyword'] = 'KEYER';
+            return _this;
+        }
+        MixerStatusKeyerCommand.commandString = 'MIXER';
+        MixerStatusKeyerCommand.protocolLogic = [];
+        return MixerStatusKeyerCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusKeyerCommand = MixerStatusKeyerCommand;
+    /**
      * @todo	Validata/clamp lamp number range?
      */
     var MixerChromaCommand = /** @class */ (function (_super) {
@@ -638,6 +660,25 @@ var AMCP;
         return MixerChromaCommand;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerChromaCommand = MixerChromaCommand;
+    var MixerStatusChromaCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusChromaCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusChromaCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('CHROMA'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusChromaParser);
+            _this._objectParams['keyword'] = 'CHROMA';
+            return _this;
+        }
+        MixerStatusChromaCommand.commandString = 'MIXER';
+        MixerStatusChromaCommand.protocolLogic = [];
+        return MixerStatusChromaCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusChromaCommand = MixerStatusChromaCommand;
     /**
      *
      */
@@ -663,6 +704,28 @@ var AMCP;
         return MixerBlendCommand;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerBlendCommand = MixerBlendCommand;
+    /**
+     *
+     */
+    var MixerStatusBlendCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusBlendCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusBlendCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('BLEND'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.StringValidator, ResponseParsers_1.Response.MixerStatusBlendParser);
+            _this._objectParams['keyword'] = 'BLEND';
+            return _this;
+        }
+        MixerStatusBlendCommand.commandString = 'MIXER';
+        MixerStatusBlendCommand.protocolLogic = [];
+        return MixerStatusBlendCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusBlendCommand = MixerStatusBlendCommand;
     /**
      *
      */
@@ -695,6 +758,28 @@ var AMCP;
     /**
      *
      */
+    var MixerStatusOpacityCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusOpacityCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusOpacityCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('OPACITY'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusOpacityParser);
+            _this._objectParams['keyword'] = 'OPACITY';
+            return _this;
+        }
+        MixerStatusOpacityCommand.commandString = 'MIXER';
+        MixerStatusOpacityCommand.protocolLogic = [];
+        return MixerStatusOpacityCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusOpacityCommand = MixerStatusOpacityCommand;
+    /**
+     *
+     */
     var MixerBrightnessCommand = /** @class */ (function (_super) {
         __extends(MixerBrightnessCommand, _super);
         /**
@@ -721,6 +806,28 @@ var AMCP;
         return MixerBrightnessCommand;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerBrightnessCommand = MixerBrightnessCommand;
+    /**
+     *
+     */
+    var MixerStatusBrightnessCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusBrightnessCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusBrightnessCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('BRIGHTNESS'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusBrightnessParser);
+            _this._objectParams['keyword'] = 'BRIGHTNESS';
+            return _this;
+        }
+        MixerStatusBrightnessCommand.commandString = 'MIXER';
+        MixerStatusBrightnessCommand.protocolLogic = [];
+        return MixerStatusBrightnessCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusBrightnessCommand = MixerStatusBrightnessCommand;
     /**
      *
      */
@@ -753,6 +860,28 @@ var AMCP;
     /**
      *
      */
+    var MixerStatusSaturationCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusSaturationCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusSaturationCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('SATURATION'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusSaturationParser);
+            _this._objectParams['keyword'] = 'SATURATION';
+            return _this;
+        }
+        MixerStatusSaturationCommand.commandString = 'MIXER';
+        MixerStatusSaturationCommand.protocolLogic = [];
+        return MixerStatusSaturationCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusSaturationCommand = MixerStatusSaturationCommand;
+    /**
+     *
+     */
     var MixerContrastCommand = /** @class */ (function (_super) {
         __extends(MixerContrastCommand, _super);
         /**
@@ -779,6 +908,28 @@ var AMCP;
         return MixerContrastCommand;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerContrastCommand = MixerContrastCommand;
+    /**
+     *
+     */
+    var MixerStatusContrastCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusContrastCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusContrastCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('CONTRAST'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusContrastParser);
+            _this._objectParams['keyword'] = 'CONTRAST';
+            return _this;
+        }
+        MixerStatusContrastCommand.commandString = 'MIXER';
+        MixerStatusContrastCommand.protocolLogic = [];
+        return MixerStatusContrastCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusContrastCommand = MixerStatusContrastCommand;
     /**
      * @todo:	verify `gamma` value range
      */
@@ -816,6 +967,28 @@ var AMCP;
     /**
      *
      */
+    var MixerStatusLevelsCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusLevelsCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusLevelsCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('LEVELS'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusLevelsParser);
+            _this._objectParams['keyword'] = 'LEVELS';
+            return _this;
+        }
+        MixerStatusLevelsCommand.commandString = 'MIXER';
+        MixerStatusLevelsCommand.protocolLogic = [];
+        return MixerStatusLevelsCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusLevelsCommand = MixerStatusLevelsCommand;
+    /**
+     *
+     */
     var MixerFillCommand = /** @class */ (function (_super) {
         __extends(MixerFillCommand, _super);
         /**
@@ -846,6 +1019,28 @@ var AMCP;
         return MixerFillCommand;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerFillCommand = MixerFillCommand;
+    /**
+     *
+     */
+    var MixerStatusFillCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusFillCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusFillCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('FILL'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusFillParser);
+            _this._objectParams['keyword'] = 'FILL';
+            return _this;
+        }
+        MixerStatusFillCommand.commandString = 'MIXER';
+        MixerStatusFillCommand.protocolLogic = [];
+        return MixerStatusFillCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusFillCommand = MixerStatusFillCommand;
     /**
      *
      */
@@ -882,6 +1077,28 @@ var AMCP;
     /**
      *
      */
+    var MixerStatusClipCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusClipCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusClipCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('CLIP'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusClipParser);
+            _this._objectParams['keyword'] = 'CLIP';
+            return _this;
+        }
+        MixerStatusClipCommand.commandString = 'MIXER';
+        MixerStatusClipCommand.protocolLogic = [];
+        return MixerStatusClipCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusClipCommand = MixerStatusClipCommand;
+    /**
+     *
+     */
     var MixerAnchorCommand = /** @class */ (function (_super) {
         __extends(MixerAnchorCommand, _super);
         /**
@@ -910,6 +1127,28 @@ var AMCP;
         return MixerAnchorCommand;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerAnchorCommand = MixerAnchorCommand;
+    /**
+     *
+     */
+    var MixerStatusAnchorCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusAnchorCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusAnchorCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('ANCHOR'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusAnchorParser);
+            _this._objectParams['keyword'] = 'ANCHOR';
+            return _this;
+        }
+        MixerStatusAnchorCommand.commandString = 'MIXER';
+        MixerStatusAnchorCommand.protocolLogic = [];
+        return MixerStatusAnchorCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusAnchorCommand = MixerStatusAnchorCommand;
     /**
      *
      */
@@ -946,6 +1185,28 @@ var AMCP;
     /**
      *
      */
+    var MixerStatusCropCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusCropCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusCropCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('CROP'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusCropParser);
+            _this._objectParams['keyword'] = 'CROP';
+            return _this;
+        }
+        MixerStatusCropCommand.commandString = 'MIXER';
+        MixerStatusCropCommand.protocolLogic = [];
+        return MixerStatusCropCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusCropCommand = MixerStatusCropCommand;
+    /**
+     *
+     */
     var MixerRotationCommand = /** @class */ (function (_super) {
         __extends(MixerRotationCommand, _super);
         /**
@@ -972,6 +1233,28 @@ var AMCP;
         return MixerRotationCommand;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerRotationCommand = MixerRotationCommand;
+    /**
+     *
+     */
+    var MixerStatusRotationCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusRotationCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusRotationCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('ROTATION'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusRotationParser);
+            _this._objectParams['keyword'] = 'ROTATION';
+            return _this;
+        }
+        MixerStatusRotationCommand.commandString = 'MIXER';
+        MixerStatusRotationCommand.protocolLogic = [];
+        return MixerStatusRotationCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusRotationCommand = MixerStatusRotationCommand;
     /**
      *
      */
@@ -1012,6 +1295,28 @@ var AMCP;
     /**
      *
      */
+    var MixerStatusPerspectiveCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusPerspectiveCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusPerspectiveCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('PERSPECTIVE'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusPerspectiveParser);
+            _this._objectParams['keyword'] = 'PERSPECTIVE';
+            return _this;
+        }
+        MixerStatusPerspectiveCommand.commandString = 'MIXER';
+        MixerStatusPerspectiveCommand.protocolLogic = [];
+        return MixerStatusPerspectiveCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusPerspectiveCommand = MixerStatusPerspectiveCommand;
+    /**
+     *
+     */
     var MixerMipmapCommand = /** @class */ (function (_super) {
         __extends(MixerMipmapCommand, _super);
         /**
@@ -1034,6 +1339,28 @@ var AMCP;
         return MixerMipmapCommand;
     }(AbstractLayerWithFallbackCommand));
     AMCP.MixerMipmapCommand = MixerMipmapCommand;
+    /**
+     *
+     */
+    var MixerStatusMipmapCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusMipmapCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusMipmapCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('MIPMAP'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusMipmapParser);
+            _this._objectParams['keyword'] = 'MIPMAP';
+            return _this;
+        }
+        MixerStatusMipmapCommand.commandString = 'MIXER';
+        MixerStatusMipmapCommand.protocolLogic = [];
+        return MixerStatusMipmapCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusMipmapCommand = MixerStatusMipmapCommand;
     /**
      *
      */
@@ -1066,6 +1393,28 @@ var AMCP;
     /**
      *
      */
+    var MixerStatusVolumeCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusVolumeCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusVolumeCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('VOLUME'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusVolumeParser);
+            _this._objectParams['keyword'] = 'VOLUME';
+            return _this;
+        }
+        MixerStatusVolumeCommand.commandString = 'MIXER';
+        MixerStatusVolumeCommand.protocolLogic = [];
+        return MixerStatusVolumeCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusVolumeCommand = MixerStatusVolumeCommand;
+    /**
+     *
+     */
     var MixerMastervolumeCommand = /** @class */ (function (_super) {
         __extends(MixerMastervolumeCommand, _super);
         /**
@@ -1093,6 +1442,28 @@ var AMCP;
     /**
      *
      */
+    var MixerStatusMastervolumeCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusMastervolumeCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusMastervolumeCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('MASTERVOLUME'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusMastervolumeParser);
+            _this._objectParams['keyword'] = 'MASTERVOLUME';
+            return _this;
+        }
+        MixerStatusMastervolumeCommand.commandString = 'MIXER';
+        MixerStatusMastervolumeCommand.protocolLogic = [];
+        return MixerStatusMastervolumeCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusMastervolumeCommand = MixerStatusMastervolumeCommand;
+    /**
+     *
+     */
     var MixerStraightAlphaOutputCommand = /** @class */ (function (_super) {
         __extends(MixerStraightAlphaOutputCommand, _super);
         /**
@@ -1115,6 +1486,28 @@ var AMCP;
         return MixerStraightAlphaOutputCommand;
     }(AbstractChannelCommand));
     AMCP.MixerStraightAlphaOutputCommand = MixerStraightAlphaOutputCommand;
+    /**
+     *
+     */
+    var MixerStatusStraightAlphaOutputCommand = /** @class */ (function (_super) {
+        __extends(MixerStatusStraightAlphaOutputCommand, _super);
+        /**
+         *
+         */
+        function MixerStatusStraightAlphaOutputCommand(params) {
+            var _this = _super.call(this, params) || this;
+            _this.paramProtocol = [
+                new ParamSignature(required, 'keyword', null, new ParamValidators_1.Validation.KeywordValidator('STRAIGHT_ALPHA_OUTPUT'))
+            ];
+            _this.responseProtocol = new ResponseSignature(201, ResponseValidators_1.Response.MixerStatusValidator, ResponseParsers_1.Response.MixerStatusStraightAlphaOutputParser);
+            _this._objectParams['keyword'] = 'STRAIGHT_ALPHA_OUTPUT';
+            return _this;
+        }
+        MixerStatusStraightAlphaOutputCommand.commandString = 'MIXER';
+        MixerStatusStraightAlphaOutputCommand.protocolLogic = [];
+        return MixerStatusStraightAlphaOutputCommand;
+    }(AbstractLayerWithFallbackCommand));
+    AMCP.MixerStatusStraightAlphaOutputCommand = MixerStatusStraightAlphaOutputCommand;
     /**
      *
      */

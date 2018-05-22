@@ -121,4 +121,20 @@ var Response;
         return Base64Validator;
     }());
     Response.Base64Validator = Base64Validator;
+    /**
+     *
+     */
+    var MixerStatusValidator = /** @class */ (function () {
+        function MixerStatusValidator() {
+        }
+        /**
+         *
+         */
+        MixerStatusValidator.prototype.resolve = function (response) {
+            var result = response.items[0].split(' ').map(function (value) { return Number.parseFloat(value); });
+            return result.length > 0 && result.every(function (value) { return !isNaN(value); }) ? result : false;
+        };
+        return MixerStatusValidator;
+    }());
+    Response.MixerStatusValidator = MixerStatusValidator;
 })(Response = exports.Response || (exports.Response = {}));

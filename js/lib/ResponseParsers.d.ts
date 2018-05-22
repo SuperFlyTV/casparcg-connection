@@ -218,4 +218,166 @@ export declare namespace Response {
          */
         parse(data: Object): Object;
     }
+    /**
+     *
+     */
+    class MixerStatusKeyerParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusChromaParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusBlendParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusOpacityParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusBrightnessParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusSaturationParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusContrastParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusLevelsParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusFillParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusClipParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusAnchorParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusCropParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusRotationParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusPerspectiveParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusMipmapParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusVolumeParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusMastervolumeParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
+    /**
+     *
+     */
+    class MixerStatusStraightAlphaOutputParser extends AbstractParser implements IResponseParser {
+        /**
+         *
+         */
+        parse(data: Array<number>): Object;
+    }
 }
