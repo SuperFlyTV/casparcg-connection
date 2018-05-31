@@ -545,6 +545,22 @@ export class TemplateDataValidator extends AbstractValidator {
 export class TimecodeValidator extends StringValidator {
   // nothing
 }
+
+export class AddressValidator extends AbstractValidator {
+  resolve (data: Object) : ParamData {
+    if (!data) return false
+    let address: string = data.toString()
+    const match = address.match(/^([0-9]{1,4})(?:-([0-9]{1,4}))?$/)
+    if (!match || Number(match[1]) > 9999 || (typeof match[2] !== 'undefined' && Number (match[2]) > 9999)) return false
+    return address
+  }
+
+  isChannel ()
+  {
+
+  }
+}
+
 export class CommandValidator extends AbstractValidator {
   resolve (command: Object): ParamData {
     if (CommandNS.isIAMCPCommand(command)) {

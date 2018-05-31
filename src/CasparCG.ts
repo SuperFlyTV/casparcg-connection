@@ -166,7 +166,8 @@ export interface IMixer {
 export interface IChannel {
   clear (channel: number, layer?: number): Promise<IAMCPCommand>
 		//// call(channel: number, layer: number): Promise<IAMCPCommand>;
-		//// swap(): Promise<IAMCPCommand>;
+  swapChannels (channel1: number, channel2?: number, transformations?: boolean): Promise<IAMCPCommand>
+  swapLayers (channel1: number, layer1?: number, channel2?: number, layer2?: number, transformations?: boolean): Promise<IAMCPCommand>
 		//// add(channel: number): Promise<IAMCPCommand>;
   print (channel: number): Promise<IAMCPCommand>
 		//// set(channel: number): Promise<IAMCPCommand>;
@@ -1515,12 +1516,17 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
   }
 
 	/**
-	 * @todo	implement
-	 * @todo	document
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#swap>
 	 */
-  public swap (): Promise<IAMCPCommand> {
-		// @todo: overloading of origin/destination pairs
-    return this.do(new AMCP.SwapCommand())
+  public swapLayers (channel1: number, layer1: number, channel2: number, layer2: number, transformations?: boolean): Promise<IAMCPCommand> {
+    return this.do(new AMCP.SwapCommand({address1: channel1 + '-' + layer1, address2: channel2 + '-' + layer2, transformations: transformations}))
+  }
+
+	/**
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#swap>
+	 */
+  public swapChannels (channel1: number, channel2: number, transformations?: boolean): Promise<IAMCPCommand> {
+    return this.do(new AMCP.SwapCommand({address1: channel1, address2: channel2, transformations: transformations}))
   }
 
 	/**

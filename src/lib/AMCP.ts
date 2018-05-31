@@ -1394,18 +1394,16 @@ export class CallCommand extends AbstractLayerWithFallbackCommand {
 	/**
 	 *
 	 */
-export class SwapCommand extends AbstractChannelOrLayerCommand {
+export class SwapCommand extends AbstractCommand {
   static readonly commandString = 'SWAP'
+  static readonly protocolLogic = [
 
-		/**
-		 *
-		 */
-  constructor () {
-    super('1-1') // @todo: foo
-			// @todo: custom parameters dual layerOrchannel with 1 optional param
-			// overloading in method
-  }
-
+  ]
+  paramProtocol = [
+    new ParamSignature(required, 'address1', null, new ParameterValidator.AddressValidator()),
+    new ParamSignature(required, 'address2', null, new ParameterValidator.AddressValidator()),
+    new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('TRANSFORMS'))
+  ]
 }
 
 	/**
