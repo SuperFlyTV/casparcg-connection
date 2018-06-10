@@ -1,17 +1,10 @@
 {
-  "extends": [
-    "tslint-config-standard"
-  ],
+  "extends": "tslint-config-standard",
   "rules": {
-    "unified-signatures": false,
-    "await-promise": false,
-    "no-use-before-declare": false,
-    "return-undefined": false,
-    "no-floating-promises": false,
-    "no-unnecessary-qualifier": false,
-    "no-unused-variable": false,
-    "strict-type-predicates": false
+    "indent": [true, "tabs", 4],
+    "ter-indent": [true, "tab",{
+			"SwitchCase": 1
+		}],
+	"space-before-function-paren":false
   }
 }
-
-

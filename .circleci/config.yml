@@ -1,0 +1,143 @@
+defaults: &defaults
+  docker:
+    - image: circleci/node:8
+  working_directory: ~/project
+
+version: 2
+jobs:
+  Checkout Code:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - restore_cache:
+          keys:
+            - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-{{ .Branch }}
+            - yarn-cache-
+      - run: yarn install
+      - save_cache:
+          key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths: [node_modules]
+      - persist_to_workspace:
+          root: .
+          paths: [.]
+  Check for vulnerabilities:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run: yarn install
+      - run: yarn validate:dependencies
+  Test node-8:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run: yarn install
+      - run: yarn ci
+  Send Coverage:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run: yarn install
+      - run: yarn send-coverage
+      - store_artifacts:
+          path: ./coverage/clover.xml
+          prefix: tests
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+      - store_test_results:
+          path: ./coverage/clover.xml
+
+  Build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run: yarn install
+      - run: yarn build
+      - persist_to_workspace:
+          root: .
+          paths: [.]
+
+  Git Release:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - add_ssh_keys:
+          fingerprints:
+            - "fe:e8:83:0c:e9:a3:83:47:db:a9:f4:ce:a3:1f:7e:28"
+      - run: yarn install
+      - run: mkdir -p ~/.ssh
+      - run:
+          name: Keyscan Github
+          command: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+      - run: git config --global user.email "jesper@starkar.no"
+      - run: git config --global user.name "jesperstarkar"
+      - run: yarn release
+      - run: git push --follow-tags origin HEAD
+      - persist_to_workspace:
+          root: .
+          paths: [.]
+  Deploy to NPM:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Write NPM Token to ~/.npmrc
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      - run:
+          name: Publish to NPM with yarn
+          command: NEW_VERSION=$(node -p "require('./package.json').version") && yarn publish --access=public --new-version=$NEW_VERSION --network-timeout 100000
+      # I have read that some people are experiencing problems with yars publish. Change to npm publish, as below, if that happens.
+      # - deploy:
+      #     name: Publish to NPM with npm
+      #     command: npm publish --access=public
+
+workflows:
+  version: 2
+  Test build and deploy(master only):
+    jobs:
+      - Checkout Code
+      - Check for vulnerabilities:
+          requires:
+            - Checkout Code
+      - Test node-8:
+          requires:
+            - Checkout Code
+      - Send Coverage:
+          requires:
+            - Check for vulnerabilities
+            - Test node-8
+          filters:
+            branches:
+              only:
+                - master
+      - Git Release:
+          requires:
+            - Send Coverage
+          filters:
+            branches:
+              only:
+                - master
+      - Build:
+          requires:
+            - Send Coverage
+            - Git Release
+          filters:
+            branches:
+              only:
+                - master
+      - Deploy to NPM:
+          requires:
+            - Build
+          filters:
+            branches:
+              only:
+                - master
