@@ -4,6 +4,8 @@
 
 [![API Docs](https://img.shields.io/badge/Docs-Api-orange.svg?style=flat-square)](https://superflytv.github.io/casparcg-connection/) [![Guide](https://img.shields.io/badge/Docs-Getting%20started%20guide-orange.svg?style=flat-square)](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/)
 
+[![CircleCI](https://circleci.com/gh/SuperFlyTV/casparcg-connection.svg?style=svg)](https://circleci.com/gh/SuperFlyTV/casparcg-connection)
+
 ## Introduction
 
 CasparCG is an open source graphics- and video server for broadcast and streaming productions. This library lets you connect and interact with CasparCG servers from Node.js in Javascript.

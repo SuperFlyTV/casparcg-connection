@@ -4,6 +4,51 @@
   "description": "Node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SuperFlyTV/casparcg-connection.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SuperFlyTV/casparcg-connection/issues"
+  },
+  "homepage": "http://superfly.tv",
+  "author": {
+    "name": "Jesper Stærkær",
+    "email": "jesper@superfly.tv",
+    "url": "http://superfly.tv"
+  },  
+  "contributors": [
+    {
+      "name": "Johan Nyman",
+      "email": "johan@superfly.tv",
+      "url": "http://superfly.tv"
+    },
+    {
+      "name": "Balte de Wit",
+      "email": "balte.dewit@gmail.com",
+      "url": "http://balte.nl"
+    },
+    {
+      "name": "Andreas Jeansson",
+      "email": "andreas.jeansson@svt.se",
+      "url": "http://svt.se"
+    },
+    {
+      "name": "Aleksandr Besedin",
+      "email": "sasha.besedin@gmail.com",
+      "url": "http://cosmonova.net"
+    },
+    {
+      "name": "Craig Sweaton",
+      "email": "craig@csweaton.com",
+      "url": "https://csweaton.com"
+    },
+    {
+      "name": "Stephan Nordnes Eriksen",
+      "email": "Stephanruler@gmail.com"
+    }
+  ],
   "scripts": {
     "info": "npm-scripts-info",
     "build": "trash dist && yarn build:main",
@@ -52,73 +97,8 @@
     "validate:dependencies": "Scan dependencies for vulnerabilities and check licenses",
     "license-validate": "Validate licenses for dependencies."
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/SuperFlyTV/casparcg-connection.git"
-  },
-  "bugs": {
-    "url": "https://github.com/SuperFlyTV/casparcg-connection/issues"
-  },
-  "license": "MIT",
-  "directories": {
-    "lib": "src/",
-    "doc": "docs/"
-  },
-  "author": {
-    "name": "Jesper Stærkær",
-    "email": "jesper@superfly.tv",
-    "url": "http://superfly.tv"
-  },
-  "contributors": [
-    {
-      "name": "Johan Nyman",
-      "email": "johan@superfly.tv",
-      "url": "http://superfly.tv"
-    },
-    {
-      "name": "Balte de Wit",
-      "email": "balte.dewit@gmail.com",
-      "url": "http://balte.nl"
-    },
-    {
-      "name": "Andreas Jeansson",
-      "email": "andreas.jeansson@svt.se",
-      "url": "http://svt.se"
-    },
-    {
-      "name": "Aleksandr Besedin",
-      "email": "sasha.besedin@gmail.com",
-      "url": "http://cosmonova.net"
-    },
-    {
-      "name": "Craig Sweaton",
-      "email": "craig@csweaton.com",
-      "url": "https://csweaton.com"
-    },
-    {
-      "name": "Stephan Nordnes Eriksen",
-      "email": "Stephanruler@gmail.com"
-    }
-  ],
-  "homepage": "http://superfly.tv",
-  "keywords": [
-    "casparcg",
-    "caspar",
-    "caspercg",
-    "amcp",
-    "socket",
-    "tcp",
-    "broadcast",
-    "graphics",
-    "superfly",
-    "connection",
-    "middleware",
-    "remote"
-  ],
-  "dependencies": {
-    "highland": "^3.0.0-beta.6",
-    "xml2js": "^0.4.19",
-    "xmlbuilder": "^9.0.7"
+  "engines": {
+    "node": ">=4.5"
   },
   "devDependencies": {
     "@types/highland": "^2.10.7",
@@ -153,6 +133,24 @@
     "sleep-ms": "^2.0.1",
     "trash-cli": "^1.4.0",
     "ts-jest": "^22.0.4"
+  },
+  "keywords": [
+    "casparcg",
+    "caspar",
+    "amcp",
+    "socket",
+    "tcp",
+    "broadcast",
+    "graphics",
+    "superfly",
+    "connection",
+    "middleware",
+    "remote"
+  ],
+  "dependencies": {
+    "highland": "^3.0.0-beta.6",
+    "xml2js": "^0.4.19",
+    "xmlbuilder": "^9.0.7"
   },
   "standard-version": {
     "message": "chore(release): %s [skip ci]",

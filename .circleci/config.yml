@@ -71,7 +71,7 @@ jobs:
           at: ~/project
       - add_ssh_keys:
           fingerprints:
-            - "fe:e8:83:0c:e9:a3:83:47:db:a9:f4:ce:a3:1f:7e:28"
+            - "06:5d:8c:c1:54:03:05:ed:21:d9:58:06:da:e1:bd:98"
       - run: yarn install
       - run: mkdir -p ~/.ssh
       - run:
