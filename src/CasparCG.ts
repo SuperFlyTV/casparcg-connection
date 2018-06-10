@@ -2150,7 +2150,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					this.doNow(new AMCP.InfoCommand())
 						.then((info) => {
 							let channelPromises: Promise<IAMCPCommand>[] = []
-							let channelLength: number = info.response.data['length']
+							let channelLength: number = info.response.data.length
 
 							for (let i: number = 1; i <= channelLength; i++) {	// 1-based index for channels
 								channelPromises.push(this.doNow(new AMCP.InfoCommand({ channel: i })))
@@ -2161,7 +2161,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 							Promise.all(channelPromises).then((channels) => {
 								for (let i: number = 0; i < channels.length; i++) {
 									let channelInfo: IAMCPCommand = channels[i]
-									if (channelInfo.response.data['stage']) {
+									if (channelInfo.response.data.stage) {
 										virgin = false
 										break
 									}

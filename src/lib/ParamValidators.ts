@@ -116,7 +116,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
+		resolve(data: any): ParamData {
 			let clipName: string = ''
 
 			function checkClipNameString(rawClipNameString: string): string {
@@ -136,10 +136,10 @@ export namespace Validation {
 
 			if (Array.isArray(data)) {
 				let i: number = 0
-				do {
+				while (clipName === null) {
 					clipName = checkClipNameString(data[i])
 					i++
-				} while (clipName == null)
+				}
 
 			} else if (typeof data === 'object' || typeof data === 'string') {
 				clipName = data !== null ? data.toString() : ''
@@ -182,11 +182,12 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
+		resolve(data: any): ParamData {
 			if (data instanceof this._enumClass) {
 				return data.value
 			} else if (typeof data === 'string') {
-				let stringCast = data !== null ? data.toString() : ''
+				// TODO: data is known to be string here;
+				let stringCast = data // !== null ? data.toString() : ''
 				// format stringy enum value
 				stringCast = stringCast.toUpperCase()
 				stringCast = stringCast.replace(' ', '_')

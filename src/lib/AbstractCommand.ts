@@ -36,7 +36,7 @@ export namespace Command {
 	export interface IAMCPResponse {
 		code: number
 		raw: string
-		data: Object
+		data: any
 		toString(): string
 	}
 
@@ -46,7 +46,7 @@ export namespace Command {
 	export class AMCPResponse implements IAMCPResponse {
 		public code: number
 		public raw: string
-		public data: Object
+		public data: any
 
 		public toString(): string {
 			if (typeof this.raw === 'string') {

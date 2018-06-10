@@ -154,18 +154,21 @@ describe('CasparCG', () => {
 		it('should autoconnect by default', () => {
 			spyOn(CasparCGSocket.prototype, 'connect')
 			let cgTest = new CasparCG()
+			expect(cgTest).toBeTruthy()
 			expect(CasparCGSocket.prototype.connect).toHaveBeenCalled()
 		})
 
 		it('should autoconnect if told to', () => {
 			spyOn(CasparCGSocket.prototype, 'connect')
 			let cgTest = new CasparCG({ autoConnect: true })
+			expect(cgTest).toBeTruthy()
 			expect(CasparCGSocket.prototype.connect).toHaveBeenCalled()
 		})
 
 		it('should not autoconnect if not told to', () => {
 			spyOn(CasparCGSocket.prototype, 'connect')
 			let cgTest = new CasparCG({ autoConnect: false })
+			expect(cgTest).toBeTruthy()
 			expect(CasparCGSocket.prototype.connect).not.toHaveBeenCalled()
 		})
 

@@ -13,7 +13,7 @@
         "../node_modules/*",
         "../src/types/*"
       ],
-      "typescript-starter": [
+      "casparcg-connection": [
         "../src/index.ts"
       ]
     },
