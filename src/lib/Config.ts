@@ -569,8 +569,6 @@ export namespace Config {
 			private __version: CasparCGVersion
 
 			/***/
-			public constructor(version: CasparCGVersion);
-			public constructor(initConfigVO: Config207VO | Config210VO | {});
 			public constructor(initVersionOrConfigVO: Config207VO | Config210VO | {} | CasparCGVersion) {
 				// is a version
 				if (typeof initVersionOrConfigVO === 'number') {
