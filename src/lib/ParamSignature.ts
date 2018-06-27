@@ -76,7 +76,7 @@ export namespace Param {
 		constructor(public required: (Required | Optional),
 			public name: string,
 			public key: string | null,
-			validation: (IValidator | Object)) {
+			validation: (IValidator | Object | Function)) {
 			if (validation instanceof AbstractValidator) {
 				this.validation = validation
 			} else if (typeof validation === 'function') {

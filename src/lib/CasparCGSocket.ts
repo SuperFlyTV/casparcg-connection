@@ -194,8 +194,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	public executeCommand(command: IAMCPCommand): IAMCPCommand {
 		let commandString: string
-		if (this.queueMode === OptionsNS.QueueMode.SALVO) commandString = `REQ ${command.token} ` + command.constructor['commandString'] + (command.address ? ' ' + command.address : '')
-		else commandString = command.constructor['commandString'] + (command.address ? ' ' + command.address : '')
+		if (this.queueMode === OptionsNS.QueueMode.SALVO) commandString = `REQ ${command.token} ` + (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
+		else commandString = (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
 
 		for (let i in command.payload) {
 			let payload: Payload = command.payload[i]

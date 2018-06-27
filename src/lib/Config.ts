@@ -569,8 +569,6 @@ export namespace Config {
 			private __version: CasparCGVersion
 
 			/***/
-			public constructor(version: CasparCGVersion);
-			public constructor(initConfigVO: Config207VO | Config210VO | {});
 			public constructor(initVersionOrConfigVO: Config207VO | Config210VO | {} | CasparCGVersion) {
 				// is a version
 				if (typeof initVersionOrConfigVO === 'number') {
@@ -606,10 +604,8 @@ export namespace Config {
 						continue
 					}
 					let value: string = data[key]
-					if (value !== null && value !== '') {
-						key = CasparCGConfig.mixedCaseToDashed(key)
-						root.ele.call(root, key, value)
-					}
+					key = CasparCGConfig.mixedCaseToDashed(key)
+					root.ele.call(root, key, value)
 				}
 				return root
 			}
@@ -620,11 +616,9 @@ export namespace Config {
 					whitelist.forEach((key) => {
 						if (data.hasOwnProperty(key)) {
 							let value: string = data[key]
-							if (value !== null && value !== '') {
-								let keyBlocks: Array<string> = key.split(/(?=[A-Z])/)
-								key = keyBlocks.map((i) => i.toLowerCase()).join('-')
-								root.ele.call(root, key, value)
-							}
+							let keyBlocks: Array<string> = key.split(/(?=[A-Z])/)
+							key = keyBlocks.map((i) => i.toLowerCase()).join('-')
+							root.ele.call(root, key, value)
 						}
 					})
 				}

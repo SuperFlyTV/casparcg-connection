@@ -39,11 +39,11 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
+		resolve(data: Object | string | undefined): ParamData {
 			let textstring: string = ''
 
-			function checkTextstring(rawClipNameString: string): string {
-				if (rawClipNameString == null) {
+			function checkTextstring(rawClipNameString: string | null): string {
+				if (rawClipNameString === null) {
 					return ''
 				}
 
@@ -66,7 +66,7 @@ export namespace Validation {
 					do {
 						textstring = checkTextstring(data[i])
 						i++
-					} while (textstring == null)
+					} while (textstring.length === 0)
 				} else {
 					// greedy
 					textstring = ''
@@ -77,7 +77,7 @@ export namespace Validation {
 				}
 
 			} else if (typeof data === 'object' || typeof data === 'string') {
-				textstring = data !== null ? data.toString() : ''
+				textstring = data.toString()
 			}
 
 			if (!checkTextstring(textstring)) {
@@ -119,8 +119,8 @@ export namespace Validation {
 		resolve(data: any): ParamData {
 			let clipName: string = ''
 
-			function checkClipNameString(rawClipNameString: string): string {
-				if (rawClipNameString == null) {
+			function checkClipNameString(rawClipNameString: string | null): string {
+				if (rawClipNameString === null) {
 					return ''
 				}
 
@@ -134,14 +134,7 @@ export namespace Validation {
 				return rawClipNameString
 			}
 
-			if (Array.isArray(data)) {
-				let i: number = 0
-				while (clipName === null) {
-					clipName = checkClipNameString(data[i])
-					i++
-				}
-
-			} else if (typeof data === 'object' || typeof data === 'string') {
+			if (typeof data === 'object' || typeof data === 'string') {
 				clipName = data !== null ? data.toString() : ''
 			}
 
@@ -214,11 +207,11 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
+		resolve(data: any): ParamData {
 			if (data instanceof Enum.ChannelFormat) {
 				return data.value
 			} else if (typeof data === 'string') {
-				let stringCast = data !== null ? data.toString() : ''
+				let stringCast = data.toString()
 				// format stringy enum value
 				stringCast = stringCast.toUpperCase()
 				stringCast = stringCast.replace(' ', '_')
@@ -255,7 +248,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
+		resolve(data: Array<any> | Object | string | null): ParamData {
 			let keywordCopy: string = this._keyword
 			if (!this._caseSensitive) {
 				keywordCopy = keywordCopy.toLowerCase()
@@ -351,7 +344,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
+		resolve(data: number | null): ParamData {
 			if (typeof data === 'number') {
 				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min)
 				if (numberCast >= 0) {
@@ -384,11 +377,8 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object | undefined): ParamData {
-			if (data) {
-				return Number(super.resolve(data)).toFixed()
-			}
-			return NaN
+		resolve(data: number): ParamData {
+			return Number(super.resolve(data)).toFixed()
 		}
 	}
 
@@ -407,7 +397,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
+		resolve(data: number | null): ParamData {
 			if (typeof data === 'number') {
 				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min)
 				return numberCast
@@ -506,13 +496,13 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		resolve(data: Object): ParamData {
+		resolve(data: Object | string): ParamData {
 			let stringCast = data.toString()
 
 			// data is object: serialize
-			if (typeof data === 'object' && data !== null) {
+			if (typeof data === 'object') {
 				stringCast = JSON.stringify(data)
-			} else if (typeof data === 'string' && data !== null) {
+			} else {
 				stringCast = stringCast.replace(/\r|\n/g, charToEscape => {
 					return charToEscape === '\r' ? '\\r' : '\\n'
 				})

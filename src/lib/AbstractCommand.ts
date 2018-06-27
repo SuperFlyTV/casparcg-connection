@@ -49,10 +49,7 @@ export namespace Command {
 		public data: any
 
 		public toString(): string {
-			if (typeof this.raw === 'string') {
-				return this.raw.replace(/\r?\n|\r/gi, '')
-			}
-			return ''
+			return this.raw.replace(/\r?\n|\r/gi, '')
 		}
 	}
 
@@ -114,19 +111,6 @@ export namespace Command {
 	/**
 	 *
 	 */
-	export function isIAMCPCommand(object: any): object is IAMCPCommand {
-		// @todo: better inheritance type checking
-		for (let prop in AbstractCommand.prototype) {
-			if (object[prop] === undefined) {
-				return false
-			}
-		}
-		return true
-	}
-
-	/**
-	 *
-	 */
 	export abstract class AbstractCommand implements IAMCPCommand {
 		response: IAMCPResponse = new AMCPResponse()
 		paramProtocol: Array<IParamSignature>
@@ -174,13 +158,10 @@ export namespace Command {
 			this._token = Math.random().toString(35).substr(2, 7)
 
 			for (let element of paramsArray) {
-				if (element === undefined) {
-					continue
-				}
 				if (typeof element === 'string') {
 					element = element.toString().trim()
 					this._stringParamsArray = this._stringParamsArray.concat([...element.toString().split(/\s+/)]) // @todo: string delimiter pairing (,;) -> objectArray
-				} else if (typeof element === 'object') {
+				} else {
 					for (let prop in element) {
 						this._objectParams[prop] = element[prop]
 					}
@@ -221,7 +202,7 @@ export namespace Command {
 			validParams.forEach((param) => {
 				let payload: Payload = { key: '', value: {}, raw: null }
 				payload.key = param.key || ''
-				payload.value = param.payload !== undefined && param.payload !== null ? param.payload : {}
+				payload.value = param.payload !== null ? param.payload : {}
 				payload.raw = param.raw
 				this.payload[param.name] = payload
 			})
@@ -452,11 +433,7 @@ export namespace Command {
 			let result: Array<IParamSignature>
 			for (let rule of this.protocolLogic) {
 				result = rule.resolve(this.paramProtocol)
-				if (result !== null) {
-					this.paramProtocol = result
-				} else {
-					return false
-				}
+				this.paramProtocol = result
 			}
 			return true
 		}
@@ -467,10 +444,10 @@ export namespace Command {
 		protected validateChannel(): number {
 			let result: ParamData
 			let validator = new PositiveNumberValidatorBetween(1, 9999)
-			let param: Object | undefined
+			let param: number
 
 			if (this._objectParams.hasOwnProperty('channel')) {
-				param = this._objectParams['channel']
+				param = Number(this._objectParams['channel'])
 			} else {
 				param = NaN
 			}
@@ -489,12 +466,12 @@ export namespace Command {
 		protected validateLayer(fallback?: number): number {
 			let result: ParamData
 			let validator = new PositiveNumberValidatorBetween(0, 9999)
-			let param: Object | undefined
+			let param: number
 
 			if (this._objectParams.hasOwnProperty('layer')) {
-				param = this._objectParams['layer']
+				param = Number(this._objectParams['layer'])
 			} else {
-				param = fallback
+				param = fallback || NaN
 			}
 			result = validator.resolve(param)
 			if (result !== false) {
@@ -504,6 +481,19 @@ export namespace Command {
 			// @todo: dispatch error
 			return 0
 		}
+	}
+
+	/**
+	 *
+	 */
+	export function isIAMCPCommand(object: any): object is IAMCPCommand {
+		// @todo: better inheritance type checking
+		for (let prop in AbstractCommand.prototype) {
+			if (object[prop] === undefined) {
+				return false
+			}
+		}
+		return true
 	}
 
 	/**
