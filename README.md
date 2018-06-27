@@ -58,7 +58,7 @@ Installing from NPM adds the dev-dependencies needed to compile TypeScript and u
 * **`npm run build`** Runs a single build command without watching for changes.
 * **`npm run cleanBuild`**  Runs the clean command before a build command.
 * **`npm run lint`** Runs code linting. Pull Requests won't be accepted without lint compliance.
-* **`npm run test`** Runs code tests through Jasmine.
+* **`npm run test`** Runs code tests through Jest.
 
 ## Documentation
 Join the discussion in the [CasparCG Forum thread](http://casparcg.com/forum/viewtopic.php?f=3&t=4061).
