@@ -63,7 +63,7 @@
     "send-coverage": "jest && codecov",
     "docs": "yarn docs:html && opn docs/index.html",
     "docs:test": "yarn docs:html",
-    "docs:html": "typedoc src/index.ts --excludePrivate --mode file --theme minimal --out docs",
+    "docs:html": "typedoc src/index.ts --ignoreCompilerErrors --excludePrivate --mode file --theme minimal --out docs",
     "docs:json": "typedoc --mode file --json docs/typedoc.json src/index.ts",
     "docs:publish": "yarn docs:html && gh-pages -d docs",
     "changelog": "standard-version",
