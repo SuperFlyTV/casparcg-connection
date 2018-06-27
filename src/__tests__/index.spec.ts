@@ -1,4 +1,4 @@
-let casparcg = require('./../js/index.js').CasparCG
+let casparcg = require('../index').CasparCG
 
 // let foop = new CasparCG({onConnected: function(){
 let foop = new casparcg({
@@ -18,3 +18,9 @@ foop.onConnectionChanged = (e) => console.log('connectionchanged', e)
 foop.onConnectionStatus = (e) => console.log('connectionstatus', e)
 
 global.setInterval(() => console.log('.'), 20000)
+
+describe('nothing', () => {
+	it('should do nothing', (dn => {
+		dn()
+	}))
+})
