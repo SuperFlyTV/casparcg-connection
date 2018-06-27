@@ -622,16 +622,16 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		return this._queueMode
 	}
 
-  public set queueMode (mode: QueueMode) {
-    if (this._queueMode === QueueMode.SEQUENTIAL && mode === QueueMode.SALVO && Object.keys(this._sentCommands).length) {
-      this._log('Warning: setting queuemode to SALVO while there is a sequential command being sent will return undocumente behaviour!')
-      // @todo: await for current command to return, and then set queue mode.
-    }
-    this._queueMode = mode
-    if (this._socket) {
-      this._socket.queueMode = mode
-    }
-  }
+	public set queueMode (mode: QueueMode) {
+		if (this._queueMode === QueueMode.SEQUENTIAL && mode === QueueMode.SALVO && Object.keys(this._sentCommands).length) {
+			this._log('Warning: setting queuemode to SALVO while there is a sequential command being sent will return undocumente behaviour!')
+			// @todo: await for current command to return, and then set queue mode.
+		}
+		this._queueMode = mode
+		if (this._socket) {
+			this._socket.queueMode = mode
+		}
+	}
 
 	/**
 	 *
