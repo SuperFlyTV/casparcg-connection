@@ -169,7 +169,7 @@ var Command;
             }
             // data is valid
             var validData = {};
-            if (this.responseProtocol.validator) { // @todo: typechecking ("class that implements....")
+            if (this.responseProtocol.validator) {
                 var validator = Object.create(this.responseProtocol.validator['prototype']);
                 validData = validator.resolve(response);
                 if (validData === false) {
@@ -177,7 +177,7 @@ var Command;
                 }
             }
             // data gets parsed
-            if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
+            if (this.responseProtocol.parser && validData) {
                 var parser = Object.create(this.responseProtocol.parser['prototype']);
                 parser.context = this.context;
                 validData = parser.parse(validData);

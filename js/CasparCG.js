@@ -307,7 +307,9 @@ var CasparCG = /** @class */ (function (_super) {
                 // @todo: await for current command to return, and then set queue mode.
             }
             this._queueMode = mode;
-            this._socket.queueMode = mode;
+            if (this._socket) {
+                this._socket.queueMode = mode;
+            }
         },
         enumerable: true,
         configurable: true
@@ -1541,7 +1543,7 @@ var CasparCG = /** @class */ (function (_super) {
                         .then(function (info) {
                         var channelPromises = [];
                         var channelLength = info.response.data['length'];
-                        for (var i = 1; i <= channelLength; i++) { // 1-based index for channels
+                        for (var i = 1; i <= channelLength; i++) {
                             channelPromises.push(_this.doNow(new AMCP_1.AMCP.InfoCommand({ channel: i })));
                         }
                         var virgin = true;

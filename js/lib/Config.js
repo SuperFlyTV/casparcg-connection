@@ -1546,9 +1546,9 @@ var Config;
                         var _loop_6 = function (innerKey) {
                             var innerValue = outerValue[innerKey];
                             if (typeof innerValue === 'object') {
-                                if (Array.isArray(innerValue)) { // multiple innervalues
+                                if (Array.isArray(innerValue)) {
                                     innerValue.forEach(function (o) {
-                                        if (typeof o !== 'object') { // "" string values, i.e. empty screen consumers
+                                        if (typeof o !== 'object') {
                                             o = {};
                                         }
                                         if (!o['_type']) {
@@ -1557,7 +1557,7 @@ var Config;
                                         flatArray_1.push(o);
                                     });
                                 }
-                                else { // single inner object
+                                else {
                                     if (!innerValue['_type']) {
                                         innerValue['_type'] = innerKey;
                                     }

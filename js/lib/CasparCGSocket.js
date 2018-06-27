@@ -79,7 +79,7 @@ var CasparCGSocket = /** @class */ (function (_super) {
         // prevents manipulation of active socket
         if (!this.connected) {
             // throthling attempts
-            if (!this._lastConnectionAttempt || (Date.now() - this._lastConnectionAttempt) >= this._reconnectDelay) { // !_lastReconnectionAttempt means first attempt, OR > _reconnectionDelay since last attempt
+            if (!this._lastConnectionAttempt || (Date.now() - this._lastConnectionAttempt) >= this._reconnectDelay) {
                 // recereates client if new attempt
                 if (this._client && this._client.connecting) {
                     this._client.destroy();
@@ -211,8 +211,8 @@ var CasparCGSocket = /** @class */ (function (_super) {
      */
     CasparCGSocket.prototype._autoReconnectionAttempt = function () {
         if (this._autoReconnect) {
-            if (this._reconnectAttempts > 0) { // no reconnection if no valid reconnectionAttemps is set
-                if ((this._reconnectAttempt >= this._reconnectAttempts)) { // if current attempt is not less than max attempts
+            if (this._reconnectAttempts > 0) {
+                if ((this._reconnectAttempt >= this._reconnectAttempts)) {
                     // reset reconnection behaviour
                     this._clearConnectionAttemptTimer();
                     return;
