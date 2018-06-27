@@ -638,7 +638,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
       // @todo: await for current command to return, and then set queue mode.
     }
     this._queueMode = mode
-    this._socket.queueMode = mode
+    if (this._socket) {
+      this._socket.queueMode = mode
+    }
   }
 
 	/**
