@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/SuperFlyTV/casparcg-connection/compare/v4.1.1...v4.2.0) (2018-06-28)
+
+
+### Bug Fixes
+
+* refactor package.json, add circleCI badge and correct ssh fingerprint ([37c5377](https://github.com/SuperFlyTV/casparcg-connection/commit/37c5377))
+* ts lint errors ([84e830c](https://github.com/SuperFlyTV/casparcg-connection/commit/84e830c))
+* typescrit imrovements ([3b8634e](https://github.com/SuperFlyTV/casparcg-connection/commit/3b8634e))
+
+
+### Features
+
+* initial convert to circleci ([842de38](https://github.com/SuperFlyTV/casparcg-connection/commit/842de38))
+
+
+
 <a name="4.1.1"></a>
 ## [4.1.1](https://github.com/SuperFlyTV/casparcg-connection/compare/v4.1.0...v4.1.1) (2018-06-27)
 

@@ -1,6 +1,6 @@
 {
   "name": "casparcg-connection",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -17,7 +17,7 @@
     "name": "Jesper Stærkær",
     "email": "jesper@superfly.tv",
     "url": "http://superfly.tv"
-  },  
+  },
   "contributors": [
     {
       "name": "Johan Nyman",
@@ -117,9 +117,8 @@
     "tslint": "^5.9.1",
     "tslint-config-standard": "^6.0.1",
     "typedoc": "^0.7.2",
-	"typescript": "^2.7.2",
-	
-	"@types/jest": "^22.1.3",
+    "typescript": "^2.7.2",
+    "@types/jest": "^22.1.3",
     "cpx": "^1.5.0",
     "gh-pages": "^1.0.0",
     "jest": "^22.4.2",
