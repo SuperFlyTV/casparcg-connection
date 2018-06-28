@@ -70,8 +70,7 @@
     "release": "yarn reset && yarn test && yarn docs:publish && yarn changelog",
     "reset": "git clean -dfx && git reset --hard && yarn",
     "ci": "yarn test && yarn docs:test",
-    "validate:dependencies": "nsp check && yarn license-validate",
-    "license-validate": "node-license-validator -p -d --allow-licenses MIT BSD BSD-3-Clause ISC Apache"
+    "validate:dependencies": "nsp check"
   },
   "scripts-info": {
     "info": "Display information about the scripts",
