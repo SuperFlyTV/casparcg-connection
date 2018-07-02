@@ -68,6 +68,7 @@
     "docs:publish": "yarn docs:html && gh-pages -d docs",
     "changelog": "standard-version",
     "release": "yarn reset && yarn test && yarn docs:publish && yarn changelog",
+    "release:skiptest": "yarn reset && yarn docs:publish && yarn changelog",
     "reset": "git clean -dfx && git reset --hard && yarn",
     "ci": "yarn test && yarn docs:test",
     "validate:dependencies": "nsp check"
