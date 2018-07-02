@@ -1891,8 +1891,9 @@ export namespace AMCPUtil {
 		// errror: commandstatus -1 //invalid command
 
 		// @todo: error handling much?????? (callback??????)
-		let command: IAMCPCommand = Object.create((AMCP as any)[cmd._commandName]['prototype'])
-		command.constructor.call(command, cmd._objectParams)
+		// let command: IAMCPCommand = Object.create((AMCP as any)[cmd._commandName]['prototype'])
+		// command.constructor.call(command, cmd._objectParams)
+		let command: IAMCPCommand = new (AMCP as any)[cmd._commandName](cmd._objectParams)
 		command.populate(cmd, id)
 		return command
 	}

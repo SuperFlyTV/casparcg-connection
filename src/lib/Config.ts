@@ -1382,8 +1382,7 @@ export namespace Config {
 					}
 				}
 				if (namespace && namespace.hasOwnProperty(memberName)) {
-					let member: v2xx.Consumer = Object.create(namespace[memberName]['prototype'])
-					member.constructor.call(member)
+					let member: v2xx.Consumer = new namespace[memberName]()
 					this.importAllValues(root, member)
 				}
 			}
