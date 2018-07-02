@@ -4,6 +4,8 @@
 
 [![API Docs](https://img.shields.io/badge/Docs-Api-orange.svg?style=flat-square)](https://superflytv.github.io/casparcg-connection/) [![Guide](https://img.shields.io/badge/Docs-Getting%20started%20guide-orange.svg?style=flat-square)](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/)
 
+[![CircleCI](https://circleci.com/gh/SuperFlyTV/casparcg-connection.svg?style=svg)](https://circleci.com/gh/SuperFlyTV/casparcg-connection)
+
 ## Introduction
 
 CasparCG is an open source graphics- and video server for broadcast and streaming productions. This library lets you connect and interact with CasparCG servers from Node.js in Javascript.
@@ -56,7 +58,7 @@ Installing from NPM adds the dev-dependencies needed to compile TypeScript and u
 * **`npm run build`** Runs a single build command without watching for changes.
 * **`npm run cleanBuild`**  Runs the clean command before a build command.
 * **`npm run lint`** Runs code linting. Pull Requests won't be accepted without lint compliance.
-* **`npm run test`** Runs code tests through Jasmine.
+* **`npm run test`** Runs code tests through Jest.
 
 ## Documentation
 Join the discussion in the [CasparCG Forum thread](http://casparcg.com/forum/viewtopic.php?f=3&t=4061).

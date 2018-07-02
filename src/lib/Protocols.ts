@@ -2,10 +2,6 @@
 export namespace v2xx {
 	/***/
 	export namespace CasparCGProtocols {
-		/***/
-		export interface AMCP extends IVideo, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation {
-		}
-
 		/**
 		 * AMCP Media-commands
 		 */
@@ -53,6 +49,10 @@ export namespace v2xx {
 		 */
 		export interface IOperation {
 		}
+
+		/***/
+		export interface AMCP extends IVideo, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation {
+		}
 	}
 }
 
@@ -60,10 +60,6 @@ export namespace v2xx {
 export namespace v21x {
 	/***/
 	export namespace CasparCGProtocols {
-		/***/
-		export interface AMCP extends IVideo, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation {
-		}
-
 		/**
 		 * AMCP Media-commands
 		 */
@@ -110,6 +106,10 @@ export namespace v21x {
 		 * AMCP Operation-commands
 		 */
 		export interface IOperation extends v2xx.CasparCGProtocols.IOperation {
+		}
+
+		/***/
+		export interface AMCP extends IVideo, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation {
 		}
 	}
 }
