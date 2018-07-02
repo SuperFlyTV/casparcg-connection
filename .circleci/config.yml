@@ -122,14 +122,14 @@ workflows:
       #           - master
       - Git Release:
           requires:
-            - Send Coverage
+            # - Send Coverage
           filters:
             branches:
               only:
                 - master
       - Build:
           requires:
-            - Send Coverage
+            # - Send Coverage
             - Git Release
           filters:
             branches:
