@@ -694,10 +694,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				if (AMCP.hasOwnProperty(commandOrString)) {
 					// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
 					// @todo: typechecking with fallback
-					command = Object.create((AMCP as any)[commandOrString]['prototype'])
-					// @todo: typechecking with fallback
-					if (command) {
-						command.constructor.apply(command, params)
+					if ((AMCP as any)[commandOrString]) {
+						command = new (AMCP as any)(commandOrString)(params)
 					} else {
 						throw new Error('Invalid command constructor')
 					}

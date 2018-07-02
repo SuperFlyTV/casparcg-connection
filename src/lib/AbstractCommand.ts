@@ -233,7 +233,7 @@ export namespace Command {
 			// data is valid
 			let validData: Object = {}
 			if (this.responseProtocol.validator) { // @todo: typechecking ("class that implements....")
-				let validator: IResponseValidator = Object.create(this.responseProtocol.validator['prototype'])
+				const validator: IResponseValidator = new this.responseProtocol.validator()
 				validData = validator.resolve(response)
 				if (validData === false) {
 					return false
@@ -242,7 +242,7 @@ export namespace Command {
 
 			// data gets parsed
 			if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
-				let parser: IResponseParser = Object.create(this.responseProtocol.parser['prototype'])
+				const parser: IResponseParser = new this.responseProtocol.parser()
 				parser.context = this.context
 				validData = parser.parse(validData)
 				if (validData === false) {
