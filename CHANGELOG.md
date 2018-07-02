@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.2.2"></a>
+## [4.2.2](https://github.com/SuperFlyTV/casparcg-connection/compare/4.2.1...4.2.2) (2018-07-02)
+
+
+### Bug Fixes
+
+* use 'new' keyword instead of Object.create ([27c6055](https://github.com/SuperFlyTV/casparcg-connection/commit/27c6055))
+
+
+
 <a name="4.2.1"></a>
 ## [4.2.1](https://github.com/SuperFlyTV/casparcg-connection/compare/4.2.0...4.2.1) (2018-07-02)
 
