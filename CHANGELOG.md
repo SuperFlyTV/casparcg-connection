@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.3.0"></a>
+# [4.3.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.2.2...4.3.0) (2018-08-02)
+
+
+### Features
+
+* sting transition type ([538a4d0](https://github.com/SuperFlyTV/casparcg-connection/commit/538a4d0))
+
+
+
 <a name="4.2.2"></a>
 ## [4.2.2](https://github.com/SuperFlyTV/casparcg-connection/compare/4.2.1...4.2.2) (2018-07-02)
 
