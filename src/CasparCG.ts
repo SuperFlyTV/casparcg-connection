@@ -1927,8 +1927,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * Undocumented, but implemented by Julusian.
 	 */
-	public time(channel: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.TimeCommand({ channel }))
+	public time(channel: number, timecode?: string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.TimeCommand({ channel, timecode }))
 	}
 
 	/**
