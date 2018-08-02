@@ -1911,6 +1911,9 @@ export namespace AMCP {
 export namespace AMCP {
 	export class TimeCommand extends AbstractChannelCommand {
 		static readonly commandString = 'TIME'
+		paramProtocol = [
+			new ParamSignature(optional, 'timecode', null, new ParameterValidator.TimecodeValidator())
+		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.InfoParser)
 	}
 	export class ScheduleSetCommand extends AbstractCommand {
