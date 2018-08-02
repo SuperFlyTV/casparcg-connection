@@ -205,6 +205,7 @@ export namespace Enum {
 		static readonly PUSH = new Transition('PUSH')
 		static readonly WIPE = new Transition('WIPE')
 		static readonly SLIDE = new Transition('SLIDE')
+		static readonly STING = new Transition('STING')
 	}
 
 	/**
