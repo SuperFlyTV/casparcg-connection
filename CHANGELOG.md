@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.3.1"></a>
+## [4.3.1](https://github.com/SuperFlyTV/casparcg-connection/compare/4.3.0...4.3.1) (2018-08-02)
+
+
+### Bug Fixes
+
+* Time command takes timecode parameter ([858e2a4](https://github.com/SuperFlyTV/casparcg-connection/commit/858e2a4))
+
+
+
 <a name="4.3.0"></a>
 # [4.3.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.2.2...4.3.0) (2018-08-02)
 
