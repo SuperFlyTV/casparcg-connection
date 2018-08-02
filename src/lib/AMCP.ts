@@ -53,7 +53,10 @@ export namespace AMCP {
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
@@ -62,6 +65,9 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
@@ -77,7 +83,10 @@ export namespace AMCP {
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
@@ -86,6 +95,9 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
@@ -108,7 +120,13 @@ export namespace AMCP {
 			new Depends('transitionDirection', 'clip'),
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(optional, 'clip', null, new ParameterValidator.ClipNameValidator()),
@@ -117,6 +135,9 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
@@ -157,7 +178,10 @@ export namespace AMCP {
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
@@ -165,6 +189,9 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
@@ -181,7 +208,10 @@ export namespace AMCP {
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
@@ -189,6 +219,9 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
@@ -212,7 +245,13 @@ export namespace AMCP {
 			new Depends('transitionDirection', 'device'),
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
@@ -220,6 +259,9 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
@@ -235,7 +277,10 @@ export namespace AMCP {
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
@@ -243,6 +288,9 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
 		]
 	}
@@ -255,14 +303,20 @@ export namespace AMCP {
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction))
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator())
 		]
 	}
 
@@ -278,14 +332,20 @@ export namespace AMCP {
 			new Depends('transitionDirection', 'url'),
 			new Depends('transitionDuration', 'transition'),
 			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition')
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(optional, 'url', '[HTML]', new ParameterValidator.URLValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction))
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator())
 		]
 	}
 }
