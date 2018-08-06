@@ -262,12 +262,12 @@ export interface ICasparCGConnection {
 	createCommand(command: IAMCPCommand): IAMCPCommand | undefined
 	createCommand(commandString: string, ...params: (string | Param)[]): IAMCPCommand | undefined
 	queueCommand(command: IAMCPCommand, priority: Priority): Promise<IAMCPCommand>
-	do(command: IAMCPCommand): Promise<IAMCPCommand>
-	do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	doNow(command: IAMCPCommand): Promise<IAMCPCommand>
-	doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	doLater(command: IAMCPCommand): Promise<IAMCPCommand>
-	doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
+	do(command: IAMCPCommand): Promise<IAMCPCommand | void>
+	do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand | void>
+	doNow(command: IAMCPCommand): Promise<IAMCPCommand | void>
+	doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand | void>
+	doLater(command: IAMCPCommand): Promise<IAMCPCommand | void>
+	doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand | void>
 }
 
 /**
