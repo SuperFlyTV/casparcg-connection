@@ -262,12 +262,12 @@ export interface ICasparCGConnection {
 	createCommand(command: IAMCPCommand): IAMCPCommand | undefined
 	createCommand(commandString: string, ...params: (string | Param)[]): IAMCPCommand | undefined
 	queueCommand(command: IAMCPCommand, priority: Priority): Promise<IAMCPCommand>
-	do(command: IAMCPCommand): Promise<IAMCPCommand | void>
-	do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand | void>
-	doNow(command: IAMCPCommand): Promise<IAMCPCommand | void>
-	doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand | void>
-	doLater(command: IAMCPCommand): Promise<IAMCPCommand | void>
-	doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand | void>
+	do(command: IAMCPCommand): Promise<IAMCPCommand>
+	do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
+	doNow(command: IAMCPCommand): Promise<IAMCPCommand>
+	doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
+	doLater(command: IAMCPCommand): Promise<IAMCPCommand>
+	doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
 }
 
 /**
@@ -646,12 +646,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public do(command: IAMCPCommand): Promise<IAMCPCommand>
 	public do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public do(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand | void> {
+	public do(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command)
 		}
-		return Promise.resolve()
+		return Promise.reject()
 	}
 
 	/**
@@ -660,12 +660,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public doNow(command: IAMCPCommand): Promise<IAMCPCommand>
 	public doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public doNow(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand | void> {
+	public doNow(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command, Priority.HIGH)
 		}
-		return Promise.resolve()
+		return Promise.reject()
 	}
 
 	/**
@@ -674,12 +674,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public doLater(command: IAMCPCommand): Promise<IAMCPCommand>
 	public doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public doLater(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand | void> {
+	public doLater(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command, Priority.LOW)
 		}
-		return Promise.resolve()
+		return Promise.reject()
 	}
 
 	/**
