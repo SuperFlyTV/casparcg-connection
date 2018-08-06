@@ -646,12 +646,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public do(command: IAMCPCommand): Promise<IAMCPCommand>
 	public do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public do(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> | undefined {
+	public do(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand | void> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command)
 		}
-		return
+		return Promise.resolve()
 	}
 
 	/**
@@ -660,12 +660,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public doNow(command: IAMCPCommand): Promise<IAMCPCommand>
 	public doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public doNow(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> | undefined {
+	public doNow(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand | void> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command, Priority.HIGH)
 		}
-		return
+		return Promise.resolve()
 	}
 
 	/**
@@ -674,12 +674,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public doLater(command: IAMCPCommand): Promise<IAMCPCommand>
 	public doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public doLater(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> | undefined {
+	public doLater(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand | void> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command, Priority.LOW)
 		}
-		return
+		return Promise.resolve()
 	}
 
 	/**
