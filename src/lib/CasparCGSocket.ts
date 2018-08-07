@@ -194,7 +194,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	public executeCommand(command: IAMCPCommand): IAMCPCommand {
 		let commandString: string
-		if (this.queueMode === OptionsNS.QueueMode.SALVO) commandString = `REQ ${command.token} ` + (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
+		if (command.name === 'PingCommand') commandString = 'PING'
+		else if (this.queueMode === OptionsNS.QueueMode.SALVO) commandString = `REQ ${command.token} ` + (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
 		else commandString = (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
 
 		for (let i in command.payload) {
@@ -265,7 +266,10 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _parseResponseGroups(i: string): void {
 		global.clearTimeout(this._commandTimeoutTimer)
 		i = (i.length > 2 && i.slice(0, 2) === '\r\n') ? i.slice(2) : i
-		if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
+		if (i === 'PONG') {
+			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i)
+			this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(this._parsedResponse))
+		} else if (AMCPUtil.CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
 			this._parsedResponse = new AMCPUtil.CasparCGSocketResponse(i)
 			this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout)
 			return

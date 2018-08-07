@@ -1921,7 +1921,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * Undocumented, but implemented by Julusian.
 	 */
 	public ping(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.PingCommand())
+		return this.doNow(new AMCP.PingCommand())
 	}
 
 	/**
@@ -2236,6 +2236,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			}
 
 			let token = Object.keys(this._sentCommands)[0]
+			if (socketResponse.responseString === 'PONG' && this.queueMode === QueueMode.SALVO) {
+				token = Object.keys(this._sentCommands).filter(token => this._sentCommands[token].name === 'PingCommand')[0]
+			}
 			currentCommand = (this._sentCommands[token])
 			delete this._sentCommands[token]
 		}
@@ -2257,6 +2260,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				delete this._sentCommands[currentCommand.getParam('token') as string]
 			}
 
+			currentCommand.status = IAMCPStatus.Suceeded
+			currentCommand.resolve(currentCommand)
+		} else if (currentCommand.name === 'PingCommand' && currentCommand.response.raw === 'PONG') {
 			currentCommand.status = IAMCPStatus.Suceeded
 			currentCommand.resolve(currentCommand)
 		} else {
