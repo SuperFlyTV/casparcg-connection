@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.4.0"></a>
+# [4.4.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.3.1...4.4.0) (2018-08-07)
+
+
+### Bug Fixes
+
+* **Commands:** Rejects promise on invalid command ([8632c79](https://github.com/SuperFlyTV/casparcg-connection/commit/8632c79))
+
+
+### Features
+
+* **Commands:** Better promise handling with fallback to empty promises instead of mixing promise and null handling ([8400194](https://github.com/SuperFlyTV/casparcg-connection/commit/8400194))
+
+
+
 <a name="4.3.1"></a>
 ## [4.3.1](https://github.com/SuperFlyTV/casparcg-connection/compare/4.3.0...4.3.1) (2018-08-02)
 
