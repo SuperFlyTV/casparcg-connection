@@ -70,9 +70,9 @@ export namespace CasparCGProtocols {
 			loadDecklink(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
 			playDecklink(channel: number, layer?: number, device?: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
 			loadHtmlPageBg(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
-			loadHtmlPageBgAuto(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string,): Promise<IAMCPCommand>
-			loadHtmlPage(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string,): Promise<IAMCPCommand>
-			playHtmlPage(channel: number, layer?: number, url?: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string,): Promise<IAMCPCommand>
+			loadHtmlPageBgAuto(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
+			loadHtmlPage(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
+			playHtmlPage(channel: number, layer?: number, url?: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
 		}
 
 		/**
@@ -646,12 +646,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public do(command: IAMCPCommand): Promise<IAMCPCommand>
 	public do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public do(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> | undefined {
+	public do(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command)
 		}
-		return
+		return Promise.reject()
 	}
 
 	/**
@@ -660,12 +660,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public doNow(command: IAMCPCommand): Promise<IAMCPCommand>
 	public doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public doNow(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> | undefined {
+	public doNow(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command, Priority.HIGH)
 		}
-		return
+		return Promise.reject()
 	}
 
 	/**
@@ -674,12 +674,12 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public doLater(command: IAMCPCommand): Promise<IAMCPCommand>
 	public doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public doLater(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> | undefined {
+	public doLater(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> {
 		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
 		if (command) {
 			return this.queueCommand(command, Priority.LOW)
 		}
-		return
+		return Promise.reject()
 	}
 
 	/**
@@ -927,14 +927,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 *
 	 */
-	public loadHtmlPageBgAuto(channel: number, layer: number = NaN, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string,): Promise<IAMCPCommand> {
+	public loadHtmlPageBgAuto(channel: number, layer: number = NaN, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadHtmlPageBgCommand({ channel: channel, layer: layer, url: url, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), auto: true }))
 	}
 
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
 	 */
-	public loadHtmlPage(channel: number, layer: number = NaN, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string,): Promise<IAMCPCommand> {
+	public loadHtmlPage(channel: number, layer: number = NaN, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadHtmlPageCommand({ channel: channel, layer: layer, url: url, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay) }))
 	}
 
@@ -942,7 +942,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PLAY>
 	 */
 	public playHtmlPage(channel: number, layer?: number): Promise<IAMCPCommand>
-	public playHtmlPage(channel: number, layer: number = NaN, url?: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string,): Promise<IAMCPCommand> {
+	public playHtmlPage(channel: number, layer: number = NaN, url?: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.PlayHtmlPageCommand({ channel: channel, layer: layer, url: url, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay) }))
 	}
 
