@@ -536,6 +536,36 @@ export namespace Validation {
 	export class TimecodeValidator extends StringValidator {
 		// nothing
 	}
+	export class RouteValidator extends AbstractValidator {
+		regex = new RegExp(/(route:\/\/)\d+((-)\d+)?/g)
+		regex2 = new RegExp(/\d+((-)\d+)?/g)
+
+		resolve (data: any): ParamData {
+			if (typeof data === 'string') {
+				if (this.regex.test(data)) {
+					return { raw: data, payload: data }
+				} else if (this.regex2.test(data)) {
+					return { raw: data, payload: 'route://' + data }
+				} else {
+					return false
+				}
+			} else if (typeof data === 'object') { // data is an object
+				let routeStr = 'route://'
+				if (data.channel) {
+					routeStr += data.channel
+					if (data.layer) {
+						routeStr += '-' + data.layer
+					}
+					return { raw: data.toString(), payload: routeStr }
+				} else {
+					return false
+				}
+			} else {
+				return false
+			}
+		}
+	}
+	export class RouteModeValidator extends StringValidator {}
 	export class CommandValidator extends AbstractValidator {
 		resolve(command: any): ParamData {
 			if (CommandNS.isIAMCPCommand(command)) {

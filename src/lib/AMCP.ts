@@ -270,6 +270,102 @@ export namespace AMCP {
 	}
 
 	/**
+	 * 
+	 */
+	export class LoadRouteBgCommand extends AbstractLayerWithFallbackCommand {
+		static readonly commandString = 'LOADBG'
+		static readonly protocolLogic = [
+			new Depends('transitionDuration', 'transition'),
+			new Depends('transitionEasing', 'transition'),
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class LoadRouteCommand extends AbstractLayerWithFallbackCommand {
+		static readonly commandString = 'LOAD'
+		static readonly protocolLogic = [
+			new Depends('transitionDuration', 'transition'),
+			new Depends('transitionEasing', 'transition'),
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class PlayRouteCommand extends AbstractLayerWithFallbackCommand {
+		static readonly commandString = 'PLAY'
+		static readonly protocolLogic = [
+			new Depends('length', 'route'),
+			new Depends('filter', 'route'),
+			new Depends('format', 'route'),
+			new Depends('channelLayout', 'route'),
+			new Depends('transition', 'route'),
+			new Depends('transitionDuration', 'route'),
+			new Depends('transitionEasing', 'route'),
+			new Depends('transitionDirection', 'route'),
+			new Depends('transitionDuration', 'transition'),
+			new Depends('transitionEasing', 'transition'),
+			new Depends('transitionDirection', 'transition'),
+			new Depends('stingMaskFilename', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'clip').if('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
+		]
+	}
+
+	/**
 	 *
 	 */
 	export class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {

@@ -920,6 +920,34 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
 	 */
+	public loadRouteBg(channel: number, layer: number = NaN, route: string | { channel: number, layer?: number }, mode: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string, auto?: boolean | number | string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.LoadRouteBgCommand({ channel, layer, route, mode, transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), length: length, filter: filter, format: format, channelLayout: channelLayout, auto: auto }))
+	}
+
+	/**
+	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
+	 */
+	public loadRouteBgAuto(channel: number, layer: number = NaN, route: string | { channel: number, layer?: number }, mode: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.LoadRouteBgCommand({ channel, layer, route, mode, transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), length: length, filter: filter, format: format, channelLayout: channelLayout, auto: true }))
+	}
+
+	/**
+	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOAD>
+	 */
+	public loadRoute(channel: number, layer: number = NaN, route: string | { channel: number, layer?: number }, mode: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.LoadRouteCommand({ channel, layer, route, mode, transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), length: length, filter: filter, format: format, channelLayout: channelLayout }))
+	}
+
+	/**
+	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PLAY>
+	 */
+	public playRoute(channel: number, layer: number = NaN, route: string | { channel: number, layer?: number },  mode: string,transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.PlayRouteCommand({ channel, layer, route, mode, transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), length: length, filter: filter, format: format, channelLayout: channelLayout }))
+	}
+
+	/**
+	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#LOADBG>
+	 */
 	public loadHtmlPageBg(channel: number, layer: number = NaN, clip: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, auto?: boolean | number | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadHtmlPageBgCommand({ channel: channel, layer: layer, clip: clip, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), auto: auto }))
 	}
