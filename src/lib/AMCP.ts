@@ -1691,7 +1691,9 @@ export namespace AMCP {
 	 */
 	export class ThumbnailListCommand extends AbstractCommand {
 		static readonly commandString = 'THUMBNAIL LIST'
-		// responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser);
+		paramProtocol = [
+			new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+		]
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser)
 	}
 
