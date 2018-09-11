@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.5.1"></a>
+## [4.5.1](https://github.com/SuperFlyTV/casparcg-connection/compare/4.5.0...4.5.1) (2018-09-11)
+
+
+### Bug Fixes
+
+* validation of transition paramters ([d128f98](https://github.com/SuperFlyTV/casparcg-connection/commit/d128f98))
+
+
+
 <a name="4.5.0"></a>
 # [4.5.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.4.0...4.5.0) (2018-08-14)
 
