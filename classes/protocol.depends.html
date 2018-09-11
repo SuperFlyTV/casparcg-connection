@@ -930,6 +930,12 @@ img { max-width: 100%; }
 				<li class=" tsd-kind-method tsd-parent-kind-class">
 					<a href="protocol.depends.html#ifnot" class="tsd-kind-icon">if<wbr>Not</a>
 				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="protocol.depends.html#mustbe" class="tsd-kind-icon">must<wbr>Be</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class">
+					<a href="protocol.depends.html#mustnotbe" class="tsd-kind-icon">must<wbr>Not<wbr>Be</a>
+				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 					<a href="protocol.depends.html#resolve" class="tsd-kind-icon">resolve</a>
 				</li>
@@ -985,6 +991,8 @@ img { max-width: 100%; }
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="protocol.depends.html#if" class="tsd-kind-icon">if</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class"><a href="protocol.depends.html#ifnot" class="tsd-kind-icon">if<wbr>Not</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="protocol.depends.html#mustbe" class="tsd-kind-icon">must<wbr>Be</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class"><a href="protocol.depends.html#mustnotbe" class="tsd-kind-icon">must<wbr>Not<wbr>Be</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="protocol.depends.html#resolve" class="tsd-kind-icon">resolve</a></li>
 						</ul>
 					</section>
@@ -1005,7 +1013,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Overrides <a href="protocol.abstractprotocollogic.html">AbstractProtocolLogic</a>.<a href="protocol.abstractprotocollogic.html#constructor">constructor</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7f46c5b/src/lib/ProtocolLogic.ts#L41">lib/ProtocolLogic.ts:41</a></li>
+								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/c0d83c5/src/lib/ProtocolLogic.ts#L41">lib/ProtocolLogic.ts:41</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1023,7 +1031,7 @@ img { max-width: 100%; }
 						<aside class="tsd-sources">
 							<p>Overrides <a href="protocol.abstractprotocollogic.html">AbstractProtocolLogic</a>.<a href="protocol.abstractprotocollogic.html#constructor">constructor</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7f46c5b/src/lib/ProtocolLogic.ts#L45">lib/ProtocolLogic.ts:45</a></li>
+								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/c0d83c5/src/lib/ProtocolLogic.ts#L45">lib/ProtocolLogic.ts:45</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1046,7 +1054,7 @@ img { max-width: 100%; }
 				<aside class="tsd-sources">
 					<p>Inherited from <a href="protocol.abstractprotocollogic.html">AbstractProtocolLogic</a>.<a href="protocol.abstractprotocollogic.html#fields">fields</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7f46c5b/src/lib/ProtocolLogic.ts#L23">lib/ProtocolLogic.ts:23</a></li>
+						<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/c0d83c5/src/lib/ProtocolLogic.ts#L23">lib/ProtocolLogic.ts:23</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1063,9 +1071,14 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7f46c5b/src/lib/ProtocolLogic.ts#L54">lib/ProtocolLogic.ts:54</a></li>
+								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/c0d83c5/src/lib/ProtocolLogic.ts#L54">lib/ProtocolLogic.ts:54</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>This will apply the validation only when this condition is met</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -1089,9 +1102,76 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7f46c5b/src/lib/ProtocolLogic.ts#L71">lib/ProtocolLogic.ts:71</a></li>
+								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/c0d83c5/src/lib/ProtocolLogic.ts#L71">lib/ProtocolLogic.ts:71</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>This will apply the validation only when this condition is not met</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>target: <span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li>
+								<h5>cantBe: <a href="enum.abstractenum.html" class="tsd-signature-type">AbstractEnum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="../interfaces/protocol.iprotocollogic.html" class="tsd-signature-type">IProtocolLogic</a></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="mustbe" class="tsd-anchor"></a>
+				<h3>must<wbr>Be</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">must<wbr>Be<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, mustBe<span class="tsd-signature-symbol">: </span><a href="enum.abstractenum.html" class="tsd-signature-type">AbstractEnum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/protocol.iprotocollogic.html" class="tsd-signature-type">IProtocolLogic</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/c0d83c5/src/lib/ProtocolLogic.ts#L88">lib/ProtocolLogic.ts:88</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>This will only include the field when this condition is met</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>target: <span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li>
+								<h5>mustBe: <a href="enum.abstractenum.html" class="tsd-signature-type">AbstractEnum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="../interfaces/protocol.iprotocollogic.html" class="tsd-signature-type">IProtocolLogic</a></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+				<a name="mustnotbe" class="tsd-anchor"></a>
+				<h3>must<wbr>Not<wbr>Be</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+					<li class="tsd-signature tsd-kind-icon">must<wbr>Not<wbr>Be<span class="tsd-signature-symbol">(</span>target<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, cantBe<span class="tsd-signature-symbol">: </span><a href="enum.abstractenum.html" class="tsd-signature-type">AbstractEnum</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/protocol.iprotocollogic.html" class="tsd-signature-type">IProtocolLogic</a></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/c0d83c5/src/lib/ProtocolLogic.ts#L106">lib/ProtocolLogic.ts:106</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>This will only include the field when this condition is not met</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -1117,7 +1197,7 @@ img { max-width: 100%; }
 							<p>Implementation of <a href="../interfaces/protocol.iprotocollogic.html">IProtocolLogic</a>.<a href="../interfaces/protocol.iprotocollogic.html#resolve">resolve</a></p>
 							<p>Overrides <a href="protocol.abstractprotocollogic.html">AbstractProtocolLogic</a>.<a href="protocol.abstractprotocollogic.html#resolve">resolve</a></p>
 							<ul>
-								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/7f46c5b/src/lib/ProtocolLogic.ts#L88">lib/ProtocolLogic.ts:88</a></li>
+								<li>Defined in <a href="https://github.com/SuperFlyTV/casparcg-connection/blob/c0d83c5/src/lib/ProtocolLogic.ts#L123">lib/ProtocolLogic.ts:123</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
