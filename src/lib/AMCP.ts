@@ -51,12 +51,12 @@ export namespace AMCP {
 	export class LoadbgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
@@ -81,12 +81,12 @@ export namespace AMCP {
 	export class LoadCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
@@ -115,18 +115,12 @@ export namespace AMCP {
 			new Depends('length', 'clip'),
 			new Depends('filter', 'clip'),
 			new Depends('transition', 'clip'),
-			new Depends('transitionDuration', 'clip'),
-			new Depends('transitionEasing', 'clip'),
-			new Depends('transitionDirection', 'clip'),
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(optional, 'clip', null, new ParameterValidator.ClipNameValidator()),
@@ -176,12 +170,12 @@ export namespace AMCP {
 	export class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
@@ -206,12 +200,12 @@ export namespace AMCP {
 	export class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
@@ -240,18 +234,12 @@ export namespace AMCP {
 			new Depends('format', 'device'),
 			new Depends('channelLayout', 'device'),
 			new Depends('transition', 'device'),
-			new Depends('transitionDuration', 'device'),
-			new Depends('transitionEasing', 'device'),
-			new Depends('transitionDirection', 'device'),
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
@@ -275,12 +263,12 @@ export namespace AMCP {
 	export class LoadRouteBgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
@@ -304,12 +292,12 @@ export namespace AMCP {
 	export class LoadRouteCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
@@ -337,18 +325,12 @@ export namespace AMCP {
 			new Depends('format', 'route'),
 			new Depends('channelLayout', 'route'),
 			new Depends('transition', 'route'),
-			new Depends('transitionDuration', 'route'),
-			new Depends('transitionEasing', 'route'),
-			new Depends('transitionDirection', 'route'),
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'clip').if('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
@@ -371,12 +353,12 @@ export namespace AMCP {
 	export class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
@@ -397,12 +379,12 @@ export namespace AMCP {
 	export class LoadHtmlPageCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
@@ -423,15 +405,12 @@ export namespace AMCP {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
 			new Depends('transition', 'url'),
-			new Depends('transitionDuration', 'url'),
-			new Depends('transitionEasing', 'url'),
-			new Depends('transitionDirection', 'url'),
-			new Depends('transitionDuration', 'transition'),
-			new Depends('transitionEasing', 'transition'),
-			new Depends('transitionDirection', 'transition'),
-			new Depends('stingMaskFilename', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'transition').if('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'transition').if('transition', Enum.Transition.STING)
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
 			new ParamSignature(optional, 'url', '[HTML]', new ParameterValidator.URLValidator()),

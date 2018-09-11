@@ -49,7 +49,7 @@ export namespace Protocol {
 		}
 
 		/**
-		 *
+		 * This will apply the validation only when this condition is met
 		 */
 		public if(target: string, mustBe: AbstractEnum | string): IProtocolLogic {
 			let resolveRef = this.resolve
@@ -66,7 +66,7 @@ export namespace Protocol {
 		}
 
 		/**
-		 *
+		 * This will apply the validation only when this condition is not met
 		 */
 		public ifNot(target: string, cantBe: AbstractEnum | string): IProtocolLogic {
 			let resolveRef = this.resolve
@@ -83,6 +83,41 @@ export namespace Protocol {
 		}
 
 		/**
+		 * This will only include the field when this condition is met
+		 */
+		public mustBe(target: string, mustBe: AbstractEnum | string): IProtocolLogic {
+			let resolveRef = this.resolve
+			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
+				for (let param of protocol) {
+					if (param.name === target && param.payload === mustBe.toString()) {
+						return resolveRef.call(this, protocol)
+					}
+				}
+
+				return this.stripField(protocol)
+			}
+
+			return this
+		}
+
+		/**
+		 * This will only include the field when this condition is not met
+		 */
+		public mustNotBe(target: string, cantBe: AbstractEnum | string): IProtocolLogic {
+			let resolveRef = this.resolve
+			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
+				for (let param of protocol) {
+					if (param.name === target && (param.payload === cantBe.toString() || param.payload === null)) {
+						return this.stripField(protocol)
+					}
+				}
+				return resolveRef.call(this, protocol)
+			}
+
+			return this
+		}
+
+		/**
 		 *
 		 */
 		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
@@ -90,13 +125,17 @@ export namespace Protocol {
 			if (valids.length === 1) {
 				return protocol
 			} else {
-				return protocol.map((param) => {
-					if (param.name === this.fields[0]) {
-						param.payload = null
-					}
-					return param
-				})
+				return this.stripField(protocol)
 			}
+		}
+
+		private stripField(protocol: Array<IParamSignature>) {
+			return protocol.map((param) => {
+				if (param.name === this.fields[0]) {
+					param.payload = null
+				}
+				return param
+			})
 		}
 	}
 
