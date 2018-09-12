@@ -8,7 +8,7 @@
 
 ## Introduction
 
-CasparCG is an open source graphics- and video server for broadcast and streaming productions. This library lets you connect and interact with CasparCG servers from Node.js in Javascript.
+CasparCG is an open source graphics- and video server for broadcast and streaming productions. This library lets you connect and interact with CasparCG Servers from Node.js in Javascript.
 
 ### Features
 
