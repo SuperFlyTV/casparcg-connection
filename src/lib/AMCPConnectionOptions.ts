@@ -80,7 +80,8 @@ export class ConnectionOptions implements IConnectionOptions {
 	constructor(options?: IConnectionOptions);
 	constructor(hostOrOptions?: IConnectionOptions | string, port?: number) {
 		// if object
-		let hasSetHostOrPort: boolean = false
+		let hasSetHost: boolean = false
+		let hasSetPort: boolean = false
 		if (hostOrOptions && typeof hostOrOptions === 'object') {
 			if (hostOrOptions.hasOwnProperty('host') && hostOrOptions.host !== undefined) {
 				let host: string = hostOrOptions!.host!
@@ -89,13 +90,13 @@ export class ConnectionOptions implements IConnectionOptions {
 					// host
 					if (dnsValidation[1]) {
 						// port gets set directly, and we need to ignore it in the loop setting all other options
-						hasSetHostOrPort = true
+						hasSetHost = true
 						this.host = dnsValidation[1]
 					}
 					// port
 					if (dnsValidation[2]) {
 						// port gets set directly, and we need to ignore it in the loop setting all other options
-						hasSetHostOrPort = true
+						hasSetPort = true
 						this.port = parseInt(dnsValidation[2], 10)
 					}
 				}
@@ -104,7 +105,10 @@ export class ConnectionOptions implements IConnectionOptions {
 			// @todo: object assign
 			for (let key in hostOrOptions) {
 				// host or port has been set directly and should not be overridden again
-				if (hasSetHostOrPort && (key === 'host' || key === 'port')) {
+				if (hasSetHost && (key === 'host')) {
+					continue
+				}
+				if (hasSetPort && (key === 'port')) {
 					continue
 				}
 				if (!hostOrOptions.hasOwnProperty(key)) {
