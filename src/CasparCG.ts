@@ -1664,7 +1664,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#THUMBNAIL_LIST>
 	 */
-	public thumbnailList(subFolder: string): Promise<IAMCPCommand> {
+	public thumbnailList(subFolder?: string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.ThumbnailListCommand({ subFolder: subFolder}))
 	}
 
