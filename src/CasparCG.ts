@@ -191,7 +191,7 @@ export namespace CasparCGProtocols {
 		 * AMCP Thumbnail-commands
 		 */
 		export interface IThumbnail {
-			thumbnailList(): Promise<IAMCPCommand>
+			thumbnailList(subFolder?: string): Promise<IAMCPCommand>
 			thumbnailRetrieve(fileName: string): Promise<IAMCPCommand>
 			thumbnailGenerate(fileName: string): Promise<IAMCPCommand>
 			thumbnailGenerateAll(): Promise<IAMCPCommand>
@@ -1664,8 +1664,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#THUMBNAIL_LIST>
 	 */
-	public thumbnailList(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ThumbnailListCommand())
+	public thumbnailList(subFolder?: string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.ThumbnailListCommand({ subFolder: subFolder}))
 	}
 
 	/**
