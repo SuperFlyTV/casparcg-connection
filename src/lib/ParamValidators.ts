@@ -119,26 +119,47 @@ export namespace Validation {
 		resolve(data: any): ParamData {
 			let clipName: string = ''
 
-			function checkClipNameString(rawClipNameString: string | null): string {
-				if (rawClipNameString === null) {
-					return ''
-				}
-
-				// trim all non-textual content
-				rawClipNameString = rawClipNameString.trim()
-
-				// check length
-				if (rawClipNameString.length === 0) {
-					return ''
-				}
-				return rawClipNameString
+			if (typeof data === 'object' || typeof data === 'string') {
+				clipName = data !== null ? data.toString() : ''
 			}
+
+			if (!this.checkClipNameString(clipName)) {
+				return false
+			}
+
+			// add quotation
+			let quotedClipName: string = `"${clipName}"`
+			return { raw: clipName, payload: quotedClipName }
+		}
+
+		checkClipNameString(rawClipNameString: string | null): string {
+			if (rawClipNameString === null) {
+				return ''
+			}
+
+			// trim all non-textual content
+			rawClipNameString = rawClipNameString.trim()
+
+			// check length
+			if (rawClipNameString.length === 0) {
+				return ''
+			}
+			return rawClipNameString
+		}
+	}
+
+	/**
+	 *
+	 */
+	export class ClipNameEmptyStringValidator extends ClipNameValidator {
+		resolve(data: any): ParamData {
+			let clipName: string = ''
 
 			if (typeof data === 'object' || typeof data === 'string') {
 				clipName = data !== null ? data.toString() : ''
 			}
 
-			if (!checkClipNameString(clipName)) {
+			if (!this.checkClipNameString(clipName) && clipName !== '') {
 				return false
 			}
 
