@@ -67,7 +67,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
@@ -97,7 +97,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
@@ -131,7 +131,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
@@ -185,7 +185,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
@@ -215,7 +215,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
@@ -249,7 +249,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
@@ -258,7 +258,7 @@ export namespace AMCP {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	export class LoadRouteBgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
@@ -279,7 +279,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
@@ -308,7 +308,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
 		]
@@ -341,7 +341,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
 		]
@@ -368,7 +368,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
 		]
 	}
@@ -394,7 +394,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator())
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
 		]
 	}
 
@@ -420,7 +420,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameValidator())
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
 		]
 	}
 }
