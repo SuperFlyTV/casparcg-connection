@@ -71,7 +71,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
+			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
 	}
 
@@ -100,7 +101,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
 	}
 
@@ -134,7 +136,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
 	}
 
@@ -282,7 +285,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
+			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
 	}
 
@@ -310,7 +314,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
 	}
 
@@ -343,7 +348,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator())
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
 	}
 
