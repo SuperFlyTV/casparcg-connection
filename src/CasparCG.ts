@@ -862,6 +862,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOADBG>
 	 */
+	public loadbg(channel: number, layer: number, clip: string): Promise<IAMCPCommand>
+	public loadbg(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
+	public loadbg(channel: number, layer: number, clip: string, loop?: boolean, transition?: string, transitionMaskFile?: string, transitionStingDuration?: number, transitionOverlay?: string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
 	public loadbg(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadbgCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), seek: seek, length: length, filter: filter, auto: auto }))
 	}
@@ -869,6 +872,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOADBG>
 	 */
+	public loadbgAuto(channel: number, layer: number, clip: string): Promise<IAMCPCommand>
+	public loadbgAuto(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
+	public loadbgAuto(channel: number, layer: number, clip: string, loop?: boolean, transition?: string, transitionMaskFile?: string, transitionStingDuration?: number, transitionOverlay?: string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
 	public loadbgAuto(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadbgCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), seek: seek, length: length, filter: filter, auto: true }))
 	}
@@ -876,6 +882,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOAD>
 	 */
+	public load(channel: number, layer: number, clip: string): Promise<IAMCPCommand>
+	public load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
+	public load(channel: number, layer: number, clip: string, loop?: boolean, transition?: string, transitionMaskFile?: string, transitionStingDuration?: number, transitionOverlay?: string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
 	public load(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), seek: seek, length: length, filter: filter }))
 	}
@@ -884,6 +893,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#PLAY>
 	 */
 	public play(channel: number, layer?: number): Promise<IAMCPCommand>
+	public play(channel: number, layer: number, clip: string): Promise<IAMCPCommand>
+	public play(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>
+	public play(channel: number, layer: number, clip: string, loop?: boolean, transition?: string, transitionMaskFile?: string, transitionStingDuration?: number, transitionOverlay?: string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>
 	public play(channel: number, layer: number = NaN, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.PlayCommand({ channel, layer, clip, loop, transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), seek, length, filter }))
 	}
@@ -913,6 +925,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#PLAY>
 	 */
 	public playDecklink(channel: number, layer?: number): Promise<IAMCPCommand>
+	public playDecklink(channel: number, layer: number, device?: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
+	public playDecklink(channel: number, layer: number, device?: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
 	public playDecklink(channel: number, layer: number = NaN, device?: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.PlayDecklinkCommand({ channel: channel, layer: layer, device: device, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), length: length, filter: filter, format: format, channelLayout: channelLayout }))
 	}
@@ -970,6 +984,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#PLAY>
 	 */
 	public playHtmlPage(channel: number, layer?: number): Promise<IAMCPCommand>
+	public playHtmlPage(channel: number, layer: number, url?: string, transition?: Enum.Transition | string, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string): Promise<IAMCPCommand>
+	public playHtmlPage(channel: number, layer: number, url?: string, transition?: Enum.Transition | string, transitionMaskFile?: string, transitionStingDuration?: number, transitionOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
 	public playHtmlPage(channel: number, layer: number = NaN, url?: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.PlayHtmlPageCommand({ channel: channel, layer: layer, url: url, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay) }))
 	}
