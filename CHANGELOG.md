@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.6.0"></a>
+# [4.6.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.5.3...4.6.0) (2018-12-12)
+
+
+### Bug Fixes
+
+* add back overloads for play methods ([40b12b4](https://github.com/SuperFlyTV/casparcg-connection/commit/40b12b4))
+
+
+### Features
+
+* channel_layout property ([c66fcfb](https://github.com/SuperFlyTV/casparcg-connection/commit/c66fcfb))
+
+
+
 <a name="4.5.3"></a>
 ## [4.5.3](https://github.com/SuperFlyTV/casparcg-connection/compare/4.5.2...4.5.3) (2018-10-03)
 
