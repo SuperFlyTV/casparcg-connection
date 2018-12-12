@@ -651,7 +651,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (command) {
 			return this.queueCommand(command)
 		}
-		return Promise.reject()
+		return Promise.reject('Could not create command instance')
 	}
 
 	/**
@@ -665,7 +665,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (command) {
 			return this.queueCommand(command, Priority.HIGH)
 		}
-		return Promise.reject()
+		return Promise.reject('Could not create command instance')
 	}
 
 	/**
@@ -679,7 +679,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		if (command) {
 			return this.queueCommand(command, Priority.LOW)
 		}
-		return Promise.reject()
+		return Promise.reject('Could not create command instance')
 	}
 
 	/**
@@ -941,7 +941,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol#PLAY>
 	 */
-	public playRoute(channel: number, layer: number = NaN, route: string | { channel: number, layer?: number },  mode: string,transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
+	public playRoute(channel: number, layer: number = NaN, route: string | { channel: number, layer?: number }, mode: string,transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.PlayRouteCommand({ channel, layer, route, mode, transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), length: length, filter: filter, format: format, channelLayout: channelLayout }))
 	}
 
@@ -1995,7 +1995,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			return {
 				stingMaskFilename: transitionDurationOrMaskFile,
 				stingDelay: transitionEasingOrStingDuration,
-				stingOverlayFilename: transitionDirectionOrOverlay
+				stingOverlayFilename: transitionDirectionOrOverlay || ''
 			}
 		} else {
 			return {
