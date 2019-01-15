@@ -1732,6 +1732,9 @@ export namespace AMCP {
 	 */
 	export class ClsCommand extends AbstractCommand {
 		static readonly commandString = 'CLS'
+		paramProtocol = [
+			new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+		]
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser)
 	}
 
@@ -1748,6 +1751,9 @@ export namespace AMCP {
 	 */
 	export class TlsCommand extends AbstractCommand {
 		static readonly commandString = 'TLS'
+		paramProtocol = [
+			new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+		]
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser)
 	}
 
