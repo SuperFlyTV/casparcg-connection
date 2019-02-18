@@ -45,9 +45,6 @@ export namespace AMCP {
  * IVideo
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
 	export class LoadbgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
@@ -76,9 +73,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
@@ -106,9 +100,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PlayCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
@@ -141,23 +132,14 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PauseCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'PAUSE'
 	}
 
-	/**
-	 *
-	 */
 	export class ResumeCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'RESUME'
 	}
 
-	/**
-	 *
-	 */
 	export class StopCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'STOP'
 	}
@@ -167,9 +149,6 @@ export namespace AMCP {
  * IInputOutput
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
 	export class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
@@ -197,9 +176,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
@@ -226,9 +202,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
@@ -260,9 +233,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadRouteBgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
@@ -290,9 +260,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadRouteCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
@@ -319,9 +286,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PlayRouteCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
@@ -353,9 +317,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
@@ -379,9 +340,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadHtmlPageCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
@@ -404,9 +362,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PlayHtmlPageCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
@@ -435,9 +390,6 @@ export namespace AMCP {
  * ICG
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
 	export class CGAddCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
@@ -448,9 +400,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class CGPlayCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
@@ -458,9 +407,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class CGStopCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
@@ -468,9 +414,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class CGNextCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
@@ -478,9 +421,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class CGRemoveCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
@@ -488,9 +428,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class CGClearCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 
@@ -498,18 +435,12 @@ export namespace AMCP {
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLEAR'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CLEAR'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class CGUpdateCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
@@ -536,9 +467,6 @@ export namespace AMCP {
  * @todo: switch 201/202 based on mode
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
 	export class MixerKeyerCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -550,18 +478,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'KEYER'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusKeyerCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -570,9 +492,6 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusKeyerParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'KEYER'
@@ -603,9 +522,6 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CHROMA'
@@ -620,18 +536,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusChromaParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CHROMA'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerBlendCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -643,18 +553,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'BLEND'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusBlendCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -663,18 +567,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.MixerStatusBlendParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'BLEND'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerOpacityCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -690,18 +588,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'OPACITY'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusOpacityCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -710,18 +602,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusOpacityParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'OPACITY'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerBrightnessCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -737,18 +623,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'BRIGHTNESS'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusBrightnessCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -757,18 +637,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusBrightnessParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'BRIGHTNESS'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerSaturationCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -784,18 +658,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'SATURATION'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusSaturationCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -804,18 +672,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusSaturationParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'SATURATION'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerContrastCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -831,18 +693,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CONTRAST'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusContrastCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -851,9 +707,6 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusContrastParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CONTRAST'
@@ -883,18 +736,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'LEVELS'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusLevelsCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -903,18 +750,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusLevelsParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'LEVELS'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerFillCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -934,18 +775,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'FILL'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusFillCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -954,18 +789,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusFillParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'FILL'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerClipCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -985,18 +814,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CLIP'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusClipCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1005,18 +828,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusClipParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CLIP'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -1034,18 +851,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'ANCHOR'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusAnchorCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1054,18 +865,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusAnchorParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'ANCHOR'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerCropCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -1085,18 +890,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CROP'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusCropCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1105,18 +904,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusCropParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CROP'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerRotationCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -1132,18 +925,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'ROTATION'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusRotationCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1152,18 +939,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusRotationParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'ROTATION'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerPerspectiveCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -1187,18 +968,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'PERSPECTIVE'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusPerspectiveCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1207,18 +982,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusPerspectiveParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'PERSPECTIVE'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerMipmapCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -1230,18 +999,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'MIPMAP'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusMipmapCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1250,18 +1013,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMipmapParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'MIPMAP'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerVolumeCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -1277,18 +1034,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'VOLUME'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusVolumeCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1297,18 +1048,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusVolumeParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'VOLUME'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerMastervolumeCommand extends AbstractChannelCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -1322,18 +1067,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'MASTERVOLUME'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusMastervolumeCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1342,18 +1081,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMastervolumeParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'MASTERVOLUME'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStraightAlphaOutputCommand extends AbstractChannelCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
@@ -1365,18 +1098,12 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'STRAIGHT_ALPHA_OUTPUT'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusStraightAlphaOutputCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
@@ -1385,18 +1112,12 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusStraightAlphaOutputParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'STRAIGHT_ALPHA_OUTPUT'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerGridCommand extends AbstractChannelCommand {
 		static readonly commandString = 'MIXER'
 		paramProtocol = [
@@ -1407,45 +1128,30 @@ export namespace AMCP {
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'GRID'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerCommitCommand extends AbstractChannelCommand {
 		static readonly commandString = 'MIXER'
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('COMMIT'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'COMMIT'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerClearCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'MIXER'
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLEAR'))
 		]
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['keyword'] = 'CLEAR'
@@ -1457,29 +1163,17 @@ export namespace AMCP {
  * IChannel
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
 	export class ClearCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'CLEAR'
 	}
 
-	/**
-	 *
-	 */
 	export class CallCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'CALL'
 	}
 
-	/**
-	 *
-	 */
 	export class SwapCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'SWAP'
 
-		/**
-		 *
-		 */
 		constructor() {
 			super('1-1') // @todo: foo
 			// @todo: custom parameters dual layerOrchannel with 1 optional param
@@ -1488,16 +1182,10 @@ export namespace AMCP {
 
 	}
 
-	/**
-	 *
-	 */
 	export class AddCommand extends AbstractChannelCommand {
 		static readonly commandString = 'ADD'
 	}
 
-	/**
-	 *
-	 */
 	export class AddDecklinkCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'ADD'
 		paramProtocol = [
@@ -1505,9 +1193,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class AddImageCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'ADD'
 		paramProtocol = [
@@ -1515,9 +1200,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class AddFileCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'ADD'
 		paramProtocol = [
@@ -1525,9 +1207,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class AddStreamCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'ADD'
 		paramProtocol = [
@@ -1536,9 +1215,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class RemoveCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'REMOVE'
 	}
@@ -1549,9 +1225,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class RemoveImageCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'REMOVE'
 		paramProtocol = [
@@ -1559,9 +1232,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class RemoveFileCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'REMOVE'
 		paramProtocol = [
@@ -1569,9 +1239,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class RemoveStreamCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'REMOVE'
 		paramProtocol = [
@@ -1579,23 +1246,14 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PrintCommand extends AbstractChannelCommand {
 		static readonly commandString = 'PRINT'
 	}
 
-	/**
-	 *
-	 */
 	export class SetCommand extends AbstractChannelCommand {
 		static readonly commandString = 'SET'
 	}
 
-	/**
-	 *
-	 */
 	export class LockCommand extends AbstractChannelCommand {
 		static readonly commandString = 'LOCK'
 		static readonly protocolLogic = [
@@ -1607,16 +1265,10 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class ChannelGridCommand extends AbstractCommand {
 		static readonly commandString = 'CHANNEL_GRID'
 	}
 
-	/**
-	 *
-	 */
 	export class GlGCCommand extends AbstractCommand {
 		static readonly commandString = 'GL GC'
 	}
@@ -1626,9 +1278,6 @@ export namespace AMCP {
  * IData
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
 	export class DataStoreCommand extends AbstractCommand {
 		static readonly commandString = 'DATA STORE'
 		paramProtocol = [
@@ -1637,9 +1286,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class DataRetrieveCommand extends AbstractCommand {
 		static readonly commandString = 'DATA RETRIEVE'
 		paramProtocol = [
@@ -1648,17 +1294,11 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(201, ResponseValidator.DataValidator, ResponseParser.DataParser)
 	}
 
-	/**
-	 *
-	 */
 	export class DataListCommand extends AbstractCommand {
 		static readonly commandString = 'DATA LIST'
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.DataListParser)
 	}
 
-	/**
-	 *
-	 */
 	export class DataRemoveCommand extends AbstractCommand {
 		static readonly commandString = 'DATA REMOVE'
 		paramProtocol = [
@@ -1671,9 +1311,6 @@ export namespace AMCP {
  * IThumbnail
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
 	export class ThumbnailListCommand extends AbstractCommand {
 		static readonly commandString = 'THUMBNAIL LIST'
 		paramProtocol = [
@@ -1683,9 +1320,6 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser)
 	}
 
-	/**
-	 *
-	 */
 	export class ThumbnailRetrieveCommand extends AbstractCommand {
 		static readonly commandString = 'THUMBNAIL RETRIEVE'
 		paramProtocol = [
@@ -1694,9 +1328,6 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(201, ResponseValidator.Base64Validator, ResponseParser.ThumbnailParser)
 	}
 
-	/**
-	 *
-	 */
 	export class ThumbnailGenerateCommand extends AbstractCommand {
 		static readonly commandString = 'THUMBNAIL GENERATE'
 		paramProtocol = [
@@ -1704,9 +1335,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class ThumbnailGenerateAllCommand extends AbstractCommand {
 		static readonly commandString = 'THUMBNAIL GENERATE_ALL'
 	}
@@ -1716,9 +1344,6 @@ export namespace AMCP {
  * IInfo
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
 	export class CinfCommand extends AbstractCommand {
 		static readonly commandString = 'CINF'
 		paramProtocol = [
@@ -1727,9 +1352,6 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.CinfParser)
 	}
 
-	/**
-	 *
-	 */
 	export class ClsCommand extends AbstractCommand {
 		static readonly commandString = 'CLS'
 		paramProtocol = [
@@ -1738,17 +1360,11 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser)
 	}
 
-	/**
-	 *
-	 */
 	export class FlsCommand extends AbstractCommand {
 		static readonly commandString = 'FLS'
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser)
 	}
 
-	/**
-	 *
-	 */
 	export class TlsCommand extends AbstractCommand {
 		static readonly commandString = 'TLS'
 		paramProtocol = [
@@ -1757,9 +1373,6 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser)
 	}
 
-	/**
-	 *
-	 */
 	export class VersionCommand extends AbstractCommand {
 		static readonly commandString = 'VERSION'
 		paramProtocol = [
@@ -1768,16 +1381,10 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.VersionParser)
 	}
 
-	/**
-	 *
-	 */
 	export class InfoCommand extends AbstractOrChannelOrLayerCommand {
 		static readonly commandString = 'INFO'
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ChannelParser)
 
-		/**
-		 *
-		 */
 		constructor(params?: (string | Param | (string | Param)[])) {
 			super(params)
 			if (this.channel && this.channel > -1) {
@@ -1786,9 +1393,6 @@ export namespace AMCP {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoTemplateCommand extends AbstractCommand {
 		static readonly commandString = 'INFO TEMPLATE'
 		paramProtocol = [
@@ -1797,64 +1401,40 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoTemplateParser)
 	}
 
-	/**
-	 *
-	 */
 	export class InfoConfigCommand extends AbstractCommand {
 		static readonly commandString = 'INFO CONFIG'
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.ConfigParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[]), context?: Object) {
 			super(params, context)
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoPathsCommand extends AbstractCommand {
 		static readonly commandString = 'INFO PATHS'
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoPathsParser)
 	}
 
-	/**
-	 *
-	 */
 	export class InfoSystemCommand extends AbstractCommand {
 		static readonly commandString = 'INFO SYSTEM'
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoSystemParser)
 	}
 
-	/**
-	 *
-	 */
 	export class InfoServerCommand extends AbstractCommand {
 		static readonly commandString = 'INFO SERVER'
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoServerParser)
 	}
 
-	/**
-	 *
-	 */
 	export class InfoQueuesCommand extends AbstractCommand {
 		static readonly commandString = 'INFO QUEUES'
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoQueuesParser)
 	}
 
-	/**
-	 *
-	 */
 	export class InfoThreadsCommand extends AbstractCommand {
 		static readonly commandString = 'INFO THREADS'
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.InfoThreadsParser)
 	}
 
-	/**
-	 *
-	 */
 	export class InfoDelayCommand extends AbstractChannelOrLayerCommand {
 		static readonly commandString = 'INFO'
 		paramProtocol = [
@@ -1862,9 +1442,6 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoDelayParser)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['delay'] = 'DELAY'
@@ -1883,26 +1460,17 @@ export namespace AMCP {
 		]
 		responseProtocol = new ResponseSignature(201)
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[])) {
 			super(params)
 			this._objectParams['info'] = 'INFO'
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class GlInfoCommand extends AbstractCommand {
 		static readonly commandString = 'GL INFO'
 		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.GLParser)
 	}
 
-	/**
-	 *
-	 */
 	export class LogLevelCommand extends AbstractCommand {
 		static readonly commandString = 'LOG LEVEL'
 		paramProtocol = [
@@ -1924,9 +1492,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class DiagCommand extends AbstractCommand {
 		static readonly commandString = 'DIAG'
 	}
@@ -1943,9 +1508,6 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser)
 	}
 
-	/**
-	 *
-	 */
 	export class HelpProducerCommand extends AbstractCommand {
 		static readonly commandString = 'HELP PRODUCER'
 		paramProtocol = [
@@ -1954,9 +1516,6 @@ export namespace AMCP {
 		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser)
 	}
 
-	/**
-	 *
-	 */
 	export class HelpConsumerCommand extends AbstractCommand {
 		static readonly commandString = 'HELP CONSUMER'
 		paramProtocol = [
@@ -2036,9 +1595,6 @@ export namespace AMCP {
  */
 export namespace AMCPUtil {
 
-	/**
-	 *
-	 */
 	export function deSerialize(cmd: IAMCPCommandVO, id: string): IAMCPCommand {
 
 		// errror: commandstatus -1 //invalid command
@@ -2051,27 +1607,18 @@ export namespace AMCPUtil {
 		return command
 	}
 
-	/**
-	 *
-	 */
 	export class CasparCGSocketResponse {
 		public statusCode: number
 		public token: string | undefined
 		public responseString: string
 		public items: Array<string> = []
 
-		/**
-		 *
-		 */
 		constructor(responseString: string) {
 			this.token = CasparCGSocketResponse.parseToken(responseString)
 			this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString)
 			this.responseString = responseString
 		}
 
-		/**
-		 *
-		 */
 		static evaluateStatusCode(responseString: string): number {
 			let token = CasparCGSocketResponse.parseToken(responseString)
 			let index: number
@@ -2080,9 +1627,6 @@ export namespace AMCPUtil {
 			return parseInt(responseString.substr(index, 3), 10)
 		}
 
-		/**
-		 *
-		 */
 		static parseToken(responseString: string): string | undefined {
 			if (responseString.substr(0, 3) === 'RES') {
 				return responseString.substr(4).split(' ')[0] // RES [token] RESPONSE

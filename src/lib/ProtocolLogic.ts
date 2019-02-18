@@ -5,43 +5,22 @@ import AbstractEnum = EnumNS.AbstractEnum
 import { Param as ParamNS } from './ParamSignature'
 import IParamSignature = ParamNS.IParamSignature
 
-/**
- *
- */
 export namespace Protocol {
-	/**
-	 *
-	 */
 	export interface IProtocolLogic {
 		resolve(protocol: Array<IParamSignature>): Array<IParamSignature>
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractProtocolLogic implements IProtocolLogic {
 		protected fields: Array<string | AbstractEnum>
 
-		/**
-		 *
-		 */
 		constructor(...fields: Array<string | AbstractEnum>) {
 			this.fields = fields
 		}
 
-		/**
-		 *
-		 */
 		abstract resolve(protocol: Array<IParamSignature>): Array<IParamSignature>
 	}
 
-	/**
-	 *
-	 */
 	export class Depends extends AbstractProtocolLogic {
-		/**
-		 *
-		 */
 		constructor(dependant: string | AbstractEnum, dependee: string | AbstractEnum);
 		constructor(...fields: Array<string | AbstractEnum>);
 		constructor(...fields: Array<string | AbstractEnum>) {
@@ -117,9 +96,6 @@ export namespace Protocol {
 			return this
 		}
 
-		/**
-		 *
-		 */
 		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
 			let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && param.name === this.fields[1])
 			if (valids.length === 1) {
@@ -139,23 +115,14 @@ export namespace Protocol {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class OneOf extends AbstractProtocolLogic {
 
-		/**
-		 *
-		 */
 		constructor(either: string | AbstractEnum, or: string | AbstractEnum);
 		constructor(...fields: Array<string | AbstractEnum>);
 		constructor(...fields: Array<string | AbstractEnum>) {
 			super(...fields)
 		}
 
-		/**
-		 *
-		 */
 		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
 			let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && this.fields.indexOf(param.name) > -1)
 			if (valids.length === 1) {
@@ -165,23 +132,14 @@ export namespace Protocol {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class Coupled extends AbstractProtocolLogic {
 
-		/**
-		 *
-		 */
 		constructor(partnerA: string | AbstractEnum, partnerB: string | AbstractEnum);
 		constructor(...fields: Array<string | AbstractEnum>);
 		constructor(...fields: Array<string | AbstractEnum>) {
 			super(...fields)
 		}
 
-		/**
-		 *
-		 */
 		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
 
 			let valids: Array<IParamSignature> = protocol.filter((param) => this.fields.indexOf(param.name) > -1 && param.resolved === true)

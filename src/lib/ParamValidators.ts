@@ -6,17 +6,11 @@ import AbstractEnum = Enum.AbstractEnum
 import { Command as CommandNS } from './AbstractCommand'
 
 export namespace Validation {
-	/**
-	 *
-	 */
 	export interface IValidator {
 		resolved: boolean
 		resolve(data: Object | CommandNS.IAMCPCommand, key?: string): ParamData
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractValidator implements IValidator {
 
 		public resolved = false
@@ -24,21 +18,12 @@ export namespace Validation {
 		abstract resolve(value: number, key?: string): ParamData
 	}
 
-	/**
-	 *
-	 */
 	export class StringValidator extends AbstractValidator {
 
-		/**
-		 *
-		 */
 		constructor(private lazy: Boolean = true) {
 			super()
 		}
 
-		/**
-		 *
-		 */
 		resolve(data: Object | string | undefined): ParamData {
 			let textstring: string = ''
 
@@ -88,10 +73,8 @@ export namespace Validation {
 		}
 	}
 
-	/***/
 	export class FilterValidator extends StringValidator { }
 
-	/***/
 	export class URLValidator extends StringValidator {
 
 		resolve(data: Object): ParamData {
@@ -103,19 +86,12 @@ export namespace Validation {
 		}
 	}
 
-	/***/
 	export class ChannelLayoutValidator extends StringValidator {
 		// @todo: a combination of string and enum!
 	}
 
-	/**
-	 *
-	 */
 	export class ClipNameValidator extends AbstractValidator {
 
-		/**
-		 *
-		 */
 		resolve(data: any): ParamData {
 			let clipName: string = ''
 
@@ -148,9 +124,6 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class ClipNameEmptyStringValidator extends ClipNameValidator {
 		resolve(data: any): ParamData {
 			let clipName: string = ''
@@ -169,33 +142,18 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class TemplateNameValidator extends ClipNameValidator {
 	}
 
-	/**
-	 *
-	 */
 	export class DataNameValidator extends ClipNameValidator {
 	}
 
-	/**
-	 *
-	 */
 	export class EnumValidator extends AbstractValidator {
 
-		/**
-		 *
-		 */
 		constructor(private _enumClass: typeof AbstractEnum) {
 			super()
 		}
 
-		/**
-		 *
-		 */
 		resolve(data: any): ParamData {
 			if (data instanceof this._enumClass) {
 				return data.value
@@ -213,21 +171,12 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class ChannelFormatValidator extends AbstractValidator {
 
-		/**
-		 *
-		 */
 		constructor() {
 			super()
 		}
 
-		/**
-		 *
-		 */
 		resolve(data: any): ParamData {
 			if (data instanceof Enum.ChannelFormat) {
 				return data.value
@@ -250,25 +199,16 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class KeywordValidator extends AbstractValidator {
 		private _keyword: string
 		private _caseSensitive: boolean
 
-		/**
-		 *
-		 */
 		constructor(keyword: string, caseSensitive: boolean = false) {
 			super()
 			this._keyword = keyword
 			this._caseSensitive = caseSensitive
 		}
 
-		/**
-		 *
-		 */
 		resolve(data: Array<any> | Object | string | null): ParamData {
 			let keywordCopy: string = this._keyword
 			if (!this._caseSensitive) {
@@ -306,23 +246,14 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class FrameValidator extends AbstractValidator {
 		private _keyword: string
 
-		/**
-		 *
-		 */
 		constructor(keyword: string) {
 			super()
 			this._keyword = keyword
 		}
 
-		/**
-		 *
-		 */
 		resolve(data: any): ParamData {
 			if (Array.isArray(data)) {
 				data = data.map(element => String(element).toLowerCase())
@@ -350,21 +281,12 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class PositiveNumberValidatorBetween extends AbstractValidator {
 
-		/**
-		 *
-		 */
 		constructor(private _min: number = Number.NEGATIVE_INFINITY, private _max: number = Number.POSITIVE_INFINITY) {
 			super()
 		}
 
-		/**
-		 *
-		 */
 		resolve(data: number | null): ParamData {
 			if (typeof data === 'number') {
 				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min)
@@ -377,47 +299,26 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class PositiveNumberValidator extends PositiveNumberValidatorBetween {
 
-		/**
-		 *
-		 */
 		constructor() {
 			super()
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class PositiveNumberRoundValidatorBetween extends PositiveNumberValidatorBetween {
 
-		/**
-		 *
-		 */
 		resolve(data: number): ParamData {
 			return Number(super.resolve(data)).toFixed()
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class NumberValidatorBetween extends AbstractValidator {
 
-		/**
-		 *
-		 */
 		constructor(private _min: number = Number.NEGATIVE_INFINITY, private _max: number = Number.POSITIVE_INFINITY) {
 			super()
 		}
 
-		/**
-		 *
-		 */
 		resolve(data: number | null): ParamData {
 			if (typeof data === 'number') {
 				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min)
@@ -428,37 +329,21 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class NumberValidator extends NumberValidatorBetween {
 
-		/**
-		 *
-		 */
 		constructor() {
 			super()
 		}
 	}
 
-	/***/
 	export class DecklinkDeviceValidator extends PositiveNumberValidator { }
 
-	/**
-	 *
-	 */
 	export class BooleanValidatorWithDefaults extends AbstractValidator {
 
-		/**
-		 *
-		 */
 		constructor(private _valueOnSuccess?: (string | number | boolean), private _valueOnFail?: (string | number | boolean)) {
 			super()
 		}
 
-		/**
-		 *
-		 */
 		resolve(data: any, key: string): ParamData {
 			if (Array.isArray(data)) {
 				data = data.map(element => String(element).toLowerCase())
@@ -496,27 +381,15 @@ export namespace Validation {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class BooleanValidator extends BooleanValidatorWithDefaults {
 
-		/**
-		 *
-		 */
 		constructor() {
 			super()
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class TemplateDataValidator extends AbstractValidator {
 
-		/**
-		 *
-		 */
 		resolve(data: Object | string): ParamData {
 			let stringCast = data.toString()
 

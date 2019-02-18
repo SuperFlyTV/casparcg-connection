@@ -25,14 +25,8 @@ import IProtocolLogic = ProtocolNS.IProtocolLogic
 import { Callback as CallbackNS } from './global/Callback'
 import ICommandStatusCallback = CallbackNS.ICommandStatusCallback
 
-/**
- *
- */
 export namespace Command {
 
-	/**
-	 *
-	 */
 	export interface IAMCPResponse {
 		code: number
 		raw: string
@@ -40,9 +34,6 @@ export namespace Command {
 		toString(): string
 	}
 
-	/**
-	 *
-	 */
 	export class AMCPResponse implements IAMCPResponse {
 		public code: number
 		public raw: string
@@ -53,9 +44,6 @@ export namespace Command {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export enum IAMCPStatus {
 		Invalid = -1,
 		New = 0,
@@ -67,9 +55,6 @@ export namespace Command {
 		Timeout = 6
 	}
 
-	/**
-	 *
-	 */
 	export interface IAMCPCommandData {
 		address: string
 		channel: number
@@ -81,18 +66,12 @@ export namespace Command {
 		readonly name: string
 	}
 
-	/**
-	 *
-	 */
 	export interface IAMCPCommandVO extends IAMCPCommandData {
 		_commandName: string
 		_objectParams: Param
 		_stringParamsArray: Array<string>
 	}
 
-	/**
-	 *
-	 */
 	export interface IAMCPCommand extends IAMCPCommandData {
 		paramProtocol: Array<IParamSignature>
 		protocolLogic: Array<IProtocolLogic>
@@ -108,9 +87,6 @@ export namespace Command {
 		populate(cmdVO: IAMCPCommandVO, id: string): void
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractCommand implements IAMCPCommand {
 		response: IAMCPResponse = new AMCPResponse()
 		paramProtocol: Array<IParamSignature>
@@ -140,9 +116,6 @@ export namespace Command {
 		// param list (dynamic)
 		// media info/template file-type to generate param data for fields
 
-		/**
-		 *
-		 */
 		constructor(params?: string | Param | (string | Param)[], public context?: Object) {
 			// parse params to objects
 			let paramsArray: Array<string | Param> = []
@@ -169,9 +142,6 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		public validateParams(): boolean {
 			let required: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === true) : []
 			let optional: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === false) : []
@@ -217,9 +187,6 @@ export namespace Command {
 			return undefined
 		}
 
-		/**
-		 *
-		 */
 		public validateResponse(response: CasparCGSocketResponse): boolean {
 			// assign raw response
 			this.response.raw = response.responseString
@@ -254,52 +221,31 @@ export namespace Command {
 			return true
 		}
 
-		/**
-		 *
-		 */
 		get payload(): PayloadVO {
 			return this._payload
 		}
 
-		/**
-		 *
-		 */
 		get id(): string {
 			return this._id || (new Date().getTime() + Math.random() * 100).toString()
 		}
 
-		/**
-		 *
-		 */
 		get name(): string {
 			return this.constructor.name
 		}
 
-		/**
-		 *
-		 */
 		get protocolLogic(): Array<IProtocolLogic> {
 			// TODO: I suspect an error here;
 			return (this.constructor as any).protocolLogic || []
 		}
 
-		/**
-		 *
-		 */
 		get channel(): number {
 			return -1
 		}
 
-		/**
-		 *
-		 */
 		get layer(): number {
 			return -1
 		}
 
-		/**
-		 *
-		 */
 		get address(): string {
 			return ''
 		}
@@ -308,16 +254,10 @@ export namespace Command {
 			return this._token
 		}
 
-		/**
-		 *
-		 */
 		get status(): IAMCPStatus {
 			return this._status
 		}
 
-		/**
-		 *
-		 */
 		set status(code: IAMCPStatus) {
 			if (code !== this._status) {
 				this._status = code
@@ -327,9 +267,6 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		public serialize(): IAMCPCommandVO {
 			return {
 				channel: this.channel,
@@ -343,9 +280,6 @@ export namespace Command {
 			} as IAMCPCommandVO
 		}
 
-		/**
-		 *
-		 */
 		populate(cmdVO: IAMCPCommandVO, id: string): void {
 			this._stringParamsArray = cmdVO._stringParamsArray
 			this._objectParams = cmdVO._objectParams
@@ -353,9 +287,6 @@ export namespace Command {
 			this._id = id
 		}
 
-		/**
-		 *
-		 */
 		public toString(): string {
 			let message: string = ''
 
@@ -383,9 +314,6 @@ export namespace Command {
 			return message
 		}
 
-		/**
-		 *
-		 */
 		protected validateParam(signature: IParamSignature): boolean {
 			let result: ParamData
 			let param: Object | undefined
@@ -421,9 +349,6 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		protected validateProtocolLogic(): boolean {
 
 			if (!this.protocolLogic) {
@@ -438,9 +363,6 @@ export namespace Command {
 			return true
 		}
 
-		/**
-		 *
-		 */
 		protected validateChannel(): number {
 			let result: ParamData
 			let validator = new PositiveNumberValidatorBetween(1, 9999)
@@ -460,9 +382,6 @@ export namespace Command {
 			return NaN
 		}
 
-		/**
-		 *
-		 */
 		protected validateLayer(fallback?: number): number {
 			let result: ParamData
 			let validator = new PositiveNumberValidatorBetween(0, 9999)
@@ -483,9 +402,6 @@ export namespace Command {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export function isIAMCPCommand(object: any): object is IAMCPCommand {
 		// @todo: better inheritance type checking
 		for (let prop in AbstractCommand.prototype) {
@@ -496,14 +412,8 @@ export namespace Command {
 		return true
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractOrChannelOrLayerCommand extends AbstractCommand {
 
-		/**
-		 *
-		 */
 		constructor(params?: (string | Param | (string | Param)[]), context?: Object) {
 			super(params, context)
 			let channel: number = this.validateChannel()
@@ -516,23 +426,14 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		get channel(): number {
 			return this._channel || -1
 		}
 
-		/**
-		 *
-		 */
 		get layer(): number {
 			return this._layer || -1
 		}
 
-		/**
-		 *
-		 */
 		get address(): string {
 			let address: string = ''
 
@@ -549,13 +450,7 @@ export namespace Command {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractChannelCommand extends AbstractCommand {
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[]), context?: Object) {
 			super(params, context)
 			let channel: number = this.validateChannel()
@@ -567,23 +462,14 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		get channel(): number {
 			return this._channel || -1
 		}
 
-		/**
-		 *
-		 */
 		get layer(): number {
 			return -1
 		}
 
-		/**
-		 *
-		 */
 		get address(): string {
 			if (this.channel) {
 				return this.channel.toString()
@@ -594,14 +480,8 @@ export namespace Command {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractLayerCommand extends AbstractCommand {
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[]), context?: Object) {
 			super(params, context)
 			let channel: number = this.validateChannel()
@@ -614,23 +494,14 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		get channel(): number {
 			return this._channel || -1
 		}
 
-		/**
-		 *
-		 */
 		get layer(): number {
 			return this._layer || -1
 		}
 
-		/**
-		 *
-		 */
 		get address(): string {
 			let address: string
 			if (this.channel && (this.channel > -1)) {
@@ -650,14 +521,8 @@ export namespace Command {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[]), context?: Object) {
 			super(params, context)
 			let channel: number = this.validateChannel()
@@ -674,23 +539,14 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		get channel(): number {
 			return this._channel || -1
 		}
 
-		/**
-		 *
-		 */
 		get layer(): number {
 			return this._layer || -1
 		}
 
-		/**
-		 *
-		 */
 		get address(): string {
 			let address: string
 			if (this.channel) {
@@ -707,14 +563,8 @@ export namespace Command {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractLayerWithFallbackCommand extends AbstractCommand {
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[]), context?: Object) {
 			super(params, context)
 			let channel: number = this.validateChannel()
@@ -727,23 +577,14 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		get channel(): number {
 			return this._channel || -1
 		}
 
-		/**
-		 *
-		 */
 		get layer(): number {
 			return this._layer || -1
 		}
 
-		/**
-		 *
-		 */
 		get address(): string {
 			let address: string
 			if (this.channel) {
@@ -760,14 +601,8 @@ export namespace Command {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand {
 
-		/**
-		 *
-		 */
 		constructor(params: (string | Param | (string | Param)[]), context?: Object) {
 			super(params, context)
 			let channel: number = this.validateChannel()
@@ -780,23 +615,14 @@ export namespace Command {
 			}
 		}
 
-		/**
-		 *
-		 */
 		get channel(): number {
 			return this._channel || -1
 		}
 
-		/**
-		 *
-		 */
 		get layer(): number {
 			return this._layer || -1
 		}
 
-		/**
-		 *
-		 */
 		get address(): string {
 			let address: string
 			if (this.channel) {

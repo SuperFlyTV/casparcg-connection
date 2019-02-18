@@ -4,49 +4,24 @@ import { AMCPUtil as AMCPUtilNS } from './AMCP'
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse
 
 export namespace Response {
-
-	/**
-	 *
-	 */
 	export interface IResponseValidator {
 		resolve(response: CasparCGSocketResponse): Object
 	}
 
-	/**
-	 *
-	 */
 	export class StatusValidator implements IResponseValidator {
-
-		/**
-		 *
-		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			return response.statusCode < 400
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class StringValidator implements IResponseValidator {
-
-		/**
-		 *
-		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			let result: String = response.items[0].toString()
 			return result.length > 0 ? result : false
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class XMLValidator implements IResponseValidator {
-
-		/**
-		 *
-		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			let parseNumbers = function (str: any) {
 				if (!isNaN(str)) {
@@ -81,14 +56,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class ListValidator implements IResponseValidator {
-
-		/**
-		 *
-		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			// filters on stringitems in items-list and validates if any items present
 			let stringItems = response.items
@@ -96,41 +64,20 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class DataValidator implements IResponseValidator {	// @todo
-
-		/**
-		 *
-		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			let result: String = response.items[0].toString()
 			return result.length > 0 ? result : false
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class Base64Validator implements IResponseValidator {
-
-		/**
-		 *
-		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			return response.items[0]
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusValidator implements IResponseValidator {
-
-		/**
-		 *
-		 */
 		public resolve(response: CasparCGSocketResponse): Object {
 			let result: Array<number> = response.items[0].split(' ').map(value => Number.parseFloat(value))
 			return result.length > 0 && result.every(value => !isNaN(value)) ? result : false

@@ -5,23 +5,14 @@ import IErrorCallback = CallbackNS.IErrorCallback
 import IStringCallback = CallbackNS.IStringCallback
 import ISocketStatusCallback = CallbackNS.ISocketStatusCallback
 
-/**
- *
- */
 export namespace Options {
 
-	/**
-	 *
-	 */
 	export enum QueueMode {
 		SALVO = 1,
 		SEQUENTIAL = 2
 		// SMART 		= 3
 	}
 
-	/**
-	 *
-	 */
 	export enum CasparCGVersion {
 		V2xx = 2000,
 		V207 = 2007,
@@ -30,9 +21,6 @@ export namespace Options {
 	}
 }
 
-/**
- *
- */
 export interface IConnectionOptions {
 	host?: string
 	port?: number
@@ -52,9 +40,6 @@ export interface IConnectionOptions {
 	onError?: IErrorCallback
 }
 
-/**
- *
- */
 export class ConnectionOptions implements IConnectionOptions {
 	public host: string | undefined = 'localhost'
 	public port: number | undefined = 5250
@@ -73,11 +58,6 @@ export class ConnectionOptions implements IConnectionOptions {
 	public onDisconnected: IBooleanCallback | undefined = undefined
 	public onError: IErrorCallback | undefined = undefined
 
-	/**
-	 *
-	 */
-	constructor(host?: string, port?: number);
-	constructor(options?: IConnectionOptions);
 	constructor(hostOrOptions?: IConnectionOptions | string, port?: number) {
 		// if object
 		let hasSetHost: boolean = false

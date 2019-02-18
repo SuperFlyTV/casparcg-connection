@@ -1,33 +1,18 @@
-/**
- *
- */
 export namespace Enum {
 
-	/**
-	 *
-	 */
 	export abstract class AbstractEnum {
 
 		public value: string
 
-		/**
-		 *
-		 */
 		constructor(value: string) {
 			this.value = value
 		}
 
-		/**
-		 *
-		 */
 		toString(): string {
 			return this.value
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class Command extends AbstractEnum {
 		static readonly LOADBG = new Command('LOADBG')
 		static readonly LOAD = new Command('LOAD')
@@ -109,9 +94,6 @@ export namespace Enum {
 		static readonly HELP_CONSUMER = new Command('HELP CONSUMER')
 	}
 
-	/**
-	 *
-	 */
 	export class Producer extends AbstractEnum {
 		static readonly FFMPEG = new Producer('FFmpeg Producer')
 		static readonly DECKLINK = new Producer('Decklink Producer')
@@ -128,9 +110,6 @@ export namespace Enum {
 		static readonly COLOR = new Producer('Color Producer')
 	}
 
-	/**
-	 *
-	 */
 	export class Consumer extends AbstractEnum {
 		static readonly FFMPEG = new Consumer('FFMpeg Consumer')
 		static readonly STREAMING = new Consumer('Streaming Consumer')
@@ -142,10 +121,6 @@ export namespace Enum {
 		static readonly IMAGE = new Consumer('Image Consumer')
 	}
 
-	/**
-	 *
-	 *
-	 */
 	export class Version extends AbstractEnum {
 		static readonly SERVER = new Version('SERVER')
 		static readonly FLASH = new Version('FLASH')
@@ -153,39 +128,23 @@ export namespace Enum {
 		static readonly CEF = new Version('CEF')
 	}
 
-	/**
-	 *
-	 *
-	 */
 	export class Lock extends AbstractEnum {
 		static readonly ACQUIRE = new Lock('ACQUIRE')
 		static readonly RELEASE = new Lock('RELEASE')
 		static readonly CLEAR = new Lock('CLEAR')
 	}
 
-	/**
-	 *
-	 *
-	 */
 	export class LogCategory extends AbstractEnum {
 		static readonly CALLTRACE = new LogCategory('CALLTRACE')
 		static readonly COMMUNICATION = new LogCategory('COMMUNICATION')
 	}
 
-	/**
-	 *
-	 *
-	 */
 	export class Chroma extends AbstractEnum {
 		static readonly NONE = new Chroma('NONE')
 		static readonly GREEN = new Chroma('GREEN')
 		static readonly BLUE = new Chroma('BLUE')
 	}
 
-	/**
-	 *
-	 *
-	 */
 	export class LogLevel extends AbstractEnum {
 		static readonly TRACE = new LogLevel('TRACE')
 		static readonly DEBUG = new LogLevel('DEBUG')
@@ -195,10 +154,6 @@ export namespace Enum {
 		static readonly FATAL = new LogLevel('FATAL')	// @todo: 2.1?????
 	}
 
-	/**
-	 *
-	 *
-	 */
 	export class Transition extends AbstractEnum {
 		static readonly CUT = new Transition('CUT')
 		static readonly MIX = new Transition('MIX')
@@ -208,18 +163,11 @@ export namespace Enum {
 		static readonly STING = new Transition('STING')
 	}
 
-	/**
-	 *
-	 *
-	 */
 	export class Direction extends AbstractEnum {
 		static readonly LEFT = new Direction('LEFT')
 		static readonly RIGHT = new Direction('RIGHT')
 	}
 
-	/**
-	 *
-	 */
 	export class BlendMode extends AbstractEnum {
 		static readonly NORMAL = new BlendMode('NORMAL')
 		static readonly LIGHTEN = new BlendMode('LIGHTEN')
@@ -252,9 +200,6 @@ export namespace Enum {
 		static readonly LUMINOSITY = new BlendMode('LUMINOSITY')
 	}
 
-	/**
-	 *
-	 */
 	export class Ease extends AbstractEnum {
 		static readonly LINEAR = new Ease('LINEAR')
 		static readonly EASELINEAR = Ease.LINEAR
@@ -342,9 +287,6 @@ export namespace Enum {
 		static readonly EASEOUTINBOUNCE = Ease.OUT_IN_BOUNCE
 	}
 
-	/**
-	 *
-	 */
 	export class ChannelFormat extends AbstractEnum {
 		static readonly INVALID = new ChannelFormat('invalid')
 		static readonly PAL = new ChannelFormat('PAL')
@@ -388,9 +330,6 @@ export namespace Enum {
 		static readonly DCI_2160P2500 = new ChannelFormat('dci2160p2500')
 	}
 
-	/**
-	 *
-	 */
 	export class ChannelLayout extends AbstractEnum {
 
 	}

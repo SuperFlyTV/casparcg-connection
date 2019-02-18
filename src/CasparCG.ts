@@ -231,17 +231,11 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		}
 	}
 
-	/**
-	 *
-	 */
 	public reconnect(): void {
 		this._createNewSocket(undefined, true)
 		this.connect()
 	}
 
-	/**
-	 *
-	 */
 	public get host(): string {
 		return this._host
 	}
@@ -262,9 +256,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		}
 	}
 
-	/**
-	 *
-	 */
 	public get port(): number {
 		return this._port
 	}
@@ -292,9 +283,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return this._autoReconnect
 	}
 
-	/**
-	 *
-	 */
 	public set autoReconnect(autoReconnect: boolean) {
 		this._autoReconnect = autoReconnect
 		if (this._socket) {
@@ -309,9 +297,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return this._autoReconnectInterval
 	}
 
-	/**
-	 *
-	 */
 	public set autoReconnectInterval(autoReconnectInterval: number) {
 		this._autoReconnectInterval = autoReconnectInterval
 		if (this._socket) {
@@ -325,9 +310,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return this._autoReconnectAttempts
 	}
 
-	/**
-	 *
-	 */
 	public set autoReconnectAttempts(autoReconnectAttempts: number) {
 		this._autoReconnectAttempts = autoReconnectAttempts
 		if (this._socket) {
@@ -335,9 +317,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		}
 	}
 
-	/**
-	 *
-	 */
 	public get connectionOptions(): ConnectionOptions {
 		let options: ConnectionOptions = new ConnectionOptions({})
 
@@ -350,32 +329,20 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return options
 	}
 
-	/**
-	 *
-	 */
 	public get connected(): boolean {
 		return this._connected || false
 	}
 
-	/**
-	 *
-	 */
 	public get connectionStatus(): SocketStatusOptions {
 		return this._socket.socketStatus
 	}
 
-	/**
-	 *
-	 */
 	public set serverVersion(version: CasparCGVersion | undefined) {
 		if (version) {
 			this._userConfigServerVersion = version
 		}
 	}
 
-	/**
-	 *
-	 */
 	public get serverVersion(): CasparCGVersion | undefined {
 		if (this._userConfigServerVersion) {
 			return this._userConfigServerVersion
@@ -399,9 +366,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		}
 	}
 
-	/**
-	 *
-	 */
 	public get commandQueueLength(): number {
 		return this._queuedCommands.length + this._queuedCommandsLowPriority.length + this._queuedCommandsHighPriority.length
 	}
@@ -442,9 +406,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return Promise.reject('Could not create command instance')
 	}
 
-	/**
-	 *
-	 */
 	public createCommand(commandOrString: IAMCPCommand | string, ...params: (string | Param)[]): IAMCPCommand | undefined {
 		let command: IAMCPCommand | undefined
 		try {
@@ -474,9 +435,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return undefined
 	}
 
-	/**
-	 *
-	 */
 	public queueCommand(command: IAMCPCommand, priority: Priority = Priority.NORMAL): Promise<IAMCPCommand> {
 		let commandPromise: Promise<IAMCPCommand[]>
 		let commandPromiseArray: Array<Promise<IAMCPCommand>> = [new Promise<IAMCPCommand>((resolve, reject) => {
@@ -562,7 +520,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return Array.isArray(removed) && removed.length > 0
 	}
 
-	/***/
 	public getCasparCGConfig(refresh: boolean = false): Promise<CasparCGConfig> {
 		if (!this._configPromise || refresh) {
 			this._configPromise = new Promise<CasparCGConfig>((resolve, reject) => {
@@ -574,7 +531,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return this._configPromise
 	}
 
-	/***/
 	public getCasparCGPaths(refresh: boolean = false): Promise<CasparCGPaths> {
 		if (!this._pathsPromise || refresh) {
 			this._pathsPromise = new Promise<CasparCGPaths>((resolve, reject) => {
@@ -586,7 +542,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return this._pathsPromise
 	}
 
-	/***/
 	public getCasparCGVersion(refresh: boolean = false): Promise<CasparCGVersion> {
 		if (!this._versionPromise || refresh) {
 			// use configed version
@@ -710,9 +665,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return this.do(new AMCP.LoadHtmlPageBgCommand({ channel: channel, layer: layer, clip: clip, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), auto: auto }))
 	}
 
-	/**
-	 *
-	 */
 	public loadHtmlPageBgAuto(channel: number, layer: number = NaN, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.LoadHtmlPageBgCommand({ channel: channel, layer: layer, url: url, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), auto: true }))
 	}
@@ -1723,9 +1675,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		}
 	}
 
-	/**
-	 *
-	 */
 	private _createNewSocket(options?: IConnectionOptions, enforceRecreation: boolean = false): void {
 		let hasNewOptions = false
 		if (options) {
@@ -1770,9 +1719,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		this._socket.log = (args) => this._log(args)
 	}
 
-	/**
-	 *
-	 */
 	private _fetchNextCommand(): { cmd: IAMCPCommand, priority: Priority } | null {
 		let VO: { cmd: IAMCPCommand, priority: Priority } | null = null
 		if (this._queuedCommandsHighPriority.length > 0) {
@@ -1785,9 +1731,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return VO
 	}
 
-	/**
-	 *
-	 */
 	private get _nextCommand(): { cmd: IAMCPCommand, priority: Priority } | null {
 		let VO: { cmd: IAMCPCommand, priority: Priority } | null = null
 		if (this._queuedCommandsHighPriority.length > 0) {
@@ -1800,16 +1743,10 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		return VO
 	}
 
-	/**
-	 *
-	 */
 	private _onSocketError(error: Error): void {
 		this._log(error) // gets emited through the log function
 	}
 
-	/**
-	 *
-	 */
 	private _log(args: any): void {
 		if (args instanceof Error) {
 			if (this.listenerCount('error') > 0) {
@@ -1829,9 +1766,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		}
 	}
 
-	/**
-	 *
-	 */
 	private _onSocketStatusChange(socketStatus: CasparCGSocketStatusEvent): void {
 		let connected = socketStatus.valueOf().connected === true
 
@@ -1909,9 +1843,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		}
 	}
 
-	/**
-	 *
-	 */
 	private _onSocketStatusTimeout(): void {
 		if (Object.keys(this._sentCommands).length > 0) {
 			this._log(`Command timed out. Starting flush procedure, with ${Object.keys(this._sentCommands).length} command(s) in sentCommands.`)
@@ -1933,9 +1864,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		// reconncet
 	}
 
-	/**
-	 *
-	 */
 	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
 		/*
 
@@ -2013,17 +1941,11 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		this._executeNextCommand()
 	}
 
-	/**
-	 *
-	 */
 	private _handleInvalidSocketResponse(): void {
 		// @todo: in the future, perhaps we could better predict that the connection is in a restart-state, and act accordingly, to
 		// gracefully keep/fall back data and/or speed up reconnection??
 	}
 
-	/**
-	 *
-	 */
 	private _flushSentCommands(): void {
 		for (let token in this._sentCommands) {
 			let i = this._sentCommands[token]
@@ -2034,9 +1956,6 @@ export class CasparCG extends EventEmitter implements CasparCGConnection, Connec
 		}
 	}
 
-	/**
-	 *
-	 */
 	private _executeNextCommand(): void {
 		if (this.connected) {
 			if (this._queueMode === QueueMode.SALVO) {

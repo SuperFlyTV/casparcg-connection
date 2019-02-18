@@ -6,8 +6,6 @@ import CasparCGVersion = OptionsNS.CasparCGVersion
 import { Config as ConfigNS } from './Config'
 import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig
 export namespace Response {
-
-	/***/
 	export class CasparCGPaths {
 		media: string
 		data: string
@@ -17,52 +15,42 @@ export namespace Response {
 		font?: string | undefined
 		root: string
 
-		/***/
 		static ensureTrailingSlash(path: string): string {
 			return ((path.slice(-1) === '/' || path.slice(-1) === '\\') ? path : path + '/')
 		}
 
-		/***/
 		get thumbnails(): string {
 			return this.thumbnail
 		}
 
-		/***/
 		get absoluteMedia(): string {
 			return this.absolutePath(this.media)
 		}
 
-		/***/
 		get absoluteData(): string {
 			return this.absolutePath(this.data)
 		}
 
-		/***/
 		get absoluteLog(): string {
 			return this.absolutePath(this.log)
 		}
 
-		/***/
 		get absoluteTemplate(): string {
 			return this.absolutePath(this.template)
 		}
 
-		/***/
 		get absoluteThumbnail(): string {
 			return this.absolutePath(this.thumbnail)
 		}
 
-		/***/
 		get absoluteThumbnails(): string {
 			return this.absolutePath(this.thumbnails)
 		}
 
-		/***/
 		get absoluteFont(): string | undefined {
 			return this.font ? this.absolutePath(this.font) : undefined
 		}
 
-		/***/
 		private absolutePath(relativeOrAbsolutePath: string): string {
 			if (relativeOrAbsolutePath.match(/\:\\|\:\//)) {
 				return CasparCGPaths.ensureTrailingSlash(relativeOrAbsolutePath)
@@ -71,14 +59,11 @@ export namespace Response {
 			return CasparCGPaths.ensureTrailingSlash(Path.join(this.root, relativeOrAbsolutePath))
 		}
 	}
-	/***/
 	export class ChannelRate {
-
 		public channelRate: number
 		public frameRate: number
 		public isInterlaced: boolean
 
-		/***/
 		constructor(rateExpression: string) {
 			this.isInterlaced = rateExpression.indexOf('i') > -1
 			let rateMatch: RegExpMatchArray | null = rateExpression.match(/[0-9]+$/)
@@ -105,29 +90,16 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export interface IResponseParser {
 		context?: Object
 		parse(data: Object): Object
 	}
 
-	/**
-	 *
-	 */
 	export abstract class AbstractParser {
 		context?: any
 	}
 
-	/**
-	 *
-	 */
 	export class ChannelParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: any): Object {
 			data = [].concat(data)
 			let result: Array<Object> = [];
@@ -149,9 +121,7 @@ export namespace Response {
 		}
 	}
 
-	/***/
 	export class ConfigParser extends AbstractParser implements IResponseParser {
-		/***/
 		public parse(data: Object): Object {
 			let serverVersion: CasparCGVersion
 			if (this.context && this.context.hasOwnProperty('serverVersion') && this.context.serverVersion > CasparCGVersion.V21x) {
@@ -166,143 +136,68 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class DataParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class DataListParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoTemplateParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class HelpParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class GLParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoDelayParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoThreadsParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class ThumbnailParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return `data:image/png;base64,${data}`
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class VersionParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class ContentParser extends AbstractParser implements IResponseParser {
-
 		static parseTimeString(timeDateString: string): number {
-
 			timeDateString = timeDateString.replace(/[tT]/g, '')
 
 			let year: number = parseInt(timeDateString.slice(0, 4), 10)
@@ -314,9 +209,6 @@ export namespace Response {
 			return new Date(year, month, date, hours, minutes, seconds).getTime()
 		}
 
-		/**
-		 *
-		 */
 		public parse(data: Array<string>): Object {
 			return data.map((i: string) => {
 				let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
@@ -383,14 +275,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class ThumbnailListParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<string>): Object {
 			return data.map((i: string) => {
 				let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
@@ -412,14 +297,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class CinfParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			if (data && Array.isArray(data)) {
 				let components: RegExpMatchArray | null = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/)
@@ -436,40 +314,19 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoQueuesParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoServerParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Object): Object {
 			return data
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoPathsParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: any): Object {
 			let paths = new CasparCGPaths()
 
@@ -509,14 +366,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class InfoSystemParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: any): Object {
 			// wrap devices in arrays (if single device of a type)
 			if (data.hasOwnProperty('decklink') && data.decklink.hasOwnProperty('device')) {
@@ -533,14 +383,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusKeyerParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				keyer: !!data[0]
@@ -548,14 +391,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusChromaParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				chroma: {
@@ -573,14 +409,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusBlendParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				blend: data
@@ -588,14 +417,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusOpacityParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				opacity: data[0]
@@ -603,14 +425,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusBrightnessParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				brightness: data[0]
@@ -618,14 +433,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusSaturationParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				saturation: data[0]
@@ -633,14 +441,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusContrastParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				contrast: data[0]
@@ -648,14 +449,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusLevelsParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				levels: {
@@ -669,14 +463,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusFillParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				fill: {
@@ -689,14 +476,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusClipParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				clip: {
@@ -709,14 +489,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusAnchorParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				anchor: {
@@ -727,14 +500,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusCropParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				crop: {
@@ -747,14 +513,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusRotationParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				rotation: data[0]
@@ -762,14 +521,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusPerspectiveParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				perspective: {
@@ -786,14 +538,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusMipmapParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				mipmap: !!data[0]
@@ -801,14 +546,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusVolumeParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				volume: data[0]
@@ -816,14 +554,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusMastervolumeParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				mastervolume: data[0]
@@ -831,14 +562,7 @@ export namespace Response {
 		}
 	}
 
-	/**
-	 *
-	 */
 	export class MixerStatusStraightAlphaOutputParser extends AbstractParser implements IResponseParser {
-
-		/**
-		 *
-		 */
 		public parse(data: Array<number>): Object {
 			return {
 				straightAlphaOutput: !!data[0]
