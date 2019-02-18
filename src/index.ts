@@ -1,4 +1,7 @@
 export * from './CasparCG'
+export * from './lib/CasparCGConnection'
+export * from './lib/CasparCGProtocols'
+export * from './lib/Priority'
 export * from './lib/event/CasparCGSocketStatusEvent'
 export * from './lib/event/Events'
 export * from './lib/global/Callback'
