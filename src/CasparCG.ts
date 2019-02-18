@@ -423,10 +423,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public constructor(hostOrOptions?: IConnectionOptions | string, port?: number) {
 		super()
 		let options: ConnectionOptions
-		if (typeof hostOrOptions === 'object') {
-			options = new ConnectionOptions(hostOrOptions)
-		} else {
+		if (typeof hostOrOptions === 'string') {
 			options = new ConnectionOptions(hostOrOptions, port)
+		} else {
+			options = new ConnectionOptions(hostOrOptions)
 		}
 
 		// if both options and port specified, port overrides options
