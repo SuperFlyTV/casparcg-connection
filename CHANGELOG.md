@@ -2,6 +2,61 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="4.6.1"></a>
+## [4.6.1](https://github.com/SuperFlyTV/casparcg-connection/compare/4.6.0...4.6.1) (2019-01-15)
+
+
+
+<a name="4.6.0"></a>
+# [4.6.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.5.3...4.6.0) (2018-12-12)
+
+
+### Bug Fixes
+
+* add back overloads for play methods ([40b12b4](https://github.com/SuperFlyTV/casparcg-connection/commit/40b12b4))
+
+
+### Features
+
+* channel_layout property ([c66fcfb](https://github.com/SuperFlyTV/casparcg-connection/commit/c66fcfb))
+
+
+
+<a name="4.5.3"></a>
+## [4.5.3](https://github.com/SuperFlyTV/casparcg-connection/compare/4.5.2...4.5.3) (2018-10-03)
+
+
+### Bug Fixes
+
+* **sting:** stingOverlayFilename can be the empty string ([afe1143](https://github.com/SuperFlyTV/casparcg-connection/commit/afe1143))
+
+
+
+<a name="4.5.2"></a>
+## [4.5.2](https://github.com/SuperFlyTV/casparcg-connection/compare/4.5.1...4.5.2) (2018-09-24)
+
+
+
+<a name="4.5.1"></a>
+## [4.5.1](https://github.com/SuperFlyTV/casparcg-connection/compare/4.5.0...4.5.1) (2018-09-11)
+
+
+### Bug Fixes
+
+* validation of transition paramters ([d128f98](https://github.com/SuperFlyTV/casparcg-connection/commit/d128f98))
+
+
+
+<a name="4.5.0"></a>
+# [4.5.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.4.0...4.5.0) (2018-08-14)
+
+
+### Features
+
+* route command ([43bdf63](https://github.com/SuperFlyTV/casparcg-connection/commit/43bdf63))
+
+
+
 <a name="4.4.0"></a>
 # [4.4.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.3.1...4.4.0) (2018-08-07)
 

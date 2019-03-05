@@ -202,9 +202,9 @@ export namespace CasparCGProtocols {
 		 */
 		export interface IQuery {
 			cinf(fileName: string): Promise<IAMCPCommand>
-			cls(): Promise<IAMCPCommand>
+			cls(subFolder?: string): Promise<IAMCPCommand>
 			fls(): Promise<IAMCPCommand>
-			tls(): Promise<IAMCPCommand>
+			tls(subFolder?: string): Promise<IAMCPCommand>
 			version(component?: Enum.Version): Promise<IAMCPCommand>
 			info(channel?: number, layer?: number): Promise<IAMCPCommand>
 			infoTemplate(template: string): Promise<IAMCPCommand>
@@ -1715,8 +1715,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CLS>
 	 */
-	public cls(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ClsCommand())
+	public cls(subFolder?: string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.ClsCommand({ subFolder: subFolder}))
 	}
 
 	/**
@@ -1729,8 +1729,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#TLS>
 	 */
-	public tls(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.TlsCommand())
+	public tls(subFolder?: string): Promise<IAMCPCommand> {
+		return this.do(new AMCP.TlsCommand({ subFolder: subFolder}))
 	}
 
 	/**
