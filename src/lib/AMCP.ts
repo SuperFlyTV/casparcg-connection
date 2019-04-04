@@ -1469,6 +1469,13 @@ export namespace AMCP {
 	 */
 	export class CallCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'CALL'
+
+		static readonly protocolLogic = [
+			new OneOf('seek')
+		]
+		paramProtocol = [
+			new ParamSignature(optional, 'seek', 'seek', new ParameterValidator.PositiveNumberValidatorBetween(0))
+		]
 	}
 
 	/**
