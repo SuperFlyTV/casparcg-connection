@@ -1471,10 +1471,15 @@ export namespace AMCP {
 		static readonly commandString = 'CALL'
 
 		static readonly protocolLogic = [
-			new OneOf('seek')
+			new OneOf('seek', 'loop', 'in', 'start', 'out', 'length')
 		]
 		paramProtocol = [
 			new ParamSignature(optional, 'seek', 'seek', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'loop', 'loop', new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+			new ParamSignature(optional, 'in', 'in', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'start', 'start', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'out', 'out', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'length', 'length', new ParameterValidator.PositiveNumberValidatorBetween())
 		]
 	}
 
