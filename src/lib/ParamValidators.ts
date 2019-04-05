@@ -358,7 +358,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		constructor(private _min: number = Number.NEGATIVE_INFINITY, private _max: number = Number.POSITIVE_INFINITY) {
+		constructor(private _min: number = 0, private _max: number = Number.POSITIVE_INFINITY) {
 			super()
 		}
 
