@@ -113,6 +113,7 @@ export namespace AMCP {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
 			new Depends('loop', 'clip'),
+			new Depends('in', 'clip'),
 			new Depends('seek', 'clip'),
 			new Depends('length', 'clip'),
 			new Depends('filter', 'clip'),
@@ -134,6 +135,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'in', 'IN', new ParameterValidator.FrameValidator('IN')),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
