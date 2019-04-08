@@ -1476,12 +1476,12 @@ export namespace AMCP {
 			new OneOf('seek', 'loop', 'in', 'start', 'out', 'length')
 		]
 		paramProtocol = [
-			new ParamSignature(optional, 'seek', 'seek', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'loop', 'loop', new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'in', 'in', new ParameterValidator.PositiveNumberValidatorBetween()),
-			new ParamSignature(optional, 'start', 'start', new ParameterValidator.PositiveNumberValidatorBetween()),
-			new ParamSignature(optional, 'out', 'out', new ParameterValidator.PositiveNumberValidatorBetween()),
-			new ParamSignature(optional, 'length', 'length', new ParameterValidator.PositiveNumberValidatorBetween())
+			new ParamSignature(optional, 'in', 'IN', new ParameterValidator.FrameValidator('IN')),
+			new ParamSignature(optional, 'start', 'START', new ParameterValidator.FrameValidator('START')),
+			new ParamSignature(optional, 'out', 'OUT', new ParameterValidator.FrameValidator('OUT')),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH'))
 		]
 	}
 
