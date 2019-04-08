@@ -62,7 +62,7 @@ export namespace AMCP {
 			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -93,7 +93,7 @@ export namespace AMCP {
 			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -128,7 +128,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'clip', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -183,7 +183,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -213,7 +213,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -247,7 +247,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -277,7 +277,7 @@ export namespace AMCP {
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
 			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -307,7 +307,7 @@ export namespace AMCP {
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
 			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -341,7 +341,7 @@ export namespace AMCP {
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
 			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -369,7 +369,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -395,7 +395,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -421,7 +421,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(optional, 'url', '[HTML]', new ParameterValidator.URLValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
@@ -441,7 +441,7 @@ export namespace AMCP {
 	export class CGAddCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'ADD', new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(required, 'flashLayer', 'ADD', new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(required, 'templateName', null, new ParameterValidator.TemplateNameValidator()),
 			new ParamSignature(required, 'playOnLoad', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
 			new ParamSignature(optional, 'data', null, new ParameterValidator.TemplateDataValidator())
@@ -454,7 +454,7 @@ export namespace AMCP {
 	export class CGPlayCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'PLAY', new ParameterValidator.PositiveNumberValidatorBetween(0))
+			new ParamSignature(required, 'flashLayer', 'PLAY', new ParameterValidator.PositiveNumberValidatorBetween())
 		]
 	}
 
@@ -464,7 +464,7 @@ export namespace AMCP {
 	export class CGStopCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'STOP', new ParameterValidator.PositiveNumberValidatorBetween(0))
+			new ParamSignature(required, 'flashLayer', 'STOP', new ParameterValidator.PositiveNumberValidatorBetween())
 		]
 	}
 
@@ -474,7 +474,7 @@ export namespace AMCP {
 	export class CGNextCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'NEXT', new ParameterValidator.PositiveNumberValidatorBetween(0))
+			new ParamSignature(required, 'flashLayer', 'NEXT', new ParameterValidator.PositiveNumberValidatorBetween())
 		]
 	}
 
@@ -484,7 +484,7 @@ export namespace AMCP {
 	export class CGRemoveCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'REMOVE', new ParameterValidator.PositiveNumberValidatorBetween(0))
+			new ParamSignature(required, 'flashLayer', 'REMOVE', new ParameterValidator.PositiveNumberValidatorBetween())
 		]
 	}
 
@@ -513,7 +513,7 @@ export namespace AMCP {
 	export class CGUpdateCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'UPDATE', new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(required, 'flashLayer', 'UPDATE', new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(required, 'data', null, new ParameterValidator.TemplateDataValidator())
 		]
 	}
@@ -524,7 +524,7 @@ export namespace AMCP {
 	export class CGInvokeCommand extends AbstractLayerWithCgFallbackCommand {
 		static readonly commandString = 'CG'
 		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'INVOKE', new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(required, 'flashLayer', 'INVOKE', new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(required, 'method', null, new ParameterValidator.StringValidator())
 		]
 		responseProtocol = new ResponseSignature(201)
@@ -598,7 +598,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'threshold', null, new ParameterValidator.NumberValidator()),
 			new ParamSignature(optional, 'softness', null, new ParameterValidator.NumberValidator()),
 			new ParamSignature(optional, 'spill', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -685,7 +685,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('OPACITY')),
 			new ParamSignature(optional, 'opacity', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -732,7 +732,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BRIGHTNESS')),
 			new ParamSignature(optional, 'brightness', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -779,7 +779,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('SATURATION')),
 			new ParamSignature(optional, 'saturation', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -826,7 +826,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CONTRAST')),
 			new ParamSignature(optional, 'contrast', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -875,10 +875,10 @@ export namespace AMCP {
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('LEVELS')),
 			new ParamSignature(optional, 'minInput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
 			new ParamSignature(optional, 'maxInput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'gamma', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'gamma', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'minOutput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
 			new ParamSignature(optional, 'maxOutput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -929,7 +929,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
 			new ParamSignature(optional, 'xScale', null, new ParameterValidator.NumberValidator()),
 			new ParamSignature(optional, 'yScale', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -980,7 +980,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
 			new ParamSignature(optional, 'width', null, new ParameterValidator.NumberValidator()),
 			new ParamSignature(optional, 'height', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -1029,7 +1029,7 @@ export namespace AMCP {
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ANCHOR')),
 			new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
 			new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -1080,7 +1080,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'top', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
 			new ParamSignature(optional, 'right', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
 			new ParamSignature(optional, 'bottom', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -1271,8 +1271,8 @@ export namespace AMCP {
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('VOLUME')),
-			new ParamSignature(optional, 'volume', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'volume', null, new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -1318,7 +1318,7 @@ export namespace AMCP {
 		]
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MASTERVOLUME')),
-			new ParamSignature(optional, 'mastervolume', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'mastervolume', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
 
@@ -1402,7 +1402,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('GRID')),
 			new ParamSignature(optional, 'resolution', null, new ParameterValidator.PositiveNumberRoundValidatorBetween(1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 		]
@@ -1469,6 +1469,18 @@ export namespace AMCP {
 	 */
 	export class CallCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'CALL'
+
+		static readonly protocolLogic = [
+			new OneOf('seek', 'loop', 'in', 'start', 'out', 'length')
+		]
+		paramProtocol = [
+			new ParamSignature(optional, 'seek', 'seek', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'loop', 'loop', new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+			new ParamSignature(optional, 'in', 'in', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'start', 'start', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'out', 'out', new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'length', 'length', new ParameterValidator.PositiveNumberValidatorBetween())
+		]
 	}
 
 	/**
@@ -1879,7 +1891,7 @@ export namespace AMCP {
 
 		paramProtocol = [
 			new ParamSignature(required, 'info', null, new ParameterValidator.KeywordValidator('INFO')),
-			new ParamSignature(optional, 'flashLayer', null, new ParameterValidator.PositiveNumberValidatorBetween(0))
+			new ParamSignature(optional, 'flashLayer', null, new ParameterValidator.PositiveNumberValidatorBetween())
 		]
 		responseProtocol = new ResponseSignature(201)
 
