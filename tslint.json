@@ -5,6 +5,7 @@
     "ter-indent": [true, "tab",{
 			"SwitchCase": 1
 		}],
-	"space-before-function-paren":false
+    "space-before-function-paren": false,
+    "unified-signatures": false
   }
 }
