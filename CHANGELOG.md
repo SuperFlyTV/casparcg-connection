@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.7.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.6.1...4.7.0) (2019-04-11)
+
+
+### Bug Fixes
+
+* **Validator:** refactor of PositiveNumberValidatorBetween ([1d6f41e](https://github.com/SuperFlyTV/casparcg-connection/commit/1d6f41e))
+
+
+### Features
+
+* **call:** adds all ffmpeg producer calls ([2edbe9d](https://github.com/SuperFlyTV/casparcg-connection/commit/2edbe9d))
+* **call:** Adds SEEK support to call ([1704912](https://github.com/SuperFlyTV/casparcg-connection/commit/1704912)), closes [#5](https://github.com/SuperFlyTV/casparcg-connection/issues/5)
+* add support for IN property in PLAY command ([9e059be](https://github.com/SuperFlyTV/casparcg-connection/commit/9e059be))
+
+
+
 <a name="4.6.1"></a>
 ## [4.6.1](https://github.com/SuperFlyTV/casparcg-connection/compare/4.6.0...4.6.1) (2019-01-15)
 
