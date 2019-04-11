@@ -909,25 +909,25 @@ img { max-width: 100%; }
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
-		<li class=" tsd-kind-enum">
+		<li class=" tsd-kind-enum tsd-is-external">
 			<a href="enums/priority.html" class="tsd-kind-icon">Priority</a>
 		</li>
-		<li class=" tsd-kind-class">
+		<li class=" tsd-kind-class tsd-is-external">
 			<a href="classes/casparcg.html" class="tsd-kind-icon">CasparCG</a>
 		</li>
-		<li class=" tsd-kind-class">
+		<li class=" tsd-kind-class tsd-is-external">
 			<a href="classes/casparcgsocket.html" class="tsd-kind-icon">CasparCGSocket</a>
 		</li>
-		<li class=" tsd-kind-class">
+		<li class=" tsd-kind-class tsd-is-external">
 			<a href="classes/connectionoptions.html" class="tsd-kind-icon">Connection<wbr>Options</a>
 		</li>
-		<li class=" tsd-kind-interface">
+		<li class=" tsd-kind-interface tsd-is-external">
 			<a href="interfaces/icasparcgconnection.html" class="tsd-kind-icon">ICasparCGConnection</a>
 		</li>
-		<li class=" tsd-kind-interface">
+		<li class=" tsd-kind-interface tsd-is-external">
 			<a href="interfaces/icasparcgsocket.html" class="tsd-kind-icon">ICasparCGSocket</a>
 		</li>
-		<li class=" tsd-kind-interface">
+		<li class=" tsd-kind-interface tsd-is-external">
 			<a href="interfaces/iconnectionoptions.html" class="tsd-kind-icon">IConnection<wbr>Options</a>
 		</li>
 	</ul>
@@ -963,14 +963,12 @@ img { max-width: 100%; }
 			</ul>
 			<h2 id="getting-started">Getting started</h2>
 			<h3 id="installing-with-npm">Installing with NPM</h3>
-			<pre><code>npm <span class="hljs-keyword">install</span> casparcg-<span class="hljs-keyword">connection</span> <span class="hljs-comment">--save</span>
-</code></pre><p>This installs the full project with sourcecode and dependencies, typescript project files and the compiled .js output with typings.</p>
+			<pre><code>npm <span class="hljs-keyword">install</span> casparcg-<span class="hljs-keyword">connection</span> <span class="hljs-comment">--save</span></code></pre><p>This installs the full project with sourcecode and dependencies, typescript project files and the compiled .js output with typings.</p>
 			<p>In your code, include and use the CasparCG object from this library with a code similar to:</p>
-			<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> {CasparCG} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"casparcg-connection"</span>);
+			<pre><code class="language-javascript"><span class="hljs-keyword">const</span> {CasparCG} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"casparcg-connection"</span>);
 
 <span class="hljs-keyword">var</span> connection = <span class="hljs-keyword">new</span> CasparCG();
-connection.play(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">"amb"</span>);
-</code></pre>
+connection.play(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">"amb"</span>);</code></pre>
 			<p><em>Note: starting with version 4.0.0 the default queue mode is now SALVO. You can optionally set the queue mode back to sequential if you need compatibility with CasparCG 2.0.7 or earlier. Note that the implementation of scheduled commands requires asynchronous behaviour and therefore only works in salvo mode.</em></p>
 			<h3 id="build-from-source">Build from source</h3>
 			<p>Installing from NPM adds the dev-dependencies needed to compile TypeScript and using Gulp as build tool. A set of commands help you managing development and testing:</p>
@@ -996,7 +994,7 @@ connection.play(<span class="hljs-number">1</span>, <span class="hljs-number">1<
 				<li>OSC events parsing</li>
 				<li>Smart queue with linked and grouped commands</li>
 			</ol>
-			<h2 id="acknowledgements-">Acknowledgements:</h2>
+			<h2 id="acknowledgements">Acknowledgements:</h2>
 			<ul>
 				<li>Many thanks to SVT for the CasparCG project</li>
 				<li>Inspired by <a href="https://github.com/respectTheCode/node-caspar-cg">https://github.com/respectTheCode/node-caspar-cg</a></li>
@@ -1006,47 +1004,44 @@ connection.play(<span class="hljs-number">1</span>, <span class="hljs-number">1<
 			<h2>Index</h2>
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
-					<section class="tsd-index-section ">
+					<section class="tsd-index-section tsd-is-external">
 						<h3>Modules</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-module"><a href="modules/amcp.html" class="tsd-kind-icon">AMCP</a></li>
-							<li class="tsd-kind-module"><a href="modules/amcputil.html" class="tsd-kind-icon">AMCPUtil</a></li>
-							<li class="tsd-kind-module"><a href="modules/callback.html" class="tsd-kind-icon">Callback</a></li>
-							<li class="tsd-kind-module"><a href="modules/casparcgprotocols.html" class="tsd-kind-icon">CasparCGProtocols</a></li>
-							<li class="tsd-kind-module"><a href="modules/command.html" class="tsd-kind-icon">Command</a></li>
-							<li class="tsd-kind-module"><a href="modules/config.html" class="tsd-kind-icon">Config</a></li>
-							<li class="tsd-kind-module"><a href="modules/configutil.html" class="tsd-kind-icon">Config<wbr>Util</a></li>
-							<li class="tsd-kind-module"><a href="modules/enum.html" class="tsd-kind-icon">Enum</a></li>
-							<li class="tsd-kind-module"><a href="modules/event.html" class="tsd-kind-icon">Event</a></li>
-							<li class="tsd-kind-module"><a href="modules/options.html" class="tsd-kind-icon">Options</a></li>
-							<li class="tsd-kind-module"><a href="modules/param.html" class="tsd-kind-icon">Param</a></li>
-							<li class="tsd-kind-module"><a href="modules/protocol.html" class="tsd-kind-icon">Protocol</a></li>
-							<li class="tsd-kind-module"><a href="modules/response.html" class="tsd-kind-icon">Response</a></li>
-							<li class="tsd-kind-module"><a href="modules/validation.html" class="tsd-kind-icon">Validation</a></li>
-							<li class="tsd-kind-module"><a href="modules/v21x.html" class="tsd-kind-icon">v21x</a></li>
-							<li class="tsd-kind-module"><a href="modules/v2xx.html" class="tsd-kind-icon">v2xx</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/amcp.html" class="tsd-kind-icon">AMCP</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/amcputil.html" class="tsd-kind-icon">AMCPUtil</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/callback.html" class="tsd-kind-icon">Callback</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/casparcgprotocols.html" class="tsd-kind-icon">CasparCGProtocols</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/command.html" class="tsd-kind-icon">Command</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/config.html" class="tsd-kind-icon">Config</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/enum.html" class="tsd-kind-icon">Enum</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/event.html" class="tsd-kind-icon">Event</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/options.html" class="tsd-kind-icon">Options</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/param.html" class="tsd-kind-icon">Param</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/protocol.html" class="tsd-kind-icon">Protocol</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/response.html" class="tsd-kind-icon">Response</a></li>
+							<li class="tsd-kind-module tsd-is-external"><a href="modules/validation.html" class="tsd-kind-icon">Validation</a></li>
 						</ul>
 					</section>
-					<section class="tsd-index-section ">
+					<section class="tsd-index-section tsd-is-external">
 						<h3>Enumerations</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-enum"><a href="enums/priority.html" class="tsd-kind-icon">Priority</a></li>
+							<li class="tsd-kind-enum tsd-is-external"><a href="enums/priority.html" class="tsd-kind-icon">Priority</a></li>
 						</ul>
 					</section>
-					<section class="tsd-index-section ">
+					<section class="tsd-index-section tsd-is-external">
 						<h3>Classes</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-class"><a href="classes/casparcg.html" class="tsd-kind-icon">CasparCG</a></li>
-							<li class="tsd-kind-class"><a href="classes/casparcgsocket.html" class="tsd-kind-icon">CasparCGSocket</a></li>
-							<li class="tsd-kind-class"><a href="classes/connectionoptions.html" class="tsd-kind-icon">Connection<wbr>Options</a></li>
+							<li class="tsd-kind-class tsd-is-external"><a href="classes/casparcg.html" class="tsd-kind-icon">CasparCG</a></li>
+							<li class="tsd-kind-class tsd-is-external"><a href="classes/casparcgsocket.html" class="tsd-kind-icon">CasparCGSocket</a></li>
+							<li class="tsd-kind-class tsd-is-external"><a href="classes/connectionoptions.html" class="tsd-kind-icon">Connection<wbr>Options</a></li>
 						</ul>
 					</section>
-					<section class="tsd-index-section ">
+					<section class="tsd-index-section tsd-is-external">
 						<h3>Interfaces</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-interface"><a href="interfaces/icasparcgconnection.html" class="tsd-kind-icon">ICasparCGConnection</a></li>
-							<li class="tsd-kind-interface"><a href="interfaces/icasparcgsocket.html" class="tsd-kind-icon">ICasparCGSocket</a></li>
-							<li class="tsd-kind-interface"><a href="interfaces/iconnectionoptions.html" class="tsd-kind-icon">IConnection<wbr>Options</a></li>
+							<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/icasparcgconnection.html" class="tsd-kind-icon">ICasparCGConnection</a></li>
+							<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/icasparcgsocket.html" class="tsd-kind-icon">ICasparCGSocket</a></li>
+							<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/iconnectionoptions.html" class="tsd-kind-icon">IConnection<wbr>Options</a></li>
 						</ul>
 					</section>
 				</div>
