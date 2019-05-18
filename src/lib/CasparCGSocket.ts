@@ -35,6 +35,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _client: net.Socket
 	private _host: string
 	private _port: number
+	private _localAddress: string
 	private _connected: boolean
 	private _autoReconnect: boolean
 	private _reconnectDelay: number
@@ -50,10 +51,11 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	/**
 	 *
 	 */
-	public constructor (host: string, port: number, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number, queueMode?: OptionsNS.QueueMode) {
+	public constructor (host: string, port: number, localAddress: string, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number, queueMode?: OptionsNS.QueueMode) {
 		super()
 		this._host = host
 		this._port = port
+		this._localAddress = localAddress;
 		this._reconnectDelay = autoReconnectInterval
 		this._autoReconnect = autoReconnect
 		this._reconnectAttempts = autoReconnectAttempts
@@ -107,7 +109,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 
 				// connects
 				this.log('Socket attempting connection')
-				this._client.connect(this._port, this._host)
+				this._client.connect({ port: this._port, host: this._host, localAddress: this._localAddress })
 				this._shouldBeConnected = true
 				this._lastConnectionAttempt = Date.now()
 			}

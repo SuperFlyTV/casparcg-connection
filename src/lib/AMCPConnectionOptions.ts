@@ -36,6 +36,7 @@ export namespace Options {
 export interface IConnectionOptions {
 	host?: string
 	port?: number
+	localAddress?: string
 	autoConnect?: boolean
 	autoReconnect?: boolean
 	autoReconnectInterval?: number
@@ -58,6 +59,7 @@ export interface IConnectionOptions {
 export class ConnectionOptions implements IConnectionOptions {
 	public host: string | undefined = 'localhost'
 	public port: number | undefined = 5250
+	public localAddress: string | undefined = '0.0.0.0'
 	public autoConnect: boolean | undefined = true
 	public autoReconnect: boolean | undefined = true
 	public autoReconnectInterval: number | undefined = 1000
