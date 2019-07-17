@@ -105,15 +105,44 @@ The matrix below details [AMCP](https://github.com/CasparCG/help/wiki/AMCP-Proto
 | `INFO THREADS`                                  |           | &#x2714;  |  &#x2714;       |          |
 | `INFO DELAY`                                    |           | &#x2714;  |  &#x2714;       |          |
 | `DIAG`                                          |           | &#x2714;  |  &#x2714;       | &#x2714; |
-| 'GL INFO'                                       |           | &#x2714;  |                 |          |
-| 'GL GC'                                         |           | &#x2714;  |                 |          |
+| `GL INFO`                                       |           | &#x2714;  |                 |          |
+| `GL GC`                                         |           | &#x2714;  |                 |          |
 | `BYE`                                           | &#x2714;  | &#x2714;  |  &#x2714;       | &#x2714; |
 | `KILL`                                          |           | &#x2714;  |  &#x2714;       | &#x2714; |
 | `RESTART`                                       |           | &#x2714;  |  &#x2714;       | &#x2714; |
 | `HELP`                                          |           |           |  &#x2714;       |          |
 | `HELP PRODUCER`                                 |           |           |  &#x2714;       |          |
 | `HELP CONSUMER`                                 |           |           |  &#x2714;       |          |
+| `TIME`                                          |           |           |  &#x2714;       |          |
 
+## Schedule and timecode commands
+
+| Command                                         | CCG 1.8.3 | CCG 2.0.7 | CCG 2.1.8 (NRK) | CCG 2.2  |
+| ----------------------------------------------- | --------- | --------- | --------------- | -------- |
+| `SCHEDULE REMOVE`                               |           |           |  &#x2714;       |          |
+| `SCHEDULE CLEAR`                                |           |           |  &#x2714;       |          |
+| `SCHEDULE LIST`                                 |           |           |  &#x2714;       |          |
+| `SCHEDULE INFO`                                 |           |           |  &#x2714;       |          |
+| `SCHEDULE SET`                                  |           |           |  &#x2714;       |          |
+| `TIMECODE SOURCE`                               |           |           |  &#x2714;       |          |
+
+## Command parameters
+
+### LOADBG
+
+Work in progress ...
+
+* Some parameters are parsed in producers, specifically SEEK, LENGTH, LOOP and FILTER in `ffmpeg_producer`
+* The new `STING` parameter in 2.1.8 changes the overall grammar of a string
+* 2.1.8 supports _bottom_ and _top_ directions.
+
+Notes:
+
+```
+* 2.0.7 .*(?<TRANSITION>CUT|PUSH|SLIDE|WIPE|MIX)\s*(?<DURATION>\d+)\s*(?<TWEEN>(LINEAR)|(EASE[^\s]*))?\s*(?<DIRECTION>FROMLEFT|FROMRIGHT|LEFT|RIGHT)?.*
+* 2.1.8 .*(?<TRANSITION>CUT|PUSH|SLIDE|WIPE|MIX)\s*(?<DURATION>\d+)\s*(?<TWEEN>(LINEAR)|(EASE[^\s]*))?\s*(?<DIRECTION>FROMLEFT|FROMRIGHT|LEFT|RIGHT|FROMBOTTOM|FROMTOP|BOTTOM|TOP)?.*)
+* 2.2   .*(?<TRANSITION>CUT|PUSH|SLIDE|WIPE|MIX)\s*(?<DURATION>\d+)\s*(?<TWEEN>(LINEAR)|(EASE[^\s]*))?\s*(?<DIRECTION>FROMLEFT|FROMRIGHT|LEFT|RIGHT)?.*)
+```
 
 ### Sources
 
