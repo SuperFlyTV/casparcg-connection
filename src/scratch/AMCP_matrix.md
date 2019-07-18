@@ -127,6 +127,10 @@ The matrix below details [AMCP](https://github.com/CasparCG/help/wiki/AMCP-Proto
 | `SCHEDULE SET`                                  |           |           |  &#x2714;       |          |          |
 | `TIMECODE SOURCE`                               |           |           |  &#x2714;       |          |          |
 
+## Asynchronous request and response
+
+From v2.1 onwards, all commands can be proceeded by `REQ <uid>`, where `<uid>` is a unique identifier provided by the caller. This allows a requester to send multiple overlapping requests and identify which response is related to which request, as responses messages are proceeded by `RES <uid>`.
+
 ## Command parameters
 
 Building a matrix of what parameters are supported in which version is a challenge as different commands relate to different producers. Producer-specific parameters are parsed locally within the producer meaning the grammar is defined by that source code. The following are some notes and observations about the differences between versions.
@@ -142,6 +146,10 @@ Transition parameters must be in order but other parameters are cherry-picked in
 ### CG ADD, CG UPDATE
 
 _Data_ parameter may be XML or, from 2.1 onwards, JSON. The data must be enclosed in double quotes (`""`) and all internal quotes must be escaped (`\"\"`).
+
+### FLS, TLS
+
+The TLS and FLS command in CasparCG 2.2 only returns the template name rather than name, size, lastChanged and format. The separate Node-based _scanner_ process must be running.
 
 ### PING
 
