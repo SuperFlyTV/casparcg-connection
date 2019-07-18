@@ -70,7 +70,7 @@ The matrix below details [AMCP](https://github.com/CasparCG/help/wiki/AMCP-Proto
 | `MIXER MIPMAP`                                  |           | &#x2714;  |  &#x2714;       | &#x2714; | &#x2714; |
 | `MIXER VOLUME`                                  |           | &#x2714;  |  &#x2714;       | &#x2714; | &#x2714; |
 | `MIXER MASTERVOLUME`                            |           | &#x2714;  |  &#x2714;       | &#x2714; | &#x2714; |
-| `MIXER STRAIGHT_ALPHA_OUTPUT`                   |           | &#x2714;  |  &#x2714;       | &#x2714; |          |
+| `MIXER STRAIGHT_ALPHA_OUTPUT`                   |           | &#x2714;  |  &#x2714;       |          |          |
 | `MIXER GRID`                                    |           | &#x2714;  |  &#x2714;       | &#x2714; | &#x2714; |
 | `MIXER COMMIT`                                  |           | &#x2714;  |  &#x2714;       | &#x2714; | &#x2714; |
 | `MIXER CLEAR`                                   |           | &#x2714;  |  &#x2714;       | &#x2714; | &#x2714; |
