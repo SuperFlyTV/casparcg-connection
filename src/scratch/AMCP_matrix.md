@@ -1,6 +1,6 @@
 # AMCP version matrix
 
-The matrix below details [AMCP](https://github.com/CasparCG/help/wiki/AMCP-Protocol) protocol commands and their supported CasparCG versions. At the time of writing, CCG v2.3 refers to the [master branch of the CasparCG code]().
+The matrix below details [AMCP](https://github.com/CasparCG/help/wiki/AMCP-Protocol) protocol commands and their supported CasparCG versions. At the time of writing, CCG v2.3 refers to the [master branch of the CasparCG code](https://github.com/CasparCG/server/tree/master).
 
 ## Basic commands
 
@@ -114,7 +114,7 @@ The matrix below details [AMCP](https://github.com/CasparCG/help/wiki/AMCP-Proto
 | `HELP PRODUCER`                                 |           |           |  &#x2714;       |          |          |
 | `HELP CONSUMER`                                 |           |           |  &#x2714;       |          |          |
 | `TIME`                                          |           |           |  &#x2714;       |          |          |
-| `PING` (non-standard response `POMG`)           |           |           |  &#x2714;       | &#x2714; | &#x2714; |
+| `PING` (non-standard response `PONG`)           |           |           |  &#x2714;       | &#x2714; | &#x2714; |
 
 ## Schedule and timecode commands
 
@@ -153,7 +153,7 @@ The TLS and FLS command in CasparCG 2.2 only returns the template name rather th
 
 ### PING
 
-Added for 2.1.x onwards. Has a non-standard (ie. not starting `200`/`201`/`202`) response code.)
+Added for 2.1.x onwards. Has a non-standard (ie. not starting `200`/`201`/`202`) response code.
 
 
 ### Sources
