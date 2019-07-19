@@ -39,211 +39,484 @@ export enum Priority {
 	HIGH = 2
 }
 
-/**
- * CasparCG Protocols
- */
-export namespace CasparCGProtocols {
-
-	/**
-	 * CasparCG Protocol version 2.1
-	 */
-	export namespace v2_1 {
-		/**
-		 * AMCP Media-commands
-		 */
-		export interface IVideo {
-			loadbg(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
-			loadbgAuto(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>
-			load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>
-			play(channel: number, layer?: number, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>
-			pause(channel: number, layer?: number): Promise<IAMCPCommand>
-			resume(channel: number, layer?: number): Promise<IAMCPCommand>
-			stop(channel: number, layer?: number): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP In/Out-commands
-		 */
-		export interface IInputOutput {
-			loadDecklinkBg(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string, auto?: boolean | number | string): Promise<IAMCPCommand>
-			loadDecklinkBgAuto(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-			loadDecklink(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-			playDecklink(channel: number, layer?: number, device?: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-			loadHtmlPageBg(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
-			loadHtmlPageBgAuto(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
-			loadHtmlPage(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
-			playHtmlPage(channel: number, layer?: number, url?: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Template-commands
-		 */
-		export interface ICG {
-			cgAdd(channel: number, layer: number, flashLayer: number, templateName: string, playOnLoad: boolean | number | string, data?: TemplateData): Promise<IAMCPCommand>
-			cgPlay(channel: number, layer: number, flashLayer: number): Promise<IAMCPCommand>
-			cgStop(channel: number, layer: number, flashLayer: number): Promise<IAMCPCommand>
-			cgNext(channel: number, layer: number, flashLayer: number): Promise<IAMCPCommand>
-			cgRemove(channel: number, layer: number, flashLayer: number): Promise<IAMCPCommand>
-			cgClear(channel: number, layer?: number): Promise<IAMCPCommand>
-			cgUpdate(channel: number, layer: number, flashLayer: number, data: TemplateData): Promise<IAMCPCommand>
-			cgInvoke(channel: number, layer: number, flashLayer: number, methodName: string): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Mixer-commands
-		 */
-		export interface IMixer {
-			mixerKeyer(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-			mixerKeyerDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand>
-			getMixerStatusKeyer(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerChroma(channel: number, layer?: number, keyer?: Enum.Chroma | string, threshold?: number, softness?: number, spill?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerChromaDeferred(channel: number, layer?: number, keyer?: Enum.Chroma | string, threshold?: number, softness?: number, spill?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusChroma(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerBlend(channel: number, layer?: number, blendmode?: Enum.BlendMode | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerBlendDeferred(channel: number, layer?: number, blendmode?: Enum.BlendMode | string): Promise<IAMCPCommand>
-			getMixerStatusBlend(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerOpacity(channel: number, layer?: number, opacity?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerOpacityDeferred(channel: number, layer?: number, opacity?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusOpacity(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerBrightness(channel: number, layer?: number, brightness?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerBrightnessDeferred(channel: number, layer?: number, brightness?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusBrightness(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerSaturation(channel: number, layer?: number, saturation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerSaturationDeferred(channel: number, layer?: number, saturation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusSaturation(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerBrightness(channel: number, layer?: number, contrast?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerContrastDeferred(channel: number, layer?: number, contrast?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusContrast(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerLevels(channel: number, layer?: number, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerLevelsDeferred(channel: number, layer?: number, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusLevels(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerFill(channel: number, layer?: number, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerFillDeferred(channel: number, layer?: number, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusFill(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerClip(channel: number, layer?: number, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerClipDeferred(channel: number, layer?: number, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusClip(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerAnchor(channel: number, layer?: number, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerAnchorDeferred(channel: number, layer?: number, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusAnchor(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerCrop(channel: number, layer?: number, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerCropDeferred(channel: number, layer?: number, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusCrop(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerRotation(channel: number, layer?: number, rotation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerRotationDeferred(channel: number, layer?: number, rotation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusRotation(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerPerspective(channel: number, layer?: number, topLeftX?: number, topLeftY?: number, topRightX?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottomLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerPerspectiveDeferred(channel: number, layer?: number, topLeftX?: number, topLeftY?: number, topRightX?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottomLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusPerspective(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerMipmap(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-			mixerMipmapDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand>
-			getMixerStatusMipmap(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerVolume(channel: number, layer?: number, volume?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerVolumeDeferred(channel: number, layer?: number, volume?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusVolume(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerMastervolume(channel: number, mastervolume?: number, defer?: boolean): Promise<IAMCPCommand>
-			mixerMastervolumeDeferred(channel: number, mastervolume?: number): Promise<IAMCPCommand>
-			getMixerStatusMastervolume(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerStraightAlphaOutput(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-			mixerStraightAlphaOutputDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand>
-			getMixerStatusStraightAlphaOutput(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerGrid(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerGridDeferred(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			mixerCommit(channel: number): Promise<IAMCPCommand>
-			mixerClear(channel: number, layer?: number): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Channel-commands
-		 */
-		export interface IChannel {
-			clear(channel: number, layer?: number): Promise<IAMCPCommand>
-			//// call(channel: number, layer: number): Promise<IAMCPCommand>;
-			//// swap(): Promise<IAMCPCommand>;
-			//// add(channel: number): Promise<IAMCPCommand>;
-			print(channel: number): Promise<IAMCPCommand>
-			//// set(channel: number): Promise<IAMCPCommand>;
-			lock(channel: number, action: Enum.Lock | string, lockPhrase?: string): Promise<IAMCPCommand>
-			channelGrid(): Promise<IAMCPCommand>
-			glGC(): Promise<IAMCPCommand>
-			addDecklink(channel: number, device: number, id?: number): Promise<IAMCPCommand>
-			addImage(channel: number, fileName: string, id?: number): Promise<IAMCPCommand>
-			addFile(channel: number, fileName: string, id?: number): Promise<IAMCPCommand>
-			addStream(channel: number, uri: string, params: string, id?: number): Promise<IAMCPCommand>
-			remove(channel: number, id: number): Promise<IAMCPCommand>
-			removeDecklink(channel: number, device: number): Promise<IAMCPCommand>
-			removeImage(channel: number, fileName: string): Promise<IAMCPCommand>
-			removeFile(channel: number, fileName: string): Promise<IAMCPCommand>
-			removeStream(channel: number, uri: string): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Template Data-commands
-		 */
-		export interface IData {
-			dataStore(fileName: string, data: TemplateData): Promise<IAMCPCommand>
-			dataRetrieve(fileName: string): Promise<IAMCPCommand>
-			dataList(): Promise<IAMCPCommand>
-			dataRemove(fileName: string): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Thumbnail-commands
-		 */
-		export interface IThumbnail {
-			thumbnailList(subFolder?: string): Promise<IAMCPCommand>
-			thumbnailRetrieve(fileName: string): Promise<IAMCPCommand>
-			thumbnailGenerate(fileName: string): Promise<IAMCPCommand>
-			thumbnailGenerateAll(): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Query-commands
-		 */
-		export interface IQuery {
-			cinf(fileName: string): Promise<IAMCPCommand>
-			cls(subFolder?: string): Promise<IAMCPCommand>
-			fls(): Promise<IAMCPCommand>
-			tls(subFolder?: string): Promise<IAMCPCommand>
-			version(component?: Enum.Version): Promise<IAMCPCommand>
-			info(channel?: number, layer?: number): Promise<IAMCPCommand>
-			infoTemplate(template: string): Promise<IAMCPCommand>
-			infoConfig(): Promise<IAMCPCommand>
-			infoPaths(): Promise<IAMCPCommand>
-			infoSystem(): Promise<IAMCPCommand>
-			infoServer(): Promise<IAMCPCommand>
-			infoQueues(): Promise<IAMCPCommand>
-			infoThreads(): Promise<IAMCPCommand>
-			infoDelay(channel: number, layer?: number): Promise<IAMCPCommand>
-			cgInfo(channel: number, layer?: number, flashLayer?: number): Promise<IAMCPCommand>
-			templateHostInfo(channel: number, layer?: number): Promise<IAMCPCommand>
-			glInfo(): Promise<IAMCPCommand>
-			logLevel(level: Enum.LogLevel | string): Promise<IAMCPCommand>
-			logCategory(category: Enum.LogCategory | string, enabled: boolean): Promise<IAMCPCommand>
-			logCalltrace(enabled: boolean): Promise<IAMCPCommand>
-			logCommunication(enabled: boolean): Promise<IAMCPCommand>
-			diag(): Promise<IAMCPCommand>
-			help(command?: Enum.Command | string): Promise<IAMCPCommand>
-			getCommands(): Promise<IAMCPCommand>
-			helpProducer(producer?: Enum.Producer | string): Promise<IAMCPCommand>
-			getProducers(): Promise<IAMCPCommand>
-			helpConsumer(consumer?: Enum.Consumer | string): Promise<IAMCPCommand>
-			getConsumers(): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Operation-commands
-		 */
-		export interface IOperation {
-			bye(): Promise<IAMCPCommand>
-			kill(): Promise<IAMCPCommand>
-			restart(): Promise<IAMCPCommand>
-		}
-
-		export interface AMCP extends IVideo, IInputOutput, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation {
-		}
-	}
+export interface ChannelOptLayer {
+	channel: number
+	layer?: number
 }
+
+export interface ChannelAndLayer extends ChannelOptLayer {
+	layer: number
+}
+
+export interface PlayOptions extends ChannelOptLayer {
+	clip: string
+	loop?: boolean
+	transition?: Enum.Transition | string
+	transitionDurationOrMaskFile?: number | string
+	transitionEasingOrStingDuration?: Enum.Ease | string | number
+	transitionDirectionOrOverlay?: Enum.Direction | string
+	seek?: number
+	length?: number
+	filter?: string
+}
+
+export interface LoadOptions extends PlayOptions, ChannelAndLayer {
+	layer: number
+}
+
+export interface LoadBGOptions extends LoadOptions {
+	auto?: boolean | number | string
+}
+
+export interface PauseOptions extends ChannelOptLayer { }
+export interface ResumeOptions extends ChannelOptLayer { }
+export interface StopOptions extends ChannelOptLayer { }
+
+export interface IVideo {
+	loadbg(options: LoadBGOptions): Promise<IAMCPCommand<LoadBGOptions, LoadBGOptions>>
+	load(options: LoadOptions): Promise<IAMCPCommand<LoadOptions, LoadOptions>>
+	play(opitons: PlayOptions): Promise<IAMCPCommand<PlayOptions, PlayOptions>>
+	pause(options: PauseOptions): Promise<IAMCPCommand<PauseOptions, PauseOptions>>
+	resume(options: ResumeOptions): Promise<IAMCPCommand<ResumeOptions, ResumeOptions>>
+	stop(options: StopOptions): Promise<IAMCPCommand<StopOptions, StopOptions>>
+}
+
+/**
+ * AMCP In/Out-commands
+ */
+export interface IInputOutput {
+	loadDecklinkBg(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string, auto?: boolean | number | string): Promise<IAMCPCommand>
+	loadDecklinkBgAuto(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
+	loadDecklink(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
+	playDecklink(channel: number, layer?: number, device?: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
+	loadHtmlPageBg(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
+	loadHtmlPageBgAuto(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
+	loadHtmlPage(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
+	playHtmlPage(channel: number, layer?: number, url?: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
+}
+
+/**
+ * AMCP Template-commands
+ */
+
+export interface CGFlashLayer extends ChannelAndLayer {
+	flashLayer: number
+}
+
+export interface CGData extends CGFlashLayer {
+	data?: TemplateData
+}
+
+export interface CGAddOptions extends CGData {
+	tempalteName: string
+	playOnLoad: boolean | number | string
+}
+
+export interface CGPlayOptions extends CGFlashLayer { }
+export interface CGStopOptions extends CGFlashLayer { }
+export interface CGNextOptions extends CGFlashLayer { }
+export interface CGRemoveOptions extends CGFlashLayer { }
+export interface CGClearOptions extends ChannelOptLayer { }
+
+export interface CGUpdateOptions extends CGData {
+	data: TemplateData
+}
+
+export interface CGInvokeOptions extends CGFlashLayer {
+	methodName: string
+}
+
+export interface CGInfoOptions extends ChannelOptLayer {
+	flashLayer?: number
+}
+
+export interface ICG {
+	cgAdd(options: CGAddOptions): Promise<IAMCPCommand<CGAddOptions, CGAddOptions>>
+	cgPlay(options: CGPlayOptions): Promise<IAMCPCommand<CGPlayOptions, CGPlayOptions>> // TODO can you not give a template name?
+	cgStop(options: CGStopOptions): Promise<IAMCPCommand<CGStopOptions, CGStopOptions>>
+	cgNext(options: CGNextOptions): Promise<IAMCPCommand<CGNextOptions, CGNextOptions>>
+	cgRemove(options: CGRemoveOptions): Promise<IAMCPCommand<CGRemoveOptions, CGRemoveOptions>>
+	cgClear(options: CGClearOptions): Promise<IAMCPCommand<CGClearOptions, CGClearOptions>>
+	cgUpdate(optiond: CGUpdateOptions): Promise<IAMCPCommand<CGUpdateOptions, CGUpdateOptions>>
+	cgInvoke(options: CGInvokeOptions): Promise<IAMCPCommand<CGInvokeOptions, CGInvokeOptions>>
+	cgInfo(options: CGInfoOptions): Promise<IAMCPCommand<CGInfoOptions, CGInfoOptions>>
+}
+
+export interface Deferable extends ChannelOptLayer {
+	defer?: boolean
+}
+
+export interface TransitionDetails {
+	transitionDuration?: number
+	transitionEasing?: Enum.Ease | string
+}
+
+export interface Position {
+	x?: number
+	y?: number
+}
+
+export interface CurrentState {
+	state?: number | boolean
+}
+
+export interface MixerKeyerOptions extends Deferable, CurrentState { }
+
+export interface MixerChromaOptions extends Deferable, TransitionDetails { // TODO: does not match docs
+	keyer?: Enum.Chroma | string
+	threshold?: number
+	softness?: number
+	spill?: number
+}
+
+export interface MixerBlendOptions extends Deferable {
+	blendmode?: Enum.BlendMode | string
+}
+
+export interface MixerInvertOptions extends Deferable, CurrentState { }
+
+export interface MixerOpacityOptions extends Deferable, TransitionDetails {
+	opacity?: number
+}
+
+export interface MixerBrightnessOptions extends Deferable, TransitionDetails {
+	brightness?: number
+}
+
+export interface MixerSaturationOptions extends Deferable, TransitionDetails {
+	saturation?: number
+}
+
+export interface MixerContrastOptions extends Deferable, TransitionDetails {
+	contract?: number
+}
+
+export interface MixerLevelsOptions extends Deferable, TransitionDetails {
+	minInput?: number
+	maxInput?: number
+	gamma?: number
+	minOutput?: number
+	maxOutput?: number
+}
+
+export interface MixerFillOptions extends Deferable, TransitionDetails, Position {
+	xScale?: number
+	yScale?: number
+}
+
+export interface MixerClipOptions extends Deferable, TransitionDetails, Position {
+	width?: number
+	height?: number
+}
+
+export interface MixerAnchorOptions extends Deferable, TransitionDetails, Position { }
+
+export interface MixerCropOptions extends Deferable, TransitionDetails {
+	left?: number
+	top?: number
+	right?: number
+	bottom?: number
+}
+
+export interface MixerRotationOptions extends Deferable, TransitionDetails {
+	rotation?: number
+}
+
+export interface MixerPerspectiveOptions extends Deferable, TransitionDetails {
+	topLeftX?: number
+	topLeftY?: number
+	topRightX?: number
+	topRightY?: number
+	bottomRightX?: number
+	bottomRightY?: number
+	bottomLeftX?: number
+	bottomLeftY?: number
+}
+
+export interface MixerMipmapOptions extends Deferable, CurrentState { }
+
+export interface MixerVolumeOptions extends Deferable, TransitionDetails {
+	volume?: number
+}
+
+export interface MixerMastervolumeOptions extends Deferable {
+	layer: undefined
+	mastervolume?: number
+}
+
+export interface MixerStraightAlphaOutputOptions extends Deferable, CurrentState { }
+
+export interface MixerGridOptions extends Deferable, TransitionDetails { // TODO no GET option?
+	layer: undefined
+	resolution: number
+}
+
+export interface MixerCommitOptions extends ChannelOptLayer {
+	layer: undefined
+}
+
+export interface MixerClearOptions extends ChannelOptLayer { }
+
+/**
+ * AMCP Mixer-commands
+ */
+export interface IMixer { // TODO: missing invert
+	mixerKeyer(options: MixerKeyerOptions): Promise<IAMCPCommand<MixerKeyerOptions, MixerKeyerOptions>>
+	mixerChroma(options: MixerChromaOptions): Promise<IAMCPCommand<MixerChromaOptions, MixerChromaOptions>>
+	mixerBlend(options: MixerBlendOptions): Promise<IAMCPCommand<MixerBlendOptions, MixerBlendOptions>>
+	mixerInvert(options: MixerInvertOptions): Promise<IAMCPCommand<MixerInvertOptions, MixerInvertOptions>>
+	mixerOpacity(options: MixerOpacityOptions): Promise<IAMCPCommand<MixerOpacityOptions, MixerOpacityOptions>>
+	mixerBrightness(options: MixerBrightnessOptions): Promise<IAMCPCommand<MixerBrightnessOptions, MixerBrightnessOptions>>
+	mixerSaturation(options: MixerSaturationOptions): Promise<IAMCPCommand<MixerSaturationOptions, MixerSaturationOptions>>
+	mixerContrast(options: MixerContrastOptions): Promise<IAMCPCommand<MixerContrastOptions, MixerContrastOptions>>
+	mixerLevels(options: MixerLevelsOptions): Promise<IAMCPCommand<MixerLevelsOptions, MixerLevelsOptions>>
+	mixerFill(options: MixerFillOptions): Promise<IAMCPCommand<MixerFillOptions, MixerFillOptions>>
+	mixerClip(options: MixerClipOptions): Promise<IAMCPCommand<MixerClipOptions, MixerClipOptions>>
+	mixerAnchor(options: MixerAnchorOptions): Promise<IAMCPCommand<MixerAnchorOptions, MixerAnchorOptions>>
+	mixerCrop(options: MixerCropOptions): Promise<IAMCPCommand<MixerCropOptions, MixerCropOptions>>
+	mixerRotation(options: MixerRotationOptions): Promise<IAMCPCommand<MixerRotationOptions, MixerRotationOptions>>
+	mixerPerspective(options: MixerPerspectiveOptions): Promise<IAMCPCommand<MixerPerspectiveOptions, MixerPerspectiveOptions>>
+	mixerMipmap(options: MixerMipmapOptions): Promise<IAMCPCommand<MixerMipmapOptions, MixerMipmapOptions>>
+	mixerVolume(options: MixerVolumeOptions): Promise<IAMCPCommand<MixerVolumeOptions, MixerVolumeOptions>>
+	mixerMastervolume(options: MixerMastervolumeOptions): Promise<IAMCPCommand<MixerMastervolumeOptions, MixerMastervolumeOptions>>
+	mixerStraightAlphaOutput(coptions: MixerStraightAlphaOutputOptions): Promise<IAMCPCommand<MixerStraightAlphaOutputOptions, MixerStraightAlphaOutputOptions>>
+	mixerGrid(options: MixerGridOptions): Promise<IAMCPCommand<MixerGridOptions, MixerGridOptions>>
+	mixerCommit(options: MixerCommitOptions): Promise<IAMCPCommand<MixerCommitOptions, MixerCommitOptions>>
+	mixerClear(options: MixerClearOptions): Promise<IAMCPCommand<MixerClearOptions, MixerClearOptions>>
+	channelGrid(): Promise<IAMCPCommand<undefined, string>>
+}
+
+/**
+ * AMCP Channel-commands
+ */
+export interface ClearOptions extends ChannelOptLayer { }
+
+export interface CallOptions extends ChannelAndLayer { }  // TODO add call-specific options
+
+export interface SwapOptions extends ChannelAndLayer {
+	channel2: number
+	layer2: number
+	transforms?: boolean | string
+}
+
+export interface PrintOptions extends ChannelOptLayer {
+	layer: undefined
+}
+
+export interface LockOptions extends ChannelOptLayer {
+	layer: undefined
+	action: Enum.Lock | string
+	lockPhrase?: string
+}
+
+export interface SetOptions extends ChannelOptLayer {
+	layer: undefined
+	variable: string
+	value: string | number | boolean
+}
+
+export interface AddOptions extends ChannelOptLayer {
+	layer: undefined
+	consumer: string
+	parameters?: string | number | boolean
+}
+
+export interface AddDecklinkOptions extends AddOptions {
+	consumer: 'DECKLINK'
+	parameters: undefined
+	device: number
+	id?: number
+}
+
+export interface AddImageOptions extends AddOptions {
+	consumer: 'IMAGE'
+	parameters: undefined
+	filename: string
+	id?: number
+}
+
+export interface AddFileOptions extends AddOptions {
+	consumer: 'FILE'
+	paramters: undefined
+	filename: string
+	id?: number
+}
+
+export interface AddStreamOptions extends AddOptions {
+	consumer: 'STREAM'
+	parameters: undefined
+	uri: string
+	params: string
+	id?: number
+}
+
+export interface RemoveOptions extends ChannelOptLayer {
+	layer: undefined
+	consumer?: string
+	id?: number
+}
+
+export interface RemoveByIDOptions extends RemoveOptions {
+	consumer: undefined
+	id: number
+}
+
+export interface RemoveDecklinkOptions extends RemoveOptions {
+	consumer: 'DECKLINK'
+	id: undefined
+	device: number
+}
+
+export interface RemoveImageOptions extends RemoveOptions {
+	consumer: 'IMAGE'
+	id: undefined
+	fileName: string
+}
+
+export interface RemoveFileOptions extends RemoveOptions {
+	consumer: 'FILE'
+	id: undefined
+	fileName: string
+}
+
+export interface RemoveStreamOptions extends RemoveOptions {
+	consumer: 'STREAM'
+	id: undefined
+	uri: string
+}
+
+export interface IChannel {
+	clear(options: ClearOptions): Promise<IAMCPCommand<ClearOptions, ClearOptions>>
+	call(options: CallOptions): Promise<IAMCPCommand<CallOptions, CallOptions>>
+	swap(options: SwapOptions): Promise<IAMCPCommand<SwapOptions, SwapOptions>>
+	print(options: PrintOptions | number): Promise<IAMCPCommand<PrintOptions, string>>
+	set(options: SetOptions): Promise<IAMCPCommand<SetOptions, SetOptions>>
+	lock(options: LockOptions): Promise<IAMCPCommand<LockOptions, LockOptions>>
+	glGC(): Promise<IAMCPCommand<undefined, string>>
+	add(options: AddOptions): Promise<IAMCPCommand<AddOptions, AddOptions>>
+	remove(options: RemoveOptions): Promise<IAMCPCommand<RemoveOptions, RemoveOptions>>
+}
+
+/**
+ * AMCP Template Data-commands
+ */
+
+export interface FileDetails {
+	fileName: string
+}
+
+export interface DataStoreOptions extends FileDetails {
+	data: TemplateData
+}
+
+export interface DataRetrieveOptions extends FileDetails { }
+
+export interface DataRemoveOptions extends FileDetails { }
+
+export interface IData {
+	dataStore(options: DataStoreOptions): Promise<IAMCPCommand<DataStoreOptions, DataStoreOptions>>
+	dataRetrieve(options: DataRetrieveOptions | string): Promise<IAMCPCommand<DataRetrieveOptions, TemplateData>>
+	dataList(): Promise<IAMCPCommand<null, string[]>>
+	dataRemove(options: DataRemoveOptions | string): Promise<IAMCPCommand<DataRemoveOptions, DataRemoveOptions>>
+}
+
+/**
+ * AMCP Thumbnail-commands
+ */
+
+export interface SubFolderDetails {
+	subFolder?: string
+}
+
+export interface ThumbnailListOptions extends SubFolderDetails { }
+
+export interface ThumbnailRetrieveOptions extends FileDetails { }
+
+export interface ThumbnailGenerateOptions extends FileDetails { }
+
+export interface IThumbnail {
+	thumbnailList(options?: ThumbnailListOptions): Promise<IAMCPCommand<ThumbnailListOptions, string[]>>
+	thumbnailRetrieve(options: ThumbnailRetrieveOptions): Promise<IAMCPCommand<ThumbnailRetrieveOptions, ThumbnailRetrieveOptions>>
+	thumbnailGenerate(options: ThumbnailGenerateOptions): Promise<IAMCPCommand<ThumbnailGenerateOptions, ThumbnailGenerateOptions>>
+	thumbnailGenerateAll(): Promise<IAMCPCommand<null, boolean>>
+}
+
+/**
+ * AMCP Query-commands
+ */
+
+export interface CInfOptions extends FileDetails { }
+export interface CLSOptions extends SubFolderDetails { }
+export interface TLSOptions extends SubFolderDetails { }
+export interface VersionOptions {
+	component?: Enum.Version
+}
+export interface InfoOptions {
+	channel?: number
+	layer?: number
+}
+export interface InfoTemplateOptions {
+	tempalteName: string
+}
+export interface InfoDelayOptions extends ChannelOptLayer { }
+export interface TemplateHostInfoOptions extends ChannelOptLayer { }
+export interface LogLevelOptions {
+	level: Enum.LogLevel | string
+}
+export interface LogCategoryOptions {
+	category: Enum.LogCategory
+	enabled: boolean
+}
+export interface HelpOptions {
+	commands?: Enum.Command | string
+}
+export interface HelpProducerOptions {
+	producer?: Enum.Producer | string
+}
+export interface HelpConsumerOptions {
+	consumer?: Enum.Consumer | string
+}
+
+export interface IQuery {
+	cinf(options: CInfOptions): Promise<IAMCPCommand<CInfOptions, string[]>> // TODO types responses
+	cls(options?: CLSOptions): Promise<IAMCPCommand<CLSOptions, string[]>>
+	fls(): Promise<IAMCPCommand<undefined, string[]>>
+	tls(options?: TLSOptions): Promise<IAMCPCommand<TLSOptions, string[]>>
+	version(options?: VersionOptions): Promise<IAMCPCommand<VersionOptions, string>>
+	info(options?: InfoOptions): Promise<IAMCPCommand<InfoOptions, InfoOptions>>
+	infoTemplate(options: InfoTemplateOptions): Promise<IAMCPCommand<InfoTemplateOptions, string[]>>
+	infoConfig(): Promise<IAMCPCommand<undefined, string>>
+	infoPaths(): Promise<IAMCPCommand<undefined, string>>
+	infoSystem(): Promise<IAMCPCommand<undefined, string>>
+	infoServer(): Promise<IAMCPCommand<undefined, string>>
+	infoQueues(): Promise<IAMCPCommand<undefined, string>>
+	infoThreads(): Promise<IAMCPCommand<undefined, string>>
+	infoDelay(options: InfoDelayOptions): Promise<IAMCPCommand<InfoDelayOptions, string>>
+	templateHostInfo(options: TemplateHostInfoOptions): Promise<IAMCPCommand<TemplateHostInfoOptions, string>>
+	glInfo(): Promise<IAMCPCommand<undefined, string>>
+	logLevel(options: LogLevelOptions): Promise<IAMCPCommand<LogLevelOptions, LogLevelOptions>>
+	logCategory(options: LogCategoryOptions): Promise<IAMCPCommand<LogCategoryOptions, string>>
+	logCalltrace(enabled: boolean): Promise<IAMCPCommand<LogCategoryOptions, string>>
+	logCommunication(enabled: boolean): Promise<IAMCPCommand<LogCategoryOptions, string>>
+	diag(): Promise<IAMCPCommand<undefined, undefined>>
+	help(options?: HelpOptions): Promise<IAMCPCommand<HelpOptions, string>>
+	getCommands(): Promise<IAMCPCommand<HelpOptions, string>>
+	helpProducer(options?: HelpProducerOptions): Promise<IAMCPCommand<HelpProducerOptions, string>>
+	getProducers(): Promise<IAMCPCommand<HelpProducerOptions, string>>
+	helpConsumer(options?: HelpConsumerOptions): Promise<IAMCPCommand<HelpConsumerOptions, string>>
+	getConsumers(): Promise<IAMCPCommand<HelpConsumerOptions, string>>
+}
+
+/**
+ * AMCP Operation-commands
+ */
+export interface IOperation {
+	bye(): Promise<IAMCPCommand<undefined, undefined>>
+	kill(): Promise<IAMCPCommand<undefined, undefined>>
+	restart(): Promise<IAMCPCommand<undefined, undefined>>
+}
+
+export interface AMCP extends IVideo, IInputOutput, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation { }
 
 /**
  * CasparCG Interface
@@ -277,7 +550,7 @@ export interface ICasparCGConnection {
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object.
  * `CasparCG` should be the only public interface to interact directly with.
  */
-export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1AMCP {
+export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, AMCP {
 	/**
 	 * Try to connect upon creation.
 	 */

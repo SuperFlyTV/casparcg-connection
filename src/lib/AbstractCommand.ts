@@ -93,14 +93,16 @@ export namespace Command {
 	/**
 	 *
 	 */
-	export interface IAMCPCommand extends IAMCPCommandData {
+	export interface IAMCPCommand<REQ, RES> extends IAMCPCommandData {
 		paramProtocol: Array<IParamSignature>
 		protocolLogic: Array<IProtocolLogic>
 		responseProtocol: ResponseSignature
 		onStatusChanged: ICommandStatusCallback
 		token: string
-		resolve: (command: IAMCPCommand) => void
-		reject: (command: IAMCPCommand) => void
+		params: REQ
+		result: RES | undefined
+		resolve: (command: IAMCPCommand<REQ, RES>) => void
+		reject: (command: IAMCPCommand<REQ, RES>) => void
 		getParam: (name: string) => string | number | boolean | Object | undefined
 		validateParams(): boolean
 		validateResponse(response: CasparCGSocketResponse): boolean
@@ -111,13 +113,15 @@ export namespace Command {
 	/**
 	 *
 	 */
-	export abstract class AbstractCommand implements IAMCPCommand {
+	export abstract class AbstractCommand<REQ, RES> implements IAMCPCommand<REQ, RES> {
 		response: IAMCPResponse = new AMCPResponse()
 		paramProtocol: Array<IParamSignature>
 		responseProtocol: ResponseSignature = new ResponseSignature()
 		onStatusChanged: ICommandStatusCallback
-		resolve: (command: IAMCPCommand) => void
-		reject: (command: IAMCPCommand) => void
+		resolve: (command: IAMCPCommand<REQ, RES>) => void
+		reject: (command: IAMCPCommand<REQ, RES>) => void
+		params: REQ
+		result: RES | undefined
 		protected _channel: number
 		protected _layer: number
 		protected _id: string

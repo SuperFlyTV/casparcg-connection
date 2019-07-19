@@ -1,6 +1,6 @@
 {
   "name": "casparcg-connection",
-  "version": "4.6.1",
+  "version": "5.0.0",
   "description": "Node.js Javascript/Typescript library for CasparCG connection and commands.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -47,7 +47,11 @@
     {
       "name": "Stephan Nordnes Eriksen",
       "email": "Stephanruler@gmail.com"
-    }
+    },
+		{
+			"name": "Richard Cartwright",
+			"email": "spark@streampunk.media"
+		}
   ],
   "scripts": {
     "info": "npm-scripts-info",
@@ -123,7 +127,8 @@
     "tslint": "^5.9.1",
     "tslint-config-standard": "^6.0.1",
     "typedoc": "^0.14.2",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.3333",
+		"marked": "^0.6.2"
   },
   "keywords": [
     "casparcg",
