@@ -3,7 +3,7 @@ import { CasparCGSocket } from './lib/CasparCGSocket'
 import { AMCP, AMCPUtil as AMCPUtilNS } from './lib/AMCP'
 // AMCPUtilNS
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse
-import { Enum } from './lib/ServerStateEnum'
+import * as Enum from './lib/ServerStateEnum'
 import { IConnectionOptions, ConnectionOptions, Options as OptionsNS } from './lib/AMCPConnectionOptions'
 // Options NS
 import QueueMode = OptionsNS.QueueMode
@@ -532,15 +532,15 @@ export interface ICasparCGConnection {
 	removeQueuedCommand(id: string): boolean
 	connect(options?: IConnectionOptions): void
 	disconnect(): void
-	createCommand(command: IAMCPCommand): IAMCPCommand | undefined
-	createCommand(commandString: string, ...params: (string | Param)[]): IAMCPCommand | undefined
-	queueCommand(command: IAMCPCommand, priority: Priority): Promise<IAMCPCommand>
-	do(command: IAMCPCommand): Promise<IAMCPCommand>
-	do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	doNow(command: IAMCPCommand): Promise<IAMCPCommand>
-	doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	doLater(command: IAMCPCommand): Promise<IAMCPCommand>
-	doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
+	createCommand<REQ, RES>(command: IAMCPCommand<REQ, RES>): IAMCPCommand<REQ, RES> | undefined
+	createCommand<REQ, RES>(commandString: string, ...params: (string | Param)[]): IAMCPCommand<REQ, RES> | undefined
+	queueCommand<REQ, RES>(command: IAMCPCommand<REQ, RES>, priority: Priority): Promise<IAMCPCommand<REQ, RES>>
+	do<REQ, RES>(command: IAMCPCommand<REQ, RES>): Promise<IAMCPCommand<REQ, RES>>
+	do<REQ, RES>(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand<REQ, RES>>
+	doNow<REQ, RES>(command: IAMCPCommand<REQ, RES>): Promise<IAMCPCommand<REQ, RES>>
+	doNow<REQ, RES>(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand<REQ, RES>>
+	doLater<REQ, RES>(command: IAMCPCommand<REQ, RES>): Promise<IAMCPCommand<REQ, RES>>
+	doLater<REQ, RES>(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand<REQ, RES>>
 }
 
 /**
@@ -608,10 +608,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _autoReconnectInterval: number
 	private _autoReconnectAttempts: number
 	private _socket: CasparCGSocket
-	private _queuedCommands: Array<IAMCPCommand> = []
-	private _queuedCommandsLowPriority: Array<IAMCPCommand> = []
-	private _queuedCommandsHighPriority: Array<IAMCPCommand> = []
-	private _sentCommands: { [token: string]: IAMCPCommand } = {}
+	private _queuedCommands: Array<IAMCPCommand<any, any>> = []
+	private _queuedCommandsLowPriority: Array<IAMCPCommand<any, any>> = []
+	private _queuedCommandsHighPriority: Array<IAMCPCommand<any, any>> = []
+	private _sentCommands: { [token: string]: IAMCPCommand<any, any> } = {}
 	private _configPromise: Promise<CasparCGConfig>
 	private _pathsPromise: Promise<CasparCGPaths>
 	private _versionPromise: Promise<CasparCGVersion>

@@ -1,4 +1,4 @@
-import { Enum } from './ServerStateEnum'
+import * as Enum from './ServerStateEnum'
 // ResponseNS
 import { Response as ResponseSignatureNS } from './ResponseSignature'
 import { Response as ResponseValidator } from './ResponseValidators'

@@ -1,6 +1,6 @@
 // Enum NS
-import { Enum as EnumNS } from './ServerStateEnum'
-import AbstractEnum = EnumNS.AbstractEnum
+import * as EnumNS from './ServerStateEnum'
+import AllEnums = EnumNS.AllEnums
 // Param NS
 import { Param as ParamNS } from './ParamSignature'
 import IParamSignature = ParamNS.IParamSignature
@@ -20,12 +20,12 @@ export namespace Protocol {
 	 *
 	 */
 	export abstract class AbstractProtocolLogic implements IProtocolLogic {
-		protected fields: Array<string | AbstractEnum>
+		protected fields: Array<string | AllEnums>
 
 		/**
 		 *
 		 */
-		constructor(...fields: Array<string | AbstractEnum>) {
+		constructor(...fields: Array<string | AllEnums>) {
 			this.fields = fields
 		}
 
@@ -42,16 +42,16 @@ export namespace Protocol {
 		/**
 		 *
 		 */
-		constructor(dependant: string | AbstractEnum, dependee: string | AbstractEnum);
-		constructor(...fields: Array<string | AbstractEnum>);
-		constructor(...fields: Array<string | AbstractEnum>) {
+		constructor(dependant: string | AllEnums, dependee: string | AllEnums);
+		constructor(...fields: Array<string | AllEnums>);
+		constructor(...fields: Array<string | AllEnums>) {
 			super(...fields)
 		}
 
 		/**
 		 * This will apply the validation only when this condition is met
 		 */
-		public if(target: string, mustBe: AbstractEnum | string): IProtocolLogic {
+		public if(target: string, mustBe: AllEnums | string): IProtocolLogic {
 			let resolveRef = this.resolve
 			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
 				for (let param of protocol) {
@@ -68,7 +68,7 @@ export namespace Protocol {
 		/**
 		 * This will apply the validation only when this condition is not met
 		 */
-		public ifNot(target: string, cantBe: AbstractEnum | string): IProtocolLogic {
+		public ifNot(target: string, cantBe: AllEnums | string): IProtocolLogic {
 			let resolveRef = this.resolve
 			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
 				for (let param of protocol) {
@@ -85,7 +85,7 @@ export namespace Protocol {
 		/**
 		 * This will only include the field when this condition is met
 		 */
-		public mustBe(target: string, mustBe: AbstractEnum | string): IProtocolLogic {
+		public mustBe(target: string, mustBe: AllEnums | string): IProtocolLogic {
 			let resolveRef = this.resolve
 			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
 				for (let param of protocol) {
@@ -103,7 +103,7 @@ export namespace Protocol {
 		/**
 		 * This will only include the field when this condition is not met
 		 */
-		public mustNotBe(target: string, cantBe: AbstractEnum | string): IProtocolLogic {
+		public mustNotBe(target: string, cantBe: AllEnums | string): IProtocolLogic {
 			let resolveRef = this.resolve
 			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
 				for (let param of protocol) {
@@ -147,9 +147,9 @@ export namespace Protocol {
 		/**
 		 *
 		 */
-		constructor(either: string | AbstractEnum, or: string | AbstractEnum);
-		constructor(...fields: Array<string | AbstractEnum>);
-		constructor(...fields: Array<string | AbstractEnum>) {
+		constructor(either: string | AllEnums, or: string | AllEnums);
+		constructor(...fields: Array<string | AllEnums>);
+		constructor(...fields: Array<string | AllEnums>) {
 			super(...fields)
 		}
 
@@ -173,9 +173,9 @@ export namespace Protocol {
 		/**
 		 *
 		 */
-		constructor(partnerA: string | AbstractEnum, partnerB: string | AbstractEnum);
-		constructor(...fields: Array<string | AbstractEnum>);
-		constructor(...fields: Array<string | AbstractEnum>) {
+		constructor(partnerA: string | AllEnums, partnerB: string | AllEnums);
+		constructor(...fields: Array<string | AllEnums>);
+		constructor(...fields: Array<string | AllEnums>) {
 			super(...fields)
 		}
 

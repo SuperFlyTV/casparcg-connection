@@ -1,7 +1,7 @@
 import { Param as ParamNS } from './ParamSignature'
 import ParamData = ParamNS.ParamData
-import { Enum } from './ServerStateEnum'
-import AbstractEnum = Enum.AbstractEnum
+import * as Enum from './ServerStateEnum'
+import AllEnums = Enum.AllEnums
 
 import { Command as CommandNS } from './AbstractCommand'
 
@@ -189,7 +189,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		constructor(private _enumClass: typeof AbstractEnum) {
+		constructor(private _enumClass: typeof AllEnums) {
 			super()
 		}
 
