@@ -1,4 +1,4 @@
-import * as Enum from './ServerStateEnum'
+import { Command, Transition, Ease, Direction } from './ServerStateEnum'
 // ResponseNS
 import { Response as ResponseSignatureNS } from './ResponseSignature'
 import { Response as ResponseValidator } from './ResponseValidators'
@@ -6,162 +6,108 @@ import { Response as ResponseParser } from './ResponseParsers'
 
 import ResponseSignature = ResponseSignatureNS.ResponseSignature
 // Command NS
-import { Command as CommandNS } from './AbstractCommand'
-import IAMCPCommand = CommandNS.IAMCPCommand
-import IAMCPCommandVO = CommandNS.IAMCPCommandVO
-import AbstractCommand = CommandNS.AbstractCommand
-import AbstractOrChannelOrLayerCommand = CommandNS.AbstractOrChannelOrLayerCommand
-import AbstractChannelCommand = CommandNS.AbstractChannelCommand
-import AbstractChannelOrLayerCommand = CommandNS.AbstractChannelOrLayerCommand
-import AbstractLayerWithFallbackCommand = CommandNS.AbstractLayerWithFallbackCommand
-import AbstractLayerWithCgFallbackCommand = CommandNS.AbstractLayerWithCgFallbackCommand
+import { IAMCPCommand, IAMCPCommandVO, AbstractCommand, AbstractOrChannelOrLayerCommand, AbstractChannelCommand,
+ 	AbstractChannelOrLayerCommand, LayerWithFallbackCommand, AbstractLayerWithCgFallbackCommand } from './AbstractCommand'
+
 // Param NS
-import { Param as ParamNS } from './ParamSignature'
-import Param = ParamNS.Param
-import required = ParamNS.Required
-import optional = ParamNS.Optional
-import ParamSignature = ParamNS.ParamSignature
+import { Param, Required as required, Optional as optional, ParamSignature, IParamSignature } from './ParamSignature'
+
 // Validation NS
 import { Validation as ParameterValidator } from './ParamValidators'
 // Protocol NS
-import { Protocol as ProtocolNS } from './ProtocolLogic'
-import Depends = ProtocolNS.Depends
-import Coupled = ProtocolNS.Coupled
-import OneOf = ProtocolNS.OneOf
+import { Depends, Coupled, OneOf, IProtocolLogic } from './ProtocolLogic'
 
 /**
  * Internal
  */
-export namespace AMCP {
-	export class CustomCommand extends AbstractCommand {
-		static readonly commandString = ''
-		paramProtocol = [
-			new ParamSignature(required, 'command', null, new ParameterValidator.StringValidator(false))
-		]
-	}
-}
+// export class CustomCommand extends AbstractCommand {
+// 	static readonly commandString = ''
+// 	paramProtocol = [
+// 		new ParamSignature(required, 'command', null, new ParameterValidator.StringValidator(false))
+// 	]
+// }
 
-/**
- * IVideo
- */
-export namespace AMCP {
-	/**
-	 *
-	 */
-	export class LoadbgCommand extends AbstractLayerWithFallbackCommand {
-		static readonly commandString = 'LOADBG'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
+export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IProtocolLogic[]>([
+	[ Command.LOADBG, [
+		new Depends('transitionDuration', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('transitionEasing', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('transitionDirection', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('stingMaskFilename', 'transition').mustBe('transition', Transition.STING),
+		new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Transition.STING),
+		new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Transition.STING)
+	]],
+	[ Command.LOAD, [
+		new Depends('transitionDuration', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('transitionEasing', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('transitionDirection', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('stingMaskFilename', 'transition').mustBe('transition', Transition.STING),
+		new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Transition.STING),
+		new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Transition.STING)
+	]],
+	[ Command.PLAY, [
+		new Depends('loop', 'clip'),
+		new Depends('seek', 'clip'),
+		new Depends('length', 'clip'),
+		new Depends('filter', 'clip'),
+		new Depends('transition', 'clip'),
+		new Depends('transitionDuration', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('transitionEasing', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('transitionDirection', 'transition').mustNotBe('transition', Transition.STING),
+		new Depends('stingMaskFilename', 'transition').mustBe('transition', Transition.STING),
+		new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Transition.STING),
+		new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Transition.STING)
+	]]
+])
 
-	/**
-	 *
-	 */
-	export class LoadCommand extends AbstractLayerWithFallbackCommand {
-		static readonly commandString = 'LOAD'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class PlayCommand extends AbstractLayerWithFallbackCommand {
-		static readonly commandString = 'PLAY'
-		static readonly protocolLogic = [
-			new Depends('loop', 'clip'),
-			new Depends('seek', 'clip'),
-			new Depends('length', 'clip'),
-			new Depends('filter', 'clip'),
-			new Depends('transition', 'clip'),
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(optional, 'clip', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class PauseCommand extends AbstractLayerWithFallbackCommand {
-		static readonly commandString = 'PAUSE'
-	}
-
-	/**
-	 *
-	 */
-	export class ResumeCommand extends AbstractLayerWithFallbackCommand {
-		static readonly commandString = 'RESUME'
-	}
-
-	/**
-	 *
-	 */
-	export class StopCommand extends AbstractLayerWithFallbackCommand {
-		static readonly commandString = 'STOP'
-	}
-}
+export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, IParamSignature[]>([
+	[ Command.LOADBG, [
+		new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
+		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Direction)),
+		new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+		new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+		new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+		new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+		new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+	]],
+	[ Command.LOAD, [
+		new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
+		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Direction)),
+		new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+		new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+		new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+		new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+		new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+	]],
+	[ Command.PLAY, [
+		new ParamSignature(optional, 'clip', null, new ParameterValidator.ClipNameValidator()),
+		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Direction)),
+		new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+		new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+		new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+		new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+	]]
+])
 
 /**
  * IInputOutput
@@ -170,7 +116,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class LoadDecklinkBgCommand extends AbstractLayerWithFallbackCommand {
+	export class LoadDecklinkBgCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
@@ -200,7 +146,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class LoadDecklinkCommand extends AbstractLayerWithFallbackCommand {
+	export class LoadDecklinkCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
@@ -229,7 +175,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class PlayDecklinkCommand extends AbstractLayerWithFallbackCommand {
+	export class PlayDecklinkCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
 			new Depends('length', 'device'),
@@ -263,7 +209,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class LoadRouteBgCommand extends AbstractLayerWithFallbackCommand {
+	export class LoadRouteBgCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
@@ -293,7 +239,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class LoadRouteCommand extends AbstractLayerWithFallbackCommand {
+	export class LoadRouteCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
@@ -322,7 +268,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class PlayRouteCommand extends AbstractLayerWithFallbackCommand {
+	export class PlayRouteCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
 			new Depends('length', 'route'),
@@ -356,7 +302,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class LoadHtmlPageBgCommand extends AbstractLayerWithFallbackCommand {
+	export class LoadHtmlPageBgCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
@@ -382,7 +328,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class LoadHtmlPageCommand extends AbstractLayerWithFallbackCommand {
+	export class LoadHtmlPageCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
@@ -407,7 +353,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class PlayHtmlPageCommand extends AbstractLayerWithFallbackCommand {
+	export class PlayHtmlPageCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
 			new Depends('transition', 'url'),
@@ -539,7 +485,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerKeyerCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerKeyerCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('defer', 'keyer')
@@ -562,7 +508,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusKeyerCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusKeyerCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -582,7 +528,7 @@ export namespace AMCP {
 	/**
 	 * @todo	Validata/clamp lamp number range?
 	 */
-	export class MixerChromaCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerChromaCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Coupled('threshold', 'softness'),
@@ -612,7 +558,7 @@ export namespace AMCP {
 		}
 	}
 
-	export class MixerStatusChromaCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusChromaCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -632,7 +578,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerBlendCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerBlendCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('defer', 'blendmode')
@@ -655,7 +601,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusBlendCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusBlendCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -675,7 +621,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerOpacityCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerOpacityCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'opacity'),
@@ -702,7 +648,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusOpacityCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusOpacityCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -722,7 +668,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerBrightnessCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerBrightnessCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'brightness'),
@@ -749,7 +695,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusBrightnessCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusBrightnessCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -769,7 +715,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerSaturationCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerSaturationCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'saturation'),
@@ -796,7 +742,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusSaturationCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusSaturationCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -816,7 +762,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerContrastCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerContrastCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'contrast'),
@@ -843,7 +789,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusContrastCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusContrastCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -863,7 +809,7 @@ export namespace AMCP {
 	/**
 	 * @todo:	verify `gamma` value range
 	 */
-	export class MixerLevelsCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerLevelsCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Coupled('minInput', 'maxInput', 'gamma', 'minOutput', 'maxOutput'),
@@ -895,7 +841,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusLevelsCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusLevelsCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -915,7 +861,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerFillCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerFillCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Coupled('x', 'y', 'xScale', 'yScale'),
@@ -946,7 +892,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusFillCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusFillCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -966,7 +912,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerClipCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerClipCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Coupled('x', 'y', 'width', 'height'),
@@ -997,7 +943,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusClipCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusClipCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1017,7 +963,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerAnchorCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerAnchorCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Coupled('x', 'y'),
@@ -1046,7 +992,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusAnchorCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusAnchorCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1066,7 +1012,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerCropCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerCropCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Coupled('left', 'top', 'right', 'bottom'),
@@ -1097,7 +1043,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusCropCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusCropCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1117,7 +1063,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerRotationCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerRotationCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'rotation'),
@@ -1144,7 +1090,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusRotationCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusRotationCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1164,7 +1110,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerPerspectiveCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerPerspectiveCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Coupled('topLeftX', 'topLeftY', 'topRightX', 'topRightY', 'bottomRightX', 'bottomRightY', 'bottomLeftX', 'bottomLeftY'),
@@ -1199,7 +1145,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusPerspectiveCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusPerspectiveCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1219,7 +1165,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerMipmapCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerMipmapCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('defer', 'mipmap')
@@ -1242,7 +1188,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusMipmapCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusMipmapCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1262,7 +1208,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerVolumeCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerVolumeCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = [
 			new Depends('transitionDuration', 'volume'),
@@ -1289,7 +1235,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusVolumeCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusVolumeCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1334,7 +1280,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusMastervolumeCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusMastervolumeCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1377,7 +1323,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class MixerStatusStraightAlphaOutputCommand extends AbstractLayerWithFallbackCommand {
+	export class MixerStatusStraightAlphaOutputCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'MIXER'
 		static readonly protocolLogic = []
 		paramProtocol = [
@@ -1467,7 +1413,7 @@ export namespace AMCP {
 	/**
 	 *
 	 */
-	export class CallCommand extends AbstractLayerWithFallbackCommand {
+	export class CallCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'CALL'
 
 		static readonly protocolLogic = [
