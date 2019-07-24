@@ -9,18 +9,12 @@ import IResponseValidator = ResponseValidatorNS.IResponseValidator
 import { Response as ResponseParserNS } from './ResponseParsers'
 import IResponseParser = ResponseParserNS.IResponseParser
 // Param NS
-import { Param as ParamNS } from './ParamSignature'
-import Payload = ParamNS.Payload
-import PayloadVO = ParamNS.PayloadVO
-import Param = ParamNS.Param
-import ParamData = ParamNS.ParamData
-import IParamSignature = ParamNS.IParamSignature
+import { Payload, PayloadVO, Param, ParamData, IParamSignature } from './ParamSignature'
 // Validation ND
 import { Validation as ValidationNS } from './ParamValidators'
 import PositiveNumberValidatorBetween = ValidationNS.PositiveNumberRoundValidatorBetween
 // Protocol NS
-import { Protocol as ProtocolNS } from './ProtocolLogic'
-import IProtocolLogic = ProtocolNS.IProtocolLogic
+import { IProtocolLogic } from './ProtocolLogic'
 // Callback NS
 import { Callback as CallbackNS } from './global/Callback'
 import ICommandStatusCallback = CallbackNS.ICommandStatusCallback
@@ -115,7 +109,7 @@ export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES
 /**
  *
  */
-export abstract class AbstractCommand<C extends Command, REQ extends CommandOptions, RES> implements IAMCPCommand<C, REQ, RES> {
+export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES> implements IAMCPCommand<C, REQ, RES> {
 	response: IAMCPResponse = new AMCPResponse()
 	paramProtocol: Array<IParamSignature>
 	responseProtocol: ResponseSignature = new ResponseSignature()
@@ -493,9 +487,9 @@ export abstract class AbstractCommand<C extends Command, REQ extends CommandOpti
 /**
  *
  */
-export function isIAMCPCommand(object: any): object is IAMCPCommand {
+export function isIAMCPCommand(object: any): object is IAMCPCommand<Command, CommandOptions, any> {
 	// @todo: better inheritance type checking
-	for (let prop in AbstractCommand.prototype) {
+	for (let prop in AMCPCommand.prototype) {
 		if (object[prop] === undefined) {
 			return false
 		}
@@ -506,12 +500,12 @@ export function isIAMCPCommand(object: any): object is IAMCPCommand {
 /**
  *
  */
-export abstract class AbstractOrChannelOrLayerCommand extends AbstractCommand {
+export class OrChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
 	 */
-	constructor(params?: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: CommandOptions, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer()
@@ -559,11 +553,11 @@ export abstract class AbstractOrChannelOrLayerCommand extends AbstractCommand {
 /**
  *
  */
-export abstract class AbstractChannelCommand extends AbstractCommand {
+export class ChannelCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
 	/**
 	 *
 	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: CommandOptions, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		if (channel) {
@@ -604,12 +598,12 @@ export abstract class AbstractChannelCommand extends AbstractCommand {
 /**
  *
  */
-export abstract class AbstractLayerCommand extends AbstractCommand {
+export class LayerCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
 	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: CommandOptions, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer()
@@ -660,12 +654,12 @@ export abstract class AbstractLayerCommand extends AbstractCommand {
 /**
  *
  */
-export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
+export class ChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
 	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: CommandOptions, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer()
@@ -717,7 +711,7 @@ export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
 /**
  *
  */
-export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOptions, RES> extends AbstractCommand<C, REQ, RES> {
+export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -770,12 +764,12 @@ export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOpti
 /**
  *
  */
-export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand {
+export class LayerWithCgFallbackCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
 	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: CommandOptions, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer(9999)
@@ -819,14 +813,3 @@ export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand
 		return address
 	}
 }
-
-interface FormatMaker<REQ extends CommandOptions> {
-	(options: REQ): string
-}
-
-interface CommandMaker<REQ extends CommandOptions> {
-	(command: Command): FormatMaker<REQ>
-}
-
-let m: Map<Command, CommandMaker<CommandOptions>> = new Map<Command, CommandMaker<CommandOptions>>()
-m.set(Command.PAUSE, (options: PauseOptions) => 'PAUSE')

@@ -1,4 +1,5 @@
-import { Command, Transition, Ease, Direction } from './ServerStateEnum'
+import { Command, Transition, Ease, Direction, LogLevel, LogCategory, Chroma,
+  BlendMode } from './ServerStateEnum'
 // ResponseNS
 import { Response as ResponseSignatureNS } from './ResponseSignature'
 import { Response as ResponseValidator } from './ResponseValidators'
@@ -6,8 +7,8 @@ import { Response as ResponseParser } from './ResponseParsers'
 
 import ResponseSignature = ResponseSignatureNS.ResponseSignature
 // Command NS
-import { IAMCPCommand, IAMCPCommandVO, AbstractCommand, AbstractOrChannelOrLayerCommand, AbstractChannelCommand,
- 	AbstractChannelOrLayerCommand, LayerWithFallbackCommand, AbstractLayerWithCgFallbackCommand } from './AbstractCommand'
+import { IAMCPCommand, IAMCPCommandVO, AMCPCommand, OrChannelOrLayerCommand, ChannelCommand,
+ 	ChannelOrLayerCommand, LayerWithFallbackCommand, LayerWithCgFallbackCommand } from './AMCPCommand'
 
 // Param NS
 import { Param, Required as required, Optional as optional, ParamSignature, IParamSignature } from './ParamSignature'
@@ -56,6 +57,64 @@ export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IP
 		new Depends('stingMaskFilename', 'transition').mustBe('transition', Transition.STING),
 		new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Transition.STING),
 		new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Transition.STING)
+	]],
+	[ Command.LOG_CATEGORY, [
+		new OneOf('calltrace', 'communication')
+	]],
+	[ Command.MIXER_KEYER, [
+		new Depends('defer', 'keyer')
+	]],
+	[ Command.MIXER_CHROMA, [
+		new Coupled('threshold', 'softness'),
+		new Depends('keyer', 'threshold').ifNot('keyer', Chroma.NONE),
+		new Depends('spill', 'threshold'),
+		new Depends('transitionDuration', 'keyer'),
+		new Depends('transitionEasing', 'keyer'),
+		new Depends('defer', 'threshold').ifNot('keyer', Chroma.NONE)
+	]],
+	[ Command.MIXER_BLEND, [
+		new Depends('defer', 'blendmode')
+	]],
+	[ Command.MIXER_INVERT, [
+		new Depends('defer', 'invert')
+	]],
+	[ Command.MIXER_OPACITY, [
+		new Depends('transitionDuration', 'opacity'),
+		new Depends('transitionEasing', 'opacity'),
+		new Depends('defer', 'opacity')
+	]],
+	[ Command.MIXER_BRIGHTNESS, [
+		new Depends('transitionDuration', 'brightness'),
+		new Depends('transitionEasing', 'brightness'),
+		new Depends('defer', 'brightness')
+	]],
+	[ Command.MIXER_SATURATION, [
+		new Depends('transitionDuration', 'saturation'),
+		new Depends('transitionEasing', 'saturation'),
+		new Depends('defer', 'saturation')
+	]],
+	[ Command.MIXER_CONTRAST, [
+		new Depends('transitionDuration', 'contrast'),
+		new Depends('transitionEasing', 'contrast'),
+		new Depends('defer', 'contrast')
+	]],
+	[ Command.MIXER_LEVELS, [
+		new Coupled('minInput', 'maxInput', 'gamma', 'minOutput', 'maxOutput'),
+		new Depends('transitionDuration', 'minInput'),
+		new Depends('transitionEasing', 'minInput'),
+		new Depends('defer', 'minInput')
+	]],
+	[ Command.MIXER_FILL, [
+		new Coupled('x', 'y', 'xScale', 'yScale'),
+		new Depends('transitionDuration', 'x'),
+		new Depends('transitionEasing', 'x'),
+		new Depends('defer', 'x')
+	]],
+	[ Command.MIXER_CLIP, [
+		new Coupled('x', 'y', 'width', 'height'),
+		new Depends('transitionDuration', 'x'),
+		new Depends('transitionEasing', 'x'),
+		new Depends('defer', 'x')
 	]]
 ])
 
@@ -106,959 +165,154 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 		new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 		new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+	]],
+	[ Command.CG_ADD, [
+		new ParamSignature(required, 'flashLayer', 'ADD', new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'templateName', null, new ParameterValidator.TemplateNameValidator()),
+		new ParamSignature(required, 'playOnLoad', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'data', null, new ParameterValidator.TemplateDataValidator())
+	]],
+	[ Command.CG_PLAY, [
+		new ParamSignature(required, 'flashLayer', 'PLAY', new ParameterValidator.PositiveNumberValidatorBetween(0))
+	]],
+	[ Command.CG_ADD, [
+		new ParamSignature(required, 'flashLayer', 'STOP', new ParameterValidator.PositiveNumberValidatorBetween(0))
+	]],
+	[ Command.CG_NEXT, [
+		new ParamSignature(required, 'flashLayer', 'NEXT', new ParameterValidator.PositiveNumberValidatorBetween(0))
+	]],
+	[ Command.CG_REMOVE, [
+		new ParamSignature(required, 'flashLayer', 'REMOVE', new ParameterValidator.PositiveNumberValidatorBetween(0))
+	]],
+	[ Command.CG_CLEAR, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLEAR'))
+	]],
+	[ Command.CG_UPDATE, [
+		new ParamSignature(required, 'flashLayer', 'UPDATE', new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'data', null, new ParameterValidator.TemplateDataValidator())
+	]],
+	[ Command.CG_INVOKE, [
+		new ParamSignature(required, 'flashLayer', 'INVOKE', new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'method', null, new ParameterValidator.StringValidator())
+	]],
+	[ Command.GL_INFO, [
+		new ParamSignature(required, 'info', null, new ParameterValidator.KeywordValidator('INFO')),
+		new ParamSignature(optional, 'flashLayer', null, new ParameterValidator.PositiveNumberValidatorBetween(0))
+	]],
+	[ Command.LOG_LEVEL, [
+		new ParamSignature(optional, 'level', null, new ParameterValidator.EnumValidator(LogLevel))
+	]],
+	[ Command.LOG_CATEGORY, [
+		new ParamSignature(optional, 'calltrace', LogCategory.CALLTRACE, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'communication', LogCategory.COMMUNICATION, new ParameterValidator.BooleanValidatorWithDefaults(1, 0))
+	]],
+	[ Command.MIXER_KEYER, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('KEYER')),
+		new ParamSignature(optional, 'keyer', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_CHROMA, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CHROMA')),
+		new ParamSignature(optional, 'keyer', null, new ParameterValidator.EnumValidator(Chroma)),
+		new ParamSignature(optional, 'threshold', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'softness', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'spill', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_BLEND, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BLEND')),
+		new ParamSignature(optional, 'blendmode', null, new ParameterValidator.EnumValidator(BlendMode)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_INVERT, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('INVERT')),
+		new ParamSignature(optional, 'invert', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_OPACITY, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('OPACITY')),
+		new ParamSignature(optional, 'opacity', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_BRIGHTNESS, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BRIGHTNESS')),
+		new ParamSignature(optional, 'brightness', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_SATURATION, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('SATURATION')),
+		new ParamSignature(optional, 'saturation', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_CONTRAST, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CONTRAST')),
+		new ParamSignature(optional, 'contrast', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_LEVELS, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('LEVELS')),
+		new ParamSignature(optional, 'minInput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'maxInput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'gamma', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'minOutput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'maxOutput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_FILL, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('FILL')),
+		new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'xScale', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'yScale', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_FILL, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLIP')),
+		new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'width', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'height', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 	]]
 ])
 
-/**
- * IInputOutput
- */
-export namespace AMCP {
-	/**
-	 *
-	 */
-	export class LoadDecklinkBgCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'LOADBG'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class LoadDecklinkCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'LOAD'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class PlayDecklinkCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'PLAY'
-		static readonly protocolLogic = [
-			new Depends('length', 'device'),
-			new Depends('filter', 'device'),
-			new Depends('format', 'device'),
-			new Depends('channelLayout', 'device'),
-			new Depends('transition', 'device'),
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class LoadRouteBgCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'LOADBG'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
-			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class LoadRouteCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'LOAD'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
-			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class PlayRouteCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'PLAY'
-		static readonly protocolLogic = [
-			new Depends('length', 'route'),
-			new Depends('filter', 'route'),
-			new Depends('format', 'route'),
-			new Depends('channelLayout', 'route'),
-			new Depends('transition', 'route'),
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
-			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class LoadHtmlPageBgCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'LOADBG'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class LoadHtmlPageCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'LOAD'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class PlayHtmlPageCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'PLAY'
-		static readonly protocolLogic = [
-			new Depends('transition', 'url'),
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(optional, 'url', '[HTML]', new ParameterValidator.URLValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
-		]
-	}
-}
-
-/**
- * ICG
- */
-export namespace AMCP {
-	/**
-	 *
-	 */
-	export class CGAddCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'ADD', new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(required, 'templateName', null, new ParameterValidator.TemplateNameValidator()),
-			new ParamSignature(required, 'playOnLoad', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-			new ParamSignature(optional, 'data', null, new ParameterValidator.TemplateDataValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class CGPlayCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'PLAY', new ParameterValidator.PositiveNumberValidatorBetween(0))
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class CGStopCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'STOP', new ParameterValidator.PositiveNumberValidatorBetween(0))
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class CGNextCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'NEXT', new ParameterValidator.PositiveNumberValidatorBetween(0))
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class CGRemoveCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'REMOVE', new ParameterValidator.PositiveNumberValidatorBetween(0))
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class CGClearCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLEAR'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CLEAR'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class CGUpdateCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'UPDATE', new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(required, 'data', null, new ParameterValidator.TemplateDataValidator())
-		]
-	}
-
-	/**
-	 * @todo: 201 response code, parsing???????
-	 */
-	export class CGInvokeCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-		paramProtocol = [
-			new ParamSignature(required, 'flashLayer', 'INVOKE', new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(required, 'method', null, new ParameterValidator.StringValidator())
-		]
-		responseProtocol = new ResponseSignature(201)
-	}
-}
+export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command, ResponseSignature>([
+	[ Command.CG_INVOKE, new ResponseSignature(201) ],
+	[ Command.GL_INFO, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.GLParser) ],
+	[ Command.MIXER_KEYER, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusKeyerParser) ],
+	[ Command.MIXER_CHROMA, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusChromaParser) ],
+	[ Command.MIXER_BLEND, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.MixerStatusBlendParser) ],
+	[ Command.MIXER_INVERT, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.MixerStatusInvertParser) ],
+	[ Command.MIXER_OPACITY, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusOpacityParser) ],
+	[ Command.MIXER_BRIGHTNESS, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusBrightnessParser) ],
+	[ Command.MIXER_SATURATION, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusSaturationParser) ],
+	[ Command.MIXER_CONTRAST, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusContrastParser) ],
+	[ Command.MIXER_LEVELS, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusLevelsParser) ],
+	[ Command.MIXER_FILL, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusFillParser) ],
+	[ Command.MIXER_CLIP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusClipParser) ]
+])
 
 /**
  * IMixer
  * @todo: switch 201/202 based on mode
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
-	export class MixerKeyerCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('defer', 'keyer')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('KEYER')),
-			new ParamSignature(optional, 'keyer', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'KEYER'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusKeyerCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('KEYER'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusKeyerParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'KEYER'
-		}
-	}
-
-	/**
-	 * @todo	Validata/clamp lamp number range?
-	 */
-	export class MixerChromaCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Coupled('threshold', 'softness'),
-			new Depends('keyer', 'threshold').ifNot('keyer', Enum.Chroma.NONE),
-			new Depends('spill', 'threshold'),
-			new Depends('transitionDuration', 'keyer'),
-			new Depends('transitionEasing', 'keyer'),
-			new Depends('defer', 'threshold').ifNot('keyer', Enum.Chroma.NONE)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CHROMA')),
-			new ParamSignature(optional, 'keyer', null, new ParameterValidator.EnumValidator(Enum.Chroma)),
-			new ParamSignature(optional, 'threshold', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'softness', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'spill', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CHROMA'
-		}
-	}
-
-	export class MixerStatusChromaCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CHROMA'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusChromaParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CHROMA'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerBlendCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('defer', 'blendmode')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BLEND')),
-			new ParamSignature(optional, 'blendmode', null, new ParameterValidator.EnumValidator(Enum.BlendMode)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'BLEND'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusBlendCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BLEND'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.MixerStatusBlendParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'BLEND'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerOpacityCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'opacity'),
-			new Depends('transitionEasing', 'opacity'),
-			new Depends('defer', 'opacity')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('OPACITY')),
-			new ParamSignature(optional, 'opacity', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'OPACITY'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusOpacityCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('OPACITY'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusOpacityParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'OPACITY'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerBrightnessCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'brightness'),
-			new Depends('transitionEasing', 'brightness'),
-			new Depends('defer', 'brightness')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BRIGHTNESS')),
-			new ParamSignature(optional, 'brightness', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'BRIGHTNESS'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusBrightnessCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BRIGHTNESS'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusBrightnessParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'BRIGHTNESS'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerSaturationCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'saturation'),
-			new Depends('transitionEasing', 'saturation'),
-			new Depends('defer', 'saturation')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('SATURATION')),
-			new ParamSignature(optional, 'saturation', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'SATURATION'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusSaturationCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('SATURATION'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusSaturationParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'SATURATION'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerContrastCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'contrast'),
-			new Depends('transitionEasing', 'contrast'),
-			new Depends('defer', 'contrast')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CONTRAST')),
-			new ParamSignature(optional, 'contrast', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CONTRAST'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusContrastCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CONTRAST'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusContrastParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CONTRAST'
-		}
-	}
-
-	/**
-	 * @todo:	verify `gamma` value range
-	 */
-	export class MixerLevelsCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Coupled('minInput', 'maxInput', 'gamma', 'minOutput', 'maxOutput'),
-			new Depends('transitionDuration', 'minInput'),
-			new Depends('transitionEasing', 'minInput'),
-			new Depends('defer', 'minInput')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('LEVELS')),
-			new ParamSignature(optional, 'minInput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'maxInput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'gamma', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'minOutput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'maxOutput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'LEVELS'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusLevelsCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('LEVELS'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusLevelsParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'LEVELS'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerFillCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Coupled('x', 'y', 'xScale', 'yScale'),
-			new Depends('transitionDuration', 'x'),
-			new Depends('transitionEasing', 'x'),
-			new Depends('defer', 'x')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('FILL')),
-			new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'xScale', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'yScale', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'FILL'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusFillCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('FILL'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusFillParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'FILL'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerClipCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Coupled('x', 'y', 'width', 'height'),
-			new Depends('transitionDuration', 'x'),
-			new Depends('transitionEasing', 'x'),
-			new Depends('defer', 'x')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLIP')),
-			new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'width', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'height', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CLIP'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusClipCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLIP'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusClipParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CLIP'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerAnchorCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Coupled('x', 'y'),
-			new Depends('transitionDuration', 'x'),
-			new Depends('transitionEasing', 'x'),
-			new Depends('defer', 'x')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ANCHOR')),
-			new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'ANCHOR'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusAnchorCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ANCHOR'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusAnchorParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'ANCHOR'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerCropCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Coupled('left', 'top', 'right', 'bottom'),
-			new Depends('transitionDuration', 'left'),
-			new Depends('transitionEasing', 'left'),
-			new Depends('defer', 'left')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CROP')),
-			new ParamSignature(optional, 'left', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'top', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'right', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'bottom', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CROP'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusCropCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CROP'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusCropParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CROP'
-		}
-	}
 
 	/**
 	 *
@@ -1825,64 +1079,11 @@ export namespace AMCP {
 	}
 
 	/**
-	 * @todo: response validator/parser
-	 */
-	export class CGInfoCommand extends AbstractLayerWithCgFallbackCommand {
-		static readonly commandString = 'CG'
-
-		paramProtocol = [
-			new ParamSignature(required, 'info', null, new ParameterValidator.KeywordValidator('INFO')),
-			new ParamSignature(optional, 'flashLayer', null, new ParameterValidator.PositiveNumberValidatorBetween(0))
-		]
-		responseProtocol = new ResponseSignature(201)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['info'] = 'INFO'
-		}
-	}
-
-	/**
 	 *
 	 */
-	export class GlInfoCommand extends AbstractCommand {
-		static readonly commandString = 'GL INFO'
-		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.GLParser)
-	}
-
-	/**
-	 *
-	 */
-	export class LogLevelCommand extends AbstractCommand {
-		static readonly commandString = 'LOG LEVEL'
-		paramProtocol = [
-			new ParamSignature(optional, 'level', null, new ParameterValidator.EnumValidator(Enum.LogLevel))
-		]
-	}
-
-	/**
-	 * @protocol	Needs either `calltrace` or `communication` parameter.
-	 */
-	export class LogCategoryCommand extends AbstractCommand {
-		static readonly commandString = 'LOG CATEGORY'
-		static readonly protocolLogic = [
-			new OneOf('calltrace', 'communication')
-		]
-		paramProtocol = [
-			new ParamSignature(optional, 'calltrace', Enum.LogCategory.CALLTRACE.value, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-			new ParamSignature(optional, 'communication', Enum.LogCategory.COMMUNICATION.value, new ParameterValidator.BooleanValidatorWithDefaults(1, 0))
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class DiagCommand extends AbstractCommand {
-		static readonly commandString = 'DIAG'
-	}
+	// export class DiagCommand extends AbstractCommand {
+	// 	static readonly commandString = 'DIAG'
+	// }
 
 	/**
 	 * @todo: mixed mode!!!!
@@ -1983,6 +1184,275 @@ export namespace AMCP {
 		]
 	}
 }
+
+/**
+ * IInputOutput
+ */
+export namespace AMCP {
+	/**
+	 *
+	 */
+	export class LoadDecklinkBgCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'LOADBG'
+		static readonly protocolLogic = [
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
+			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class LoadDecklinkCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'LOAD'
+		static readonly protocolLogic = [
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class PlayDecklinkCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'PLAY'
+		static readonly protocolLogic = [
+			new Depends('length', 'device'),
+			new Depends('filter', 'device'),
+			new Depends('format', 'device'),
+			new Depends('channelLayout', 'device'),
+			new Depends('transition', 'device'),
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class LoadRouteBgCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'LOADBG'
+		static readonly protocolLogic = [
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class LoadRouteCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'LOAD'
+		static readonly protocolLogic = [
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class PlayRouteCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'PLAY'
+		static readonly protocolLogic = [
+			new Depends('length', 'route'),
+			new Depends('filter', 'route'),
+			new Depends('format', 'route'),
+			new Depends('channelLayout', 'route'),
+			new Depends('transition', 'route'),
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class LoadHtmlPageBgCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'LOADBG'
+		static readonly protocolLogic = [
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class LoadHtmlPageCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'LOAD'
+		static readonly protocolLogic = [
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class PlayHtmlPageCommand extends LayerWithFallbackCommand {
+		static readonly commandString = 'PLAY'
+		static readonly protocolLogic = [
+			new Depends('transition', 'url'),
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(optional, 'url', '[HTML]', new ParameterValidator.URLValidator()),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
+		]
+	}
+}
+
 
 /**
  * Factory

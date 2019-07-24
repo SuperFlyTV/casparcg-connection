@@ -10,12 +10,11 @@ import { IConnectionOptions, ConnectionOptions, Options as OptionsNS } from './l
 import QueueMode = OptionsNS.QueueMode
 import CasparCGVersion = OptionsNS.CasparCGVersion
 // Command NS
-import { IAMCPCommand, isIAMCPCommand, IAMCPStatus, AMCPResponse, CommandOptions, LayerWithFallbackCommand } from './lib/AbstractCommand'
+import { IAMCPCommand, isIAMCPCommand, IAMCPStatus, AMCPResponse, CommandOptions,
+	LayerWithFallbackCommand, LayerWithCgFallbackCommand, AMCPCommand } from './lib/AMCPCommand'
 
 // Param NS
-import { Param as ParamNS } from './lib/ParamSignature'
-import Param = ParamNS.Param
-import TemplateData = ParamNS.TemplateData
+import { Param, TemplateData } from './lib/ParamSignature'
 // Event NS
 import { CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent,
 	LogEvent, SocketStatusOptions } from './lib/event/Events'
@@ -650,9 +649,9 @@ export interface IQuery {
 	infoQueues(options?: InfoQueuesOptions): Promise<IAMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, string>>
 	infoThreads(options?: InfoThreadsOptions): Promise<IAMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, string>>
 	infoDelay(options: InfoDelayOptions): Promise<IAMCPCommand<Command.INFO_DELAY, InfoDelayOptions, string>>
-	templateHostInfo(options: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, string>>
+	templateHostInfo(options: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, CGInfoOptions>>
 	glInfo(options?: GLInfoOptions): Promise<IAMCPCommand<Command.GL_INFO, GLInfoOptions, string>>
-	logLevel(options: LogLevelOptions): Promise<IAMCPCommand<Command.LOG_LEVEL, LogLevelOptions, LogLevelOptions>>
+	logLevel(options: LogLevelOptions | LogLevel | string): Promise<IAMCPCommand<Command.LOG_LEVEL, LogLevelOptions, LogLevelOptions>>
 	logCategory(options: LogCategoryOptions): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>>
 	logCalltrace(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>>
 	logCommunication(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>>
@@ -1311,31 +1310,26 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		return this.do(new LayerWithFallbackCommand<Command.LOADBG, LoadBGOptions, LoadBGOptions>(options))
 	}
 
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOADBG>
-	 */
-	public loadbgAuto(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-	public loadbgAuto(channel: number, layer: number, clip: string, loop?: boolean, transition?: string, transitionMaskFile?: string, transitionStingDuration?: number, transitionOverlay?: string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-	public loadbgAuto(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.LoadbgCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), seek: seek, length: length, filter: filter, auto: true, channelLayout }))
-	}
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOADBG>
+	//  */
+	// public loadbgAuto(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.LoadbgCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), seek: seek, length: length, filter: filter, auto: true, channelLayout }))
+	// }
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOAD>
 	 */
-	public load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-	public load(channel: number, layer: number, clip: string, loop?: boolean, transition?: string, transitionMaskFile?: string, transitionStingDuration?: number, transitionOverlay?: string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-	public load(channel: number, layer: number = NaN, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.LoadCommand({ channel: channel, layer: layer, clip: clip, loop: loop, transition: transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), seek: seek, length: length, filter: filter, channelLayout }))
+	public load(options: LoadOptions): Promise<IAMCPCommand<Command.LOAD, LoadOptions, LoadOptions>> {
+		options.command = Command.LOAD
+		return this.do(new LayerWithFallbackCommand<Command.LOAD, LoadOptions, LoadOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#PLAY>
 	 */
-	public play(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition, transitionDuration?: number, transitionEasing?: Enum.Ease | string, transitionDirection?: Enum.Direction | string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-	public play(channel: number, layer: number, clip: string, loop?: boolean, transition?: string, transitionMaskFile?: string, transitionStingDuration?: number, transitionOverlay?: string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-	public play(channel: number, layer: number = NaN, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.PlayCommand({ channel, layer, clip, loop, transition, ...this._createTransitionOptionsObject(transition, transitionDurationOrMaskFile, transitionEasingOrStingDuration, transitionDirectionOrOverlay), seek, length, filter, channelLayout }))
+	public play(options: PlayOptions): Promise<IAMCPCommand<Command.PLAY, PlayOptions, PlayOptions>> {
+		return this.do(new LayerWithFallbackCommand<Command.PLAY, PlayOptions, PlayOptions>(options))
 	}
 
 	/**
@@ -1450,290 +1444,296 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-ADD>
 	 */
-	public cgAdd(channel: number, layer: number = NaN, flashLayer: number = NaN, templateName: string, playOnLoad: boolean | number | string, data?: TemplateData): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGAddCommand({ channel: channel, layer: layer, flashLayer: flashLayer, templateName: templateName, playOnLoad: playOnLoad, data: data }))
+	public cgAdd(options: CGAddOptions): Promise<IAMCPCommand<Command.CG_ADD, CGAddOptions, CGAddOptions>> {
+		options.command = Command.CG_ADD
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_ADD, CGAddOptions, CGAddOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-PLAY>
 	 */
-	public cgPlay(channel: number, layer?: number, flashLayer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGPlayCommand({ channel: channel, layer: layer, flashLayer: flashLayer }))
+	public cgPlay(options: CGPlayOptions): Promise<IAMCPCommand<Command.CG_PLAY, CGPlayOptions, CGPlayOptions>> {
+		options.command = Command.CG_PLAY
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_PLAY, CGPlayOptions, CGPlayOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-STOP>
 	 */
-	public cgStop(channel: number, layer?: number, flashLayer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGStopCommand({ channel: channel, layer: layer, flashLayer: flashLayer }))
+	public cgStop(options: CGStopOptions): Promise<IAMCPCommand<Command.CG_STOP, CGStopOptions, CGStopOptions>> {
+		options.command = Command.CG_STOP
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_STOP, CGStopOptions, CGStopOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-NEXT>
 	 */
-	public cgNext(channel: number, layer?: number, flashLayer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGNextCommand({ channel: channel, layer: layer, flashLayer: flashLayer }))
+	public cgNext(options: CGNextOptions): Promise<IAMCPCommand<Command.CG_NEXT, CGNextOptions, CGNextOptions>> {
+		options.command = Command.CG_NEXT
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_NEXT, CGNextOptions, CGNextOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-REMOVE>
 	 */
-	public cgRemove(channel: number, layer?: number, flashLayer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGRemoveCommand({ channel: channel, layer: layer, flashLayer: flashLayer }))
+	public cgRemove(options: CGRemoveOptions): Promise<IAMCPCommand<Command.CG_REMOVE, CGRemoveOptions, CGRemoveOptions>> {
+		options.command = Command.CG_REMOVE
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_REMOVE, CGRemoveOptions, CGRemoveOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-CLEAR>
 	 */
-	public cgClear(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGClearCommand({ channel: channel, layer: layer }))
+	public cgClear(options: CGClearOptions): Promise<IAMCPCommand<Command.CG_CLEAR, CGClearOptions, CGClearOptions>> {
+		options.command = Command.CG_CLEAR
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_CLEAR, CGClearOptions, CGClearOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-UPDATE>
 	 */
-	public cgUpdate(channel: number, layer: number = NaN, flashLayer: number, data: TemplateData): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGUpdateCommand({ channel: channel, layer: layer, flashLayer: flashLayer, data: data }))
+	public cgUpdate(options: CGUpdateOptions): Promise<IAMCPCommand<Command.CG_UPDATE, CGUpdateOptions, CGUpdateOptions>> {
+		options.command = Command.CG_UPDATE
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_UPDATE, CGUpdateOptions, CGUpdateOptions>(options))
 	}
 
 	/*
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-INVOKE
 	 */
-	public cgInvoke(channel: number, layer: number, flashLayer: number, method: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGInvokeCommand({ channel: channel, layer: layer, flashLayer: flashLayer, method: method }))
+	public cgInvoke(options: CGInvokeOptions): Promise<IAMCPCommand<Command.CG_INVOKE, CGInvokeOptions, CGInvokeOptions>> {
+		options.command = Command.CG_INVOKE
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_INVOKE, CGInvokeOptions, CGInvokeOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-KEYER>
 	 */
-	public mixerKeyer(channel: number, layer: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-	public mixerKeyer(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerKeyerCommand({ channel: channel, layer: layer, keyer: state, defer: defer }))
+	public mixerKeyer(options: MixerKeyerOptions): Promise<IAMCPCommand<Command.MIXER_KEYER, MixerKeyerOptions, MixerKeyerOptions>> {
+		options.command = Command.MIXER_KEYER
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_KEYER, MixerKeyerOptions, MixerKeyerOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-KEYER>
 	 */
-	public mixerKeyerDeferred(channel: number, layer: number, state?: number | boolean): Promise<IAMCPCommand> {
-		return this.mixerKeyer(channel, layer, state, true)
-	}
+	// public mixerKeyerDeferred(channel: number, layer: number, state?: number | boolean): Promise<IAMCPCommand> {
+	// 	return this.mixerKeyer(channel, layer, state, true)
+	// }
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-KEYER>
 	 */
-	public getMixerStatusKeyer(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusKeyerCommand({ channel: channel, layer: layer }))
+	// public getMixerStatusKeyer(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusKeyerCommand({ channel: channel, layer: layer }))
+	// }
+
+	/**
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CHROMA>
+	 */
+	public mixerChroma(options: MixerChromaOptions): Promise<IAMCPCommand<Command.MIXER_CHROMA, MixerChromaOptions, MixerChromaOptions>> {
+		options.command = Command.MIXER_CHROMA
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_CHROMA, MixerChromaOptions, MixerChromaOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CHROMA>
 	 */
-	public mixerChroma(channel: number, layer: number, keyer: Enum.Chroma, threshold: number, softness: number, spill: number, transitionDuration?: number, transitionEasing?: Enum.Ease, defer?: boolean): Promise<IAMCPCommand>
-	public mixerChroma(channel: number, layer: number, keyer: string, threshold: number, softness: number, spill: number, transitionDuration?: number, transitionEasing?: string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerChroma(channel: number, layer: number, keyer?: Enum.Chroma | string, threshold?: number, softness?: number, spill?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerChroma(channel: number, layer: number = 0, keyer?: Enum.Chroma | string, threshold?: number, softness?: number, spill?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerChromaCommand({ channel: channel, layer: layer, keyer: keyer, threshold: threshold, softness: softness, spill: spill, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
+	// public mixerChromaDeferred(channel: number, layer: number, keyer: Enum.Chroma, threshold: number, softness: number, spill: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
+	// public mixerChromaDeferred(channel: number, layer: number = 0, keyer: string | Enum.Chroma | string, threshold: number, softness: number, spill: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerChroma(channel, layer, keyer, threshold, softness, spill, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CHROMA>
+	//  */
+	// public getMixerStatusChroma(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusChromaCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CHROMA>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BLEND>
 	 */
-	public mixerChromaDeferred(channel: number, layer: number, keyer: Enum.Chroma, threshold: number, softness: number, spill: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-	public mixerChromaDeferred(channel: number, layer: number = 0, keyer: string | Enum.Chroma | string, threshold: number, softness: number, spill: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerChroma(channel, layer, keyer, threshold, softness, spill, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CHROMA>
-	 */
-	public getMixerStatusChroma(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusChromaCommand({ channel: channel, layer: layer }))
+	public mixerBlend(options: MixerBlendOptions): Promise<IAMCPCommand<Command.MIXER_BLEND, MixerBlendOptions, MixerBlendOptions>> {
+		options.command = Command.MIXER_BLEND
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_BLEND, MixerBlendOptions, MixerBlendOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BLEND>
 	 */
-	public mixerBlend(channel: number, layer: number, blendmode: string | Enum.BlendMode, defer?: boolean): Promise<IAMCPCommand>
-	public mixerBlend(channel: number, layer?: number, blendmode?: Enum.BlendMode | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerBlend(channel: number, layer?: number, blendmode?: Enum.BlendMode | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerBlendCommand({ channel: channel, layer: layer, blendmode: blendmode, defer: defer }))
-	}
+	// public mixerBlendDeferred(channel: number, layer: number, blendmode: string | Enum.BlendMode): Promise<IAMCPCommand>
+	// public mixerBlendDeferred(channel: number, layer: number = NaN, blendmode: Enum.BlendMode | string): Promise<IAMCPCommand> {
+	// 	return this.mixerBlend(channel, layer, blendmode, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BLEND>
+	//  */
+	// public getMixerStatusBlend(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusBlendCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BLEND>
+	 * https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-INVERT
 	 */
-	public mixerBlendDeferred(channel: number, layer: number, blendmode: string | Enum.BlendMode): Promise<IAMCPCommand>
-	public mixerBlendDeferred(channel: number, layer: number = NaN, blendmode: Enum.BlendMode | string): Promise<IAMCPCommand> {
-		return this.mixerBlend(channel, layer, blendmode, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BLEND>
-	 */
-	public getMixerStatusBlend(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusBlendCommand({ channel: channel, layer: layer }))
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-OPACITY>
-	 */
-	public mixerOpacity(channel: number, layer: number, opacity: number, transitionDuration?: number, transitionEasing?: string | Enum.Ease, defer?: boolean): Promise<IAMCPCommand>
-	public mixerOpacity(channel: number, layer?: number, opacity?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerOpacity(channel: number, layer?: number, opacity?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerOpacityCommand({ channel: channel, layer: layer, opacity: opacity, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
+	public mixerInvert(options: MixerInvertOptions): Promise<IAMCPCommand<Command.MIXER_INVERT, MixerInvertOptions, MixerInvertOptions>> {
+		options.command = Command.MIXER_INVERT
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_INVERT, MixerInvertOptions, MixerInvertOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-OPACITY>
 	 */
-	public mixerOpacityDeferred(channel: number, layer: number = NaN, opacity: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerOpacity(channel, layer, opacity, transitionDuration, transitionEasing, true)
+	public mixerOpacity(options: MixerOpacityOptions): Promise<IAMCPCommand<Command.MIXER_OPACITY, MixerOpacityOptions, MixerOpacityOptions>> {
+		options.command = Command.MIXER_OPACITY
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_OPACITY, MixerOpacityOptions, MixerOpacityOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-OPACITY>
 	 */
-	public getMixerStatusOpacity(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusOpacityCommand({ channel: channel, layer: layer }))
+	// public mixerOpacityDeferred(channel: number, layer: number = NaN, opacity: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerOpacity(channel, layer, opacity, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-OPACITY>
+	//  */
+	// public getMixerStatusOpacity(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusOpacityCommand({ channel: channel, layer: layer }))
+	// }
+
+	/**
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BRIGHTNESS>
+	 */
+	public mixerBrightness(options: MixerBrightnessOptions): Promise<IAMCPCommand<Command.MIXER_BRIGHTNESS, MixerBrightnessOptions, MixerBrightnessOptions>> {
+		options.command = Command.MIXER_BRIGHTNESS
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_BRIGHTNESS, MixerBrightnessOptions, MixerBrightnessOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BRIGHTNESS>
 	 */
-	public mixerBrightness(channel: number, layer: number, brightness: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerBrightness(channel: number, layer?: number, brightness?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerBrightness(channel: number, layer?: number, brightness?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerBrightnessCommand({ channel: channel, layer: layer, brightness: brightness, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
+	// public mixerBrightnessDeferred(channel: number, layer: number = NaN, brightness: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerBrightness(channel, layer, brightness, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BRIGHTNESS>
+	//  */
+	// public getMixerStatusBrightness(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusBrightnessCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BRIGHTNESS>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-SATURATION>
 	 */
-	public mixerBrightnessDeferred(channel: number, layer: number = NaN, brightness: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerBrightness(channel, layer, brightness, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BRIGHTNESS>
-	 */
-	public getMixerStatusBrightness(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusBrightnessCommand({ channel: channel, layer: layer }))
+	public mixerSaturation(options: MixerSaturationOptions): Promise<IAMCPCommand<Command.MIXER_SATURATION, MixerSaturationOptions, MixerSaturationOptions>> {
+		options.command = Command.MIXER_SATURATION
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_SATURATION, MixerSaturationOptions, MixerSaturationOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-SATURATION>
 	 */
-	public mixerSaturation(channel: number, layer: number, saturation: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerSaturation(channel: number, layer?: number, saturation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerSaturation(channel: number, layer?: number, saturation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerSaturationCommand({ channel: channel, layer: layer, saturation: saturation, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
+	// public mixerSaturationDeferred(channel: number, layer: number = NaN, saturation: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerSaturation(channel, layer, saturation, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-SATURATION>
+	//  */
+	// public getMixerStatusSaturation(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusSaturationCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-SATURATION>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CONTRAST>
 	 */
-	public mixerSaturationDeferred(channel: number, layer: number = NaN, saturation: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerSaturation(channel, layer, saturation, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-SATURATION>
-	 */
-	public getMixerStatusSaturation(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusSaturationCommand({ channel: channel, layer: layer }))
+	public mixerContrast(options: MixerContrastOptions): Promise<IAMCPCommand<Command.MIXER_CONTRAST, MixerContrastOptions, MixerContrastOptions>> {
+		options.command = Command.MIXER_CONTRAST
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_CONTRAST, MixerContrastOptions, MixerContrastOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CONTRAST>
 	 */
-	public mixerContrast(channel: number, layer: number, contrast: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerContrast(channel: number, layer?: number, contrast?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerContrast(channel: number, layer?: number, contrast?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerContrastCommand({ channel: channel, layer: layer, contrast: contrast, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
+	// public mixerContrastDeferred(channel: number, layer: number = NaN, contrast: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerContrast(channel, layer, contrast, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CONTRAST>
+	//  */
+	// public getMixerStatusContrast(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusContrastCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CONTRAST>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-LEVELS>
 	 */
-	public mixerContrastDeferred(channel: number, layer: number = NaN, contrast: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerContrast(channel, layer, contrast, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CONTRAST>
-	 */
-	public getMixerStatusContrast(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusContrastCommand({ channel: channel, layer: layer }))
+	public mixerLevels(options: MixerLevelsOptions): Promise<IAMCPCommand<Command.MIXER_LEVELS, MixerLevelsOptions, MixerLevelsOptions>> {
+		options.command = Command.MIXER_LEVELS
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_LEVELS, MixerLevelsOptions, MixerLevelsOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-LEVELS>
 	 */
-	public mixerLevels(channel: number, layer: number, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerLevels(channel: number, layer: number, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerLevels(channel: number, layer: number = NaN, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerLevelsCommand({ channel: channel, layer: layer, minInput: minInput, maxInput: maxInput, gamma: gamma, minOutput: minOutput, maxOutput: maxOutput, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-LEVELS>
-	 */
-	public mixerLevelsDeferred(channel: number, layer: number = NaN, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerLevels(channel, layer, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-LEVELS>
-	 */
-	public getMixerStatusLevels(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusLevelsCommand({ channel: channel, layer: layer }))
-	}
+	// public mixerLevelsDeferred(channel: number, layer: number = NaN, minInput: number, maxInput: number, gamma: number, minOutput: number, maxOutput: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerLevels(channel, layer, minInput, maxInput, gamma, minOutput, maxOutput, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-LEVELS>
+	//  */
+	// public getMixerStatusLevels(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusLevelsCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-FILL>
 	 */
-	public mixerFill(channel: number, layer: number, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerFill(channel: number, layer: number, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerFill(channel: number, layer: number = NaN, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerFillCommand({ channel: channel, layer: layer, x: x, y: y, xScale: xScale, yScale: yScale, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
+	public mixerFill(options: MixerFillOptions): Promise<IAMCPCommand<Command.MIXER_FILL, MixerFillOptions, MixerFillOptions>> {
+		options.command = Command.MIXER_FILL
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_FILL, MixerFillOptions, MixerFillOptions>(options))
 	}
 
 	/*
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-FILL>
 	 */
-	public mixerFillDeferred(channel: number, layer: number = NaN, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerFill(channel, layer, x, y, xScale, yScale, transitionDuration, transitionEasing, true)
-	}
+	// public mixerFillDeferred(channel: number, layer: number = NaN, x: number, y: number, xScale: number, yScale: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerFill(channel, layer, x, y, xScale, yScale, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-FILL>
+	//  */
+	// public getMixerStatusFill(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusFillCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-FILL>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CLIP>
 	 */
-	public getMixerStatusFill(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusFillCommand({ channel: channel, layer: layer }))
+	public mixerClip(options: MixerClipOptions): Promise<IAMCPCommand<Command.MIXER_CLIP, MixerClipOptions, MixerClipOptions>> {
+		options.command = Command.MIXER_CLIP
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_CLIP, MixerClipOptions, MixerClipOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CLIP>
 	 */
-	public mixerClip(channel: number, layer: number, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerClip(channel: number, layer: number, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerClip(channel: number, layer: number = NaN, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerClipCommand({ channel: channel, layer: layer, x: x, y: y, width: width, height: height, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CLIP>
-	 */
-	public mixerClipDeferred(channel: number, layer: number = NaN, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerClip(channel, layer, x, y, width, height, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CLIP>
-	 */
-	public getMixerStatusClip(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusClipCommand({ channel: channel, layer: layer }))
-	}
+	// public mixerClipDeferred(channel: number, layer: number = NaN, x: number, y: number, width: number, height: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerClip(channel, layer, x, y, width, height, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CLIP>
+	//  */
+	// public getMixerStatusClip(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusClipCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ANCHOR>
@@ -2252,8 +2252,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * @param flashLayer	If not specified, information about the `TemplateHost` will be returned.
 	 */
-	public cgInfo(channel: number, layer?: number, flashLayer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CGInfoCommand({ channel: channel, layer: layer, flashLayer: flashLayer }))
+	public cgInfo(options: CGInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, CGInfoOptions, CGInfoOptions>> {
+		options.command = Command.CG_INFO
+		return this.do(new LayerWithCgFallbackCommand<Command.CG_INFO, CGInfoOptions, CGInfoOptions>(options))
 	}
 
 	/**
@@ -2261,15 +2262,21 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-INFO>
 	 */
-	public templateHostInfo(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.cgInfo(channel, layer)
+	public templateHostInfo(options: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, CGInfoOptions>> {
+		options.command = Command.CG_INFO
+		return this.cgInfo(options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#GL-INFO>
 	 */
-	public glInfo(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.GlInfoCommand())
+	public glInfo(options?: GLInfoOptions): Promise<IAMCPCommand<Command.GL_INFO, GLInfoOptions, string>> {
+		if (!options) {
+			options = { command: Command.GL_INFO }
+		} else {
+			options.command = Command.GL_INFO
+		}
+		return this.do(new AMCPCommand<Command.GL_INFO, GLInfoOptions, string>(options))
 	}
 
 	/**
@@ -2277,8 +2284,16 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOG-LEVEL>
 	 */
-	public logLevel(enumOrString: Enum.LogLevel | string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.LogLevelCommand({ level: enumOrString }))
+	public logLevel(options: LogLevelOptions | LogLevel | string): Promise<IAMCPCommand<Command.LOG_LEVEL, LogLevelOptions, LogLevelOptions>> {
+		if (typeof options === 'object') {
+			options.command = Command.LOG_LEVEL
+		} else {
+			options = {
+				command: Command.LOG_LEVEL,
+				level: options
+			} as LogLevelOptions
+		}
+		return this.do(new AMCPCommand<Command.LOG_LEVEL, LogLevelOptions, LogLevelOptions>(options))
 	}
 
 	/**
@@ -2288,29 +2303,44 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOG_CATEGORY>
 	 */
-	public logCategory(category: Enum.LogCategory | string, enabled: boolean): Promise<IAMCPCommand> {
-		let params: Param = {}
-		params[category.toString().toLowerCase()] = enabled
-		return this.do(new AMCP.LogCategoryCommand(params))
+	public logCategory(options: LogCategoryOptions): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>> {
+		options.command = Command.LOG_CATEGORY
+		return this.do(new AMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>(options))
 	}
+
 	/**
 	 * Convenience method for enabling or disabling logging for [[LogCategory.CALLTRACE]] through calling [[logCategory]].
 	 */
-	public logCalltrace(enabled: boolean): Promise<IAMCPCommand> {
-		return this.logCategory(Enum.LogCategory.CALLTRACE, enabled)
+	public logCalltrace(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>> {
+		let options: LogCategoryOptions = {
+			category: LogCategory.CALLTRACE,
+			enabled: enabled
+		}
+		return this.logCategory(options)
 	}
 	/**
 	 * Convenience method for enabling or disabling logging for [[LogCategory.COMMUNICATION]] through calling [[logCategory]].
 	 */
-	public logCommunication(enabled: boolean): Promise<IAMCPCommand> {
-		return this.logCategory(Enum.LogCategory.COMMUNICATION, enabled)
+	public logCommunication(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>> {
+		let options: LogCategoryOptions = {
+			category: LogCategory.COMMUNICATION,
+			enabled: enabled
+		}
+		return this.logCategory(options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DIAG>
 	 */
-	public diag(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.DiagCommand())
+	public diag(options?: DiagOptions): Promise<IAMCPCommand<Command.DIAG, DiagOptions, undefined>> {
+		if (options) {
+			options.command = Command.DIAG
+		} else {
+			options = {
+				command: Command.DIAG
+			} as DiagOptions
+		}
+		return this.do(new AMCPCommand<Command.DIAG, DiagOptions, undefined>(options))
 	}
 
 	/**
