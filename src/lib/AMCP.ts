@@ -115,6 +115,45 @@ export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IP
 		new Depends('transitionDuration', 'x'),
 		new Depends('transitionEasing', 'x'),
 		new Depends('defer', 'x')
+	]],
+	[ Command.MIXER_ANCHOR, [
+		new Coupled('x', 'y'),
+		new Depends('transitionDuration', 'x'),
+		new Depends('transitionEasing', 'x'),
+		new Depends('defer', 'x')
+	]],
+	[ Command.MIXER_CROP, [
+		new Coupled('left', 'top', 'right', 'bottom'),
+		new Depends('transitionDuration', 'left'),
+		new Depends('transitionEasing', 'left'),
+		new Depends('defer', 'left')
+	]],
+	[ Command.MIXER_ROTATION, [
+		new Depends('transitionDuration', 'rotation'),
+		new Depends('transitionEasing', 'rotation'),
+		new Depends('defer', 'rotation')
+	]],
+	[ Command.MIXER_PERSPECTIVE, [
+		new Coupled('topLeftX', 'topLeftY', 'topRightX', 'topRightY', 'bottomRightX', 'bottomRightY', 'bottomLeftX', 'bottomLeftY'),
+		new Depends('transitionDuration', 'topLeftX'),
+		new Depends('transitionEasing', 'topLeftX'),
+		new Depends('defer', 'topLeftX')
+	]],
+	[ Command.MIXER_MIPMAP, [
+		new Depends('defer', 'mipmap')
+	]],
+	[ Command.MIXER_VOLUME, [
+		new Depends('transitionDuration', 'volume'),
+		new Depends('transitionEasing', 'volume'),
+		new Depends('defer', 'volume')
+	]],
+	[ Command.MIXER_MASTERVOLUME, [
+		new Depends('transitionDuration', 'mastervolume'),
+		new Depends('transitionEasing', 'mastervolume'),
+		new Depends('defer', 'mastervolume')
+	]],
+	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, [
+		new Depends('defer', 'straight_alpha_output')
 	]]
 ])
 
@@ -280,7 +319,7 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
 		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 	]],
-	[ Command.MIXER_FILL, [
+	[ Command.MIXER_CLIP, [
 		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLIP')),
 		new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
 		new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
@@ -288,6 +327,67 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 		new ParamSignature(optional, 'height', null, new ParameterValidator.NumberValidator()),
 		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
 		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_ANCHOR, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ANCHOR')),
+		new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_CROP, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CROP')),
+		new ParamSignature(optional, 'left', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'top', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'right', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'bottom', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_ROTATION, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ROTATION')),
+		new ParamSignature(optional, 'rotation', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_PERSPECTIVE, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('PERSPECTIVE')),
+		new ParamSignature(optional, 'topLeftX', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'topLeftY', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'topRightX', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'topRightY', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'bottomRightX', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'bottomRightY', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'bottomLeftX', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'bottomLeftY', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.NumberValidator()),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_MIPMAP, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MIPMAP')),
+		new ParamSignature(optional, 'mipmap', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_VOLUME, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('VOLUME')),
+		new ParamSignature(optional, 'volume', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_MASTERVOLUME, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MASTERVOLUME')),
+		new ParamSignature(optional, 'mastervolume', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('STRAIGHT_ALPHA_OUTPUT')),
+		new ParamSignature(optional, 'straight_alpha_output', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
 		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
 	]]
 ])
@@ -305,7 +405,15 @@ export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command
 	[ Command.MIXER_CONTRAST, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusContrastParser) ],
 	[ Command.MIXER_LEVELS, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusLevelsParser) ],
 	[ Command.MIXER_FILL, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusFillParser) ],
-	[ Command.MIXER_CLIP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusClipParser) ]
+	[ Command.MIXER_CLIP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusClipParser) ],
+	[ Command.MIXER_ANCHOR, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusAnchorParser) ],
+	[ Command.MIXER_CROP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusCropParser) ],
+	[ Command.MIXER_ROTATION, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusRotationParser) ],
+	[ Command.MIXER_PERSPECTIVE, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusPerspectiveParser) ],
+	[ Command.MIXER_MIPMAP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMipmapParser) ],
+	[ Command.MIXER_VOLUME, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusVolumeParser) ],
+	[ Command.MIXER_MASTERVOLUME, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMastervolumeParser) ],
+	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusStraightAlphaOutputParser) ]
 ])
 
 /**
@@ -313,286 +421,6 @@ export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command
  * @todo: switch 201/202 based on mode
  */
 export namespace AMCP {
-
-	/**
-	 *
-	 */
-	export class MixerRotationCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'rotation'),
-			new Depends('transitionEasing', 'rotation'),
-			new Depends('defer', 'rotation')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ROTATION')),
-			new ParamSignature(optional, 'rotation', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'ROTATION'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusRotationCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ROTATION'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusRotationParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'ROTATION'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerPerspectiveCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Coupled('topLeftX', 'topLeftY', 'topRightX', 'topRightY', 'bottomRightX', 'bottomRightY', 'bottomLeftX', 'bottomLeftY'),
-			new Depends('transitionDuration', 'topLeftX'),
-			new Depends('transitionEasing', 'topLeftX'),
-			new Depends('defer', 'topLeftX')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('PERSPECTIVE')),
-			new ParamSignature(optional, 'topLeftX', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'topLeftY', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'topRightX', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'topRightY', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'bottomRightX', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'bottomRightY', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'bottomLeftX', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'bottomLeftY', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.NumberValidator()),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'PERSPECTIVE'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusPerspectiveCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('PERSPECTIVE'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusPerspectiveParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'PERSPECTIVE'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerMipmapCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('defer', 'mipmap')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MIPMAP')),
-			new ParamSignature(optional, 'mipmap', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'MIPMAP'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusMipmapCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MIPMAP'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMipmapParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'MIPMAP'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerVolumeCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'volume'),
-			new Depends('transitionEasing', 'volume'),
-			new Depends('defer', 'volume')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('VOLUME')),
-			new ParamSignature(optional, 'volume', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'VOLUME'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusVolumeCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('VOLUME'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusVolumeParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'VOLUME'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerMastervolumeCommand extends AbstractChannelCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'mastervolume'),
-			new Depends('transitionEasing', 'mastervolume'),
-			new Depends('defer', 'mastervolume')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MASTERVOLUME')),
-			new ParamSignature(optional, 'mastervolume', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'MASTERVOLUME'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusMastervolumeCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MASTERVOLUME'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMastervolumeParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'MASTERVOLUME'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStraightAlphaOutputCommand extends AbstractChannelCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = [
-			new Depends('defer', 'straight_alpha_output')
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('STRAIGHT_ALPHA_OUTPUT')),
-			new ParamSignature(optional, 'straight_alpha_output', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'STRAIGHT_ALPHA_OUTPUT'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerStatusStraightAlphaOutputCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'MIXER'
-		static readonly protocolLogic = []
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('STRAIGHT_ALPHA_OUTPUT'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusStraightAlphaOutputParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'STRAIGHT_ALPHA_OUTPUT'
-		}
-	}
 
 	/**
 	 *

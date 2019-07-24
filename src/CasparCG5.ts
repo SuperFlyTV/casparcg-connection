@@ -11,7 +11,7 @@ import QueueMode = OptionsNS.QueueMode
 import CasparCGVersion = OptionsNS.CasparCGVersion
 // Command NS
 import { IAMCPCommand, isIAMCPCommand, IAMCPStatus, AMCPResponse, CommandOptions,
-	LayerWithFallbackCommand, LayerWithCgFallbackCommand, AMCPCommand } from './lib/AMCPCommand'
+	LayerWithFallbackCommand, LayerWithCgFallbackCommand, AMCPCommand, ChannelCommand } from './lib/AMCPCommand'
 
 // Param NS
 import { Param, TemplateData } from './lib/ParamSignature'
@@ -1738,183 +1738,178 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ANCHOR>
 	 */
-	public mixerAnchor(channel: number, layer: number, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerAnchor(channel: number, layer: number, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerAnchor(channel: number, layer: number = NaN, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerAnchorCommand({ channel: channel, layer: layer, x: x, y: y, ransition: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
+	public mixerAnchor(options: MixerAnchorOptions): Promise<IAMCPCommand<Command.MIXER_ANCHOR, MixerAnchorOptions, MixerAnchorOptions>> {
+		options.command = Command.MIXER_ANCHOR
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_ANCHOR, MixerAnchorOptions, MixerAnchorOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ANCHOR>
 	 */
-	public mixerAnchorDeferred(channel: number, layer: number = NaN, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerAnchor(channel, layer, x, y, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ANCHOR>
-	 */
-	public getMixerStatusAnchor(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusAnchorCommand({ channel: channel, layer: layer }))
-	}
+	// public mixerAnchorDeferred(channel: number, layer: number = NaN, x: number, y: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerAnchor(channel, layer, x, y, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ANCHOR>
+	//  */
+	// public getMixerStatusAnchor(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusAnchorCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CROP>
 	 */
-	public mixerCrop(channel: number, layer: number, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerCrop(channel: number, layer: number, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerCrop(channel: number, layer: number = NaN, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
+	public mixerCrop(options: MixerCropOptions): Promise<IAMCPCommand<Command.MIXER_CROP, MixerCropOptions, MixerCropOptions>> {
+		options.command = Command.MIXER_CROP
 		return this.do(new AMCP.MixerCropCommand({ channel: channel, layer: layer, left: left, top: top, right: right, bottom: bottom, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CROP>
 	 */
-	public mixerCropDeferred(channel: number, layer: number = NaN, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerCrop(channel, layer, left, top, right, bottom, transitionDuration, transitionEasing, true)
-	}
+	// public mixerCropDeferred(channel: number, layer: number = NaN, left: number, top: number, right: number, bottom: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerCrop(channel, layer, left, top, right, bottom, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CROP>
+	//  */
+	// public getMixerStatusCrop(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusCropCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CROP>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ROTATION>
 	 */
-	public getMixerStatusCrop(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusCropCommand({ channel: channel, layer: layer }))
+	public mixerRotation(options: MixerRotationOptions): Promise<IAMCPCommand<Command.MIXER_ROTATION, MixerRotationOptions, MixerRotationOptions>> {
+		options.command = Command.MIXER_ROTATION
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_ROTATION, MixerRotationOptions, MixerRotationOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ROTATION>
 	 */
-	public mixerRotation(channel: number, layer: number, rotation: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerRotation(channel: number, layer?: number, rotation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerRotation(channel: number, layer?: number, rotation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerRotationCommand({ channel: channel, layer: layer, rotation: rotation, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
+	// public mixerRotationDeferred(channel: number, layer: number = NaN, rotation: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerRotation(channel, layer, rotation, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ROTATION>
+	//  */
+	// public getMixerStatusRotation(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusRotationCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ROTATION>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-PERSPECTIVE>
 	 */
-	public mixerRotationDeferred(channel: number, layer: number = NaN, rotation: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerRotation(channel, layer, rotation, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ROTATION>
-	 */
-	public getMixerStatusRotation(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusRotationCommand({ channel: channel, layer: layer }))
+	public mixerPerspective(options: MixerPerspectiveOptions): Promise<IAMCPCommand<Command.MIXER_PERSPECTIVE, MixerPerspectiveOptions, MixerPerspectiveOptions>> {
+		options.command = Command.MIXER_PERSPECTIVE
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_PERSPECTIVE, MixerPerspectiveOptions, MixerPerspectiveOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-PERSPECTIVE>
 	 */
-	public mixerPerspective(channel: number, layer: number, topLeftX: number, topLeftY: number, topRightX: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerPerspective(channel: number, layer: number, topLeftX: number, topLeftY: number, topRightX: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerPerspective(channel: number, layer: number = NaN, topLeftX?: number, topLeftY?: number, topRightX?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottomLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerPerspectiveCommand({ channel: channel, layer: layer, topLeftX: topLeftX, topLeftY: topLeftY, topRightX: topRightX, topRightY: topRightY, bottomRightX: bottomRightX, bottomRightY: bottomRightY, bottomLeftX: bottomLeftX, bottomLeftY: bottomLeftY, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
+	// public mixerPerspectiveDeferred(channel: number, layer: number = NaN, topLeftX: number, topLeftY: number, topRightX: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerPerspective(channel, layer, topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-PERSPECTIVE>
+	//  */
+	// public getMixerStatusPerspective(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusPerspectiveCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-PERSPECTIVE>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MIPMAP>
 	 */
-	public mixerPerspectiveDeferred(channel: number, layer: number = NaN, topLeftX: number, topLeftY: number, topRightX: number, topRightY: number, bottomRightX: number, bottomRightY: number, bottomLeftX: number, bottomLeftY: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerPerspective(channel, layer, topLeftX, topLeftY, topRightX, topRightY, bottomRightX, bottomRightY, bottomLeftX, bottomLeftY, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-PERSPECTIVE>
-	 */
-	public getMixerStatusPerspective(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusPerspectiveCommand({ channel: channel, layer: layer }))
+	public mixerMipmap(options: MixerMipmapOptions): Promise<IAMCPCommand<Command.MIXER_MIPMAP, MixerMipmapOptions, MixerMipmapOptions>> {
+		options.command = Command.MIXER_MIPMAP
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_MIPMAP, MixerMipmapOptions, MixerMipmapOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MIPMAP>
 	 */
-	public mixerMipmap(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-	public mixerMipmap(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerMipmapCommand({ channel: channel, layer: layer, keyer: state, defer: defer }))
-	}
+	// public mixerMipmapDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand> {
+	// 	return this.mixerMipmap(channel, layer, state, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MIPMAP>
+	//  */
+	// public getMixerStatusMipmap(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusMipmapCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MIPMAP>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-VOLUME>
 	 */
-	public mixerMipmapDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand> {
-		return this.mixerMipmap(channel, layer, state, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MIPMAP>
-	 */
-	public getMixerStatusMipmap(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusMipmapCommand({ channel: channel, layer: layer }))
+	public mixerVolume(options: MixerVolumeOptions): Promise<IAMCPCommand<Command.MIXER_VOLUME, MixerVolumeOptions, MixerVolumeOptions>> {
+		options.command = Command.MIXER_VOLUME
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_VOLUME, MixerVolumeOptions, MixerVolumeOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-VOLUME>
 	 */
-	public mixerVolume(channel: number, layer: number, volume: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerVolume(channel: number, layer?: number, volume?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerVolume(channel: number, layer?: number, volume?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerVolumeCommand({ channel: channel, layer: layer, volume: volume, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
-	}
+	// public mixerVolumeDeferred(channel: number, layer: number = NaN, volume: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerVolume(channel, layer, volume, transitionDuration, transitionEasing, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-VOLUME>
+	//  */
+	// public getMixerStatusVolume(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusVolumeCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-VOLUME>
+	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MASTERVOLUME>
 	 */
-	public mixerVolumeDeferred(channel: number, layer: number = NaN, volume: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerVolume(channel, layer, volume, transitionDuration, transitionEasing, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-VOLUME>
-	 */
-	public getMixerStatusVolume(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusVolumeCommand({ channel: channel, layer: layer }))
+	public mixerMastervolume(options: MixerMastervolumeOptions): Promise<IAMCPCommand<Command.MIXER_MASTERVOLUME, MixerMastervolumeOptions, MixerMastervolumeOptions>> {
+		options.command = Command.MIXER_MASTERVOLUME
+		return this.do(new ChannelCommand<Command.MIXER_MASTERVOLUME, MixerMastervolumeOptions, MixerMastervolumeOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MASTERVOLUME>
 	 */
-	public mixerMastervolume(channel: number, mastervolume?: number, defer?: boolean): Promise<IAMCPCommand>
-	public mixerMastervolume(channel: number, mastervolume?: number, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerMastervolumeCommand({ channel: channel, mastervolume: mastervolume, defer: defer }))
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MASTERVOLUME>
-	 */
-	public mixerMastervolumeDeferred(channel: number, mastervolume?: number): Promise<IAMCPCommand> {
-		return this.mixerMastervolume(channel, mastervolume, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MASTERVOLUME>
-	 */
-	public getMixerStatusMastervolume(channel: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusMastervolumeCommand({ channel: channel }))
-	}
+	// public mixerMastervolumeDeferred(channel: number, mastervolume?: number): Promise<IAMCPCommand> {
+	// 	return this.mixerMastervolume(channel, mastervolume, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MASTERVOLUME>
+	//  */
+	// public getMixerStatusMastervolume(channel: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusMastervolumeCommand({ channel: channel }))
+	// }
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-STRAIGHT_ALPHA_OUTPUT>
 	 */
-	public mixerStraightAlphaOutput(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-	public mixerStraightAlphaOutput(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerKeyerCommand({ channel: channel, layer: layer, keyer: state, defer: defer }))
+	public mixerStraightAlphaOutput(options: MixerStraightAlphaOutputOptions): Promise<IAMCPCommand<Command.MIXER_STRAIGHT_ALPHA_OUTPUT, MixerStraightAlphaOutputOptions, MixerStraightAlphaOutputOptions>> {
+		options.command = Command.MIXER_STRAIGHT_ALPHA_OUTPUT
+		return this.do(new ChannelCommand<Command.MIXER_STRAIGHT_ALPHA_OUTPUT, MixerStraightAlphaOutputOptions, MixerStraightAlphaOutputOptions>(options))
 	}
 
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-STRAIGHT_ALPHA_OUTPUT>
-	 */
-	public mixerStraightAlphaOutputDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand> {
-		return this.mixerStraightAlphaOutput(channel, layer, state, true)
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-STRAIGHT_ALPHA_OUTPUT>
-	 */
-	public getMixerStatusStraightAlphaOutput(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerStatusStraightAlphaOutputCommand({ channel: channel, layer: layer }))
-	}
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-STRAIGHT_ALPHA_OUTPUT>
+	//  */
+	// public mixerStraightAlphaOutputDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand> {
+	// 	return this.mixerStraightAlphaOutput(channel, layer, state, true)
+	// }
+	//
+	// /**
+	//  * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-STRAIGHT_ALPHA_OUTPUT>
+	//  */
+	// public getMixerStatusStraightAlphaOutput(channel: number, layer?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.MixerStatusStraightAlphaOutputCommand({ channel: channel, layer: layer }))
+	// }
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-GRID>
