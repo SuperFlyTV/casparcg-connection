@@ -1,5 +1,5 @@
 import { Command, Transition, Ease, Direction, LogLevel, LogCategory, Chroma,
-  BlendMode } from './ServerStateEnum'
+  BlendMode, Lock, Version } from './ServerStateEnum'
 // ResponseNS
 import { Response as ResponseSignatureNS } from './ResponseSignature'
 import { Response as ResponseValidator } from './ResponseValidators'
@@ -154,6 +154,12 @@ export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IP
 	]],
 	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, [
 		new Depends('defer', 'straight_alpha_output')
+	]],
+	[ Command.CALL, [
+		new OneOf('seek')
+	]],
+	[ Command.LOCK, [
+		new Depends('action', 'phrase').ifNot('action', Lock.RELEASE)
 	]]
 ])
 
@@ -389,6 +395,57 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('STRAIGHT_ALPHA_OUTPUT')),
 		new ParamSignature(optional, 'straight_alpha_output', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
 		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_GRID, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('GRID')),
+		new ParamSignature(optional, 'resolution', null, new ParameterValidator.PositiveNumberRoundValidatorBetween(1)),
+		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+	]],
+	[ Command.MIXER_COMMIT, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('COMMIT'))
+	]],
+	[ Command.MIXER_CLEAR, [
+		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLEAR'))
+	]],
+	[ Command.CALL, [
+		new ParamSignature(optional, 'seek', 'seek', new ParameterValidator.PositiveNumberValidatorBetween(0))
+	]],
+	[ Command.LOCK, [
+		new ParamSignature(required, 'action', null, new ParameterValidator.EnumValidator(Lock)),
+		new ParamSignature(optional, 'phrase', null, new ParameterValidator.StringValidator())
+	]],
+	[ Command.DATA_STORE, [
+		new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator()),
+		new ParamSignature(required, 'data', null, new ParameterValidator.TemplateDataValidator())
+	]],
+	[ Command.DATA_RETRIEVE, [
+		new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator())
+	]],
+	[ Command.DATA_REMOVE, [
+		new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator())
+	]],
+	[ Command.THUMBNAIL_LIST, [
+		new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+	]],
+	[ Command.THUMBNAIL_RETRIEVE, [
+		new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
+	]],
+	[ Command.THUMBNAIL_GENERATE, [
+		new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
+	]],
+	[ Command.CINF, [
+		new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
+	]],
+	[ Command.CLS, [
+		new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+	]],
+	[ Command.TLS, [
+		new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+	]],
+	[ Command.VERSION, [
+		new ParamSignature(optional, 'component', null, new ParameterValidator.EnumValidator(Version))
 	]]
 ])
 
@@ -413,424 +470,29 @@ export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command
 	[ Command.MIXER_MIPMAP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMipmapParser) ],
 	[ Command.MIXER_VOLUME, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusVolumeParser) ],
 	[ Command.MIXER_MASTERVOLUME, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMastervolumeParser) ],
-	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusStraightAlphaOutputParser) ]
+	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusStraightAlphaOutputParser) ],
+	[ Command.DATA_RETRIEVE, new ResponseSignature(201, ResponseValidator.DataValidator, ResponseParser.DataParser) ],
+	[ Command.DATA_LIST, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.DataListParser) ],
+	[ Command.THUMBNAIL_LIST, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser) ],
+	[ Command.THUMBNAIL_RETRIEVE, new ResponseSignature(201, ResponseValidator.Base64Validator, ResponseParser.ThumbnailParser) ],
+	[ Command.CINF, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.CinfParser) ],
+	[ Command.CLS, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser) ],
+	[ Command.FLS, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser) ],
+	[ Command.TLS, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser) ],
+	[ Command.VERSION, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.VersionParser) ],
+	[ Command.INFO, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ChannelParser) ],
+	// [ Command.INFO, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser) ],
+	[ Command.INFO_TEMPLATE, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoTemplateParser) ]
 ])
 
-/**
- * IMixer
- * @todo: switch 201/202 based on mode
- */
-export namespace AMCP {
-
-	/**
-	 *
-	 */
-	export class MixerGridCommand extends AbstractChannelCommand {
-		static readonly commandString = 'MIXER'
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('GRID')),
-			new ParamSignature(optional, 'resolution', null, new ParameterValidator.PositiveNumberRoundValidatorBetween(1)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'GRID'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerCommitCommand extends AbstractChannelCommand {
-		static readonly commandString = 'MIXER'
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('COMMIT'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'COMMIT'
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class MixerClearCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'MIXER'
-		paramProtocol = [
-			new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLEAR'))
-		]
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['keyword'] = 'CLEAR'
-		}
-	}
-}
-
-/**
- * IChannel
- */
-export namespace AMCP {
-	/**
-	 *
-	 */
-	export class ClearCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'CLEAR'
-	}
-
-	/**
-	 *
-	 */
-	export class CallCommand extends LayerWithFallbackCommand {
-		static readonly commandString = 'CALL'
-
-		static readonly protocolLogic = [
-			new OneOf('seek')
-		]
-		paramProtocol = [
-			new ParamSignature(optional, 'seek', 'seek', new ParameterValidator.PositiveNumberValidatorBetween(0))
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class SwapCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'SWAP'
-
-		/**
-		 *
-		 */
-		constructor() {
-			super('1-1') // @todo: foo
-			// @todo: custom parameters dual layerOrchannel with 1 optional param
-			// overloading in method
-		}
-
-	}
-
-	/**
-	 *
-	 */
-	export class AddCommand extends AbstractChannelCommand {
-		static readonly commandString = 'ADD'
-	}
-
-	/**
-	 *
-	 */
-	export class AddDecklinkCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'ADD'
-		paramProtocol = [
-			new ParamSignature(required, 'device', 'DECKLINK', new ParameterValidator.DecklinkDeviceValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class AddImageCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'ADD'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', 'IMAGE', new ParameterValidator.StringValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class AddFileCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'ADD'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', 'FILE', new ParameterValidator.StringValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class AddStreamCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'ADD'
-		paramProtocol = [
-			new ParamSignature(required, 'uri', 'STREAM', new ParameterValidator.StringValidator()),
-			new ParamSignature(required, 'params', null, new ParameterValidator.StringValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class RemoveCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'REMOVE'
-	}
-	export class RemoveDecklinkCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'REMOVE'
-		paramProtocol = [
-			new ParamSignature(required, 'device', 'DECKLINK', new ParameterValidator.DecklinkDeviceValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class RemoveImageCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'REMOVE'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', 'IMAGE', new ParameterValidator.StringValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class RemoveFileCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'REMOVE'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', 'FILE', new ParameterValidator.StringValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class RemoveStreamCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'REMOVE'
-		paramProtocol = [
-			new ParamSignature(required, 'uri', 'STREAM', new ParameterValidator.StringValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class PrintCommand extends AbstractChannelCommand {
-		static readonly commandString = 'PRINT'
-	}
-
-	/**
-	 *
-	 */
-	export class SetCommand extends AbstractChannelCommand {
-		static readonly commandString = 'SET'
-	}
-
-	/**
-	 *
-	 */
-	export class LockCommand extends AbstractChannelCommand {
-		static readonly commandString = 'LOCK'
-		static readonly protocolLogic = [
-			new Depends('action', 'phrase').ifNot('action', Enum.Lock.RELEASE)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'action', null, new ParameterValidator.EnumValidator(Enum.Lock)),
-			new ParamSignature(optional, 'phrase', null, new ParameterValidator.StringValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class ChannelGridCommand extends AbstractCommand {
-		static readonly commandString = 'CHANNEL_GRID'
-	}
-
-	/**
-	 *
-	 */
-	export class GlGCCommand extends AbstractCommand {
-		static readonly commandString = 'GL GC'
-	}
-}
-
-/**
- * IData
- */
-export namespace AMCP {
-	/**
-	 *
-	 */
-	export class DataStoreCommand extends AbstractCommand {
-		static readonly commandString = 'DATA STORE'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator()),
-			new ParamSignature(required, 'data', null, new ParameterValidator.TemplateDataValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class DataRetrieveCommand extends AbstractCommand {
-		static readonly commandString = 'DATA RETRIEVE'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator())
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.DataValidator, ResponseParser.DataParser)
-	}
-
-	/**
-	 *
-	 */
-	export class DataListCommand extends AbstractCommand {
-		static readonly commandString = 'DATA LIST'
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.DataListParser)
-	}
-
-	/**
-	 *
-	 */
-	export class DataRemoveCommand extends AbstractCommand {
-		static readonly commandString = 'DATA REMOVE'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator())
-		]
-	}
-}
-
-/**
- * IThumbnail
- */
-export namespace AMCP {
-	/**
-	 *
-	 */
-	export class ThumbnailListCommand extends AbstractCommand {
-		static readonly commandString = 'THUMBNAIL LIST'
-		paramProtocol = [
-			new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
-		]
-		// responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser);
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser)
-	}
-
-	/**
-	 *
-	 */
-	export class ThumbnailRetrieveCommand extends AbstractCommand {
-		static readonly commandString = 'THUMBNAIL RETRIEVE'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.Base64Validator, ResponseParser.ThumbnailParser)
-	}
-
-	/**
-	 *
-	 */
-	export class ThumbnailGenerateCommand extends AbstractCommand {
-		static readonly commandString = 'THUMBNAIL GENERATE'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class ThumbnailGenerateAllCommand extends AbstractCommand {
-		static readonly commandString = 'THUMBNAIL GENERATE_ALL'
-	}
-}
+// FIXME: swap was not fully implemented
+// FIXME: implement set
+// FIXME: InfoCommand response vairies depending on whether channel is specified or not
 
 /**
  * IInfo
  */
 export namespace AMCP {
-	/**
-	 *
-	 */
-	export class CinfCommand extends AbstractCommand {
-		static readonly commandString = 'CINF'
-		paramProtocol = [
-			new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
-		]
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.CinfParser)
-	}
-
-	/**
-	 *
-	 */
-	export class ClsCommand extends AbstractCommand {
-		static readonly commandString = 'CLS'
-		paramProtocol = [
-			new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
-		]
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser)
-	}
-
-	/**
-	 *
-	 */
-	export class FlsCommand extends AbstractCommand {
-		static readonly commandString = 'FLS'
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser)
-	}
-
-	/**
-	 *
-	 */
-	export class TlsCommand extends AbstractCommand {
-		static readonly commandString = 'TLS'
-		paramProtocol = [
-			new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
-		]
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser)
-	}
-
-	/**
-	 *
-	 */
-	export class VersionCommand extends AbstractCommand {
-		static readonly commandString = 'VERSION'
-		paramProtocol = [
-			new ParamSignature(optional, 'component', null, new ParameterValidator.EnumValidator(Enum.Version))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.VersionParser)
-	}
-
-	/**
-	 *
-	 */
-	export class InfoCommand extends AbstractOrChannelOrLayerCommand {
-		static readonly commandString = 'INFO'
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ChannelParser)
-
-		/**
-		 *
-		 */
-		constructor(params?: (string | Param | (string | Param)[])) {
-			super(params)
-			if (this.channel && this.channel > -1) {
-				this.responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser)
-			}
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class InfoTemplateCommand extends AbstractCommand {
-		static readonly commandString = 'INFO TEMPLATE'
-		paramProtocol = [
-			new ParamSignature(required, 'template', null, new ParameterValidator.TemplateNameValidator())
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoTemplateParser)
-	}
 
 	/**
 	 *

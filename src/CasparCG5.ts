@@ -4,14 +4,15 @@ import { AMCP, AMCPUtil as AMCPUtilNS } from './lib/AMCP'
 // AMCPUtilNS
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse
 import { Command, Transition, Ease, Direction, Chroma, BlendMode, Lock,
-	Version, LogLevel, LogCategory, Producer, Consumer } from './lib/ServerStateEnum'
+	Version, LogLevel, LogCategory, Producer, Consumer, ChannelVariable } from './lib/ServerStateEnum'
 import { IConnectionOptions, ConnectionOptions, Options as OptionsNS } from './lib/AMCPConnectionOptions'
 // Options NS
 import QueueMode = OptionsNS.QueueMode
 import CasparCGVersion = OptionsNS.CasparCGVersion
 // Command NS
 import { IAMCPCommand, isIAMCPCommand, IAMCPStatus, AMCPResponse, CommandOptions,
-	LayerWithFallbackCommand, LayerWithCgFallbackCommand, AMCPCommand, ChannelCommand } from './lib/AMCPCommand'
+	LayerWithFallbackCommand, LayerWithCgFallbackCommand, AMCPCommand, ChannelCommand,
+  ChannelOrLayerCommand, OrChannelOrLayerCommand } from './lib/AMCPCommand'
 
 // Param NS
 import { Param, TemplateData } from './lib/ParamSignature'
@@ -117,7 +118,7 @@ interface CGData extends CGFlashLayer {
 }
 
 export interface CGAddOptions extends CGData {
-	tempalteName: string
+	templateName: string
 	playOnLoad: boolean | number | string
 }
 
@@ -377,7 +378,7 @@ export interface LockOptions extends ChannelOptLayer {
 export interface SetOptions extends ChannelOptLayer {
 	// command: Command.SET
 	layer: undefined
-	variable: string
+	variable: ChannelVariable | string
 	value: string | number | boolean
 }
 
@@ -389,72 +390,101 @@ export interface AddOptions extends ChannelOptLayer {
 	// command: Command.ADD
 	layer: undefined
 	consumer: string
-	parameters?: string | number | boolean
+	consumerIndex?: number // Used for removal
+	parameters?: Array<string | number | boolean>
 }
 
 export interface AddDecklinkOptions extends AddOptions {
 	consumer: 'DECKLINK'
-	parameters: undefined
+	// parameters: undefined
 	device: number
-	id?: number
+}
+
+function isAddDecklinkOptions(x: AddOptions): x is AddDecklinkOptions {
+	return x.consumer === 'DECKLINK'
 }
 
 export interface AddImageOptions extends AddOptions {
 	consumer: 'IMAGE'
-	parameters: undefined
-	filename: string
-	id?: number
+	// parameters: undefined
+	fileName: string
+}
+
+function isAddImageOptions(x: AddOptions): x is AddImageOptions {
+	return x.consumer === 'IMAGE'
 }
 
 export interface AddFileOptions extends AddOptions {
 	consumer: 'FILE'
-	paramters: undefined
-	filename: string
-	id?: number
+	// paramters: undefined
+	fileName: string
+	separateKey?: boolean
+}
+
+function isAddFileOptions(x: AddOptions): x is AddFileOptions {
+	return x.consumer === 'FILE'
 }
 
 export interface AddStreamOptions extends AddOptions {
 	consumer: 'STREAM'
-	parameters: undefined
 	uri: string
-	params: string
-	id?: number
+}
+
+function isAddStreamOptions(x: AddOptions): x is AddStreamOptions {
+	return x.consumer === 'STREAM'
 }
 
 export interface RemoveOptions extends ChannelOptLayer {
 	// command: Command.REMOVE
 	layer: undefined
 	consumer?: string
-	id?: number
+	consumerIndex?: number
+	parameters?: Array<string | number | boolean>
 }
 
 export interface RemoveByIDOptions extends RemoveOptions {
 	consumer: undefined
-	id: number
+	consumerIndex: number
+}
+
+function isRemoveByIDOptions(x: RemoveOptions): x is RemoveByIDOptions {
+	return x.consumer === undefined && typeof x.consumerIndex === 'number'
 }
 
 export interface RemoveDecklinkOptions extends RemoveOptions {
 	consumer: 'DECKLINK'
-	id: undefined
 	device: number
+}
+
+function isRemoveDecklinkOptions(x: RemoveOptions): x is RemoveDecklinkOptions {
+	return x.consumer === 'DECKLINK'
 }
 
 export interface RemoveImageOptions extends RemoveOptions {
 	consumer: 'IMAGE'
-	id: undefined
 	fileName: string
+}
+
+function isRemoveImageOptions(x: RemoveOptions): x is RemoveImageOptions {
+	return x.consumer === 'IMAGE'
 }
 
 export interface RemoveFileOptions extends RemoveOptions {
 	consumer: 'FILE'
-	id: undefined
 	fileName: string
+}
+
+function isRemoveFileOptions(x: RemoveOptions): x is RemoveFileOptions {
+	return x.consumer === 'FILE'
 }
 
 export interface RemoveStreamOptions extends RemoveOptions {
 	consumer: 'STREAM'
-	id: undefined
 	uri: string
+}
+
+function isRemoveStreamOptions(x: RemoveOptions): x is RemoveStreamOptions {
+	return x.consumer === 'STREAM'
 }
 
 export interface IChannel {
@@ -565,7 +595,7 @@ export interface InfoOptions extends CommandOptions {
 
 export interface InfoTemplateOptions extends CommandOptions {
 	// command: Command.INFO_TEMPLATE
-	tempalteName: string
+	templateName: string
 }
 
 export interface InfoConfigOptions extends CommandOptions {
@@ -1914,275 +1944,437 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-GRID>
 	 */
-	public mixerGrid(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerGrid(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-	public mixerGrid(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerGridCommand({ channel: channel, resolution: resolution, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
+	public mixerGrid(options: MixerGridOptions): Promise<IAMCPCommand<Command.MIXER_GRID, MixerGridOptions, MixerGridOptions>> {
+		options.command = Command.MIXER_GRID
+		return this.do(new ChannelCommand<Command.MIXER_GRID, MixerGridOptions, MixerGridOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-GRID>
 	 */
-	public mixerGridDeferred(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
-		return this.mixerGrid(channel, resolution, transitionDuration, transitionEasing, true)
-	}
-
+	// public mixerGridDeferred(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand> {
+	// 	return this.mixerGrid(channel, resolution, transitionDuration, transitionEasing, true)
+	// }
+	//
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-COMMIT>
 	 */
-	public mixerCommit(channel: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerCommitCommand({ channel: channel }))
+	public mixerCommit(options: MixerCommitOptions | number): Promise<IAMCPCommand<Command.MIXER_COMMIT, MixerCommitOptions, MixerCommitOptions>> {
+		if (typeof options === 'number') {
+			options = {
+				command: Command.MIXER_COMMIT,
+				channel: options
+			} as MixerCommitOptions
+		} else {
+			options.command = Command.MIXER_COMMIT
+		}
+		return this.do(new ChannelCommand<Command.MIXER_COMMIT, MixerCommitOptions, MixerCommitOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CLEAR>
 	 */
-	public mixerClear(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.MixerClearCommand({ channel: channel, layer: layer }))
+	public mixerClear(options: MixerClearOptions): Promise<IAMCPCommand<Command.MIXER_CLEAR, MixerClipOptions, MixerClearOptions>> {
+		options.command = Command.MIXER_CLEAR
+		return this.do(new ChannelOrLayerCommand<Command.MIXER_CLEAR, MixerClipOptions, MixerClearOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CLEAR>
 	 */
-	public clear(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ClearCommand({ channel: channel, layer: layer }))
+	public clear(options: ClearOptions): Promise<IAMCPCommand<Command.CLEAR, ClearOptions, ClearOptions>> {
+		options.command = Command.CLEAR
+		return this.do(new ChannelOrLayerCommand<Command.CLEAR, ClearOptions, ClearOptions>(options))
 	}
 
 	/**
 	 * @todo	implement
 	 * @todo	document
 	 */
-	public call(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CallCommand({ channel: channel, layer: layer }))
+	public call(options: CallOptions): Promise<IAMCPCommand<Command.CALL, CallOptions, CallOptions>> {
+		options.command = Command.CALL
+		return this.do(new LayerWithFallbackCommand<Command.CALL, CallOptions, CallOptions>(options))
 	}
 
 	/**
 	 * @todo	implement
 	 * @todo	document
 	 */
-	public swap(): Promise<IAMCPCommand> {
-		// @todo: overloading of origin/destination pairs
-		return this.do(new AMCP.SwapCommand())
+	public swap(options: SwapOptions): Promise<IAMCPCommand<Command.SWAP, SwapOptions, SwapOptions>> {
+		options.command = Command.SWAP
+		return this.do(new ChannelOrLayerCommand<Command.SWAP, SwapOptions, SwapOptions>(options))
 	}
 
 	/**
 	 * @todo	implement
 	 * @todo	document
 	 */
-	public add(channel: number): Promise<IAMCPCommand> {
+	public add(options: AddOptions): Promise<IAMCPCommand<Command.ADD, AddOptions, AddOptions>> {
 		// remember index /layer
 		// i suggest duplicating abstractchannelorlayer to avoid problems if the address logic changes for layers and not indicies
 		// consumer factoruies parses "consumer"-string parameter
-		return this.do(new AMCP.AddCommand({ channel: channel }))
+		options.command = Command.ADD
+		if (isAddDecklinkOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.device)
+			return this.do(new ChannelCommand<Command.ADD, AddDecklinkOptions, AddDecklinkOptions>(options))
+		}
+		if (isAddImageOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.fileName)
+			return this.do(new ChannelCommand<Command.ADD, AddImageOptions, AddImageOptions>(options))
+		}
+		if (isAddFileOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.fileName)
+			if (options.separateKey) options.parameters.push('SEPARATE_KEY')
+			return this.do(new ChannelCommand<Command.ADD, AddFileOptions, AddFileOptions>(options))
+		}
+		if (isAddStreamOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.uri)
+			return this.do(new ChannelCommand<Command.ADD, AddStreamOptions, AddStreamOptions>(options))
+		}
+		// todo SYNCTO
+		return this.do(new ChannelCommand<Command.ADD, AddOptions, AddOptions>(options))
 	}
 
-	/**
-	 *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#ADD>
-	 */
-	public addDecklink(channel: number, device: number, id?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.AddDecklinkCommand({ channel: channel, layer: id, device: device }))
-	}
-
-	/**
-	 *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#ADD>
-	 */
-	public addImage(channel: number, fileName: string, id?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.AddImageCommand({ channel: channel, layer: id, fileName: fileName }))
-	}
-
-	/**
-	 *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#ADD>
-	 */
-	public addFile(channel: number, fileName: string, id?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.AddFileCommand({ channel: channel, layer: id, fileName: fileName }))
-	}
-
-	/**
-	 *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#ADD>
-	 */
-	public addStream(channel: number, uri: string, params: string, id?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.AddStreamCommand({ channel: channel, layer: id, uri: uri, params: params }))
-	}
+	// /**
+	//  *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#ADD>
+	//  */
+	// public addDecklink(channel: number, device: number, id?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.AddDecklinkCommand({ channel: channel, layer: id, device: device }))
+	// }
+	//
+	// /**
+	//  *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#ADD>
+	//  */
+	// public addImage(channel: number, fileName: string, id?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.AddImageCommand({ channel: channel, layer: id, fileName: fileName }))
+	// }
+	//
+	// /**
+	//  *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#ADD>
+	//  */
+	// public addFile(channel: number, fileName: string, id?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.AddFileCommand({ channel: channel, layer: id, fileName: fileName }))
+	// }
+	//
+	// /**
+	//  *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#ADD>
+	//  */
+	// public addStream(channel: number, uri: string, params: string, id?: number): Promise<IAMCPCommand> {
+	// 	return this.do(new AMCP.AddStreamCommand({ channel: channel, layer: id, uri: uri, params: params }))
+	// }
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#REMOVE>
 	 */
-	public remove(channel: number, id: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.RemoveCommand({ channel: channel, layer: id }))
-	}
+	public remove(options: RemoveOptions): Promise<IAMCPCommand<Command.REMOVE, RemoveOptions, RemoveOptions>> {
+		options.command = Command.REMOVE
+		if (isRemoveByIDOptions(options)) {
+			return this.do(new ChannelCommand<Command.REMOVE, RemoveByIDOptions, RemoveByIDOptions>(options))
+		}
+		if (isRemoveDecklinkOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.device)
+			return this.do(new ChannelCommand<Command.REMOVE, RemoveDecklinkOptions, RemoveDecklinkOptions>(options))
+		}
+		if (isRemoveImageOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.fileName)
+			return this.do(new ChannelCommand<Command.REMOVE, RemoveImageOptions, RemoveImageOptions>(options))
+		}
+		if (isRemoveFileOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.fileName)
+			return this.do(new ChannelCommand<Command.REMOVE, RemoveFileOptions, RemoveFileOptions>(options))
+		}
+		if (isRemoveStreamOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.uri)
+			return this.do(new ChannelCommand<Command.REMOVE, RemoveStreamOptions, RemoveStreamOptions>(options))
+		}
 
-	/**
-	 *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#REMOVE>
-	 */
-	public removeDecklink(channel: number, device: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.RemoveDecklinkCommand({ channel: channel, device: device }))
-	}
-
-	/**
-	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#REMOVE>
-	 */
-	public removeImage(channel: number, fileName: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.RemoveImageCommand({ channel: channel, fileName: fileName }))
-	}
-
-	/**
-	 *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#REMOVE>
-	 */
-	public removeFile(channel: number, fileName: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.RemoveFileCommand({ channel: channel, fileName: fileName }))
-	}
-
-	/**
-	 *  <https://github.com/CasparCG/help/wiki/AMCP-Protocol#REMOVE>
-	 */
-	public removeStream(channel: number, uri: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.RemoveStreamCommand({ channel: channel, uri: uri }))
+		return this.do(new ChannelCommand<Command.REMOVE, RemoveOptions, RemoveOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#PRINT>
 	 */
-	public print(channel: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.PrintCommand({ channel: channel }))
+	public print(options: number | PrintOptions): Promise<IAMCPCommand<Command.PRINT, PrintOptions, string>> {
+		if (typeof options === 'number') {
+			options = {
+				command: Command.PRINT,
+				channel: options
+			} as PrintOptions
+		} else {
+			options.command = Command.PRINT
+		}
+		return this.do(new ChannelCommand<Command.PRINT, PrintOptions, string>(options))
 	}
 
 	/**
 	 * @todo	implement
 	 * @todo	document
 	 */
-	public set(channel: number): Promise<IAMCPCommand> {
+	public set(options: SetOptions): Promise<IAMCPCommand<Command.SET, SetOptions, SetOptions>> {
 		// @todo:  param enum (only MODE and channelLayout for now)
 		// @todo: switchable second parameter based on what to set:
 		// mode = enum modes.......
 		// layer = enum layouts..........
-		return this.do(new AMCP.SetCommand({ channel: channel }))
+		// Rehaul uses an Enum for variable
+		options.command = Command.SET
+		return this.do(new ChannelCommand<Command.SET, SetOptions, SetOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOCK>
 	 */
-	public lock(channel: number, action: Enum.Lock | string, lockPhrase?: string): Promise<IAMCPCommand>
-	public lock(channel: number, action: Enum.Lock | string, lockPhrase?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.LockCommand({ channel: channel, action: action, phrase: lockPhrase }))
+	public lock(options: LockOptions): Promise<IAMCPCommand<Command.LOCK, LockOptions, LockOptions>> {
+		options.command = Command.LOCK
+		return this.do(new ChannelCommand<Command.LOCK, LockOptions, LockOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CHANNEL-GRID>
 	 */
-	public channelGrid(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ChannelGridCommand())
+	public channelGrid(options?: ChannelGridOptions): Promise<IAMCPCommand<Command.CHANNEL_GRID, ChannelGridOptions, string>> {
+		if (!options) {
+			options = {
+				command: Command.CHANNEL_GRID
+			} as ChannelGridOptions
+		} else {
+			options.command = Command.CHANNEL_GRID
+		}
+		return this.do(new AMCPCommand<Command.CHANNEL_GRID, ChannelGridOptions, string>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#GL-GC>
 	 */
-	public glGC(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.GlGCCommand())
+	public glGC(options?: GLGCOptions): Promise<IAMCPCommand<Command.GL_GC, GLGCOptions, string>> {
+		if (!options) {
+			options = {
+				command: Command.GL_GC
+			}
+		} else {
+			options.command = Command.GL_GC
+		}
+		return this.do(new AMCPCommand<Command.GL_GC, GLGCOptions, string>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DATA-STORE>
 	 */
-	public dataStore(fileName: string, data: TemplateData): Promise<IAMCPCommand> {
-		return this.do(new AMCP.DataStoreCommand({ fileName: fileName, data: data }))
+	public dataStore(options: DataStoreOptions): Promise<IAMCPCommand<Command.DATA_STORE, DataStoreOptions, DataStoreOptions>> {
+		options.command = Command.DATA_STORE
+		return this.do(new AMCPCommand<Command.DATA_STORE, DataStoreOptions, DataStoreOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DATA-RETRIEVE>
 	 */
-	public dataRetrieve(fileName: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.DataRetrieveCommand({ fileName: fileName }))
+	public dataRetrieve(options: string | DataRetrieveOptions): Promise<IAMCPCommand<Command.DATA_RETRIEVE, DataRetrieveOptions, DataRetrieveOptions>> {
+		if (typeof options === 'string') {
+			options = {
+				command: Command.DATA_RETRIEVE,
+				fileName: options
+			}
+		} else {
+			options.command = Command.DATA_RETRIEVE
+		}
+		return this.do(new AMCPCommand<Command.DATA_RETRIEVE, DataRetrieveOptions, DataRetrieveOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DATA-LIST>
 	 */
-	public dataList(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.DataListCommand())
+	public dataList(options?: DataListOptions): Promise<IAMCPCommand<Command.DATA_LIST, DataListOptions, string[]>> {
+		if (!options) {
+			options = {
+				command: Command.DATA_LIST
+			} as DataListOptions
+		} else {
+			options.command = Command.DATA_LIST
+		}
+		return this.do(new AMCPCommand<Command.DATA_LIST, DataListOptions, DataListOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DATA-REMOVE>
 	 */
-	public dataRemove(fileName: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.DataRemoveCommand({ fileName: fileName }))
+	public dataRemove(options: string | DataRemoveOptions): Promise<IAMCPCommand<Command.DATA_REMOVE, DataRemoveOptions, DataRemoveOptions>> {
+		if (typeof options === 'string') {
+			options = {
+				command: Command.DATA_REMOVE,
+				fileName: options
+			} as DataRemoveOptions
+		} else {
+			options.command = Command.DATA_REMOVE
+		}
+		return this.do(new AMCPCommand<Command.DATA_REMOVE, DataRemoveOptions, DataRemoveOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#THUMBNAIL-LIST>
 	 */
-	public thumbnailList(subFolder?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ThumbnailListCommand({ subFolder: subFolder}))
+	public thumbnailList(options?: string | ThumbnailListOptions): Promise<IAMCPCommand<Command.THUMBNAIL_LIST, ThumbnailListOptions, string[]>> {
+		if (!options || typeof options === 'string') {
+			options = {
+				command: Command.THUMBNAIL_LIST,
+				subFolder: options
+			} as ThumbnailListOptions
+		} else {
+			options.command = Command.THUMBNAIL_LIST
+		}
+		return this.do(new AMCPCommand<Command.THUMBNAIL_LIST, ThumbnailListOptions, string[]>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#THUMBNAIL-RETRIEVE>
 	 */
-	public thumbnailRetrieve(fileName: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ThumbnailRetrieveCommand({ fileName: fileName }))
+	public thumbnailRetrieve(options: string | ThumbnailRetrieveOptions): Promise<IAMCPCommand<Command.THUMBNAIL_RETRIEVE, ThumbnailRetrieveOptions, ThumbnailRetrieveOptions>> {
+		if (typeof options === 'string') {
+			options = {
+				command: Command.THUMBNAIL_RETRIEVE,
+				fileName: options
+			} as ThumbnailRetrieveOptions
+		}
+		options.command = Command.THUMBNAIL_RETRIEVE
+		return this.do(new AMCPCommand<Command.THUMBNAIL_RETRIEVE, ThumbnailRetrieveOptions, ThumbnailRetrieveOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#THUMBNAIL-GENERATE>
 	 */
-	public thumbnailGenerate(fileName: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ThumbnailGenerateCommand({ fileName: fileName }))
+	public thumbnailGenerate(options: string | ThumbnailGenerateOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE, ThumbnailGenerateOptions, ThumbnailGenerateOptions>> {
+		if (typeof options === 'string') {
+			options = {
+				command: Command.THUMBNAIL_GENERATE,
+				fileName: options
+			} as ThumbnailGenerateOptions
+		} else {
+			options.command = Command.THUMBNAIL_GENERATE
+		}
+		return this.do(new AMCPCommand<Command.THUMBNAIL_GENERATE, ThumbnailGenerateOptions, ThumbnailGenerateOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#THUMBNAIL-GENERATE_ALL>
 	 */
-	public thumbnailGenerateAll(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ThumbnailGenerateAllCommand())
+	public thumbnailGenerateAll(options?: ThumbnailGenerateAllOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE_ALL, ThumbnailGenerateAllOptions, boolean>> {
+		if (!options) {
+			options = {
+				command: Command.THUMBNAIL_GENERATE_ALL
+			} as ThumbnailGenerateAllOptions
+		} else {
+			options.command = Command.THUMBNAIL_GENERATE_ALL
+		}
+		return this.do(new AMCPCommand<Command.THUMBNAIL_GENERATE_ALL, ThumbnailGenerateAllOptions, boolean>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CINF>
 	 */
-	public cinf(fileName: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.CinfCommand({ fileName: fileName }))
+	public cinf(options: string | CInfOptions): Promise<IAMCPCommand<Command.CINF, CInfOptions, string[]>> {
+		if (typeof options === 'string') {
+			options = {
+				command: Command.CINF,
+				fileName: options
+			} as CInfOptions
+		} else {
+			options.command = Command.CINF
+		}
+		return this.do(new AMCPCommand<Command.CINF, CInfOptions, CInfOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CLS>
 	 */
-	public cls(subFolder?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ClsCommand({ subFolder: subFolder}))
+	public cls(options?: string | CLSOptions): Promise<IAMCPCommand<Command.CLS, CLSOptions, string[]>> {
+		if (!options || typeof options === 'string') {
+			options = {
+				command: Command.CLS,
+				subFolder: options
+			} as CLSOptions
+		} else {
+			options.command = Command.CLS
+		}
+		return this.do(new AMCPCommand<Command.CLS, CLSOptions, string[]>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#FLS>
 	 */
-	public fls(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.FlsCommand())
+	public fls(options?: FLSOptions): Promise<IAMCPCommand<Command.FLS, FLSOptions, string[]>> {
+		if (!options) {
+			options = {
+				command: Command.FLS
+			} as FLSOptions
+		} else {
+			options.command = Command.FLS
+		}
+		return this.do(new AMCPCommand<Command.FLS, FLSOptions, FLSOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#TLS>
 	 */
-	public tls(subFolder?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.TlsCommand({ subFolder: subFolder}))
+	public tls(options?: string | TLSOptions): Promise<IAMCPCommand<Command.TLS, TLSOptions, string[]>> {
+		if (!options || typeof options === 'string') {
+			options = {
+				command: Command.TLS,
+				subFolder: options
+			} as CLSOptions
+		} else {
+			options.command = Command.TLS
+		}
+		return this.do(new AMCPCommand<Command.TLS, TLSOptions, string[]>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#VERSION>
 	 */
-	public version(component?: Enum.Version): Promise<IAMCPCommand> {
-		return this.do(new AMCP.VersionCommand({ component: component }))
+	public version(options?: Version | VersionOptions): Promise<IAMCPCommand<Command.VERSION, VersionOptions, string>> {
+		if (!options || typeof options === 'string') {
+			options = {
+				command: Command.VERSION,
+				component: options
+			} as VersionOptions
+		} else {
+			options.command = Command.VERSION
+		}
+		return this.do(new AMCPCommand<Command.VERSION, VersionOptions, string>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO>
 	 */
-	public info(channel?: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoCommand({ channel: channel, layer: layer }))
+	public info(options?: InfoOptions): Promise<IAMCPCommand<Command.INFO, InfoOptions, InfoOptions>> {
+		if (!options) {
+			options = {
+				command: Command.INFO
+			} as InfoOptions
+		} else {
+			options.command = Command.INFO
+		}
+		return this.do(new OrChannelOrLayerCommand<Command.INFO, InfoOptions, InfoOptions>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-TEMPLATE>
 	 */
-	public infoTemplate(template: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoTemplateCommand({ template: template }))
+	public infoTemplate(options: string | InfoTemplateOptions): Promise<IAMCPCommand<Command.INFO_TEMPLATE, InfoTemplateOptions, string[]>> {
+		if (typeof options === 'string') {
+			options = {
+				command: Command.INFO_TEMPLATE,
+				templateName: options
+			} as InfoTemplateOptions
+		} else {
+			options.command = Command.INFO_TEMPLATE
+		}
+		return this.do(new AMCPCommand<Command.INFO_TEMPLATE, InfoTemplateOptions, string[]>(options))
 	}
 
 	/**

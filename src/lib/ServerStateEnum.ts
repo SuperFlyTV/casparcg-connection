@@ -318,7 +318,12 @@ export enum ChannelFormat {
 
 export enum ChannelLayout { }
 
+export enum ChannelVariable {
+	MODE = 'MODE',
+	CHANNEL_LAYOUT = 'CHANNEL_LAYOUT'
+}
+
 export type AllEnums =
   Command | Version | Producer | Consumer |
 	Lock | LogCategory | Chroma | LogLevel | Transition | Direction |
-	BlendMode | Ease | ChannelFormat | ChannelLayout
+	BlendMode | Ease | ChannelFormat | ChannelLayout | ChannelVariable
