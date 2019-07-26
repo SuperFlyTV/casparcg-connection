@@ -656,7 +656,7 @@ export interface HelpOptions extends CommandOptions {
 
 export interface HelpProducerOptions extends CommandOptions {
 	// command: Command.HELP_PRODUCER
-	produoptcer?: Producer | string
+	producer?: Producer | string
 }
 
 export interface HelpConsumerOptions extends CommandOptions {
@@ -686,11 +686,11 @@ export interface IQuery {
 	logCalltrace(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>>
 	logCommunication(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>>
 	diag(options?: DiagOptions): Promise<IAMCPCommand<Command.DIAG, DiagOptions, undefined>>
-	help(options?: HelpOptions): Promise<IAMCPCommand<Command.HELP, HelpOptions, string>>
+	help(options?: HelpOptions | Command | string): Promise<IAMCPCommand<Command.HELP, HelpOptions, string>>
 	getCommands(options?: HelpOptions): Promise<IAMCPCommand<Command.HELP, HelpOptions, string>>
-	helpProducer(options?: HelpProducerOptions): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>>
+	helpProducer(options?: HelpProducerOptions | Producer | string): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>>
 	getProducers(options?: HelpProducerOptions): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>>
-	helpConsumer(options?: HelpConsumerOptions): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>>
+	helpConsumer(options?: HelpConsumerOptions | Consumer | string): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>>
 	getConsumers(options?: HelpConsumerOptions): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>>
 }
 
@@ -710,13 +710,64 @@ export interface RestartOptions extends CommandOptions {
  // command: Command.RESTART
 }
 
+export interface PingOptions extends CommandOptions {
+	// command: Command.PING
+}
+
 export interface IOperation {
 	bye(options?: ByeOptions): Promise<IAMCPCommand<Command.BYE, ByeOptions, undefined>>
 	kill(options?: KillOptions): Promise<IAMCPCommand<Command.KILL, KillOptions, undefined>>
 	restart(options?: RestartOptions): Promise<IAMCPCommand<Command.RESTART, RestartOptions, undefined>>
+	ping(options?: PingOptions): Promise<IAMCPCommand<Command.PING, PingOptions, boolean>>
 }
 
-export interface AMCP extends IVideo, IInputOutput, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation { }
+export interface TimeOptions extends ChannelOptLayer {
+	// command: Command.TIME
+	layer: undefined
+	timecode?: string
+}
+
+export interface ScheduleSetOptions extends CommandOptions {
+	// command: Command.SCHEDULE_SET
+	token: string
+	timecode: string
+	scheduledCommand: Command | string
+	options: CommandOptions	// command: Command.SCHEDULE_SET
+}
+
+export interface ScheduleListOptions extends CommandOptions {
+	// command: Command.SCHEDULE_LIST
+	timecode?: string
+}
+
+export interface ScheduleClearOptions extends CommandOptions {
+	// command: Command.SCHEDULE_CLEAR
+}
+
+export interface ScheduleRemoveOptions extends CommandOptions {
+	// command: Command.SCHEDULE_REMOVE
+	token: string
+}
+
+export interface ScheduleInfoOptions extends CommandOptions {
+	// command: Command.SCHEDULE_INFO
+}
+
+export interface TimecodeSourceOptions extends CommandOptions {
+	// command: Command.TIMECODE_SOURCE
+}
+
+export interface ISchedule {
+	time(options: TimeOptions): Promise<IAMCPCommand<Command.TIME, TimeOptions, TimeOptions>>
+	scheduleSet(options: ScheduleSetOptions): Promise<IAMCPCommand<Command.SCHEDULE_SET, ScheduleSetOptions, ScheduleSetOptions>>
+	scheduleList(options: ScheduleListOptions): Promise<IAMCPCommand<Command.SCHEDULE_LIST, ScheduleListOptions, ScheduleListOptions>>
+	scheduleClear(options: ScheduleClearOptions): Promise<IAMCPCommand<Command.SCHEDULE_CLEAR, ScheduleClearOptions, ScheduleClearOptions>>
+	scheduleRemove(options: ScheduleRemoveOptions | string): Promise<IAMCPCommand<Command.SCHEDULE_REMOVE, ScheduleRemoveOptions, ScheduleRemoveOptions>>
+	scheduleInfo(options: ScheduleInfoOptions): Promise<IAMCPCommand<Command.SCHEDULE_INFO, ScheduleInfoOptions, ScheduleInfoOptions>>
+	timecodeSource(options: TimecodeSourceOptions): Promise<IAMCPCommand<Command.TIMECODE_SOURCE, TimecodeSourceOptions, TimecodeSourceOptions>>
+}
+
+export interface AMCP extends IVideo, IInputOutput, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation, ISchedule { }
 
 /**
  * CasparCG Interface
@@ -1792,7 +1843,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public mixerCrop(options: MixerCropOptions): Promise<IAMCPCommand<Command.MIXER_CROP, MixerCropOptions, MixerCropOptions>> {
 		options.command = Command.MIXER_CROP
-		return this.do(new AMCP.MixerCropCommand({ channel: channel, layer: layer, left: left, top: top, right: right, bottom: bottom, transitionDuration: transitionDuration, transitionEasing: transitionEasing, defer: defer }))
+		return this.do(new LayerWithFallbackCommand<Command.MIXER_CROP, MixerCropOptions, MixerCropOptions>(options))
 	}
 
 	/**
@@ -2391,43 +2442,79 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-PATHS>
 	 */
-	public infoPaths(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoPathsCommand())
+	public infoPaths(options?: InfoPathsOptions): Promise<IAMCPCommand<Command.INFO_PATHS, InfoPathsOptions, string>> {
+		if (!options) {
+			options = {
+				command: Command.INFO_PATHS
+			} as InfoPathsOptions
+		} else {
+			options.command = Command.INFO_PATHS
+		}
+		return this.do(new AMCPCommand<Command.INFO_PATHS, InfoPathsOptions, string>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-SYSTEM>
 	 */
-	public infoSystem(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoSystemCommand())
+	public infoSystem(options?: InfoSystemOptions): Promise<IAMCPCommand<Command.INFO_SYSTEM, InfoSystemOptions, string>> {
+		if (!options) {
+			options = {
+				command: Command.INFO_SYSTEM
+			} as InfoSystemOptions
+		} else {
+			options.command = Command.INFO_SYSTEM
+		}
+		return this.do(new AMCPCommand<Command.INFO_SYSTEM, InfoSystemOptions, string>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-SERVER>
 	 */
-	public infoServer(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoServerCommand())
+	public infoServer(options?: InfoServerOptions): Promise<IAMCPCommand<Command.INFO_SERVER, InfoServerOptions, string>> {
+		if (!options) {
+			options = {
+				command: Command.INFO_SERVER
+			} as InfoServerOptions
+		} else {
+			options.command = Command.INFO_SERVER
+		}
+		return this.do(new AMCPCommand<Command.INFO_SERVER, InfoServerOptions, string>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-QUEUES>
 	 */
-	public infoQueues(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoQueuesCommand())
+	public infoQueues(options?: InfoQueuesOptions): Promise<IAMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, string>> {
+		if (!options) {
+			options = {
+				command: Command.INFO_QUEUES
+			} as InfoQueuesOptions
+		} else {
+			options.command = Command.INFO_QUEUES
+		}
+		return this.do(new AMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, string>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-THREADS>
 	 */
-	public infoThreads(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoThreadsCommand())
+	public infoThreads(options?: InfoThreadsOptions): Promise<IAMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, string>> {
+		if (!options) {
+			options = {
+				command: Command.INFO_THREADS
+			} as InfoThreadsOptions
+		} else {
+			options.command = Command.INFO_THREADS
+		}
+		return this.do(new AMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, string>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-DELAY>
 	 */
-	public infoDelay(channel: number, layer?: number): Promise<IAMCPCommand> {
-		return this.do(new AMCP.InfoDelayCommand({ channel: channel, layer: layer }))
+	public infoDelay(options: InfoDelayOptions): Promise<IAMCPCommand<Command.INFO_DELAY, InfoDelayOptions, string>> {
+		options.command = Command.INFO_DELAY
+		return this.do(new ChannelOrLayerCommand<Command.INFO_DELAY, InfoDelayOptions, string>(options))
 	}
 
 	/**
@@ -2533,13 +2620,16 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP>
 	 */
-	public help(): Promise<IAMCPCommand>
-	public help(commandOrName?: (Enum.Command | string)): Promise<IAMCPCommand> {
-		let param: Param = {}
-		if (commandOrName) {
-			param['command'] = commandOrName
+	public help(options?: HelpOptions | Command | string): Promise<IAMCPCommand<Command.HELP, HelpOptions, string>> {
+		if (!options || typeof options === 'string') {
+			options = {
+				command: Command.HELP,
+				commands: options
+			} as HelpOptions
+		} else {
+			options.command = Command.HELP
 		}
-		return this.do(new AMCP.HelpCommand(param))
+		return this.do(new AMCPCommand<Command.HELP, HelpOptions, string>(options))
 	}
 
 	/**
@@ -2547,20 +2637,23 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP>
 	 */
-	public getCommands(): Promise<IAMCPCommand> {
+	public getCommands(): Promise<IAMCPCommand<Command.HELP, HelpOptions, string>> {
 		return this.help()
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP-PRODUCER>
 	 */
-	public helpProducer(): Promise<IAMCPCommand>
-	public helpProducer(producerOrName?: (Enum.Producer | string)): Promise<IAMCPCommand> {
-		let param: Param = {}
-		if (producerOrName) {
-			param['producer'] = producerOrName
+	public helpProducer(options?: HelpProducerOptions | Producer | string): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>> {
+		if (!options || typeof options === 'string') {
+			options = {
+				command: Command.HELP_PRODUCER,
+				producer: options
+			} as HelpProducerOptions
+		} else {
+			options.command = Command.HELP_PRODUCER
 		}
-		return this.do(new AMCP.HelpProducerCommand(param))
+		return this.do(new AMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>(options))
 	}
 
 	/**
@@ -2568,19 +2661,23 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP-PRODUCER>
 	 */
-	public getProducers(): Promise<IAMCPCommand> {
+	public getProducers(): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>> {
 		return this.helpProducer()
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP-CONSUMER>
 	 */
-	public helpConsumer(consumerOrName?: (Enum.Consumer | string)): Promise<IAMCPCommand> {
-		let param: Param = {}
-		if (consumerOrName) {
-			param['consumer'] = consumerOrName
+	public helpConsumer(options?: HelpConsumerOptions | Consumer | string): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>> {
+		if (!options || typeof options === 'string') {
+			options = {
+				command: Command.HELP_CONSUMER,
+				consumer: options
+			} as HelpConsumerOptions
+		} else {
+			options.command = Command.HELP_CONSUMER
 		}
-		return this.do(new AMCP.HelpConsumerCommand(param))
+		return this.do(new AMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>(options))
 	}
 
 	/**
@@ -2588,71 +2685,122 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP-CONSUMER>
 	 */
-	public getConsumers(): Promise<IAMCPCommand> {
+	public getConsumers(): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>> {
 		return this.helpConsumer()
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#BYE>
 	 */
-	public bye(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ByeCommand())
+	public bye(options?: ByeOptions): Promise<IAMCPCommand<Command.BYE, ByeOptions, undefined>> {
+		if (!options) {
+			options = {
+				command: Command.BYE
+			} as ByeOptions
+		}
+		return this.do(new AMCPCommand<Command.BYE, ByeOptions, undefined>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#KILL>
 	 */
-	public kill(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.KillCommand())
+	public kill(options?: KillOptions): Promise<IAMCPCommand<Command.KILL, KillOptions, undefined>> {
+		if (!options) {
+			options = {
+				command: Command.KILL
+			} as KillOptions
+		} else {
+			options.command = Command.KILL
+		}
+		return this.do(new AMCPCommand<Command.KILL, KillOptions, undefined>(options))
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#RESTART>
 	 */
-	public restart(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.RestartCommand())
+	public restart(options?: RestartOptions): Promise<IAMCPCommand<Command.RESTART, RestartOptions, undefined>> {
+		if (!options) {
+			options = {
+				command: Command.RESTART
+			} as RestartOptions
+		} else {
+			options.command = Command.RESTART
+		}
+		return this.do(new AMCPCommand<Command.RESTART, RestartOptions, undefined>(options))
 	}
 
 	/**
 	 * Undocumented, but implemented by Julusian.
 	 */
-	public ping(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.PingCommand())
+	public ping(options?: PingOptions): Promise<IAMCPCommand<Command.PING, PingOptions, boolean>> {
+		if (!options) {
+			options = {
+				command: Command.PING
+			} as PingOptions
+		} else {
+			options.command = Command.PING
+		}
+		return this.do(new AMCPCommand<Command.PING, PingOptions, boolean>(options))
 	}
 
 	/**
 	 * Undocumented, but implemented by Julusian.
 	 */
-	public time(channel: number, timecode?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.TimeCommand({ channel, timecode }))
+	public time(options: TimeOptions): Promise<IAMCPCommand<Command.TIME, TimeOptions, TimeOptions>> {
+		options.command = Command.TIME
+		return this.do(new AMCPCommand<Command.TIME, TimeOptions, TimeOptions>(options))
 	}
 
 	/**
 	 * https://github.com/CasparCG/server/issues/872
 	 */
-	public scheduleSet(timecode: string, command: IAMCPCommand): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ScheduleSetCommand({ token: command.token, timecode, command }))
+	public scheduleSet(options: ScheduleSetOptions): Promise<IAMCPCommand<Command.SCHEDULE_SET, ScheduleSetOptions, ScheduleSetOptions>> {
+		options.command = Command.SCHEDULE_SET
+		return this.do(new AMCPCommand<Command.SCHEDULE_SET, ScheduleSetOptions, ScheduleSetOptions>(options))
 	}
 
 	/**
 	 * https://github.com/CasparCG/server/issues/872
 	 */
-	public scheduleRemove(token: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ScheduleRemoveCommand({ token }))
+	public scheduleRemove(options: ScheduleRemoveOptions | string): Promise<IAMCPCommand<Command.SCHEDULE_REMOVE, ScheduleRemoveOptions, ScheduleRemoveOptions>> {
+		if (typeof options === 'string') {
+			options = {
+				command: Command.SCHEDULE_REMOVE,
+				token: options
+			} as ScheduleRemoveOptions
+		} else {
+			options.command = Command.SCHEDULE_REMOVE
+		}
+		return this.do(new AMCPCommand<Command.SCHEDULE_REMOVE, ScheduleRemoveOptions, ScheduleRemoveOptions>(options))
 	}
 
 	/**
 	 * https://github.com/CasparCG/server/issues/872
 	 */
-	public scheduleClear(): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ScheduleClearCommand())
+	public scheduleClear(options?: ScheduleClearOptions): Promise<IAMCPCommand<Command.SCHEDULE_CLEAR, ScheduleClearOptions, ScheduleClearOptions>> {
+		if (!options) {
+			options = {
+				command: Command.SCHEDULE_CLEAR
+			} as ScheduleClearOptions
+		} else {
+			options.command = Command.SCHEDULE_CLEAR
+		}
+		return this.do(new AMCPCommand<Command.SCHEDULE_CLEAR, ScheduleClearOptions, ScheduleClearOptions>(options))
 	}
 
 	/**
 	 * https://github.com/CasparCG/server/issues/872
 	 */
-	public scheduleList(timecode?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ScheduleListCommand({ timecode }))
+	public scheduleList(options?: ScheduleListOptions | string): Promise<IAMCPCommand<Command.SCHEDULE_LIST, ScheduleClearOptions, ScheduleClearOptions>> {
+		if (!options || typeof options === 'string') {
+			options = {
+				command: Command.SCHEDULE_LIST,
+				timecode: options
+			} as ScheduleListOptions
+		} else {
+			options.command = Command.SCHEDULE_LIST
+		}
+		return this.do(new AMCPCommand<Command.SCHEDULE_LIST, ScheduleClearOptions, ScheduleClearOptions>(options))
 	}
 
 	/**

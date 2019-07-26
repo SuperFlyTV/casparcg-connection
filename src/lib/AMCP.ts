@@ -1,5 +1,5 @@
 import { Command, Transition, Ease, Direction, LogLevel, LogCategory, Chroma,
-  BlendMode, Lock, Version } from './ServerStateEnum'
+  BlendMode, Lock, Version, Producer, Consumer } from './ServerStateEnum'
 // ResponseNS
 import { Response as ResponseSignatureNS } from './ResponseSignature'
 import { Response as ResponseValidator } from './ResponseValidators'
@@ -446,6 +446,32 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 	]],
 	[ Command.VERSION, [
 		new ParamSignature(optional, 'component', null, new ParameterValidator.EnumValidator(Version))
+	]],
+	[ Command.INFO_DELAY, [
+		new ParamSignature(required, 'delay', null, new ParameterValidator.KeywordValidator('DELAY'))
+	]],
+	[ Command.HELP, [
+		new ParamSignature(optional, 'commands', null, new ParameterValidator.EnumValidator(Command))
+	]],
+	[ Command.HELP_PRODUCER, [
+		new ParamSignature(optional, 'producer', null, new ParameterValidator.EnumValidator(Producer))
+	]],
+	[ Command.HELP_CONSUMER, [
+		new ParamSignature(optional, 'consumer', null, new ParameterValidator.EnumValidator(Consumer))
+	]],
+	[ Command.TIME, [
+		new ParamSignature(optional, 'timecode', null, new ParameterValidator.TimecodeValidator())
+	]],
+	[ Command.SCHEDULE_SET, [
+		new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator()),
+		new ParamSignature(required, 'timecode', null, new ParameterValidator.TimecodeValidator()),
+		new ParamSignature(required, 'command', null, new ParameterValidator.CommandValidator()) // FIXME - change this
+	]],
+	[ Command.SCHEDULE_REMOVE, [
+		new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator())
+	]],
+	[ Command.SCHEDULE_LIST, [
+		new ParamSignature(optional, 'timecode', null, new ParameterValidator.TimecodeValidator())
 	]]
 ])
 
@@ -482,12 +508,24 @@ export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command
 	[ Command.VERSION, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.VersionParser) ],
 	[ Command.INFO, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ChannelParser) ],
 	// [ Command.INFO, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser) ],
-	[ Command.INFO_TEMPLATE, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoTemplateParser) ]
+	[ Command.INFO_TEMPLATE, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoTemplateParser) ],
+	[ Command.INFO_PATHS, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoPathsParser) ],
+	[ Command.INFO_CONFIG, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.ConfigParser) ],
+	[ Command.INFO_SYSTEM, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoSystemParser) ],
+	[ Command.INFO_SERVER, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoServerParser) ],
+	[ Command.INFO_QUEUES, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoQueuesParser) ],
+	[ Command.INFO_THREADS, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.InfoThreadsParser) ],
+	[ Command.INFO_DELAY, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoDelayParser) ],
+	[ Command.HELP, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser) ],
+	[ Command.HELP_PRODUCER, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser) ],
+	[ Command.HELP_CONSUMER, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser) ],
+	[ Command.TIME, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.InfoParser) ]
 ])
 
 // FIXME: swap was not fully implemented
 // FIXME: implement set
 // FIXME: InfoCommand response vairies depending on whether channel is specified or not
+// FIXME: Parsing ping/pong
 
 /**
  * IInfo
@@ -507,171 +545,6 @@ export namespace AMCP {
 		constructor(params: (string | Param | (string | Param)[]), context?: Object) {
 			super(params, context)
 		}
-	}
-
-	/**
-	 *
-	 */
-	export class InfoPathsCommand extends AbstractCommand {
-		static readonly commandString = 'INFO PATHS'
-		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoPathsParser)
-	}
-
-	/**
-	 *
-	 */
-	export class InfoSystemCommand extends AbstractCommand {
-		static readonly commandString = 'INFO SYSTEM'
-		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoSystemParser)
-	}
-
-	/**
-	 *
-	 */
-	export class InfoServerCommand extends AbstractCommand {
-		static readonly commandString = 'INFO SERVER'
-		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoServerParser)
-	}
-
-	/**
-	 *
-	 */
-	export class InfoQueuesCommand extends AbstractCommand {
-		static readonly commandString = 'INFO QUEUES'
-		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoQueuesParser)
-	}
-
-	/**
-	 *
-	 */
-	export class InfoThreadsCommand extends AbstractCommand {
-		static readonly commandString = 'INFO THREADS'
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.InfoThreadsParser)
-	}
-
-	/**
-	 *
-	 */
-	export class InfoDelayCommand extends AbstractChannelOrLayerCommand {
-		static readonly commandString = 'INFO'
-		paramProtocol = [
-			new ParamSignature(required, 'delay', null, new ParameterValidator.KeywordValidator('DELAY'))
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoDelayParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[])) {
-			super(params)
-			this._objectParams['delay'] = 'DELAY'
-		}
-	}
-
-	/**
-	 *
-	 */
-	// export class DiagCommand extends AbstractCommand {
-	// 	static readonly commandString = 'DIAG'
-	// }
-
-	/**
-	 * @todo: mixed mode!!!!
-	 * 202/201
-	 */
-	export class HelpCommand extends AbstractCommand {
-		static readonly commandString = 'HELP'
-		paramProtocol = [
-			new ParamSignature(optional, 'command', null, new ParameterValidator.EnumValidator(Enum.Command))
-		]
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser)
-	}
-
-	/**
-	 *
-	 */
-	export class HelpProducerCommand extends AbstractCommand {
-		static readonly commandString = 'HELP PRODUCER'
-		paramProtocol = [
-			new ParamSignature(optional, 'producer', null, new ParameterValidator.EnumValidator(Enum.Producer))
-		]
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser)
-	}
-
-	/**
-	 *
-	 */
-	export class HelpConsumerCommand extends AbstractCommand {
-		static readonly commandString = 'HELP CONSUMER'
-		paramProtocol = [
-			new ParamSignature(optional, 'consumer', null, new ParameterValidator.EnumValidator(Enum.Consumer))
-		]
-		responseProtocol = new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser)
-	}
-}
-
-/**
- * IOperation
- */
-export namespace AMCP {
-	/**
-	 * @todo: response
-	 */
-	export class ByeCommand extends AbstractCommand {
-		static readonly commandString = 'BYE'
-	}
-
-	/**
-	 * @todo: response
-	 */
-	export class KillCommand extends AbstractCommand {
-		static readonly commandString = 'KILL'
-	}
-
-	/**
-	 * @todo: response
-	 */
-	export class RestartCommand extends AbstractCommand {
-		static readonly commandString = 'RESTART'
-	}
-	export class PingCommand extends AbstractCommand {
-		static readonly commandString = 'PING'
-	}
-}
-
-/**
- * IScheduling
- */
-export namespace AMCP {
-	export class TimeCommand extends AbstractChannelCommand {
-		static readonly commandString = 'TIME'
-		paramProtocol = [
-			new ParamSignature(optional, 'timecode', null, new ParameterValidator.TimecodeValidator())
-		]
-		responseProtocol = new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.InfoParser)
-	}
-	export class ScheduleSetCommand extends AbstractCommand {
-		static readonly commandString = 'SCHEDULE SET'
-		paramProtocol = [
-			new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator()),
-			new ParamSignature(required, 'timecode', null, new ParameterValidator.TimecodeValidator()),
-			new ParamSignature(required, 'command', null, new ParameterValidator.CommandValidator())
-		]
-	}
-	export class ScheduleRemoveCommand extends AbstractCommand {
-		static readonly commandString = 'SCHEDULE REMOVE'
-		paramProtocol = [
-			new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator())
-		]
-	}
-	export class ScheduleClearCommand extends AbstractCommand {
-		static readonly commandString = 'SCHEDULE CLEAR'
-	}
-	export class ScheduleListCommand extends AbstractCommand {
-		static readonly commandString = 'SCHEDULE LIST'
-		paramProtocol = [
-			new ParamSignature(optional, 'token', null, new ParameterValidator.StringValidator())
-		]
 	}
 }
 
@@ -943,65 +816,58 @@ export namespace AMCP {
 	}
 }
 
+/**
+ *
+ */
+export function deSerialize(cmd: IAMCPCommandVO, id: string): IAMCPCommand {
+
+	// errror: commandstatus -1 //invalid command
+
+	// @todo: error handling much?????? (callback??????)
+	// let command: IAMCPCommand = Object.create((AMCP as any)[cmd._commandName]['prototype'])
+	// command.constructor.call(command, cmd._objectParams)
+	let command: IAMCPCommand = new (AMCP as any)[cmd._commandName](cmd._objectParams)
+	command.populate(cmd, id)
+	return command
+}
 
 /**
- * Factory
+ *
  */
-export namespace AMCPUtil {
+export class CasparCGSocketResponse {
+	public statusCode: number
+	public token: string | undefined
+	public responseString: string
+	public items: Array<string> = []
 
 	/**
 	 *
 	 */
-	export function deSerialize(cmd: IAMCPCommandVO, id: string): IAMCPCommand {
-
-		// errror: commandstatus -1 //invalid command
-
-		// @todo: error handling much?????? (callback??????)
-		// let command: IAMCPCommand = Object.create((AMCP as any)[cmd._commandName]['prototype'])
-		// command.constructor.call(command, cmd._objectParams)
-		let command: IAMCPCommand = new (AMCP as any)[cmd._commandName](cmd._objectParams)
-		command.populate(cmd, id)
-		return command
+	constructor(responseString: string) {
+		this.token = CasparCGSocketResponse.parseToken(responseString)
+		this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString)
+		this.responseString = responseString
 	}
 
 	/**
 	 *
 	 */
-	export class CasparCGSocketResponse {
-		public statusCode: number
-		public token: string | undefined
-		public responseString: string
-		public items: Array<string> = []
+	static evaluateStatusCode(responseString: string): number {
+		let token = CasparCGSocketResponse.parseToken(responseString)
+		let index: number
+		if (token) index = token.length + 5
+		else index = 0
+		return parseInt(responseString.substr(index, 3), 10)
+	}
 
-		/**
-		 *
-		 */
-		constructor(responseString: string) {
-			this.token = CasparCGSocketResponse.parseToken(responseString)
-			this.statusCode = CasparCGSocketResponse.evaluateStatusCode(responseString)
-			this.responseString = responseString
-		}
-
-		/**
-		 *
-		 */
-		static evaluateStatusCode(responseString: string): number {
-			let token = CasparCGSocketResponse.parseToken(responseString)
-			let index: number
-			if (token) index = token.length + 5
-			else index = 0
-			return parseInt(responseString.substr(index, 3), 10)
-		}
-
-		/**
-		 *
-		 */
-		static parseToken(responseString: string): string | undefined {
-			if (responseString.substr(0, 3) === 'RES') {
-				return responseString.substr(4).split(' ')[0] // RES [token] RESPONSE
-			} else {
-				return undefined
-			}
+	/**
+	 *
+	 */
+	static parseToken(responseString: string): string | undefined {
+		if (responseString.substr(0, 3) === 'RES') {
+			return responseString.substr(4).split(' ')[0] // RES [token] RESPONSE
+		} else {
+			return undefined
 		}
 	}
 }

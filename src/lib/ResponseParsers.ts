@@ -591,6 +591,21 @@ export namespace Response {
 	/**
 	 *
 	 */
+	export class MixerStatusInvertParser extends AbstractParser implements IResponseParser {
+
+		/**
+		 *
+		 */
+		public parse(data: Array<number>): Object {
+			return {
+				keyer: !!data[0]
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
 	export class MixerStatusOpacityParser extends AbstractParser implements IResponseParser {
 
 		/**
