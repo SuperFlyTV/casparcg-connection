@@ -29,7 +29,7 @@ import { Depends, Coupled, OneOf, IProtocolLogic } from './ProtocolLogic'
 // }
 
 export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IProtocolLogic[]>([
-	[ Command.LOADBG, [
+	[ Command.LOADBG, [ // TODO deal with device, route, HTML
 		new Depends('transitionDuration', 'transition').mustNotBe('transition', Transition.STING),
 		new Depends('transitionEasing', 'transition').mustNotBe('transition', Transition.STING),
 		new Depends('transitionDirection', 'transition').mustNotBe('transition', Transition.STING),
@@ -37,7 +37,7 @@ export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IP
 		new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Transition.STING),
 		new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Transition.STING)
 	]],
-	[ Command.LOAD, [
+	[ Command.LOAD, [ // TODO deal with device, route, HTML
 		new Depends('transitionDuration', 'transition').mustNotBe('transition', Transition.STING),
 		new Depends('transitionEasing', 'transition').mustNotBe('transition', Transition.STING),
 		new Depends('transitionDirection', 'transition').mustNotBe('transition', Transition.STING),
@@ -45,7 +45,7 @@ export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IP
 		new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Transition.STING),
 		new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Transition.STING)
 	]],
-	[ Command.PLAY, [
+	[ Command.PLAY, [ // TODO deal with device, route, HTML
 		new Depends('loop', 'clip'),
 		new Depends('seek', 'clip'),
 		new Depends('length', 'clip'),
@@ -164,7 +164,7 @@ export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IP
 ])
 
 export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, IParamSignature[]>([
-	[ Command.LOADBG, [
+	[ Command.LOADBG, [ // TODO deal with device, route, HTML
 		new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
 		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
 		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
@@ -180,7 +180,7 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 		new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
 		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 	]],
-	[ Command.LOAD, [
+	[ Command.LOAD, [ // TODO deal with device, route, HTML
 		new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
 		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
 		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
@@ -196,7 +196,7 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 		new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
 		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 	]],
-	[ Command.PLAY, [
+	[ Command.PLAY, [ // TODO deal with device, route, HTML
 		new ParamSignature(optional, 'clip', null, new ParameterValidator.ClipNameValidator()),
 		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
 		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
@@ -551,10 +551,8 @@ export namespace AMCP {
 /**
  * IInputOutput
  */
-export namespace AMCP {
-	/**
-	 *
-	 */
+/* export namespace AMCP {
+
 	export class LoadDecklinkBgCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
@@ -582,9 +580,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadDecklinkCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
@@ -611,9 +606,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PlayDecklinkCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
@@ -645,9 +637,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadRouteBgCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
@@ -675,9 +664,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadRouteCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
@@ -704,9 +690,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PlayRouteCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
@@ -738,9 +721,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadHtmlPageBgCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOADBG'
 		static readonly protocolLogic = [
@@ -764,9 +744,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class LoadHtmlPageCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
@@ -789,9 +766,6 @@ export namespace AMCP {
 		]
 	}
 
-	/**
-	 *
-	 */
 	export class PlayHtmlPageCommand extends LayerWithFallbackCommand {
 		static readonly commandString = 'PLAY'
 		static readonly protocolLogic = [
@@ -814,7 +788,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
 		]
 	}
-}
+} */
 
 /**
  *

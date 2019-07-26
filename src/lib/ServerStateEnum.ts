@@ -331,7 +331,14 @@ export enum ChannelVariable {
 	CHANNEL_LAYOUT = 'CHANNEL_LAYOUT'
 }
 
+export enum TimecodeSource {
+	CLOCK = 'CLOCK',
+	LAYER = 'LAYER',
+	CLEAR = 'CLEAR'
+}
+
 export type AllEnums =
   Command | Version | Producer | Consumer |
 	Lock | LogCategory | Chroma | LogLevel | Transition | Direction |
-	BlendMode | Ease | ChannelFormat | ChannelLayout | ChannelVariable
+	BlendMode | Ease | ChannelFormat | ChannelLayout | ChannelVariable |
+	TimecodeSource
