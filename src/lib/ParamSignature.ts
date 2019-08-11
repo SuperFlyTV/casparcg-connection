@@ -1,6 +1,4 @@
-import { Validation } from './ParamValidators'
-import IValidator = Validation.IValidator
-import AbstractValidator = Validation.AbstractValidator
+import { IValidator, AbstractValidator } from './ParamValidators'
 
 /**
  *

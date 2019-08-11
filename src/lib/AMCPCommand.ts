@@ -11,8 +11,7 @@ import IResponseParser = ResponseParserNS.IResponseParser
 // Param NS
 import { Payload, PayloadVO, Param, ParamData, IParamSignature } from './ParamSignature'
 // Validation ND
-import { Validation as ValidationNS } from './ParamValidators'
-import PositiveNumberValidatorBetween = ValidationNS.PositiveNumberRoundValidatorBetween
+import { PositiveNumberValidatorBetween } from './ParamValidators'
 // Protocol NS
 import { IProtocolLogic } from './ProtocolLogic'
 // Callback NS
@@ -25,6 +24,7 @@ import { Command } from './ServerStateEnum'
  *
  */
 export interface IAMCPResponse {
+	command: Command
 	code: number
 	raw: string
 	data: any
@@ -35,12 +35,24 @@ export interface IAMCPResponse {
  *
  */
 export class AMCPResponse implements IAMCPResponse {
+	public command: Command
 	public code: number
 	public raw: string
 	public data: any
 
 	public toString(): string {
 		return this.raw.replace(/\r?\n|\r/gi, '')
+	}
+}
+
+export class AMCPError extends Error {
+	public res: IAMCPResponse
+	constructor (res: IAMCPResponse) {
+		super(`Error response from CasparCG: ${res.raw}`)
+		this.res = res
+	}
+	get code(): number {
+		return this.res.code
 	}
 }
 
@@ -88,14 +100,14 @@ export interface CommandOptions {
 /**
  *
  */
-export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES> extends IAMCPCommandData {
+export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends IAMCPCommandData {
 	paramProtocol: Array<IParamSignature>
 	protocolLogic: Array<IProtocolLogic>
 	responseProtocol: ResponseSignature
 	onStatusChanged: ICommandStatusCallback
 	token: string
 	params: REQ
-	result: RES | undefined
+	result: Promise<RES>
 	command: C
 	resolve: (command: IAMCPCommand<C, REQ, RES>) => void
 	reject: (command: IAMCPCommand<C, REQ, RES>) => void
@@ -109,7 +121,7 @@ export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES
 /**
  *
  */
-export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES> implements IAMCPCommand<C, REQ, RES> {
+export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> implements IAMCPCommand<C, REQ, RES> {
 	response: IAMCPResponse = new AMCPResponse()
 	paramProtocol: Array<IParamSignature>
 	responseProtocol: ResponseSignature = new ResponseSignature()
@@ -118,7 +130,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES> imp
 	resolve: (command: IAMCPCommand<C, REQ, RES>) => void
 	reject: (command: IAMCPCommand<C, REQ, RES>) => void
 	params: REQ
-	result: RES | undefined
+	result: Promise<RES>
 	protected _channel: number
 	protected _layer: number
 	protected _id: string
@@ -500,7 +512,7 @@ export function isIAMCPCommand(object: any): object is IAMCPCommand<Command, Com
 /**
  *
  */
-export class OrChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
+export class OrChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -553,7 +565,7 @@ export class OrChannelOrLayerCommand<C extends Command, REQ extends CommandOptio
 /**
  *
  */
-export class ChannelCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
+export class ChannelCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
 	/**
 	 *
 	 */
@@ -598,7 +610,7 @@ export class ChannelCommand<C extends Command, REQ extends CommandOptions, RES> 
 /**
  *
  */
-export class LayerCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
+export class LayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -654,7 +666,7 @@ export class LayerCommand<C extends Command, REQ extends CommandOptions, RES> ex
 /**
  *
  */
-export class ChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
+export class ChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -711,7 +723,7 @@ export class ChannelOrLayerCommand<C extends Command, REQ extends CommandOptions
 /**
  *
  */
-export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
+export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -764,7 +776,7 @@ export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOpti
 /**
  *
  */
-export class LayerWithCgFallbackCommand<C extends Command, REQ extends CommandOptions, RES> extends AMCPCommand<C, REQ, RES> {
+export class LayerWithCgFallbackCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *

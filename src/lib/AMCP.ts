@@ -14,7 +14,11 @@ import { IAMCPCommand, IAMCPCommandVO, AMCPCommand, OrChannelOrLayerCommand, Cha
 import { Param, Required as required, Optional as optional, ParamSignature, IParamSignature } from './ParamSignature'
 
 // Validation NS
-import { Validation as ParameterValidator } from './ParamValidators'
+import { KeywordValidator, NumberValidator, StringValidator, EnumValidator, PositiveNumberValidator,
+ 	ClipNameValidator, PositiveNumberValidatorBetween, BooleanValidatorWithDefaults,
+	ClipNameEmptyStringValidator, FrameValidator, FilterValidator, ChannelLayoutValidator,
+ 	PositiveNumberRoundValidatorBetween, TemplateNameValidator, TemplateDataValidator,
+  DataNameValidator, TimecodeValidator, CommandValidator	} from './ParamValidators'
 // Protocol NS
 import { Depends, Coupled, OneOf, IProtocolLogic } from './ProtocolLogic'
 
@@ -24,7 +28,7 @@ import { Depends, Coupled, OneOf, IProtocolLogic } from './ProtocolLogic'
 // export class CustomCommand extends AbstractCommand {
 // 	static readonly commandString = ''
 // 	paramProtocol = [
-// 		new ParamSignature(required, 'command', null, new ParameterValidator.StringValidator(false))
+// 		new ParamSignature(required, 'command', null, new StringValidator(false))
 // 	]
 // }
 
@@ -165,313 +169,313 @@ export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IP
 
 export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, IParamSignature[]>([
 	[ Command.LOADBG, [ // TODO deal with device, route, HTML
-		new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
-		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
-		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Direction)),
-		new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-		new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-		new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-		new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
-		new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-		new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-		new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
-		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+		new ParamSignature(required, 'clip', null, new ClipNameValidator()),
+		new ParamSignature(optional, 'loop', null, new BooleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, new EnumValidator(Transition)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Direction)),
+		new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+		new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+		new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+		new ParamSignature(optional, 'seek', 'SEEK', new FrameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+		new ParamSignature(optional, 'auto', null, new BooleanValidatorWithDefaults('AUTO')),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
 	]],
 	[ Command.LOAD, [ // TODO deal with device, route, HTML
-		new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
-		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
-		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Direction)),
-		new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-		new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-		new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-		new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
-		new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-		new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-		new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
-		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+		new ParamSignature(required, 'clip', null, new ClipNameValidator()),
+		new ParamSignature(optional, 'loop', null, new BooleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, new EnumValidator(Transition)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Direction)),
+		new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+		new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+		new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+		new ParamSignature(optional, 'seek', 'SEEK', new FrameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+		new ParamSignature(optional, 'auto', null, new BooleanValidatorWithDefaults('AUTO')),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
 	]],
 	[ Command.PLAY, [ // TODO deal with device, route, HTML
-		new ParamSignature(optional, 'clip', null, new ParameterValidator.ClipNameValidator()),
-		new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
-		new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Transition)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Direction)),
-		new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-		new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-		new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-		new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
-		new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-		new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+		new ParamSignature(optional, 'clip', null, new ClipNameValidator()),
+		new ParamSignature(optional, 'loop', null, new BooleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, new EnumValidator(Transition)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Direction)),
+		new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+		new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+		new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+		new ParamSignature(optional, 'seek', 'SEEK', new FrameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
 	]],
 	[ Command.CG_ADD, [
-		new ParamSignature(required, 'flashLayer', 'ADD', new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(required, 'templateName', null, new ParameterValidator.TemplateNameValidator()),
-		new ParamSignature(required, 'playOnLoad', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'data', null, new ParameterValidator.TemplateDataValidator())
+		new ParamSignature(required, 'flashLayer', 'ADD', new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'templateName', null, new TemplateNameValidator()),
+		new ParamSignature(required, 'playOnLoad', null, new BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'data', null, new TemplateDataValidator())
 	]],
 	[ Command.CG_PLAY, [
-		new ParamSignature(required, 'flashLayer', 'PLAY', new ParameterValidator.PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'flashLayer', 'PLAY', new PositiveNumberValidatorBetween(0))
 	]],
 	[ Command.CG_ADD, [
-		new ParamSignature(required, 'flashLayer', 'STOP', new ParameterValidator.PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'flashLayer', 'STOP', new PositiveNumberValidatorBetween(0))
 	]],
 	[ Command.CG_NEXT, [
-		new ParamSignature(required, 'flashLayer', 'NEXT', new ParameterValidator.PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'flashLayer', 'NEXT', new PositiveNumberValidatorBetween(0))
 	]],
 	[ Command.CG_REMOVE, [
-		new ParamSignature(required, 'flashLayer', 'REMOVE', new ParameterValidator.PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'flashLayer', 'REMOVE', new PositiveNumberValidatorBetween(0))
 	]],
 	[ Command.CG_CLEAR, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLEAR'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('CLEAR'))
 	]],
 	[ Command.CG_UPDATE, [
-		new ParamSignature(required, 'flashLayer', 'UPDATE', new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(required, 'data', null, new ParameterValidator.TemplateDataValidator())
+		new ParamSignature(required, 'flashLayer', 'UPDATE', new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'data', null, new TemplateDataValidator())
 	]],
 	[ Command.CG_INVOKE, [
-		new ParamSignature(required, 'flashLayer', 'INVOKE', new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(required, 'method', null, new ParameterValidator.StringValidator())
+		new ParamSignature(required, 'flashLayer', 'INVOKE', new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'method', null, new StringValidator())
 	]],
 	[ Command.GL_INFO, [
-		new ParamSignature(required, 'info', null, new ParameterValidator.KeywordValidator('INFO')),
-		new ParamSignature(optional, 'flashLayer', null, new ParameterValidator.PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'info', null, new KeywordValidator('INFO')),
+		new ParamSignature(optional, 'flashLayer', null, new PositiveNumberValidatorBetween(0))
 	]],
 	[ Command.LOG_LEVEL, [
-		new ParamSignature(optional, 'level', null, new ParameterValidator.EnumValidator(LogLevel))
+		new ParamSignature(optional, 'level', null, new EnumValidator(LogLevel))
 	]],
 	[ Command.LOG_CATEGORY, [
-		new ParamSignature(optional, 'calltrace', LogCategory.CALLTRACE, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'communication', LogCategory.COMMUNICATION, new ParameterValidator.BooleanValidatorWithDefaults(1, 0))
+		new ParamSignature(optional, 'calltrace', LogCategory.CALLTRACE, new BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'communication', LogCategory.COMMUNICATION, new BooleanValidatorWithDefaults(1, 0))
 	]],
 	[ Command.MIXER_KEYER, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('KEYER')),
-		new ParamSignature(optional, 'keyer', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('KEYER')),
+		new ParamSignature(optional, 'keyer', null, new BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_CHROMA, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CHROMA')),
-		new ParamSignature(optional, 'keyer', null, new ParameterValidator.EnumValidator(Chroma)),
-		new ParamSignature(optional, 'threshold', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'softness', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'spill', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('CHROMA')),
+		new ParamSignature(optional, 'keyer', null, new EnumValidator(Chroma)),
+		new ParamSignature(optional, 'threshold', null, new NumberValidator()),
+		new ParamSignature(optional, 'softness', null, new NumberValidator()),
+		new ParamSignature(optional, 'spill', null, new NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_BLEND, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BLEND')),
-		new ParamSignature(optional, 'blendmode', null, new ParameterValidator.EnumValidator(BlendMode)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('BLEND')),
+		new ParamSignature(optional, 'blendmode', null, new EnumValidator(BlendMode)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_INVERT, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('INVERT')),
-		new ParamSignature(optional, 'invert', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('INVERT')),
+		new ParamSignature(optional, 'invert', null, new BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_OPACITY, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('OPACITY')),
-		new ParamSignature(optional, 'opacity', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('OPACITY')),
+		new ParamSignature(optional, 'opacity', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_BRIGHTNESS, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('BRIGHTNESS')),
-		new ParamSignature(optional, 'brightness', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('BRIGHTNESS')),
+		new ParamSignature(optional, 'brightness', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_SATURATION, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('SATURATION')),
-		new ParamSignature(optional, 'saturation', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('SATURATION')),
+		new ParamSignature(optional, 'saturation', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_CONTRAST, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CONTRAST')),
-		new ParamSignature(optional, 'contrast', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('CONTRAST')),
+		new ParamSignature(optional, 'contrast', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_LEVELS, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('LEVELS')),
-		new ParamSignature(optional, 'minInput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'maxInput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'gamma', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'minOutput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'maxOutput', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('LEVELS')),
+		new ParamSignature(optional, 'minInput', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'maxInput', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'gamma', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'minOutput', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'maxOutput', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_FILL, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('FILL')),
-		new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'xScale', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'yScale', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('FILL')),
+		new ParamSignature(optional, 'x', null, new NumberValidator()),
+		new ParamSignature(optional, 'y', null, new NumberValidator()),
+		new ParamSignature(optional, 'xScale', null, new NumberValidator()),
+		new ParamSignature(optional, 'yScale', null, new NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_CLIP, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLIP')),
-		new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'width', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'height', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('CLIP')),
+		new ParamSignature(optional, 'x', null, new NumberValidator()),
+		new ParamSignature(optional, 'y', null, new NumberValidator()),
+		new ParamSignature(optional, 'width', null, new NumberValidator()),
+		new ParamSignature(optional, 'height', null, new NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_ANCHOR, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ANCHOR')),
-		new ParamSignature(optional, 'x', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'y', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('ANCHOR')),
+		new ParamSignature(optional, 'x', null, new NumberValidator()),
+		new ParamSignature(optional, 'y', null, new NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween()),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_CROP, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CROP')),
-		new ParamSignature(optional, 'left', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'top', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'right', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'bottom', null, new ParameterValidator.PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('CROP')),
+		new ParamSignature(optional, 'left', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'top', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'right', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'bottom', null, new PositiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween()),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_ROTATION, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('ROTATION')),
-		new ParamSignature(optional, 'rotation', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('ROTATION')),
+		new ParamSignature(optional, 'rotation', null, new NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new NumberValidator()),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_PERSPECTIVE, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('PERSPECTIVE')),
-		new ParamSignature(optional, 'topLeftX', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'topLeftY', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'topRightX', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'topRightY', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'bottomRightX', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'bottomRightY', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'bottomLeftX', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'bottomLeftY', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.NumberValidator()),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('PERSPECTIVE')),
+		new ParamSignature(optional, 'topLeftX', null, new NumberValidator()),
+		new ParamSignature(optional, 'topLeftY', null, new NumberValidator()),
+		new ParamSignature(optional, 'topRightX', null, new NumberValidator()),
+		new ParamSignature(optional, 'topRightY', null, new NumberValidator()),
+		new ParamSignature(optional, 'bottomRightX', null, new NumberValidator()),
+		new ParamSignature(optional, 'bottomRightY', null, new NumberValidator()),
+		new ParamSignature(optional, 'bottomLeftX', null, new NumberValidator()),
+		new ParamSignature(optional, 'bottomLeftY', null, new NumberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, new NumberValidator()),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_MIPMAP, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MIPMAP')),
-		new ParamSignature(optional, 'mipmap', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('MIPMAP')),
+		new ParamSignature(optional, 'mipmap', null, new BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_VOLUME, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('VOLUME')),
-		new ParamSignature(optional, 'volume', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('VOLUME')),
+		new ParamSignature(optional, 'volume', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_MASTERVOLUME, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('MASTERVOLUME')),
-		new ParamSignature(optional, 'mastervolume', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('MASTERVOLUME')),
+		new ParamSignature(optional, 'mastervolume', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('STRAIGHT_ALPHA_OUTPUT')),
-		new ParamSignature(optional, 'straight_alpha_output', null, new ParameterValidator.BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('STRAIGHT_ALPHA_OUTPUT')),
+		new ParamSignature(optional, 'straight_alpha_output', null, new BooleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_GRID, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('GRID')),
-		new ParamSignature(optional, 'resolution', null, new ParameterValidator.PositiveNumberRoundValidatorBetween(1)),
-		new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new ParameterValidator.BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('GRID')),
+		new ParamSignature(optional, 'resolution', null, new PositiveNumberRoundValidatorBetween(1)),
+		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
+		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_COMMIT, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('COMMIT'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('COMMIT'))
 	]],
 	[ Command.MIXER_CLEAR, [
-		new ParamSignature(required, 'keyword', null, new ParameterValidator.KeywordValidator('CLEAR'))
+		new ParamSignature(required, 'keyword', null, new KeywordValidator('CLEAR'))
 	]],
 	[ Command.CALL, [
-		new ParamSignature(optional, 'seek', 'seek', new ParameterValidator.PositiveNumberValidatorBetween(0))
+		new ParamSignature(optional, 'seek', 'seek', new PositiveNumberValidatorBetween(0))
 	]],
 	[ Command.LOCK, [
-		new ParamSignature(required, 'action', null, new ParameterValidator.EnumValidator(Lock)),
-		new ParamSignature(optional, 'phrase', null, new ParameterValidator.StringValidator())
+		new ParamSignature(required, 'action', null, new EnumValidator(Lock)),
+		new ParamSignature(optional, 'phrase', null, new StringValidator())
 	]],
 	[ Command.DATA_STORE, [
-		new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator()),
-		new ParamSignature(required, 'data', null, new ParameterValidator.TemplateDataValidator())
+		new ParamSignature(required, 'fileName', null, new DataNameValidator()),
+		new ParamSignature(required, 'data', null, new TemplateDataValidator())
 	]],
 	[ Command.DATA_RETRIEVE, [
-		new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator())
+		new ParamSignature(required, 'fileName', null, new DataNameValidator())
 	]],
 	[ Command.DATA_REMOVE, [
-		new ParamSignature(required, 'fileName', null, new ParameterValidator.DataNameValidator())
+		new ParamSignature(required, 'fileName', null, new DataNameValidator())
 	]],
 	[ Command.THUMBNAIL_LIST, [
-		new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+		new ParamSignature(optional, 'subFolder', null, new ClipNameValidator())
 	]],
 	[ Command.THUMBNAIL_RETRIEVE, [
-		new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
+		new ParamSignature(required, 'fileName', null, new ClipNameValidator())
 	]],
 	[ Command.THUMBNAIL_GENERATE, [
-		new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
+		new ParamSignature(required, 'fileName', null, new ClipNameValidator())
 	]],
 	[ Command.CINF, [
-		new ParamSignature(required, 'fileName', null, new ParameterValidator.ClipNameValidator())
+		new ParamSignature(required, 'fileName', null, new ClipNameValidator())
 	]],
 	[ Command.CLS, [
-		new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+		new ParamSignature(optional, 'subFolder', null, new ClipNameValidator())
 	]],
 	[ Command.TLS, [
-		new ParamSignature(optional, 'subFolder', null, new ParameterValidator.ClipNameValidator())
+		new ParamSignature(optional, 'subFolder', null, new ClipNameValidator())
 	]],
 	[ Command.VERSION, [
-		new ParamSignature(optional, 'component', null, new ParameterValidator.EnumValidator(Version))
+		new ParamSignature(optional, 'component', null, new EnumValidator(Version))
 	]],
 	[ Command.INFO_DELAY, [
-		new ParamSignature(required, 'delay', null, new ParameterValidator.KeywordValidator('DELAY'))
+		new ParamSignature(required, 'delay', null, new KeywordValidator('DELAY'))
 	]],
 	[ Command.HELP, [
-		new ParamSignature(optional, 'commands', null, new ParameterValidator.EnumValidator(Command))
+		new ParamSignature(optional, 'commands', null, new EnumValidator(Command))
 	]],
 	[ Command.HELP_PRODUCER, [
-		new ParamSignature(optional, 'producer', null, new ParameterValidator.EnumValidator(Producer))
+		new ParamSignature(optional, 'producer', null, new EnumValidator(Producer))
 	]],
 	[ Command.HELP_CONSUMER, [
-		new ParamSignature(optional, 'consumer', null, new ParameterValidator.EnumValidator(Consumer))
+		new ParamSignature(optional, 'consumer', null, new EnumValidator(Consumer))
 	]],
 	[ Command.TIME, [
-		new ParamSignature(optional, 'timecode', null, new ParameterValidator.TimecodeValidator())
+		new ParamSignature(optional, 'timecode', null, new TimecodeValidator())
 	]],
 	[ Command.SCHEDULE_SET, [
-		new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator()),
-		new ParamSignature(required, 'timecode', null, new ParameterValidator.TimecodeValidator()),
-		new ParamSignature(required, 'command', null, new ParameterValidator.CommandValidator()) // FIXME - change this
+		new ParamSignature(required, 'token', null, new StringValidator()),
+		new ParamSignature(required, 'timecode', null, new TimecodeValidator()),
+		new ParamSignature(required, 'command', null, new CommandValidator()) // FIXME - change this
 	]],
 	[ Command.SCHEDULE_REMOVE, [
-		new ParamSignature(required, 'token', null, new ParameterValidator.StringValidator())
+		new ParamSignature(required, 'token', null, new StringValidator())
 	]],
 	[ Command.SCHEDULE_LIST, [
-		new ParamSignature(optional, 'timecode', null, new ParameterValidator.TimecodeValidator())
+		new ParamSignature(optional, 'timecode', null, new TimecodeValidator())
 	]]
 ])
 
@@ -564,19 +568,19 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
+			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new DecklinkDeviceValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+			new ParamSignature(optional, 'format', 'FORMAT', new ChannelFormatValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator()),
+			new ParamSignature(optional, 'auto', null, new BooleanValidatorWithDefaults('AUTO'))
 		]
 	}
 
@@ -591,18 +595,18 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new DecklinkDeviceValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+			new ParamSignature(optional, 'format', 'FORMAT', new ChannelFormatValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
 		]
 	}
 
@@ -622,18 +626,18 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new ParameterValidator.DecklinkDeviceValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+			new ParamSignature(required, 'device', 'DECKLINK DEVICE', new DecklinkDeviceValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+			new ParamSignature(optional, 'format', 'FORMAT', new ChannelFormatValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
 		]
 	}
 
@@ -648,19 +652,19 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
-			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+			new ParamSignature(required, 'route', null, new RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+			new ParamSignature(optional, 'auto', null, new BooleanValidatorWithDefaults('AUTO')),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
 		]
 	}
 
@@ -675,18 +679,18 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
-			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+			new ParamSignature(required, 'route', null, new RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
 		]
 	}
 
@@ -706,18 +710,18 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
-			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+			new ParamSignature(required, 'route', null, new RouteValidator()),
+			new ParamSignature(optional, 'mode', null, new RouteModeValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
 		]
 	}
 
@@ -732,15 +736,15 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
+			new ParamSignature(required, 'url', '[HTML]', new URLValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'auto', null, new BooleanValidatorWithDefaults('AUTO'))
 		]
 	}
 
@@ -755,14 +759,14 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(required, 'url', '[HTML]', new ParameterValidator.URLValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
+			new ParamSignature(required, 'url', '[HTML]', new URLValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator())
 		]
 	}
 
@@ -778,14 +782,14 @@ export namespace AMCP {
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
 		]
 		paramProtocol = [
-			new ParamSignature(optional, 'url', '[HTML]', new ParameterValidator.URLValidator()),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween(0)),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
+			new ParamSignature(optional, 'url', '[HTML]', new URLValidator()),
+			new ParamSignature(optional, 'transition', null, new EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
+			new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator())
 		]
 	}
 } */
