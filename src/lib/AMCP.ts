@@ -7,11 +7,10 @@ import { Response as ResponseParser } from './ResponseParsers'
 
 import ResponseSignature = ResponseSignatureNS.ResponseSignature
 // Command NS
-import { IAMCPCommand, IAMCPCommandVO, AMCPCommand, OrChannelOrLayerCommand, ChannelCommand,
- 	ChannelOrLayerCommand, LayerWithFallbackCommand, LayerWithCgFallbackCommand } from './AMCPCommand'
+// import { IAMCPCommand, IAMCPCommandVO, CommandOptions, IAMCPResponse } from './AMCPCommand'
 
 // Param NS
-import { Param, Required as required, Optional as optional, ParamSignature, IParamSignature } from './ParamSignature'
+import { Required as required, Optional as optional, ParamSignature, IParamSignature } from './ParamSignature'
 
 // Validation NS
 import { KeywordValidator, NumberValidator, StringValidator, EnumValidator, PositiveNumberValidator,
@@ -532,27 +531,6 @@ export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command
 // FIXME: Parsing ping/pong
 
 /**
- * IInfo
- */
-export namespace AMCP {
-
-	/**
-	 *
-	 */
-	export class InfoConfigCommand extends AbstractCommand {
-		static readonly commandString = 'INFO CONFIG'
-		responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.ConfigParser)
-
-		/**
-		 *
-		 */
-		constructor(params: (string | Param | (string | Param)[]), context?: Object) {
-			super(params, context)
-		}
-	}
-}
-
-/**
  * IInputOutput
  */
 /* export namespace AMCP {
@@ -797,17 +775,17 @@ export namespace AMCP {
 /**
  *
  */
-export function deSerialize(cmd: IAMCPCommandVO, id: string): IAMCPCommand {
-
-	// errror: commandstatus -1 //invalid command
-
-	// @todo: error handling much?????? (callback??????)
-	// let command: IAMCPCommand = Object.create((AMCP as any)[cmd._commandName]['prototype'])
-	// command.constructor.call(command, cmd._objectParams)
-	let command: IAMCPCommand = new (AMCP as any)[cmd._commandName](cmd._objectParams)
-	command.populate(cmd, id)
-	return command
-}
+// export function deSerialize<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(cmd: IAMCPCommandVO, id: string): IAMCPCommand<C, REQ, RES> {
+//
+// 	// errror: commandstatus -1 //invalid command
+//
+// 	// @todo: error handling much?????? (callback??????)
+// 	// let command: IAMCPCommand = Object.create((AMCP as any)[cmd._commandName]['prototype'])
+// 	// command.constructor.call(command, cmd._objectParams)
+// 	let command: IAMCPCommand<C, REQ, RES> = new (AMCP as any)[cmd._commandName](cmd._objectParams)
+// 	command.populate(cmd, id)
+// 	return command
+// }
 
 /**
  *

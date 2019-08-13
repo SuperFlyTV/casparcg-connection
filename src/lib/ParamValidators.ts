@@ -183,7 +183,7 @@ export class EnumValidator extends AbstractValidator {
 	/**
 	 *
 	 */
-	constructor(private _enumClass: typeof AllEnums) {
+	constructor(private _enumClass: any) {
 		super()
 	}
 
@@ -191,9 +191,7 @@ export class EnumValidator extends AbstractValidator {
 	 *
 	 */
 	resolve(data: any): ParamData {
-		if (data instanceof this._enumClass) {
-			return data.value
-		} else if (typeof data === 'string') {
+		if (typeof data === 'string') {
 			// TODO: data is known to be string here;
 			let stringCast = data // !== null ? data.toString() : ''
 			// format stringy enum value
@@ -223,9 +221,7 @@ export class ChannelFormatValidator extends AbstractValidator {
 	 *
 	 */
 	resolve(data: any): ParamData {
-		if (data instanceof ChannelFormat) {
-			return data.value
-		} else if (typeof data === 'string') {
+		if (typeof data === 'string') {
 			let stringCast = data.toString()
 			// format stringy enum value
 			stringCast = stringCast.toUpperCase()

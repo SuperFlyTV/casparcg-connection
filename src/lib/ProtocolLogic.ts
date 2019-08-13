@@ -2,8 +2,7 @@
 import * as EnumNS from './ServerStateEnum'
 import AllEnums = EnumNS.AllEnums
 // Param NS
-import { Param as ParamNS } from './ParamSignature'
-import IParamSignature = ParamNS.IParamSignature
+import { IParamSignature } from './ParamSignature'
 
 /**
  *

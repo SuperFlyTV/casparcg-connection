@@ -1,6 +1,5 @@
 // AMCPUtilNS
-import { AMCPUtil as AMCPUtilNS } from './AMCP'
-import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse
+import { CasparCGSocketResponse } from './AMCP'
 // ResponseNS
 import { Response as ResponseNS } from './ResponseSignature'
 import ResponseSignature = ResponseNS.ResponseSignature
