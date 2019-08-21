@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gl>
+  <details>
+    <pooled_device_buffers>
+      <device_buffer_pool>
+        <stride>4</stride>
+        <mipmapping>false</mipmapping>
+        <width>720</width>
+        <height>576</height>
+        <size>1658880</size>
+        <count>1</count>
+      </device_buffer_pool>
+  	</pooled_device_buffers>
+    <pooled_host_buffers>
+    	<host_buffer_pool>
+      	<usage>read_only</usage>
+        <size>1658880</size>
+        <count>2</count>
+  		</host_buffer_pool>
+    </pooled_host_buffers>
+  </details>
+  <summary>
+    <pooled_device_buffers>
+    	<total_count>1</total_count>
+      <total_size>1658880</total_size>
+    </pooled_device_buffers>
+    <all_device_buffers>
+      <total_count>2</total_count>
+      <total_size>3317760</total_size>
+    </all_device_buffers>
+    <pooled_host_buffers>
+      <total_read_count>2</total_read_count>
+      <total_write_count>0</total_write_count>
+      <total_read_size>3317760</total_read_size>
+      <total_write_size>0</total_write_size>
+    </pooled_host_buffers>
+  	<all_host_buffers>
+    	<total_read_count>11</total_read_count>
+      <total_write_count>0</total_write_count>
+      <total_read_size>18247680</total_read_size>
+      <total_write_size>0</total_write_size>
+    </all_host_buffers>
+	</summary>
+</gl>

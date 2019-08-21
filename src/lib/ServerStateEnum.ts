@@ -337,8 +337,13 @@ export enum TimecodeSource {
 	CLEAR = 'CLEAR'
 }
 
+export enum ClipType {
+	MOVIE = 'MOVIE',
+	STILL = 'STILL'
+}
+
 export type AllEnums =
   Command | Version | Producer | Consumer |
 	Lock | LogCategory | Chroma | LogLevel | Transition | Direction |
 	BlendMode | Ease | ChannelFormat | ChannelLayout | ChannelVariable |
-	TimecodeSource
+	TimecodeSource | ClipType

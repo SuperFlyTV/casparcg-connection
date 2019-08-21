@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<system>
+	<name>XPS 15 9575</name>
+  <os>
+    <description>Windows 10 Pro </description>
+  </os>
+  <cpu>Intel(R) Core(TM) i7-8705G CPU @ 3.10GHz Physical Threads: 8</cpu>
+  <ffmpeg>
+  	<avcodec>58.11.101</avcodec>
+    <avformat>58.9.100</avformat>
+    <avfilter>7.12.100</avfilter>
+    <avutil>56.7.101</avutil>
+    <swscale>5.0.101</swscale>
+  </ffmpeg>
+  <bluefish>
+    <version>Not found</version>
+  </bluefish>
+  <decklink>
+    <version>10.11.4</version>
+  </decklink>
+  <cef>
+  	<version>3.3239.1705</version>
+    <chromeversion>63.0.3239.109</chromeversion>
+  </cef>
+  <flash>$(build.FlashMajorVersion).$(build.FlashMinorVersion).$(build.FlashBuildVersion).$(build.FlashPrivateVersion)</flash>
+  <newtek-ivga>
+    <version>unavailable (Processing.AirSend.x64.dll)</version>
+  </newtek-ivga>
+  <freeimage>3.16.0</freeimage>
+</system>

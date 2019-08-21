@@ -99,14 +99,14 @@ export interface CommandOptions {
 /**
  *
  */
-export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends IAMCPCommandData {
+export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> extends IAMCPCommandData {
 	paramProtocol: Array<IParamSignature>
 	protocolLogic: Array<IProtocolLogic>
 	responseProtocol: ResponseSignature
 	onStatusChanged: ICommandStatusCallback
 	token: string
 	params: REQ
-	result: Promise<RES>
+	result: Promise<RES & IAMCPResponse>
 	command: C
 	resolve: (command: IAMCPCommand<C, REQ, RES>) => void
 	reject: (command: IAMCPCommand<C, REQ, RES>) => void
@@ -120,7 +120,7 @@ export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES
 /**
  *
  */
-export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> implements IAMCPCommand<C, REQ, RES> {
+export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> implements IAMCPCommand<C, REQ, RES> {
 	response: IAMCPResponse = new AMCPResponse()
 	paramProtocol: Array<IParamSignature>
 	responseProtocol: ResponseSignature = new ResponseSignature()
@@ -129,7 +129,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	resolve: (command: IAMCPCommand<C, REQ, RES>) => void
 	reject: (command: IAMCPCommand<C, REQ, RES>) => void
 	params: REQ
-	result: Promise<RES>
+	result: Promise<RES & IAMCPResponse>
 	protected _channel: number
 	protected _layer: number
 	protected _id: string
@@ -511,7 +511,7 @@ export function isIAMCPCommand(object: any): object is IAMCPCommand<Command, Com
 /**
  *
  */
-export class OrChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
+export class OrChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -564,7 +564,7 @@ export class OrChannelOrLayerCommand<C extends Command, REQ extends CommandOptio
 /**
  *
  */
-export class ChannelCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
+export class ChannelCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> extends AMCPCommand<C, REQ, RES> {
 	/**
 	 *
 	 */
@@ -609,7 +609,7 @@ export class ChannelCommand<C extends Command, REQ extends CommandOptions, RES e
 /**
  *
  */
-export class LayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
+export class LayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -665,7 +665,7 @@ export class LayerCommand<C extends Command, REQ extends CommandOptions, RES ext
 /**
  *
  */
-export class ChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
+export class ChannelOrLayerCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -722,7 +722,7 @@ export class ChannelOrLayerCommand<C extends Command, REQ extends CommandOptions
 /**
  *
  */
-export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
+export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -775,7 +775,7 @@ export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOpti
 /**
  *
  */
-export class LayerWithCgFallbackCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse> extends AMCPCommand<C, REQ, RES> {
+export class LayerWithCgFallbackCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> extends AMCPCommand<C, REQ, RES> {
 
 	/**
 	 *
@@ -823,4 +823,18 @@ export class LayerWithCgFallbackCommand<C extends Command, REQ extends CommandOp
 
 		return address
 	}
+}
+
+interface CommandConstructor<C extends Command, REQ extends CommandOptions, RES extends REQ> {
+	new (options: REQ, context?: Object): IAMCPCommand<C, REQ, RES>
+}
+
+// TODO vary this with version
+export const constructors: Map<Command, CommandConstructor<Command, CommandOptions, CommandOptions>> = new Map([
+	[ Command.LOADBG, LayerWithFallbackCommand ]
+])
+
+export function createCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ, context?: Object): IAMCPCommand<C, REQ, RES> | undefined {
+	let ctor = constructors.get(command) as CommandConstructor<C, REQ, RES>
+	return ctor ? new ctor(options, context) : undefined
 }

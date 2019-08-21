@@ -1,10 +1,10 @@
 import { EventEmitter } from 'events'
 import { CasparCGSocket } from './lib/CasparCGSocket'
-import { AMCP, CasparCGSocketResponse } from './lib/AMCP'
+import { CasparCGSocketResponse } from './lib/AMCP'
 
 import { Command, Transition, Ease, Direction, Chroma, BlendMode, Lock,
 	Version, LogLevel, LogCategory, Producer, Consumer, ChannelVariable,
- 	TimecodeSource } from './lib/ServerStateEnum'
+ 	TimecodeSource, ClipType } from './lib/ServerStateEnum'
 import { IConnectionOptions, ConnectionOptions, Options as OptionsNS } from './lib/AMCPConnectionOptions'
 // Options NS
 import QueueMode = OptionsNS.QueueMode
@@ -12,7 +12,7 @@ import CasparCGVersion = OptionsNS.CasparCGVersion
 // Command NS
 import { IAMCPCommand, isIAMCPCommand, IAMCPStatus, AMCPResponse, CommandOptions,
 	LayerWithFallbackCommand, LayerWithCgFallbackCommand, AMCPCommand, ChannelCommand,
-  ChannelOrLayerCommand, OrChannelOrLayerCommand, IAMCPResponse } from './lib/AMCPCommand'
+  ChannelOrLayerCommand, OrChannelOrLayerCommand, createCommand as createAMCPCommand} from './lib/AMCPCommand'
 
 // Param NS
 import { Param, TemplateData } from './lib/ParamSignature'
@@ -28,6 +28,7 @@ import ISocketStatusCallback = CallbackNS.ISocketStatusCallback
 // Config NS
 import { Config as ConfigNS } from './lib/Config'
 import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig
+import ICasparCGConfig = ConfigNS.Intermediate.ICasparCGConfig
 // Response NS
 import { Response as ResponseNS } from './lib/ResponseParsers'
 import CasparCGPaths = ResponseNS.CasparCGPaths
@@ -173,12 +174,12 @@ export interface StopOptions extends ChannelOptLayer {
 }
 
 export interface IVideo {
-	loadbg(options: LoadBGOptions): Promise<IAMCPCommand<Command.LOADBG, LoadBGOptions, LoadBGOptions & IAMCPResponse>>
-	load(options: LoadOptions): Promise<IAMCPCommand<Command.LOAD, LoadOptions, LoadOptions & IAMCPResponse>>
-	play(opitons: PlayOptions): Promise<IAMCPCommand<Command.PLAY, PlayOptions, PlayOptions & IAMCPResponse>>
-	pause(options: PauseOptions): Promise<IAMCPCommand<Command.PAUSE, PauseOptions, PauseOptions & IAMCPResponse>>
-	resume(options: ResumeOptions): Promise<IAMCPCommand<Command.RESUME, ResumeOptions, ResumeOptions & IAMCPResponse>>
-	stop(options: StopOptions): Promise<IAMCPCommand<Command.STOP, StopOptions, StopOptions & IAMCPResponse>>
+	loadbg(options: LoadBGOptions): Promise<IAMCPCommand<Command.LOADBG, LoadBGOptions, LoadBGOptions>>
+	load(options: LoadOptions): Promise<IAMCPCommand<Command.LOAD, LoadOptions, LoadOptions>>
+	play(opitons: PlayOptions): Promise<IAMCPCommand<Command.PLAY, PlayOptions, PlayOptions>>
+	pause(options: PauseOptions): Promise<IAMCPCommand<Command.PAUSE, PauseOptions, PauseOptions>>
+	resume(options: ResumeOptions): Promise<IAMCPCommand<Command.RESUME, ResumeOptions, ResumeOptions>>
+	stop(options: StopOptions): Promise<IAMCPCommand<Command.STOP, StopOptions, StopOptions>>
 }
 
 /**
@@ -228,21 +229,26 @@ export interface CGInvokeOptions extends CGFlashLayer {
 	methodName: string
 }
 
+// see also TemplateHostInfo which is the same with flashLayer = undefined
 export interface CGInfoOptions extends ChannelOptLayer {
 	// command: Command.CG_INFO
 	flashLayer?: number
 }
 
+export interface CGInfoResponse extends CGInfoOptions {
+	result: string // Response is variable depending on renderer type
+}
+
 export interface ICG {
-	cgAdd(options: CGAddOptions): Promise<IAMCPCommand<Command.CG_ADD, CGAddOptions, CGAddOptions & IAMCPResponse>>
-	cgPlay(options: CGPlayOptions): Promise<IAMCPCommand<Command.CG_PLAY, CGPlayOptions, CGPlayOptions & IAMCPResponse>> // TODO can you not give a template name?
-	cgStop(options: CGStopOptions): Promise<IAMCPCommand<Command.CG_STOP, CGStopOptions, CGStopOptions & IAMCPResponse>>
-	cgNext(options: CGNextOptions): Promise<IAMCPCommand<Command.CG_NEXT, CGNextOptions, CGNextOptions & IAMCPResponse>>
-	cgRemove(options: CGRemoveOptions): Promise<IAMCPCommand<Command.CG_REMOVE, CGRemoveOptions, CGRemoveOptions & IAMCPResponse>>
-	cgClear(options: CGClearOptions): Promise<IAMCPCommand<Command.CG_CLEAR, CGClearOptions, CGClearOptions & IAMCPResponse>>
-	cgUpdate(optiond: CGUpdateOptions): Promise<IAMCPCommand<Command.CG_UPDATE, CGUpdateOptions, CGUpdateOptions & IAMCPResponse>>
-	cgInvoke(options: CGInvokeOptions): Promise<IAMCPCommand<Command.CG_INVOKE, CGInvokeOptions, CGInvokeOptions & IAMCPResponse>>
-	cgInfo(options: CGInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, CGInfoOptions, CGInfoOptions & IAMCPResponse>>
+	cgAdd(options: CGAddOptions): Promise<IAMCPCommand<Command.CG_ADD, CGAddOptions, CGAddOptions>>
+	cgPlay(options: CGPlayOptions): Promise<IAMCPCommand<Command.CG_PLAY, CGPlayOptions, CGPlayOptions>> // TODO can you not give a template name?
+	cgStop(options: CGStopOptions): Promise<IAMCPCommand<Command.CG_STOP, CGStopOptions, CGStopOptions>>
+	cgNext(options: CGNextOptions): Promise<IAMCPCommand<Command.CG_NEXT, CGNextOptions, CGNextOptions>>
+	cgRemove(options: CGRemoveOptions): Promise<IAMCPCommand<Command.CG_REMOVE, CGRemoveOptions, CGRemoveOptions>>
+	cgClear(options: CGClearOptions): Promise<IAMCPCommand<Command.CG_CLEAR, CGClearOptions, CGClearOptions>>
+	cgUpdate(optiond: CGUpdateOptions): Promise<IAMCPCommand<Command.CG_UPDATE, CGUpdateOptions, CGUpdateOptions>>
+	cgInvoke(options: CGInvokeOptions): Promise<IAMCPCommand<Command.CG_INVOKE, CGInvokeOptions, CGInvokeOptions>>
+	cgInfo(options: CGInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, CGInfoOptions, CGInfoResponse>>
 }
 
 interface Deferable extends ChannelOptLayer {
@@ -395,30 +401,30 @@ export interface ChannelGridOptions extends CommandOptions {
 /**
  * AMCP Mixer-commands
  */
-export interface IMixer { // TODO: missing invert
-	mixerKeyer(options: MixerKeyerOptions): Promise<IAMCPCommand<Command.MIXER_KEYER, MixerKeyerOptions, MixerKeyerOptions & IAMCPResponse>>
-	mixerChroma(options: MixerChromaOptions): Promise<IAMCPCommand<Command.MIXER_CHROMA, MixerChromaOptions, MixerChromaOptions & IAMCPResponse>>
-	mixerBlend(options: MixerBlendOptions): Promise<IAMCPCommand<Command.MIXER_BLEND, MixerBlendOptions, MixerBlendOptions & IAMCPResponse>>
-	mixerInvert(options: MixerInvertOptions): Promise<IAMCPCommand<Command.MIXER_INVERT, MixerInvertOptions, MixerInvertOptions & IAMCPResponse>>
-	mixerOpacity(options: MixerOpacityOptions): Promise<IAMCPCommand<Command.MIXER_OPACITY, MixerOpacityOptions, MixerOpacityOptions & IAMCPResponse>>
-	mixerBrightness(options: MixerBrightnessOptions): Promise<IAMCPCommand<Command.MIXER_BRIGHTNESS, MixerBrightnessOptions, MixerBrightnessOptions & IAMCPResponse>>
-	mixerSaturation(options: MixerSaturationOptions): Promise<IAMCPCommand<Command.MIXER_SATURATION, MixerSaturationOptions, MixerSaturationOptions & IAMCPResponse>>
-	mixerContrast(options: MixerContrastOptions): Promise<IAMCPCommand<Command.MIXER_CONTRAST, MixerContrastOptions, MixerContrastOptions & IAMCPResponse>>
-	mixerLevels(options: MixerLevelsOptions): Promise<IAMCPCommand<Command.MIXER_LEVELS, MixerLevelsOptions, MixerLevelsOptions & IAMCPResponse>>
-	mixerFill(options: MixerFillOptions): Promise<IAMCPCommand<Command.MIXER_FILL, MixerFillOptions, MixerFillOptions & IAMCPResponse>>
-	mixerClip(options: MixerClipOptions): Promise<IAMCPCommand<Command.MIXER_CLIP, MixerClipOptions, MixerClipOptions & IAMCPResponse>>
-	mixerAnchor(options: MixerAnchorOptions): Promise<IAMCPCommand<Command.MIXER_ANCHOR, MixerAnchorOptions, MixerAnchorOptions & IAMCPResponse>>
-	mixerCrop(options: MixerCropOptions): Promise<IAMCPCommand<Command.MIXER_CROP, MixerCropOptions, MixerCropOptions & IAMCPResponse>>
-	mixerRotation(options: MixerRotationOptions): Promise<IAMCPCommand<Command.MIXER_ROTATION, MixerRotationOptions, MixerRotationOptions & IAMCPResponse>>
-	mixerPerspective(options: MixerPerspectiveOptions): Promise<IAMCPCommand<Command.MIXER_PERSPECTIVE, MixerPerspectiveOptions, MixerPerspectiveOptions & IAMCPResponse>>
-	mixerMipmap(options: MixerMipmapOptions): Promise<IAMCPCommand<Command.MIXER_MIPMAP, MixerMipmapOptions, MixerMipmapOptions & IAMCPResponse>>
-	mixerVolume(options: MixerVolumeOptions): Promise<IAMCPCommand<Command.MIXER_VOLUME, MixerVolumeOptions, MixerVolumeOptions & IAMCPResponse>>
-	mixerMastervolume(options: MixerMastervolumeOptions): Promise<IAMCPCommand<Command.MIXER_MASTERVOLUME, MixerMastervolumeOptions, MixerMastervolumeOptions & IAMCPResponse>>
-	mixerStraightAlphaOutput(coptions: MixerStraightAlphaOutputOptions): Promise<IAMCPCommand<Command.MIXER_STRAIGHT_ALPHA_OUTPUT, MixerStraightAlphaOutputOptions, MixerStraightAlphaOutputOptions & IAMCPResponse>>
-	mixerGrid(options: MixerGridOptions): Promise<IAMCPCommand<Command.MIXER_GRID, MixerGridOptions, MixerGridOptions & IAMCPResponse>>
-	mixerCommit(options: MixerCommitOptions): Promise<IAMCPCommand<Command.MIXER_COMMIT, MixerCommitOptions, MixerCommitOptions & IAMCPResponse>>
-	mixerClear(options: MixerClearOptions): Promise<IAMCPCommand<Command.MIXER_CLEAR, MixerClearOptions, MixerClearOptions & IAMCPResponse>>
-	channelGrid(options?: ChannelGridOptions): Promise<IAMCPCommand<Command.CHANNEL_GRID, ChannelGridOptions, ChannelGridOptions & IAMCPResponse>>
+export interface IMixer {
+	mixerKeyer(options: MixerKeyerOptions): Promise<IAMCPCommand<Command.MIXER_KEYER, MixerKeyerOptions, MixerKeyerOptions>>
+	mixerChroma(options: MixerChromaOptions): Promise<IAMCPCommand<Command.MIXER_CHROMA, MixerChromaOptions, MixerChromaOptions>>
+	mixerBlend(options: MixerBlendOptions): Promise<IAMCPCommand<Command.MIXER_BLEND, MixerBlendOptions, MixerBlendOptions>>
+	mixerInvert(options: MixerInvertOptions): Promise<IAMCPCommand<Command.MIXER_INVERT, MixerInvertOptions, MixerInvertOptions>>
+	mixerOpacity(options: MixerOpacityOptions): Promise<IAMCPCommand<Command.MIXER_OPACITY, MixerOpacityOptions, MixerOpacityOptions>>
+	mixerBrightness(options: MixerBrightnessOptions): Promise<IAMCPCommand<Command.MIXER_BRIGHTNESS, MixerBrightnessOptions, MixerBrightnessOptions>>
+	mixerSaturation(options: MixerSaturationOptions): Promise<IAMCPCommand<Command.MIXER_SATURATION, MixerSaturationOptions, MixerSaturationOptions>>
+	mixerContrast(options: MixerContrastOptions): Promise<IAMCPCommand<Command.MIXER_CONTRAST, MixerContrastOptions, MixerContrastOptions>>
+	mixerLevels(options: MixerLevelsOptions): Promise<IAMCPCommand<Command.MIXER_LEVELS, MixerLevelsOptions, MixerLevelsOptions>>
+	mixerFill(options: MixerFillOptions): Promise<IAMCPCommand<Command.MIXER_FILL, MixerFillOptions, MixerFillOptions>>
+	mixerClip(options: MixerClipOptions): Promise<IAMCPCommand<Command.MIXER_CLIP, MixerClipOptions, MixerClipOptions>>
+	mixerAnchor(options: MixerAnchorOptions): Promise<IAMCPCommand<Command.MIXER_ANCHOR, MixerAnchorOptions, MixerAnchorOptions>>
+	mixerCrop(options: MixerCropOptions): Promise<IAMCPCommand<Command.MIXER_CROP, MixerCropOptions, MixerCropOptions>>
+	mixerRotation(options: MixerRotationOptions): Promise<IAMCPCommand<Command.MIXER_ROTATION, MixerRotationOptions, MixerRotationOptions>>
+	mixerPerspective(options: MixerPerspectiveOptions): Promise<IAMCPCommand<Command.MIXER_PERSPECTIVE, MixerPerspectiveOptions, MixerPerspectiveOptions>>
+	mixerMipmap(options: MixerMipmapOptions): Promise<IAMCPCommand<Command.MIXER_MIPMAP, MixerMipmapOptions, MixerMipmapOptions>>
+	mixerVolume(options: MixerVolumeOptions): Promise<IAMCPCommand<Command.MIXER_VOLUME, MixerVolumeOptions, MixerVolumeOptions>>
+	mixerMastervolume(options: MixerMastervolumeOptions): Promise<IAMCPCommand<Command.MIXER_MASTERVOLUME, MixerMastervolumeOptions, MixerMastervolumeOptions>>
+	mixerStraightAlphaOutput(coptions: MixerStraightAlphaOutputOptions): Promise<IAMCPCommand<Command.MIXER_STRAIGHT_ALPHA_OUTPUT, MixerStraightAlphaOutputOptions, MixerStraightAlphaOutputOptions>>
+	mixerGrid(options: MixerGridOptions): Promise<IAMCPCommand<Command.MIXER_GRID, MixerGridOptions, MixerGridOptions>>
+	mixerCommit(options: MixerCommitOptions): Promise<IAMCPCommand<Command.MIXER_COMMIT, MixerCommitOptions, MixerCommitOptions>>
+	mixerClear(options: MixerClearOptions): Promise<IAMCPCommand<Command.MIXER_CLEAR, MixerClearOptions, MixerClearOptions>>
+	channelGrid(options?: ChannelGridOptions): Promise<IAMCPCommand<Command.CHANNEL_GRID, ChannelGridOptions, ChannelGridOptions>>
 }
 
 /**
@@ -564,15 +570,15 @@ function isRemoveStreamOptions(x: RemoveOptions): x is RemoveStreamOptions {
 }
 
 export interface IChannel {
-	clear(options: ClearOptions): Promise<IAMCPCommand<Command.CLEAR, ClearOptions, ClearOptions & IAMCPResponse>>
-	call(options: CallOptions): Promise<IAMCPCommand<Command.CALL, CallOptions, CallOptions & IAMCPResponse>>
-	swap(options: SwapOptions): Promise<IAMCPCommand<Command.SWAP, SwapOptions, SwapOptions & IAMCPResponse>>
-	print(options: PrintOptions | number): Promise<IAMCPCommand<Command.PRINT, PrintOptions, PrintOptions & IAMCPResponse>>
-	set(options: SetOptions): Promise<IAMCPCommand<Command.SET, SetOptions, SetOptions & IAMCPResponse>>
-	lock(options: LockOptions): Promise<IAMCPCommand<Command.LOCK, LockOptions, LockOptions & IAMCPResponse>>
-	glGC(options?: GLGCOptions): Promise<IAMCPCommand<Command.GL_GC, GLGCOptions, GLGCOptions & IAMCPResponse>>
-	add(options: AddOptions): Promise<IAMCPCommand<Command.ADD, AddOptions, AddOptions & IAMCPResponse>>
-	remove(options: RemoveOptions): Promise<IAMCPCommand<Command.REMOVE, RemoveOptions, RemoveOptions & IAMCPResponse>>
+	clear(options: ClearOptions): Promise<IAMCPCommand<Command.CLEAR, ClearOptions, ClearOptions>>
+	call(options: CallOptions): Promise<IAMCPCommand<Command.CALL, CallOptions, CallOptions>>
+	swap(options: SwapOptions): Promise<IAMCPCommand<Command.SWAP, SwapOptions, SwapOptions>>
+	print(options: PrintOptions | number): Promise<IAMCPCommand<Command.PRINT, PrintOptions, PrintOptions>>
+	set(options: SetOptions): Promise<IAMCPCommand<Command.SET, SetOptions, SetOptions>>
+	lock(options: LockOptions): Promise<IAMCPCommand<Command.LOCK, LockOptions, LockOptions>>
+	glGC(options?: GLGCOptions): Promise<IAMCPCommand<Command.GL_GC, GLGCOptions, GLGCOptions>>
+	add(options: AddOptions): Promise<IAMCPCommand<Command.ADD, AddOptions, AddOptions>>
+	remove(options: RemoveOptions): Promise<IAMCPCommand<Command.REMOVE, RemoveOptions, RemoveOptions>>
 }
 
 /**
@@ -592,8 +598,16 @@ export interface DataListOptions extends CommandOptions {
 	// command: Command.DATA_LIST
 }
 
+export interface DataListeResponse extends DataListOptions {
+	fileNames: string[]
+}
+
 export interface DataRetrieveOptions extends FileDetails {
 	// command: Command.DATA_RETRIEVE
+}
+
+export interface DataRetrieveResponse extends DataRetrieveOptions {
+	data: TemplateData
 }
 
 export interface DataRemoveOptions extends FileDetails {
@@ -601,10 +615,10 @@ export interface DataRemoveOptions extends FileDetails {
 }
 
 export interface IData {
-	dataStore(options: DataStoreOptions): Promise<IAMCPCommand<Command.DATA_STORE, DataStoreOptions, DataStoreOptions & IAMCPResponse>>
-	dataRetrieve(options: DataRetrieveOptions | string): Promise<IAMCPCommand<Command.DATA_RETRIEVE, DataRetrieveOptions, TemplateData & IAMCPResponse>>
-	dataList(options?: DataListOptions): Promise<IAMCPCommand<Command.DATA_LIST, DataListOptions, string[] & IAMCPResponse>>
-	dataRemove(options: DataRemoveOptions | string): Promise<IAMCPCommand<Command.DATA_REMOVE, DataRemoveOptions, DataRemoveOptions & IAMCPResponse>>
+	dataStore(options: DataStoreOptions): Promise<IAMCPCommand<Command.DATA_STORE, DataStoreOptions, DataStoreOptions>>
+	dataRetrieve(options: DataRetrieveOptions | string): Promise<IAMCPCommand<Command.DATA_RETRIEVE, DataRetrieveOptions, DataRetrieveResponse>>
+	dataList(options?: DataListOptions): Promise<IAMCPCommand<Command.DATA_LIST, DataListOptions, DataListOptions>>
+	dataRemove(options: DataRemoveOptions | string): Promise<IAMCPCommand<Command.DATA_REMOVE, DataRemoveOptions, DataRemoveOptions>>
 }
 
 /**
@@ -619,8 +633,16 @@ export interface ThumbnailListOptions extends SubFolderDetails {
 	// command: Command.THUMBNAIL_LIST
 }
 
+export interface ThumbnailListResponse extends ThumbnailListOptions {
+	thumbnailNames: string[]
+}
+
 export interface ThumbnailRetrieveOptions extends FileDetails {
 	// command: Command.THUMBNAIL_RETRIEVE
+}
+
+export interface ThumbnailRetrieveResponse extends ThumbnailRetrieveOptions {
+	thumbnail: Buffer | null // Base-64 PNG image
 }
 
 export interface ThumbnailGenerateOptions extends FileDetails {
@@ -632,10 +654,10 @@ export interface ThumbnailGenerateAllOptions extends CommandOptions {
 }
 
 export interface IThumbnail {
-	thumbnailList(options?: ThumbnailListOptions): Promise<IAMCPCommand<Command.THUMBNAIL_LIST, ThumbnailListOptions, string[] & IAMCPResponse>>
-	thumbnailRetrieve(options: ThumbnailRetrieveOptions): Promise<IAMCPCommand<Command.THUMBNAIL_RETRIEVE, ThumbnailRetrieveOptions, ThumbnailRetrieveOptions & IAMCPResponse>>
-	thumbnailGenerate(options: ThumbnailGenerateOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE, ThumbnailGenerateOptions, ThumbnailGenerateOptions & IAMCPResponse>>
-	thumbnailGenerateAll(options?: ThumbnailGenerateAllOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE_ALL, ThumbnailGenerateAllOptions, boolean & IAMCPResponse>>
+	thumbnailList(options?: ThumbnailListOptions): Promise<IAMCPCommand<Command.THUMBNAIL_LIST, ThumbnailListOptions, ThumbnailListResponse>>
+	thumbnailRetrieve(options: ThumbnailRetrieveOptions): Promise<IAMCPCommand<Command.THUMBNAIL_RETRIEVE, ThumbnailRetrieveOptions, ThumbnailRetrieveResponse>>
+	thumbnailGenerate(options: ThumbnailGenerateOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE, ThumbnailGenerateOptions, ThumbnailGenerateOptions>>
+	thumbnailGenerateAll(options?: ThumbnailGenerateAllOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE_ALL, ThumbnailGenerateAllOptions, ThumbnailGenerateAllOptions>>
 }
 
 /**
@@ -646,25 +668,62 @@ export interface CInfOptions extends FileDetails {
 	// command: Command.CINF
 }
 
+export interface MediaInfo {
+	filePath: string
+	clipType: ClipType
+	size: number
+	writeTime: Date
+	duration: number
+	timeBase: [ number, number ]
+}
+
 export interface CInfResponse extends CInfOptions {
-	info: string[]
+	clips: MediaInfo[]
 }
 
 export interface CLSOptions extends SubFolderDetails {
 	// command: Command.CLS
 }
 
+export interface CLSResponse extends CLSOptions {
+	clips: MediaInfo[]
+}
+
+export interface TemplateInfo {
+	filePath: string
+	size: number
+	writeTime: Date
+	sceneType: string
+}
+
 export interface TLSOptions extends SubFolderDetails {
 	// command: Command.TLS
+}
+
+export interface TLSReponse extends TLSOptions {
+	templates: TemplateInfo[]
 }
 
 export interface FLSOptions extends CommandOptions {
 	// command: Command.FLS
 }
 
+export interface FontInfo {
+	fontName: string
+	filePath: string
+}
+
+export interface FLSResponse extends FLSOptions {
+	fontNames: FontInfo[]
+}
+
 export interface VersionOptions extends CommandOptions {
 	// command: Command.VERSION
 	component?: Version
+}
+
+export interface VersionResponse extends VersionOptions {
+	version: string // TODO should this og
 }
 
 export interface InfoOptions extends CommandOptions {
@@ -678,40 +737,94 @@ export interface InfoTemplateOptions extends CommandOptions {
 	templateName: string
 }
 
+export interface InfoTemplateResponse extends InfoTemplateOptions {
+	templateInfo: object // Covert XML to JSON
+}
+
 export interface InfoConfigOptions extends CommandOptions {
 	// command: Command.INFO_CONFIG
+}
+
+export interface InfoConfigResponse extends InfoConfigOptions {
+	config: ICasparCGConfig
 }
 
 export interface InfoPathsOptions extends CommandOptions {
 	// command: Command.INFO_PATHS
 }
 
+export interface InfoPathsResponse extends InfoPathsOptions {
+	mediaPath: string
+	logPath: string
+	dataPath: string
+	templatePath: string
+	thumbnailPath: string
+	fontPath: string
+	initialPath: string
+}
+
 export interface InfoSystemOptions extends CommandOptions {
 	// command: Command.INFO_SYSTEM
+}
+
+export interface InfoSystemResponse extends InfoSystemOptions {
+	name: string
+	osDescription: string
+	cpu: string
+	systemDetails: object // Convert remaining XML to JSON/Object
 }
 
 export interface InfoServerOptions extends CommandOptions {
 	// command; Command.INFO_SERVER
 }
 
+export interface InfoServerResponse extends InfoServerOptions {
+	serverDetails: object // Convert XML to JSON/Object
+}
+
 export interface InfoQueuesOptions extends CommandOptions {
 	// command: Command.INFO_QUEUE
+}
+
+export interface InfoQueuesResponse extends InfoQueuesOptions {
+	queues: object
 }
 
 export interface InfoThreadsOptions extends CommandOptions {
 	// comand: Command.INFO_THREADS
 }
 
+export interface ThreadInfo {
+	nativeId: number
+	name: string
+}
+
+export interface InfoThreadsResponse extends InfoThreadsOptions {
+	threads: ThreadInfo[]
+}
+
 export interface InfoDelayOptions extends ChannelOptLayer {
 	// command: Command.INFO_DELAY
 }
 
-export interface TemplateHostInfoOptions extends ChannelOptLayer {
-  // command: Cmmand.INFO
+export interface InfoDelayResponse extends InfoDelayOptions {
+	delayDetails: object // Convert XML to JSON/Object
+}
+
+export interface TemplateHostInfoOptions extends CommandOptions {
+  // command: Cmmand.CG_INFO with no parameters
+}
+
+export interface TemplateHostInfoResponse extends TemplateHostInfoOptions {
+	result: string // What is returned is very renderer specific - bit of a mess
 }
 
 export interface GLInfoOptions extends CommandOptions {
 	// command: Command.GL_INFO
+}
+
+export interface GLInfoResponse extends GLInfoOptions {
+	deviceDetails: object // convert XML to JSON/Object
 }
 
 export interface LogLevelOptions extends CommandOptions {
@@ -731,7 +844,15 @@ export interface DiagOptions extends CommandOptions {
 
 export interface HelpOptions extends CommandOptions {
 	// command: Command.HELP
-	commands?: Command | string
+	for?: Command | string
+}
+
+export interface HelpInfo {
+	command: Command
+	details: string
+}
+export interface HelpResponse extends HelpOptions {
+	info: HelpInfo | HelpInfo[]
 }
 
 export interface HelpProducerOptions extends CommandOptions {
@@ -739,39 +860,59 @@ export interface HelpProducerOptions extends CommandOptions {
 	producer?: Producer | string
 }
 
+export interface ProducerInfo {
+	producer: Producer
+	details: string
+}
+
+export interface HelpProducerResponse extends HelpProducerOptions {
+	info: ProducerInfo | ProducerInfo[]
+}
+
 export interface HelpConsumerOptions extends CommandOptions {
 	// command: Command.HELP_CONSUMER
 	consumer?: Consumer | string
 }
 
+export interface ConsumerInfo {
+	consumer: Consumer
+	details: string
+}
+
+export interface HelpConsumerResponse extends HelpConsumerOptions {
+	info: ConsumerInfo | ConsumerInfo[]
+}
+
+// Behaviour of CINF different between 2.1 and 2.2 - 2.1 ignores functionlders
+
 export interface IQuery {
-	cinf(options: CInfOptions): Promise<IAMCPCommand<Command.CINF, CInfOptions, CInfResponse & IAMCPResponse>> // TODO types responses
-	cls(options?: CLSOptions): Promise<IAMCPCommand<Command.CLS, CLSOptions, string[] & IAMCPResponse>>
-	fls(optins?: FLSOptions): Promise<IAMCPCommand<Command.FLS, FLSOptions, string[] & IAMCPResponse>>
-	tls(options?: TLSOptions): Promise<IAMCPCommand<Command.TLS, TLSOptions, string[] & IAMCPResponse>>
-	version(options?: VersionOptions): Promise<IAMCPCommand<Command.VERSION, VersionOptions, string & IAMCPResponse>>
-	info(options?: InfoOptions): Promise<IAMCPCommand<Command.INFO, InfoOptions, InfoOptions & IAMCPResponse>>
-	infoTemplate(options: InfoTemplateOptions): Promise<IAMCPCommand<Command.INFO_TEMPLATE, InfoTemplateOptions, string[] & IAMCPResponse>>
-	infoConfig(options?: InfoConfigOptions): Promise<IAMCPCommand<Command.INFO_CONFIG, InfoConfigOptions, string & IAMCPResponse>>
-	infoPaths(options?: InfoPathsOptions): Promise<IAMCPCommand<Command.INFO_PATHS, InfoPathsOptions, string & IAMCPResponse>>
-	infoSystem(options?: InfoSystemOptions): Promise<IAMCPCommand<Command.INFO_SYSTEM, InfoSystemOptions, string & IAMCPResponse>>
-	infoServer(options?: InfoServerOptions): Promise<IAMCPCommand<Command.INFO_SERVER, InfoServerOptions, string & IAMCPResponse>>
-	infoQueues(options?: InfoQueuesOptions): Promise<IAMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, string & IAMCPResponse>>
-	infoThreads(options?: InfoThreadsOptions): Promise<IAMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, string & IAMCPResponse>>
-	infoDelay(options: InfoDelayOptions): Promise<IAMCPCommand<Command.INFO_DELAY, InfoDelayOptions, string & IAMCPResponse>>
-	templateHostInfo(options: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, CGInfoOptions & IAMCPResponse>>
-	glInfo(options?: GLInfoOptions): Promise<IAMCPCommand<Command.GL_INFO, GLInfoOptions, string & IAMCPResponse>>
-	logLevel(options: LogLevelOptions | LogLevel | string): Promise<IAMCPCommand<Command.LOG_LEVEL, LogLevelOptions, LogLevelOptions & IAMCPResponse>>
-	logCategory(options: LogCategoryOptions): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string & IAMCPResponse>>
-	logCalltrace(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string & IAMCPResponse>>
-	logCommunication(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string & IAMCPResponse>>
-	diag(options?: DiagOptions): Promise<IAMCPCommand<Command.DIAG, DiagOptions, undefined & IAMCPResponse>>
-	help(options?: HelpOptions | Command | string): Promise<IAMCPCommand<Command.HELP, HelpOptions, string & IAMCPResponse>>
-	getCommands(options?: HelpOptions): Promise<IAMCPCommand<Command.HELP, HelpOptions, string & IAMCPResponse>>
-	helpProducer(options?: HelpProducerOptions | Producer | string): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string & IAMCPResponse>>
-	getProducers(options?: HelpProducerOptions): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string & IAMCPResponse>>
-	helpConsumer(options?: HelpConsumerOptions | Consumer | string): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string & IAMCPResponse>>
-	getConsumers(options?: HelpConsumerOptions): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string & IAMCPResponse>>
+	cinf(options: CInfOptions): Promise<IAMCPCommand<Command.CINF, CInfOptions, CInfResponse>>
+	cls(options?: CLSOptions): Promise<IAMCPCommand<Command.CLS, CLSOptions, CLSResponse>>
+	fls(optins?: FLSOptions): Promise<IAMCPCommand<Command.FLS, FLSOptions, FLSResponse>>
+	tls(options?: TLSOptions): Promise<IAMCPCommand<Command.TLS, TLSOptions, TLSReponse>>
+	version(options?: VersionOptions): Promise<IAMCPCommand<Command.VERSION, VersionOptions, VersionResponse>>
+	info(options?: InfoOptions): Promise<IAMCPCommand<Command.INFO, InfoOptions, InfoOptions>>
+	infoTemplate(options: InfoTemplateOptions): Promise<IAMCPCommand<Command.INFO_TEMPLATE, InfoTemplateOptions, InfoTemplateResponse>>
+	infoConfig(options?: InfoConfigOptions): Promise<IAMCPCommand<Command.INFO_CONFIG, InfoConfigOptions, InfoConfigResponse>>
+	infoPaths(options?: InfoPathsOptions): Promise<IAMCPCommand<Command.INFO_PATHS, InfoPathsOptions, InfoPathsResponse>>
+	infoSystem(options?: InfoSystemOptions): Promise<IAMCPCommand<Command.INFO_SYSTEM, InfoSystemOptions, InfoSystemResponse>>
+	infoServer(options?: InfoServerOptions): Promise<IAMCPCommand<Command.INFO_SERVER, InfoServerOptions, InfoServerResponse>>
+	infoQueues(options?: InfoQueuesOptions): Promise<IAMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, InfoQueuesOptions>> // v2.0.7 only
+	infoThreads(options?: InfoThreadsOptions): Promise<IAMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, InfoThreadsResponse>>
+	infoDelay(options: InfoDelayOptions): Promise<IAMCPCommand<Command.INFO_DELAY, InfoDelayOptions, InfoDelayResponse>>
+	templateHostInfo(options: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, TemplateHostInfoResponse>>
+	glInfo(options?: GLInfoOptions): Promise<IAMCPCommand<Command.GL_INFO, GLInfoOptions, GLInfoResponse>>
+	logLevel(options: LogLevelOptions | LogLevel | string): Promise<IAMCPCommand<Command.LOG_LEVEL, LogLevelOptions, LogLevelOptions>>
+	logCategory(options: LogCategoryOptions): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, LogCategoryOptions>>
+	logCalltrace(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, LogCategoryOptions>>
+	logCommunication(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, LogCategoryOptions>>
+	diag(options?: DiagOptions): Promise<IAMCPCommand<Command.DIAG, DiagOptions, DiagOptions>>
+	help(options?: HelpOptions | Command | string): Promise<IAMCPCommand<Command.HELP, HelpOptions, HelpResponse>>
+	getCommands(): Promise<IAMCPCommand<Command.HELP, HelpOptions, HelpResponse>>
+	helpProducer(options?: HelpProducerOptions | Producer | string): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, HelpProducerResponse>>
+	getProducers(): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, HelpProducerResponse>>
+	helpConsumer(options?: HelpConsumerOptions | Consumer | string): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, HelpConsumerResponse>>
+	getConsumers(): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, HelpConsumerResponse>>
 }
 
 /**
@@ -795,10 +936,10 @@ export interface PingOptions extends CommandOptions {
 }
 
 export interface IOperation {
-	bye(options?: ByeOptions): Promise<IAMCPCommand<Command.BYE, ByeOptions, ByeOptions & IAMCPResponse>>
-	kill(options?: KillOptions): Promise<IAMCPCommand<Command.KILL, KillOptions, KillOptions & IAMCPResponse>>
-	restart(options?: RestartOptions): Promise<IAMCPCommand<Command.RESTART, RestartOptions, RestartOptions & IAMCPResponse>>
-	ping(options?: PingOptions): Promise<IAMCPCommand<Command.PING, PingOptions, PingOptions & IAMCPResponse>>
+	bye(options?: ByeOptions): Promise<IAMCPCommand<Command.BYE, ByeOptions, ByeOptions>>
+	kill(options?: KillOptions): Promise<IAMCPCommand<Command.KILL, KillOptions, KillOptions>>
+	restart(options?: RestartOptions): Promise<IAMCPCommand<Command.RESTART, RestartOptions, RestartOptions>>
+	ping(options?: PingOptions): Promise<IAMCPCommand<Command.PING, PingOptions, PingOptions>>
 }
 
 export interface TimeOptions extends ChannelOptLayer {
@@ -817,7 +958,18 @@ export interface ScheduleSetOptions extends CommandOptions {
 
 export interface ScheduleListOptions extends CommandOptions {
 	// command: Command.SCHEDULE_LIST
+	channel?: number
 	timecode?: string
+}
+
+export interface ScheduleItem {
+	channel: number
+	timecode: string
+	token: string
+}
+
+export interface ScheduleListResponse extends ScheduleListOptions {
+	items: ScheduleItem[]
 }
 
 export interface ScheduleClearOptions extends CommandOptions {
@@ -831,11 +983,20 @@ export interface ScheduleRemoveOptions extends CommandOptions {
 
 export interface ScheduleInfoOptions extends CommandOptions {
 	// command: Command.SCHEDULE_INFO
+	token: string
+}
+
+export interface ScheduleInfoResponse extends ScheduleInfoOptions {
+	timecode: string
 }
 
 interface TimecodeSourceOptions extends CommandOptions {
 	// command: Command.TIMECODE_SOURCE
-	source: TimecodeSource
+	source?: TimecodeSource
+}
+
+export interface TimecodeSourceQueryOptions extends TimecodeSourceOptions {
+	source: undefined
 }
 
 export interface TimecodeSourceClockOptions extends TimecodeSourceOptions {
@@ -852,13 +1013,13 @@ export interface TimecodeSourceClearOptios extends TimecodeSourceOptions {
 }
 
 export interface ISchedule {
-	time(options: TimeOptions): Promise<IAMCPCommand<Command.TIME, TimeOptions, TimeOptions & IAMCPResponse>>
-	scheduleSet(options: ScheduleSetOptions): Promise<IAMCPCommand<Command.SCHEDULE_SET, ScheduleSetOptions, ScheduleSetOptions & IAMCPResponse>>
-	scheduleList(options: ScheduleListOptions): Promise<IAMCPCommand<Command.SCHEDULE_LIST, ScheduleListOptions, ScheduleListOptions & IAMCPResponse>>
-	scheduleClear(options: ScheduleClearOptions): Promise<IAMCPCommand<Command.SCHEDULE_CLEAR, ScheduleClearOptions, ScheduleClearOptions & IAMCPResponse>>
-	scheduleRemove(options: ScheduleRemoveOptions | string): Promise<IAMCPCommand<Command.SCHEDULE_REMOVE, ScheduleRemoveOptions, ScheduleRemoveOptions & IAMCPResponse>>
-	scheduleInfo(options: ScheduleInfoOptions): Promise<IAMCPCommand<Command.SCHEDULE_INFO, ScheduleInfoOptions, ScheduleInfoOptions & IAMCPResponse>>
-	timecodeSource(options: TimecodeSourceOptions): Promise<IAMCPCommand<Command.TIMECODE_SOURCE, TimecodeSourceOptions, TimecodeSourceOptions & IAMCPResponse>>
+	time(options: TimeOptions): Promise<IAMCPCommand<Command.TIME, TimeOptions, TimeOptions>>
+	scheduleSet(options: ScheduleSetOptions): Promise<IAMCPCommand<Command.SCHEDULE_SET, ScheduleSetOptions, ScheduleSetOptions>>
+	scheduleList(options: ScheduleListOptions): Promise<IAMCPCommand<Command.SCHEDULE_LIST, ScheduleListOptions, ScheduleListResponse>>
+	scheduleClear(options: ScheduleClearOptions): Promise<IAMCPCommand<Command.SCHEDULE_CLEAR, ScheduleClearOptions, ScheduleClearOptions>>
+	scheduleRemove(options: ScheduleRemoveOptions | string): Promise<IAMCPCommand<Command.SCHEDULE_REMOVE, ScheduleRemoveOptions, ScheduleRemoveOptions>>
+	scheduleInfo(options: ScheduleInfoOptions): Promise<IAMCPCommand<Command.SCHEDULE_INFO, ScheduleInfoOptions, ScheduleInfoResponse>>
+	timecodeSource(options: TimecodeSourceOptions): Promise<IAMCPCommand<Command.TIMECODE_SOURCE, TimecodeSourceOptions, TimecodeSourceOptions>>
 }
 
 export interface AMCP extends IVideo, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation, ISchedule { }
@@ -877,15 +1038,11 @@ export interface ICasparCGConnection {
 	removeQueuedCommand(id: string): boolean
 	connect(options?: IConnectionOptions): void
 	disconnect(): void
-	createCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(command: IAMCPCommand<C, REQ, RES>): IAMCPCommand<C, REQ, RES> | undefined
-	createCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(commandString: Command, options: CommandOptions): IAMCPCommand<C, REQ, RES> | undefined
-	queueCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(command: IAMCPCommand<C, REQ, RES>, priority: Priority): Promise<IAMCPCommand<C, REQ, RES>>
-	do<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(fullCommand: IAMCPCommand<C, REQ, RES>): Promise<IAMCPCommand<C, REQ, RES>>
-	do<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>>
-	doNow<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(command: IAMCPCommand<C, REQ, RES>): Promise<IAMCPCommand<C, REQ, RES>>
-	doNow<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>>
-	doLater<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(command: IAMCPCommand<C, REQ, RES>): Promise<IAMCPCommand<C, REQ, RES>>
-	doLater<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>>
+	createCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): IAMCPCommand<C, REQ, RES> | undefined
+	queueCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: IAMCPCommand<C, REQ, RES>, priority: Priority): Promise<IAMCPCommand<C, REQ, RES>>
+	do<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>>
+	doNow<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>>
+	doLater<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>>
 }
 
 /**
@@ -1262,10 +1419,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * @todo	implement
 	 * @todo	document
 	 */
-	public do<C extends Command, REQ extends CommandOptions, RES>(fullCommand: IAMCPCommand<C, REQ, RES>): Promise<IAMCPCommand<C, REQ, RES>>
-	public do<C extends Command, REQ extends CommandOptions, RES>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>> {
+ 	public do<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>> {
 		let fullCommand: IAMCPCommand<C, REQ, RES> | undefined = this.createCommand(command, options)
-		if (command) {
+		if (fullCommand) {
 			return this.queueCommand(fullCommand)
 		}
 		return Promise.reject('Could not create command instance')
@@ -1275,12 +1431,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * @todo	implement
 	 * @todo	document
 	 */
-	public doNow(command: IAMCPCommand): Promise<IAMCPCommand>
-	public doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public doNow(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> {
-		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
-		if (command) {
-			return this.queueCommand(command, Priority.HIGH)
+ 	public doNow<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>> {
+		let fullCommand: IAMCPCommand<C, REQ, RES> | undefined = this.createCommand(command, options)
+		if (fullCommand) {
+			return this.queueCommand(fullCommand, Priority.HIGH)
 		}
 		return Promise.reject('Could not create command instance')
 	}
@@ -1289,12 +1443,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * @todo	implement
 	 * @todo	document
 	 */
-	public doLater(command: IAMCPCommand): Promise<IAMCPCommand>
-	public doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	public doLater(commandOrString: (IAMCPCommand | string), ...params: (string | Param)[]): Promise<IAMCPCommand> {
-		let command: IAMCPCommand | undefined = this.createCommand(commandOrString, ...params)
-		if (command) {
-			return this.queueCommand(command, Priority.LOW)
+	public doLater<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>> {
+		let fullCommand: IAMCPCommand<C, REQ, RES> | undefined = this.createCommand(command, options)
+		if (fullCommand) {
+			return this.queueCommand(fullCommand, Priority.LOW)
 		}
 		return Promise.reject('Could not create command instance')
 	}
@@ -1302,29 +1454,18 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 *
 	 */
-	public createCommand<C extends Command, REQ extends CommandOptions, RES>(commandOrString: (IAMCPCommand<C, REQ, RES> | string), options: CommandOptions): IAMCPCommand<C, REQ, RES> | undefined {
-		let command: IAMCPCommand<C, REQ, RES> | undefined
+	public createCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): IAMCPCommand<C, REQ, RES> | undefined {
+		let fullCommand: IAMCPCommand<C, REQ, RES> | undefined
+		options.command = command
 		try {
-			if (isIAMCPCommand(commandOrString)) {
-				command = commandOrString as IAMCPCommand<C, REQ, RES>
-			} else { // then it must be a string:
-				if (AMCP.hasOwnProperty(commandOrString)) {
-					// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
-					// @todo: typechecking with fallback
-					if ((AMCP as any)[commandOrString]) {
-						command = new (AMCP as any)(commandOrString)(options)
-					} else {
-						throw new Error('Invalid command constructor')
-					}
-				}
-			}
+			fullCommand = createAMCPCommand(command, options)
 			// validate command and params
-			if (!command || !command.validateParams()) {
+			if (!fullCommand || !fullCommand.validateParams()) {
 				// @todo: Handle, return?
 				throw new Error('Invalid command parameters')
 			}
 
-			return command
+			return fullCommand
 		} catch (error) {
 			this._log(error)
 		}
@@ -1334,7 +1475,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 *
 	 */
-	public queueCommand<C extends Command, REQ extends CommandOptions, RES>(command: IAMCPCommand<C, REQ, RES>, priority: Priority = Priority.NORMAL): Promise<IAMCPCommand<C, REQ, RES>> {
+	public queueCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: IAMCPCommand<C, REQ, RES>, priority: Priority = Priority.NORMAL): Promise<IAMCPCommand<C, REQ, RES>> {
 		let commandPromise: Promise<IAMCPCommand<C, REQ, RES>[]>
 		let commandPromiseArray: Array<Promise<IAMCPCommand<C, REQ, RES>>> = [new Promise<IAMCPCommand<C, REQ, RES>>((resolve, reject) => {
 			command.resolve = resolve
@@ -1383,7 +1524,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * @todo: document
 	 */
-	public removeQueuedCommand<C extends Command, REQ extends CommandOptions, RES>(id: string): boolean {
+	public removeQueuedCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(id: string): boolean {
 		let removed: Array<IAMCPCommand<C, REQ, RES>> | undefined
 		// normal priority
 		for (let i: number = 0; i < this._queuedCommands.length; i++) {
@@ -1480,8 +1621,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOADBG>
 	 */
 	public loadbg(options: LoadBGOptions): Promise<IAMCPCommand<Command.LOADBG, LoadBGOptions, LoadBGOptions>> {
-		options.command = Command.LOADBG
-		return this.do(new LayerWithFallbackCommand<Command.LOADBG, LoadBGOptions, LoadBGOptions>(options))
+		return this.do(Command.LOADBG, options)
 	}
 
 	// /**
@@ -2170,7 +2310,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		} else {
 			options.command = Command.PRINT
 		}
-		return this.do(new ChannelCommand<Command.PRINT, PrintOptions, string>(options))
+		return this.do(new ChannelCommand<Command.PRINT, PrintOptions, PrintOptions>(options))
 	}
 
 	/**

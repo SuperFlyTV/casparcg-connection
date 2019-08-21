@@ -25,8 +25,8 @@ Should the response include the request as well as the status information? Yes.
 
 Design choice:
 
-* Change IAMCPCommand definition to `IAMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ & IAMCPResponse>`
-* Contains a `result: Promise<RES>` property.
-* Resolves on success, rejects on error.
+* Change IAMCPCommand definition to `IAMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>`
+* Contains a `result: Promise<RES & IAMCPResponse>` property.
+* Resolves on success, rejects on error. Rejects with AMCPError<IAMCPResponse>.
 
 When a response contains more information than the request's parameters allow in the options object, a *Command*`Response` interface is created that extends *Command*`Options`. This adds the parameters that can be returned.

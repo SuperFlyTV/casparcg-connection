@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<queues>
+  <queue>
+    <name>AMCPCommandQueue Channel 1 for Console</name>
+    <queued>0</queued>
+  </queue>
+  <queue>
+    <name>AMCPCommandQueue Channel 1 for TCP Port 5250</name>
+    <queued>0</queued>
+  </queue>
+  <queue>
+  <name>AMCPCommandQueue General Queue for Console</name>
+    <queued>0</queued>
+  </queue>
+	<queue>
+    <name>AMCPCommandQueue General Queue for TCP Port 5250</name>
+    <queued>0</queued>
+    <running>
+      <command>InfoCommand</command>
+      <params>QUEUES </params>
+      <elapsed>0</elapsed>
+  	</running>
+	</queue>
+</queues>
