@@ -12,7 +12,7 @@ import CasparCGVersion = OptionsNS.CasparCGVersion
 // Command NS
 import { IAMCPCommand, isIAMCPCommand, IAMCPStatus, AMCPResponse, CommandOptions,
 	LayerWithFallbackCommand, LayerWithCgFallbackCommand, AMCPCommand, ChannelCommand,
-  ChannelOrLayerCommand, OrChannelOrLayerCommand, createCommand as createAMCPCommand} from './lib/AMCPCommand'
+  ChannelOrLayerCommand, OrChannelOrLayerCommand, createCommand as createAMCPCommand } from './lib/AMCPCommand'
 
 // Param NS
 import { Param, TemplateData } from './lib/ParamSignature'
@@ -516,6 +516,15 @@ function isAddStreamOptions(x: AddOptions): x is AddStreamOptions {
 	return x.consumer === 'STREAM'
 }
 
+export interface AddSyncToOptions extends AddOptions {
+	consumer: 'SYNCTO'
+	syncWith: number
+}
+
+function isAddSyncToOptions(x: AddOptions): x is AddSyncToOptions {
+	return x.consumer === 'SYNCTO'
+}
+
 export interface RemoveOptions extends ChannelOptLayer {
 	// command: Command.REMOVE
 	layer: undefined
@@ -900,7 +909,7 @@ export interface IQuery {
 	infoQueues(options?: InfoQueuesOptions): Promise<IAMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, InfoQueuesOptions>> // v2.0.7 only
 	infoThreads(options?: InfoThreadsOptions): Promise<IAMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, InfoThreadsResponse>>
 	infoDelay(options: InfoDelayOptions): Promise<IAMCPCommand<Command.INFO_DELAY, InfoDelayOptions, InfoDelayResponse>>
-	templateHostInfo(options: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, TemplateHostInfoResponse>>
+	templateHostInfo(options?: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, TemplateHostInfoResponse>>
 	glInfo(options?: GLInfoOptions): Promise<IAMCPCommand<Command.GL_INFO, GLInfoOptions, GLInfoResponse>>
 	logLevel(options: LogLevelOptions | LogLevel | string): Promise<IAMCPCommand<Command.LOG_LEVEL, LogLevelOptions, LogLevelOptions>>
 	logCategory(options: LogCategoryOptions): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, LogCategoryOptions>>
@@ -1635,111 +1644,98 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOAD>
 	 */
 	public load(options: LoadOptions): Promise<IAMCPCommand<Command.LOAD, LoadOptions, LoadOptions>> {
-		options.command = Command.LOAD
-		return this.do(new LayerWithFallbackCommand<Command.LOAD, LoadOptions, LoadOptions>(options))
+		return this.do(Command.LOAD, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#PLAY>
 	 */
 	public play(options: PlayOptions): Promise<IAMCPCommand<Command.PLAY, PlayOptions, PlayOptions>> {
-		return this.do(new LayerWithFallbackCommand<Command.PLAY, PlayOptions, PlayOptions>(options))
+		return this.do(Command.PLAY, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#PAUSE>
 	 */
 	public pause(options: PauseOptions): Promise<IAMCPCommand<Command.PAUSE, PauseOptions, PauseOptions>> {
-		options.command = Command.PAUSE
-		return this.do(new LayerWithFallbackCommand<Command.PAUSE, PauseOptions, PauseOptions>(options))
+		return this.do(Command.PAUSE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#RESUME>
 	 */
 	public resume(options: ResumeOptions): Promise<IAMCPCommand<Command.RESUME, ResumeOptions, ResumeOptions>> {
-		options.command = Command.RESUME
-		return this.do(new LayerWithFallbackCommand<Command.RESUME, ResumeOptions, ResumeOptions>(options))
+		return this.do(Command.RESUME, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#STOP>
 	 */
 	public stop(options: StopOptions): Promise<IAMCPCommand<Command.STOP, StopOptions, StopOptions>> {
-		options.command = Command.STOP
-		return this.do(new LayerWithFallbackCommand<Command.STOP, StopOptions, StopOptions>(options))
+		return this.do(Command.STOP, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-ADD>
 	 */
 	public cgAdd(options: CGAddOptions): Promise<IAMCPCommand<Command.CG_ADD, CGAddOptions, CGAddOptions>> {
-		options.command = Command.CG_ADD
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_ADD, CGAddOptions, CGAddOptions>(options))
+		return this.do(Command.CG_ADD, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-PLAY>
 	 */
 	public cgPlay(options: CGPlayOptions): Promise<IAMCPCommand<Command.CG_PLAY, CGPlayOptions, CGPlayOptions>> {
-		options.command = Command.CG_PLAY
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_PLAY, CGPlayOptions, CGPlayOptions>(options))
+		return this.do(Command.CG_PLAY, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-STOP>
 	 */
 	public cgStop(options: CGStopOptions): Promise<IAMCPCommand<Command.CG_STOP, CGStopOptions, CGStopOptions>> {
-		options.command = Command.CG_STOP
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_STOP, CGStopOptions, CGStopOptions>(options))
+		return this.do(Command.CG_STOP, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-NEXT>
 	 */
 	public cgNext(options: CGNextOptions): Promise<IAMCPCommand<Command.CG_NEXT, CGNextOptions, CGNextOptions>> {
-		options.command = Command.CG_NEXT
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_NEXT, CGNextOptions, CGNextOptions>(options))
+		return this.do(Command.CG_NEXT, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-REMOVE>
 	 */
 	public cgRemove(options: CGRemoveOptions): Promise<IAMCPCommand<Command.CG_REMOVE, CGRemoveOptions, CGRemoveOptions>> {
-		options.command = Command.CG_REMOVE
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_REMOVE, CGRemoveOptions, CGRemoveOptions>(options))
+		return this.do(Command.CG_REMOVE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-CLEAR>
 	 */
 	public cgClear(options: CGClearOptions): Promise<IAMCPCommand<Command.CG_CLEAR, CGClearOptions, CGClearOptions>> {
-		options.command = Command.CG_CLEAR
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_CLEAR, CGClearOptions, CGClearOptions>(options))
+		return this.do(Command.CG_CLEAR, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-UPDATE>
 	 */
 	public cgUpdate(options: CGUpdateOptions): Promise<IAMCPCommand<Command.CG_UPDATE, CGUpdateOptions, CGUpdateOptions>> {
-		options.command = Command.CG_UPDATE
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_UPDATE, CGUpdateOptions, CGUpdateOptions>(options))
+		return this.do(Command.CG_UPDATE, options)
 	}
 
 	/*
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-INVOKE
 	 */
 	public cgInvoke(options: CGInvokeOptions): Promise<IAMCPCommand<Command.CG_INVOKE, CGInvokeOptions, CGInvokeOptions>> {
-		options.command = Command.CG_INVOKE
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_INVOKE, CGInvokeOptions, CGInvokeOptions>(options))
+		return this.do(Command.CG_INVOKE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-KEYER>
 	 */
 	public mixerKeyer(options: MixerKeyerOptions): Promise<IAMCPCommand<Command.MIXER_KEYER, MixerKeyerOptions, MixerKeyerOptions>> {
-		options.command = Command.MIXER_KEYER
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_KEYER, MixerKeyerOptions, MixerKeyerOptions>(options))
+		return this.do(Command.MIXER_KEYER, options)
 	}
 
 	/**
@@ -1760,8 +1756,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CHROMA>
 	 */
 	public mixerChroma(options: MixerChromaOptions): Promise<IAMCPCommand<Command.MIXER_CHROMA, MixerChromaOptions, MixerChromaOptions>> {
-		options.command = Command.MIXER_CHROMA
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_CHROMA, MixerChromaOptions, MixerChromaOptions>(options))
+		return this.do(Command.MIXER_CHROMA, options)
 	}
 
 	/**
@@ -1783,8 +1778,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BLEND>
 	 */
 	public mixerBlend(options: MixerBlendOptions): Promise<IAMCPCommand<Command.MIXER_BLEND, MixerBlendOptions, MixerBlendOptions>> {
-		options.command = Command.MIXER_BLEND
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_BLEND, MixerBlendOptions, MixerBlendOptions>(options))
+		return this.do(Command.MIXER_BLEND, options)
 	}
 
 	/**
@@ -1806,16 +1800,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-INVERT
 	 */
 	public mixerInvert(options: MixerInvertOptions): Promise<IAMCPCommand<Command.MIXER_INVERT, MixerInvertOptions, MixerInvertOptions>> {
-		options.command = Command.MIXER_INVERT
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_INVERT, MixerInvertOptions, MixerInvertOptions>(options))
+		return this.do(Command.MIXER_INVERT, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-OPACITY>
 	 */
 	public mixerOpacity(options: MixerOpacityOptions): Promise<IAMCPCommand<Command.MIXER_OPACITY, MixerOpacityOptions, MixerOpacityOptions>> {
-		options.command = Command.MIXER_OPACITY
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_OPACITY, MixerOpacityOptions, MixerOpacityOptions>(options))
+		return this.do(Command.MIXER_OPACITY, options)
 	}
 
 	/**
@@ -1836,8 +1828,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-BRIGHTNESS>
 	 */
 	public mixerBrightness(options: MixerBrightnessOptions): Promise<IAMCPCommand<Command.MIXER_BRIGHTNESS, MixerBrightnessOptions, MixerBrightnessOptions>> {
-		options.command = Command.MIXER_BRIGHTNESS
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_BRIGHTNESS, MixerBrightnessOptions, MixerBrightnessOptions>(options))
+		return this.do(Command.MIXER_BRIGHTNESS, options)
 	}
 
 	/**
@@ -1858,8 +1849,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-SATURATION>
 	 */
 	public mixerSaturation(options: MixerSaturationOptions): Promise<IAMCPCommand<Command.MIXER_SATURATION, MixerSaturationOptions, MixerSaturationOptions>> {
-		options.command = Command.MIXER_SATURATION
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_SATURATION, MixerSaturationOptions, MixerSaturationOptions>(options))
+		return this.do(Command.MIXER_SATURATION, options)
 	}
 
 	/**
@@ -1880,8 +1870,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CONTRAST>
 	 */
 	public mixerContrast(options: MixerContrastOptions): Promise<IAMCPCommand<Command.MIXER_CONTRAST, MixerContrastOptions, MixerContrastOptions>> {
-		options.command = Command.MIXER_CONTRAST
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_CONTRAST, MixerContrastOptions, MixerContrastOptions>(options))
+		return this.do(Command.MIXER_CONTRAST, options)
 	}
 
 	/**
@@ -1902,8 +1891,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-LEVELS>
 	 */
 	public mixerLevels(options: MixerLevelsOptions): Promise<IAMCPCommand<Command.MIXER_LEVELS, MixerLevelsOptions, MixerLevelsOptions>> {
-		options.command = Command.MIXER_LEVELS
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_LEVELS, MixerLevelsOptions, MixerLevelsOptions>(options))
+		return this.do(Command.MIXER_LEVELS, options)
 	}
 
 	/**
@@ -1924,8 +1912,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-FILL>
 	 */
 	public mixerFill(options: MixerFillOptions): Promise<IAMCPCommand<Command.MIXER_FILL, MixerFillOptions, MixerFillOptions>> {
-		options.command = Command.MIXER_FILL
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_FILL, MixerFillOptions, MixerFillOptions>(options))
+		return this.do(Command.MIXER_FILL, options)
 	}
 
 	/*
@@ -1946,8 +1933,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CLIP>
 	 */
 	public mixerClip(options: MixerClipOptions): Promise<IAMCPCommand<Command.MIXER_CLIP, MixerClipOptions, MixerClipOptions>> {
-		options.command = Command.MIXER_CLIP
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_CLIP, MixerClipOptions, MixerClipOptions>(options))
+		return this.do(Command.MIXER_CLIP, options)
 	}
 
 	/**
@@ -1968,8 +1954,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ANCHOR>
 	 */
 	public mixerAnchor(options: MixerAnchorOptions): Promise<IAMCPCommand<Command.MIXER_ANCHOR, MixerAnchorOptions, MixerAnchorOptions>> {
-		options.command = Command.MIXER_ANCHOR
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_ANCHOR, MixerAnchorOptions, MixerAnchorOptions>(options))
+		return this.do(Command.MIXER_ANCHOR, options)
 	}
 
 	/**
@@ -1990,8 +1975,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CROP>
 	 */
 	public mixerCrop(options: MixerCropOptions): Promise<IAMCPCommand<Command.MIXER_CROP, MixerCropOptions, MixerCropOptions>> {
-		options.command = Command.MIXER_CROP
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_CROP, MixerCropOptions, MixerCropOptions>(options))
+		return this.do(Command.MIXER_CROP, options)
 	}
 
 	/**
@@ -2012,8 +1996,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-ROTATION>
 	 */
 	public mixerRotation(options: MixerRotationOptions): Promise<IAMCPCommand<Command.MIXER_ROTATION, MixerRotationOptions, MixerRotationOptions>> {
-		options.command = Command.MIXER_ROTATION
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_ROTATION, MixerRotationOptions, MixerRotationOptions>(options))
+		return this.do(Command.MIXER_ROTATION, options)
 	}
 
 	/**
@@ -2034,8 +2017,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-PERSPECTIVE>
 	 */
 	public mixerPerspective(options: MixerPerspectiveOptions): Promise<IAMCPCommand<Command.MIXER_PERSPECTIVE, MixerPerspectiveOptions, MixerPerspectiveOptions>> {
-		options.command = Command.MIXER_PERSPECTIVE
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_PERSPECTIVE, MixerPerspectiveOptions, MixerPerspectiveOptions>(options))
+		return this.do(Command.MIXER_PERSPECTIVE, options)
 	}
 
 	/**
@@ -2056,8 +2038,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MIPMAP>
 	 */
 	public mixerMipmap(options: MixerMipmapOptions): Promise<IAMCPCommand<Command.MIXER_MIPMAP, MixerMipmapOptions, MixerMipmapOptions>> {
-		options.command = Command.MIXER_MIPMAP
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_MIPMAP, MixerMipmapOptions, MixerMipmapOptions>(options))
+		return this.do(Command.MIXER_MIPMAP, options)
 	}
 
 	/**
@@ -2079,7 +2060,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public mixerVolume(options: MixerVolumeOptions): Promise<IAMCPCommand<Command.MIXER_VOLUME, MixerVolumeOptions, MixerVolumeOptions>> {
 		options.command = Command.MIXER_VOLUME
-		return this.do(new LayerWithFallbackCommand<Command.MIXER_VOLUME, MixerVolumeOptions, MixerVolumeOptions>(options))
+		return this.do(Command.MIXER_VOLUME, options)
 	}
 
 	/**
@@ -2100,8 +2081,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-MASTERVOLUME>
 	 */
 	public mixerMastervolume(options: MixerMastervolumeOptions): Promise<IAMCPCommand<Command.MIXER_MASTERVOLUME, MixerMastervolumeOptions, MixerMastervolumeOptions>> {
-		options.command = Command.MIXER_MASTERVOLUME
-		return this.do(new ChannelCommand<Command.MIXER_MASTERVOLUME, MixerMastervolumeOptions, MixerMastervolumeOptions>(options))
+		return this.do(Command.MIXER_MASTERVOLUME, options)
 	}
 
 	/**
@@ -2122,8 +2102,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-STRAIGHT_ALPHA_OUTPUT>
 	 */
 	public mixerStraightAlphaOutput(options: MixerStraightAlphaOutputOptions): Promise<IAMCPCommand<Command.MIXER_STRAIGHT_ALPHA_OUTPUT, MixerStraightAlphaOutputOptions, MixerStraightAlphaOutputOptions>> {
-		options.command = Command.MIXER_STRAIGHT_ALPHA_OUTPUT
-		return this.do(new ChannelCommand<Command.MIXER_STRAIGHT_ALPHA_OUTPUT, MixerStraightAlphaOutputOptions, MixerStraightAlphaOutputOptions>(options))
+		return this.do(Command.MIXER_STRAIGHT_ALPHA_OUTPUT, options)
 	}
 
 	// /**
@@ -2144,8 +2123,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-GRID>
 	 */
 	public mixerGrid(options: MixerGridOptions): Promise<IAMCPCommand<Command.MIXER_GRID, MixerGridOptions, MixerGridOptions>> {
-		options.command = Command.MIXER_GRID
-		return this.do(new ChannelCommand<Command.MIXER_GRID, MixerGridOptions, MixerGridOptions>(options))
+		return this.do(Command.MIXER_GRID, options)
 	}
 
 	/**
@@ -2161,29 +2139,24 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public mixerCommit(options: MixerCommitOptions | number): Promise<IAMCPCommand<Command.MIXER_COMMIT, MixerCommitOptions, MixerCommitOptions>> {
 		if (typeof options === 'number') {
 			options = {
-				command: Command.MIXER_COMMIT,
 				channel: options
 			} as MixerCommitOptions
-		} else {
-			options.command = Command.MIXER_COMMIT
 		}
-		return this.do(new ChannelCommand<Command.MIXER_COMMIT, MixerCommitOptions, MixerCommitOptions>(options))
+		return this.do(Command.MIXER_COMMIT, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#MIXER-CLEAR>
 	 */
 	public mixerClear(options: MixerClearOptions): Promise<IAMCPCommand<Command.MIXER_CLEAR, MixerClipOptions, MixerClearOptions>> {
-		options.command = Command.MIXER_CLEAR
-		return this.do(new ChannelOrLayerCommand<Command.MIXER_CLEAR, MixerClipOptions, MixerClearOptions>(options))
+		return this.do(Command.MIXER_CLEAR, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CLEAR>
 	 */
 	public clear(options: ClearOptions): Promise<IAMCPCommand<Command.CLEAR, ClearOptions, ClearOptions>> {
-		options.command = Command.CLEAR
-		return this.do(new ChannelOrLayerCommand<Command.CLEAR, ClearOptions, ClearOptions>(options))
+		return this.do(Command.CLEAR, options)
 	}
 
 	/**
@@ -2191,8 +2164,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * @todo	document
 	 */
 	public call(options: CallOptions): Promise<IAMCPCommand<Command.CALL, CallOptions, CallOptions>> {
-		options.command = Command.CALL
-		return this.do(new LayerWithFallbackCommand<Command.CALL, CallOptions, CallOptions>(options))
+		return this.do(Command.CALL, options)
 	}
 
 	/**
@@ -2200,8 +2172,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * @todo	document
 	 */
 	public swap(options: SwapOptions): Promise<IAMCPCommand<Command.SWAP, SwapOptions, SwapOptions>> {
-		options.command = Command.SWAP
-		return this.do(new ChannelOrLayerCommand<Command.SWAP, SwapOptions, SwapOptions>(options))
+		return this.do(Command.SWAP, options)
 	}
 
 	/**
@@ -2212,30 +2183,28 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		// remember index /layer
 		// i suggest duplicating abstractchannelorlayer to avoid problems if the address logic changes for layers and not indicies
 		// consumer factoruies parses "consumer"-string parameter
-		options.command = Command.ADD
 		if (isAddDecklinkOptions(options)) {
 			if (!options.parameters) options.parameters = []
 			options.parameters.unshift(options.device)
-			return this.do(new ChannelCommand<Command.ADD, AddDecklinkOptions, AddDecklinkOptions>(options))
 		}
 		if (isAddImageOptions(options)) {
 			if (!options.parameters) options.parameters = []
 			options.parameters.unshift(options.fileName)
-			return this.do(new ChannelCommand<Command.ADD, AddImageOptions, AddImageOptions>(options))
 		}
 		if (isAddFileOptions(options)) {
 			if (!options.parameters) options.parameters = []
 			options.parameters.unshift(options.fileName)
 			if (options.separateKey) options.parameters.push('SEPARATE_KEY')
-			return this.do(new ChannelCommand<Command.ADD, AddFileOptions, AddFileOptions>(options))
 		}
 		if (isAddStreamOptions(options)) {
 			if (!options.parameters) options.parameters = []
 			options.parameters.unshift(options.uri)
-			return this.do(new ChannelCommand<Command.ADD, AddStreamOptions, AddStreamOptions>(options))
 		}
-		// todo SYNCTO
-		return this.do(new ChannelCommand<Command.ADD, AddOptions, AddOptions>(options))
+		if (isAddSyncToOptions(options)) {
+			if (!options.parameters) options.parameters = []
+			options.parameters.unshift(options.syncWith)
+		}
+		return this.do(Command.ADD, options)
 	}
 
 	// /**
@@ -2270,47 +2239,39 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#REMOVE>
 	 */
 	public remove(options: RemoveOptions): Promise<IAMCPCommand<Command.REMOVE, RemoveOptions, RemoveOptions>> {
-		options.command = Command.REMOVE
 		if (isRemoveByIDOptions(options)) {
-			return this.do(new ChannelCommand<Command.REMOVE, RemoveByIDOptions, RemoveByIDOptions>(options))
+			return this.do(Command.REMOVE, options)
 		}
 		if (isRemoveDecklinkOptions(options)) {
 			if (!options.parameters) options.parameters = []
 			options.parameters.unshift(options.device)
-			return this.do(new ChannelCommand<Command.REMOVE, RemoveDecklinkOptions, RemoveDecklinkOptions>(options))
 		}
 		if (isRemoveImageOptions(options)) {
 			if (!options.parameters) options.parameters = []
 			options.parameters.unshift(options.fileName)
-			return this.do(new ChannelCommand<Command.REMOVE, RemoveImageOptions, RemoveImageOptions>(options))
 		}
 		if (isRemoveFileOptions(options)) {
 			if (!options.parameters) options.parameters = []
 			options.parameters.unshift(options.fileName)
-			return this.do(new ChannelCommand<Command.REMOVE, RemoveFileOptions, RemoveFileOptions>(options))
 		}
 		if (isRemoveStreamOptions(options)) {
 			if (!options.parameters) options.parameters = []
 			options.parameters.unshift(options.uri)
-			return this.do(new ChannelCommand<Command.REMOVE, RemoveStreamOptions, RemoveStreamOptions>(options))
 		}
 
-		return this.do(new ChannelCommand<Command.REMOVE, RemoveOptions, RemoveOptions>(options))
+		return this.do(Command.REMOVE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#PRINT>
 	 */
-	public print(options: number | PrintOptions): Promise<IAMCPCommand<Command.PRINT, PrintOptions, string>> {
+	public print(options: number | PrintOptions): Promise<IAMCPCommand<Command.PRINT, PrintOptions, PrintOptions>> {
 		if (typeof options === 'number') {
 			options = {
-				command: Command.PRINT,
 				channel: options
 			} as PrintOptions
-		} else {
-			options.command = Command.PRINT
 		}
-		return this.do(new ChannelCommand<Command.PRINT, PrintOptions, PrintOptions>(options))
+		return this.do(Command.PRINT, options)
 	}
 
 	/**
@@ -2323,81 +2284,69 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		// mode = enum modes.......
 		// layer = enum layouts..........
 		// Rehaul uses an Enum for variable
-		options.command = Command.SET
-		return this.do(new ChannelCommand<Command.SET, SetOptions, SetOptions>(options))
+		return this.do(Command.SET, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOCK>
 	 */
 	public lock(options: LockOptions): Promise<IAMCPCommand<Command.LOCK, LockOptions, LockOptions>> {
-		options.command = Command.LOCK
-		return this.do(new ChannelCommand<Command.LOCK, LockOptions, LockOptions>(options))
+		return this.do(Command.LOCK, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CHANNEL-GRID>
 	 */
-	public channelGrid(options?: ChannelGridOptions): Promise<IAMCPCommand<Command.CHANNEL_GRID, ChannelGridOptions, string>> {
+	public channelGrid(options?: ChannelGridOptions): Promise<IAMCPCommand<Command.CHANNEL_GRID, ChannelGridOptions, ChannelGridOptions>> {
 		if (!options) {
 			options = {
 				command: Command.CHANNEL_GRID
 			} as ChannelGridOptions
-		} else {
-			options.command = Command.CHANNEL_GRID
 		}
-		return this.do(new AMCPCommand<Command.CHANNEL_GRID, ChannelGridOptions, string>(options))
+		return this.do(Command.CHANNEL_GRID, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#GL-GC>
 	 */
-	public glGC(options?: GLGCOptions): Promise<IAMCPCommand<Command.GL_GC, GLGCOptions, string>> {
+	public glGC(options?: GLGCOptions): Promise<IAMCPCommand<Command.GL_GC, GLGCOptions, GLGCOptions>> {
 		if (!options) {
 			options = {
 				command: Command.GL_GC
 			}
-		} else {
-			options.command = Command.GL_GC
 		}
-		return this.do(new AMCPCommand<Command.GL_GC, GLGCOptions, string>(options))
+		return this.do(Command.GL_GC,options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DATA-STORE>
 	 */
 	public dataStore(options: DataStoreOptions): Promise<IAMCPCommand<Command.DATA_STORE, DataStoreOptions, DataStoreOptions>> {
-		options.command = Command.DATA_STORE
-		return this.do(new AMCPCommand<Command.DATA_STORE, DataStoreOptions, DataStoreOptions>(options))
+		return this.do(Command.DATA_STORE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DATA-RETRIEVE>
 	 */
-	public dataRetrieve(options: string | DataRetrieveOptions): Promise<IAMCPCommand<Command.DATA_RETRIEVE, DataRetrieveOptions, DataRetrieveOptions>> {
+	public dataRetrieve(options: string | DataRetrieveOptions): Promise<IAMCPCommand<Command.DATA_RETRIEVE, DataRetrieveOptions, DataRetrieveResponse>> {
 		if (typeof options === 'string') {
 			options = {
-				command: Command.DATA_RETRIEVE,
 				fileName: options
-			}
-		} else {
-			options.command = Command.DATA_RETRIEVE
+			} as DataRetrieveOptions
 		}
-		return this.do(new AMCPCommand<Command.DATA_RETRIEVE, DataRetrieveOptions, DataRetrieveOptions>(options))
+		return this.do(Command.DATA_RETRIEVE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DATA-LIST>
 	 */
-	public dataList(options?: DataListOptions): Promise<IAMCPCommand<Command.DATA_LIST, DataListOptions, string[]>> {
+	public dataList(options?: DataListOptions): Promise<IAMCPCommand<Command.DATA_LIST, DataListOptions, DataListeResponse>> {
 		if (!options) {
 			options = {
 				command: Command.DATA_LIST
 			} as DataListOptions
-		} else {
-			options.command = Command.DATA_LIST
 		}
-		return this.do(new AMCPCommand<Command.DATA_LIST, DataListOptions, DataListOptions>(options))
+		return this.do(Command.DATA_LIST, options)
 	}
 
 	/**
@@ -2406,42 +2355,34 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public dataRemove(options: string | DataRemoveOptions): Promise<IAMCPCommand<Command.DATA_REMOVE, DataRemoveOptions, DataRemoveOptions>> {
 		if (typeof options === 'string') {
 			options = {
-				command: Command.DATA_REMOVE,
 				fileName: options
 			} as DataRemoveOptions
-		} else {
-			options.command = Command.DATA_REMOVE
 		}
-		return this.do(new AMCPCommand<Command.DATA_REMOVE, DataRemoveOptions, DataRemoveOptions>(options))
+		return this.do(Command.DATA_REMOVE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#THUMBNAIL-LIST>
 	 */
-	public thumbnailList(options?: string | ThumbnailListOptions): Promise<IAMCPCommand<Command.THUMBNAIL_LIST, ThumbnailListOptions, string[]>> {
+	public thumbnailList(options?: string | ThumbnailListOptions): Promise<IAMCPCommand<Command.THUMBNAIL_LIST, ThumbnailListOptions, ThumbnailListResponse>> {
 		if (!options || typeof options === 'string') {
 			options = {
-				command: Command.THUMBNAIL_LIST,
 				subFolder: options
 			} as ThumbnailListOptions
-		} else {
-			options.command = Command.THUMBNAIL_LIST
 		}
-		return this.do(new AMCPCommand<Command.THUMBNAIL_LIST, ThumbnailListOptions, string[]>(options))
+		return this.do(Command.THUMBNAIL_LIST, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#THUMBNAIL-RETRIEVE>
 	 */
-	public thumbnailRetrieve(options: string | ThumbnailRetrieveOptions): Promise<IAMCPCommand<Command.THUMBNAIL_RETRIEVE, ThumbnailRetrieveOptions, ThumbnailRetrieveOptions>> {
+	public thumbnailRetrieve(options: string | ThumbnailRetrieveOptions): Promise<IAMCPCommand<Command.THUMBNAIL_RETRIEVE, ThumbnailRetrieveOptions, ThumbnailRetrieveResponse>> {
 		if (typeof options === 'string') {
 			options = {
-				command: Command.THUMBNAIL_RETRIEVE,
 				fileName: options
 			} as ThumbnailRetrieveOptions
 		}
-		options.command = Command.THUMBNAIL_RETRIEVE
-		return this.do(new AMCPCommand<Command.THUMBNAIL_RETRIEVE, ThumbnailRetrieveOptions, ThumbnailRetrieveOptions>(options))
+		return this.do(Command.THUMBNAIL_RETRIEVE, options)
 	}
 
 	/**
@@ -2450,147 +2391,124 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public thumbnailGenerate(options: string | ThumbnailGenerateOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE, ThumbnailGenerateOptions, ThumbnailGenerateOptions>> {
 		if (typeof options === 'string') {
 			options = {
-				command: Command.THUMBNAIL_GENERATE,
 				fileName: options
 			} as ThumbnailGenerateOptions
-		} else {
-			options.command = Command.THUMBNAIL_GENERATE
 		}
-		return this.do(new AMCPCommand<Command.THUMBNAIL_GENERATE, ThumbnailGenerateOptions, ThumbnailGenerateOptions>(options))
+		return this.do(Command.THUMBNAIL_GENERATE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#THUMBNAIL-GENERATE_ALL>
 	 */
-	public thumbnailGenerateAll(options?: ThumbnailGenerateAllOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE_ALL, ThumbnailGenerateAllOptions, boolean>> {
+	public thumbnailGenerateAll(options?: ThumbnailGenerateAllOptions): Promise<IAMCPCommand<Command.THUMBNAIL_GENERATE_ALL, ThumbnailGenerateAllOptions, ThumbnailGenerateAllOptions>> {
 		if (!options) {
 			options = {
 				command: Command.THUMBNAIL_GENERATE_ALL
 			} as ThumbnailGenerateAllOptions
-		} else {
-			options.command = Command.THUMBNAIL_GENERATE_ALL
 		}
-		return this.do(new AMCPCommand<Command.THUMBNAIL_GENERATE_ALL, ThumbnailGenerateAllOptions, boolean>(options))
+		return this.do(Command.THUMBNAIL_GENERATE_ALL, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CINF>
 	 */
-	public cinf(options: string | CInfOptions): Promise<IAMCPCommand<Command.CINF, CInfOptions, string[]>> {
+	public cinf(options: string | CInfOptions): Promise<IAMCPCommand<Command.CINF, CInfOptions, CInfResponse>> {
 		if (typeof options === 'string') {
 			options = {
-				command: Command.CINF,
 				fileName: options
 			} as CInfOptions
-		} else {
-			options.command = Command.CINF
 		}
-		return this.do(new AMCPCommand<Command.CINF, CInfOptions, CInfOptions>(options))
+		return this.do(Command.CINF, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CLS>
 	 */
-	public cls(options?: string | CLSOptions): Promise<IAMCPCommand<Command.CLS, CLSOptions, string[]>> {
+	public cls(options?: string | CLSOptions): Promise<IAMCPCommand<Command.CLS, CLSOptions, CLSResponse>> {
 		if (!options || typeof options === 'string') {
 			options = {
-				command: Command.CLS,
 				subFolder: options
 			} as CLSOptions
-		} else {
-			options.command = Command.CLS
 		}
-		return this.do(new AMCPCommand<Command.CLS, CLSOptions, string[]>(options))
+		return this.do(Command.CLS, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#FLS>
 	 */
-	public fls(options?: FLSOptions): Promise<IAMCPCommand<Command.FLS, FLSOptions, string[]>> {
+	public fls(options?: FLSOptions): Promise<IAMCPCommand<Command.FLS, FLSOptions, FLSResponse>> {
 		if (!options) {
 			options = {
 				command: Command.FLS
 			} as FLSOptions
-		} else {
-			options.command = Command.FLS
 		}
-		return this.do(new AMCPCommand<Command.FLS, FLSOptions, FLSOptions>(options))
+		return this.do(Command.FLS, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#TLS>
 	 */
-	public tls(options?: string | TLSOptions): Promise<IAMCPCommand<Command.TLS, TLSOptions, string[]>> {
+	public tls(options?: string | TLSOptions): Promise<IAMCPCommand<Command.TLS, TLSOptions, TLSReponse>> {
 		if (!options || typeof options === 'string') {
 			options = {
-				command: Command.TLS,
 				subFolder: options
-			} as CLSOptions
-		} else {
-			options.command = Command.TLS
+			} as TLSOptions
 		}
-		return this.do(new AMCPCommand<Command.TLS, TLSOptions, string[]>(options))
+		return this.do(Command.TLS, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#VERSION>
 	 */
-	public version(options?: Version | VersionOptions): Promise<IAMCPCommand<Command.VERSION, VersionOptions, string>> {
+	public version(options?: Version | VersionOptions): Promise<IAMCPCommand<Command.VERSION, VersionOptions, VersionResponse>> {
 		if (!options || typeof options === 'string') {
 			options = {
-				command: Command.VERSION,
 				component: options
 			} as VersionOptions
-		} else {
-			options.command = Command.VERSION
 		}
-		return this.do(new AMCPCommand<Command.VERSION, VersionOptions, string>(options))
+		return this.do(Command.VERSION, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO>
 	 */
-	public info(options?: InfoOptions): Promise<IAMCPCommand<Command.INFO, InfoOptions, InfoOptions>> {
+	public info(options?: InfoOptions): Promise<IAMCPCommand<Command.INFO, InfoOptions, InfoResponse>> {
 		if (!options) {
 			options = {
 				command: Command.INFO
 			} as InfoOptions
-		} else {
-			options.command = Command.INFO
 		}
-		return this.do(new OrChannelOrLayerCommand<Command.INFO, InfoOptions, InfoOptions>(options))
+		return this.do(Command.INFO, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-TEMPLATE>
 	 */
-	public infoTemplate(options: string | InfoTemplateOptions): Promise<IAMCPCommand<Command.INFO_TEMPLATE, InfoTemplateOptions, string[]>> {
+	public infoTemplate(options: string | InfoTemplateOptions): Promise<IAMCPCommand<Command.INFO_TEMPLATE, InfoTemplateOptions, InfoTemplateResponse>> {
 		if (typeof options === 'string') {
 			options = {
-				command: Command.INFO_TEMPLATE,
 				templateName: options
 			} as InfoTemplateOptions
-		} else {
-			options.command = Command.INFO_TEMPLATE
 		}
-		return this.do(new AMCPCommand<Command.INFO_TEMPLATE, InfoTemplateOptions, string[]>(options))
+		return this.do(Command.INFO_TEMPLATE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-CONFIG>
 	 */
-	public infoConfig(): Promise<IAMCPCommand> {
-		return new Promise<IAMCPCommand>((resolve, reject) => {
-			this.getCasparCGVersion().then((version) => {
-				resolve(this.do(new AMCP.InfoConfigCommand([], { serverVersion: version })))
-			}).catch(reject)
-		})
+	public infoConfig(options?: InfoConfigOptions): Promise<IAMCPCommand<Command.INFO_CONFIG, InfoConfigOptions, InfoConfigResponse>> {
+		if (!options) {
+			options = {
+				command: Command.INFO
+			}
+		}
+		return this.do(Command.INFO_CONFIG, options, { serverVersion })
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-PATHS>
 	 */
-	public infoPaths(options?: InfoPathsOptions): Promise<IAMCPCommand<Command.INFO_PATHS, InfoPathsOptions, string>> {
+	public infoPaths(options?: InfoPathsOptions): Promise<IAMCPCommand<Command.INFO_PATHS, InfoPathsOptions, InfoPathsResponse>> {
 		if (!options) {
 			options = {
 				command: Command.INFO_PATHS
@@ -2598,71 +2516,62 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		} else {
 			options.command = Command.INFO_PATHS
 		}
-		return this.do(new AMCPCommand<Command.INFO_PATHS, InfoPathsOptions, string>(options))
+		return this.do(Command.INFO_PATHS, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-SYSTEM>
 	 */
-	public infoSystem(options?: InfoSystemOptions): Promise<IAMCPCommand<Command.INFO_SYSTEM, InfoSystemOptions, string>> {
+	public infoSystem(options?: InfoSystemOptions): Promise<IAMCPCommand<Command.INFO_SYSTEM, InfoSystemOptions, InfoSystemResponse>> {
 		if (!options) {
 			options = {
 				command: Command.INFO_SYSTEM
 			} as InfoSystemOptions
-		} else {
-			options.command = Command.INFO_SYSTEM
 		}
-		return this.do(new AMCPCommand<Command.INFO_SYSTEM, InfoSystemOptions, string>(options))
+		return this.do(Command.INFO_SYSTEM, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-SERVER>
 	 */
-	public infoServer(options?: InfoServerOptions): Promise<IAMCPCommand<Command.INFO_SERVER, InfoServerOptions, string>> {
+	public infoServer(options?: InfoServerOptions): Promise<IAMCPCommand<Command.INFO_SERVER, InfoServerOptions, InfoServerResponse>> {
 		if (!options) {
 			options = {
 				command: Command.INFO_SERVER
 			} as InfoServerOptions
-		} else {
-			options.command = Command.INFO_SERVER
 		}
-		return this.do(new AMCPCommand<Command.INFO_SERVER, InfoServerOptions, string>(options))
+		return this.do(Command.INFO_SERVER, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-QUEUES>
 	 */
-	public infoQueues(options?: InfoQueuesOptions): Promise<IAMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, string>> {
+	public infoQueues(options?: InfoQueuesOptions): Promise<IAMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, InfoQueuesResponse>> {
 		if (!options) {
 			options = {
 				command: Command.INFO_QUEUES
 			} as InfoQueuesOptions
-		} else {
-			options.command = Command.INFO_QUEUES
 		}
-		return this.do(new AMCPCommand<Command.INFO_QUEUES, InfoQueuesOptions, string>(options))
+		return this.do(Command.INFO_QUEUES, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-THREADS>
 	 */
-	public infoThreads(options?: InfoThreadsOptions): Promise<IAMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, string>> {
+	public infoThreads(options?: InfoThreadsOptions): Promise<IAMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, InfoThreadsResponse>> {
 		if (!options) {
 			options = {
 				command: Command.INFO_THREADS
 			} as InfoThreadsOptions
-		} else {
-			options.command = Command.INFO_THREADS
 		}
-		return this.do(new AMCPCommand<Command.INFO_THREADS, InfoThreadsOptions, string>(options))
+		return this.do(Command.INFO_THREADS, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#INFO-DELAY>
 	 */
-	public infoDelay(options: InfoDelayOptions): Promise<IAMCPCommand<Command.INFO_DELAY, InfoDelayOptions, string>> {
-		options.command = Command.INFO_DELAY
-		return this.do(new ChannelOrLayerCommand<Command.INFO_DELAY, InfoDelayOptions, string>(options))
+	public infoDelay(options: InfoDelayOptions): Promise<IAMCPCommand<Command.INFO_DELAY, InfoDelayOptions, InfoDelayResponse>> {
+		return this.do(Command.INFO_DELAY, options)
 	}
 
 	/**
@@ -2674,9 +2583,13 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * @param flashLayer	If not specified, information about the `TemplateHost` will be returned.
 	 */
-	public cgInfo(options: CGInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, CGInfoOptions, CGInfoOptions>> {
-		options.command = Command.CG_INFO
-		return this.do(new LayerWithCgFallbackCommand<Command.CG_INFO, CGInfoOptions, CGInfoOptions>(options))
+	public cgInfo(options?: CGInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, CGInfoOptions, CGInfoResponse>> {
+		if (!options) {
+			options = {
+				command: Command.CG_INFO
+			} as CGInfoOptions
+		}
+		return this.do(Command.CG_INFO, options)
 	}
 
 	/**
@@ -2684,21 +2597,23 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-INFO>
 	 */
-	public templateHostInfo(options: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, CGInfoOptions>> {
-		options.command = Command.CG_INFO
-		return this.cgInfo(options)
+	public templateHostInfo(options?: TemplateHostInfoOptions): Promise<IAMCPCommand<Command.CG_INFO, TemplateHostInfoOptions, TemplateHostInfoResponse>> {
+		if (!options) {
+			options = {
+				command: Command.CG_INFO
+			} as CGInfoOptions
+		}
+		return this.do(Command.CG_INFO, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#GL-INFO>
 	 */
-	public glInfo(options?: GLInfoOptions): Promise<IAMCPCommand<Command.GL_INFO, GLInfoOptions, string>> {
+	public glInfo(options?: GLInfoOptions): Promise<IAMCPCommand<Command.GL_INFO, GLInfoOptions, GLInfoResponse>> {
 		if (!options) {
-			options = { command: Command.GL_INFO }
-		} else {
-			options.command = Command.GL_INFO
+			options = { command: Command.GL_INFO } as GLInfoOptions
 		}
-		return this.do(new AMCPCommand<Command.GL_INFO, GLInfoOptions, string>(options))
+		return this.do(Command.GL_INFO, options)
 	}
 
 	/**
@@ -2715,7 +2630,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				level: options
 			} as LogLevelOptions
 		}
-		return this.do(new AMCPCommand<Command.LOG_LEVEL, LogLevelOptions, LogLevelOptions>(options))
+		return this.do(Command.LOG_LEVEL, options)
 	}
 
 	/**
@@ -2725,15 +2640,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#LOG_CATEGORY>
 	 */
-	public logCategory(options: LogCategoryOptions): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>> {
-		options.command = Command.LOG_CATEGORY
-		return this.do(new AMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>(options))
+	public logCategory(options: LogCategoryOptions): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, LogCategoryOptions>> {
+		return this.do(Command.LOG_CATEGORY, options)
 	}
 
 	/**
 	 * Convenience method for enabling or disabling logging for [[LogCategory.CALLTRACE]] through calling [[logCategory]].
 	 */
-	public logCalltrace(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>> {
+	public logCalltrace(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, LogCategoryOptions>> {
 		let options: LogCategoryOptions = {
 			category: LogCategory.CALLTRACE,
 			enabled: enabled
@@ -2743,7 +2657,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * Convenience method for enabling or disabling logging for [[LogCategory.COMMUNICATION]] through calling [[logCategory]].
 	 */
-	public logCommunication(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, string>> {
+	public logCommunication(enabled: boolean): Promise<IAMCPCommand<Command.LOG_CATEGORY, LogCategoryOptions, LogCategoryOptions>> {
 		let options: LogCategoryOptions = {
 			category: LogCategory.COMMUNICATION,
 			enabled: enabled
@@ -2754,30 +2668,25 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#DIAG>
 	 */
-	public diag(options?: DiagOptions): Promise<IAMCPCommand<Command.DIAG, DiagOptions, undefined>> {
-		if (options) {
-			options.command = Command.DIAG
-		} else {
+	public diag(options?: DiagOptions): Promise<IAMCPCommand<Command.DIAG, DiagOptions, DiagOptions>> {
+		if (!options) {
 			options = {
 				command: Command.DIAG
 			} as DiagOptions
 		}
-		return this.do(new AMCPCommand<Command.DIAG, DiagOptions, undefined>(options))
+		return this.do(Command.DIAG, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP>
 	 */
-	public help(options?: HelpOptions | Command | string): Promise<IAMCPCommand<Command.HELP, HelpOptions, string>> {
+	public help(options?: HelpOptions | Command | string): Promise<IAMCPCommand<Command.HELP, HelpOptions, HelpResponse>> {
 		if (!options || typeof options === 'string') {
 			options = {
-				command: Command.HELP,
-				commands: options
+				for: options
 			} as HelpOptions
-		} else {
-			options.command = Command.HELP
 		}
-		return this.do(new AMCPCommand<Command.HELP, HelpOptions, string>(options))
+		return this.do(Command.HELP, options)
 	}
 
 	/**
@@ -2785,23 +2694,20 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP>
 	 */
-	public getCommands(): Promise<IAMCPCommand<Command.HELP, HelpOptions, string>> {
+	public getCommands(): Promise<IAMCPCommand<Command.HELP, HelpOptions, HelpResponse>> {
 		return this.help()
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP-PRODUCER>
 	 */
-	public helpProducer(options?: HelpProducerOptions | Producer | string): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>> {
+	public helpProducer(options?: HelpProducerOptions | Producer | string): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, HelpProducerResponse>> {
 		if (!options || typeof options === 'string') {
 			options = {
-				command: Command.HELP_PRODUCER,
 				producer: options
 			} as HelpProducerOptions
-		} else {
-			options.command = Command.HELP_PRODUCER
 		}
-		return this.do(new AMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>(options))
+		return this.do(Command.HELP_PRODUCER, options)
 	}
 
 	/**
@@ -2809,23 +2715,20 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP-PRODUCER>
 	 */
-	public getProducers(): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, string>> {
+	public getProducers(): Promise<IAMCPCommand<Command.HELP_PRODUCER, HelpProducerOptions, HelpProducerResponse>> {
 		return this.helpProducer()
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP-CONSUMER>
 	 */
-	public helpConsumer(options?: HelpConsumerOptions | Consumer | string): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>> {
+	public helpConsumer(options?: HelpConsumerOptions | Consumer | string): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, HelpConsumerResponse>> {
 		if (!options || typeof options === 'string') {
 			options = {
-				command: Command.HELP_CONSUMER,
 				consumer: options
 			} as HelpConsumerOptions
-		} else {
-			options.command = Command.HELP_CONSUMER
 		}
-		return this.do(new AMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>(options))
+		return this.do(Command.HELP_CONSUMER, options)
 	}
 
 	/**
@@ -2833,34 +2736,32 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#HELP-CONSUMER>
 	 */
-	public getConsumers(): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, string>> {
+	public getConsumers(): Promise<IAMCPCommand<Command.HELP_CONSUMER, HelpConsumerOptions, HelpConsumerResponse>> {
 		return this.helpConsumer()
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#BYE>
 	 */
-	public bye(options?: ByeOptions): Promise<IAMCPCommand<Command.BYE, ByeOptions, undefined>> {
+	public bye(options?: ByeOptions): Promise<IAMCPCommand<Command.BYE, ByeOptions, ByeOptions>> {
 		if (!options) {
 			options = {
 				command: Command.BYE
 			} as ByeOptions
 		}
-		return this.do(new AMCPCommand<Command.BYE, ByeOptions, undefined>(options))
+		return this.do(Command.BYE, options)
 	}
 
 	/**
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#KILL>
 	 */
-	public kill(options?: KillOptions): Promise<IAMCPCommand<Command.KILL, KillOptions, undefined>> {
+	public kill(options?: KillOptions): Promise<IAMCPCommand<Command.KILL, KillOptions, KillOptions>> {
 		if (!options) {
 			options = {
 				command: Command.KILL
 			} as KillOptions
-		} else {
-			options.command = Command.KILL
 		}
-		return this.do(new AMCPCommand<Command.KILL, KillOptions, undefined>(options))
+		return this.do(Command.KILL, options)
 	}
 
 	/**
