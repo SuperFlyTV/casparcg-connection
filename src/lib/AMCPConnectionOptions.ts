@@ -1,33 +1,25 @@
-// Callback NS
-import { Callback as CallbackNS } from './global/Callback'
-import IBooleanCallback = CallbackNS.IBooleanCallback
-import IErrorCallback = CallbackNS.IErrorCallback
-import IStringCallback = CallbackNS.IStringCallback
-import ISocketStatusCallback = CallbackNS.ISocketStatusCallback
+import { IBooleanCallback, IErrorCallback, IStringCallback,
+	ISocketStatusCallback } from './global/Callback'
 
 /**
  *
  */
-export namespace Options {
+export enum QueueMode {
+	SALVO = 1,
+	SEQUENTIAL = 2
+	// SMART 		= 3
+}
 
-	/**
-	 *
-	 */
-	export enum QueueMode {
-		SALVO = 1,
-		SEQUENTIAL = 2
-		// SMART 		= 3
-	}
-
-	/**
-	 *
-	 */
-	export enum CasparCGVersion {
-		V2xx = 2000,
-		V207 = 2007,
-		V21x = 2100,
-		V210 = 2110
-	}
+/**
+ *
+ */
+export enum CasparCGVersion {
+	V2xx = 2000,
+	V207 = 2007,
+	V21x = 2100,
+	V210 = 2110,
+	V22x = 2200,
+	V23x = 2300
 }
 
 /**
@@ -40,9 +32,9 @@ export interface IConnectionOptions {
 	autoReconnect?: boolean
 	autoReconnectInterval?: number
 	autoReconnectAttempts?: number
-	serverVersion?: Options.CasparCGVersion
+	serverVersion?: CasparCGVersion
 	virginServerCheck?: boolean
-	queueMode?: Options.QueueMode
+	queueMode?: QueueMode
 	debug?: boolean
 	onLog?: IStringCallback
 	onConnectionStatus?: ISocketStatusCallback
@@ -62,8 +54,8 @@ export class ConnectionOptions implements IConnectionOptions {
 	public autoReconnect: boolean | undefined = true
 	public autoReconnectInterval: number | undefined = 1000
 	public autoReconnectAttempts: number | undefined = Infinity
-	public serverVersion: Options.CasparCGVersion | undefined = undefined
-	public queueMode: Options.QueueMode | undefined = Options.QueueMode.SALVO
+	public serverVersion: CasparCGVersion | undefined = undefined
+	public queueMode: QueueMode | undefined = QueueMode.SALVO
 	public virginServerCheck: boolean | undefined = false
 	public debug: boolean | undefined = false
 	public onLog: IStringCallback | undefined = undefined

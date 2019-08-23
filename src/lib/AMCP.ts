@@ -1,15 +1,20 @@
 import { Command, Transition, Ease, Direction, LogLevel, LogCategory, Chroma,
   BlendMode, Lock, Version, Producer, Consumer } from './ServerStateEnum'
-// ResponseNS
-import { Response as ResponseSignatureNS } from './ResponseSignature'
-import { Response as ResponseValidator } from './ResponseValidators'
-import { Response as ResponseParser } from './ResponseParsers'
+import { ResponseSignature } from './ResponseSignature'
+import { XMLValidator, MixerStatusValidator, StringValidator as ResponseStringValidator,
+	DataValidator, ListValidator, Base64Validator } from './ResponseValidators'
+import { GLParser, MixerStatusKeyerParser, MixerStatusChromaParser, MixerStatusBlendParser,
+ 	MixerStatusInvertParser, MixerStatusOpacityParser, MixerStatusBrightnessParser,
+	MixerStatusSaturationParser, MixerStatusContrastParser, MixerStatusLevelsParser,
+	MixerStatusFillParser, MixerStatusClipParser, MixerStatusAnchorParser,
+	MixerStatusCropParser, MixerStatusRotationParser, MixerStatusPerspectiveParser,
+	MixerStatusMipmapParser, MixerStatusVolumeParser, MixerStatusMastervolumeParser,
+	MixerStatusStraightAlphaOutputParser, DataParser, DataListParser,
+	ThumbnailListParser, ThumbnailParser, CinfParser, ContentParser, InfoTemplateParser,
+	VersionParser, ChannelParser, InfoThreadsParser, InfoPathsParser, ConfigParser,
+	InfoSystemParser, InfoServerParser, InfoQueuesParser, InfoDelayParser,
+	HelpParser, InfoParser } from './ResponseParsers'
 
-import ResponseSignature = ResponseSignatureNS.ResponseSignature
-// Command NS
-// import { IAMCPCommand, IAMCPCommandVO, CommandOptions, IAMCPResponse } from './AMCPCommand'
-
-// Param NS
 import { Required as required, Optional as optional, ParamSignature, IParamSignature } from './ParamSignature'
 
 // Validation NS
@@ -480,49 +485,49 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 
 export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command, ResponseSignature>([
 	[ Command.CG_INVOKE, new ResponseSignature(201) ],
-	[ Command.GL_INFO, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.GLParser) ],
-	[ Command.MIXER_KEYER, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusKeyerParser) ],
-	[ Command.MIXER_CHROMA, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusChromaParser) ],
-	[ Command.MIXER_BLEND, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.MixerStatusBlendParser) ],
-	[ Command.MIXER_INVERT, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.MixerStatusInvertParser) ],
-	[ Command.MIXER_OPACITY, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusOpacityParser) ],
-	[ Command.MIXER_BRIGHTNESS, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusBrightnessParser) ],
-	[ Command.MIXER_SATURATION, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusSaturationParser) ],
-	[ Command.MIXER_CONTRAST, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusContrastParser) ],
-	[ Command.MIXER_LEVELS, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusLevelsParser) ],
-	[ Command.MIXER_FILL, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusFillParser) ],
-	[ Command.MIXER_CLIP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusClipParser) ],
-	[ Command.MIXER_ANCHOR, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusAnchorParser) ],
-	[ Command.MIXER_CROP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusCropParser) ],
-	[ Command.MIXER_ROTATION, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusRotationParser) ],
-	[ Command.MIXER_PERSPECTIVE, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusPerspectiveParser) ],
-	[ Command.MIXER_MIPMAP, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMipmapParser) ],
-	[ Command.MIXER_VOLUME, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusVolumeParser) ],
-	[ Command.MIXER_MASTERVOLUME, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusMastervolumeParser) ],
-	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, new ResponseSignature(201, ResponseValidator.MixerStatusValidator, ResponseParser.MixerStatusStraightAlphaOutputParser) ],
-	[ Command.DATA_RETRIEVE, new ResponseSignature(201, ResponseValidator.DataValidator, ResponseParser.DataParser) ],
-	[ Command.DATA_LIST, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.DataListParser) ],
-	[ Command.THUMBNAIL_LIST, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ThumbnailListParser) ],
-	[ Command.THUMBNAIL_RETRIEVE, new ResponseSignature(201, ResponseValidator.Base64Validator, ResponseParser.ThumbnailParser) ],
-	[ Command.CINF, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.CinfParser) ],
-	[ Command.CLS, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser) ],
-	[ Command.FLS, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser) ],
-	[ Command.TLS, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ContentParser) ],
-	[ Command.VERSION, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.VersionParser) ],
-	[ Command.INFO, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.ChannelParser) ],
-	// [ Command.INFO, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoParser) ],
-	[ Command.INFO_TEMPLATE, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoTemplateParser) ],
-	[ Command.INFO_PATHS, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoPathsParser) ],
-	[ Command.INFO_CONFIG, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.ConfigParser) ],
-	[ Command.INFO_SYSTEM, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoSystemParser) ],
-	[ Command.INFO_SERVER, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoServerParser) ],
-	[ Command.INFO_QUEUES, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoQueuesParser) ],
-	[ Command.INFO_THREADS, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.InfoThreadsParser) ],
-	[ Command.INFO_DELAY, new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.InfoDelayParser) ],
-	[ Command.HELP, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser) ],
-	[ Command.HELP_PRODUCER, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser) ],
-	[ Command.HELP_CONSUMER, new ResponseSignature(200, ResponseValidator.ListValidator, ResponseParser.HelpParser) ],
-	[ Command.TIME, new ResponseSignature(201, ResponseValidator.StringValidator, ResponseParser.InfoParser) ]
+	[ Command.GL_INFO, new ResponseSignature(201, new XMLValidator(), GLParser) ],
+	[ Command.MIXER_KEYER, new ResponseSignature(201, MixerStatusValidator, MixerStatusKeyerParser) ],
+	[ Command.MIXER_CHROMA, new ResponseSignature(201, MixerStatusValidator, MixerStatusChromaParser) ],
+	[ Command.MIXER_BLEND, new ResponseSignature(201, ResponseStringValidator, MixerStatusBlendParser) ],
+	[ Command.MIXER_INVERT, new ResponseSignature(201, ResponseStringValidator, MixerStatusInvertParser) ],
+	[ Command.MIXER_OPACITY, new ResponseSignature(201, MixerStatusValidator, MixerStatusOpacityParser) ],
+	[ Command.MIXER_BRIGHTNESS, new ResponseSignature(201, MixerStatusValidator, MixerStatusBrightnessParser) ],
+	[ Command.MIXER_SATURATION, new ResponseSignature(201, MixerStatusValidator, MixerStatusSaturationParser) ],
+	[ Command.MIXER_CONTRAST, new ResponseSignature(201, MixerStatusValidator, MixerStatusContrastParser) ],
+	[ Command.MIXER_LEVELS, new ResponseSignature(201, MixerStatusValidator, MixerStatusLevelsParser) ],
+	[ Command.MIXER_FILL, new ResponseSignature(201, MixerStatusValidator, MixerStatusFillParser) ],
+	[ Command.MIXER_CLIP, new ResponseSignature(201, MixerStatusValidator, MixerStatusClipParser) ],
+	[ Command.MIXER_ANCHOR, new ResponseSignature(201, MixerStatusValidator, MixerStatusAnchorParser) ],
+	[ Command.MIXER_CROP, new ResponseSignature(201, MixerStatusValidator, MixerStatusCropParser) ],
+	[ Command.MIXER_ROTATION, new ResponseSignature(201, MixerStatusValidator, MixerStatusRotationParser) ],
+	[ Command.MIXER_PERSPECTIVE, new ResponseSignature(201, MixerStatusValidator, MixerStatusPerspectiveParser) ],
+	[ Command.MIXER_MIPMAP, new ResponseSignature(201, MixerStatusValidator, MixerStatusMipmapParser) ],
+	[ Command.MIXER_VOLUME, new ResponseSignature(201, MixerStatusValidator, MixerStatusVolumeParser) ],
+	[ Command.MIXER_MASTERVOLUME, new ResponseSignature(201, MixerStatusValidator, MixerStatusMastervolumeParser) ],
+	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, new ResponseSignature(201, MixerStatusValidator, MixerStatusStraightAlphaOutputParser) ],
+	[ Command.DATA_RETRIEVE, new ResponseSignature(201, DataValidator, DataParser) ],
+	[ Command.DATA_LIST, new ResponseSignature(200, ListValidator, DataListParser) ],
+	[ Command.THUMBNAIL_LIST, new ResponseSignature(200, ListValidator, ThumbnailListParser) ],
+	[ Command.THUMBNAIL_RETRIEVE, new ResponseSignature(201, Base64Validator, ThumbnailParser) ],
+	[ Command.CINF, new ResponseSignature(200, ListValidator, CinfParser) ],
+	[ Command.CLS, new ResponseSignature(200, ListValidator, ContentParser) ],
+	[ Command.FLS, new ResponseSignature(200, ListValidator, ContentParser) ],
+	[ Command.TLS, new ResponseSignature(200, ListValidator, ContentParser) ],
+	[ Command.VERSION, new ResponseSignature(201, ResponseStringValidator, VersionParser) ],
+	[ Command.INFO, new ResponseSignature(200, ListValidator, ChannelParser) ],
+	// [ Command.INFO, new ResponseSignature(201, XMLValidator, ResponseParser.InfoParser) ],
+	[ Command.INFO_TEMPLATE, new ResponseSignature(201, XMLValidator, InfoTemplateParser) ],
+	[ Command.INFO_PATHS, new ResponseSignature(201, XMLValidator, InfoPathsParser) ],
+	[ Command.INFO_CONFIG, new ResponseSignature(201, XMLValidator, ConfigParser) ],
+	[ Command.INFO_SYSTEM, new ResponseSignature(201, XMLValidator, InfoSystemParser) ],
+	[ Command.INFO_SERVER, new ResponseSignature(201, XMLValidator, InfoServerParser) ],
+	[ Command.INFO_QUEUES, new ResponseSignature(201, XMLValidator, InfoQueuesParser) ],
+	[ Command.INFO_THREADS, new ResponseSignature(200, ListValidator, InfoThreadsParser) ],
+	[ Command.INFO_DELAY, new ResponseSignature(201, XMLValidator, InfoDelayParser) ],
+	[ Command.HELP, new ResponseSignature(200, ListValidator, HelpParser) ],
+	[ Command.HELP_PRODUCER, new ResponseSignature(200, ListValidator, HelpParser) ],
+	[ Command.HELP_CONSUMER, new ResponseSignature(200, ListValidator, HelpParser) ],
+	[ Command.TIME, new ResponseSignature(201, ResponseStringValidator, InfoParser) ]
 ])
 
 // FIXME: swap was not fully implemented

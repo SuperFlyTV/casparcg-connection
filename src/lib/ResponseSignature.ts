@@ -1,21 +1,16 @@
-import { Response as ResponseValidatorNS } from './ResponseValidators'
-import StatusValidator = ResponseValidatorNS.StatusValidator
+import { IResponseValidator, statusValidator } from './ResponseValidators'
+import { IResponseParser } from './ResponseParsers'
 
 /**
  *
  */
-export namespace Response {
+export class ResponseSignature {
+
 	/**
 	 *
 	 */
-	export class ResponseSignature {
+	// @todo: change :any to "typeof IResponseValidator" and same for parser
+	constructor(public code: number = 202, public validator: IResponseValidator = statusValidator, public parser: IResponseParser | null = null) {
 
-		/**
-		 *
-		 */
-		// @todo: change :any to "typeof IResponseValidator" and same for parser
-		constructor(public code: number = 202, public validator: any = StatusValidator, public parser: any = null) {
-
-		}
 	}
 }

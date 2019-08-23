@@ -917,7 +917,8 @@ export const constructors: Map<Command, CommandConstructor<Command, CommandOptio
 	[ Command.SCHEDULE_LIST, AMCPCommand ],
 	[ Command.SCHEDULE_CLEAR, AMCPCommand ],
 	[ Command.SCHEDULE_REMOVE, AMCPCommand ],
-	[ Command.SCGEDULE_INFO, AMCPCommand ]
+	[ Command.SCHEDULE_INFO, AMCPCommand ],
+	[ Command.TIMECODE_SOURCE, AMCPCommand ]
 ])
 
 export function createCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ, context?: Object): IAMCPCommand<C, REQ, RES> | undefined {
