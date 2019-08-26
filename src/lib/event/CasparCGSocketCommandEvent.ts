@@ -1,9 +1,7 @@
 import { Event as BaseEventNS } from './BaseEvent'
-import { Command as CommandNS } from '../AbstractCommand'
-import IAMCPCommand = CommandNS.IAMCPCommand
-import { AMCPUtil as AMCPUtilNS } from '../AMCP'
-// AMCPUtilNS
-import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse
+import { IAMCPCommand, CommandOptions } from '../AMCPCommand'
+import { CasparCGSocketResponse } from '../AMCP'
+import { Command } from '../ServerStateEnum'
 
 export namespace Event {
 
@@ -17,14 +15,14 @@ export namespace Event {
 		/**
 		 *
 		 */
-		constructor(public command: IAMCPCommand) {
+		constructor(public command: IAMCPCommand<Command, CommandOptions, CommandOptions>) {
 			super({ command })
 		}
 
 		/**
 		 *
 		 */
-		valueOf(): IAMCPCommand {
+		valueOf(): IAMCPCommand<Command, CommandOptions, CommandOptions> {
 			return this.command
 		}
 	}

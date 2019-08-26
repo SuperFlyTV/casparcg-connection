@@ -1,22 +1,11 @@
-// AMCPUtilNS
 import { CasparCGSocketResponse } from './AMCP'
-// ResponseNS
-import { Response as ResponseNS } from './ResponseSignature'
-import ResponseSignature = ResponseNS.ResponseSignature
-import { Response as ResponseValidatorNS } from './ResponseValidators'
-import IResponseValidator = ResponseValidatorNS.IResponseValidator
-import { Response as ResponseParserNS } from './ResponseParsers'
-import IResponseParser = ResponseParserNS.IResponseParser
-// Param NS
+import { ResponseSignature } from './ResponseSignature'
+import { IResponseValidator } from './ResponseValidators'
+import { IResponseParser } from './ResponseParsers'
 import { Payload, PayloadVO, Param, ParamData, IParamSignature } from './ParamSignature'
-// Validation ND
-import { PositiveNumberValidatorBetween } from './ParamValidators'
-// Protocol NS
+import { positiveNumberValidatorBetween } from './ParamValidators'
 import { IProtocolLogic } from './ProtocolLogic'
-// Callback NS
-import { Callback as CallbackNS } from './global/Callback'
-import ICommandStatusCallback = CallbackNS.ICommandStatusCallback
-
+import { ICommandStatusCallback } from './global/Callback'
 import { Command } from './ServerStateEnum'
 
 /**
@@ -245,8 +234,8 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 		// data is valid
 		let validData: Object = {}
 		if (this.responseProtocol.validator) { // @todo: typechecking ("class that implements....")
-			const validator: IResponseValidator = new this.responseProtocol.validator()
-			validData = validator.resolve(response)
+			const validator: IResponseValidator = this.responseProtocol.validator
+			validData = validator(response)
 			if (validData === false) {
 				return false
 			}
@@ -254,9 +243,8 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 
 		// data gets parsed
 		if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
-			const parser: IResponseParser = new this.responseProtocol.parser()
-			parser.context = this.context
-			validData = parser.parse(validData)
+			const parser: IResponseParser = this.responseProtocol.parser
+			validData = parser(validData, this.context)
 			if (validData === false) {
 				return false
 			}
@@ -418,9 +406,9 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 		if (param === undefined) {
 			return false
 		}
-		result = signature.validation.resolve(param, (signature.key || signature.name))
+		result = signature.validation(param, (signature.key || signature.name))
 		if (result !== false) {
-			signature.validation.resolved = true
+			signature.resolved = true
 			if (typeof result === 'object' && result.hasOwnProperty('raw') && result.hasOwnProperty('payload')) {
 				signature.payload = result.payload
 				signature.raw = result.raw
@@ -455,7 +443,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	 */
 	protected validateChannel(): number {
 		let result: ParamData
-		let validator = new PositiveNumberValidatorBetween(1, 9999)
+		let validator = positiveNumberValidatorBetween(1, 9999)
 		let param: number
 
 		if (this._objectParams.hasOwnProperty('channel')) {
@@ -463,7 +451,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 		} else {
 			param = NaN
 		}
-		result = validator.resolve(param)
+		result = validator(param)
 		if (result !== false) {
 			return Number(result)
 		}
@@ -477,7 +465,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	 */
 	protected validateLayer(fallback?: number): number {
 		let result: ParamData
-		let validator = new PositiveNumberValidatorBetween(0, 9999)
+		let validator = positiveNumberValidatorBetween(0, 9999)
 		let param: number
 
 		if (this._objectParams.hasOwnProperty('layer')) {
@@ -485,7 +473,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 		} else {
 			param = fallback || NaN
 		}
-		result = validator.resolve(param)
+		result = validator(param)
 		if (result !== false) {
 			return Number(result)
 		}

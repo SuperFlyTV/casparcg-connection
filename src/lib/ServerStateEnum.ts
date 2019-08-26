@@ -347,3 +347,31 @@ export type AllEnums =
 	Lock | LogCategory | Chroma | LogLevel | Transition | Direction |
 	BlendMode | Ease | ChannelFormat | ChannelLayout | ChannelVariable |
 	TimecodeSource | ClipType
+
+export interface Reverse<E extends AllEnums> {
+	(v: string): E | null
+}
+
+function reverse<E extends AllEnums>(e: object): Reverse<E> {
+	let rMap: { [k: string]: E}
+	Object.entries(e).forEach(([k, el]) => rMap[el.toString()] = k as E)
+	return (v: string) => { return rMap[v] }
+}
+
+export const revCommand = reverse<Command>(Command)
+export const revVersion = reverse<Version>(Version)
+export const revProducer = reverse<Producer>(Producer)
+export const revConsumer = reverse<Consumer>(Consumer)
+export const revLock = reverse<Lock>(Lock)
+export const revLogCategory = reverse<LogCategory>(LogCategory)
+export const revChroma = reverse<Chroma>(Chroma)
+export const revLogLevel = reverse<LogLevel>(LogLevel)
+export const revTransition = reverse<Transition>(Transition)
+export const revDirection = reverse<Direction>(Direction)
+export const revBlendMode = reverse<BlendMode>(BlendMode)
+export const revEase = reverse<Ease>(Ease)
+export const revChannelFormat = reverse<ChannelFormat>(ChannelFormat)
+export const revChannelLayout = reverse<ChannelLayout>(ChannelLayout)
+export const revChannelVariable = reverse<ChannelVariable>(ChannelVariable)
+export const revTimecodeSource = reverse<TimecodeSource>(TimecodeSource)
+export const revClip: Reverse<ClipType> = reverse<ClipType>(ClipType)

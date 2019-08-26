@@ -1,4 +1,4 @@
-import { IValidator, AbstractValidator } from './ParamValidators'
+import { IValidator } from './ParamValidators'
 
 /**
  *
@@ -70,19 +70,15 @@ export class ParamSignature implements IParamSignature {
 	constructor(public required: (Required | Optional),
 		public name: string,
 		public key: string | null,
-		validation: (IValidator | Object | Function)) {
-		if (validation instanceof AbstractValidator) {
-			this.validation = validation
-		} else if (typeof validation === 'function') {
-			let proto = Object.create((validation as any).prototype)
-			this.validation = new proto.constructor()
-		}
+		validation: IValidator) {
+
+		this.validation = validation
 	}
 
 	/**
 	 *
 	 */
 	public get resolved(): boolean {
-		return this.validation.resolved
+		return this.resolved
 	}
 }

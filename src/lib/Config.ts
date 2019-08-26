@@ -1,8 +1,6 @@
 /* tslint:disable:no-unnecessary-qualifier */
 import { create as XMLBuilder } from 'xmlbuilder'
-// Options NS
-import { Options as OptionsNS } from './AMCPConnectionOptions'
-import CasparCGVersion = OptionsNS.CasparCGVersion
+import { CasparCGVersion } from './AMCPConnectionOptions'
 
 /***/
 export namespace Config {

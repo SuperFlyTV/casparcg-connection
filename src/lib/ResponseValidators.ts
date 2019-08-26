@@ -17,26 +17,17 @@ export const statusValidator: IResponseValidator =
 /**
  *
  */
-export class StringValidator implements IResponseValidator {
-
-	/**
-	 *
-	 */
-	public resolve(response: CasparCGSocketResponse): Object {
+export const stringValidator: IResponseValidator =
+	(response: CasparCGSocketResponse): Object => {
 		let result: String = response.items[0].toString()
 		return result.length > 0 ? result : false
 	}
-}
 
 /**
  *
  */
-export class XMLValidator implements IResponseValidator {
-
-	/**
-	 *
-	 */
-	public resolve(response: CasparCGSocketResponse): Object {
+export const xmlValidator: IResponseValidator =
+	(response: CasparCGSocketResponse): Object => {
 		let parseNumbers = function (str: any) {
 			if (!isNaN(str)) {
 				str = str % 1 === 0 ? parseInt(str, 10) : parseFloat(str)
@@ -60,7 +51,16 @@ export class XMLValidator implements IResponseValidator {
 
 		xmlParser(
 			response.items[0].replace('\n', ''),
-			{ explicitRoot: false, async: false, trim: true, explicitArray: false, mergeAttrs: true, attrValueProcessors: [parseNumbers], valueProcessors: [parseNumbers, parseBooleans], tagNameProcessors: [parseLowerCase], attrNameProcessors: [parseLowerCase] },
+			{
+				explicitRoot: false,
+				async: false, trim: true,
+				explicitArray: false,
+				mergeAttrs: true,
+				attrValueProcessors: [parseNumbers],
+				valueProcessors: [parseNumbers, parseBooleans],
+				tagNameProcessors: [parseLowerCase],
+				attrNameProcessors: [parseLowerCase]
+			},
 			(error, result) => {
 				returnFalse = error
 				returnData = result
@@ -68,60 +68,37 @@ export class XMLValidator implements IResponseValidator {
 
 		return returnFalse ? {} : returnData || {}
 	}
-}
 
 /**
  *
  */
-export class ListValidator implements IResponseValidator {
-
-	/**
-	 *
-	 */
-	public resolve(response: CasparCGSocketResponse): Object {
+export const listValidator: IResponseValidator =
+	(response: CasparCGSocketResponse): Object => {
 		// filters on stringitems in items-list and validates if any items present
 		let stringItems = response.items
 		return stringItems
 	}
-}
 
 /**
  *
  */
-export class DataValidator implements IResponseValidator {	// @todo
-
-	/**
-	 *
-	 */
-	public resolve(response: CasparCGSocketResponse): Object {
+export const dataValidator: IResponseValidator = // todo?
+	(response: CasparCGSocketResponse): Object => {
 		let result: String = response.items[0].toString()
 		return result.length > 0 ? result : false
 	}
-}
 
 /**
  *
  */
-export class Base64Validator implements IResponseValidator {
-
-	/**
-	 *
-	 */
-	public resolve(response: CasparCGSocketResponse): Object {
-		return response.items[0]
-	}
-}
+export const base64Validator: IResponseValidator =
+	(response: CasparCGSocketResponse): Object => response.items[0]
 
 /**
  *
  */
-export class MixerStatusValidator implements IResponseValidator {
-
-	/**
-	 *
-	 */
-	public resolve(response: CasparCGSocketResponse): Object {
+export const mixerStatusValidator: IResponseValidator =
+	(response: CasparCGSocketResponse): Object => {
 		let result: Array<number> = response.items[0].split(' ').map(value => Number.parseFloat(value))
 		return result.length > 0 && result.every(value => !isNaN(value)) ? result : false
 	}
-}

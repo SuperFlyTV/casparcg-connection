@@ -107,7 +107,7 @@ export class ChannelRate {
  *
  */
 export interface IResponseParser {
-	parse(data: Object, context?: any): Object
+	(data: Object, context?: any): Object
 }
 
 /**
@@ -120,12 +120,8 @@ export abstract class AbstractParser {
 /**
  *
  */
-export class ChannelParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: any): Object {
+export const channelParser: IResponseParser =
+	(data: any): Object => {
 		data = [].concat(data)
 		let result: Array<Object> = [];
 		(data as Array<Object>).forEach((channel) => {
@@ -144,14 +140,12 @@ export class ChannelParser extends AbstractParser implements IResponseParser {
 
 		return {}
 	}
-}
 
 /***/
-export class ConfigParser extends AbstractParser implements IResponseParser {
-	/***/
-	public parse(data: Object): Object {
+export const configParser: IResponseParser =
+	(data: any, context?: any): Object => {
 		let serverVersion: CasparCGVersion
-		if (this.context && this.context.hasOwnProperty('serverVersion') && this.context.serverVersion > CasparCGVersion.V21x) {
+		if (context && context.hasOwnProperty('serverVersion') && context.serverVersion > CasparCGVersion.V21x) {
 			serverVersion = CasparCGVersion.V210
 		} else {
 			serverVersion = CasparCGVersion.V207
@@ -161,160 +155,77 @@ export class ConfigParser extends AbstractParser implements IResponseParser {
 		configResult.import(data)
 		return configResult
 	}
+
+const nopParser: IResponseParser = (data: any): Object => data
+
+/**
+ *
+ */
+export const dataParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const dataListParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const infoTemplateParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const helpParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const glParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const infoDelayParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const infoParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const infoThreadsParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const thumbnailParser: IResponseParser = nopParser
+
+/**
+ *
+ */
+export const versionParser: IResponseParser = nopParser
+
+function parseTimeString(timeDateString: string): number {
+
+	timeDateString = timeDateString.replace(/[tT]/g, '')
+
+	let year: number = parseInt(timeDateString.slice(0, 4), 10)
+	let month: number = parseInt(timeDateString.slice(4, 6), 10)
+	let date: number = parseInt(timeDateString.slice(6, 8), 10)
+	let hours: number = parseInt(timeDateString.slice(8, 10), 10)
+	let minutes: number = parseInt(timeDateString.slice(10, 12), 10)
+	let seconds: number = parseInt(timeDateString.slice(12, 14), 10)
+	return new Date(year, month, date, hours, minutes, seconds).getTime()
 }
 
 /**
  *
  */
-export class DataParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class DataListParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class InfoTemplateParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class HelpParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class GLParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class InfoDelayParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class InfoParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class InfoThreadsParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class ThumbnailParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return `data:image/png;base64,${data}`
-	}
-}
-
-/**
- *
- */
-export class VersionParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
-
-/**
- *
- */
-export class ContentParser extends AbstractParser implements IResponseParser {
-
-	static parseTimeString(timeDateString: string): number {
-
-		timeDateString = timeDateString.replace(/[tT]/g, '')
-
-		let year: number = parseInt(timeDateString.slice(0, 4), 10)
-		let month: number = parseInt(timeDateString.slice(4, 6), 10)
-		let date: number = parseInt(timeDateString.slice(6, 8), 10)
-		let hours: number = parseInt(timeDateString.slice(8, 10), 10)
-		let minutes: number = parseInt(timeDateString.slice(10, 12), 10)
-		let seconds: number = parseInt(timeDateString.slice(12, 14), 10)
-		return new Date(year, month, date, hours, minutes, seconds).getTime()
-	}
-
-	/**
-	 *
-	 */
-	public parse(data: Array<string>): Object {
+export const contentParser: IResponseParser =
+	(data: Array<string>): Object => {
 		return data.map((i: string) => {
 			let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
 
@@ -340,7 +251,7 @@ export class ContentParser extends AbstractParser implements IResponseParser {
 					name: name,
 					type: 'template',
 					size: parseInt(typeData[0], 10),
-					changed: ContentParser.parseTimeString(typeData[1]),
+					changed: parseTimeString(typeData[1]),
 					format: typeData[2]
 				}
 			}
@@ -351,7 +262,7 @@ export class ContentParser extends AbstractParser implements IResponseParser {
 					name: name,
 					type: 'template',
 					size: parseInt(typeData[0], 10),
-					changed: ContentParser.parseTimeString(typeData[1])
+					changed: parseTimeString(typeData[1])
 				}
 			}
 
@@ -370,7 +281,7 @@ export class ContentParser extends AbstractParser implements IResponseParser {
 				name: name,
 				type: typeData[0].toLowerCase() === 'movie' ? 'video' : typeData[0].toLowerCase() === 'still' ? 'image' : typeData[0].toLowerCase(),
 				size: parseInt(typeData[1], 10),
-				changed: ContentParser.parseTimeString(typeData[2]),
+				changed: parseTimeString(typeData[2]),
 				frames: frames,
 				frameTime: typeData[4],
 				frameRate: frameRate,
@@ -378,46 +289,34 @@ export class ContentParser extends AbstractParser implements IResponseParser {
 			}
 		})
 	}
-}
 
 /**
  *
  */
-export class ThumbnailListParser extends AbstractParser implements IResponseParser {
+export const thumbnailListParser: IResponseParser =
+	(data: Array<string>): Object => data.map((i: string) => {
+		let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
 
-	/**
-	 *
-	 */
-	public parse(data: Array<string>): Object {
-		return data.map((i: string) => {
-			let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
+		if (components === null) {
+			return null
+		}
 
-			if (components === null) {
-				return null
-			}
+		let name: string = components[1].replace(/\\/g, '/')
+		let typeData: Array<string> = components[2].split(/\s+/)
 
-			let name: string = components[1].replace(/\\/g, '/')
-			let typeData: Array<string> = components[2].split(/\s+/)
-
-			return {
-				name: name,
-				type: 'thumbnail',
-				changed: ContentParser.parseTimeString(typeData[0]),
-				size: parseInt(typeData[1], 10)
-			}
-		})
-	}
-}
+		return {
+			name: name,
+			type: 'thumbnail',
+			changed: parseTimeString(typeData[0]),
+			size: parseInt(typeData[1], 10)
+		}
+	})
 
 /**
  *
  */
-export class CinfParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
+export const cinfParser: IResponseParser =
+	(data: Object): Object => {
 		if (data && Array.isArray(data)) {
 			let components: RegExpMatchArray | null = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/)
 
@@ -431,43 +330,22 @@ export class CinfParser extends AbstractParser implements IResponseParser {
 		}
 		return {}
 	}
-}
 
 /**
  *
  */
-export class InfoQueuesParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
+export const infoQueuesParser: IResponseParser = nopParser
 
 /**
  *
  */
-export class InfoServerParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Object): Object {
-		return data
-	}
-}
+export const infoServerParser: IResponseParser = nopParser
 
 /**
  *
  */
-export class InfoPathsParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: any): Object {
+export const infoPathsParser: IResponseParser =
+	(data: any): Object => {
 		let paths = new CasparCGPaths()
 
 		if (data.hasOwnProperty('initial-path')) {
@@ -504,17 +382,12 @@ export class InfoPathsParser extends AbstractParser implements IResponseParser {
 
 		return paths
 	}
-}
 
 /**
  *
  */
-export class InfoSystemParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: any): Object {
+export const infoSystemParser: IResponseParser =
+	(data: any): Object => {
 		// wrap devices in arrays (if single device of a type)
 		if (data.hasOwnProperty('decklink') && data.decklink.hasOwnProperty('device')) {
 			if (!Array.isArray(data.decklink.device)) {
@@ -528,332 +401,195 @@ export class InfoSystemParser extends AbstractParser implements IResponseParser 
 		}
 		return data
 	}
-}
 
 /**
  *
  */
-export class MixerStatusKeyerParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			keyer: !!data[0]
-		}
-	}
-}
+export const mixerStatusKeyerParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		keyer: !!data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusChromaParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			chroma: {
-				enable: !!data[0],
-				targetHue: data[1],
-				hueWidth: data[2],
-				minSaturation: data[3],
-				minBrightness: data[4],
-				softness: data[5],
-				spillSuppress: data[6],
-				spillSuppressSaturation: data[7],
-				showMask: !!data[8]
-			}
+export const mixerStatusChromaParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		chroma: {
+			enable: !!data[0],
+			targetHue: data[1],
+			hueWidth: data[2],
+			minSaturation: data[3],
+			minBrightness: data[4],
+			softness: data[5],
+			spillSuppress: data[6],
+			spillSuppressSaturation: data[7],
+			showMask: !!data[8]
 		}
-	}
-}
+	})
 
 /**
  *
  */
-export class MixerStatusBlendParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			blend: data
-		}
-	}
-}
+export const mixerStatusBlendParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		blend: data
+	})
 
 /**
  *
  */
-export class MixerStatusInvertParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			keyer: !!data[0]
-		}
-	}
-}
+export const mixerStatusInvertParser: IResponseParser = mixerStatusKeyerParser
 
 /**
  *
  */
-export class MixerStatusOpacityParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			opacity: data[0]
-		}
-	}
-}
+export const mixerStatusOpacityParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		opacity: data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusBrightnessParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			brightness: data[0]
-		}
-	}
-}
+export const mixerStatusBrightnessParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		brightness: data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusSaturationParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			saturation: data[0]
-		}
-	}
-}
+export const mixerStatusSaturationParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		saturation: data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusContrastParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			contrast: data[0]
-		}
-	}
-}
+export const mixerStatusContrastParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		contrast: data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusLevelsParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			levels: {
-				minInput: data[0],
-				maxInput: data[1],
-				gamma: data[2],
-				minOutput: data[3],
-				maxOutput: data[4]
-			}
+export const mixerStatusLevelsParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		levels: {
+			minInput: data[0],
+			maxInput: data[1],
+			gamma: data[2],
+			minOutput: data[3],
+			maxOutput: data[4]
 		}
-	}
-}
+	})
 
 /**
  *
  */
-export class MixerStatusFillParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			fill: {
-				x: data[0],
-				y: data[1],
-				xScale: data[2],
-				yScale: data[3]
-			}
+export const mixerStatusFillParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		fill: {
+			x: data[0],
+			y: data[1],
+			xScale: data[2],
+			yScale: data[3]
 		}
-	}
-}
+	})
 
 /**
  *
  */
-export class MixerStatusClipParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			clip: {
-				x: data[0],
-				y: data[1],
-				width: data[2],
-				height: data[3]
-			}
+export const mixerStatusClipParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		clip: {
+			x: data[0],
+			y: data[1],
+			width: data[2],
+			height: data[3]
 		}
-	}
-}
+	})
 
 /**
  *
  */
-export class MixerStatusAnchorParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			anchor: {
-				x: data[0],
-				y: data[1]
-			}
+export const mixerStatusAnchorParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		anchor: {
+			x: data[0],
+			y: data[1]
 		}
-	}
-}
+	})
 
 /**
  *
  */
-export class MixerStatusCropParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			crop: {
-				left: data[0],
-				top: data[1],
-				right: data[2],
-				bottom: data[3]
-			}
+export const mixerStatusCropParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		crop: {
+			left: data[0],
+			top: data[1],
+			right: data[2],
+			bottom: data[3]
 		}
-	}
-}
+	})
 
 /**
  *
  */
-export class MixerStatusRotationParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			rotation: data[0]
-		}
-	}
-}
+export const mixerStatusRotationParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		rotation: data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusPerspectiveParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			perspective: {
-				topLeftX: data[0],
-				topLeftY: data[1],
-				topRightX: data[2],
-				topRightY: data[3],
-				bottomRightX: data[6],
-				bottomRightY: data[7],
-				bottomLeftX: data[4],
-				bottomLeftY: data[5]
-			}
+export const mixerStatusPerspectiveParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		perspective: {
+			topLeftX: data[0],
+			topLeftY: data[1],
+			topRightX: data[2],
+			topRightY: data[3],
+			bottomRightX: data[6],
+			bottomRightY: data[7],
+			bottomLeftX: data[4],
+			bottomLeftY: data[5]
 		}
-	}
-}
+	})
 
 /**
  *
  */
-export class MixerStatusMipmapParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			mipmap: !!data[0]
-		}
-	}
-}
+export const mixerStatusMipmapParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		mipmap: !!data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusVolumeParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			volume: data[0]
-		}
-	}
-}
+export const mixerStatusVolumeParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		volume: data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusMastervolumeParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			mastervolume: data[0]
-		}
-	}
-}
+export const mixerStatusMastervolumeParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		mastervolume: data[0]
+	})
 
 /**
  *
  */
-export class MixerStatusStraightAlphaOutputParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
-	public parse(data: Array<number>): Object {
-		return {
-			straightAlphaOutput: !!data[0]
-		}
-	}
-}
+export const mixerStatusStraightAlphaOutputParser: IResponseParser =
+	(data: Array<number>): Object => ({
+		straightAlphaOutput: !!data[0]
+	})

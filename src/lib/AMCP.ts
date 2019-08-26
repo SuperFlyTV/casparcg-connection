@@ -1,28 +1,29 @@
-import { Command, Transition, Ease, Direction, LogLevel, LogCategory, Chroma,
-  BlendMode, Lock, Version, Producer, Consumer } from './ServerStateEnum'
+import { Command, Transition, LogCategory, Chroma, Lock,
+ 	revCommand, revTransition, revEase, revDirection, revLogLevel, revChroma,
+	revBlendMode, revLock, revVersion, revProducer, revConsumer } from './ServerStateEnum'
 import { ResponseSignature } from './ResponseSignature'
-import { XMLValidator, MixerStatusValidator, StringValidator as ResponseStringValidator,
-	DataValidator, ListValidator, Base64Validator } from './ResponseValidators'
-import { GLParser, MixerStatusKeyerParser, MixerStatusChromaParser, MixerStatusBlendParser,
- 	MixerStatusInvertParser, MixerStatusOpacityParser, MixerStatusBrightnessParser,
-	MixerStatusSaturationParser, MixerStatusContrastParser, MixerStatusLevelsParser,
-	MixerStatusFillParser, MixerStatusClipParser, MixerStatusAnchorParser,
-	MixerStatusCropParser, MixerStatusRotationParser, MixerStatusPerspectiveParser,
-	MixerStatusMipmapParser, MixerStatusVolumeParser, MixerStatusMastervolumeParser,
-	MixerStatusStraightAlphaOutputParser, DataParser, DataListParser,
-	ThumbnailListParser, ThumbnailParser, CinfParser, ContentParser, InfoTemplateParser,
-	VersionParser, ChannelParser, InfoThreadsParser, InfoPathsParser, ConfigParser,
-	InfoSystemParser, InfoServerParser, InfoQueuesParser, InfoDelayParser,
-	HelpParser, InfoParser } from './ResponseParsers'
+import { xmlValidator, mixerStatusValidator, stringValidator as responseStringValidator,
+	dataValidator, listValidator, base64Validator } from './ResponseValidators'
+import { glParser, mixerStatusKeyerParser, mixerStatusChromaParser, mixerStatusBlendParser,
+ 	mixerStatusInvertParser, mixerStatusOpacityParser, mixerStatusBrightnessParser,
+	mixerStatusSaturationParser, mixerStatusContrastParser, mixerStatusLevelsParser,
+	mixerStatusFillParser, mixerStatusClipParser, mixerStatusAnchorParser,
+	mixerStatusCropParser, mixerStatusRotationParser, mixerStatusPerspectiveParser,
+	mixerStatusMipmapParser, mixerStatusVolumeParser, mixerStatusMastervolumeParser,
+	mixerStatusStraightAlphaOutputParser, dataParser, dataListParser,
+	thumbnailListParser, thumbnailParser, cinfParser, contentParser, infoTemplateParser,
+	versionParser, channelParser, infoThreadsParser, infoPathsParser, configParser,
+	infoSystemParser, infoServerParser, infoQueuesParser, infoDelayParser,
+	helpParser, infoParser } from './ResponseParsers'
 
 import { Required as required, Optional as optional, ParamSignature, IParamSignature } from './ParamSignature'
 
 // Validation NS
-import { KeywordValidator, NumberValidator, StringValidator, EnumValidator, PositiveNumberValidator,
- 	ClipNameValidator, PositiveNumberValidatorBetween, BooleanValidatorWithDefaults,
-	ClipNameEmptyStringValidator, FrameValidator, FilterValidator, ChannelLayoutValidator,
- 	PositiveNumberRoundValidatorBetween, TemplateNameValidator, TemplateDataValidator,
-  DataNameValidator, TimecodeValidator, CommandValidator	} from './ParamValidators'
+import { keywordValidator, numberValidator, stringValidator, enumValidator, positiveNumberValidator,
+ 	clipNameValidator, positiveNumberValidatorBetween, booleanValidatorWithDefaults,
+	clipNameEmptyStringValidator, frameValidator, filterValidator, channelLayoutValidator,
+ 	positiveNumberRoundValidatorBetween, templateNameValidator, templateDataValidator,
+  dataNameValidator, timecodeValidator, commandValidator	} from './ParamValidators'
 // Protocol NS
 import { Depends, Coupled, OneOf, IProtocolLogic } from './ProtocolLogic'
 
@@ -173,361 +174,361 @@ export const protocolLogic: Map<Command, IProtocolLogic[]> = new Map<Command, IP
 
 export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, IParamSignature[]>([
 	[ Command.LOADBG, [ // TODO deal with device, route, HTML
-		new ParamSignature(required, 'clip', null, new ClipNameValidator()),
-		new ParamSignature(optional, 'loop', null, new BooleanValidatorWithDefaults('LOOP')),
-		new ParamSignature(optional, 'transition', null, new EnumValidator(Transition)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Direction)),
-		new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
-		new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
-		new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
-		new ParamSignature(optional, 'seek', 'SEEK', new FrameValidator('SEEK')),
-		new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
-		new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
-		new ParamSignature(optional, 'auto', null, new BooleanValidatorWithDefaults('AUTO')),
-		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
+		new ParamSignature(required, 'clip', null, clipNameValidator),
+		new ParamSignature(optional, 'loop', null, booleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, enumValidator(revTransition)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'transitionDirection', null, enumValidator(revDirection)),
+		new ParamSignature(optional, 'stingMaskFilename', null, clipNameValidator),
+		new ParamSignature(optional, 'stingDelay', null, positiveNumberValidator),
+		new ParamSignature(optional, 'stingOverlayFilename', null, clipNameEmptyStringValidator),
+		new ParamSignature(optional, 'seek', 'SEEK', frameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', frameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', filterValidator()),
+		new ParamSignature(optional, 'auto', null, booleanValidatorWithDefaults('AUTO')),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', channelLayoutValidator())
 	]],
 	[ Command.LOAD, [ // TODO deal with device, route, HTML
-		new ParamSignature(required, 'clip', null, new ClipNameValidator()),
-		new ParamSignature(optional, 'loop', null, new BooleanValidatorWithDefaults('LOOP')),
-		new ParamSignature(optional, 'transition', null, new EnumValidator(Transition)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Direction)),
-		new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
-		new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
-		new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
-		new ParamSignature(optional, 'seek', 'SEEK', new FrameValidator('SEEK')),
-		new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
-		new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
-		new ParamSignature(optional, 'auto', null, new BooleanValidatorWithDefaults('AUTO')),
-		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
+		new ParamSignature(required, 'clip', null, clipNameValidator),
+		new ParamSignature(optional, 'loop', null, booleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, enumValidator(revTransition)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'transitionDirection', null, enumValidator(revDirection)),
+		new ParamSignature(optional, 'stingMaskFilename', null, clipNameValidator),
+		new ParamSignature(optional, 'stingDelay', null, positiveNumberValidator),
+		new ParamSignature(optional, 'stingOverlayFilename', null, clipNameEmptyStringValidator),
+		new ParamSignature(optional, 'seek', 'SEEK', frameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', frameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', filterValidator()),
+		new ParamSignature(optional, 'auto', null, booleanValidatorWithDefaults('AUTO')),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', channelLayoutValidator())
 	]],
 	[ Command.PLAY, [ // TODO deal with device, route, HTML
-		new ParamSignature(optional, 'clip', null, new ClipNameValidator()),
-		new ParamSignature(optional, 'loop', null, new BooleanValidatorWithDefaults('LOOP')),
-		new ParamSignature(optional, 'transition', null, new EnumValidator(Transition)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'transitionDirection', null, new EnumValidator(Direction)),
-		new ParamSignature(optional, 'stingMaskFilename', null, new ClipNameValidator()),
-		new ParamSignature(optional, 'stingDelay', null, new PositiveNumberValidator()),
-		new ParamSignature(optional, 'stingOverlayFilename', null, new ClipNameEmptyStringValidator()),
-		new ParamSignature(optional, 'seek', 'SEEK', new FrameValidator('SEEK')),
-		new ParamSignature(optional, 'length', 'LENGTH', new FrameValidator('LENGTH')),
-		new ParamSignature(optional, 'filter', 'FILTER', new FilterValidator()),
-		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ChannelLayoutValidator())
+		new ParamSignature(optional, 'clip', null, clipNameValidator),
+		new ParamSignature(optional, 'loop', null, booleanValidatorWithDefaults('LOOP')),
+		new ParamSignature(optional, 'transition', null, enumValidator(revTransition)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'transitionDirection', null, enumValidator(revDirection)),
+		new ParamSignature(optional, 'stingMaskFilename', null, clipNameValidator),
+		new ParamSignature(optional, 'stingDelay', null, positiveNumberValidator),
+		new ParamSignature(optional, 'stingOverlayFilename', null, clipNameEmptyStringValidator),
+		new ParamSignature(optional, 'seek', 'SEEK', frameValidator('SEEK')),
+		new ParamSignature(optional, 'length', 'LENGTH', frameValidator('LENGTH')),
+		new ParamSignature(optional, 'filter', 'FILTER', filterValidator()),
+		new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', channelLayoutValidator())
 	]],
 	[ Command.CG_ADD, [
-		new ParamSignature(required, 'flashLayer', 'ADD', new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(required, 'templateName', null, new TemplateNameValidator()),
-		new ParamSignature(required, 'playOnLoad', null, new BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'data', null, new TemplateDataValidator())
+		new ParamSignature(required, 'flashLayer', 'ADD', positiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'templateName', null, templateNameValidator),
+		new ParamSignature(required, 'playOnLoad', null, booleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'data', null, templateDataValidator)
 	]],
 	[ Command.CG_PLAY, [
-		new ParamSignature(required, 'flashLayer', 'PLAY', new PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'flashLayer', 'PLAY', positiveNumberValidatorBetween(0))
 	]],
 	[ Command.CG_ADD, [
-		new ParamSignature(required, 'flashLayer', 'STOP', new PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'flashLayer', 'STOP', positiveNumberValidatorBetween(0))
 	]],
 	[ Command.CG_NEXT, [
-		new ParamSignature(required, 'flashLayer', 'NEXT', new PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'flashLayer', 'NEXT', positiveNumberValidatorBetween(0))
 	]],
 	[ Command.CG_REMOVE, [
-		new ParamSignature(required, 'flashLayer', 'REMOVE', new PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'flashLayer', 'REMOVE', positiveNumberValidatorBetween(0))
 	]],
 	[ Command.CG_CLEAR, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('CLEAR'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('CLEAR'))
 	]],
 	[ Command.CG_UPDATE, [
-		new ParamSignature(required, 'flashLayer', 'UPDATE', new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(required, 'data', null, new TemplateDataValidator())
+		new ParamSignature(required, 'flashLayer', 'UPDATE', positiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'data', null, templateDataValidator)
 	]],
 	[ Command.CG_INVOKE, [
-		new ParamSignature(required, 'flashLayer', 'INVOKE', new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(required, 'method', null, new StringValidator())
+		new ParamSignature(required, 'flashLayer', 'INVOKE', positiveNumberValidatorBetween(0)),
+		new ParamSignature(required, 'method', null, stringValidator())
 	]],
 	[ Command.GL_INFO, [
-		new ParamSignature(required, 'info', null, new KeywordValidator('INFO')),
-		new ParamSignature(optional, 'flashLayer', null, new PositiveNumberValidatorBetween(0))
+		new ParamSignature(required, 'info', null, keywordValidator('INFO')),
+		new ParamSignature(optional, 'flashLayer', null, positiveNumberValidatorBetween(0))
 	]],
 	[ Command.LOG_LEVEL, [
-		new ParamSignature(optional, 'level', null, new EnumValidator(LogLevel))
+		new ParamSignature(optional, 'level', null, enumValidator(revLogLevel))
 	]],
 	[ Command.LOG_CATEGORY, [
-		new ParamSignature(optional, 'calltrace', LogCategory.CALLTRACE, new BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'communication', LogCategory.COMMUNICATION, new BooleanValidatorWithDefaults(1, 0))
+		new ParamSignature(optional, 'calltrace', LogCategory.CALLTRACE, booleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'communication', LogCategory.COMMUNICATION, booleanValidatorWithDefaults(1, 0))
 	]],
 	[ Command.MIXER_KEYER, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('KEYER')),
-		new ParamSignature(optional, 'keyer', null, new BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('KEYER')),
+		new ParamSignature(optional, 'keyer', null, booleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_CHROMA, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('CHROMA')),
-		new ParamSignature(optional, 'keyer', null, new EnumValidator(Chroma)),
-		new ParamSignature(optional, 'threshold', null, new NumberValidator()),
-		new ParamSignature(optional, 'softness', null, new NumberValidator()),
-		new ParamSignature(optional, 'spill', null, new NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('CHROMA')),
+		new ParamSignature(optional, 'keyer', null, enumValidator(revChroma)),
+		new ParamSignature(optional, 'threshold', null, numberValidator()),
+		new ParamSignature(optional, 'softness', null, numberValidator()),
+		new ParamSignature(optional, 'spill', null, numberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_BLEND, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('BLEND')),
-		new ParamSignature(optional, 'blendmode', null, new EnumValidator(BlendMode)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('BLEND')),
+		new ParamSignature(optional, 'blendmode', null, enumValidator(revBlendMode)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_INVERT, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('INVERT')),
-		new ParamSignature(optional, 'invert', null, new BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('INVERT')),
+		new ParamSignature(optional, 'invert', null, booleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_OPACITY, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('OPACITY')),
-		new ParamSignature(optional, 'opacity', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('OPACITY')),
+		new ParamSignature(optional, 'opacity', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_BRIGHTNESS, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('BRIGHTNESS')),
-		new ParamSignature(optional, 'brightness', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('BRIGHTNESS')),
+		new ParamSignature(optional, 'brightness', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_SATURATION, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('SATURATION')),
-		new ParamSignature(optional, 'saturation', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('SATURATION')),
+		new ParamSignature(optional, 'saturation', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_CONTRAST, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('CONTRAST')),
-		new ParamSignature(optional, 'contrast', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('CONTRAST')),
+		new ParamSignature(optional, 'contrast', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_LEVELS, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('LEVELS')),
-		new ParamSignature(optional, 'minInput', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'maxInput', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'gamma', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'minOutput', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'maxOutput', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('LEVELS')),
+		new ParamSignature(optional, 'minInput', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'maxInput', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'gamma', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'minOutput', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'maxOutput', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_FILL, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('FILL')),
-		new ParamSignature(optional, 'x', null, new NumberValidator()),
-		new ParamSignature(optional, 'y', null, new NumberValidator()),
-		new ParamSignature(optional, 'xScale', null, new NumberValidator()),
-		new ParamSignature(optional, 'yScale', null, new NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('FILL')),
+		new ParamSignature(optional, 'x', null, numberValidator()),
+		new ParamSignature(optional, 'y', null, numberValidator()),
+		new ParamSignature(optional, 'xScale', null, numberValidator()),
+		new ParamSignature(optional, 'yScale', null, numberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_CLIP, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('CLIP')),
-		new ParamSignature(optional, 'x', null, new NumberValidator()),
-		new ParamSignature(optional, 'y', null, new NumberValidator()),
-		new ParamSignature(optional, 'width', null, new NumberValidator()),
-		new ParamSignature(optional, 'height', null, new NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('CLIP')),
+		new ParamSignature(optional, 'x', null, numberValidator()),
+		new ParamSignature(optional, 'y', null, numberValidator()),
+		new ParamSignature(optional, 'width', null, numberValidator()),
+		new ParamSignature(optional, 'height', null, numberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_ANCHOR, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('ANCHOR')),
-		new ParamSignature(optional, 'x', null, new NumberValidator()),
-		new ParamSignature(optional, 'y', null, new NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween()),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('ANCHOR')),
+		new ParamSignature(optional, 'x', null, numberValidator()),
+		new ParamSignature(optional, 'y', null, numberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween()),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_CROP, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('CROP')),
-		new ParamSignature(optional, 'left', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'top', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'right', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'bottom', null, new PositiveNumberValidatorBetween(0, 1)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween()),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('CROP')),
+		new ParamSignature(optional, 'left', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'top', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'right', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'bottom', null, positiveNumberValidatorBetween(0, 1)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween()),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_ROTATION, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('ROTATION')),
-		new ParamSignature(optional, 'rotation', null, new NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new NumberValidator()),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('ROTATION')),
+		new ParamSignature(optional, 'rotation', null, numberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, numberValidator()),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_PERSPECTIVE, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('PERSPECTIVE')),
-		new ParamSignature(optional, 'topLeftX', null, new NumberValidator()),
-		new ParamSignature(optional, 'topLeftY', null, new NumberValidator()),
-		new ParamSignature(optional, 'topRightX', null, new NumberValidator()),
-		new ParamSignature(optional, 'topRightY', null, new NumberValidator()),
-		new ParamSignature(optional, 'bottomRightX', null, new NumberValidator()),
-		new ParamSignature(optional, 'bottomRightY', null, new NumberValidator()),
-		new ParamSignature(optional, 'bottomLeftX', null, new NumberValidator()),
-		new ParamSignature(optional, 'bottomLeftY', null, new NumberValidator()),
-		new ParamSignature(optional, 'transitionDuration', null, new NumberValidator()),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('PERSPECTIVE')),
+		new ParamSignature(optional, 'topLeftX', null, numberValidator()),
+		new ParamSignature(optional, 'topLeftY', null, numberValidator()),
+		new ParamSignature(optional, 'topRightX', null, numberValidator()),
+		new ParamSignature(optional, 'topRightY', null, numberValidator()),
+		new ParamSignature(optional, 'bottomRightX', null, numberValidator()),
+		new ParamSignature(optional, 'bottomRightY', null, numberValidator()),
+		new ParamSignature(optional, 'bottomLeftX', null, numberValidator()),
+		new ParamSignature(optional, 'bottomLeftY', null, numberValidator()),
+		new ParamSignature(optional, 'transitionDuration', null, numberValidator()),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_MIPMAP, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('MIPMAP')),
-		new ParamSignature(optional, 'mipmap', null, new BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('MIPMAP')),
+		new ParamSignature(optional, 'mipmap', null, booleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_VOLUME, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('VOLUME')),
-		new ParamSignature(optional, 'volume', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('VOLUME')),
+		new ParamSignature(optional, 'volume', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_MASTERVOLUME, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('MASTERVOLUME')),
-		new ParamSignature(optional, 'mastervolume', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('MASTERVOLUME')),
+		new ParamSignature(optional, 'mastervolume', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('STRAIGHT_ALPHA_OUTPUT')),
-		new ParamSignature(optional, 'straight_alpha_output', null, new BooleanValidatorWithDefaults(1, 0)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('STRAIGHT_ALPHA_OUTPUT')),
+		new ParamSignature(optional, 'straight_alpha_output', null, booleanValidatorWithDefaults(1, 0)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_GRID, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('GRID')),
-		new ParamSignature(optional, 'resolution', null, new PositiveNumberRoundValidatorBetween(1)),
-		new ParamSignature(optional, 'transitionDuration', null, new PositiveNumberValidatorBetween(0)),
-		new ParamSignature(optional, 'transitionEasing', null, new EnumValidator(Ease)),
-		new ParamSignature(optional, 'defer', null, new BooleanValidatorWithDefaults('DEFER'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('GRID')),
+		new ParamSignature(optional, 'resolution', null, positiveNumberRoundValidatorBetween(1)),
+		new ParamSignature(optional, 'transitionDuration', null, positiveNumberValidatorBetween(0)),
+		new ParamSignature(optional, 'transitionEasing', null, enumValidator(revEase)),
+		new ParamSignature(optional, 'defer', null, booleanValidatorWithDefaults('DEFER'))
 	]],
 	[ Command.MIXER_COMMIT, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('COMMIT'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('COMMIT'))
 	]],
 	[ Command.MIXER_CLEAR, [
-		new ParamSignature(required, 'keyword', null, new KeywordValidator('CLEAR'))
+		new ParamSignature(required, 'keyword', null, keywordValidator('CLEAR'))
 	]],
 	[ Command.CALL, [
-		new ParamSignature(optional, 'seek', 'seek', new PositiveNumberValidatorBetween(0))
+		new ParamSignature(optional, 'seek', 'seek', positiveNumberValidatorBetween(0))
 	]],
 	[ Command.LOCK, [
-		new ParamSignature(required, 'action', null, new EnumValidator(Lock)),
-		new ParamSignature(optional, 'phrase', null, new StringValidator())
+		new ParamSignature(required, 'action', null, enumValidator(revLock)),
+		new ParamSignature(optional, 'phrase', null, stringValidator())
 	]],
 	[ Command.DATA_STORE, [
-		new ParamSignature(required, 'fileName', null, new DataNameValidator()),
-		new ParamSignature(required, 'data', null, new TemplateDataValidator())
+		new ParamSignature(required, 'fileName', null, dataNameValidator),
+		new ParamSignature(required, 'data', null, templateDataValidator)
 	]],
 	[ Command.DATA_RETRIEVE, [
-		new ParamSignature(required, 'fileName', null, new DataNameValidator())
+		new ParamSignature(required, 'fileName', null, dataNameValidator)
 	]],
 	[ Command.DATA_REMOVE, [
-		new ParamSignature(required, 'fileName', null, new DataNameValidator())
+		new ParamSignature(required, 'fileName', null, dataNameValidator)
 	]],
 	[ Command.THUMBNAIL_LIST, [
-		new ParamSignature(optional, 'subFolder', null, new ClipNameValidator())
+		new ParamSignature(optional, 'subFolder', null, clipNameValidator)
 	]],
 	[ Command.THUMBNAIL_RETRIEVE, [
-		new ParamSignature(required, 'fileName', null, new ClipNameValidator())
+		new ParamSignature(required, 'fileName', null, clipNameValidator)
 	]],
 	[ Command.THUMBNAIL_GENERATE, [
-		new ParamSignature(required, 'fileName', null, new ClipNameValidator())
+		new ParamSignature(required, 'fileName', null, clipNameValidator)
 	]],
 	[ Command.CINF, [
-		new ParamSignature(required, 'fileName', null, new ClipNameValidator())
+		new ParamSignature(required, 'fileName', null, clipNameValidator)
 	]],
 	[ Command.CLS, [
-		new ParamSignature(optional, 'subFolder', null, new ClipNameValidator())
+		new ParamSignature(optional, 'subFolder', null, clipNameValidator)
 	]],
 	[ Command.TLS, [
-		new ParamSignature(optional, 'subFolder', null, new ClipNameValidator())
+		new ParamSignature(optional, 'subFolder', null, clipNameValidator)
 	]],
 	[ Command.VERSION, [
-		new ParamSignature(optional, 'component', null, new EnumValidator(Version))
+		new ParamSignature(optional, 'component', null, enumValidator(revVersion))
 	]],
 	[ Command.INFO_DELAY, [
-		new ParamSignature(required, 'delay', null, new KeywordValidator('DELAY'))
+		new ParamSignature(required, 'delay', null, keywordValidator('DELAY'))
 	]],
 	[ Command.HELP, [
-		new ParamSignature(optional, 'commands', null, new EnumValidator(Command))
+		new ParamSignature(optional, 'commands', null, enumValidator(revCommand))
 	]],
 	[ Command.HELP_PRODUCER, [
-		new ParamSignature(optional, 'producer', null, new EnumValidator(Producer))
+		new ParamSignature(optional, 'producer', null, enumValidator(revProducer))
 	]],
 	[ Command.HELP_CONSUMER, [
-		new ParamSignature(optional, 'consumer', null, new EnumValidator(Consumer))
+		new ParamSignature(optional, 'consumer', null, enumValidator(revConsumer))
 	]],
 	[ Command.TIME, [
-		new ParamSignature(optional, 'timecode', null, new TimecodeValidator())
+		new ParamSignature(optional, 'timecode', null, timecodeValidator)
 	]],
 	[ Command.SCHEDULE_SET, [
-		new ParamSignature(required, 'token', null, new StringValidator()),
-		new ParamSignature(required, 'timecode', null, new TimecodeValidator()),
-		new ParamSignature(required, 'command', null, new CommandValidator()) // FIXME - change this
+		new ParamSignature(required, 'token', null, stringValidator()),
+		new ParamSignature(required, 'timecode', null, timecodeValidator),
+		new ParamSignature(required, 'command', null, commandValidator) // FIXME - change this
 	]],
 	[ Command.SCHEDULE_REMOVE, [
-		new ParamSignature(required, 'token', null, new StringValidator())
+		new ParamSignature(required, 'token', null, stringValidator())
 	]],
 	[ Command.SCHEDULE_LIST, [
-		new ParamSignature(optional, 'timecode', null, new TimecodeValidator())
+		new ParamSignature(optional, 'timecode', null, timecodeValidator)
 	]]
 ])
 
 export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command, ResponseSignature>([
 	[ Command.CG_INVOKE, new ResponseSignature(201) ],
-	[ Command.GL_INFO, new ResponseSignature(201, new XMLValidator(), GLParser) ],
-	[ Command.MIXER_KEYER, new ResponseSignature(201, MixerStatusValidator, MixerStatusKeyerParser) ],
-	[ Command.MIXER_CHROMA, new ResponseSignature(201, MixerStatusValidator, MixerStatusChromaParser) ],
-	[ Command.MIXER_BLEND, new ResponseSignature(201, ResponseStringValidator, MixerStatusBlendParser) ],
-	[ Command.MIXER_INVERT, new ResponseSignature(201, ResponseStringValidator, MixerStatusInvertParser) ],
-	[ Command.MIXER_OPACITY, new ResponseSignature(201, MixerStatusValidator, MixerStatusOpacityParser) ],
-	[ Command.MIXER_BRIGHTNESS, new ResponseSignature(201, MixerStatusValidator, MixerStatusBrightnessParser) ],
-	[ Command.MIXER_SATURATION, new ResponseSignature(201, MixerStatusValidator, MixerStatusSaturationParser) ],
-	[ Command.MIXER_CONTRAST, new ResponseSignature(201, MixerStatusValidator, MixerStatusContrastParser) ],
-	[ Command.MIXER_LEVELS, new ResponseSignature(201, MixerStatusValidator, MixerStatusLevelsParser) ],
-	[ Command.MIXER_FILL, new ResponseSignature(201, MixerStatusValidator, MixerStatusFillParser) ],
-	[ Command.MIXER_CLIP, new ResponseSignature(201, MixerStatusValidator, MixerStatusClipParser) ],
-	[ Command.MIXER_ANCHOR, new ResponseSignature(201, MixerStatusValidator, MixerStatusAnchorParser) ],
-	[ Command.MIXER_CROP, new ResponseSignature(201, MixerStatusValidator, MixerStatusCropParser) ],
-	[ Command.MIXER_ROTATION, new ResponseSignature(201, MixerStatusValidator, MixerStatusRotationParser) ],
-	[ Command.MIXER_PERSPECTIVE, new ResponseSignature(201, MixerStatusValidator, MixerStatusPerspectiveParser) ],
-	[ Command.MIXER_MIPMAP, new ResponseSignature(201, MixerStatusValidator, MixerStatusMipmapParser) ],
-	[ Command.MIXER_VOLUME, new ResponseSignature(201, MixerStatusValidator, MixerStatusVolumeParser) ],
-	[ Command.MIXER_MASTERVOLUME, new ResponseSignature(201, MixerStatusValidator, MixerStatusMastervolumeParser) ],
-	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, new ResponseSignature(201, MixerStatusValidator, MixerStatusStraightAlphaOutputParser) ],
-	[ Command.DATA_RETRIEVE, new ResponseSignature(201, DataValidator, DataParser) ],
-	[ Command.DATA_LIST, new ResponseSignature(200, ListValidator, DataListParser) ],
-	[ Command.THUMBNAIL_LIST, new ResponseSignature(200, ListValidator, ThumbnailListParser) ],
-	[ Command.THUMBNAIL_RETRIEVE, new ResponseSignature(201, Base64Validator, ThumbnailParser) ],
-	[ Command.CINF, new ResponseSignature(200, ListValidator, CinfParser) ],
-	[ Command.CLS, new ResponseSignature(200, ListValidator, ContentParser) ],
-	[ Command.FLS, new ResponseSignature(200, ListValidator, ContentParser) ],
-	[ Command.TLS, new ResponseSignature(200, ListValidator, ContentParser) ],
-	[ Command.VERSION, new ResponseSignature(201, ResponseStringValidator, VersionParser) ],
-	[ Command.INFO, new ResponseSignature(200, ListValidator, ChannelParser) ],
+	[ Command.GL_INFO, new ResponseSignature(201, xmlValidator, glParser) ],
+	[ Command.MIXER_KEYER, new ResponseSignature(201, mixerStatusValidator, mixerStatusKeyerParser) ],
+	[ Command.MIXER_CHROMA, new ResponseSignature(201, mixerStatusValidator, mixerStatusChromaParser) ],
+	[ Command.MIXER_BLEND, new ResponseSignature(201, responseStringValidator, mixerStatusBlendParser) ],
+	[ Command.MIXER_INVERT, new ResponseSignature(201, responseStringValidator, mixerStatusInvertParser) ],
+	[ Command.MIXER_OPACITY, new ResponseSignature(201, mixerStatusValidator, mixerStatusOpacityParser) ],
+	[ Command.MIXER_BRIGHTNESS, new ResponseSignature(201, mixerStatusValidator, mixerStatusBrightnessParser) ],
+	[ Command.MIXER_SATURATION, new ResponseSignature(201, mixerStatusValidator, mixerStatusSaturationParser) ],
+	[ Command.MIXER_CONTRAST, new ResponseSignature(201, mixerStatusValidator, mixerStatusContrastParser) ],
+	[ Command.MIXER_LEVELS, new ResponseSignature(201, mixerStatusValidator, mixerStatusLevelsParser) ],
+	[ Command.MIXER_FILL, new ResponseSignature(201, mixerStatusValidator, mixerStatusFillParser) ],
+	[ Command.MIXER_CLIP, new ResponseSignature(201, mixerStatusValidator, mixerStatusClipParser) ],
+	[ Command.MIXER_ANCHOR, new ResponseSignature(201, mixerStatusValidator, mixerStatusAnchorParser) ],
+	[ Command.MIXER_CROP, new ResponseSignature(201, mixerStatusValidator, mixerStatusCropParser) ],
+	[ Command.MIXER_ROTATION, new ResponseSignature(201, mixerStatusValidator, mixerStatusRotationParser) ],
+	[ Command.MIXER_PERSPECTIVE, new ResponseSignature(201, mixerStatusValidator, mixerStatusPerspectiveParser) ],
+	[ Command.MIXER_MIPMAP, new ResponseSignature(201, mixerStatusValidator, mixerStatusMipmapParser) ],
+	[ Command.MIXER_VOLUME, new ResponseSignature(201, mixerStatusValidator, mixerStatusVolumeParser) ],
+	[ Command.MIXER_MASTERVOLUME, new ResponseSignature(201, mixerStatusValidator, mixerStatusMastervolumeParser) ],
+	[ Command.MIXER_STRAIGHT_ALPHA_OUTPUT, new ResponseSignature(201, mixerStatusValidator, mixerStatusStraightAlphaOutputParser) ],
+	[ Command.DATA_RETRIEVE, new ResponseSignature(201, dataValidator, dataParser) ],
+	[ Command.DATA_LIST, new ResponseSignature(200, listValidator, dataListParser) ],
+	[ Command.THUMBNAIL_LIST, new ResponseSignature(200, listValidator, thumbnailListParser) ],
+	[ Command.THUMBNAIL_RETRIEVE, new ResponseSignature(201, base64Validator, thumbnailParser) ],
+	[ Command.CINF, new ResponseSignature(200, listValidator, cinfParser) ],
+	[ Command.CLS, new ResponseSignature(200, listValidator, contentParser) ],
+	[ Command.FLS, new ResponseSignature(200, listValidator, contentParser) ],
+	[ Command.TLS, new ResponseSignature(200, listValidator, contentParser) ],
+	[ Command.VERSION, new ResponseSignature(201, responseStringValidator, versionParser) ],
+	[ Command.INFO, new ResponseSignature(200, listValidator, channelParser) ],
 	// [ Command.INFO, new ResponseSignature(201, XMLValidator, ResponseParser.InfoParser) ],
-	[ Command.INFO_TEMPLATE, new ResponseSignature(201, XMLValidator, InfoTemplateParser) ],
-	[ Command.INFO_PATHS, new ResponseSignature(201, XMLValidator, InfoPathsParser) ],
-	[ Command.INFO_CONFIG, new ResponseSignature(201, XMLValidator, ConfigParser) ],
-	[ Command.INFO_SYSTEM, new ResponseSignature(201, XMLValidator, InfoSystemParser) ],
-	[ Command.INFO_SERVER, new ResponseSignature(201, XMLValidator, InfoServerParser) ],
-	[ Command.INFO_QUEUES, new ResponseSignature(201, XMLValidator, InfoQueuesParser) ],
-	[ Command.INFO_THREADS, new ResponseSignature(200, ListValidator, InfoThreadsParser) ],
-	[ Command.INFO_DELAY, new ResponseSignature(201, XMLValidator, InfoDelayParser) ],
-	[ Command.HELP, new ResponseSignature(200, ListValidator, HelpParser) ],
-	[ Command.HELP_PRODUCER, new ResponseSignature(200, ListValidator, HelpParser) ],
-	[ Command.HELP_CONSUMER, new ResponseSignature(200, ListValidator, HelpParser) ],
-	[ Command.TIME, new ResponseSignature(201, ResponseStringValidator, InfoParser) ]
+	[ Command.INFO_TEMPLATE, new ResponseSignature(201, xmlValidator, infoTemplateParser) ],
+	[ Command.INFO_PATHS, new ResponseSignature(201, xmlValidator, infoPathsParser) ],
+	[ Command.INFO_CONFIG, new ResponseSignature(201, xmlValidator, configParser) ],
+	[ Command.INFO_SYSTEM, new ResponseSignature(201, xmlValidator, infoSystemParser) ],
+	[ Command.INFO_SERVER, new ResponseSignature(201, xmlValidator, infoServerParser) ],
+	[ Command.INFO_QUEUES, new ResponseSignature(201, xmlValidator, infoQueuesParser) ],
+	[ Command.INFO_THREADS, new ResponseSignature(200, listValidator, infoThreadsParser) ],
+	[ Command.INFO_DELAY, new ResponseSignature(201, xmlValidator, infoDelayParser) ],
+	[ Command.HELP, new ResponseSignature(200, listValidator, helpParser) ],
+	[ Command.HELP_PRODUCER, new ResponseSignature(200, listValidator, helpParser) ],
+	[ Command.HELP_CONSUMER, new ResponseSignature(200, listValidator, helpParser) ],
+	[ Command.TIME, new ResponseSignature(201, responseStringValidator, infoParser) ]
 ])
 
 // FIXME: swap was not fully implemented

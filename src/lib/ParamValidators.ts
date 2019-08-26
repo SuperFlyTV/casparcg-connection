@@ -1,123 +1,110 @@
 import { ParamData, Payload } from './ParamSignature'
-import { ChannelFormat, AllEnums } from './ServerStateEnum'
+import { ChannelFormat, AllEnums, Reverse } from './ServerStateEnum'
 
-import { IAMCPCommand, isIAMCPCommand } from './AMCPCommand'
+import { isIAMCPCommand } from './AMCPCommand'
 
 export interface IValidator {
-	resolved: boolean
-	resolve(data: Object | IAMCPCommand, key?: string): ParamData
+	(data: Object, key?: string): ParamData
 }
 
 /**
  *
  */
-export abstract class AbstractValidator implements IValidator {
+export const stringValidator: (lazy?: boolean) => IValidator =
+  (lazy: boolean = true): IValidator =>
+		(data: Object | string | undefined): ParamData => {
+			let textstring: string = ''
 
-	public resolved = false
+			function checkTextstring(rawClipNameString: string | null): string {
+				if (rawClipNameString === null) {
+					return ''
+				}
 
-	abstract resolve(value: number, key?: string): ParamData
-}
+				// trim all non-textual content
+				rawClipNameString = rawClipNameString.trim()
 
-/**
- *
- */
-export class StringValidator extends AbstractValidator {
-
-	/**
-	 *
-	 */
-	constructor(private lazy: Boolean = true) {
-		super()
-	}
-
-	/**
-	 *
-	 */
-	resolve(data: Object | string | undefined): ParamData {
-		let textstring: string = ''
-
-		function checkTextstring(rawClipNameString: string | null): string {
-			if (rawClipNameString === null) {
-				return ''
+				// check length
+				if (rawClipNameString.length === 0) {
+					return ''
+				}
+				return rawClipNameString
 			}
 
-			// trim all non-textual content
-			rawClipNameString = rawClipNameString.trim()
+			if (Array.isArray(data)) {
+				let i: number = 0
 
-			// check length
-			if (rawClipNameString.length === 0) {
-				return ''
-			}
-			return rawClipNameString
-		}
+				// switch lazy/greedy mode
+				if (lazy) {
+					// lazy = return first valid hit
+					do {
+						textstring = checkTextstring(data[i])
+						i++
+					} while (textstring.length === 0)
+				} else {
+					// greedy
+					textstring = ''
+					data.forEach(i => {
+						let o = checkTextstring(i)
+						textstring += (o) ? o + ' ' : ''
+					})
+				}
 
-		if (Array.isArray(data)) {
-			let i: number = 0
-
-			// switch lazy/greedy mode
-			if (this.lazy) {
-				// lazy = return first valid hit
-				do {
-					textstring = checkTextstring(data[i])
-					i++
-				} while (textstring.length === 0)
-			} else {
-				// greedy
-				textstring = ''
-				data.forEach(i => {
-					let o = checkTextstring(i)
-					textstring += (o) ? o + ' ' : ''
-				})
+			} else if (typeof data === 'object' || typeof data === 'string') {
+				textstring = data.toString()
 			}
 
-		} else if (typeof data === 'object' || typeof data === 'string') {
-			textstring = data.toString()
-		}
+			if (!checkTextstring(textstring)) {
+				return false
+			}
 
-		if (!checkTextstring(textstring)) {
-			return false
+			return textstring
 		}
-
-		return textstring
-	}
-}
 
 /***/
-export class FilterValidator extends StringValidator { }
+export const filterValidator = stringValidator
 
 /***/
-export class URLValidator extends StringValidator {
-
-	resolve(data: Object): ParamData {
-		let url: string = super.resolve(data).toString()
+export const urlValidator: IValidator =
+	(data: Object): ParamData => {
+		let url: string = stringValidator()(data).toString()
 
 		// add quotation
 		let quotedUrl: string = `"${url}"`
 		return { raw: url, payload: quotedUrl }
 	}
-}
 
 /***/
-export class ChannelLayoutValidator extends StringValidator {
 	// @todo: a combination of string and enum!
+export const channelLayoutValidator = stringValidator
+
+function checkClipNameString(rawClipNameString: string | null): string {
+	if (rawClipNameString === null) {
+		return ''
+	}
+
+	// trim all non-textual content
+	rawClipNameString = rawClipNameString.trim()
+
+	// check length
+	if (rawClipNameString.length === 0) {
+		return ''
+	}
+	return rawClipNameString
 }
 
 /**
  *
  */
-export class ClipNameValidator extends AbstractValidator {
+export const clipNameValidator: IValidator =
+	(data: any): ParamData => {
 
-	/**
-	 *
-	 */
-	resolve(data: any): ParamData {
 		let clipName: string = ''
 
 		if (typeof data === 'object' || typeof data === 'string') {
 			clipName = data !== null ? data.toString() : ''
 		}
 
-		if (!this.checkClipNameString(clipName)) {
+		if (!checkClipNameString(clipName)) {
 			return false
 		}
 
@@ -126,34 +113,18 @@ export class ClipNameValidator extends AbstractValidator {
 		return { raw: clipName, payload: quotedClipName }
 	}
 
-	checkClipNameString(rawClipNameString: string | null): string {
-		if (rawClipNameString === null) {
-			return ''
-		}
-
-		// trim all non-textual content
-		rawClipNameString = rawClipNameString.trim()
-
-		// check length
-		if (rawClipNameString.length === 0) {
-			return ''
-		}
-		return rawClipNameString
-	}
-}
-
 /**
  *
  */
-export class ClipNameEmptyStringValidator extends ClipNameValidator {
-	resolve(data: any): ParamData {
+export const clipNameEmptyStringValidator: IValidator =
+	(data: any): ParamData => {
 		let clipName: string = ''
 
 		if (typeof data === 'object' || typeof data === 'string') {
 			clipName = data !== null ? data.toString() : ''
 		}
 
-		if (!this.checkClipNameString(clipName) && clipName !== '') {
+		if (!checkClipNameString(clipName) && clipName !== '') {
 			return false
 		}
 
@@ -161,66 +132,41 @@ export class ClipNameEmptyStringValidator extends ClipNameValidator {
 		let quotedClipName: string = `"${clipName}"`
 		return { raw: clipName, payload: quotedClipName }
 	}
-}
 
 /**
  *
  */
-export class TemplateNameValidator extends ClipNameValidator {
-}
+export const templateNameValidator = clipNameValidator
 
 /**
  *
  */
-export class DataNameValidator extends ClipNameValidator {
-}
+export const dataNameValidator = clipNameValidator
 
 /**
  *
  */
-export class EnumValidator extends AbstractValidator {
-
-	/**
-	 *
-	 */
-	constructor(private _enumClass: any) {
-		super()
-	}
-
-	/**
-	 *
-	 */
-	resolve(data: any): ParamData {
-		if (typeof data === 'string') {
-			// TODO: data is known to be string here;
-			let stringCast = data // !== null ? data.toString() : ''
-			// format stringy enum value
-			stringCast = stringCast.toUpperCase()
-			stringCast = stringCast.replace(' ', '_')
-			if (this._enumClass.hasOwnProperty(stringCast)) {
-				return (this._enumClass as any)[stringCast].value
+export const enumValidator: (lookup: Reverse<AllEnums>) => IValidator =
+	(lookup: Reverse<AllEnums>) =>
+		(data: any): ParamData => {
+			if (typeof data === 'string') {
+				// TODO: data is known to be string here;
+				let stringCast = data // !== null ? data.toString() : ''
+				// format stringy enum value
+				stringCast = stringCast.toUpperCase()
+				stringCast = stringCast.replace(' ', '_')
+				if (lookup(stringCast)) {
+					return lookup(stringCast) as string
+				}
 			}
+			return false
 		}
-		return false
-	}
-}
 
 /**
  *
  */
-export class ChannelFormatValidator extends AbstractValidator {
-
-	/**
-	 *
-	 */
-	constructor() {
-		super()
-	}
-
-	/**
-	 *
-	 */
-	resolve(data: any): ParamData {
+export const channelFormatValidator: IValidator =
+	(data: any): ParamData => {
 		if (typeof data === 'string') {
 			let stringCast = data.toString()
 			// format stringy enum value
@@ -238,276 +184,181 @@ export class ChannelFormatValidator extends AbstractValidator {
 		}
 		return false
 	}
-}
 
 /**
  *
  */
-export class KeywordValidator extends AbstractValidator {
-	private _keyword: string
-	private _caseSensitive: boolean
-
-	/**
-	 *
-	 */
-	constructor(keyword: string, caseSensitive: boolean = false) {
-		super()
-		this._keyword = keyword
-		this._caseSensitive = caseSensitive
-	}
-
-	/**
-	 *
-	 */
-	resolve(data: Array<any> | Object | string | null): ParamData {
-		let keywordCopy: string = this._keyword
-		if (!this._caseSensitive) {
-			keywordCopy = keywordCopy.toLowerCase()
-		}
-
-		if (Array.isArray(data)) {
-			if (!this._caseSensitive) {
-				data = data.map(value => String(value).toLowerCase())
+export const keywordValidator: (keyword: string, caseSensitive?: boolean) => IValidator =
+	(keyword: string, caseSensitive: boolean = false) => {
+		return (data: Array<any> | Object | string | null): ParamData => {
+			let keywordCopy = keyword
+			if (caseSensitive) {
+				keywordCopy = keywordCopy.toLowerCase()
 			}
-			if ((data as Array<string>).indexOf(keywordCopy) > -1) {
-				return this._keyword
-			}
-		} else if (typeof data === 'object' && data !== null) {
-			let objectCast = data
-			if (!this._caseSensitive) {
-				for (let key in objectCast) {
-					(objectCast as any)[key] = String((objectCast as any)[key]).toLowerCase()
+
+			if (Array.isArray(data)) {
+				if (!caseSensitive) {
+					data = data.map(value => String(value).toLowerCase())
+				}
+				if ((data as Array<string>).indexOf(keywordCopy) > -1) {
+					return keyword
+				}
+			} else if (typeof data === 'object' && data !== null) {
+				let objectCast = data
+				if (!caseSensitive) {
+					for (let key in objectCast) {
+						(objectCast as any)[key] = String((objectCast as any)[key]).toLowerCase()
+					}
+				}
+				if (objectCast.hasOwnProperty(keywordCopy)) {
+					return keyword
+				}
+
+			} else if (typeof data === 'string') {
+				if (!caseSensitive) {
+					data = String(data).toLowerCase()
+				}
+				if (data === keywordCopy) {
+					return keyword
 				}
 			}
-			if (objectCast.hasOwnProperty(keywordCopy)) {
-				return this._keyword
-			}
 
-		} else if (typeof data === 'string') {
-			if (!this._caseSensitive) {
-				data = String(data).toLowerCase()
-			}
-			if (data === keywordCopy) {
-				return this._keyword
-			}
+			return false
 		}
-
-		return false
 	}
-}
 
 /**
  *
  */
-export class FrameValidator extends AbstractValidator {
-	private _keyword: string
-
-	/**
-	 *
-	 */
-	constructor(keyword: string) {
-		super()
-		this._keyword = keyword
-	}
-
-	/**
-	 *
-	 */
-	resolve(data: any): ParamData {
-		if (Array.isArray(data)) {
-			data = data.map(element => String(element).toLowerCase())
-			let index: number = (data as Array<string>).indexOf(this._keyword.toLowerCase())
-			if (index > -1) {
-				data = parseInt(data[index + 1], 10)
+export const frameValidator: (keyword: string) => IValidator =
+	(keyword: string) =>
+		(data: any): ParamData => {
+			if (Array.isArray(data)) {
+				data = data.map(element => String(element).toLowerCase())
+				let index: number = (data as Array<string>).indexOf(keyword.toLowerCase())
+				if (index > -1) {
+					data = parseInt(data[index + 1], 10)
+				}
+			} else if (typeof data === 'object' && data !== null) {
+				let objectCast = data
+				if (objectCast.hasOwnProperty(keyword)) {
+					data = objectCast[keyword] as number
+				}
+			} else if (typeof data === 'string') {
+				data = Number(data)
 			}
-		} else if (typeof data === 'object' && data !== null) {
-			let objectCast = data
-			if (objectCast.hasOwnProperty(this._keyword)) {
-				data = objectCast[this._keyword] as number
+
+			if (typeof data === 'number') {
+				let numberCast: number = data as number
+				if (numberCast >= 0) {
+					return numberCast
+				}
 			}
-		} else if (typeof data === 'string') {
-			data = Number(data)
+
+			return false
 		}
 
-		if (typeof data === 'number') {
-			let numberCast: number = data as number
-			if (numberCast >= 0) {
+/**
+ *
+ */
+export const positiveNumberValidatorBetween: (min?: number, max?: number) => IValidator =
+	(min: number = Number.NEGATIVE_INFINITY, max: number = Number.POSITIVE_INFINITY) =>
+		(data: Object | number | null): ParamData => {
+			if (typeof data === 'number') {
+				let numberCast: number = Math.max(Math.min(data as number, max), min)
+				if (numberCast >= 0) {
+					return numberCast
+				}
+			}
+
+			return false
+		}
+
+/**
+ *
+ */
+export const positiveNumberValidator: IValidator = positiveNumberValidatorBetween()
+
+/**
+ *
+ */
+export const positiveNumberRoundValidatorBetween: (min?: number, max?: number) => IValidator =
+	(min?: number, max?: number) =>
+		(data: number) => Number(positiveNumberValidatorBetween(min, max)(data)).toFixed()
+
+/**
+ *
+ */
+export const numberValidatorBetween: (min?: number, max?: number) => IValidator =
+	(min: number = Number.NEGATIVE_INFINITY, max: number = Number.POSITIVE_INFINITY) =>
+		(data: Object | number | null): ParamData => {
+			if (typeof data === 'number') {
+				let numberCast: number = Math.max(Math.min(data as number, max), min)
 				return numberCast
 			}
+
+			return false
 		}
 
-		return false
-	}
-}
-
 /**
  *
  */
-export class PositiveNumberValidatorBetween extends AbstractValidator {
-
-	/**
-	 *
-	 */
-	constructor(private _min: number = Number.NEGATIVE_INFINITY, private _max: number = Number.POSITIVE_INFINITY) {
-		super()
-	}
-
-	/**
-	 *
-	 */
-	resolve(data: number | null): ParamData {
-		if (typeof data === 'number') {
-			let numberCast: number = Math.max(Math.min(data as number, this._max), this._min)
-			if (numberCast >= 0) {
-				return numberCast
-			}
-		}
-
-		return false
-	}
-}
-
-/**
- *
- */
-export class PositiveNumberValidator extends PositiveNumberValidatorBetween {
-
-	/**
-	 *
-	 */
-	constructor() {
-		super()
-	}
-}
-
-/**
- *
- */
-export class PositiveNumberRoundValidatorBetween extends PositiveNumberValidatorBetween {
-
-	/**
-	 *
-	 */
-	resolve(data: number): ParamData {
-		return Number(super.resolve(data)).toFixed()
-	}
-}
-
-/**
- *
- */
-export class NumberValidatorBetween extends AbstractValidator {
-
-	/**
-	 *
-	 */
-	constructor(private _min: number = Number.NEGATIVE_INFINITY, private _max: number = Number.POSITIVE_INFINITY) {
-		super()
-	}
-
-	/**
-	 *
-	 */
-	resolve(data: number | null): ParamData {
-		if (typeof data === 'number') {
-			let numberCast: number = Math.max(Math.min(data as number, this._max), this._min)
-			return numberCast
-		}
-
-		return false
-	}
-}
-
-/**
- *
- */
-export class NumberValidator extends NumberValidatorBetween {
-
-	/**
-	 *
-	 */
-	constructor() {
-		super()
-	}
-}
+export const numberValidator = numberValidatorBetween
 
 /***/
-export class DecklinkDeviceValidator extends PositiveNumberValidator { }
+export const decklinkDeviceValidator = positiveNumberValidator
 
 /**
  *
  */
-export class BooleanValidatorWithDefaults extends AbstractValidator {
-
-	/**
-	 *
-	 */
-	constructor(private _valueOnSuccess?: (string | number | boolean), private _valueOnFail?: (string | number | boolean)) {
-		super()
-	}
-
-	/**
-	 *
-	 */
-	resolve(data: any, key: string): ParamData {
-		if (Array.isArray(data)) {
-			data = data.map(element => String(element).toLowerCase())
-			let index: number = (data as Array<string>).indexOf(key.toLowerCase())
-			if (index > -1) {
-				data = data[index + 1]
-				if (data === undefined) {
-					data = data[index]
+export const booleanValidatorWithDefaults: (valueOnSuccess?: (string | number | boolean), valueOnFail?: (string | number | boolean)) => IValidator =
+	(valueOnSuccess?: (string | number | boolean), valueOnFail?: (string | number | boolean)) =>
+		(data: any, key: string): ParamData => {
+			if (Array.isArray(data)) {
+				data = data.map(element => String(element).toLowerCase())
+				let index: number = (data as Array<string>).indexOf(key.toLowerCase())
+				if (index > -1) {
+					data = data[index + 1]
+					if (data === undefined) {
+						data = data[index]
+					}
+					// @todo: probably add some string-parsing logic:
+					// if just a single boolean param in protocol, try to parse arrayCast[0] which should hold it
+				} else {
+					// can't resolve array
+					data = false
 				}
-				// @todo: probably add some string-parsing logic:
-				// if just a single boolean param in protocol, try to parse arrayCast[0] which should hold it
+			}
+
+			let isValid: boolean = false
+			if (typeof data === 'string') {
+				if (data === 'true') {
+					isValid = true
+				} else if (data === '1') {
+					isValid = true
+				} else if (data === key) {
+					isValid = true
+				}
 			} else {
-				// can't resolve array
-				data = false
+				isValid = (!!data.valueOf())
+			}
+			if (isValid) {
+				return (valueOnSuccess !== undefined) ? valueOnSuccess : isValid
+			} else {
+				return (valueOnFail !== undefined) ? valueOnFail : isValid
 			}
 		}
-
-		let isValid: boolean = false
-		if (typeof data === 'string') {
-			if (data === 'true') {
-				isValid = true
-			} else if (data === '1') {
-				isValid = true
-			} else if (data === key) {
-				isValid = true
-			}
-		} else {
-			isValid = (!!data.valueOf())
-		}
-		if (isValid) {
-			return (this._valueOnSuccess !== undefined) ? this._valueOnSuccess : isValid
-		} else {
-			return (this._valueOnFail !== undefined) ? this._valueOnFail : isValid
-		}
-	}
-}
 
 /**
  *
  */
-export class BooleanValidator extends BooleanValidatorWithDefaults {
-
-	/**
-	 *
-	 */
-	constructor() {
-		super()
-	}
-}
+export const booleanValidator = booleanValidatorWithDefaults()
 
 /**
  *
  */
-export class TemplateDataValidator extends AbstractValidator {
-
-	/**
-	 *
-	 */
-	resolve(data: Object | string): ParamData {
+export const templateDataValidator =
+	(data: Object | string): ParamData => {
 		let stringCast = data.toString()
 
 		// data is object: serialize
@@ -543,19 +394,19 @@ export class TemplateDataValidator extends AbstractValidator {
 		let quotedString: string = `"${stringCast}"`
 		return { raw: stringCast, payload: quotedString }
 	}
-}
-export class TimecodeValidator extends StringValidator {
-	// nothing
-}
-export class RouteValidator extends AbstractValidator {
-	regex = new RegExp(/(route:\/\/)\d+((-)\d+)?/g)
-	regex2 = new RegExp(/\d+((-)\d+)?/g)
 
-	resolve (data: any): ParamData {
+// TODO?
+export const timecodeValidator = stringValidator()
+
+const regex = /(route:\/\/)\d+((-)\d+)?/g
+const regex2 = /\d+((-)\d+)?/g
+
+export const routeValidato: IValidator =
+	(data: any): ParamData => {
 		if (typeof data === 'string') {
-			if (this.regex.test(data)) {
+			if (regex.test(data)) {
 				return { raw: data, payload: data }
-			} else if (this.regex2.test(data)) {
+			} else if (regex2.test(data)) {
 				return { raw: data, payload: 'route://' + data }
 			} else {
 				return false
@@ -575,10 +426,11 @@ export class RouteValidator extends AbstractValidator {
 			return false
 		}
 	}
-}
-export class RouteModeValidator extends StringValidator {}
-export class CommandValidator extends AbstractValidator {
-	resolve(command: any): ParamData {
+
+export const routeModeValidator = stringValidator()
+
+export const commandValidator: IValidator =
+	(command: any): ParamData => {
 		if (isIAMCPCommand(command)) {
 			command.validateParams()
 			// TODO: The `command.constructor.commandString` is probably a bug, or at best bad pratice to name a paramter "constructur", as it is reserved.
@@ -593,4 +445,3 @@ export class CommandValidator extends AbstractValidator {
 			throw new Error('Argument 0 was not an amcp command.')
 		}
 	}
-}
