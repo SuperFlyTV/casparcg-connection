@@ -689,7 +689,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		let command: IAMCPCommand | undefined
 		try {
 			if (isIAMCPCommand(commandOrString)) {
-				command = commandOrString as IAMCPCommand
+				command = commandOrString
 			} else { // then it must be a string:
 				if (AMCP.hasOwnProperty(commandOrString)) {
 					// @todo: parse out params from commandString, if Params is empty and commandString.split(" ").length > 1
@@ -1671,7 +1671,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#THUMBNAIL-LIST>
 	 */
 	public thumbnailList(subFolder?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ThumbnailListCommand({ subFolder: subFolder}))
+		return this.do(new AMCP.ThumbnailListCommand({ subFolder: subFolder }))
 	}
 
 	/**
@@ -1706,7 +1706,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CLS>
 	 */
 	public cls(subFolder?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.ClsCommand({ subFolder: subFolder}))
+		return this.do(new AMCP.ClsCommand({ subFolder: subFolder }))
 	}
 
 	/**
@@ -1720,7 +1720,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#TLS>
 	 */
 	public tls(subFolder?: string): Promise<IAMCPCommand> {
-		return this.do(new AMCP.TlsCommand({ subFolder: subFolder}))
+		return this.do(new AMCP.TlsCommand({ subFolder: subFolder }))
 	}
 
 	/**
@@ -2077,15 +2077,15 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 *
 	 */
 	private get _nextCommand(): { cmd: IAMCPCommand, priority: Priority } | null {
-		let VO: { cmd: IAMCPCommand, priority: Priority } | null = null
 		if (this._queuedCommandsHighPriority.length > 0) {
-			VO = { cmd: this._queuedCommandsHighPriority[0]!, priority: Priority.HIGH }
+			return { cmd: this._queuedCommandsHighPriority[0], priority: Priority.HIGH }
 		} else if (this._queuedCommands.length > 0) {
-			VO = { cmd: this._queuedCommands[0]!, priority: Priority.NORMAL }
+			return { cmd: this._queuedCommands[0], priority: Priority.NORMAL }
 		} else if (this._queuedCommandsLowPriority.length > 0) {
-			VO = { cmd: this._queuedCommandsLowPriority[0]!, priority: Priority.LOW }
+			return { cmd: this._queuedCommandsLowPriority[0], priority: Priority.LOW }
+		} else {
+			return null
 		}
-		return VO
 	}
 
 	/**
@@ -2260,7 +2260,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				this._log(`Received a response from an unknown command with token ${socketResponse.token}`)
 				return
 			}
-			currentCommand = (this._sentCommands[socketResponse.token])!
+			currentCommand = this._sentCommands[socketResponse.token]
 			delete this._sentCommands[socketResponse.token]
 		} else {
 			if (Object.keys(this._sentCommands).length === 0) {

@@ -340,7 +340,7 @@ export namespace Validation {
 			}
 
 			if (typeof data === 'number') {
-				let numberCast: number = data as number
+				let numberCast: number = data
 				if (numberCast >= 0) {
 					return numberCast
 				}
@@ -358,7 +358,7 @@ export namespace Validation {
 		/**
 		 *
 		 */
-		constructor(private _min: number = Number.NEGATIVE_INFINITY, private _max: number = Number.POSITIVE_INFINITY) {
+		constructor(private _min: number = 0, private _max: number = Number.POSITIVE_INFINITY) {
 			super()
 		}
 
@@ -367,7 +367,7 @@ export namespace Validation {
 		 */
 		resolve(data: number | null): ParamData {
 			if (typeof data === 'number') {
-				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min)
+				let numberCast: number = Math.max(Math.min(data, this._max), this._min)
 				if (numberCast >= 0) {
 					return numberCast
 				}
@@ -420,7 +420,7 @@ export namespace Validation {
 		 */
 		resolve(data: number | null): ParamData {
 			if (typeof data === 'number') {
-				let numberCast: number = Math.max(Math.min(data as number, this._max), this._min)
+				let numberCast: number = Math.max(Math.min(data, this._max), this._min)
 				return numberCast
 			}
 
