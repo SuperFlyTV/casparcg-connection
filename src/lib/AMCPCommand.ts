@@ -1,4 +1,4 @@
-import { CasparCGSocketResponse } from './AMCP'
+import { CasparCGSocketResponse, protocolLogic, paramProtocol, responseProtocol } from './AMCP'
 import { ResponseSignature } from './ResponseSignature'
 import { IResponseValidator } from './ResponseValidators'
 import { IResponseParser } from './ResponseParsers'
@@ -85,6 +85,11 @@ export interface CommandOptions {
 	command?: Command
 }
 
+export interface Result<RES extends CommandOptions> {
+	response: IAMCPResponse
+	details: RES
+}
+
 /**
  *
  */
@@ -95,7 +100,7 @@ export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES
 	onStatusChanged: ICommandStatusCallback
 	token: string
 	params: REQ
-	result: Promise<RES & IAMCPResponse>
+	result: Promise<Result<RES>> // avoid clashes
 	command: C
 	resolve: (command: IAMCPCommand<C, REQ, RES>) => void
 	reject: (command: IAMCPCommand<C, REQ, RES>) => void
@@ -118,7 +123,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	resolve: (command: IAMCPCommand<C, REQ, RES>) => void
 	reject: (command: IAMCPCommand<C, REQ, RES>) => void
 	params: REQ
-	result: Promise<RES & IAMCPResponse>
+	result: Promise<Result<RES>>
 	protected _channel: number
 	protected _layer: number
 	protected _id: string
@@ -147,13 +152,20 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	constructor(params: CommandOptions, public context?: Object) {
 		// parse params to objects
 		let paramsArray: Array<string | Param> = []
-		if (params.command) this.command = params.command as C
+		if (params.command) {
+			this.command = params.command as C
+			this.paramProtocol = paramProtocol.has(this.command) ? paramProtocol.get(this.command) as IParamSignature[] : []
+			if (responseProtocol.has(this.command)) {
+				this.responseProtocol = responseProtocol.get(this.command) as ResponseSignature
+			}
+		}
 		// conform params to array
 		if (Array.isArray(params)) {
 			paramsArray = params
 		} else {
 			paramsArray = [params as string | Param]
 		}
+		console.log('>>>', paramsArray)
 		this._stringParamsArray = []
 		this._objectParams = {}
 		this._token = Math.random().toString(35).substr(2, 7)
@@ -177,6 +189,8 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 		let required: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === true) : []
 		let optional: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === false) : []
 
+		console.log('<<< validating required')
+
 		// check all required
 		for (let signature of required) {
 			if (!this.validateParam(signature)) {
@@ -184,14 +198,20 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 			}
 		}
 
+		console.log('<<< validating optional')
+
 		// add valid optionals
 		optional.forEach((signature) => {
 			this.validateParam(signature)
 		})
 
+		console.log('<<< validating protocol logic')
+
 		if (!this.validateProtocolLogic()) {
 			return false
 		}
+
+		console.log('<<< validated protocol logic')
 
 		let validParams: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter((param) => param.resolved && param.payload !== null) : []
 		let invalidParams: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter((param) => param.resolved && param.payload === null && param.required.valueOf() === true) : []
@@ -272,7 +292,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	 *
 	 */
 	get name(): string {
-		return this.constructor.name
+		return this.command
 	}
 
 	/**
@@ -280,7 +300,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	 */
 	get protocolLogic(): Array<IProtocolLogic> {
 		// TODO: I suspect an error here;
-		return (this.constructor as any).protocolLogic || []
+		return (this.command && protocolLogic.has(this.command)) ? protocolLogic.get(this.command) as IProtocolLogic[] : []
 	}
 
 	/**
@@ -390,6 +410,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 		let result: ParamData
 		let param: Object | undefined
 
+		debugger
 		// objectParams parsing
 		if (this._objectParams.hasOwnProperty(signature.name)) {
 			param = this._objectParams[signature.name]
@@ -408,6 +429,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 		}
 		result = signature.validation(param, (signature.key || signature.name))
 		if (result !== false) {
+			debugger
 			signature.resolved = true
 			if (typeof result === 'object' && result.hasOwnProperty('raw') && result.hasOwnProperty('payload')) {
 				signature.payload = result.payload
@@ -725,6 +747,7 @@ export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOpti
 		} else {
 			throw new Error('Needs at least channel, layer will default to 0 if not specified') // @todo: dispatch
 		}
+		console.log('+++', this)
 	}
 
 	/**

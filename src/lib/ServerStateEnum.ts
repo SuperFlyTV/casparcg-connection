@@ -353,7 +353,7 @@ export interface Reverse<E extends AllEnums> {
 }
 
 function reverse<E extends AllEnums>(e: object): Reverse<E> {
-	let rMap: { [k: string]: E}
+	let rMap: { [k: string]: E} = {}
 	Object.entries(e).forEach(([k, el]) => rMap[el.toString()] = k as E)
 	return (v: string) => { return rMap[v] }
 }

@@ -1536,13 +1536,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		command.status = IAMCPStatus.Queued
 
 		this._executeNextCommand()
-		return new Promise((outerResolve, outerReject) => {
-			commandPromise.then((cmds) => [
-				outerResolve(cmds[cmds.length - 1]) // resolve with last executed command
-			]).catch((err) => {
-				outerReject(err)
-			})
-		})
+		return commandPromiseArray[0]
 	}
 
 	/**
@@ -1620,7 +1614,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 					this.doNow(Command.VERSION, { component: Version.SERVER } as VersionOptions)
 					.then((versionCommand: IAMCPCommand<Command.VERSION, VersionOptions, VersionResponse>) => versionCommand.result)
 					.then((response) => {
-						let versionString: string = response.version.slice(0, 3)
+					let versionString: string = response.details.version.slice(0, 3)
 						let version: CasparCGVersion = CasparCGVersion.V2xx
 						switch (versionString) {
 							case '2.0':
@@ -2740,7 +2734,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 						.then((infoCommand: IAMCPCommand<Command.INFO, InfoOptions, InfoChannelsResponse>) => infoCommand.result )
 						.then(async (info) => {
 							let channelPromises: Promise<IAMCPCommand<Command.INFO, InfoOptions, InfoChannelResponse>>[] = []
-							let channelLength: number = info.channels.length
+							let channelLength: number = info.details.channels.length
 
 							for (let i: number = 1; i <= channelLength; i++) {	// 1-based index for channels
 								channelPromises.push(this.doNow(Command.INFO, { channel: i } as InfoOptions ))
@@ -2750,7 +2744,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 							return Promise.all(channelPromises.map(x => x.then(y => y.result))).then((channels) => {
 								for (let i: number = 0; i < channels.length; i++) {
-									let channelInfo: InfoChannelResponse = channels[i]
+									let channelInfo: InfoChannelResponse = channels[i].details
 									if ((channelInfo.channelDetails as any).channel.stage) {
 										virgin = false
 										break
@@ -2843,6 +2837,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		// resolve with response object
 
 		// handle unkown tokens:
+		debugger
 		let currentCommand: IAMCPCommand<C, REQ, RES>
 		if (socketResponse.token) {
 			if (this._queueMode === QueueMode.SALVO && !this._sentCommands[socketResponse.token]) {
@@ -2920,6 +2915,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				while (this.commandQueueLength > 0) {
 					let nextCommand: { cmd: IAMCPCommand<Command, CommandOptions, CommandOptions>, priority: Priority } | null = this._fetchNextCommand()
 					if (nextCommand) {
+						debugger
 						this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
 						this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
 						this._socket.executeCommand(nextCommand.cmd)

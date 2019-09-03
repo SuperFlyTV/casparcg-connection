@@ -98,6 +98,7 @@ function checkClipNameString(rawClipNameString: string | null): string {
 export const clipNameValidator: IValidator =
 	(data: any): ParamData => {
 
+		debugger
 		let clipName: string = ''
 
 		if (typeof data === 'object' || typeof data === 'string') {
@@ -434,7 +435,7 @@ export const commandValidator: IValidator =
 		if (isIAMCPCommand(command)) {
 			command.validateParams()
 			// TODO: The `command.constructor.commandString` is probably a bug, or at best bad pratice to name a paramter "constructur", as it is reserved.
-			let commandString: string = (command.constructor as any).commandString + (command.address ? ' ' + command.address : '')
+			let commandString: string = command.command + (command.address ? ' ' + command.address : '')
 			for (let i in command.payload) {
 				let payload: Payload = command.payload[i]
 				commandString += (commandString.length > 0 ? ' ' : '')

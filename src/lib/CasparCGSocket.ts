@@ -189,7 +189,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	public executeCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: IAMCPCommand<C, REQ, RES>): IAMCPCommand<C, REQ, RES> {
 		let commandString: string
-		if (this.queueMode === QueueMode.SALVO) commandString = `REQ ${command.token} ` + (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
+		if (this.queueMode === QueueMode.SALVO) commandString = `REQ ${command.token} ` + command.command + (command.address ? ' ' + command.address : '')
 		else commandString = (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
 
 		for (let i in command.payload) {
@@ -286,6 +286,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		} else {
 			let parsedResponse: CasparCGSocketResponse = new CasparCGSocketResponse(i)
 			if (!isNaN(parsedResponse.statusCode)) {
+				debugger
 				this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse))
 				return
 			} else {

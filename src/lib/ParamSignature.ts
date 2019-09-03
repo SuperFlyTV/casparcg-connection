@@ -63,6 +63,7 @@ export class ParamSignature implements IParamSignature {
 	public validation: IValidator
 	public payload: string | number | boolean | null = null
 	public raw: string | number | boolean | null = null
+	public resolved: boolean = false
 
 	/**
 	 *
@@ -75,10 +76,4 @@ export class ParamSignature implements IParamSignature {
 		this.validation = validation
 	}
 
-	/**
-	 *
-	 */
-	public get resolved(): boolean {
-		return this.resolved
-	}
 }
