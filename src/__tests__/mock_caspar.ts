@@ -59,10 +59,107 @@ function processCommand(command: string[] | null, token = ''): string {
 }
 
 interface Responses {
-	[ command: string ]: (req: string[] | null) => string
+	[ command: string ]: ((req: string[] | null) => string) | Responses
 }
 
 let responses218: Responses = {
+	LOADBG: () => '202 LOADBG OK',
+	LOAD: () => '202 LOAD OK',
+	PLAY: () => '202 PLAY OK',
+	PAUSE: () => '202 PAUSE OK',
+	RESUME: () => '202 RESUME OK',
+	STOP: () => '202 STOP OK',
+	CLEAR: () => '202 CLEAR OK',
+	CALL: () => 'CALL', // TODO
+	SWAP: () => 'SWAP', // TODO
+	ADD: () => '202 ADD OK',
+	REMOVE: () => '202 REMOVE OK',
+	PRINT: () => '202 PRINT OK',
+	LOG: {
+		LEVEL: (c) => (c && c.length === 3 &&
+			c[2].toLowerCase() in ['trace','debug','info','warning','error','fatal']) ? '202 LOG OK' : '400 ERROR',
+		CATEGORY: (c) => (c && (c.length === 4)) ? '202 LOG OK' : '400 ERROR' // TODO
+	},
+	SET: () => 'SET',
+	LOCK: () => 'LOCK',
+	DATA: {
+		STORE: () => 'DATA STORE',
+		RETRIEVE: () => 'DATA RETRIEVE',
+		LIST: () => 'DATA LIST',
+		REMOVE: () => 'DATA REMOVE'
+	},
+	CG: {
+		ADD: () => 'CG ADD',
+		PLAY: () => 'CG PLAY',
+		STOP: () => 'CG STOP',
+		NEXT: () => 'CG NEXT',
+		REMOVE: () => 'CG REMOVE',
+		CLEAR: () => 'CG CLEAR',
+		UPDATE: () => 'CG UPDATE',
+		INVOKE: () => 'CG INVOKE',
+		INFO: () => 'CG INFO'
+	},
+	MIXER: {
+		KEYER: () => 'MIXER KEYER',
+		CHROMA: () => 'MIXER CHROMA',
+		BLEND: () => 'MIXER BLEND',
+		INVERT: () => 'MIXER_INVERT',
+		OPACITY: () => 'MIXER OPACITY',
+		BRIGHTNESS: () => 'MIXER BRIGHTNESS',
+		SATURATION: () => 'MIXER SATURATION',
+		CONTRAST: () => 'MIXER CONTRAST',
+		LEVELS: () => 'MIXER LEVELS',
+		FILL: () => 'MIXER FILL',
+		CLIP: () => 'MIXER CLIP',
+		ANCHOR: () => 'MIXER ANCHOR',
+		CROP: () => 'MIXER CROP',
+		ROTATION: () => 'MIXER ROTATION',
+		PERSPECTIVE: () => 'MIXER PERSPECTIVE',
+		MIPMAP: () => 'MIXER MIPMAP',
+		VOLUME: () => 'MIXER VOLUME',
+		MASTERVOLUME: () => 'MIXER MASTERVOLUME',
+		STRAIGHT_ALPHA_OUTPUT: () => 'MIXER STRAIGHT_ALPHA_OUTPUT',
+		GRID: () => 'MIXER GRID',
+		COMMIT: () => 'MIXER COMMIT',
+		CLEAR: () => 'MIXER CLEAR'
+	},
+	CHANNEL_GRID: () => '202 CHANNEL_GRID OK',
+	THUMBNAIL: {
+		LIST: () => 'THUMBNAIL LIST',
+		RETRIEVE: () => 'THUMBNAIL RETRIEVE',
+		GENERATE: () => 'THUMBNAIL GENERATE',
+		GENERATE_ALL: () => 'THUMBNAIL GENERATE_ALL'
+	},
+	CINF: () => 'CINF',
+	CLS: () => 'CLS',
+	FLS: () => 'FLS',
+	TLS: () => 'TLS',
+	VERSION: () => 'VERSION',
+	INFO: () => 'INFO',
+	INFO_TEMPLATE: () => 'INFO TEMPLATE',
+	INFO_CONFIG: () => 'INFO CONFIG',
+	INFO_PATHS: () => 'INFO PATHS',
+	INFO_SYSTEM: () => 'INFO SYSTEM',
+	INFO_SERVER: () => 'INFO SERVER',
+	INFO_QUEUES: () => 'INFO QUEUES',
+	INFO_THREADS: () => 'INFO THREADS',
+	INFO_DELAY: () => 'INFO DELAY',
+	DIAG: () => '202 DIAG OK',
+	GL_INFO: () => 'GL INFO',
+	GL_GC: () => 'GL GC',
+	// BYE: () => 'BYE',
 	KILL: () => '202 KILL OK',
-	PING: () => 'PONG'
+	RESTART: () => '202 RESTART OK',
+	PING: () => 'PONG',
+	HELP: () => 'HELP',
+	HELP_PRODUCER: () => 'HELP PRODUCER',
+	HELP_CONSUMER: () => 'HELP CONSUMER',
+	TIME: () => 'TIME',
+	SCHEDULE_SET: () => 'SCHEDULE_SET',
+	SCHEDULE_LIST: () => 'SCHEDULE_LIST',
+	SCHEDULE_CLEAR: () => 'SCHEDULE_CLEAR',
+	SCHEDULE_REMOVE: () => 'SCHEDULE_REMOVE',
+	SCHEDULE_INFO: () => 'SCHEDULE_INFO',
+	TIMECODE_SOURCE: () => 'TIMECODE_SOURCE'
+	// TODO Command list?
 }
