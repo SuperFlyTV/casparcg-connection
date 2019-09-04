@@ -322,7 +322,11 @@ export namespace Response {
 				let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
 
 				if (components === null) {
-					return null
+					// propably 2.2.0
+					return {
+						name: i,
+						type: 'template'
+					}
 				}
 
 				let name: string = components[1].replace(/\\/g, '/')
