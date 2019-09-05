@@ -74,7 +74,7 @@ function processCommand(command: string[] | null, token = ''): string {
 	if (!command) {
 		return '400 ERROR'
 	}
-	if (command[0] === 'REQ') {
+	if (command[0] === 'REQ' && command[2] !== 'PING') {
 		return processCommand(command.slice(2), command[1])
 	}
 	if (command[0] === 'SWITCH') {
