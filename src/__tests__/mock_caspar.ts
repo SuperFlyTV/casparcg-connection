@@ -46,6 +46,7 @@ server.on('connection', sock => {
 			// console.log(result)
 			if (result === '202 KILL OK') {
 				sock.destroy()
+				stop()
 				break
 			}
 			chunk = chunk.substring(eol + 2)
@@ -74,8 +75,12 @@ function processCommand(command: string[] | null, token = ''): string {
 	if (!command) {
 		return '400 ERROR'
 	}
-	if (command[0] === 'REQ' && command[2] !== 'PING') {
-		return processCommand(command.slice(2), command[1])
+	if (command[0] === 'REQ') {
+		if (command[2] !== 'PING') {
+			return processCommand(command.slice(2), command[1])
+		} else {
+			token = command[1]
+		}
 	}
 	if (command[0] === 'SWITCH') {
 		if (command[1] === '207') {
@@ -114,7 +119,12 @@ function processCommand(command: string[] | null, token = ''): string {
 				response = (responseFn.string as (req: string[]) => string | null)(command)
 			}
 		}
-		if (response) return token ? `REQ ${token} ${response}` : response
+		if (response) return token ? `RES ${token} ${response}` : response
 	}
-	return token ? `REQ ${token} 400 ERROR` : '400 ERROR'
+
+	return token ? `RES ${token} 400 ERROR\r\n${command.join(' ')}` : `400 ERROR\r\n${command.join(' ')}`
+}
+
+if (!module.parent) {
+	start()
 }

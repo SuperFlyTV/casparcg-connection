@@ -96,7 +96,7 @@ export let responses218: Responses = {
 	// BYE: () => 'BYE',
 	KILL: () => '202 KILL OK',
 	RESTART: () => '202 RESTART OK',
-	PING: () => 'PONG',
+	PING: (c) => c && c.length > 1 ? 'PONG ' + c.slice(1).join(' ') : 'PONG',
 	HELP: {
 		none: () => 'HELP', // commands
 		string: () => 'HELP command',
