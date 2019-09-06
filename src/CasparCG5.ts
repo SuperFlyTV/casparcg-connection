@@ -955,6 +955,7 @@ export interface RestartOptions extends CommandOptions {
 
 export interface PingOptions extends CommandOptions {
 	// command: Command.PING
+	token?: string
 }
 
 export interface IOperation {
@@ -1446,7 +1447,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
  	public do<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: C, options: REQ): Promise<IAMCPCommand<C, REQ, RES>> {
 		let fullCommand: IAMCPCommand<C, REQ, RES> | undefined = this.createCommand(command, options)
 		if (fullCommand) {
-			return this.queueCommand(fullCommand)
+			let result = this.queueCommand(fullCommand)
+			console.log('=== result', result)
+			return result
 		}
 		return Promise.reject('Could not create command instance')
 	}
@@ -1535,7 +1538,11 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		this._log(`New command added, "${command.name}". ${this.commandQueueLength} command(s) in command queues.`)
 		command.status = IAMCPStatus.Queued
 
-		this._executeNextCommand()
+		console.log('>>> about to execute')
+		try {
+			this._executeNextCommand()
+		} catch (e) { console.error(e) }
+		console.log('<<< executed', commandPromiseArray)
 		return commandPromiseArray[0]
 	}
 
@@ -2507,13 +2514,21 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	/**
 	 * Undocumented, but implemented by Julusian.
 	 */
-	public ping(options?: PingOptions): Promise<IAMCPCommand<Command.PING, PingOptions, PingOptions>> {
+	public ping(options?: PingOptions | string): Promise<IAMCPCommand<Command.PING, PingOptions, PingOptions>> {
 		if (!options) {
 			options = {
 				command: Command.PING
 			} as PingOptions
+		} else if (typeof options === 'string') {
+			options = {
+				command: Command.PING,
+				token: options
+			}
 		}
-		return this.do(Command.PING, options)
+		console.log('**************************** About to do the do')
+		let pingRes = this.do(Command.PING, options)
+		console.log(pingRes)
+		return pingRes
 	}
 
 	/**
@@ -2837,7 +2852,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		// resolve with response object
 
 		// handle unkown tokens:
-		debugger
 		let currentCommand: IAMCPCommand<C, REQ, RES>
 		if (socketResponse.token) {
 			if (this._queueMode === QueueMode.SALVO && !this._sentCommands[socketResponse.token]) {
@@ -2915,7 +2929,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				while (this.commandQueueLength > 0) {
 					let nextCommand: { cmd: IAMCPCommand<Command, CommandOptions, CommandOptions>, priority: Priority } | null = this._fetchNextCommand()
 					if (nextCommand) {
-						debugger
 						this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
 						this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
 						this._socket.executeCommand(nextCommand.cmd)

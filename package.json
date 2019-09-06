@@ -61,7 +61,7 @@
     "unit": "jest --forceExit",
     "test": "yarn lint && yarn unit",
     "test:integration": "yarn lint && jest --config=jest-integration.config.js",
-		"test:debug": "node --inspect-brk node_modules/jest/bin/jest --runInBand",
+		"test:debug": "node --inspect-brk node_modules/jest/bin/jest --runInBand --forceExit --coverage=false",
 		"test:dummy": "ts-node src/__tests__/mock_caspar.ts",
     "watch": "jest --watch",
     "cov": "jest --coverage; opn coverage/lcov-report/index.html",

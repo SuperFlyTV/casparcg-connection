@@ -1,5 +1,6 @@
 {
   "extends": "./config/tsconfig.base",
+	"sourceMap": true,
   "exclude": [
     "node_modules/**",
     "src/**/*spec.ts",

@@ -36,23 +36,25 @@ server.on('connection', sock => {
 
 		while (eol > -1) {
 			let command = chunk.substring(0, eol)
-			// console.log(command)
+			console.log(command)
 			let result = processCommand(command.match(/"[^"]+"|""|\S+/g) )
 			if (result === '***BYE***') {
 				sock.destroy()
 				break
 			}
 			sock.write(result.toString() + '\r\n')
-			// console.log(result)
+			console.log(result)
 			if (result === '202 KILL OK') {
 				sock.destroy()
-				stop()
+				stop().catch(console.error)
 				break
 			}
 			chunk = chunk.substring(eol + 2)
 			eol = chunk.indexOf('\r\n')
 		}
 	})
+	sock.on('error', console.error)
+	sock.on('close', () => { console.log('client disconnect') })
 })
 
 export async function stop (): Promise<string> {
@@ -126,5 +128,5 @@ function processCommand(command: string[] | null, token = ''): string {
 }
 
 if (!module.parent) {
-	start()
+	start().then(console.log, console.error)
 }

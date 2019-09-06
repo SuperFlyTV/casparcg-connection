@@ -189,8 +189,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	public executeCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: IAMCPCommand<C, REQ, RES>): IAMCPCommand<C, REQ, RES> {
 		let commandString: string
-		if (this.queueMode === QueueMode.SALVO) commandString = `REQ ${command.token} ` + command.command + (command.address ? ' ' + command.address : '')
-		else commandString = (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
+		if (this.queueMode === QueueMode.SALVO && command.command !== Command.PING) commandString = `REQ ${command.token} ` + command.command + (command.address ? ' ' + command.address : '')
+		else commandString = command.command + (command.address ? ' ' + command.address : '')
 
 		for (let i in command.payload) {
 			let payload: Payload = command.payload[i]
@@ -200,7 +200,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 
 		global.clearTimeout(this._commandTimeoutTimer)
 		this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout)
-		this._client.write(`${commandString}\r\n`)
+		this._client.write(`${commandString}\r\n`, 'utf8', () => { console.log('+++ Resolving'); command.resolve(command) })
 		command.status = IAMCPStatus.Sent
 		this.log(commandString)
 		return command
