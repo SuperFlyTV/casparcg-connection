@@ -3,7 +3,7 @@ import { Command, Transition, LogCategory, Chroma, Lock,
 	revBlendMode, revLock, revVersion, revProducer, revConsumer } from './ServerStateEnum'
 import { ResponseSignature } from './ResponseSignature'
 import { xmlValidator, mixerStatusValidator, stringValidator as responseStringValidator,
-	dataValidator, listValidator, base64Validator } from './ResponseValidators'
+	dataValidator, listValidator, base64Validator, pingValidator } from './ResponseValidators'
 import { glParser, mixerStatusKeyerParser, mixerStatusChromaParser, mixerStatusBlendParser,
  	mixerStatusInvertParser, mixerStatusOpacityParser, mixerStatusBrightnessParser,
 	mixerStatusSaturationParser, mixerStatusContrastParser, mixerStatusLevelsParser,
@@ -14,7 +14,7 @@ import { glParser, mixerStatusKeyerParser, mixerStatusChromaParser, mixerStatusB
 	thumbnailListParser, thumbnailParser, cinfParser, contentParser, infoTemplateParser,
 	versionParser, channelParser, infoThreadsParser, infoPathsParser, configParser,
 	infoSystemParser, infoServerParser, infoQueuesParser, infoDelayParser,
-	helpParser, infoParser } from './ResponseParsers'
+	helpParser, infoParser, pingParser } from './ResponseParsers'
 
 import { Required as required, Optional as optional, ParamSignature, IParamSignature } from './ParamSignature'
 
@@ -484,7 +484,7 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 	]]
 ])
 
-export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command, ResponseSignature>([
+export const responseProtocol: Map<Command, ResponseSignature<any>> = new Map<Command, ResponseSignature<any>> ([
 	[ Command.CG_INVOKE, new ResponseSignature(201) ],
 	[ Command.GL_INFO, new ResponseSignature(201, xmlValidator, glParser) ],
 	[ Command.MIXER_KEYER, new ResponseSignature(201, mixerStatusValidator, mixerStatusKeyerParser) ],
@@ -528,7 +528,8 @@ export const responseProtocol: Map<Command, ResponseSignature> = new Map<Command
 	[ Command.HELP, new ResponseSignature(200, listValidator, helpParser) ],
 	[ Command.HELP_PRODUCER, new ResponseSignature(200, listValidator, helpParser) ],
 	[ Command.HELP_CONSUMER, new ResponseSignature(200, listValidator, helpParser) ],
-	[ Command.TIME, new ResponseSignature(201, responseStringValidator, infoParser) ]
+	[ Command.TIME, new ResponseSignature(201, responseStringValidator, infoParser) ],
+	[ Command.PING, new ResponseSignature(-1, pingValidator, pingParser )]
 ])
 
 // FIXME: swap was not fully implemented

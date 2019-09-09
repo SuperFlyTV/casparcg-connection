@@ -1,6 +1,6 @@
 import { start, stop } from './mock_caspar'
 import * as net from 'net'
-import { CasparCG } from '../index'
+import { CasparCG, Command } from '../index'
 
 describe('Test spinning up a mock server', () => {
 
@@ -30,8 +30,24 @@ describe('Test spinning up a mock server', () => {
 	})
 
 	test('Check a ping via Caspar connection', async () => {
+		// expect.assertions(2)
 		let conn = new CasparCG({ debug: true })
-		await expect(conn.ping()).resolves.toBeTruthy()
+		let reqPromise = conn.ping()
+		await expect(reqPromise).resolves.toMatchObject({
+			command: Command.PING
+		})
+		let resPromise = (await reqPromise).result
+		await expect(resPromise).resolves.toMatchObject({
+			details: {
+				command: Command.PING,
+				token: undefined
+			},
+			response: {
+				code: NaN,
+				raw: 'PONG'
+			}
+		})
+		conn.disconnect()
 	})
 
 	afterAll(async () => {

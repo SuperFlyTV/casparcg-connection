@@ -1,5 +1,9 @@
 import * as Path from 'path'
 import { CasparCGVersion } from './AMCPConnectionOptions'
+import { Command } from './ServerStateEnum'
+import { CommandOptions } from './AMCPCommand'
+import { PingOptions } from '../CasparCG5'
+import { CasparCGSocketResponse } from './AMCP'
 
 // config NS
 import { Config as ConfigNS } from './Config'
@@ -106,8 +110,8 @@ export class ChannelRate {
 /**
  *
  */
-export interface IResponseParser {
-	(data: Object, context?: any): Object
+export interface IResponseParser<RES extends CommandOptions> {
+	(response: CasparCGSocketResponse, command?: Command, context?: any): RES
 }
 
 /**
@@ -120,7 +124,7 @@ export abstract class AbstractParser {
 /**
  *
  */
-export const channelParser: IResponseParser =
+export const channelParser: IResponseParser<CommandOptions> =
 	(data: any): Object => {
 		data = [].concat(data)
 		let result: Array<Object> = [];
@@ -142,8 +146,8 @@ export const channelParser: IResponseParser =
 	}
 
 /***/
-export const configParser: IResponseParser =
-	(data: any, context?: any): Object => {
+export const configParser: IResponseParser<CommandOptions> =
+	(data: any, _command?: Command, context?: any): Object => {
 		let serverVersion: CasparCGVersion
 		if (context && context.hasOwnProperty('serverVersion') && context.serverVersion > CasparCGVersion.V21x) {
 			serverVersion = CasparCGVersion.V210
@@ -156,57 +160,57 @@ export const configParser: IResponseParser =
 		return configResult
 	}
 
-const nopParser: IResponseParser = (data: any): Object => data
+const nopParser: IResponseParser<CommandOptions> = (data: any): Object => data
 
 /**
  *
  */
-export const dataParser: IResponseParser = nopParser
+export const dataParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const dataListParser: IResponseParser = nopParser
+export const dataListParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const infoTemplateParser: IResponseParser = nopParser
+export const infoTemplateParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const helpParser: IResponseParser = nopParser
+export const helpParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const glParser: IResponseParser = nopParser
+export const glParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const infoDelayParser: IResponseParser = nopParser
+export const infoDelayParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const infoParser: IResponseParser = nopParser
+export const infoParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const infoThreadsParser: IResponseParser = nopParser
+export const infoThreadsParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const thumbnailParser: IResponseParser = nopParser
+export const thumbnailParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const versionParser: IResponseParser = nopParser
+export const versionParser: IResponseParser<CommandOptions> = nopParser
 
 function parseTimeString(timeDateString: string): number {
 
@@ -224,9 +228,9 @@ function parseTimeString(timeDateString: string): number {
 /**
  *
  */
-export const contentParser: IResponseParser =
-	(data: Array<string>): Object => {
-		return data.map((i: string) => {
+export const contentParser: IResponseParser<CommandOptions> =
+	(data: CasparCGSocketResponse): Object => {
+		return data.items.map((i: string) => {
 			let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
 
 			if (components === null) {
@@ -293,8 +297,8 @@ export const contentParser: IResponseParser =
 /**
  *
  */
-export const thumbnailListParser: IResponseParser =
-	(data: Array<string>): Object => data.map((i: string) => {
+export const thumbnailListParser: IResponseParser<CommandOptions> =
+	(data: CasparCGSocketResponse): Object => data.items.map((i: string) => {
 		let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
 
 		if (components === null) {
@@ -315,8 +319,8 @@ export const thumbnailListParser: IResponseParser =
 /**
  *
  */
-export const cinfParser: IResponseParser =
-	(data: Object): Object => {
+export const cinfParser: IResponseParser<CommandOptions> =
+	(data: CasparCGSocketResponse): Object => {
 		if (data && Array.isArray(data)) {
 			let components: RegExpMatchArray | null = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/)
 
@@ -334,17 +338,17 @@ export const cinfParser: IResponseParser =
 /**
  *
  */
-export const infoQueuesParser: IResponseParser = nopParser
+export const infoQueuesParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const infoServerParser: IResponseParser = nopParser
+export const infoServerParser: IResponseParser<CommandOptions> = nopParser
 
 /**
  *
  */
-export const infoPathsParser: IResponseParser =
+export const infoPathsParser: IResponseParser<CommandOptions> =
 	(data: any): Object => {
 		let paths = new CasparCGPaths()
 
@@ -386,7 +390,7 @@ export const infoPathsParser: IResponseParser =
 /**
  *
  */
-export const infoSystemParser: IResponseParser =
+export const infoSystemParser: IResponseParser<CommandOptions> =
 	(data: any): Object => {
 		// wrap devices in arrays (if single device of a type)
 		if (data.hasOwnProperty('decklink') && data.decklink.hasOwnProperty('device')) {
@@ -405,191 +409,200 @@ export const infoSystemParser: IResponseParser =
 /**
  *
  */
-export const mixerStatusKeyerParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		keyer: !!data[0]
+export const mixerStatusKeyerParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// keyer: !!data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusChromaParser: IResponseParser =
-	(data: Array<number>): Object => ({
+export const mixerStatusChromaParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
 		chroma: {
-			enable: !!data[0],
-			targetHue: data[1],
-			hueWidth: data[2],
-			minSaturation: data[3],
-			minBrightness: data[4],
-			softness: data[5],
-			spillSuppress: data[6],
-			spillSuppressSaturation: data[7],
-			showMask: !!data[8]
+			// enable: !!data[0],
+			// targetHue: data[1],
+			// hueWidth: data[2],
+			// minSaturation: data[3],
+			// minBrightness: data[4],
+			// softness: data[5],
+			// spillSuppress: data[6],
+			// spillSuppressSaturation: data[7],
+			// showMask: !!data[8]
 		}
 	})
 
 /**
  *
  */
-export const mixerStatusBlendParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		blend: data
+export const mixerStatusBlendParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// blend: data
 	})
 
 /**
  *
  */
-export const mixerStatusInvertParser: IResponseParser = mixerStatusKeyerParser
+export const mixerStatusInvertParser: IResponseParser<CommandOptions> = mixerStatusKeyerParser
 
 /**
  *
  */
-export const mixerStatusOpacityParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		opacity: data[0]
+export const mixerStatusOpacityParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// opacity: data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusBrightnessParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		brightness: data[0]
+export const mixerStatusBrightnessParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// brightness: data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusSaturationParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		saturation: data[0]
+export const mixerStatusSaturationParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// saturation: data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusContrastParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		contrast: data[0]
+export const mixerStatusContrastParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// contrast: data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusLevelsParser: IResponseParser =
-	(data: Array<number>): Object => ({
+export const mixerStatusLevelsParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
 		levels: {
-			minInput: data[0],
-			maxInput: data[1],
-			gamma: data[2],
-			minOutput: data[3],
-			maxOutput: data[4]
+			// minInput: data[0],
+			// maxInput: data[1],
+			// gamma: data[2],
+			// minOutput: data[3],
+			// maxOutput: data[4]
 		}
 	})
 
 /**
  *
  */
-export const mixerStatusFillParser: IResponseParser =
-	(data: Array<number>): Object => ({
+export const mixerStatusFillParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
 		fill: {
-			x: data[0],
-			y: data[1],
-			xScale: data[2],
-			yScale: data[3]
+			// x: data[0],
+			// y: data[1],
+			// xScale: data[2],
+			// yScale: data[3]
 		}
 	})
 
 /**
  *
  */
-export const mixerStatusClipParser: IResponseParser =
-	(data: Array<number>): Object => ({
+export const mixerStatusClipParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
 		clip: {
-			x: data[0],
-			y: data[1],
-			width: data[2],
-			height: data[3]
+			// x: data[0],
+			// y: data[1],
+			// width: data[2],
+			// height: data[3]
 		}
 	})
 
 /**
  *
  */
-export const mixerStatusAnchorParser: IResponseParser =
-	(data: Array<number>): Object => ({
+export const mixerStatusAnchorParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
 		anchor: {
-			x: data[0],
-			y: data[1]
+			// x: data[0],
+			// y: data[1]
 		}
 	})
 
 /**
  *
  */
-export const mixerStatusCropParser: IResponseParser =
-	(data: Array<number>): Object => ({
+export const mixerStatusCropParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
 		crop: {
-			left: data[0],
-			top: data[1],
-			right: data[2],
-			bottom: data[3]
+			// left: data[0],
+			// top: data[1],
+			// right: data[2],
+			// bottom: data[3]
 		}
 	})
 
 /**
  *
  */
-export const mixerStatusRotationParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		rotation: data[0]
+export const mixerStatusRotationParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// rotation: data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusPerspectiveParser: IResponseParser =
-	(data: Array<number>): Object => ({
+export const mixerStatusPerspectiveParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
 		perspective: {
-			topLeftX: data[0],
-			topLeftY: data[1],
-			topRightX: data[2],
-			topRightY: data[3],
-			bottomRightX: data[6],
-			bottomRightY: data[7],
-			bottomLeftX: data[4],
-			bottomLeftY: data[5]
+			// topLeftX: data[0],
+			// topLeftY: data[1],
+			// topRightX: data[2],
+			// topRightY: data[3],
+			// bottomRightX: data[6],
+			// bottomRightY: data[7],
+			// bottomLeftX: data[4],
+			// bottomLeftY: data[5]
 		}
 	})
 
 /**
  *
  */
-export const mixerStatusMipmapParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		mipmap: !!data[0]
+export const mixerStatusMipmapParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// mipmap: !!data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusVolumeParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		volume: data[0]
+export const mixerStatusVolumeParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// volume: data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusMastervolumeParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		mastervolume: data[0]
+export const mixerStatusMastervolumeParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// mastervolume: data[0]
 	})
 
 /**
  *
  */
-export const mixerStatusStraightAlphaOutputParser: IResponseParser =
-	(data: Array<number>): Object => ({
-		straightAlphaOutput: !!data[0]
+export const mixerStatusStraightAlphaOutputParser: IResponseParser<CommandOptions> =
+	(_data: CasparCGSocketResponse): Object => ({
+		// straightAlphaOutput: !!data[0]
 	})
+
+export const pingParser: IResponseParser<PingOptions> =
+	(data: CasparCGSocketResponse): PingOptions => {
+		let tokenized = data.responseString.split(/\s+/)
+		return {
+			command: Command.PING,
+			token: tokenized.length > 1 ? tokenized : undefined
+		} as PingOptions
+	}

@@ -1505,15 +1505,15 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public queueCommand<C extends Command, REQ extends CommandOptions, RES extends REQ>(command: IAMCPCommand<C, REQ, RES>, priority: Priority = Priority.NORMAL): Promise<IAMCPCommand<C, REQ, RES>> {
 		let commandPromise: Promise<IAMCPCommand<C, REQ, RES>[]>
 		let commandPromiseArray: Array<Promise<IAMCPCommand<C, REQ, RES>>> = [new Promise<IAMCPCommand<C, REQ, RES>>((resolve, reject) => {
-			command.resolve = resolve
-			command.reject = reject
+			command.resolveSent = resolve
+			command.rejectSent = reject
 		})]
 
 		if (command.name === 'ScheduleSetCommand') {
 			let subCommand = command.getParam('command') as IAMCPCommand<C, REQ, RES>
 			commandPromiseArray.push(new Promise<IAMCPCommand<C, REQ, RES>>((resolve, reject) => {
-				subCommand.resolve = resolve
-				subCommand.reject = reject
+				subCommand.resolveSent = resolve
+				subCommand.rejectSent = reject
 			}))
 		}
 
@@ -1586,26 +1586,27 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	}
 
 	/***/
-	public getCasparCGConfig(refresh: boolean = false): Promise<CasparCGConfig> {
-		if (!this._configPromise || refresh) {
-			this._configPromise = new Promise<CasparCGConfig>((resolve, reject) => {
-				this.infoConfig().then((response) => {
-					resolve(response.response.data as CasparCGConfig)
-				}).catch(reject)
-			})
-		}
+	public async getCasparCGConfig(refresh: boolean = false): Promise<CasparCGConfig> {
+		// FIXME
+		// if (!this._configPromise || refresh) {
+		// 	let configRequest = await this.infoConfig()
+		// 	this._configPromise = (await configRequest.result).details as CasparCGConfig
+		// }
+		console.log(refresh)
 		return this._configPromise
 	}
 
 	/***/
 	public getCasparCGPaths(refresh: boolean = false): Promise<CasparCGPaths> {
-		if (!this._pathsPromise || refresh) {
-			this._pathsPromise = new Promise<CasparCGPaths>((resolve, reject) => {
-				this.infoPaths().then((response) => {
-					resolve(response.response.data as CasparCGPaths)
-				}).catch(reject)
-			})
-		}
+		// FIXME
+		// if (!this._pathsPromise || refresh) {
+		// 	this._pathsPromise = new Promise<CasparCGPaths>((resolve, reject) => {
+		// 		this.infoPaths().then((response) => {
+		// 			resolve(response.response.data as CasparCGPaths)
+		// 		}).catch(reject)
+		// 	})
+		// }
+		console.log(refresh)
 		return this._pathsPromise
 	}
 
@@ -2525,7 +2526,6 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				token: options
 			}
 		}
-		console.log('**************************** About to do the do')
 		let pingRes = this.do(Command.PING, options)
 		console.log(pingRes)
 		return pingRes
@@ -2853,6 +2853,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 
 		// handle unkown tokens:
 		let currentCommand: IAMCPCommand<C, REQ, RES>
+		console.log('***', socketResponse)
 		if (socketResponse.token) {
 			if (this._queueMode === QueueMode.SALVO && !this._sentCommands[socketResponse.token]) {
 				this._log(`Received a response from an unknown command with token ${socketResponse.token}`)
@@ -2862,7 +2863,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			delete this._sentCommands[socketResponse.token]
 		} else {
 			if (Object.keys(this._sentCommands).length === 0) {
-				this._log(`Received a response without knowlingy having sent anyting.`)
+				this._log(`Received a response without knowlingy having sent anything.`)
 				return
 			}
 
@@ -2876,7 +2877,8 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			currentCommand.response = new AMCPResponse()
 		}
 
-		if (currentCommand.validateResponse(socketResponse)) {
+		let validData: RES | boolean = currentCommand.validateResponse(socketResponse)
+		if (validData) {
 			if (currentCommand.name === 'ScheduleSetCommand') {
 				let scheduledCommand: IAMCPCommand<C, REQ, RES> = currentCommand.getParam('command') as IAMCPCommand<C, REQ, RES>
 
@@ -2888,11 +2890,14 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 				delete this._sentCommands[currentCommand.getParam('token') as string]
 			}
 
-			currentCommand.status = IAMCPStatus.Suceeded
-			currentCommand.resolve(currentCommand)
+			currentCommand.status = IAMCPStatus.Succeeded
+			currentCommand.resolveRcvd({
+				response: currentCommand.response,
+				details: typeof validData === 'boolean' ? currentCommand.params as RES : validData
+			})
 		} else {
 			currentCommand.status = IAMCPStatus.Failed
-			currentCommand.reject(currentCommand)
+			currentCommand.rejectRcvd(new Error('Invalid response.'))
 		}
 		this.emit(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand))
 
@@ -2916,7 +2921,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			delete this._sentCommands[token]
 			this._log(`Flushing commands from sent-queue. Deleting: "${i.name}" with token "${i.token}".`)
 			i.status = IAMCPStatus.Failed
-			i.reject(i)
+			i.rejectSent(new Error(`Flushing commands from sent-queue. Deleting: "${i.name}" with token "${i.token}".`))
 		}
 	}
 

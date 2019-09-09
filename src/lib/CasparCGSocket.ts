@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import * as net from 'net'
-import * as _ from 'highland'
+// import * as _ from 'highland'
 import { CasparCGSocketResponse } from './AMCP'
 import { IAMCPCommand, IAMCPStatus, CommandOptions } from './AMCPCommand'
 import { CasparCGSocketStatusEvent, CasparCGSocketResponseEvent, SocketStatusOptions } from './event/Events'
@@ -41,6 +41,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _commandTimeout: number = 5000 // @todo make connectionOption!
 	private _parsedResponse: CasparCGSocketResponse | undefined
 	private _shouldBeConnected: boolean = false
+	private _flushed: boolean = true
+	private _chunk: string = ''
 
 	/**
 	 *
@@ -198,10 +200,26 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			commandString += (payload.key ? payload.key + ' ' : '') + payload.value
 		}
 
-		global.clearTimeout(this._commandTimeoutTimer)
-		this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout)
-		this._client.write(`${commandString}\r\n`, 'utf8', () => { console.log('+++ Resolving'); command.resolve(command) })
-		command.status = IAMCPStatus.Sent
+		let write = () => {
+			global.clearTimeout(this._commandTimeoutTimer)
+			this._commandTimeoutTimer = global.setTimeout(() => this._onTimeout(), this._commandTimeout)
+			this._flushed = this._client.write(`${commandString}\r\n`, 'utf8', (err: Error) => {
+				if (err) {
+					console.error('+++ rejecting', err)
+					command.status = IAMCPStatus.Failed
+					return command.rejectSent(err)
+				}
+				console.log('+++ Resolving. Flushed: ', this._flushed)
+				command.status = IAMCPStatus.Sent
+				command.resolveSent(command)
+			})
+			command.status = IAMCPStatus.Sending
+		}
+		if (this._flushed) {
+			write()
+		} else {
+			this._client.once('drain', write)
+		}
 		this.log(commandString)
 		return command
 	}
@@ -250,7 +268,17 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	private _onConnected() {
 		this._clearConnectionAttemptTimer()
-		_(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => this._parseResponseGroups(i))
+		this._client.on('data', input => {
+			this._chunk += input.toString()
+			let eol = this._chunk.indexOf('\r\n')
+			while (eol > -1) {
+				let command = this._chunk.substring(0, eol)
+				this._parseResponseGroups(command)
+				this._chunk = this._chunk.substring(eol + 2)
+				eol = this._chunk.indexOf('\r\n')
+			}
+		})
+		// _(this._client).splitBy(/(?=\r\n)/).errors((error: Error) => this._onError(error)).each((i: string) => { console.log('^^^', i); return this._parseResponseGroups(i) })
 		this.connected = true
 	}
 
@@ -258,6 +286,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 *
 	 */
 	private _parseResponseGroups(i: string): void {
+		console.log('^^^', i)
 		global.clearTimeout(this._commandTimeoutTimer)
 		i = (i.length > 2 && i.slice(0, 2) === '\r\n') ? i.slice(2) : i
 		if (CasparCGSocketResponse.evaluateStatusCode(i) === 200) {
@@ -285,8 +314,8 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 			return
 		} else {
 			let parsedResponse: CasparCGSocketResponse = new CasparCGSocketResponse(i)
-			if (!isNaN(parsedResponse.statusCode)) {
-				debugger
+			console.log(parsedResponse)
+			if (!isNaN(parsedResponse.statusCode) || (parsedResponse.responseString.indexOf('PONG') >= 0)) {
 				this.emit(CasparCGSocketResponseEvent.RESPONSE, new CasparCGSocketResponseEvent(parsedResponse))
 				return
 			} else {

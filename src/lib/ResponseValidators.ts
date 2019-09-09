@@ -1,33 +1,34 @@
 import { parseString as xmlParser } from 'xml2js'
 import { CasparCGSocketResponse } from './AMCP'
+import { Command } from './ServerStateEnum'
 
 /**
  *
  */
 export interface IResponseValidator {
-	(response: CasparCGSocketResponse): Object
+	(response: CasparCGSocketResponse, command?: Command): boolean
 }
 
 /**
  *
  */
 export const statusValidator: IResponseValidator =
-	(response: CasparCGSocketResponse): Object => response.statusCode < 400
+	(response: CasparCGSocketResponse): boolean => response.statusCode < 400
 
 /**
  *
  */
 export const stringValidator: IResponseValidator =
-	(response: CasparCGSocketResponse): Object => {
-		let result: String = response.items[0].toString()
-		return result.length > 0 ? result : false
+	(response: CasparCGSocketResponse): boolean => {
+		let result: string = response.items[0].toString()
+		return result.length > 0
 	}
 
 /**
  *
  */
 export const xmlValidator: IResponseValidator =
-	(response: CasparCGSocketResponse): Object => {
+	(response: CasparCGSocketResponse): boolean => {
 		let parseNumbers = function (str: any) {
 			if (!isNaN(str)) {
 				str = str % 1 === 0 ? parseInt(str, 10) : parseFloat(str)
@@ -46,6 +47,7 @@ export const xmlValidator: IResponseValidator =
 			return str.toString().toLowerCase()
 		}
 
+		// FIXME
 		let returnFalse: Error | undefined
 		let returnData: Object | undefined
 
@@ -64,41 +66,47 @@ export const xmlValidator: IResponseValidator =
 			(error, result) => {
 				returnFalse = error
 				returnData = result
+				console.log(returnFalse, returnData)
 			})
 
-		return returnFalse ? {} : returnData || {}
+		return true // FIXME this should be an XML validator! THIS NEVER WORKED BEFORE!
 	}
 
 /**
  *
  */
 export const listValidator: IResponseValidator =
-	(response: CasparCGSocketResponse): Object => {
+	(response: CasparCGSocketResponse): boolean => {
 		// filters on stringitems in items-list and validates if any items present
 		let stringItems = response.items
-		return stringItems
+		return stringItems.length > 0
 	}
 
 /**
  *
  */
 export const dataValidator: IResponseValidator = // todo?
-	(response: CasparCGSocketResponse): Object => {
+	(response: CasparCGSocketResponse): boolean => {
 		let result: String = response.items[0].toString()
-		return result.length > 0 ? result : false
+		return result.length > 0
 	}
-
 /**
  *
  */
 export const base64Validator: IResponseValidator =
-	(response: CasparCGSocketResponse): Object => response.items[0]
+	(response: CasparCGSocketResponse): boolean => !!response.items[0]
 
 /**
  *
  */
 export const mixerStatusValidator: IResponseValidator =
-	(response: CasparCGSocketResponse): Object => {
+	(response: CasparCGSocketResponse): boolean => {
 		let result: Array<number> = response.items[0].split(' ').map(value => Number.parseFloat(value))
-		return result.length > 0 && result.every(value => !isNaN(value)) ? result : false
+		return result.length > 0 && result.every(value => !isNaN(value))
+	}
+
+export const pingValidator: IResponseValidator =
+	(response: CasparCGSocketResponse): boolean => {
+		let result: Array<string> = response.responseString.split(/\s+/)
+		return result.length > 0 && result[0] === 'PONG'
 	}

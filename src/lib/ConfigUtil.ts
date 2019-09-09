@@ -3,6 +3,9 @@ import { CasparCGVersion } from './AMCPConnectionOptions'
 import { CasparCGSocketResponse } from './AMCP'
 import { xmlValidator } from './ResponseValidators'
 import { configParser } from './ResponseParsers'
+import { Command } from './ServerStateEnum'
+import { InfoConfigOptions } from '../CasparCG5'
+
 /***/
 export namespace ConfigUtil {
 	/***/
@@ -10,11 +13,11 @@ export namespace ConfigUtil {
 		let validator = xmlValidator
 		let parser = configParser
 		let fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString)	// @todo: does this work?
-		let validData: Object = validator(fauxResponseData)
+		let validData: boolean | InfoConfigOptions = validator(fauxResponseData)
 		if (validData === false) {
 			return {}
 		}
-		validData = parser(validData, { serverVersion: CasparCGVersion.V207 })
+		validData = parser(fauxResponseData, Command.INFO_CONFIG, { serverVersion: CasparCGVersion.V207 })
 		if (validData === false) {
 			return {}
 		}
@@ -32,7 +35,7 @@ export namespace ConfigUtil {
 		if (validData === false) {
 			return {}
 		}
-		validData = parser(validData, { serverVersion: CasparCGVersion.V210 })
+		validData = parser(fauxResponseData, Command.INFO_CONFIG, { serverVersion: CasparCGVersion.V210 })
 		if (validData === false) {
 			return {}
 		}

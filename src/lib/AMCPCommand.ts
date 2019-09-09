@@ -15,7 +15,7 @@ export interface IAMCPResponse {
 	command: Command
 	code: number
 	raw: string
-	data: any
+	// data: CommandOptions
 	toString(): string
 }
 
@@ -26,7 +26,7 @@ export class AMCPResponse implements IAMCPResponse {
 	public command: Command
 	public code: number
 	public raw: string
-	public data: any
+	// public data: CommandOptions
 
 	public toString(): string {
 		return this.raw.replace(/\r?\n|\r/gi, '')
@@ -48,14 +48,15 @@ export class AMCPError extends Error {
  *
  */
 export enum IAMCPStatus {
-	Invalid = -1,
-	New = 0,
-	Initialized = 1,
-	Queued = 2,
-	Sent = 3,
-	Suceeded = 4,
-	Failed = 5,
-	Timeout = 6
+	Invalid = 'INVALID',
+	New = 'NEW',
+	Initialized = 'INITIALIZED',
+	Queued = 'QUEUED',
+	Sending = 'SENDING',
+	Sent = 'SENT',
+	Succeeded = 'SUCCEEDED',
+	Failed = 'FAILED',
+	Timeout = 'TIMEOUT'
 }
 
 /**
@@ -96,17 +97,19 @@ export interface Result<RES extends CommandOptions> {
 export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> extends IAMCPCommandData {
 	paramProtocol: Array<IParamSignature>
 	protocolLogic: Array<IProtocolLogic>
-	responseProtocol: ResponseSignature
+	responseProtocol: ResponseSignature<RES>
 	onStatusChanged: ICommandStatusCallback
 	token: string
 	params: REQ
 	result: Promise<Result<RES>> // avoid clashes
 	command: C
-	resolve: (command: IAMCPCommand<C, REQ, RES>) => void
-	reject: (command: IAMCPCommand<C, REQ, RES>) => void
+	resolveSent: (command: IAMCPCommand<C, REQ, RES>) => void
+	rejectSent: (error: Error) => void
+	resolveRcvd: (details: Result<RES>) => void
+	rejectRcvd: (error: Error) => void
 	getParam: (name: string) => string | number | boolean | Object | undefined
 	validateParams(): boolean
-	validateResponse(response: CasparCGSocketResponse): boolean
+	validateResponse(response: CasparCGSocketResponse): boolean | RES
 	serialize(): IAMCPCommandVO
 	populate(cmdVO: IAMCPCommandVO, id: string): void
 }
@@ -117,13 +120,18 @@ export interface IAMCPCommand<C extends Command, REQ extends CommandOptions, RES
 export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES extends REQ> implements IAMCPCommand<C, REQ, RES> {
 	response: IAMCPResponse = new AMCPResponse()
 	paramProtocol: Array<IParamSignature>
-	responseProtocol: ResponseSignature = new ResponseSignature()
+	responseProtocol: ResponseSignature<RES> = new ResponseSignature()
 	onStatusChanged: ICommandStatusCallback
 	command: C
-	resolve: (command: IAMCPCommand<C, REQ, RES>) => void
-	reject: (command: IAMCPCommand<C, REQ, RES>) => void
+	resolveSent: (command: IAMCPCommand<C, REQ, RES>) => void
+	rejectSent: (error: Error) => void
+	resolveRcvd: (details: Result<RES>) => void
+	rejectRcvd: (error: Error) => void
 	params: REQ
-	result: Promise<Result<RES>>
+	result: Promise<Result<RES>> = new Promise<Result<RES>>((resolve, reject) => {
+		this.resolveRcvd = resolve
+		this.rejectRcvd = reject
+	})
 	protected _channel: number
 	protected _layer: number
 	protected _id: string
@@ -156,7 +164,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 			this.command = params.command as C
 			this.paramProtocol = paramProtocol.has(this.command) ? paramProtocol.get(this.command) as IParamSignature[] : []
 			if (responseProtocol.has(this.command)) {
-				this.responseProtocol = responseProtocol.get(this.command) as ResponseSignature
+				this.responseProtocol = responseProtocol.get(this.command) as ResponseSignature<RES>
 			}
 		}
 		// conform params to array
@@ -241,21 +249,22 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	/**
 	 *
 	 */
-	public validateResponse(response: CasparCGSocketResponse): boolean {
+	public validateResponse(response: CasparCGSocketResponse): RES | boolean {
 		// assign raw response
 		this.response.raw = response.responseString
 		this.response.code = response.statusCode
 
 		// code is correct
-		if (response.statusCode !== this.responseProtocol.code) {
+		if (this.responseProtocol.code !== -1 && response.statusCode !== this.responseProtocol.code) {
 			// @todo: fallbacks? multiple valid codes?
 			return false
 		}
 		// data is valid
-		let validData: Object = {}
+		let validData: boolean | RES = false
 		if (this.responseProtocol.validator) { // @todo: typechecking ("class that implements....")
 			const validator: IResponseValidator = this.responseProtocol.validator
-			validData = validator(response)
+			debugger
+			validData = validator(response, this.command)
 			if (validData === false) {
 				return false
 			}
@@ -263,15 +272,15 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 
 		// data gets parsed
 		if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
-			const parser: IResponseParser = this.responseProtocol.parser
-			validData = parser(validData, this.context)
-			if (validData === false) {
+			const parser: IResponseParser<RES> = this.responseProtocol.parser
+			validData = parser(response, this.command, this.context)
+			if (!validData) {
 				return false
 			}
+
 		}
 
-		this.response.data = validData
-		return true
+		return validData
 	}
 
 	/**
@@ -392,7 +401,7 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 			case IAMCPStatus.Sent:
 				message = 'Sent command'
 				break
-			case IAMCPStatus.Suceeded:
+			case IAMCPStatus.Succeeded:
 				message = 'Succeeded command'
 				break
 			case IAMCPStatus.Failed:
