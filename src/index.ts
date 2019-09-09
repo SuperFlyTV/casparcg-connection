@@ -1,4 +1,5 @@
 export * from './CasparCG5'
+export * from './CasparCGTypes'
 export * from './lib/event/CasparCGSocketStatusEvent'
 export * from './lib/event/Events'
 export * from './lib/global/Callback'

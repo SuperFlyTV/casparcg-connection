@@ -2,7 +2,7 @@ import * as Path from 'path'
 import { CasparCGVersion } from './AMCPConnectionOptions'
 import { Command } from './ServerStateEnum'
 import { CommandOptions } from './AMCPCommand'
-import { PingOptions } from '../CasparCG5'
+import { PingOptions } from '../CasparCGTypes'
 import { CasparCGSocketResponse } from './AMCP'
 
 // config NS

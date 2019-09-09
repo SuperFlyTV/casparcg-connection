@@ -4,7 +4,7 @@ import { CasparCGSocketResponse } from './AMCP'
 import { xmlValidator } from './ResponseValidators'
 import { configParser } from './ResponseParsers'
 import { Command } from './ServerStateEnum'
-import { InfoConfigOptions } from '../CasparCG5'
+import { InfoConfigOptions } from '../CasparCGTypes'
 
 /***/
 export namespace ConfigUtil {
