@@ -157,9 +157,8 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 	/**
 	 *
 	 */
-	constructor(params: CommandOptions, public context?: Object) {
+	constructor(params: REQ, public context?: Object) {
 		// parse params to objects
-		let paramsArray: Array<string | Param> = []
 		if (params.command) {
 			this.command = params.command as C
 			this.paramProtocol = paramProtocol.has(this.command) ? paramProtocol.get(this.command) as IParamSignature[] : []
@@ -167,27 +166,12 @@ export class AMCPCommand<C extends Command, REQ extends CommandOptions, RES exte
 				this.responseProtocol = responseProtocol.get(this.command) as ResponseSignature<RES>
 			}
 		}
-		// conform params to array
-		if (Array.isArray(params)) {
-			paramsArray = params
-		} else {
-			paramsArray = [params as string | Param]
-		}
-		console.log('>>>', paramsArray)
+		this.params = params
 		this._stringParamsArray = []
 		this._objectParams = {}
 		this._token = Math.random().toString(35).substr(2, 7)
 
-		for (let element of paramsArray) {
-			if (typeof element === 'string') {
-				element = element.toString().trim()
-				this._stringParamsArray = this._stringParamsArray.concat([...element.toString().split(/\s+/)]) // @todo: string delimiter pairing (,;) -> objectArray
-			} else {
-				for (let prop in element) {
-					this._objectParams[prop] = element[prop]
-				}
-			}
-		}
+		this._objectParams = Object.assign({}, params)
 	}
 
 	/**
@@ -535,7 +519,7 @@ export class OrChannelOrLayerCommand<C extends Command, REQ extends CommandOptio
 	/**
 	 *
 	 */
-	constructor(params: CommandOptions, context?: Object) {
+	constructor(params: REQ, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer()
@@ -587,7 +571,7 @@ export class ChannelCommand<C extends Command, REQ extends CommandOptions, RES e
 	/**
 	 *
 	 */
-	constructor(params: CommandOptions, context?: Object) {
+	constructor(params: REQ, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		if (channel) {
@@ -633,7 +617,7 @@ export class LayerCommand<C extends Command, REQ extends CommandOptions, RES ext
 	/**
 	 *
 	 */
-	constructor(params: CommandOptions, context?: Object) {
+	constructor(params: REQ, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer()
@@ -689,7 +673,7 @@ export class ChannelOrLayerCommand<C extends Command, REQ extends CommandOptions
 	/**
 	 *
 	 */
-	constructor(params: CommandOptions, context?: Object) {
+	constructor(params: REQ, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer()
@@ -746,7 +730,7 @@ export class LayerWithFallbackCommand<C extends Command, REQ extends CommandOpti
 	/**
 	 *
 	 */
-	constructor(params: CommandOptions, context?: Object) {
+	constructor(params: REQ, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer(0)
@@ -800,7 +784,7 @@ export class LayerWithCgFallbackCommand<C extends Command, REQ extends CommandOp
 	/**
 	 *
 	 */
-	constructor(params: CommandOptions, context?: Object) {
+	constructor(params: REQ, context?: Object) {
 		super(params, context)
 		let channel: number = this.validateChannel()
 		let layer: number = this.validateLayer(9999)

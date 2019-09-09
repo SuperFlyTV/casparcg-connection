@@ -127,6 +127,18 @@ function processCommand(command: string[] | null, token = ''): string {
 	return token ? `RES ${token} 400 ERROR\r\n${command.join(' ')}` : `400 ERROR\r\n${command.join(' ')}`
 }
 
+export function version (version: string): void {
+	if (version === '207') {
+		ccgResponses = responses207
+	}
+	if (version === '218') {
+		ccgResponses = responses218
+	}
+	if (version === '220') {
+		ccgResponses = responses220
+	}
+}
+
 if (!module.parent) {
 	start().then(console.log, console.error)
 }

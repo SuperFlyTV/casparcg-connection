@@ -603,6 +603,6 @@ export const pingParser: IResponseParser<PingOptions> =
 		let tokenized = data.responseString.split(/\s+/)
 		return {
 			command: Command.PING,
-			token: tokenized.length > 1 ? tokenized : undefined
+			token: tokenized.length > 1 ? tokenized[1] : undefined
 		} as PingOptions
 	}

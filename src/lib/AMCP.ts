@@ -481,6 +481,9 @@ export const paramProtocol: Map<Command, IParamSignature[]> = new Map<Command, I
 	]],
 	[ Command.SCHEDULE_LIST, [
 		new ParamSignature(optional, 'timecode', null, timecodeValidator)
+	]],
+	[ Command.PING, [
+		new ParamSignature(optional, 'token', null, stringValidator())
 	]]
 ])
 

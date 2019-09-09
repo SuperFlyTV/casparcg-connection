@@ -58,7 +58,7 @@
     "build": "trash dist && yarn build:main",
     "build:main": "tsc -p tsconfig.json",
     "lint": "tslint --project tsconfig.jest.json --config tslint.json",
-    "unit": "jest --forceExit",
+    "unit": "jest --forceExit --runInBand",
     "test": "yarn lint && yarn unit",
     "test:integration": "yarn lint && jest --config=jest-integration.config.js",
     "test:debug": "node --inspect-brk node_modules/jest/bin/jest --runInBand --forceExit --coverage=false",
