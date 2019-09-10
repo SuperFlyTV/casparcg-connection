@@ -3,7 +3,7 @@ import { CasparCGVersion } from './AMCPConnectionOptions'
 import { Command } from './ServerStateEnum'
 import { CommandOptions } from './AMCPCommand'
 import { PingOptions } from '../CasparCGTypes'
-import { CasparCGSocketResponse } from './AMCP'
+import { CasparCGSocketResponse } from './CasparCGSocketResponse'
 
 // config NS
 import { Config as ConfigNS } from './Config'

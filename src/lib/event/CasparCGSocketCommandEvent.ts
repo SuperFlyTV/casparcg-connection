@@ -1,6 +1,6 @@
 import { Event as BaseEventNS } from './BaseEvent'
 import { IAMCPCommand, CommandOptions } from '../AMCPCommand'
-import { CasparCGSocketResponse } from '../AMCP'
+import { CasparCGSocketResponse } from '../CasparCGSocketResponse'
 import { Command } from '../ServerStateEnum'
 
 export namespace Event {

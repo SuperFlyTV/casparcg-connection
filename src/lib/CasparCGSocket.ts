@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import * as net from 'net'
 // import * as _ from 'highland'
-import { CasparCGSocketResponse } from './AMCP'
+import { CasparCGSocketResponse } from './CasparCGSocketResponse'
 import { IAMCPCommand, IAMCPStatus, CommandOptions } from './AMCPCommand'
 import { CasparCGSocketStatusEvent, CasparCGSocketResponseEvent, SocketStatusOptions } from './event/Events'
 import { Payload } from './ParamSignature'

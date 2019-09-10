@@ -1,5 +1,5 @@
 import { parseString as xmlParser } from 'xml2js'
-import { CasparCGSocketResponse } from './AMCP'
+import { CasparCGSocketResponse } from './CasparCGSocketResponse'
 import { Command } from './ServerStateEnum'
 
 /**

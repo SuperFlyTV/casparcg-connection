@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import { CasparCGSocket } from './lib/CasparCGSocket'
-import { CasparCGSocketResponse } from './lib/AMCP'
+import { CasparCGSocketResponse } from './lib/CasparCGSocketResponse'
 
 import { Command, Version, LogLevel, LogCategory, Producer, Consumer } from './lib/ServerStateEnum'
 import { IConnectionOptions, ConnectionOptions, QueueMode, CasparCGVersion } from './lib/AMCPConnectionOptions'

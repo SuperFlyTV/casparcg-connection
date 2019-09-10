@@ -1,6 +1,6 @@
 import { Config } from './Config'
 import { CasparCGVersion } from './AMCPConnectionOptions'
-import { CasparCGSocketResponse } from './AMCP'
+import { CasparCGSocketResponse } from './CasparCGSocketResponse'
 import { xmlValidator } from './ResponseValidators'
 import { configParser } from './ResponseParsers'
 import { Command } from './ServerStateEnum'

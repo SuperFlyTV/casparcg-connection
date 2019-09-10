@@ -1,4 +1,5 @@
-import { CasparCGSocketResponse, protocolLogic, paramProtocol, responseProtocol } from './AMCP'
+import { protocolLogic, paramProtocol, responseProtocol } from './AMCP'
+import { CasparCGSocketResponse } from './CasparCGSocketResponse'
 import { ResponseSignature } from './ResponseSignature'
 import { IResponseValidator } from './ResponseValidators'
 import { IResponseParser } from './ResponseParsers'
