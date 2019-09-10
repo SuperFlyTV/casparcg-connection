@@ -685,6 +685,9 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 * <https://github.com/CasparCG/help/wiki/AMCP-Protocol#CG-ADD>
 	 */
 	public cgAdd(options: CGAddOptions): Promise<IAMCPCommand<Command.CG_ADD, CGAddOptions, CGAddOptions>> {
+		if (typeof options['playOnLoad'] === 'undefined') {
+			options.playOnLoad = false
+		}
 		return this.do(Command.CG_ADD, options)
 	}
 

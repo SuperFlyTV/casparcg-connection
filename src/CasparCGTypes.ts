@@ -176,7 +176,7 @@ interface CGData extends CGFlashLayer {
 
 export interface CGAddOptions extends CGData {
 	templateName: string
-	playOnLoad: boolean | number | string
+	playOnLoad?: boolean | number | string // defaults to false
 }
 
 export interface CGPlayOptions extends CGFlashLayer {

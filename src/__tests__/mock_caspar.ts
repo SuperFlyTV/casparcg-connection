@@ -25,7 +25,7 @@ export async function start (): Promise<string> {
 }
 
 server.on('listening', () => {
-	console.log('Mock CasparCG server AMCP protocol running on port 5250')
+	// console.log('Mock CasparCG server AMCP protocol running on port 5250')
 })
 
 server.on('connection', sock => {
