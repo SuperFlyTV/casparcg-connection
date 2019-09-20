@@ -35,7 +35,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	private _client: net.Socket
 	private _host: string
 	private _port: number
-	private _localAddress: string
+	private _localAddress: string | undefined
 	private _connected: boolean
 	private _autoReconnect: boolean
 	private _reconnectDelay: number
@@ -55,7 +55,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 		super()
 		this._host = host
 		this._port = port
-		this._localAddress = localAddress;
+		this._localAddress = localAddress
 		this._reconnectDelay = autoReconnectInterval
 		this._autoReconnect = autoReconnect
 		this._reconnectAttempts = autoReconnectAttempts
