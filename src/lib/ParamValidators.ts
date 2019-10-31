@@ -604,4 +604,28 @@ export namespace Validation {
 			}
 		}
 	}
+
+	export class StingTransitionPropertiesValidator extends AbstractValidator {
+		regex = new RegExp(/\(((\w+=(((?:").*(?:"))+|(\d+)))( )?)*\)/g)
+
+		resolve (data: any) {
+			if (!data) return false
+
+			if (typeof data === 'string' && this.regex.test(data)) {
+				return { raw: data, payload: data }
+			} else if (typeof data === 'object') { // data is an object
+				let str = '('
+
+				for (const key of Object.keys(data)) {
+					str += key + '="' + data[key] + '" '
+				}
+
+				str = str.substr(0, str.length - 1) + ')'
+
+				return { raw: JSON.stringify(data), payload: str }
+			} else {
+				return false
+			}
+		}
+	}
 }
