@@ -607,6 +607,7 @@ export namespace Validation {
 
 	export class StingTransitionPropertiesValidator extends AbstractValidator {
 		regex = new RegExp(/\(((\w+=(((?:").*(?:"))+|(\d+)))( )?)*\)/g)
+		props: { maskFile?: string, delay?: number, overlayFile?: string, audioFadeStart?: number, audioFadeDuration?: number } = {}
 
 		resolve (data: any) {
 			if (!data) return false
@@ -614,11 +615,15 @@ export namespace Validation {
 			if (typeof data === 'string' && this.regex.test(data)) {
 				return { raw: data, payload: data }
 			} else if (typeof data === 'object') { // data is an object
+				this.props = data
+
 				let str = '('
 
-				for (const key of Object.keys(data)) {
-					str += key + '="' + data[key] + '" '
-				}
+				if (this.props.maskFile) str += `MASK="${this.props.maskFile}" `
+				if (this.props.overlayFile) str += `OVERLAY="${this.props.overlayFile}" `
+				if (this.props.delay) str += `TRIGGER_POINT="${this.props.delay}" `
+				if (this.props.audioFadeStart) str += `AUDIO_FADE_START="${this.props.audioFadeStart}" `
+				if (this.props.audioFadeDuration) str += `AUDIO_FADE_DURATION="${this.props.audioFadeDuration}" `
 
 				str = str.substr(0, str.length - 1) + ')'
 
