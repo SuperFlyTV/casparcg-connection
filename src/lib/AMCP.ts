@@ -54,6 +54,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -65,6 +66,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -85,6 +87,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -96,6 +99,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -121,6 +125,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -132,6 +137,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -178,6 +184,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -188,6 +195,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -208,6 +216,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -218,6 +227,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -242,6 +252,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -252,6 +263,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -271,6 +283,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -282,6 +295,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -301,6 +315,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -312,6 +327,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -335,6 +351,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -346,6 +363,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -364,6 +382,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -374,6 +393,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
@@ -390,6 +410,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -400,6 +421,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
@@ -416,6 +438,7 @@ export namespace AMCP {
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
 			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
@@ -426,6 +449,7 @@ export namespace AMCP {
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
 			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator())
