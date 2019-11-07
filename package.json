@@ -145,7 +145,7 @@
     "xmlbuilder": "^9.0.7"
   },
   "resolutions": {
-    "typedoc/**/marked": "^0.6.2"
+    "typedoc/**/marked": "^0.7.0"
   },
   "standard-version": {
     "message": "chore(release): %s [skip ci]",
