@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.8.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.7.0...4.8.0) (2019-11-07)
+
+
+### Bug Fixes
+
+* remove unnecessary overloads ([5a2ca12](https://github.com/SuperFlyTV/casparcg-connection/commit/5a2ca1213585d6fbb669a4341b28cad28e628ad8))
+* sting transition property names ([6b45644](https://github.com/SuperFlyTV/casparcg-connection/commit/6b4564470cd66d41a35a51e211836430987e9dc8))
+* update dependencies ([b481590](https://github.com/SuperFlyTV/casparcg-connection/commit/b48159035c1f27b29736556c6a1d5a015de83057))
+* update docs ([50f3fb0](https://github.com/SuperFlyTV/casparcg-connection/commit/50f3fb02199367587d510db91d44e04f1a84ba3e))
+
+
+### Features
+
+* **call:** Adds SEEK support to call ([bad75ae](https://github.com/SuperFlyTV/casparcg-connection/commit/bad75ae625d0a3aaf7e2140447f5624ccda8c598)), closes [#5](https://github.com/SuperFlyTV/casparcg-connection/issues/5)
+* sting audio fade parameters ([9c64a9e](https://github.com/SuperFlyTV/casparcg-connection/commit/9c64a9ea6e61078e567927600c6e6d1d6c0c8b61))
+
+
+
 # [4.7.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.6.1...4.7.0) (2019-04-11)
 
 
