@@ -70,11 +70,13 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
 			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'in', 'IN', new ParameterValidator.FrameValidator('IN')),
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
+			new ParamSignature(optional, 'clearOn404', null, new ParameterValidator.BooleanValidatorWithDefaults('CLEAR_ON_404'))
 		]
 	}
 
@@ -84,44 +86,14 @@ export namespace AMCP {
 	export class LoadCommand extends AbstractLayerWithFallbackCommand {
 		static readonly commandString = 'LOAD'
 		static readonly protocolLogic = [
-			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
-			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
-			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
-		]
-		paramProtocol = [
-			new ParamSignature(required, 'clip', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
-			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
-			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
-			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
-			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
-			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
-			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
-			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
-			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
-			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
-			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
-			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
-		]
-	}
-
-	/**
-	 *
-	 */
-	export class PlayCommand extends AbstractLayerWithFallbackCommand {
-		static readonly commandString = 'PLAY'
-		static readonly protocolLogic = [
 			new Depends('loop', 'clip'),
 			new Depends('in', 'clip'),
 			new Depends('seek', 'clip'),
 			new Depends('length', 'clip'),
 			new Depends('filter', 'clip'),
 			new Depends('transition', 'clip'),
+			new Depends('channelLayout', 'clip'),
+			new Depends('clearOn404', 'clip'),
 			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
 			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
@@ -145,7 +117,50 @@ export namespace AMCP {
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
-			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
+			new ParamSignature(optional, 'clearOn404', null, new ParameterValidator.BooleanValidatorWithDefaults('CLEAR_ON_404'))
+		]
+	}
+
+	/**
+	 *
+	 */
+	export class PlayCommand extends AbstractLayerWithFallbackCommand {
+		static readonly commandString = 'PLAY'
+		static readonly protocolLogic = [
+			new Depends('loop', 'clip'),
+			new Depends('in', 'clip'),
+			new Depends('seek', 'clip'),
+			new Depends('length', 'clip'),
+			new Depends('filter', 'clip'),
+			new Depends('transition', 'clip'),
+			new Depends('channelLayout', 'clip'),
+			new Depends('clearOn404', 'clip'),
+			new Depends('transitionDuration', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionEasing', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('transitionDirection', 'transition').mustNotBe('transition', Enum.Transition.STING),
+			new Depends('stingTransitionProperties', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingMaskFilename', 'transition').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingDelay', 'stingMaskFilename').mustBe('transition', Enum.Transition.STING),
+			new Depends('stingOverlayFilename', 'stingDelay').mustBe('transition', Enum.Transition.STING)
+		]
+		paramProtocol = [
+			new ParamSignature(optional, 'clip', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'loop', null, new ParameterValidator.BooleanValidatorWithDefaults('LOOP')),
+			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
+			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
+			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
+			new ParamSignature(optional, 'transitionDirection', null, new ParameterValidator.EnumValidator(Enum.Direction)),
+			new ParamSignature(optional, 'stingTransitionProperties', null, new ParameterValidator.StingTransitionPropertiesValidator()),
+			new ParamSignature(optional, 'stingMaskFilename', null, new ParameterValidator.ClipNameValidator()),
+			new ParamSignature(optional, 'stingDelay', null, new ParameterValidator.PositiveNumberValidator()),
+			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
+			new ParamSignature(optional, 'in', 'IN', new ParameterValidator.FrameValidator('IN')),
+			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
+			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
+			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
+			new ParamSignature(optional, 'clearOn404', null, new ParameterValidator.BooleanValidatorWithDefaults('CLEAR_ON_404'))
 		]
 	}
 
