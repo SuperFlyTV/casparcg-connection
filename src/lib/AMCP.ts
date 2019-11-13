@@ -291,6 +291,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
 			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'framesDelay', 'FRAMES_DELAY', new ParameterValidator.RouteFramesDelayValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
@@ -323,6 +324,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
 			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'framesDelay', 'FRAMES_DELAY', new ParameterValidator.RouteFramesDelayValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
@@ -359,6 +361,7 @@ export namespace AMCP {
 		paramProtocol = [
 			new ParamSignature(required, 'route', null, new ParameterValidator.RouteValidator()),
 			new ParamSignature(optional, 'mode', null, new ParameterValidator.RouteModeValidator()),
+			new ParamSignature(optional, 'framesDelay', 'FRAMES_DELAY', new ParameterValidator.RouteFramesDelayValidator()),
 			new ParamSignature(optional, 'transition', null, new ParameterValidator.EnumValidator(Enum.Transition)),
 			new ParamSignature(optional, 'transitionDuration', null, new ParameterValidator.PositiveNumberValidatorBetween()),
 			new ParamSignature(optional, 'transitionEasing', null, new ParameterValidator.EnumValidator(Enum.Ease)),
