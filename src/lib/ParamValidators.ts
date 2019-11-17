@@ -586,6 +586,9 @@ export namespace Validation {
 			}
 		}
 	}
+
+	export class RouteFramesDelayValidator extends PositiveNumberValidator {}
+
 	export class RouteModeValidator extends StringValidator {}
 	export class CommandValidator extends AbstractValidator {
 		resolve(command: any): ParamData {
