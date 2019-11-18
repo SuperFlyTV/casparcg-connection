@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [4.9.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.8.1...4.9.0) (2019-11-18)
+
+
+### Features
+
+* clear_on_404 parameter for PLAY/LOAD/LOADBG ([b8f0bd6](https://github.com/SuperFlyTV/casparcg-connection/commit/b8f0bd6c519fe15d0aa36f461b18383467fd8755))
+* FRAMES_DELAY parameter for PLAY/LOAD/LOADBG route ([bceabce](https://github.com/SuperFlyTV/casparcg-connection/commit/bceabce321466fcfdd28dc4dd6c41c93ede162c3))
+
+
+
 ## [4.8.1](https://github.com/SuperFlyTV/casparcg-connection/compare/4.8.0...4.8.1) (2019-11-07)
 
 
