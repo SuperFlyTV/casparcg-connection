@@ -1,10 +1,11 @@
 # casparcg-connection
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/SuperFlyTV/casparcg-connection/master/LICENSE) [![npm](https://img.shields.io/npm/v/casparcg-connection.svg?style=flat-square)](https://www.npmjs.com/package/casparcg-connection) [![Travis](https://img.shields.io/travis/SuperFlyTV/casparcg-connection.svg?style=flat-square)](https://travis-ci.org/SuperFlyTV/casparcg-connection) [![David](https://img.shields.io/david/superflytv/casparcg-connection.svg?style=flat-square)](https://david-dm.org/superflytv/casparcg-connection)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/SuperFlyTV/casparcg-connection/master/LICENSE) [![npm](https://img.shields.io/npm/v/casparcg-connection.svg?style=flat-square)](https://www.npmjs.com/package/casparcg-connection)
+
+[![CircleCI](https://circleci.com/gh/SuperFlyTV/casparcg-connection.svg?style=svg)](https://circleci.com/gh/SuperFlyTV/casparcg-connection)
 
 [![API Docs](https://img.shields.io/badge/Docs-Api-orange.svg?style=flat-square)](https://superflytv.github.io/casparcg-connection/) [![Guide](https://img.shields.io/badge/Docs-Getting%20started%20guide-orange.svg?style=flat-square)](https://superfly-tv.gitbooks.io/casparcg-connection-getting-started-guide/content/)
 
-[![CircleCI](https://circleci.com/gh/SuperFlyTV/casparcg-connection.svg?style=svg)](https://circleci.com/gh/SuperFlyTV/casparcg-connection)
 
 ## Introduction
 

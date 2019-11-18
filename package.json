@@ -52,15 +52,15 @@
   "scripts": {
     "info": "npm-scripts-info",
     "build": "trash dist && yarn build:main",
-    "build:main": "tsc -p tsconfig.json",
-    "lint": "tslint --project tsconfig.jest.json --config tslint.json",
+    "build:main": "tsc -p tsconfig.build.json",
+    "lint": "tslint --project tsconfig.json --config tslint.json",
     "unit": "jest --forceExit",
     "test": "yarn lint && yarn unit",
     "test:integration": "yarn lint && jest --config=jest-integration.config.js",
     "watch": "jest --watch",
     "cov": "jest --coverage; open-cli coverage/lcov-report/index.html",
     "cov-open": "open-cli coverage/lcov-report/index.html",
-    "send-coverage": "jest && codecov",
+    "send-coverage": "codecov",
     "docs": "yarn docs:html && open-cli docs/index.html",
     "docs:test": "yarn docs:html",
     "docs:html": "typedoc src/index.ts --ignoreCompilerErrors --excludePrivate --mode file --theme minimal --out docs",
@@ -70,7 +70,6 @@
     "release": "yarn reset && yarn test && yarn docs:publish && yarn changelog",
     "release:skiptest": "yarn reset && yarn docs:publish && yarn changelog",
     "reset": "git clean -dfx && git reset --hard && yarn",
-    "ci": "yarn test && yarn docs:test",
     "validate:dependencies": "yarn audit && yarn license-validate",
     "license-validate": "node-license-validator -p -d --allow-licenses MIT BSD BSD-3-Clause ISC Apache"
   },
@@ -94,13 +93,18 @@
     "changelog": "Bump package.json version, update CHANGELOG.md, tag a release",
     "release": "Clean, build, test, publish docs, and prepare release (a one-step publish process). Updates versions and creates git commits.",
     "reset": "Delete all untracked files and reset the repo to the last commit",
-    "ci": "Test script for running by the CI (CircleCI)",
     "validate:dependencies": "Scan dependencies for vulnerabilities and check licenses",
     "license-validate": "Validate licenses for dependencies."
   },
   "engines": {
     "node": ">=4.5"
   },
+  "files": [
+    "/dist",
+    "/CHANGELOG.md",
+    "/README.md",
+    "/LICENSE"
+  ],
   "devDependencies": {
     "@types/highland": "^2.10.7",
     "@types/jest": "^24.0.23",
