@@ -331,6 +331,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _connected: boolean = false
 	private _host: string
 	private _port: number
+	private _localAddress: string
 	private _autoReconnect: boolean
 	private _autoReconnectInterval: number
 	private _autoReconnectAttempts: number
@@ -511,6 +512,29 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	public set port(port: number) {
 		if (this._port !== port) {
 			this._port = port
+			let shouldReconnect = this.connected
+			this._createNewSocket()
+			if (shouldReconnect) {
+				this.connect()
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	public get localAddress(): string {
+		return this._localAddress
+	}
+
+	/**
+	 * Setting the `localAddress` will create a new [[CasparCGSocket]] connection.
+	 *
+	 * The new `CasparCGSocket` will `autoConnect` if the old socket was either successfully connected, or currently reconnecting. Changing the host resets the number of [[CasparCG.autoReconnectAttempts]].
+	 */
+	public set localAddress(localAddress: string) {
+		if (this._localAddress !== localAddress) {
+			this._localAddress = localAddress
 			let shouldReconnect = this.connected
 			this._createNewSocket()
 			if (shouldReconnect) {
@@ -2059,7 +2083,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 			this._socket.dispose()
 			delete this._socket
 		}
-		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts, this.queueMode)
+		this._socket = new CasparCGSocket(this.host, this.port, this.localAddress, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts, this.queueMode)
 		this._socket.on('error', (error: Error) => this._onSocketError(error))
 		this._socket.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event))
 		this._socket.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout())
