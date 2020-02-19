@@ -107,7 +107,7 @@
     "@types/node": "^8.10.0",
     "@types/xml2js": "^0.4.2",
     "@types/xmlbuilder": "0.0.30",
-    "codecov": "3.3.0",
+    "codecov": "3.6.5",
     "gh-pages": "^1.0.0",
     "jest": "^24.7.1",
     "mkdirp": "^0.5.1",
