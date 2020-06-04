@@ -2,7 +2,7 @@
   "extends": "./tsconfig.strict",
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "ES2018",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
