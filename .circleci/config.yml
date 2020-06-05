@@ -1,22 +1,5 @@
 version: 2
 jobs:
-  test-node-8:
-    docker:
-      - image: circleci/node:8
-    working_directory: ~/project
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - yarn-cache-8-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-cache-8-{{ .Branch }}
-            - yarn-cache-8-
-      - run: yarn install
-      - save_cache:
-          key: yarn-cache-8-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths: [node_modules]
-      - run: yarn test
-
   test-node-10:
     docker:
       - image: circleci/node:10
@@ -34,7 +17,7 @@ jobs:
           paths: [node_modules]
       - run: yarn test
 
-  test-latest(node-12):
+  test-node-12:
     docker:
       - image: circleci/node:12
     working_directory: ~/project
@@ -69,6 +52,23 @@ jobs:
           prefix: coverage
       - store_test_results:
           path: ./coverage/clover.xml
+
+  test-node-latest:
+    docker:
+      - image: circleci/node
+    working_directory: ~/project
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - yarn-cache-latest-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-latest-{{ .Branch }}
+            - yarn-cache-latest-
+      - run: yarn install
+      - save_cache:
+          key: yarn-cache-latest-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths: [node_modules]
+      - run: yarn test
 
   validate-dependencies:
     docker:
@@ -206,9 +206,9 @@ workflows:
   version: 2
   build-test-publish:
     jobs:
-      - test-latest(node-12)
+      - test-node-12
       - test-node-10
-      - test-node-8
+      - test-node-latest
       - validate-all-dependencies:
           filters:
             branches:
@@ -224,18 +224,16 @@ workflows:
       - release:
           requires:
             - validate-dependencies
-            - test-latest(node-12)
+            - test-node-12
             - test-node-10
-            - test-node-8
           filters:
             branches:
               only:
                 - master
       - prerelease:
           requires:
-            - test-latest(node-12)
+            - test-node-12
             - test-node-10
-            - test-node-8
           filters:
             tags:
               ignore: /.*/
