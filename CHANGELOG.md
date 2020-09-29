@@ -1,6 +1,19 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [5.0.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.9.0...5.0.0) (2020-09-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop node 8 support
+
+### Features
+
+* drop node 8 support ([44f6dae](https://github.com/SuperFlyTV/casparcg-connection/commit/44f6dae5102ba54163bb81385a06157530027d37))
+* **ci:** use prerelease flow & optionally skip audit [skip ci] ([bd32ef1](https://github.com/SuperFlyTV/casparcg-connection/commit/bd32ef1f2b1b43053bb82a009f01143b45c5a9f8))
+* update ci to run for node 8,10,12 ([8e1de30](https://github.com/SuperFlyTV/casparcg-connection/commit/8e1de3093dbee2a979eb0c9736515449d965dc47))
 
 # [4.9.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.8.1...4.9.0) (2019-11-18)
 
