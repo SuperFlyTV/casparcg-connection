@@ -89,7 +89,23 @@ export namespace Validation {
 	}
 
 	/***/
-	export class FilterValidator extends StringValidator { }
+	export class FilterValidator extends StringValidator {
+
+		/**
+		 *
+		 */
+		resolve(data: any): ParamData {
+			let clipName: string = ''
+
+			if (typeof data === 'object' || typeof data === 'string') {
+				clipName = data !== null ? data.toString() : ''
+			}
+
+			// add quotation
+			let quotedClipName: string = `"${clipName}"`
+			return { raw: clipName, payload: quotedClipName }
+		}
+	}
 
 	/***/
 	export class URLValidator extends StringValidator {
