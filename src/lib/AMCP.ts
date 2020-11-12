@@ -74,6 +74,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
 			new ParamSignature(optional, 'clearOn404', null, new ParameterValidator.BooleanValidatorWithDefaults('CLEAR_ON_404'))
@@ -117,6 +119,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
 			new ParamSignature(optional, 'clearOn404', null, new ParameterValidator.BooleanValidatorWithDefaults('CLEAR_ON_404'))
 		]
@@ -159,6 +163,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'seek', 'SEEK', new ParameterValidator.FrameValidator('SEEK')),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
 			new ParamSignature(optional, 'clearOn404', null, new ParameterValidator.BooleanValidatorWithDefaults('CLEAR_ON_404'))
 		]
@@ -216,6 +222,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator()),
 			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO'))
@@ -248,6 +256,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
@@ -284,6 +294,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'format', 'FORMAT', new ParameterValidator.ChannelFormatValidator()),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
@@ -317,6 +329,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'auto', null, new ParameterValidator.BooleanValidatorWithDefaults('AUTO')),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
@@ -350,6 +364,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
 	}
@@ -387,6 +403,8 @@ export namespace AMCP {
 			new ParamSignature(optional, 'stingOverlayFilename', null, new ParameterValidator.ClipNameEmptyStringValidator()),
 			new ParamSignature(optional, 'length', 'LENGTH', new ParameterValidator.FrameValidator('LENGTH')),
 			new ParamSignature(optional, 'filter', 'FILTER', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'afilter', 'AF', new ParameterValidator.FilterValidator()),
+			new ParamSignature(optional, 'vfilter', 'VF', new ParameterValidator.FilterValidator()),
 			new ParamSignature(optional, 'channelLayout', 'CHANNEL_LAYOUT', new ParameterValidator.ChannelLayoutValidator())
 		]
 	}
