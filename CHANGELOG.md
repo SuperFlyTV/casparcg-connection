@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/SuperFlyTV/casparcg-connection/compare/5.0.1...5.1.0) (2020-11-16)
+
+
+### Features
+
+* add ffmpeg filter options ([1b81653](https://github.com/SuperFlyTV/casparcg-connection/commit/1b81653cf9f5f898fcc62f21d4844377076b3134))
+
 ### [5.0.1](https://github.com/SuperFlyTV/casparcg-connection/compare/5.0.0...5.0.1) (2020-09-29)
 
 ## [5.0.0](https://github.com/SuperFlyTV/casparcg-connection/compare/4.9.0...5.0.0) (2020-09-29)
