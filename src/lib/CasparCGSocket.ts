@@ -1,17 +1,16 @@
 import { EventEmitter } from 'events'
 import * as net from 'net'
 import * as _ from 'highland'
-import { AMCPUtil } from './AMCP'
+import * as AMCPUtil from './AMCPUtil'
 // Command NS
-import { Command as CommandNS } from './AbstractCommand'
+import * as CommandNS from './AbstractCommand'
 import IAMCPCommand = CommandNS.IAMCPCommand
 import IAMCPStatus = CommandNS.IAMCPStatus
 // Event NS
 import { CasparCGSocketStatusEvent, CasparCGSocketResponseEvent, SocketStatusOptions } from './event/Events'
 // Param NS
-import { Param as ParamNS } from './ParamSignature'
-import Payload = ParamNS.Payload
-import { Options as OptionsNS } from './AMCPConnectionOptions'
+import { Payload } from './ParamSignature'
+import { QueueMode } from './AMCPConnectionOptions'
 
 /**
  *
@@ -31,7 +30,7 @@ export interface ICasparCGSocket {
  *
  */
 export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
-	public queueMode?: OptionsNS.QueueMode
+	public queueMode?: QueueMode
 	private _client: net.Socket
 	private _host: string
 	private _port: number
@@ -50,7 +49,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	/**
 	 *
 	 */
-	public constructor (host: string, port: number, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number, queueMode?: OptionsNS.QueueMode) {
+	public constructor (host: string, port: number, autoReconnect: boolean, autoReconnectInterval: number, autoReconnectAttempts: number, queueMode?: QueueMode) {
 		super()
 		this._host = host
 		this._port = port
@@ -194,7 +193,7 @@ export class CasparCGSocket extends EventEmitter implements ICasparCGSocket {
 	 */
 	public executeCommand(command: IAMCPCommand): IAMCPCommand {
 		let commandString: string
-		if (this.queueMode === OptionsNS.QueueMode.SALVO) commandString = `REQ ${command.token} ` + (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
+		if (this.queueMode === QueueMode.SALVO) commandString = `REQ ${command.token} ` + (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
 		else commandString = (command.constructor as any)['commandString'] + (command.address ? ' ' + command.address : '')
 
 		for (let i in command.payload) {

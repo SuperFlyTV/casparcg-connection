@@ -1,7 +1,7 @@
-import { Event as BaseEventNS } from './BaseEvent'
-import { Event as CasparCGSocketStatusEventNS } from './CasparCGSocketStatusEvent'
-import { Event as CasparCGSocketCommandEventNS } from './CasparCGSocketCommandEvent'
-import { Event as LogEventNS } from './LogEvent'
+import * as BaseEventNS from './BaseEvent'
+import * as CasparCGSocketStatusEventNS from './CasparCGSocketStatusEvent'
+import * as CasparCGSocketCommandEventNS from './CasparCGSocketCommandEvent'
+import * as LogEventNS from './LogEvent'
 import BaseEvent = BaseEventNS.BaseEvent
 import CasparCGSocketStatusEvent = CasparCGSocketStatusEventNS.CasparCGSocketStatusEvent
 import SocketStatusOptions = CasparCGSocketStatusEventNS.ConnectionStatus

@@ -1,137 +1,189 @@
 // Enum NS
-import { Enum as EnumNS } from './ServerStateEnum'
-import AbstractEnum = EnumNS.AbstractEnum
+import { AnyEnum } from './ServerStateEnum'
 // Param NS
-import { Param as ParamNS } from './ParamSignature'
-import IParamSignature = ParamNS.IParamSignature
+import { IParamSignature } from './ParamSignature'
 
 /**
  *
  */
-export namespace Protocol {
+export interface IProtocolLogic {
+	resolve(protocol: Array<IParamSignature>): Array<IParamSignature>
+}
+
+/**
+ *
+ */
+export abstract class AbstractProtocolLogic implements IProtocolLogic {
+	protected fields: Array<string | AnyEnum>
+
 	/**
 	 *
 	 */
-	export interface IProtocolLogic {
-		resolve(protocol: Array<IParamSignature>): Array<IParamSignature>
+	constructor(...fields: Array<string | AnyEnum>) {
+		this.fields = fields
 	}
 
 	/**
 	 *
 	 */
-	export abstract class AbstractProtocolLogic implements IProtocolLogic {
-		protected fields: Array<string | AbstractEnum>
+	abstract resolve(protocol: Array<IParamSignature>): Array<IParamSignature>
+}
 
-		/**
-		 *
-		 */
-		constructor(...fields: Array<string | AbstractEnum>) {
-			this.fields = fields
+/**
+ *
+ */
+export class Depends extends AbstractProtocolLogic {
+	/**
+	 *
+	 */
+	constructor(dependant: string | AnyEnum, dependee: string | AnyEnum);
+	constructor(...fields: Array<string | AnyEnum>);
+	constructor(...fields: Array<string | AnyEnum>) {
+		super(...fields)
+	}
+
+	/**
+	 * This will apply the validation only when this condition is met
+	 */
+	public if(target: string, mustBe: AnyEnum | string): IProtocolLogic {
+		let resolveRef = this.resolve
+		this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
+			for (let param of protocol) {
+				if (param.name === target && param.payload === mustBe.toString()) {
+					return resolveRef.call(this, protocol)
+				}
+			}
+			return protocol
 		}
 
-		/**
-		 *
-		 */
-		abstract resolve(protocol: Array<IParamSignature>): Array<IParamSignature>
+		return this
+	}
+
+	/**
+	 * This will apply the validation only when this condition is not met
+	 */
+	public ifNot(target: string, cantBe: AnyEnum | string): IProtocolLogic {
+		let resolveRef = this.resolve
+		this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
+			for (let param of protocol) {
+				if (param.name === target && param.payload === cantBe.toString()) {
+					return protocol
+				}
+			}
+			return resolveRef.call(this, protocol)
+		}
+
+		return this
+	}
+
+	/**
+	 * This will only include the field when this condition is met
+	 */
+	public mustBe(target: string, mustBe: AnyEnum | string): IProtocolLogic {
+		let resolveRef = this.resolve
+		this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
+			for (let param of protocol) {
+				if (param.name === target && param.payload === mustBe.toString()) {
+					return resolveRef.call(this, protocol)
+				}
+			}
+
+			return this.stripField(protocol)
+		}
+
+		return this
+	}
+
+	/**
+	 * This will only include the field when this condition is not met
+	 */
+	public mustNotBe(target: string, cantBe: AnyEnum | string): IProtocolLogic {
+		let resolveRef = this.resolve
+		this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
+			for (let param of protocol) {
+				if (param.name === target && (param.payload === cantBe.toString() || param.payload === null)) {
+					return this.stripField(protocol)
+				}
+			}
+			return resolveRef.call(this, protocol)
+		}
+
+		return this
 	}
 
 	/**
 	 *
 	 */
-	export class Depends extends AbstractProtocolLogic {
-		/**
-		 *
-		 */
-		constructor(dependant: string | AbstractEnum, dependee: string | AbstractEnum);
-		constructor(...fields: Array<string | AbstractEnum>);
-		constructor(...fields: Array<string | AbstractEnum>) {
-			super(...fields)
+	public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
+		let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && param.name === this.fields[1])
+		if (valids.length === 1) {
+			return protocol
+		} else {
+			return this.stripField(protocol)
 		}
+	}
 
-		/**
-		 * This will apply the validation only when this condition is met
-		 */
-		public if(target: string, mustBe: AbstractEnum | string): IProtocolLogic {
-			let resolveRef = this.resolve
-			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
-				for (let param of protocol) {
-					if (param.name === target && param.payload === mustBe.toString()) {
-						return resolveRef.call(this, protocol)
-					}
-				}
-				return protocol
+	private stripField(protocol: Array<IParamSignature>) {
+		return protocol.map((param) => {
+			if (param.name === this.fields[0]) {
+				param.payload = null
 			}
+			return param
+		})
+	}
+}
 
-			return this
+/**
+ *
+ */
+export class OneOf extends AbstractProtocolLogic {
+
+	/**
+	 *
+	 */
+	constructor(either: string | AnyEnum, or: string | AnyEnum);
+	constructor(...fields: Array<string | AnyEnum>);
+	constructor(...fields: Array<string | AnyEnum>) {
+		super(...fields)
+	}
+
+	/**
+	 *
+	 */
+	public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
+		let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && this.fields.indexOf(param.name) > -1)
+		if (valids.length === 1) {
+			return protocol
 		}
+		return []
+	}
+}
 
-		/**
-		 * This will apply the validation only when this condition is not met
-		 */
-		public ifNot(target: string, cantBe: AbstractEnum | string): IProtocolLogic {
-			let resolveRef = this.resolve
-			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
-				for (let param of protocol) {
-					if (param.name === target && param.payload === cantBe.toString()) {
-						return protocol
-					}
-				}
-				return resolveRef.call(this, protocol)
-			}
+/**
+ *
+ */
+export class Coupled extends AbstractProtocolLogic {
 
-			return this
-		}
+	/**
+	 *
+	 */
+	constructor(partnerA: string | AnyEnum, partnerB: string | AnyEnum);
+	constructor(...fields: Array<string | AnyEnum>);
+	constructor(...fields: Array<string | AnyEnum>) {
+		super(...fields)
+	}
 
-		/**
-		 * This will only include the field when this condition is met
-		 */
-		public mustBe(target: string, mustBe: AbstractEnum | string): IProtocolLogic {
-			let resolveRef = this.resolve
-			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
-				for (let param of protocol) {
-					if (param.name === target && param.payload === mustBe.toString()) {
-						return resolveRef.call(this, protocol)
-					}
-				}
+	/**
+	 *
+	 */
+	public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
 
-				return this.stripField(protocol)
-			}
-
-			return this
-		}
-
-		/**
-		 * This will only include the field when this condition is not met
-		 */
-		public mustNotBe(target: string, cantBe: AbstractEnum | string): IProtocolLogic {
-			let resolveRef = this.resolve
-			this.resolve = (protocol: Array<IParamSignature>): Array<IParamSignature> => {
-				for (let param of protocol) {
-					if (param.name === target && (param.payload === cantBe.toString() || param.payload === null)) {
-						return this.stripField(protocol)
-					}
-				}
-				return resolveRef.call(this, protocol)
-			}
-
-			return this
-		}
-
-		/**
-		 *
-		 */
-		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
-			let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && param.name === this.fields[1])
-			if (valids.length === 1) {
-				return protocol
-			} else {
-				return this.stripField(protocol)
-			}
-		}
-
-		private stripField(protocol: Array<IParamSignature>) {
+		let valids: Array<IParamSignature> = protocol.filter((param) => this.fields.indexOf(param.name) > -1 && param.resolved === true)
+		if (valids.length >= this.fields.length) {
+			return protocol
+		} else {
 			return protocol.map((param) => {
-				if (param.name === this.fields[0]) {
+				if (this.fields.indexOf(param.name) > -1) {
 					param.payload = null
 				}
 				return param
@@ -139,63 +191,4 @@ export namespace Protocol {
 		}
 	}
 
-	/**
-	 *
-	 */
-	export class OneOf extends AbstractProtocolLogic {
-
-		/**
-		 *
-		 */
-		constructor(either: string | AbstractEnum, or: string | AbstractEnum);
-		constructor(...fields: Array<string | AbstractEnum>);
-		constructor(...fields: Array<string | AbstractEnum>) {
-			super(...fields)
-		}
-
-		/**
-		 *
-		 */
-		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
-			let valids: Array<IParamSignature> = protocol.filter((param) => param.resolved && this.fields.indexOf(param.name) > -1)
-			if (valids.length === 1) {
-				return protocol
-			}
-			return []
-		}
-	}
-
-	/**
-	 *
-	 */
-	export class Coupled extends AbstractProtocolLogic {
-
-		/**
-		 *
-		 */
-		constructor(partnerA: string | AbstractEnum, partnerB: string | AbstractEnum);
-		constructor(...fields: Array<string | AbstractEnum>);
-		constructor(...fields: Array<string | AbstractEnum>) {
-			super(...fields)
-		}
-
-		/**
-		 *
-		 */
-		public resolve(protocol: Array<IParamSignature>): Array<IParamSignature> {
-
-			let valids: Array<IParamSignature> = protocol.filter((param) => this.fields.indexOf(param.name) > -1 && param.resolved === true)
-			if (valids.length >= this.fields.length) {
-				return protocol
-			} else {
-				return protocol.map((param) => {
-					if (this.fields.indexOf(param.name) > -1) {
-						param.payload = null
-					}
-					return param
-				})
-			}
-		}
-
-	}
 }

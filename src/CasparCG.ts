@@ -1,273 +1,42 @@
 import { EventEmitter } from 'events'
 import { CasparCGSocket } from './lib/CasparCGSocket'
-import { AMCP, AMCPUtil as AMCPUtilNS } from './lib/AMCP'
+import * as AMCP from './lib/AMCP'
+import * as AMCPUtilNS from './lib/AMCPUtil'
 // AMCPUtilNS
 import CasparCGSocketResponse = AMCPUtilNS.CasparCGSocketResponse
-import { Enum } from './lib/ServerStateEnum'
-import { IConnectionOptions, ConnectionOptions, Options as OptionsNS } from './lib/AMCPConnectionOptions'
-// Options NS
-import QueueMode = OptionsNS.QueueMode
-import CasparCGVersion = OptionsNS.CasparCGVersion
+import * as Enum from './lib/ServerStateEnum'
+import { IConnectionOptions, ConnectionOptions, QueueMode, CasparCGVersion } from './lib/AMCPConnectionOptions'
 // Command NS
-import { Command as CommandNS } from './lib/AbstractCommand'
-import IAMCPCommand = CommandNS.IAMCPCommand
-import isIAMCPCommand = CommandNS.isIAMCPCommand
-import IAMCPStatus = CommandNS.IAMCPStatus
-import AMCPResponse = CommandNS.AMCPResponse
+import {
+	IAMCPCommand,
+	isIAMCPCommand,
+	IAMCPStatus,
+	AMCPResponse
+} from './lib/AbstractCommand'
 // Param NS
-import { Param as ParamNS } from './lib/ParamSignature'
-import Param = ParamNS.Param
-import TemplateData = ParamNS.TemplateData
+import {
+	Param,
+	TemplateData,
+} from './lib/ParamSignature'
 // Event NS
 import { CasparCGSocketStatusEvent, CasparCGSocketCommandEvent, CasparCGSocketResponseEvent, LogEvent, SocketStatusOptions } from './lib/event/Events'
 // Callback NS
-import { Callback as CallbackNS } from './lib/global/Callback'
-import IBooleanCallback = CallbackNS.IBooleanCallback
-import IErrorCallback = CallbackNS.IErrorCallback
-import IStringCallback = CallbackNS.IStringCallback
-import ISocketStatusCallback = CallbackNS.ISocketStatusCallback
+import {
+	IBooleanCallback,
+	IErrorCallback,
+	IStringCallback,
+	ISocketStatusCallback,
+} from './lib/global/Callback'
 // Config NS
-import { Config as ConfigNS } from './lib/Config'
+import * as ConfigNS from './lib/Config'
 import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig
 // Response NS
-import { Response as ResponseNS } from './lib/ResponseParsers'
-import CasparCGPaths = ResponseNS.CasparCGPaths
+import { CasparCGPaths } from './lib/ResponseParsers'
 
 export enum Priority {
 	LOW = 0,
 	NORMAL = 1,
 	HIGH = 2
-}
-
-/**
- * CasparCG Protocols
- */
-export namespace CasparCGProtocols {
-
-	/**
-	 * CasparCG Protocol version 2.1
-	 */
-	export namespace v2_1 {
-		/**
-		 * AMCP Media-commands
-		 */
-		export interface IVideo {
-			loadbg(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
-			loadbgAuto(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>
-			load(channel: number, layer: number, clip: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>
-			play(channel: number, layer?: number, clip?: string, loop?: boolean, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string): Promise<IAMCPCommand>
-			pause(channel: number, layer?: number): Promise<IAMCPCommand>
-			resume(channel: number, layer?: number): Promise<IAMCPCommand>
-			stop(channel: number, layer?: number): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP In/Out-commands
-		 */
-		export interface IInputOutput {
-			loadDecklinkBg(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string, auto?: boolean | number | string): Promise<IAMCPCommand>
-			loadDecklinkBgAuto(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-			loadDecklink(channel: number, layer: number, device: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-			playDecklink(channel: number, layer?: number, device?: number, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, length?: number, filter?: string, format?: Enum.ChannelFormat | string, channelLayout?: Enum.ChannelLayout | string): Promise<IAMCPCommand>
-			loadHtmlPageBg(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string, seek?: number, length?: number, filter?: string, auto?: boolean | number | string): Promise<IAMCPCommand>
-			loadHtmlPageBgAuto(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
-			loadHtmlPage(channel: number, layer: number, url: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
-			playHtmlPage(channel: number, layer?: number, url?: string, transition?: Enum.Transition | string, transitionDurationOrMaskFile?: number | string, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Template-commands
-		 */
-		export interface ICG {
-			cgAdd(channel: number, layer: number, flashLayer: number, templateName: string, playOnLoad: boolean | number | string, data?: TemplateData): Promise<IAMCPCommand>
-			cgPlay(channel: number, layer: number, flashLayer: number): Promise<IAMCPCommand>
-			cgStop(channel: number, layer: number, flashLayer: number): Promise<IAMCPCommand>
-			cgNext(channel: number, layer: number, flashLayer: number): Promise<IAMCPCommand>
-			cgRemove(channel: number, layer: number, flashLayer: number): Promise<IAMCPCommand>
-			cgClear(channel: number, layer?: number): Promise<IAMCPCommand>
-			cgUpdate(channel: number, layer: number, flashLayer: number, data: TemplateData): Promise<IAMCPCommand>
-			cgInvoke(channel: number, layer: number, flashLayer: number, methodName: string): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Mixer-commands
-		 */
-		export interface IMixer {
-			mixerKeyer(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-			mixerKeyerDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand>
-			getMixerStatusKeyer(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerChroma(channel: number, layer?: number, keyer?: Enum.Chroma | string, threshold?: number, softness?: number, spill?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerChromaDeferred(channel: number, layer?: number, keyer?: Enum.Chroma | string, threshold?: number, softness?: number, spill?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusChroma(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerBlend(channel: number, layer?: number, blendmode?: Enum.BlendMode | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerBlendDeferred(channel: number, layer?: number, blendmode?: Enum.BlendMode | string): Promise<IAMCPCommand>
-			getMixerStatusBlend(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerOpacity(channel: number, layer?: number, opacity?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerOpacityDeferred(channel: number, layer?: number, opacity?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusOpacity(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerBrightness(channel: number, layer?: number, brightness?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerBrightnessDeferred(channel: number, layer?: number, brightness?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusBrightness(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerSaturation(channel: number, layer?: number, saturation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerSaturationDeferred(channel: number, layer?: number, saturation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusSaturation(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerBrightness(channel: number, layer?: number, contrast?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerContrastDeferred(channel: number, layer?: number, contrast?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusContrast(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerLevels(channel: number, layer?: number, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerLevelsDeferred(channel: number, layer?: number, minInput?: number, maxInput?: number, gamma?: number, minOutput?: number, maxOutput?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusLevels(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerFill(channel: number, layer?: number, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerFillDeferred(channel: number, layer?: number, x?: number, y?: number, xScale?: number, yScale?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusFill(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerClip(channel: number, layer?: number, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerClipDeferred(channel: number, layer?: number, x?: number, y?: number, width?: number, height?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusClip(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerAnchor(channel: number, layer?: number, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerAnchorDeferred(channel: number, layer?: number, x?: number, y?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusAnchor(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerCrop(channel: number, layer?: number, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerCropDeferred(channel: number, layer?: number, left?: number, top?: number, right?: number, bottom?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusCrop(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerRotation(channel: number, layer?: number, rotation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerRotationDeferred(channel: number, layer?: number, rotation?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusRotation(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerPerspective(channel: number, layer?: number, topLeftX?: number, topLeftY?: number, topRightX?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottomLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerPerspectiveDeferred(channel: number, layer?: number, topLeftX?: number, topLeftY?: number, topRightX?: number, topRightY?: number, bottomRightX?: number, bottomRightY?: number, bottomLeftX?: number, bottomLeftY?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusPerspective(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerMipmap(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-			mixerMipmapDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand>
-			getMixerStatusMipmap(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerVolume(channel: number, layer?: number, volume?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerVolumeDeferred(channel: number, layer?: number, volume?: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			getMixerStatusVolume(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerMastervolume(channel: number, mastervolume?: number, defer?: boolean): Promise<IAMCPCommand>
-			mixerMastervolumeDeferred(channel: number, mastervolume?: number): Promise<IAMCPCommand>
-			getMixerStatusMastervolume(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerStraightAlphaOutput(channel: number, layer?: number, state?: number | boolean, defer?: boolean): Promise<IAMCPCommand>
-			mixerStraightAlphaOutputDeferred(channel: number, layer?: number, state?: number | boolean): Promise<IAMCPCommand>
-			getMixerStatusStraightAlphaOutput(channel: number, layer?: number): Promise<IAMCPCommand>
-			mixerGrid(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string, defer?: boolean): Promise<IAMCPCommand>
-			mixerGridDeferred(channel: number, resolution: number, transitionDuration?: number, transitionEasing?: Enum.Ease | string): Promise<IAMCPCommand>
-			mixerCommit(channel: number): Promise<IAMCPCommand>
-			mixerClear(channel: number, layer?: number): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Channel-commands
-		 */
-		export interface IChannel {
-			clear(channel: number, layer?: number): Promise<IAMCPCommand>
-			//// call(channel: number, layer: number): Promise<IAMCPCommand>;
-			//// swap(): Promise<IAMCPCommand>;
-			//// add(channel: number): Promise<IAMCPCommand>;
-			print(channel: number): Promise<IAMCPCommand>
-			//// set(channel: number): Promise<IAMCPCommand>;
-			lock(channel: number, action: Enum.Lock | string, lockPhrase?: string): Promise<IAMCPCommand>
-			channelGrid(): Promise<IAMCPCommand>
-			glGC(): Promise<IAMCPCommand>
-			addDecklink(channel: number, device: number, id?: number): Promise<IAMCPCommand>
-			addImage(channel: number, fileName: string, id?: number): Promise<IAMCPCommand>
-			addFile(channel: number, fileName: string, id?: number): Promise<IAMCPCommand>
-			addStream(channel: number, uri: string, params: string, id?: number): Promise<IAMCPCommand>
-			remove(channel: number, id: number): Promise<IAMCPCommand>
-			removeDecklink(channel: number, device: number): Promise<IAMCPCommand>
-			removeImage(channel: number, fileName: string): Promise<IAMCPCommand>
-			removeFile(channel: number, fileName: string): Promise<IAMCPCommand>
-			removeStream(channel: number, uri: string): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Template Data-commands
-		 */
-		export interface IData {
-			dataStore(fileName: string, data: TemplateData): Promise<IAMCPCommand>
-			dataRetrieve(fileName: string): Promise<IAMCPCommand>
-			dataList(): Promise<IAMCPCommand>
-			dataRemove(fileName: string): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Thumbnail-commands
-		 */
-		export interface IThumbnail {
-			thumbnailList(subFolder?: string): Promise<IAMCPCommand>
-			thumbnailRetrieve(fileName: string): Promise<IAMCPCommand>
-			thumbnailGenerate(fileName: string): Promise<IAMCPCommand>
-			thumbnailGenerateAll(): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Query-commands
-		 */
-		export interface IQuery {
-			cinf(fileName: string): Promise<IAMCPCommand>
-			cls(subFolder?: string): Promise<IAMCPCommand>
-			fls(): Promise<IAMCPCommand>
-			tls(subFolder?: string): Promise<IAMCPCommand>
-			version(component?: Enum.Version): Promise<IAMCPCommand>
-			info(channel?: number, layer?: number): Promise<IAMCPCommand>
-			infoTemplate(template: string): Promise<IAMCPCommand>
-			infoConfig(): Promise<IAMCPCommand>
-			infoPaths(): Promise<IAMCPCommand>
-			infoSystem(): Promise<IAMCPCommand>
-			infoServer(): Promise<IAMCPCommand>
-			infoQueues(): Promise<IAMCPCommand>
-			infoThreads(): Promise<IAMCPCommand>
-			infoDelay(channel: number, layer?: number): Promise<IAMCPCommand>
-			cgInfo(channel: number, layer?: number, flashLayer?: number): Promise<IAMCPCommand>
-			templateHostInfo(channel: number, layer?: number): Promise<IAMCPCommand>
-			glInfo(): Promise<IAMCPCommand>
-			logLevel(level: Enum.LogLevel | string): Promise<IAMCPCommand>
-			logCategory(category: Enum.LogCategory | string, enabled: boolean): Promise<IAMCPCommand>
-			logCalltrace(enabled: boolean): Promise<IAMCPCommand>
-			logCommunication(enabled: boolean): Promise<IAMCPCommand>
-			diag(): Promise<IAMCPCommand>
-			help(command?: Enum.Command | string): Promise<IAMCPCommand>
-			getCommands(): Promise<IAMCPCommand>
-			helpProducer(producer?: Enum.Producer | string): Promise<IAMCPCommand>
-			getProducers(): Promise<IAMCPCommand>
-			helpConsumer(consumer?: Enum.Consumer | string): Promise<IAMCPCommand>
-			getConsumers(): Promise<IAMCPCommand>
-		}
-
-		/**
-		 * AMCP Operation-commands
-		 */
-		export interface IOperation {
-			bye(): Promise<IAMCPCommand>
-			kill(): Promise<IAMCPCommand>
-			restart(): Promise<IAMCPCommand>
-		}
-
-		export interface AMCP extends IVideo, IInputOutput, ICG, IMixer, IChannel, IData, IThumbnail, IQuery, IOperation {
-		}
-	}
-}
-
-/**
- * CasparCG Interface
- */
-export interface ICasparCGConnection {
-	connectionOptions: ConnectionOptions
-	connected: boolean
-	connectionStatus: SocketStatusOptions
-	readonly commandQueueLength: number
-	getCasparCGConfig(refresh: boolean): Promise<CasparCGConfig>
-	getCasparCGPaths(refresh: boolean): Promise<CasparCGPaths>
-	getCasparCGVersion(refresh: boolean): Promise<CasparCGVersion>
-	removeQueuedCommand(id: string): boolean
-	connect(options?: IConnectionOptions): void
-	disconnect(): void
-	createCommand(command: IAMCPCommand): IAMCPCommand | undefined
-	createCommand(commandString: string, ...params: (string | Param)[]): IAMCPCommand | undefined
-	queueCommand(command: IAMCPCommand, priority: Priority): Promise<IAMCPCommand>
-	do(command: IAMCPCommand): Promise<IAMCPCommand>
-	do(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	doNow(command: IAMCPCommand): Promise<IAMCPCommand>
-	doNow(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
-	doLater(command: IAMCPCommand): Promise<IAMCPCommand>
-	doLater(commandString: string, ...params: (string | Param)[]): Promise<IAMCPCommand>
 }
 
 /**
@@ -277,7 +46,7 @@ export interface ICasparCGConnection {
  * There is a single [[CasparCGSocket]] pr. `CasparCG` object.
  * `CasparCG` should be the only public interface to interact directly with.
  */
-export class CasparCG extends EventEmitter implements ICasparCGConnection, ConnectionOptions, CasparCGProtocols.v2_1.AMCP {
+export class CasparCGBase extends EventEmitter {
 	/**
 	 * Try to connect upon creation.
 	 */
@@ -339,10 +108,10 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	private _queuedCommandsLowPriority: Array<IAMCPCommand> = []
 	private _queuedCommandsHighPriority: Array<IAMCPCommand> = []
 	private _sentCommands: { [token: string]: IAMCPCommand } = {}
-	private _configPromise: Promise<CasparCGConfig>
-	private _pathsPromise: Promise<CasparCGPaths>
-	private _versionPromise: Promise<CasparCGVersion>
-	private _userConfigServerVersion: CasparCGVersion
+	protected _configPromise: Promise<CasparCGConfig>
+	protected _pathsPromise: Promise<CasparCGPaths>
+	protected _versionPromise: Promise<CasparCGVersion>
+	protected _userConfigServerVersion: CasparCGVersion
 
 	/**
 	 * If the constructor gets called with no parameters, all properties of the CasparCG object will match all default properties defined by [[IConnectionOptions]].
@@ -576,7 +345,7 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		let options: ConnectionOptions = new ConnectionOptions({})
 
 		for (let key in options) {
-			if (this.hasOwnProperty(key) || CasparCG.hasOwnProperty(key)) {
+			if (this.hasOwnProperty(key) || CasparCGBase.hasOwnProperty(key)) {
 				(options as any)[key] = (this as any)[key]
 			}
 		}
@@ -801,6 +570,376 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 		}
 		return Array.isArray(removed) && removed.length > 0
 	}
+
+	/**
+	 * Automatically create a transition object with the correct transition keys
+	 */
+	protected _createTransitionOptionsObject(transition?: Enum.Transition | string, transitionDurationOrMaskFileOrProps?: number | string | object, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string) {
+		if (transition === Enum.Transition.STING.toString()) {
+			if (typeof transitionDurationOrMaskFileOrProps === 'object') {
+				return {
+					stingTransitionProperties: {
+						...transitionDurationOrMaskFileOrProps
+					}
+				}
+			} else {
+				return {
+					stingMaskFilename: transitionDurationOrMaskFileOrProps,
+					stingDelay: transitionEasingOrStingDuration,
+					stingOverlayFilename: transitionDirectionOrOverlay || ''
+				}
+			}
+		} else {
+			return {
+				transitionDuration: transitionDurationOrMaskFileOrProps,
+				transitionEasing: transitionEasingOrStingDuration,
+				transitionDirection: transitionDirectionOrOverlay
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	private _createNewSocket(options?: IConnectionOptions, enforceRecreation: boolean = false): void {
+		let hasNewOptions = false
+		if (options) {
+			for (let key in options) {
+				if (!options.hasOwnProperty(key)) {
+					continue
+				}
+
+				if (this.hasOwnProperty(key) || CasparCGBase.prototype.hasOwnProperty(key)) {
+					// only update new options
+					if ((this as any)[key] !== (options as any)[key]) {
+						(this as any)[key] = (options as any)[key]
+						hasNewOptions = true
+					}
+				}
+			}
+		}
+		// dont recreate if exising socket, same options + host + port
+		if (this._socket && (this._socket.host !== this.host)) {
+			hasNewOptions = true
+		}
+		if (this._socket && (this._socket.port !== this.port)) {
+			hasNewOptions = true
+		}
+		if (this._socket && !hasNewOptions && !enforceRecreation) {
+			return
+		}
+
+		// clean up if existing socket
+		if (this._socket) {
+			this._socket.dispose()
+			delete this._socket
+		}
+		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts, this.queueMode)
+		this._socket.on('error', (error: Error) => this._onSocketError(error))
+		this._socket.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event))
+		this._socket.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout())
+		this._socket.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response))
+		this._socket.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, () => this._handleInvalidSocketResponse())
+
+		// inherit log method
+		this._socket.log = (args) => this._log(args)
+	}
+
+	/**
+	 *
+	 */
+	private _fetchNextCommand(): { cmd: IAMCPCommand, priority: Priority } | null {
+		let VO: { cmd: IAMCPCommand, priority: Priority } | null = null
+		if (this._queuedCommandsHighPriority.length > 0) {
+			VO = { cmd: this._queuedCommandsHighPriority.shift()!, priority: Priority.HIGH }
+		} else if (this._queuedCommands.length > 0) {
+			VO = { cmd: this._queuedCommands.shift()!, priority: Priority.NORMAL }
+		} else if (this._queuedCommandsLowPriority.length > 0) {
+			VO = { cmd: this._queuedCommandsLowPriority.shift()!, priority: Priority.LOW }
+		}
+		return VO
+	}
+
+	/**
+	 *
+	 */
+	private get _nextCommand(): { cmd: IAMCPCommand, priority: Priority } | null {
+		if (this._queuedCommandsHighPriority.length > 0) {
+			return { cmd: this._queuedCommandsHighPriority[0], priority: Priority.HIGH }
+		} else if (this._queuedCommands.length > 0) {
+			return { cmd: this._queuedCommands[0], priority: Priority.NORMAL }
+		} else if (this._queuedCommandsLowPriority.length > 0) {
+			return { cmd: this._queuedCommandsLowPriority[0], priority: Priority.LOW }
+		} else {
+			return null
+		}
+	}
+
+	/**
+	 *
+	 */
+	private _onSocketError(error: Error): void {
+		this._log(error) // gets emited through the log function
+	}
+
+	/**
+	 *
+	 */
+	private _log(args: any): void {
+		if (args instanceof Error) {
+			if (this.listenerCount('error') > 0) {
+				this.emit('error', args)
+			}
+			if (this.onError) {
+				this.onError(args)
+			}
+		} else {
+			if (this.debug) {
+				console.log(args)
+			}
+			if (this.onLog) {
+				this.onLog(args)
+			}
+			this.emit(LogEvent.LOG, new LogEvent(args))
+		}
+	}
+
+	/**
+	 *
+	 */
+	private _onSocketStatusChange(socketStatus: CasparCGSocketStatusEvent): void {
+		let connected = socketStatus.valueOf().connected === true
+
+		if (this.onConnectionStatus) {
+			this.onConnectionStatus(socketStatus.valueOf())
+		}
+
+		if (connected !== this._connected) {
+			if (connected) {
+				// @todo: handle flush SENT-buffer + shift/push version command in queue. (add back the sent command (retry strategy)) + make sure VERSION comes first after reconnect
+				this._flushSentCommands()
+				// reset cached data
+				delete this._configPromise
+				delete this._pathsPromise
+				delete this._versionPromise
+			}
+
+			this._connected = connected
+			this.emit(CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus)
+
+			if (this.onConnectionChanged) {
+				this.onConnectionChanged(this._connected)
+			}
+			if (this._connected) {
+				this._executeNextCommand() // gets going on commands already on queue, also cleans up sent command buffers
+
+				// do checks to see if the server has been alive and used before this connection, or is in a untouched state
+				if (this.virginServerCheck) {
+					this.doNow(new AMCP.InfoCommand())
+						.then((info) => {
+							let channelPromises: Promise<IAMCPCommand>[] = []
+							let channelLength: number = info.response.data.length
+
+							for (let i: number = 1; i <= channelLength; i++) {	// 1-based index for channels
+								channelPromises.push(this.doNow(new AMCP.InfoCommand({ channel: i })))
+							}
+
+							let virgin: boolean = true
+
+							return Promise.all(channelPromises).then((channels) => {
+								for (let i: number = 0; i < channels.length; i++) {
+									let channelInfo: IAMCPCommand = channels[i]
+									if (channelInfo.response.data.stage) {
+										virgin = false
+										break
+									}
+								}
+								this.emit(CasparCGSocketStatusEvent.CONNECTED, { connected: this._connected, virginServer: virgin })
+								if (this.onConnected) {
+									this.onConnected(this._connected)
+								}
+							})
+						})
+						.catch(() => {
+							this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus)
+							if (this.onConnected) {
+								this.onConnected(this._connected)
+							}
+						})
+
+					// don't check virgin state, just inform about the connection asap
+				} else {
+					this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus)
+					if (this.onConnected) {
+						this.onConnected(this._connected)
+					}
+				}
+			}
+			if (!this._connected) {
+				this.emit(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus)
+				if (this.onDisconnected) {
+					this.onDisconnected(this._connected)
+				}
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	private _onSocketStatusTimeout(): void {
+		if (Object.keys(this._sentCommands).length > 0) {
+			this._log(`Command timed out. Starting flush procedure, with ${Object.keys(this._sentCommands).length} command(s) in sentCommands.`)
+		}
+
+		// @todo: implement retry strategy #81
+
+		// 1) discard
+		// this._expediteCommand(true);
+
+		// 2) retry (max attempts missing)
+		this.reconnect()
+
+		// 3) smart/probe
+		// try to send INFO
+		// -> SUCCESS
+		// discard that single command, procees
+		// -> FAIL
+		// reconncet
+	}
+
+	/**
+	 *
+	 */
+	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
+		/*
+
+		100 [action] - Information about an event.
+		101 [action] - Information about an event. A line of data is being returned.
+
+		200 [command] OK	- The command has been executed and several lines of data (seperated by \r\n) are being returned (terminated with an additional \r\n)
+		201 [command] OK	- The command has been executed and data (terminated by \r\n) is being returned.
+		202 [command] OK	- The command has been executed.
+
+		400 ERROR	- Command not understood
+		401 [command] ERROR	- Illegal video_channel
+		402 [command] ERROR	- Parameter missing
+		403 [command] ERROR	- Illegal parameter
+		404 [command] ERROR	- Media file not found
+
+		500 FAILED	- Internal server error
+		501 [command] FAILED	- Internal server error
+		502 [command] FAILED	- Media file unreadable
+
+		*/
+
+		// receive data & handle possible timeout first
+		// parse incoming data & handle parsing errors (response code unknown, unexpected format)
+		// create error object for response codes 400 to 502
+		// reject with error object
+		// create response object for response codes 200 to 202
+		// resolve with response object
+
+		// handle unkown tokens:
+		let currentCommand: IAMCPCommand
+		if (socketResponse.token) {
+			if (this._queueMode === QueueMode.SALVO && !this._sentCommands[socketResponse.token]) {
+				this._log(`Received a response from an unknown command with token ${socketResponse.token}`)
+				return
+			}
+			currentCommand = this._sentCommands[socketResponse.token]
+			delete this._sentCommands[socketResponse.token]
+		} else {
+			if (Object.keys(this._sentCommands).length === 0) {
+				this._log(`Received a response without knowlingy having sent anyting.`)
+				return
+			}
+
+			let token = Object.keys(this._sentCommands)[0]
+			currentCommand = (this._sentCommands[token])
+			delete this._sentCommands[token]
+		}
+
+		this._log(`Handling response, "${currentCommand.name}" with token "${currentCommand.token}"`)
+		if (!(currentCommand.response instanceof AMCPResponse)) {
+			currentCommand.response = new AMCPResponse()
+		}
+
+		if (currentCommand.validateResponse(socketResponse)) {
+			if (currentCommand.name === 'ScheduleSetCommand') {
+				let scheduledCommand: IAMCPCommand = currentCommand.getParam('command') as IAMCPCommand
+
+				scheduledCommand.status = IAMCPStatus.Sent
+				this._sentCommands[scheduledCommand.token] = scheduledCommand
+
+				this._log(`New command scheduled, "${scheduledCommand.name}".`)
+			} else if (currentCommand.name === 'ScheduleRemoveCommand') {
+				delete this._sentCommands[currentCommand.getParam('token') as string]
+			}
+
+			currentCommand.status = IAMCPStatus.Suceeded
+			currentCommand.resolve(currentCommand)
+		} else {
+			currentCommand.status = IAMCPStatus.Failed
+			currentCommand.reject(currentCommand)
+		}
+		this.emit(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand))
+
+		this._executeNextCommand()
+	}
+
+	/**
+	 *
+	 */
+	private _handleInvalidSocketResponse(): void {
+		// @todo: in the future, perhaps we could better predict that the connection is in a restart-state, and act accordingly, to
+		// gracefully keep/fall back data and/or speed up reconnection??
+	}
+
+	/**
+	 *
+	 */
+	private _flushSentCommands(): void {
+		for (let token in this._sentCommands) {
+			let i = this._sentCommands[token]
+			delete this._sentCommands[token]
+			this._log(`Flushing commands from sent-queue. Deleting: "${i.name}" with token "${i.token}".`)
+			i.status = IAMCPStatus.Failed
+			i.reject(i)
+		}
+	}
+
+	/**
+	 *
+	 */
+	private _executeNextCommand(): void {
+		if (this.connected) {
+			if (this._queueMode === QueueMode.SALVO) {
+				while (this.commandQueueLength > 0) {
+					let nextCommand: { cmd: IAMCPCommand, priority: Priority } | null = this._fetchNextCommand()
+					if (nextCommand) {
+						this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
+						this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
+						this._socket.executeCommand(nextCommand.cmd)
+					}
+				}
+			} else if (this._queueMode === QueueMode.SEQUENTIAL) {
+				let nextCommand: { cmd: IAMCPCommand, priority: Priority } | null = this._fetchNextCommand()
+				if (nextCommand) {
+					this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
+					this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
+					this._socket.executeCommand(nextCommand.cmd)
+				}
+			}
+		} else {
+			if (this.commandQueueLength > 0) {
+				this._log(`Can't process commands, socket not connected. ${this.commandQueueLength} commands left in commandsQueue, the first one being "${this._nextCommand ? this._nextCommand.cmd.name : 'null'}".`)
+			}
+		}
+	}
+}
+
+export class CasparCG extends CasparCGBase {
 
 	/***/
 	public getCasparCGConfig(refresh: boolean = false): Promise<CasparCGConfig> {
@@ -1994,372 +2133,5 @@ export class CasparCG extends EventEmitter implements ICasparCGConnection, Conne
 	 */
 	public scheduleList(timecode?: string): Promise<IAMCPCommand> {
 		return this.do(new AMCP.ScheduleListCommand({ timecode }))
-	}
-
-	/**
-	 * Automatically create a transition object with the correct transition keys
-	 */
-	private _createTransitionOptionsObject(transition?: Enum.Transition | string, transitionDurationOrMaskFileOrProps?: number | string | object, transitionEasingOrStingDuration?: Enum.Ease | string | number, transitionDirectionOrOverlay?: Enum.Direction | string) {
-		if (transition === Enum.Transition.STING.toString()) {
-			if (typeof transitionDurationOrMaskFileOrProps === 'object') {
-				return {
-					stingTransitionProperties: {
-						...transitionDurationOrMaskFileOrProps
-					}
-				}
-			} else {
-				return {
-					stingMaskFilename: transitionDurationOrMaskFileOrProps,
-					stingDelay: transitionEasingOrStingDuration,
-					stingOverlayFilename: transitionDirectionOrOverlay || ''
-				}
-			}
-		} else {
-			return {
-				transitionDuration: transitionDurationOrMaskFileOrProps,
-				transitionEasing: transitionEasingOrStingDuration,
-				transitionDirection: transitionDirectionOrOverlay
-			}
-		}
-	}
-
-	/**
-	 *
-	 */
-	private _createNewSocket(options?: IConnectionOptions, enforceRecreation: boolean = false): void {
-		let hasNewOptions = false
-		if (options) {
-			for (let key in options) {
-				if (!options.hasOwnProperty(key)) {
-					continue
-				}
-
-				if (this.hasOwnProperty(key) || CasparCG.prototype.hasOwnProperty(key)) {
-					// only update new options
-					if ((this as any)[key] !== (options as any)[key]) {
-						(this as any)[key] = (options as any)[key]
-						hasNewOptions = true
-					}
-				}
-			}
-		}
-		// dont recreate if exising socket, same options + host + port
-		if (this._socket && (this._socket.host !== this.host)) {
-			hasNewOptions = true
-		}
-		if (this._socket && (this._socket.port !== this.port)) {
-			hasNewOptions = true
-		}
-		if (this._socket && !hasNewOptions && !enforceRecreation) {
-			return
-		}
-
-		// clean up if existing socket
-		if (this._socket) {
-			this._socket.dispose()
-			delete this._socket
-		}
-		this._socket = new CasparCGSocket(this.host, this.port, this.autoReconnect, this.autoReconnectInterval, this.autoReconnectAttempts, this.queueMode)
-		this._socket.on('error', (error: Error) => this._onSocketError(error))
-		this._socket.on(CasparCGSocketStatusEvent.STATUS, (event: CasparCGSocketStatusEvent) => this._onSocketStatusChange(event))
-		this._socket.on(CasparCGSocketStatusEvent.TIMEOUT, () => this._onSocketStatusTimeout())
-		this._socket.on(CasparCGSocketResponseEvent.RESPONSE, (event: CasparCGSocketResponseEvent) => this._handleSocketResponse(event.response))
-		this._socket.on(CasparCGSocketResponseEvent.INVALID_RESPONSE, () => this._handleInvalidSocketResponse())
-
-		// inherit log method
-		this._socket.log = (args) => this._log(args)
-	}
-
-	/**
-	 *
-	 */
-	private _fetchNextCommand(): { cmd: IAMCPCommand, priority: Priority } | null {
-		let VO: { cmd: IAMCPCommand, priority: Priority } | null = null
-		if (this._queuedCommandsHighPriority.length > 0) {
-			VO = { cmd: this._queuedCommandsHighPriority.shift()!, priority: Priority.HIGH }
-		} else if (this._queuedCommands.length > 0) {
-			VO = { cmd: this._queuedCommands.shift()!, priority: Priority.NORMAL }
-		} else if (this._queuedCommandsLowPriority.length > 0) {
-			VO = { cmd: this._queuedCommandsLowPriority.shift()!, priority: Priority.LOW }
-		}
-		return VO
-	}
-
-	/**
-	 *
-	 */
-	private get _nextCommand(): { cmd: IAMCPCommand, priority: Priority } | null {
-		if (this._queuedCommandsHighPriority.length > 0) {
-			return { cmd: this._queuedCommandsHighPriority[0], priority: Priority.HIGH }
-		} else if (this._queuedCommands.length > 0) {
-			return { cmd: this._queuedCommands[0], priority: Priority.NORMAL }
-		} else if (this._queuedCommandsLowPriority.length > 0) {
-			return { cmd: this._queuedCommandsLowPriority[0], priority: Priority.LOW }
-		} else {
-			return null
-		}
-	}
-
-	/**
-	 *
-	 */
-	private _onSocketError(error: Error): void {
-		this._log(error) // gets emited through the log function
-	}
-
-	/**
-	 *
-	 */
-	private _log(args: any): void {
-		if (args instanceof Error) {
-			if (this.listenerCount('error') > 0) {
-				this.emit('error', args)
-			}
-			if (this.onError) {
-				this.onError(args)
-			}
-		} else {
-			if (this.debug) {
-				console.log(args)
-			}
-			if (this.onLog) {
-				this.onLog(args)
-			}
-			this.emit(LogEvent.LOG, new LogEvent(args))
-		}
-	}
-
-	/**
-	 *
-	 */
-	private _onSocketStatusChange(socketStatus: CasparCGSocketStatusEvent): void {
-		let connected = socketStatus.valueOf().connected === true
-
-		if (this.onConnectionStatus) {
-			this.onConnectionStatus(socketStatus.valueOf())
-		}
-
-		if (connected !== this._connected) {
-			if (connected) {
-				// @todo: handle flush SENT-buffer + shift/push version command in queue. (add back the sent command (retry strategy)) + make sure VERSION comes first after reconnect
-				this._flushSentCommands()
-				// reset cached data
-				delete this._configPromise
-				delete this._pathsPromise
-				delete this._versionPromise
-			}
-
-			this._connected = connected
-			this.emit(CasparCGSocketStatusEvent.STATUS_CHANGED, socketStatus)
-
-			if (this.onConnectionChanged) {
-				this.onConnectionChanged(this._connected)
-			}
-			if (this._connected) {
-				this._executeNextCommand() // gets going on commands already on queue, also cleans up sent command buffers
-
-				// do checks to see if the server has been alive and used before this connection, or is in a untouched state
-				if (this.virginServerCheck) {
-					this.doNow(new AMCP.InfoCommand())
-						.then((info) => {
-							let channelPromises: Promise<IAMCPCommand>[] = []
-							let channelLength: number = info.response.data.length
-
-							for (let i: number = 1; i <= channelLength; i++) {	// 1-based index for channels
-								channelPromises.push(this.doNow(new AMCP.InfoCommand({ channel: i })))
-							}
-
-							let virgin: boolean = true
-
-							return Promise.all(channelPromises).then((channels) => {
-								for (let i: number = 0; i < channels.length; i++) {
-									let channelInfo: IAMCPCommand = channels[i]
-									if (channelInfo.response.data.stage) {
-										virgin = false
-										break
-									}
-								}
-								this.emit(CasparCGSocketStatusEvent.CONNECTED, { connected: this._connected, virginServer: virgin })
-								if (this.onConnected) {
-									this.onConnected(this._connected)
-								}
-							})
-						})
-						.catch(() => {
-							this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus)
-							if (this.onConnected) {
-								this.onConnected(this._connected)
-							}
-						})
-
-					// don't check virgin state, just inform about the connection asap
-				} else {
-					this.emit(CasparCGSocketStatusEvent.CONNECTED, socketStatus)
-					if (this.onConnected) {
-						this.onConnected(this._connected)
-					}
-				}
-			}
-			if (!this._connected) {
-				this.emit(CasparCGSocketStatusEvent.DISCONNECTED, socketStatus)
-				if (this.onDisconnected) {
-					this.onDisconnected(this._connected)
-				}
-			}
-		}
-	}
-
-	/**
-	 *
-	 */
-	private _onSocketStatusTimeout(): void {
-		if (Object.keys(this._sentCommands).length > 0) {
-			this._log(`Command timed out. Starting flush procedure, with ${Object.keys(this._sentCommands).length} command(s) in sentCommands.`)
-		}
-
-		// @todo: implement retry strategy #81
-
-		// 1) discard
-		// this._expediteCommand(true);
-
-		// 2) retry (max attempts missing)
-		this.reconnect()
-
-		// 3) smart/probe
-		// try to send INFO
-		// -> SUCCESS
-		// discard that single command, procees
-		// -> FAIL
-		// reconncet
-	}
-
-	/**
-	 *
-	 */
-	private _handleSocketResponse(socketResponse: CasparCGSocketResponse): void {
-		/*
-
-		100 [action] - Information about an event.
-		101 [action] - Information about an event. A line of data is being returned.
-
-		200 [command] OK	- The command has been executed and several lines of data (seperated by \r\n) are being returned (terminated with an additional \r\n)
-		201 [command] OK	- The command has been executed and data (terminated by \r\n) is being returned.
-		202 [command] OK	- The command has been executed.
-
-		400 ERROR	- Command not understood
-		401 [command] ERROR	- Illegal video_channel
-		402 [command] ERROR	- Parameter missing
-		403 [command] ERROR	- Illegal parameter
-		404 [command] ERROR	- Media file not found
-
-		500 FAILED	- Internal server error
-		501 [command] FAILED	- Internal server error
-		502 [command] FAILED	- Media file unreadable
-
-		*/
-
-		// receive data & handle possible timeout first
-		// parse incoming data & handle parsing errors (response code unknown, unexpected format)
-		// create error object for response codes 400 to 502
-		// reject with error object
-		// create response object for response codes 200 to 202
-		// resolve with response object
-
-		// handle unkown tokens:
-		let currentCommand: IAMCPCommand
-		if (socketResponse.token) {
-			if (this._queueMode === QueueMode.SALVO && !this._sentCommands[socketResponse.token]) {
-				this._log(`Received a response from an unknown command with token ${socketResponse.token}`)
-				return
-			}
-			currentCommand = this._sentCommands[socketResponse.token]
-			delete this._sentCommands[socketResponse.token]
-		} else {
-			if (Object.keys(this._sentCommands).length === 0) {
-				this._log(`Received a response without knowlingy having sent anyting.`)
-				return
-			}
-
-			let token = Object.keys(this._sentCommands)[0]
-			currentCommand = (this._sentCommands[token])
-			delete this._sentCommands[token]
-		}
-
-		this._log(`Handling response, "${currentCommand.name}" with token "${currentCommand.token}"`)
-		if (!(currentCommand.response instanceof AMCPResponse)) {
-			currentCommand.response = new AMCPResponse()
-		}
-
-		if (currentCommand.validateResponse(socketResponse)) {
-			if (currentCommand.name === 'ScheduleSetCommand') {
-				let scheduledCommand: IAMCPCommand = currentCommand.getParam('command') as IAMCPCommand
-
-				scheduledCommand.status = IAMCPStatus.Sent
-				this._sentCommands[scheduledCommand.token] = scheduledCommand
-
-				this._log(`New command scheduled, "${scheduledCommand.name}".`)
-			} else if (currentCommand.name === 'ScheduleRemoveCommand') {
-				delete this._sentCommands[currentCommand.getParam('token') as string]
-			}
-
-			currentCommand.status = IAMCPStatus.Suceeded
-			currentCommand.resolve(currentCommand)
-		} else {
-			currentCommand.status = IAMCPStatus.Failed
-			currentCommand.reject(currentCommand)
-		}
-		this.emit(CasparCGSocketCommandEvent.RESPONSE, new CasparCGSocketCommandEvent(currentCommand))
-
-		this._executeNextCommand()
-	}
-
-	/**
-	 *
-	 */
-	private _handleInvalidSocketResponse(): void {
-		// @todo: in the future, perhaps we could better predict that the connection is in a restart-state, and act accordingly, to
-		// gracefully keep/fall back data and/or speed up reconnection??
-	}
-
-	/**
-	 *
-	 */
-	private _flushSentCommands(): void {
-		for (let token in this._sentCommands) {
-			let i = this._sentCommands[token]
-			delete this._sentCommands[token]
-			this._log(`Flushing commands from sent-queue. Deleting: "${i.name}" with token "${i.token}".`)
-			i.status = IAMCPStatus.Failed
-			i.reject(i)
-		}
-	}
-
-	/**
-	 *
-	 */
-	private _executeNextCommand(): void {
-		if (this.connected) {
-			if (this._queueMode === QueueMode.SALVO) {
-				while (this.commandQueueLength > 0) {
-					let nextCommand: { cmd: IAMCPCommand, priority: Priority } | null = this._fetchNextCommand()
-					if (nextCommand) {
-						this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
-						this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
-						this._socket.executeCommand(nextCommand.cmd)
-					}
-				}
-			} else if (this._queueMode === QueueMode.SEQUENTIAL) {
-				let nextCommand: { cmd: IAMCPCommand, priority: Priority } | null = this._fetchNextCommand()
-				if (nextCommand) {
-					this._sentCommands[nextCommand.cmd.token] = nextCommand.cmd
-					this._log(`Sending command, "${nextCommand.cmd.name}" with priority "${nextCommand.priority === 1 ? 'NORMAL' : nextCommand.priority === 2 ? 'HIGH' : nextCommand.priority === 0 ? 'LOW' : 'unknown'}". ${this._sentCommands.length} command(s) in sentCommands, ${this.commandQueueLength} command(s) in command queues.`)
-					this._socket.executeCommand(nextCommand.cmd)
-				}
-			}
-		} else {
-			if (this.commandQueueLength > 0) {
-				this._log(`Can't process commands, socket not connected. ${this.commandQueueLength} commands left in commandsQueue, the first one being "${this._nextCommand ? this._nextCommand.cmd.name : 'null'}".`)
-			}
-		}
 	}
 }
