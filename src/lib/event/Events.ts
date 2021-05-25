@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/ban-types: 0 */
 import * as BaseEventNS from './BaseEvent'
 import * as CasparCGSocketStatusEventNS from './CasparCGSocketStatusEvent'
 import * as CasparCGSocketCommandEventNS from './CasparCGSocketCommandEvent'

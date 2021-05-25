@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/ban-types: 0 */
 import { EventEmitter } from 'events'
 import { CasparCGSocket } from './lib/CasparCGSocket'
 import * as AMCP from './lib/AMCP'
@@ -184,7 +183,7 @@ export class CasparCGBase extends EventEmitter {
 	 *
 	 */
 	public constructor(options: IConnectionOptions)
-	public constructor(hostOrOptions?: Object | string, port?: number) {
+	public constructor(hostOrOptions?: IConnectionOptions | string, port?: number) {
 		super()
 		let options: ConnectionOptions
 		if (typeof hostOrOptions === 'object') {
@@ -548,7 +547,7 @@ export class CasparCGBase extends EventEmitter {
 	 */
 	protected _createTransitionOptionsObject(
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFileOrProps?: number | string | object,
+		transitionDurationOrMaskFileOrProps?: number | string | Record<string, string | number | undefined>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string
 	) {
@@ -1056,7 +1055,7 @@ export class CasparCG extends CasparCGBase {
 		clip: string,
 		loop?: boolean,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFileOrProps?: number | string | object,
+		transitionDurationOrMaskFileOrProps?: number | string | Record<string, string | number | undefined>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		seek?: number,
@@ -1149,7 +1148,7 @@ export class CasparCG extends CasparCGBase {
 		clip: string,
 		loop?: boolean,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFileOrProps?: number | string | object,
+		transitionDurationOrMaskFileOrProps?: number | string | Record<string, string | number | undefined>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		seek?: number,
@@ -1241,7 +1240,7 @@ export class CasparCG extends CasparCGBase {
 		clip: string,
 		loop?: boolean,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFileOrProps?: number | string | object,
+		transitionDurationOrMaskFileOrProps?: number | string | Record<string, string | number | undefined>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		seek?: number,
@@ -1332,7 +1331,7 @@ export class CasparCG extends CasparCGBase {
 		clip?: string,
 		loop?: boolean,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFileOrStingProps?: number | string | object,
+		transitionDurationOrMaskFileOrStingProps?: number | string | Record<string, string | number | undefined>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		seek?: number,
@@ -1371,7 +1370,7 @@ export class CasparCG extends CasparCGBase {
 		layer = NaN,
 		device: number,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		length?: number,
@@ -1409,7 +1408,7 @@ export class CasparCG extends CasparCGBase {
 		layer = NaN,
 		device: number,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		length?: number,
@@ -1446,7 +1445,7 @@ export class CasparCG extends CasparCGBase {
 		layer = NaN,
 		device: number,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		length?: number,
@@ -1482,7 +1481,7 @@ export class CasparCG extends CasparCGBase {
 		layer = NaN,
 		device?: number,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		length?: number,
@@ -1519,7 +1518,7 @@ export class CasparCG extends CasparCGBase {
 		route: string | { channel: number; layer?: number },
 		mode: string,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		length?: number,
@@ -1561,7 +1560,7 @@ export class CasparCG extends CasparCGBase {
 		route: string | { channel: number; layer?: number },
 		mode: string,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		length?: number,
@@ -1602,7 +1601,7 @@ export class CasparCG extends CasparCGBase {
 		route: string | { channel: number; layer?: number },
 		mode: string,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		length?: number,
@@ -1642,7 +1641,7 @@ export class CasparCG extends CasparCGBase {
 		route: string | { channel: number; layer?: number },
 		mode: string,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		length?: number,
@@ -1681,7 +1680,7 @@ export class CasparCG extends CasparCGBase {
 		layer = NaN,
 		clip: string,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string,
 		auto?: boolean | number | string
@@ -1708,7 +1707,7 @@ export class CasparCG extends CasparCGBase {
 		layer = NaN,
 		url: string,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string
 	): Promise<IAMCPCommand> {
@@ -1737,7 +1736,7 @@ export class CasparCG extends CasparCGBase {
 		layer = NaN,
 		url: string,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string
 	): Promise<IAMCPCommand> {
@@ -1766,7 +1765,7 @@ export class CasparCG extends CasparCGBase {
 		layer = NaN,
 		url?: string,
 		transition?: Enum.Transition | string,
-		transitionDurationOrMaskFile?: number | string | object,
+		transitionDurationOrMaskFile?: number | string | Record<string, string | number>,
 		transitionEasingOrStingDuration?: Enum.Ease | string | number,
 		transitionDirectionOrOverlay?: Enum.Direction | string
 	): Promise<IAMCPCommand> {

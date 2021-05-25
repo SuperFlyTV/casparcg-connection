@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/ban-types: 0 */
 import { EventEmitter } from 'events'
 import * as net from 'net'
 import * as _ from 'highland'

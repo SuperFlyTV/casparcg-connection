@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/ban-types: 0 */
 import * as Enum from './ServerStateEnum'
 // ResponseNS
 import { ResponseSignature } from './ResponseSignature'
@@ -2065,7 +2064,7 @@ export class InfoConfigCommand extends AbstractCommand {
 	responseProtocol = new ResponseSignature(201, ResponseValidator.XMLValidator, ResponseParser.ConfigParser)
 	paramProtocol = []
 
-	constructor(params: string | Param | (string | Param)[], context?: Object) {
+	constructor(params: string | Param | (string | Param)[], context?: Record<string, unknown>) {
 		super(params, context)
 	}
 }

@@ -1,4 +1,3 @@
-/* eslint @typescript-eslint/ban-types: 0 */
 import * as BaseEventNS from './BaseEvent'
 import { IAMCPCommand } from '../AbstractCommand'
 import { CasparCGSocketResponse } from '../AMCPUtil'
