@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/ban-types: 0 */
 import * as Validation from './ParamValidators'
 import IValidator = Validation.IValidator
 import AbstractValidator = Validation.AbstractValidator
@@ -6,10 +7,6 @@ import AbstractValidator = Validation.AbstractValidator
  *
  */
 export class Optional {
-
-	/**
-	 *
-	 */
 	static valueOf(): boolean {
 		return false
 	}
@@ -19,10 +16,6 @@ export class Optional {
  *
  */
 export class Required {
-
-	/**
-	 *
-	 */
 	static valueOf(): boolean {
 		return true
 	}
@@ -32,7 +25,7 @@ export class Required {
  *
  */
 export interface IParamSignature {
-	required: (Required | Optional)
+	required: Required | Optional
 	name: string
 	key: string | null
 	validation: IValidator
@@ -44,19 +37,27 @@ export interface IParamSignature {
 /**
  *
  */
-export type Param = { [k: string]: (string | number | boolean | Object | undefined) }
-export type Payload = { key: string, value: (string | number | boolean | Object), raw: (string | number | boolean | Object | null) }
+export type Param = { [k: string]: string | number | boolean | Object | undefined }
+export type Payload = {
+	key: string
+	value: string | number | boolean | Object
+	raw: string | number | boolean | Object | null
+}
 export type PayloadVO = { [k: string]: Payload }
 
 /**
  *
  */
-export type ParamData = (string | boolean | number | { raw: string | boolean | number, payload: string | boolean | number })
+export type ParamData =
+	| string
+	| boolean
+	| number
+	| { raw: string | boolean | number; payload: string | boolean | number }
 
 /**
  *
  */
-export type TemplateData = Object | String
+export type TemplateData = Object | string
 
 /**
  *
@@ -66,24 +67,22 @@ export class ParamSignature implements IParamSignature {
 	public payload: string | number | boolean | null = null
 	public raw: string | number | boolean | null = null
 
-	/**
-	 *
-	 */
-	constructor(public required: (Required | Optional),
+	constructor(
+		public required: Required | Optional,
 		public name: string,
 		public key: string | null,
-		validation: (IValidator | Object | Function)) {
+		validation: IValidator | Object | Function
+	) {
 		if (validation instanceof AbstractValidator) {
 			this.validation = validation
 		} else if (typeof validation === 'function') {
-			let proto = Object.create((validation as any).prototype)
+			const proto = Object.create((validation as any).prototype)
 			this.validation = new proto.constructor()
+		} else {
+			throw new Error('Argument validation is not executable')
 		}
 	}
 
-	/**
-	 *
-	 */
 	public get resolved(): boolean {
 		return this.validation.resolved
 	}

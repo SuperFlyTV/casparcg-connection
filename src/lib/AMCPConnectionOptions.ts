@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/ban-types: 0 */
 // Callback NS
 import * as CallbackNS from './global/Callback'
 import IBooleanCallback = CallbackNS.IBooleanCallback
@@ -10,7 +11,7 @@ import ISocketStatusCallback = CallbackNS.ISocketStatusCallback
  */
 export enum QueueMode {
 	SALVO = 1,
-	SEQUENTIAL = 2
+	SEQUENTIAL = 2,
 	// SMART 		= 3
 }
 
@@ -21,7 +22,7 @@ export enum CasparCGVersion {
 	V2xx = 2000,
 	V207 = 2007,
 	V21x = 2100,
-	V210 = 2110
+	V210 = 2110,
 }
 
 /**
@@ -67,19 +68,19 @@ export class ConnectionOptions implements IConnectionOptions {
 	public onDisconnected: IBooleanCallback | undefined = undefined
 	public onError: IErrorCallback | undefined = undefined
 
-	/**
-	 *
-	 */
-	constructor(host?: string, port?: number);
-	constructor(options?: IConnectionOptions);
+	constructor(host?: string, port?: number)
+	constructor(options?: IConnectionOptions)
 	constructor(hostOrOptions?: IConnectionOptions | string, port?: number) {
 		// if object
-		let hasSetHost: boolean = false
-		let hasSetPort: boolean = false
+		let hasSetHost = false
+		let hasSetPort = false
 		if (hostOrOptions && typeof hostOrOptions === 'object') {
-			if (hostOrOptions.hasOwnProperty('host') && hostOrOptions.host !== undefined) {
-				let host: string = hostOrOptions.host
-				let dnsValidation: Array<string> | null = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(host)
+			if ('host' in hostOrOptions && hostOrOptions.host !== undefined) {
+				const host: string = hostOrOptions.host
+				const dnsValidation: Array<string> | null =
+					/((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?::([0-9]{4}))?/.exec(
+						host
+					)
 				if (dnsValidation) {
 					// host
 					if (dnsValidation[1]) {
@@ -97,19 +98,19 @@ export class ConnectionOptions implements IConnectionOptions {
 			}
 
 			// @todo: object assign
-			for (let key in hostOrOptions) {
+			for (const key in hostOrOptions) {
 				// host or port has been set directly and should not be overridden again
-				if (hasSetHost && (key === 'host')) {
+				if (hasSetHost && key === 'host') {
 					continue
 				}
-				if (hasSetPort && (key === 'port')) {
+				if (hasSetPort && key === 'port') {
 					continue
 				}
-				if (!hostOrOptions.hasOwnProperty(key)) {
+				if (!(key in hostOrOptions)) {
 					continue
 				}
-				if (this.hasOwnProperty(key)) {
-					(this as any)[key] = (hostOrOptions as any)[key]
+				if (key in this) {
+					;(this as any)[key] = (hostOrOptions as any)[key]
 				}
 			}
 			return
@@ -117,7 +118,10 @@ export class ConnectionOptions implements IConnectionOptions {
 
 		// else
 		if (typeof hostOrOptions === 'string') {
-			let dnsValidation: Array<string> | null = /((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?:\:([0-9]{4}))?/.exec(hostOrOptions.toString())
+			const dnsValidation: Array<string> | null =
+				/((?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?)(?::([0-9]{4}))?/.exec(
+					hostOrOptions.toString()
+				)
 			if (dnsValidation) {
 				// host
 				if (dnsValidation[1]) {

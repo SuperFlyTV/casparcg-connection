@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/ban-types: 0 */
 // Config NS
 import * as Config from './Config'
 // Options NS
@@ -9,12 +10,11 @@ import { XMLValidator } from './ResponseValidators'
 // Response NS
 import { ConfigParser } from './ResponseParsers'
 
-/***/
 export function parseConfigFrom207XML(XMLString: string): Config.Intermediate.CasparCGConfig | {} {
-	let validator: XMLValidator = new XMLValidator()
-	let parser: ConfigParser = new ConfigParser()
+	const validator: XMLValidator = new XMLValidator()
+	const parser: ConfigParser = new ConfigParser()
 	parser.context = { serverVersion: CasparCGVersion.V207 }
-	let fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString)	// @todo: does this work?
+	const fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString) // @todo: does this work?
 	let validData: Object = validator.resolve(fauxResponseData)
 	if (validData === false) {
 		return {}
@@ -27,12 +27,11 @@ export function parseConfigFrom207XML(XMLString: string): Config.Intermediate.Ca
 	return validData
 }
 
-/***/
 export function parseConfigFrom210XML(XMLString: string): Config.Intermediate.CasparCGConfig | {} {
-	let validator: XMLValidator = new XMLValidator()
-	let parser: ConfigParser = new ConfigParser()
+	const validator: XMLValidator = new XMLValidator()
+	const parser: ConfigParser = new ConfigParser()
 	parser.context = { serverVersion: CasparCGVersion.V210 }
-	let fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString)	// @todo: does this work?
+	const fauxResponseData: CasparCGSocketResponse = new CasparCGSocketResponse(XMLString) // @todo: does this work?
 	let validData: Object = {}
 	validData = validator.resolve(fauxResponseData)
 	if (validData === false) {

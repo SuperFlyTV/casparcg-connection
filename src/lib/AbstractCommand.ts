@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/ban-types: 0 */
 // AMCPUtilNS
 import { CasparCGSocketResponse } from './AMCPUtil'
 // ResponseNS
@@ -5,13 +6,7 @@ import { ResponseSignature } from './ResponseSignature'
 import { IResponseValidator } from './ResponseValidators'
 import { IResponseParser } from './ResponseParsers'
 // Param NS
-import {
-	Payload,
-	PayloadVO,
-	Param,
-	ParamData,
-	IParamSignature,
-} from './ParamSignature'
+import { Payload, PayloadVO, Param, ParamData, IParamSignature } from './ParamSignature'
 // Validation ND
 import { PositiveNumberValidatorBetween } from './ParamValidators'
 // Protocol NS
@@ -33,9 +28,9 @@ export interface IAMCPResponse {
  *
  */
 export class AMCPResponse implements IAMCPResponse {
-	public code: number
-	public raw: string
 	public data: any
+
+	constructor(public code: number, public raw: string) {}
 
 	public toString(): string {
 		return this.raw.replace(/\r?\n|\r/gi, '')
@@ -53,7 +48,7 @@ export enum IAMCPStatus {
 	Sent = 3,
 	Suceeded = 4,
 	Failed = 5,
-	Timeout = 6
+	Timeout = 6,
 }
 
 /**
@@ -86,10 +81,10 @@ export interface IAMCPCommand extends IAMCPCommandData {
 	paramProtocol: Array<IParamSignature>
 	protocolLogic: Array<IProtocolLogic>
 	responseProtocol: ResponseSignature
-	onStatusChanged: ICommandStatusCallback
+	onStatusChanged?: ICommandStatusCallback
 	token: string
-	resolve: (command: IAMCPCommand) => void
-	reject: (command: IAMCPCommand) => void
+	resolve?: (command: IAMCPCommand) => void
+	reject?: (command: IAMCPCommand) => void
 	getParam: (name: string) => string | number | boolean | Object | undefined
 	validateParams(): boolean
 	validateResponse(response: CasparCGSocketResponse): boolean
@@ -101,15 +96,15 @@ export interface IAMCPCommand extends IAMCPCommandData {
  *
  */
 export abstract class AbstractCommand implements IAMCPCommand {
-	response: IAMCPResponse = new AMCPResponse()
-	paramProtocol: Array<IParamSignature>
+	response: IAMCPResponse = new AMCPResponse(0, '')
+	abstract paramProtocol: Array<IParamSignature>
 	responseProtocol: ResponseSignature = new ResponseSignature()
-	onStatusChanged: ICommandStatusCallback
-	resolve: (command: IAMCPCommand) => void
-	reject: (command: IAMCPCommand) => void
-	protected _channel: number
-	protected _layer: number
-	protected _id: string
+	onStatusChanged?: ICommandStatusCallback
+	resolve?: (command: IAMCPCommand) => void
+	reject?: (command: IAMCPCommand) => void
+	protected _channel = 0
+	protected _layer?: number
+	protected _id?: string
 	protected _payload: PayloadVO = {}
 	protected _stringParamsArray: Array<string>
 	protected _objectParams: Param
@@ -129,9 +124,6 @@ export abstract class AbstractCommand implements IAMCPCommand {
 	// param list (dynamic)
 	// media info/template file-type to generate param data for fields
 
-	/**
-	 *
-	 */
 	constructor(params?: string | Param | (string | Param)[], public context?: Object) {
 		// parse params to objects
 		let paramsArray: Array<string | Param> = []
@@ -151,22 +143,23 @@ export abstract class AbstractCommand implements IAMCPCommand {
 				element = element.toString().trim()
 				this._stringParamsArray = this._stringParamsArray.concat([...element.toString().split(/\s+/)]) // @todo: string delimiter pairing (,;) -> objectArray
 			} else {
-				for (let prop in element) {
+				for (const prop in element) {
 					this._objectParams[prop] = element[prop]
 				}
 			}
 		}
 	}
 
-	/**
-	 *
-	 */
 	public validateParams(): boolean {
-		let required: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === true) : []
-		let optional: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter(signature => signature.required.valueOf() === false) : []
+		const required: Array<IParamSignature> = this.paramProtocol
+			? this.paramProtocol.filter((signature) => signature.required.valueOf() === true)
+			: []
+		const optional: Array<IParamSignature> = this.paramProtocol
+			? this.paramProtocol.filter((signature) => signature.required.valueOf() === false)
+			: []
 
 		// check all required
-		for (let signature of required) {
+		for (const signature of required) {
 			if (!this.validateParam(signature)) {
 				return false
 			}
@@ -181,15 +174,21 @@ export abstract class AbstractCommand implements IAMCPCommand {
 			return false
 		}
 
-		let validParams: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter((param) => param.resolved && param.payload !== null) : []
-		let invalidParams: Array<IParamSignature> = this.paramProtocol ? this.paramProtocol.filter((param) => param.resolved && param.payload === null && param.required.valueOf() === true) : []
+		const validParams: Array<IParamSignature> = this.paramProtocol
+			? this.paramProtocol.filter((param) => param.resolved && param.payload !== null)
+			: []
+		const invalidParams: Array<IParamSignature> = this.paramProtocol
+			? this.paramProtocol.filter(
+					(param) => param.resolved && param.payload === null && param.required.valueOf() === true
+			  )
+			: []
 
 		if (invalidParams.length > 0) {
 			return false
 		}
 
 		validParams.forEach((param) => {
-			let payload: Payload = { key: '', value: {}, raw: null }
+			const payload: Payload = { key: '', value: {}, raw: null }
 			payload.key = param.key || ''
 			payload.value = param.payload !== null ? param.payload : {}
 			payload.raw = param.raw
@@ -206,9 +205,6 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		return undefined
 	}
 
-	/**
-	 *
-	 */
 	public validateResponse(response: CasparCGSocketResponse): boolean {
 		// assign raw response
 		this.response.raw = response.responseString
@@ -221,7 +217,8 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		}
 		// data is valid
 		let validData: Object = {}
-		if (this.responseProtocol.validator) { // @todo: typechecking ("class that implements....")
+		if (this.responseProtocol.validator) {
+			// @todo: typechecking ("class that implements....")
 			const validator: IResponseValidator = new this.responseProtocol.validator()
 			validData = validator.resolve(response)
 			if (validData === false) {
@@ -230,7 +227,8 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		}
 
 		// data gets parsed
-		if (this.responseProtocol.parser && validData) { // @todo: typechecking ("class that implements....")
+		if (this.responseProtocol.parser && validData) {
+			// @todo: typechecking ("class that implements....")
 			const parser: IResponseParser = new this.responseProtocol.parser()
 			parser.context = this.context
 			validData = parser.parse(validData)
@@ -243,52 +241,31 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		return true
 	}
 
-	/**
-	 *
-	 */
 	get payload(): PayloadVO {
 		return this._payload
 	}
 
-	/**
-	 *
-	 */
 	get id(): string {
 		return this._id || (new Date().getTime() + Math.random() * 100).toString()
 	}
 
-	/**
-	 *
-	 */
 	get name(): string {
 		return this.constructor.name
 	}
 
-	/**
-	 *
-	 */
 	get protocolLogic(): Array<IProtocolLogic> {
 		// TODO: I suspect an error here;
 		return (this.constructor as any).protocolLogic || []
 	}
 
-	/**
-	 *
-	 */
 	get channel(): number {
 		return -1
 	}
 
-	/**
-	 *
-	 */
 	get layer(): number {
 		return -1
 	}
 
-	/**
-	 *
-	 */
 	get address(): string {
 		return ''
 	}
@@ -297,16 +274,10 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		return this._token
 	}
 
-	/**
-	 *
-	 */
 	get status(): IAMCPStatus {
 		return this._status
 	}
 
-	/**
-	 *
-	 */
 	set status(code: IAMCPStatus) {
 		if (code !== this._status) {
 			this._status = code
@@ -316,9 +287,6 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		}
 	}
 
-	/**
-	 *
-	 */
 	public serialize(): IAMCPCommandVO {
 		return {
 			channel: this.channel,
@@ -328,13 +296,10 @@ export abstract class AbstractCommand implements IAMCPCommand {
 			status: this.status,
 			_commandName: this.constructor['name'],
 			_objectParams: this._objectParams,
-			_stringParamsArray: this._stringParamsArray
+			_stringParamsArray: this._stringParamsArray,
 		} as IAMCPCommandVO
 	}
 
-	/**
-	 *
-	 */
 	populate(cmdVO: IAMCPCommandVO, id: string): void {
 		this._stringParamsArray = cmdVO._stringParamsArray
 		this._objectParams = cmdVO._objectParams
@@ -342,11 +307,8 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		this._id = id
 	}
 
-	/**
-	 *
-	 */
 	public toString(): string {
-		let message: string = ''
+		let message = ''
 
 		switch (this.status) {
 			case IAMCPStatus.Invalid:
@@ -372,15 +334,11 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		return message
 	}
 
-	/**
-	 *
-	 */
 	protected validateParam(signature: IParamSignature): boolean {
-		let result: ParamData
 		let param: Object | undefined
 
 		// objectParams parsing
-		if (this._objectParams.hasOwnProperty(signature.name)) {
+		if (signature.name in this._objectParams) {
 			param = this._objectParams[signature.name]
 		} else {
 			// stringParam parsing
@@ -395,10 +353,10 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		if (param === undefined) {
 			return false
 		}
-		result = signature.validation.resolve(param, (signature.key || signature.name))
+		const result = signature.validation.resolve(param, signature.key || signature.name)
 		if (result !== false) {
 			signature.validation.resolved = true
-			if (typeof result === 'object' && result.hasOwnProperty('raw') && result.hasOwnProperty('payload')) {
+			if (typeof result === 'object' && 'raw' in result && 'payload' in result) {
 				signature.payload = result.payload
 				signature.raw = result.raw
 			} else {
@@ -410,37 +368,29 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		}
 	}
 
-	/**
-	 *
-	 */
 	protected validateProtocolLogic(): boolean {
-
 		if (!this.protocolLogic) {
 			return true
 		}
 
 		let result: Array<IParamSignature>
-		for (let rule of this.protocolLogic) {
+		for (const rule of this.protocolLogic) {
 			result = rule.resolve(this.paramProtocol)
 			this.paramProtocol = result
 		}
 		return true
 	}
 
-	/**
-	 *
-	 */
 	protected validateChannel(): number {
-		let result: ParamData
-		let validator = new PositiveNumberValidatorBetween(1, 9999)
+		const validator = new PositiveNumberValidatorBetween(1, 9999)
 		let param: number
 
-		if (this._objectParams.hasOwnProperty('channel')) {
+		if ('channel' in this._objectParams) {
 			param = Number(this._objectParams['channel'])
 		} else {
 			param = NaN
 		}
-		result = validator.resolve(param)
+		const result: ParamData = validator.resolve(param)
 		if (result !== false) {
 			return Number(result)
 		}
@@ -449,20 +399,16 @@ export abstract class AbstractCommand implements IAMCPCommand {
 		return NaN
 	}
 
-	/**
-	 *
-	 */
 	protected validateLayer(fallback?: number): number {
-		let result: ParamData
-		let validator = new PositiveNumberValidatorBetween(0, 9999)
+		const validator = new PositiveNumberValidatorBetween(0, 9999)
 		let param: number
 
-		if (this._objectParams.hasOwnProperty('layer')) {
+		if ('layer' in this._objectParams) {
 			param = Number(this._objectParams['layer'])
 		} else {
 			param = fallback || NaN
 		}
-		result = validator.resolve(param)
+		const result = validator.resolve(param)
 		if (result !== false) {
 			return Number(result)
 		}
@@ -477,7 +423,7 @@ export abstract class AbstractCommand implements IAMCPCommand {
  */
 export function isIAMCPCommand(object: any): object is IAMCPCommand {
 	// @todo: better inheritance type checking
-	for (let prop in AbstractCommand.prototype) {
+	for (const prop in AbstractCommand.prototype) {
 		if (object[prop] === undefined) {
 			return false
 		}
@@ -489,14 +435,10 @@ export function isIAMCPCommand(object: any): object is IAMCPCommand {
  *
  */
 export abstract class AbstractOrChannelOrLayerCommand extends AbstractCommand {
-
-	/**
-	 *
-	 */
-	constructor(params?: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params?: string | Param | (string | Param)[], context?: Object) {
 		super(params, context)
-		let channel: number = this.validateChannel()
-		let layer: number = this.validateLayer()
+		const channel: number = this.validateChannel()
+		const layer: number = this.validateLayer()
 		if (channel) {
 			this._channel = channel
 			if (layer) {
@@ -505,32 +447,23 @@ export abstract class AbstractOrChannelOrLayerCommand extends AbstractCommand {
 		}
 	}
 
-	/**
-	 *
-	 */
 	get channel(): number {
 		return this._channel || -1
 	}
 
-	/**
-	 *
-	 */
 	get layer(): number {
 		return this._layer || -1
 	}
 
-	/**
-	 *
-	 */
 	get address(): string {
-		let address: string = ''
+		let address = ''
 
-		if (this.channel && (this.channel > -1)) {
+		if (this.channel && this.channel > -1) {
 			address = this.channel.toString()
 		} else {
 			return address
 		}
-		if (this.layer && (this.layer > -1)) {
+		if (this.layer && this.layer > -1) {
 			address = `${address}-${this.layer}`
 		}
 
@@ -542,12 +475,9 @@ export abstract class AbstractOrChannelOrLayerCommand extends AbstractCommand {
  *
  */
 export abstract class AbstractChannelCommand extends AbstractCommand {
-	/**
-	 *
-	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: string | Param | (string | Param)[], context?: Object) {
 		super(params, context)
-		let channel: number = this.validateChannel()
+		const channel: number = this.validateChannel()
 		if (channel) {
 			this._channel = channel
 			this._layer = -1
@@ -556,23 +486,14 @@ export abstract class AbstractChannelCommand extends AbstractCommand {
 		}
 	}
 
-	/**
-	 *
-	 */
 	get channel(): number {
 		return this._channel || -1
 	}
 
-	/**
-	 *
-	 */
 	get layer(): number {
 		return -1
 	}
 
-	/**
-	 *
-	 */
 	get address(): string {
 		if (this.channel) {
 			return this.channel.toString()
@@ -587,14 +508,10 @@ export abstract class AbstractChannelCommand extends AbstractCommand {
  *
  */
 export abstract class AbstractLayerCommand extends AbstractCommand {
-
-	/**
-	 *
-	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: string | Param | (string | Param)[], context?: Object) {
 		super(params, context)
-		let channel: number = this.validateChannel()
-		let layer: number = this.validateLayer()
+		const channel: number = this.validateChannel()
+		const layer: number = this.validateLayer()
 		if (channel && layer) {
 			this._channel = channel
 			this._layer = layer
@@ -603,32 +520,23 @@ export abstract class AbstractLayerCommand extends AbstractCommand {
 		}
 	}
 
-	/**
-	 *
-	 */
 	get channel(): number {
 		return this._channel || -1
 	}
 
-	/**
-	 *
-	 */
 	get layer(): number {
 		return this._layer || -1
 	}
 
-	/**
-	 *
-	 */
 	get address(): string {
 		let address: string
-		if (this.channel && (this.channel > -1)) {
+		if (this.channel && this.channel > -1) {
 			address = this.channel.toString()
 		} else {
 			return ''
 			// @todo throw???
 		}
-		if (this.layer && (this.layer > -1)) {
+		if (this.layer && this.layer > -1) {
 			address = `${address}-${this.layer}`
 		} else {
 			return ''
@@ -643,43 +551,29 @@ export abstract class AbstractLayerCommand extends AbstractCommand {
  *
  */
 export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
-
-	/**
-	 *
-	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: string | Param | (string | Param)[], context?: Object) {
 		super(params, context)
-		let channel: number = this.validateChannel()
-		let layer: number = this.validateLayer()
+		const channel: number = this.validateChannel()
+		const layer: number = this.validateLayer()
 
 		if (channel) {
 			this._channel = channel
 			if (layer) {
 				this._layer = layer
 			}
-
 		} else {
 			throw new Error('Needs at least channel') // @todo: dispatch
 		}
 	}
 
-	/**
-	 *
-	 */
 	get channel(): number {
 		return this._channel || -1
 	}
 
-	/**
-	 *
-	 */
 	get layer(): number {
 		return this._layer || -1
 	}
 
-	/**
-	 *
-	 */
 	get address(): string {
 		let address: string
 		if (this.channel) {
@@ -688,7 +582,7 @@ export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
 			return ''
 			// @todo throw???
 		}
-		if (this.layer && (this.layer > -1)) {
+		if (this.layer && this.layer > -1) {
 			address = `${address}-${this.layer}`
 		}
 
@@ -700,14 +594,10 @@ export abstract class AbstractChannelOrLayerCommand extends AbstractCommand {
  *
  */
 export abstract class AbstractLayerWithFallbackCommand extends AbstractCommand {
-
-	/**
-	 *
-	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: string | Param | (string | Param)[], context?: Object) {
 		super(params, context)
-		let channel: number = this.validateChannel()
-		let layer: number = this.validateLayer(0)
+		const channel: number = this.validateChannel()
+		const layer: number = this.validateLayer(0)
 		if (channel) {
 			this._channel = channel
 			this._layer = layer
@@ -716,23 +606,14 @@ export abstract class AbstractLayerWithFallbackCommand extends AbstractCommand {
 		}
 	}
 
-	/**
-	 *
-	 */
 	get channel(): number {
 		return this._channel || -1
 	}
 
-	/**
-	 *
-	 */
 	get layer(): number {
 		return this._layer || -1
 	}
 
-	/**
-	 *
-	 */
 	get address(): string {
 		let address: string
 		if (this.channel) {
@@ -741,7 +622,7 @@ export abstract class AbstractLayerWithFallbackCommand extends AbstractCommand {
 			return ''
 			// @todo throw???
 		}
-		if (this.layer && (this.layer > -1)) {
+		if (this.layer && this.layer > -1) {
 			address = `${address}-${this.layer}`
 		}
 
@@ -753,14 +634,10 @@ export abstract class AbstractLayerWithFallbackCommand extends AbstractCommand {
  *
  */
 export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand {
-
-	/**
-	 *
-	 */
-	constructor(params: (string | Param | (string | Param)[]), context?: Object) {
+	constructor(params: string | Param | (string | Param)[], context?: Object) {
 		super(params, context)
-		let channel: number = this.validateChannel()
-		let layer: number = this.validateLayer(9999)
+		const channel: number = this.validateChannel()
+		const layer: number = this.validateLayer(9999)
 		if (channel) {
 			this._channel = channel
 			this._layer = layer
@@ -769,23 +646,14 @@ export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand
 		}
 	}
 
-	/**
-	 *
-	 */
 	get channel(): number {
 		return this._channel || -1
 	}
 
-	/**
-	 *
-	 */
 	get layer(): number {
 		return this._layer || -1
 	}
 
-	/**
-	 *
-	 */
 	get address(): string {
 		let address: string
 		if (this.channel) {
@@ -794,7 +662,7 @@ export abstract class AbstractLayerWithCgFallbackCommand extends AbstractCommand
 			return ''
 			// @todo throw???
 		}
-		if (this.layer && (this.layer > -1)) {
+		if (this.layer && this.layer > -1) {
 			address = `${address}-${this.layer}`
 		}
 

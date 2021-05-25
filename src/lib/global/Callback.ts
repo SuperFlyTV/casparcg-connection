@@ -1,8 +1,8 @@
+/* eslint @typescript-eslint/ban-types: 0 */
 import { BaseEvent, SocketStatusOptions } from '../event/Events'
 import * as CommandNS from '../AbstractCommand'
 import IAMCPResponse = CommandNS.IAMCPResponse
 import IAMCPStatus = CommandNS.IAMCPStatus
-
 
 /**
  *

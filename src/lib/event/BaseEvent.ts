@@ -1,21 +1,15 @@
-
+/* eslint @typescript-eslint/ban-types: 0 */
 /**
  *
  */
 export class BaseEvent {
-	public _val: Object
+	public _val: Record<string, unknown> | unknown
 
-	/**
-	 *
-	 */
-	constructor(params: Object) {
+	constructor(params: Record<string, unknown> | unknown) {
 		this._val = params
 	}
 
-	/**
-	 *
-	 */
-	valueOf(): Object {
+	valueOf(): Record<string, unknown> | unknown {
 		return this._val
 	}
 }

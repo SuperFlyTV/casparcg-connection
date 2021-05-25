@@ -1,101 +1,88 @@
-import *as Path from 'path'
+/* eslint @typescript-eslint/ban-types: 0 */
+import * as Path from 'path'
 import { CasparCGVersion } from './AMCPConnectionOptions'
 // config NS
 import * as ConfigNS from './Config'
 import CasparCGConfig = ConfigNS.Intermediate.CasparCGConfig
 
-
-/***/
 export class CasparCGPaths {
-	media: string
-	data: string
-	log: string
-	template: string
-	thumbnail: string
+	media: string | undefined
+	data: string | undefined
+	log: string | undefined
+	template: string | undefined
+	thumbnail: string | undefined
 	font?: string | undefined
-	root: string
+	root: string | undefined
 
-	/***/
 	static ensureTrailingSlash(path: string): string {
-		return ((path.slice(-1) === '/' || path.slice(-1) === '\\') ? path : path + '/')
+		return path.slice(-1) === '/' || path.slice(-1) === '\\' ? path : path + '/'
 	}
 
-	/***/
 	get thumbnails(): string {
-		return this.thumbnail
+		return this.thumbnail || ''
 	}
 
-	/***/
 	get absoluteMedia(): string {
-		return this.absolutePath(this.media)
+		return this.absolutePath(this.media || '')
 	}
 
-	/***/
 	get absoluteData(): string {
-		return this.absolutePath(this.data)
+		return this.absolutePath(this.data || '')
 	}
 
-	/***/
 	get absoluteLog(): string {
-		return this.absolutePath(this.log)
+		return this.absolutePath(this.log || '')
 	}
 
-	/***/
 	get absoluteTemplate(): string {
-		return this.absolutePath(this.template)
+		return this.absolutePath(this.template || '')
 	}
 
-	/***/
 	get absoluteThumbnail(): string {
-		return this.absolutePath(this.thumbnail)
+		return this.absolutePath(this.thumbnail || '')
 	}
 
-	/***/
 	get absoluteThumbnails(): string {
 		return this.absolutePath(this.thumbnails)
 	}
 
-	/***/
 	get absoluteFont(): string | undefined {
 		return this.font ? this.absolutePath(this.font) : undefined
 	}
 
-	/***/
 	private absolutePath(relativeOrAbsolutePath: string): string {
-		if (relativeOrAbsolutePath.match(/\:\\|\:\//)) {
+		if (relativeOrAbsolutePath.match(/:\\|:\//)) {
 			return CasparCGPaths.ensureTrailingSlash(relativeOrAbsolutePath)
 		}
 
-		return CasparCGPaths.ensureTrailingSlash(Path.join(this.root, relativeOrAbsolutePath))
+		return CasparCGPaths.ensureTrailingSlash(Path.join(this.root || '', relativeOrAbsolutePath))
 	}
 }
-/***/
-export class ChannelRate {
 
+export class ChannelRate {
 	public channelRate: number
 	public frameRate: number
 	public isInterlaced: boolean
 
-	/***/
 	constructor(rateExpression: string) {
 		this.isInterlaced = rateExpression.indexOf('i') > -1
-		let rateMatch: RegExpMatchArray | null = rateExpression.match(/[0-9]+$/)
-		let rate: number = 0
+		const rateMatch: RegExpMatchArray | null = rateExpression.match(/[0-9]+$/)
+		let rate = 0
 		if (rateMatch) {
 			rate = +rateMatch[0]
 		}
 
 		if (rate === 5994) {
-			this.channelRate = 60 * 1000 / 1001
-			this.frameRate = this.isInterlaced ? 30 * 1000 / 1001 : this.channelRate
+			this.channelRate = (60 * 1000) / 1001
+			this.frameRate = this.isInterlaced ? (30 * 1000) / 1001 : this.channelRate
 		} else if (rateExpression.toLowerCase() === 'pal') {
 			this.isInterlaced = true
 			this.channelRate = 50
 			this.frameRate = 25
 		} else if (rateExpression.toLowerCase() === 'ntsc') {
 			this.isInterlaced = true
-			this.channelRate = 60 * 1000 / 1001
-			this.frameRate = 30 * 1000 / 1001
+			this.channelRate = (60 * 1000) / 1001
+			this.frameRate = (30 * 1000) / 1001
 		} else {
 			this.channelRate = rate / 100
 			this.frameRate = this.isInterlaced ? rate / 200 : this.channelRate
@@ -122,21 +109,23 @@ export abstract class AbstractParser {
  *
  */
 export class ChannelParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: any): Object {
 		data = [].concat(data)
-		let result: Array<Object> = [];
-		(data as Array<Object>).forEach((channel) => {
-			let components: Array<string> = channel.toString().split(/\s|,/)
+		const result: Array<Object> = []
+		;(data as Array<Object>).forEach((channel) => {
+			const components: Array<string> = channel.toString().split(/\s|,/)
 
-			let i: number = +components.shift()!
-			let format: string = components.shift() || ''
-			let rates: ChannelRate = new ChannelRate(format)
+			const i: number = parseInt(components.shift() || '-1')
+			const format: string = components.shift() || ''
+			const rates: ChannelRate = new ChannelRate(format)
 
-			result.push({ channel: i, format: format.toLowerCase(), channelRate: rates.channelRate, frameRate: rates.frameRate, interlaced: rates.isInterlaced })
+			result.push({
+				channel: i,
+				format: format.toLowerCase(),
+				channelRate: rates.channelRate,
+				frameRate: rates.frameRate,
+				interlaced: rates.isInterlaced,
+			})
 		})
 
 		if (result.length > 0) {
@@ -147,18 +136,16 @@ export class ChannelParser extends AbstractParser implements IResponseParser {
 	}
 }
 
-/***/
 export class ConfigParser extends AbstractParser implements IResponseParser {
-	/***/
 	public parse(data: Object): Object {
 		let serverVersion: CasparCGVersion
-		if (this.context && this.context.hasOwnProperty('serverVersion') && this.context.serverVersion > CasparCGVersion.V21x) {
+		if (this.context && 'serverVersion' in this.context && this.context.serverVersion > CasparCGVersion.V21x) {
 			serverVersion = CasparCGVersion.V210
 		} else {
 			serverVersion = CasparCGVersion.V207
 		}
 
-		let configResult: CasparCGConfig = new CasparCGConfig(serverVersion)
+		const configResult: CasparCGConfig = new CasparCGConfig(serverVersion)
 		configResult.import(data)
 		return configResult
 	}
@@ -168,10 +155,6 @@ export class ConfigParser extends AbstractParser implements IResponseParser {
  *
  */
 export class DataParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -181,10 +164,6 @@ export class DataParser extends AbstractParser implements IResponseParser {
  *
  */
 export class DataListParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -194,10 +173,6 @@ export class DataListParser extends AbstractParser implements IResponseParser {
  *
  */
 export class InfoTemplateParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -207,10 +182,6 @@ export class InfoTemplateParser extends AbstractParser implements IResponseParse
  *
  */
 export class HelpParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -220,10 +191,6 @@ export class HelpParser extends AbstractParser implements IResponseParser {
  *
  */
 export class GLParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -233,10 +200,6 @@ export class GLParser extends AbstractParser implements IResponseParser {
  *
  */
 export class InfoDelayParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -246,10 +209,6 @@ export class InfoDelayParser extends AbstractParser implements IResponseParser {
  *
  */
 export class InfoParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -259,10 +218,6 @@ export class InfoParser extends AbstractParser implements IResponseParser {
  *
  */
 export class InfoThreadsParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -272,10 +227,6 @@ export class InfoThreadsParser extends AbstractParser implements IResponseParser
  *
  */
 export class ThumbnailParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return `data:image/png;base64,${data}`
 	}
@@ -285,10 +236,6 @@ export class ThumbnailParser extends AbstractParser implements IResponseParser {
  *
  */
 export class VersionParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -298,44 +245,39 @@ export class VersionParser extends AbstractParser implements IResponseParser {
  *
  */
 export class ContentParser extends AbstractParser implements IResponseParser {
-
 	static parseTimeString(timeDateString: string): number {
-
 		timeDateString = timeDateString.replace(/[tT]/g, '')
 
-		let year: number = parseInt(timeDateString.slice(0, 4), 10)
-		let month: number = parseInt(timeDateString.slice(4, 6), 10)
-		let date: number = parseInt(timeDateString.slice(6, 8), 10)
-		let hours: number = parseInt(timeDateString.slice(8, 10), 10)
-		let minutes: number = parseInt(timeDateString.slice(10, 12), 10)
-		let seconds: number = parseInt(timeDateString.slice(12, 14), 10)
+		const year: number = parseInt(timeDateString.slice(0, 4), 10)
+		const month: number = parseInt(timeDateString.slice(4, 6), 10)
+		const date: number = parseInt(timeDateString.slice(6, 8), 10)
+		const hours: number = parseInt(timeDateString.slice(8, 10), 10)
+		const minutes: number = parseInt(timeDateString.slice(10, 12), 10)
+		const seconds: number = parseInt(timeDateString.slice(12, 14), 10)
 		return new Date(year, month, date, hours, minutes, seconds).getTime()
 	}
 
-	/**
-	 *
-	 */
 	public parse(data: Array<string>): Object {
 		return data.map((i: string) => {
-			let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
+			const components: RegExpMatchArray | null = i.match(/"([\s\S]*)" +([\s\S]*)/)
 
 			if (components === null) {
 				// propably 2.2.0
 				return {
 					name: i,
-					type: 'template'
+					type: 'template',
 				}
 			}
 
-			let name: string = components[1].replace(/\\/g, '/')
-			let typeData: Array<string> = components[2].split(/\s+/)
+			const name: string = components[1].replace(/\\/g, '/')
+			const typeData: Array<string> = components[2].split(/\s+/)
 
 			// is font
 			if (typeData.length === 1) {
 				return {
 					name: name,
 					type: 'font',
-					fileName: typeData[0].replace(/\"/g, '')
+					fileName: typeData[0].replace(/"/g, ''),
 				}
 			}
 
@@ -346,7 +288,7 @@ export class ContentParser extends AbstractParser implements IResponseParser {
 					type: 'template',
 					size: parseInt(typeData[0], 10),
 					changed: ContentParser.parseTimeString(typeData[1]),
-					format: typeData[2]
+					format: typeData[2],
 				}
 			}
 
@@ -356,16 +298,16 @@ export class ContentParser extends AbstractParser implements IResponseParser {
 					name: name,
 					type: 'template',
 					size: parseInt(typeData[0], 10),
-					changed: ContentParser.parseTimeString(typeData[1])
+					changed: ContentParser.parseTimeString(typeData[1]),
 				}
 			}
 
 			// is media
 
-			let frames: number = parseInt(typeData[3], 10)
-			let frameRate: number = 0
-			let duration: number = 0
-			let frameTimeSegments: Array<string> = typeData[4].split('/')
+			const frames: number = parseInt(typeData[3], 10)
+			let frameRate = 0
+			let duration = 0
+			const frameTimeSegments: Array<string> = typeData[4].split('/')
 			if (frameTimeSegments[0] !== '0') {
 				frameRate = +(parseInt(frameTimeSegments[1], 10) / parseInt(frameTimeSegments[0], 10)).toFixed(2)
 				duration = Math.round((frames / frameRate) * 100) / 100
@@ -373,13 +315,18 @@ export class ContentParser extends AbstractParser implements IResponseParser {
 
 			return {
 				name: name,
-				type: typeData[0].toLowerCase() === 'movie' ? 'video' : typeData[0].toLowerCase() === 'still' ? 'image' : typeData[0].toLowerCase(),
+				type:
+					typeData[0].toLowerCase() === 'movie'
+						? 'video'
+						: typeData[0].toLowerCase() === 'still'
+						? 'image'
+						: typeData[0].toLowerCase(),
 				size: parseInt(typeData[1], 10),
 				changed: ContentParser.parseTimeString(typeData[2]),
 				frames: frames,
 				frameTime: typeData[4],
 				frameRate: frameRate,
-				duration: duration
+				duration: duration,
 			}
 		})
 	}
@@ -389,26 +336,22 @@ export class ContentParser extends AbstractParser implements IResponseParser {
  *
  */
 export class ThumbnailListParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<string>): Object {
 		return data.map((i: string) => {
-			let components: RegExpMatchArray | null = i.match(/\"([\s\S]*)\" +([\s\S]*)/)
+			const components: RegExpMatchArray | null = i.match(/"([\s\S]*)" +([\s\S]*)/)
 
 			if (components === null) {
 				return null
 			}
 
-			let name: string = components[1].replace(/\\/g, '/')
-			let typeData: Array<string> = components[2].split(/\s+/)
+			const name: string = components[1].replace(/\\/g, '/')
+			const typeData: Array<string> = components[2].split(/\s+/)
 
 			return {
 				name: name,
 				type: 'thumbnail',
 				changed: ContentParser.parseTimeString(typeData[0]),
-				size: parseInt(typeData[1], 10)
+				size: parseInt(typeData[1], 10),
 			}
 		})
 	}
@@ -418,21 +361,22 @@ export class ThumbnailListParser extends AbstractParser implements IResponsePars
  *
  */
 export class CinfParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		if (data && Array.isArray(data)) {
-			let components: RegExpMatchArray | null = data[0].match(/\"([\s\S]*)\" +([\s\S]*)/)
+			const components: RegExpMatchArray | null = data[0].match(/"([\s\S]*)" +([\s\S]*)/)
 
 			if (components === null) {
 				return {}
 			}
 
 			// let name: string = components[1].replace(/\\/g, "/");
-			let typeData: Array<string> = components[2].split(/\s+/)
-			return { size: parseInt(typeData[1], 10), changed: typeData[2], duration: parseInt(typeData[3], 10), fps: typeData[4] }
+			const typeData: Array<string> = components[2].split(/\s+/)
+			return {
+				size: parseInt(typeData[1], 10),
+				changed: typeData[2],
+				duration: parseInt(typeData[3], 10),
+				fps: typeData[4],
+			}
 		}
 		return {}
 	}
@@ -442,10 +386,6 @@ export class CinfParser extends AbstractParser implements IResponseParser {
  *
  */
 export class InfoQueuesParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -455,10 +395,6 @@ export class InfoQueuesParser extends AbstractParser implements IResponseParser 
  *
  */
 export class InfoServerParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Object): Object {
 		return data
 	}
@@ -468,42 +404,38 @@ export class InfoServerParser extends AbstractParser implements IResponseParser 
  *
  */
 export class InfoPathsParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: any): Object {
-		let paths = new CasparCGPaths()
+		const paths = new CasparCGPaths()
 
-		if (data.hasOwnProperty('initial-path')) {
+		if ('initial-path' in data) {
 			paths.root = data['initial-path']
 		}
 
-		if (data.hasOwnProperty('media-path')) {
+		if ('media-path' in data) {
 			paths.media = data['media-path']
 		}
 
-		if (data.hasOwnProperty('data-path')) {
+		if ('data-path' in data) {
 			paths.data = data['data-path']
 		}
 
-		if (data.hasOwnProperty('log-path')) {
+		if ('log-path' in data) {
 			paths.log = data['log-path']
 		}
 
-		if (data.hasOwnProperty('template-path')) {
+		if ('template-path' in data) {
 			paths.template = data['template-path']
 		}
 
-		if (data.hasOwnProperty('thumbnails-path')) {
+		if ('thumbnails-path' in data) {
 			paths.thumbnail = data['thumbnails-path']
 		}
 
-		if (data.hasOwnProperty('thumbnail-path')) {
+		if ('thumbnail-path' in data) {
 			paths.thumbnail = data['thumbnail-path']
 		}
 
-		if (data.hasOwnProperty('font-path')) {
+		if ('font-path' in data) {
 			paths.font = data['font-path']
 		}
 
@@ -515,18 +447,14 @@ export class InfoPathsParser extends AbstractParser implements IResponseParser {
  *
  */
 export class InfoSystemParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: any): Object {
 		// wrap devices in arrays (if single device of a type)
-		if (data.hasOwnProperty('decklink') && data.decklink.hasOwnProperty('device')) {
+		if ('device' in data?.decklink) {
 			if (!Array.isArray(data.decklink.device)) {
 				data.decklink.device = [data.decklink.device]
 			}
 		}
-		if (data.hasOwnProperty('bluefish') && data.bluefish.hasOwnProperty('device')) {
+		if ('device' in data?.bluefish) {
 			if (!Array.isArray(data.bluefish.device)) {
 				data.bluefish.device = [data.bluefish.device]
 			}
@@ -539,13 +467,9 @@ export class InfoSystemParser extends AbstractParser implements IResponseParser 
  *
  */
 export class MixerStatusKeyerParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			keyer: !!data[0]
+			keyer: !!data[0],
 		}
 	}
 }
@@ -554,10 +478,6 @@ export class MixerStatusKeyerParser extends AbstractParser implements IResponseP
  *
  */
 export class MixerStatusChromaParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
 			chroma: {
@@ -569,8 +489,8 @@ export class MixerStatusChromaParser extends AbstractParser implements IResponse
 				softness: data[5],
 				spillSuppress: data[6],
 				spillSuppressSaturation: data[7],
-				showMask: !!data[8]
-			}
+				showMask: !!data[8],
+			},
 		}
 	}
 }
@@ -579,13 +499,9 @@ export class MixerStatusChromaParser extends AbstractParser implements IResponse
  *
  */
 export class MixerStatusBlendParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			blend: data
+			blend: data,
 		}
 	}
 }
@@ -594,13 +510,9 @@ export class MixerStatusBlendParser extends AbstractParser implements IResponseP
  *
  */
 export class MixerStatusOpacityParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			opacity: data[0]
+			opacity: data[0],
 		}
 	}
 }
@@ -609,13 +521,9 @@ export class MixerStatusOpacityParser extends AbstractParser implements IRespons
  *
  */
 export class MixerStatusBrightnessParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			brightness: data[0]
+			brightness: data[0],
 		}
 	}
 }
@@ -624,13 +532,9 @@ export class MixerStatusBrightnessParser extends AbstractParser implements IResp
  *
  */
 export class MixerStatusSaturationParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			saturation: data[0]
+			saturation: data[0],
 		}
 	}
 }
@@ -639,13 +543,9 @@ export class MixerStatusSaturationParser extends AbstractParser implements IResp
  *
  */
 export class MixerStatusContrastParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			contrast: data[0]
+			contrast: data[0],
 		}
 	}
 }
@@ -654,10 +554,6 @@ export class MixerStatusContrastParser extends AbstractParser implements IRespon
  *
  */
 export class MixerStatusLevelsParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
 			levels: {
@@ -665,8 +561,8 @@ export class MixerStatusLevelsParser extends AbstractParser implements IResponse
 				maxInput: data[1],
 				gamma: data[2],
 				minOutput: data[3],
-				maxOutput: data[4]
-			}
+				maxOutput: data[4],
+			},
 		}
 	}
 }
@@ -675,18 +571,14 @@ export class MixerStatusLevelsParser extends AbstractParser implements IResponse
  *
  */
 export class MixerStatusFillParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
 			fill: {
 				x: data[0],
 				y: data[1],
 				xScale: data[2],
-				yScale: data[3]
-			}
+				yScale: data[3],
+			},
 		}
 	}
 }
@@ -695,18 +587,14 @@ export class MixerStatusFillParser extends AbstractParser implements IResponsePa
  *
  */
 export class MixerStatusClipParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
 			clip: {
 				x: data[0],
 				y: data[1],
 				width: data[2],
-				height: data[3]
-			}
+				height: data[3],
+			},
 		}
 	}
 }
@@ -715,16 +603,12 @@ export class MixerStatusClipParser extends AbstractParser implements IResponsePa
  *
  */
 export class MixerStatusAnchorParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
 			anchor: {
 				x: data[0],
-				y: data[1]
-			}
+				y: data[1],
+			},
 		}
 	}
 }
@@ -733,18 +617,14 @@ export class MixerStatusAnchorParser extends AbstractParser implements IResponse
  *
  */
 export class MixerStatusCropParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
 			crop: {
 				left: data[0],
 				top: data[1],
 				right: data[2],
-				bottom: data[3]
-			}
+				bottom: data[3],
+			},
 		}
 	}
 }
@@ -753,13 +633,9 @@ export class MixerStatusCropParser extends AbstractParser implements IResponsePa
  *
  */
 export class MixerStatusRotationParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			rotation: data[0]
+			rotation: data[0],
 		}
 	}
 }
@@ -768,10 +644,6 @@ export class MixerStatusRotationParser extends AbstractParser implements IRespon
  *
  */
 export class MixerStatusPerspectiveParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
 			perspective: {
@@ -782,8 +654,8 @@ export class MixerStatusPerspectiveParser extends AbstractParser implements IRes
 				bottomRightX: data[6],
 				bottomRightY: data[7],
 				bottomLeftX: data[4],
-				bottomLeftY: data[5]
-			}
+				bottomLeftY: data[5],
+			},
 		}
 	}
 }
@@ -792,13 +664,9 @@ export class MixerStatusPerspectiveParser extends AbstractParser implements IRes
  *
  */
 export class MixerStatusMipmapParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			mipmap: !!data[0]
+			mipmap: !!data[0],
 		}
 	}
 }
@@ -807,13 +675,9 @@ export class MixerStatusMipmapParser extends AbstractParser implements IResponse
  *
  */
 export class MixerStatusVolumeParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			volume: data[0]
+			volume: data[0],
 		}
 	}
 }
@@ -822,13 +686,9 @@ export class MixerStatusVolumeParser extends AbstractParser implements IResponse
  *
  */
 export class MixerStatusMastervolumeParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			mastervolume: data[0]
+			mastervolume: data[0],
 		}
 	}
 }
@@ -837,13 +697,9 @@ export class MixerStatusMastervolumeParser extends AbstractParser implements IRe
  *
  */
 export class MixerStatusStraightAlphaOutputParser extends AbstractParser implements IResponseParser {
-
-	/**
-	 *
-	 */
 	public parse(data: Array<number>): Object {
 		return {
-			straightAlphaOutput: !!data[0]
+			straightAlphaOutput: !!data[0],
 		}
 	}
 }

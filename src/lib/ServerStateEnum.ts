@@ -1,18 +1,20 @@
-export type AnyEnum = |
-	Command |
-	Producer |
-	Consumer |
-	Version |
-	Lock |
-	LogCategory |
-	Chroma |
-	LogLevel |
-	Transition |
-	Direction |
-	BlendMode |
-	Ease |
-	ChannelFormat |
-	ChannelLayout
+/* eslint @typescript-eslint/ban-types: 0 */
+
+export type AnyEnum =
+	| Command
+	| Producer
+	| Consumer
+	| Version
+	| Lock
+	| LogCategory
+	| Chroma
+	| LogLevel
+	| Transition
+	| Direction
+	| BlendMode
+	| Ease
+	| ChannelFormat
+	| ChannelLayout
 
 /**
  *
@@ -95,7 +97,7 @@ export enum Command {
 	RESTART = 'RESTART',
 	HELP = 'HELP',
 	HELP_PRODUCER = 'HELP PRODUCER',
-	HELP_CONSUMER = 'HELP CONSUMER'
+	HELP_CONSUMER = 'HELP CONSUMER',
 }
 
 /**
@@ -114,7 +116,7 @@ export enum Producer {
 	REROUTE = 'Reroute Producer',
 	TEXT = 'Text Producer',
 	SCENE = 'XML Scene Producer',
-	COLOR = 'Color Producer'
+	COLOR = 'Color Producer',
 }
 
 /**
@@ -128,7 +130,7 @@ export enum Consumer {
 	DECKLINK = 'Decklink Consumer',
 	SCREEN = 'Screen Consumer',
 	IVGA = 'iVGA Consumer',
-	IMAGE = 'Image Consumer'
+	IMAGE = 'Image Consumer',
 }
 
 /**
@@ -139,7 +141,7 @@ export enum Version {
 	SERVER = 'SERVER',
 	FLASH = 'FLASH',
 	TEMPLATEHOST = 'TEMPLATEHOST',
-	CEF = 'CEF'
+	CEF = 'CEF',
 }
 
 /**
@@ -149,7 +151,7 @@ export enum Version {
 export enum Lock {
 	ACQUIRE = 'ACQUIRE',
 	RELEASE = 'RELEASE',
-	CLEAR = 'CLEAR'
+	CLEAR = 'CLEAR',
 }
 
 /**
@@ -158,7 +160,7 @@ export enum Lock {
  */
 export enum LogCategory {
 	CALLTRACE = 'CALLTRACE',
-	COMMUNICATION = 'COMMUNICATION'
+	COMMUNICATION = 'COMMUNICATION',
 }
 
 /**
@@ -168,7 +170,7 @@ export enum LogCategory {
 export enum Chroma {
 	NONE = 'NONE',
 	GREEN = 'GREEN',
-	BLUE = 'BLUE'
+	BLUE = 'BLUE',
 }
 
 /**
@@ -181,7 +183,7 @@ export enum LogLevel {
 	INFO = 'INFO',
 	WARNING = 'WARNING',
 	ERROR = 'ERROR',
-	FATAL = 'FATAL'	// @todo: 2.1?????
+	FATAL = 'FATAL', // @todo: 2.1?????
 }
 
 /**
@@ -194,7 +196,7 @@ export enum Transition {
 	PUSH = 'PUSH',
 	WIPE = 'WIPE',
 	SLIDE = 'SLIDE',
-	STING = 'STING'
+	STING = 'STING',
 }
 
 /**
@@ -203,7 +205,7 @@ export enum Transition {
  */
 export enum Direction {
 	LEFT = 'LEFT',
-	RIGHT = 'RIGHT'
+	RIGHT = 'RIGHT',
 }
 
 /**
@@ -238,7 +240,7 @@ export enum BlendMode {
 	CONTRAST = 'CONTRAST',
 	SATURATION = 'SATURATION',
 	COLOR = 'COLOR',
-	LUMINOSITY = 'LUMINOSITY'
+	LUMINOSITY = 'LUMINOSITY',
 }
 
 /**
@@ -286,7 +288,7 @@ export enum Ease {
 	OUT_BOUNCE = 'EASEOUTBOUNCE',
 	IN_BOUNCE = 'EASEINBOUNCE',
 	IN_OUT_BOUNCE = 'EASEINOUTBOUNCE',
-	OUT_IN_BOUNCE = 'EASEOUTINBOUNCE'
+	OUT_IN_BOUNCE = 'EASEOUTINBOUNCE',
 }
 
 /**
@@ -332,12 +334,10 @@ export enum ChannelFormat {
 	UHD_2160P6000 = '2160p6000',
 	DCI_2160P2398 = 'dci2160p2398',
 	DCI_2160P2400 = 'dci2160p2400',
-	DCI_2160P2500 = 'dci2160p2500'
+	DCI_2160P2500 = 'dci2160p2500',
 }
 
 /**
  *
  */
-export enum ChannelLayout {
-
-}
+export enum ChannelLayout {}

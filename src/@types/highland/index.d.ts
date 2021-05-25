@@ -1,5 +1,5 @@
-declare module Highland { 
-	interface Stream<R>{
-		splitBy(delimiter: string|RegExp): Stream<R>;
+declare namespace Highland {
+	interface Stream<R> {
+		splitBy(delimiter: string | RegExp): Stream<R>
 	}
 }
