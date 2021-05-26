@@ -1,0 +1,15 @@
+{
+	"name": "casparcg-connection",
+	"out": "docs",
+	"theme": "default",
+	"exclude": [
+		"*.spec.ts",
+		"node_modules",
+		"**/node_modules",
+		"docs",
+		"**/dist",
+		"**/__mocks__",
+		"**/__tests__",
+		"**/examples"
+	]
+}
