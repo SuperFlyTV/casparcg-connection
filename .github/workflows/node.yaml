@@ -137,7 +137,7 @@ jobs:
       - name: Generate docs
         if: ${{ steps.do-publish.outputs.tag }} == 'latest'
         run: |
-          yarn docs:html
+          yarn docs
       - name: Publish docs
         uses: peaceiris/actions-gh-pages@v3
         with:
