@@ -81,3 +81,40 @@ export enum LockAction {
 	Release = 'RELEASE',
 	Clear = 'CLEAR',
 }
+
+export enum BlendMode {
+	Normal = 'NORMAL',
+	Lighten = 'LIGHTEN',
+	Darken = 'DARKEN',
+	Multiply = 'MULTIPLY',
+	Average = 'AVERAGE',
+	Add = 'ADD',
+	Subtract = 'SUBTRACT',
+	Difference = 'DIFFERENCE',
+	Negation = 'NEGATION',
+	Exclusion = 'EXCLUSION',
+	Screen = 'SCREEN',
+	Overlay = 'OVERLAY',
+	SoftLight = 'SOFT LIGHT',
+	HardLight = 'HARD LIGHT',
+	ColorDodge = 'COLOR DODGE',
+	ColorBurn = 'COLOR BURN',
+	LinearDodge = 'LINEAR DODGE',
+	LinearBurn = 'LINEAR BURN',
+	LinearLight = 'LINEAR LIGHT',
+	VividLight = 'VIVID LIGHT',
+	PinLight = 'PIN LIGHT',
+	HardMix = 'HARD MIX',
+	Reflect = 'REFLECT',
+	Glow = 'GLOW',
+	Phoenix = 'PHOENIX',
+	Contrast = 'CONTRAST',
+	Saturation = 'SATURATION',
+	Color = 'COLOR',
+	Luminosity = 'LUMINOSITY',
+}
+
+export enum RouteMode {
+	Background = 'BACKGROUND',
+	Next = 'NEXT',
+}

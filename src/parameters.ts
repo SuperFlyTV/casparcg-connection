@@ -1,4 +1,14 @@
-import { TransitionType, TransitionTween, Direction, LogLevel, LogCategory, SetVariable, LockAction } from './enums'
+import {
+	TransitionType,
+	TransitionTween,
+	Direction,
+	LogLevel,
+	LogCategory,
+	SetVariable,
+	LockAction,
+	BlendMode,
+	RouteMode,
+} from './enums'
 
 export type Empty = Record<string, never>
 
@@ -19,32 +29,56 @@ export interface TransitionParameters {
 	stingProperties?: {
 		maskFile: string
 		overlayFile?: string
-		delay?: string
-		audioFadeStart?: string
-		audioFadeDuration?: string
+		delay?: number
+		audioFadeStart?: number
+		audioFadeDuration?: number
 	}
 }
 
 export interface ClipParameters {
-	clip: string
+	clip?: string
 	loop?: boolean
+	inPoint?: number
 	seek?: number
 	length?: number
 	clearOn404?: boolean
 }
 
+export interface DecklinkParameters {
+	device: number
+}
+
+export interface HtmlParameters {
+	url: string
+}
+
+export interface RouteParameters {
+	route: {
+		channel: number
+		layer?: number
+	}
+	framesDelay?: number
+	mode?: RouteMode
+}
+
 export interface ProducerOptions {
 	vFilter?: string
 	aFilter?: string
-}
-
-export interface PlayParameters extends ChannelLayer, ClipParameters, ProducerOptions {
 	transition?: TransitionParameters
 }
 
+export interface PlayParameters extends ChannelLayer, ClipParameters, ProducerOptions {}
+export interface PlayDecklinkParameters extends ChannelLayer, DecklinkParameters, ProducerOptions {}
+export interface PlayHtmlParameters extends ChannelLayer, HtmlParameters, ProducerOptions {}
+export interface PlayRouteParameters extends ChannelLayer, RouteParameters, ProducerOptions {}
+
 export interface LoadbgParameters extends PlayParameters {
-	auto: boolean
+	clip: string
+	auto?: boolean
 }
+export type LoadbgDecklinkParameters = PlayDecklinkParameters
+export type LoadbgHtmlParameters = PlayHtmlParameters
+export type LoadbgRouteParameters = PlayRouteParameters
 
 export type LoadParameters = PlayParameters
 
@@ -55,6 +89,7 @@ export type ClearParameters = ChannelLayer
 
 export interface CallParameters extends ChannelLayer {
 	param: string
+	value?: string | number
 }
 
 export interface SwapParameters extends ChannelLayer {
@@ -112,7 +147,7 @@ export interface CGLayer {
 export interface CgAddParameters extends ChannelLayer, CGLayer {
 	template: string
 	playOnLoad: boolean
-	data?: string
+	data?: Record<string, any> | string
 }
 export interface CgPlayParameters extends ChannelLayer, CGLayer {}
 export interface CgStopParameters extends ChannelLayer, CGLayer {}
@@ -128,11 +163,11 @@ export interface CgInvokeParameters extends ChannelLayer, CGLayer {
 export type CgInfoParameters = ChannelLayer & CGLayer
 
 export interface MixerTween {
-	duration: number
-	tween: TransitionTween
+	duration?: number
+	tween?: TransitionTween
 }
 export interface MixerDefer {
-	defer: boolean
+	defer?: boolean
 }
 export interface MixerNumberValue extends ChannelLayer, MixerDefer, MixerTween {
 	value: number
@@ -153,7 +188,7 @@ export interface MixerChromaParameters extends ChannelLayer, MixerTween {
 	showMask: boolean
 }
 export interface MixerBlendParameters extends ChannelLayer, MixerDefer {
-	value: string
+	value: BlendMode
 }
 export interface MixerInvertParameters extends ChannelLayer, MixerDefer {
 	value: boolean
@@ -165,7 +200,7 @@ export type MixerContrastParameters = MixerNumberValue
 export interface MixerLevelsParameters extends ChannelLayer, MixerDefer, MixerTween {
 	minInput: number
 	maxInput: number
-	gamme: number
+	gamma: number
 	minOutput: number
 	maxOutput: number
 }
@@ -206,8 +241,10 @@ export interface MixerMipmapParameters extends ChannelLayer, MixerDefer {
 	value: boolean
 }
 export type MixerVolumeParameters = MixerNumberValue
-export type MixerMastervolumeParameters = MixerNumberValue
-export interface MixerStraightAlphaOutputParameters extends ChannelLayer, MixerDefer {
+export interface MixerMastervolumeParameters extends Channel, MixerDefer, MixerTween {
+	value: number
+}
+export interface MixerStraightAlphaOutputParameters extends Channel, MixerDefer {
 	value: boolean
 }
 export interface MixerGridParameters extends Channel, MixerDefer, MixerTween, MixerNumberValue {}

@@ -4,10 +4,15 @@ import { TransitionType } from './enums'
 import {
 	AddParameters,
 	CallParameters,
+	CgAddParameters,
 	CGLayer,
+	CgUpdateParameters,
 	ClipParameters,
+	DecklinkParameters,
+	HtmlParameters,
 	MixerTween,
 	RemoveParameters,
+	RouteParameters,
 	TransitionParameters,
 } from './parameters'
 
@@ -31,12 +36,22 @@ const channelOptLayerOptSerializer = (
 	{ channel, layer }: { channel?: number; layer?: number }
 ): string => (channel ? channel + (layer ? '-' + layer : '') : '')
 
-const clipCommandSerializer = (_command: Commands, { clip, loop, seek, length, clearOn404 }: ClipParameters) =>
-	`"${clip}"` +
+const clipCommandSerializer = (_command: Commands, { clip, loop, inPoint, seek, length, clearOn404 }: ClipParameters) =>
+	(clip ? `"${clip}"` : '') +
 	(loop ? ' LOOP' : '') +
+	(inPoint ? ' IN ' + inPoint : '') +
 	(seek ? ' SEEK ' + seek : '') +
 	(length ? ' LENGTH ' + length : '') +
 	(clearOn404 ? ' CLEAR_ON_404' : '')
+const decklinkCommandSerializer = (_: Commands, { device }: DecklinkParameters) => 'DECKLINK ' + device
+const htmlCommandSerializerr = (_: Commands, { url }: HtmlParameters) => '[html] ' + url
+const routeCommandSerializer = (_: Commands, { route, mode, framesDelay }: RouteParameters) =>
+	'route://' +
+	route.channel +
+	(route.layer !== undefined ? '-' + route.layer : '') +
+	(mode ? '  ' + mode : '') +
+	(framesDelay ? 'BUFFER ' + framesDelay : '')
+
 const transitionOptSerializer = (_command: Commands, { transition }: { transition?: TransitionParameters }) =>
 	(transition && transitionSerializer(transition)) || ''
 const transitionSerializer = ({
@@ -67,11 +82,22 @@ const transitionSerializer = ({
 		return [transitionType, duration, tween, direction].filter((p) => p !== undefined).join(' ')
 	}
 }
-const callAttributeSerializer = (_: Commands, { param }: CallParameters) => param
+const callAttributeSerializer = (_: Commands, { param, value }: CallParameters) =>
+	param + (value !== undefined ? ' ' + value : '')
 const consumerSerializer = (_: Commands, { consumer, parameters }: AddParameters) => consumer + ' ' + parameters
 const removeSerializer = (_: Commands, { consumer }: RemoveParameters) => consumer + ''
 
 const cgLayerSerializer = (_: Commands, { cgLayer }: CGLayer) => cgLayer + ''
+const cgDataSerializer = (_: Commands, { data }: CgUpdateParameters | CgAddParameters) => {
+	if (!data) {
+		return ''
+	} else if (typeof data === 'string') {
+		return data
+	} else {
+		return JSON.stringify(data)
+	}
+}
+
 const mixerTweenSerializer = (_: Commands, { tween, duration }: MixerTween) => (tween ? tween + ' ' + duration : '')
 const mixerSimpleValueSerializer = (_: Commands, { value }: { value: number | boolean | string }) =>
 	value !== undefined ? (typeof value === 'boolean' ? (value ? '1' : '0') : value + '') : ''
@@ -99,8 +125,44 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		(_, { auto }) => (auto ? 'AUTO' : ''),
 		transitionOptSerializer,
 	],
+	[Commands.LoadbgDecklink]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		decklinkCommandSerializer,
+		transitionOptSerializer,
+	],
+	[Commands.LoadbgHtml]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		htmlCommandSerializerr,
+		transitionOptSerializer,
+	],
+	[Commands.LoadbgRoute]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		routeCommandSerializer,
+		transitionOptSerializer,
+	],
 	[Commands.Load]: [commandNameSerializer, channelLayerSerializer, clipCommandSerializer, transitionOptSerializer],
 	[Commands.Play]: [commandNameSerializer, channelLayerSerializer, clipCommandSerializer, transitionOptSerializer],
+	[Commands.PlayDecklink]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		decklinkCommandSerializer,
+		transitionOptSerializer,
+	],
+	[Commands.PlayHtml]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		htmlCommandSerializerr,
+		transitionOptSerializer,
+	],
+	[Commands.PlayRoute]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		routeCommandSerializer,
+		transitionOptSerializer,
+	],
 	[Commands.Pause]: [commandNameSerializer, channelLayerSerializer],
 	[Commands.Resume]: [commandNameSerializer, channelLayerSerializer],
 	[Commands.Stop]: [commandNameSerializer, channelLayerSerializer],
@@ -138,7 +200,8 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
-		(_, { template, playOnLoad, data }) => `${template} ${playOnLoad}${data ? ' ' + data : ''}`,
+		(_, { template, playOnLoad }) => `${template} ${playOnLoad}`,
+		cgDataSerializer,
 	],
 	[Commands.CgPlay]: [
 		splitCommandSerializer,
@@ -170,7 +233,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
-		(_, { data }) => (data ? data : ''),
+		cgDataSerializer,
 	],
 	[Commands.CgInvoke]: [
 		splitCommandSerializer,
@@ -249,7 +312,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		optional((_, params) =>
-			[params.minInput, params.maxInput, params.gamme, params.minOutput, params.maxOutput].join(' ')
+			[params.minInput, params.maxInput, params.gamma, params.minOutput, params.maxOutput].join(' ')
 		),
 		mixerTweenSerializer,
 	],
@@ -321,14 +384,14 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 	],
 	[Commands.MixerMastervolume]: [
 		splitCommandSerializer,
-		channelLayerSerializer,
+		channelSerializer,
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
 	],
 	[Commands.MixerStraightAlphaOutput]: [
 		splitCommandSerializer,
-		channelLayerSerializer,
+		channelSerializer,
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 	],

@@ -75,12 +75,24 @@ import {
 	AddParameters,
 	ThumbnailGenerateAllParameters,
 	ChannelGridParameters,
+	PlayDecklinkParameters,
+	LoadbgDecklinkParameters,
+	LoadbgHtmlParameters,
+	LoadbgRouteParameters,
+	PlayHtmlParameters,
+	PlayRouteParameters,
 } from './parameters'
 
 export enum Commands {
 	Loadbg = 'LOADBG',
+	LoadbgDecklink = 'LOADBG DECKLINK',
+	LoadbgRoute = 'LOADBG route://',
+	LoadbgHtml = 'LOADBG [html]',
 	Load = 'LOAD',
 	Play = 'PLAY',
+	PlayDecklink = 'PLAY DECKLINK',
+	PlayRoute = 'PLAY route://',
+	PlayHtml = 'PLAY [html]',
 	Pause = 'PAUSE',
 	Resume = 'RESUME',
 	Stop = 'STOP',
@@ -162,8 +174,14 @@ export interface Command<T extends Commands, V> {
 }
 
 export type LoadbgCommand = Command<Commands.Loadbg, LoadbgParameters>
+export type LoadbgDecklinkCommand = Command<Commands.LoadbgDecklink, LoadbgDecklinkParameters>
+export type LoadbgHtmlCommand = Command<Commands.LoadbgHtml, LoadbgHtmlParameters>
+export type LoadbgRouteCommand = Command<Commands.LoadbgRoute, LoadbgRouteParameters>
 export type LoadCommand = Command<Commands.Load, LoadParameters>
 export type PlayCommand = Command<Commands.Play, PlayParameters>
+export type PlayDecklinkCommand = Command<Commands.PlayDecklink, PlayDecklinkParameters>
+export type PlayHtmlCommand = Command<Commands.PlayHtml, PlayHtmlParameters>
+export type PlayRouteCommand = Command<Commands.PlayRoute, PlayRouteParameters>
 export type PauseCommand = Command<Commands.Pause, PauseParameters>
 export type ResumeCommand = Command<Commands.Resume, ResumeParameters>
 export type StopCommand = Command<Commands.Stop, StopParameters>
@@ -243,8 +261,14 @@ export type RestartCommand = Command<Commands.Restart, RestartParameters>
 
 export type AMCPCommand =
 	| LoadbgCommand
+	| LoadbgDecklinkCommand
+	| LoadbgHtmlCommand
+	| LoadbgRouteCommand
 	| LoadCommand
 	| PlayCommand
+	| PlayDecklinkCommand
+	| PlayHtmlCommand
+	| PlayRouteCommand
 	| PauseCommand
 	| ResumeCommand
 	| StopCommand

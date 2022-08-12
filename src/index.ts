@@ -1,4 +1,4 @@
 export * from './CasparCG'
 export * from './api'
-export * from './enums'
+export * as Enum from './enums'
 export * from './commands'
