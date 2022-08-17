@@ -60,7 +60,7 @@
 		"cov": "jest --coverage; open-cli coverage/lcov-report/index.html",
 		"cov-open": "open-cli coverage/lcov-report/index.html",
 		"send-coverage": "codecov",
-		"docs": "yarn typedoc .",
+		"docs": "yarn typedoc ./src/index.ts",
 		"changelog": "standard-version",
 		"release": "yarn reset && yarn test && yarn changelog",
 		"release:skiptest": "yarn reset && yarn changelog",
