@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events'
+import { EventEmitter } from 'eventemitter3'
 import { AMCPCommand, Commands } from './commands'
 import { Connection, ResponseTypes } from './connection'
 
@@ -39,7 +39,12 @@ export interface Response {
 	message: string
 }
 
-export class BasicCasparCGAPI extends EventEmitter {
+export type ConnectionEvents = {
+	connect: []
+	disconnect: []
+}
+
+export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 	private _connection: Connection
 	private _host: string
 	private _port: number
