@@ -46,6 +46,7 @@ export interface ClipParameters {
 
 export interface DecklinkParameters {
 	device: number
+	format: string
 }
 
 export interface HtmlParameters {

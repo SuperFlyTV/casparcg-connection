@@ -11,6 +11,7 @@ import {
 	DecklinkParameters,
 	HtmlParameters,
 	MixerTween,
+	ProducerOptions,
 	RemoveParameters,
 	RouteParameters,
 	TransitionParameters,
@@ -43,7 +44,8 @@ const clipCommandSerializer = (_command: Commands, { clip, loop, inPoint, seek, 
 	(seek ? ' SEEK ' + seek : '') +
 	(length ? ' LENGTH ' + length : '') +
 	(clearOn404 ? ' CLEAR_ON_404' : '')
-const decklinkCommandSerializer = (_: Commands, { device }: DecklinkParameters) => 'DECKLINK ' + device
+const decklinkCommandSerializer = (_: Commands, { device, format }: DecklinkParameters) =>
+	'DECKLINK ' + device + (format ? ' FORMAT ' + format : '')
 const htmlCommandSerializerr = (_: Commands, { url }: HtmlParameters) => '[html] ' + url
 const routeCommandSerializer = (_: Commands, { route, mode, framesDelay }: RouteParameters) =>
 	'route://' +
@@ -51,6 +53,11 @@ const routeCommandSerializer = (_: Commands, { route, mode, framesDelay }: Route
 	(route.layer !== undefined ? '-' + route.layer : '') +
 	(mode ? '  ' + mode : '') +
 	(framesDelay ? 'BUFFER ' + framesDelay : '')
+const producerOptionsSerializer = (_: Commands, { vFilter, aFilter }: ProducerOptions) => {
+	return [vFilter ? 'VFILTER ' + vFilter : undefined, aFilter ? 'AFILTER ' + aFilter : undefined]
+		.filter((p) => p !== undefined)
+		.join(' ')
+}
 
 const transitionOptSerializer = (_command: Commands, { transition }: { transition?: TransitionParameters }) =>
 	(transition && transitionSerializer(transition)) || ''
@@ -123,44 +130,63 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		channelLayerSerializer,
 		clipCommandSerializer,
 		(_, { auto }) => (auto ? 'AUTO' : ''),
+		producerOptionsSerializer,
 		transitionOptSerializer,
 	],
 	[Commands.LoadbgDecklink]: [
 		splitCommandKeywordSerializer,
 		channelLayerSerializer,
 		decklinkCommandSerializer,
+		producerOptionsSerializer,
 		transitionOptSerializer,
 	],
 	[Commands.LoadbgHtml]: [
 		splitCommandKeywordSerializer,
 		channelLayerSerializer,
 		htmlCommandSerializerr,
+		producerOptionsSerializer,
 		transitionOptSerializer,
 	],
 	[Commands.LoadbgRoute]: [
 		splitCommandKeywordSerializer,
 		channelLayerSerializer,
 		routeCommandSerializer,
+		producerOptionsSerializer,
 		transitionOptSerializer,
 	],
-	[Commands.Load]: [commandNameSerializer, channelLayerSerializer, clipCommandSerializer, transitionOptSerializer],
-	[Commands.Play]: [commandNameSerializer, channelLayerSerializer, clipCommandSerializer, transitionOptSerializer],
+	[Commands.Load]: [
+		commandNameSerializer,
+		channelLayerSerializer,
+		clipCommandSerializer,
+		producerOptionsSerializer,
+		transitionOptSerializer,
+	],
+	[Commands.Play]: [
+		commandNameSerializer,
+		channelLayerSerializer,
+		clipCommandSerializer,
+		producerOptionsSerializer,
+		transitionOptSerializer,
+	],
 	[Commands.PlayDecklink]: [
 		splitCommandKeywordSerializer,
 		channelLayerSerializer,
 		decklinkCommandSerializer,
+		producerOptionsSerializer,
 		transitionOptSerializer,
 	],
 	[Commands.PlayHtml]: [
 		splitCommandKeywordSerializer,
 		channelLayerSerializer,
 		htmlCommandSerializerr,
+		producerOptionsSerializer,
 		transitionOptSerializer,
 	],
 	[Commands.PlayRoute]: [
 		splitCommandKeywordSerializer,
 		channelLayerSerializer,
 		routeCommandSerializer,
+		producerOptionsSerializer,
 		transitionOptSerializer,
 	],
 	[Commands.Pause]: [commandNameSerializer, channelLayerSerializer],
