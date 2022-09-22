@@ -153,7 +153,6 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 				// attempt to deserialize the response if we can
 				if (deserializer[response.command] && response.data.length) {
-					console.log(response.data)
 					response.data = deserializer[response.command](response.data)
 				}
 

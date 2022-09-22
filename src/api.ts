@@ -3,7 +3,9 @@ import { AMCPCommand, Commands } from './commands'
 import { Connection, ResponseTypes } from './connection'
 
 export interface Options {
+	/** Host name of the machine to connect to. Defaults to 127.0.0.1 */
 	host?: string
+	/** Port number to connect to. Defaults to 5250 */
 	port?: number
 	useSequential?: boolean
 }
@@ -151,7 +153,6 @@ export class BasicCasparCGAPI extends EventEmitter {
 			this._requestQueue.forEach((r) => {
 				if (!r.sent) {
 					const sentOk = this._connection.sendCommand(r.command, r.requestId)
-					console.log('sent', sentOk, r.command)
 					r.sent = true
 					r.sentResolve(sentOk)
 
