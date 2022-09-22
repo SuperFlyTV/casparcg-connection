@@ -120,7 +120,7 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		return this._socket?.write(payload + '\r\n') || false
 	}
 
-	private _processIncomingData(data: Buffer) {
+	private async _processIncomingData(data: Buffer) {
 		const string = data.toString('utf-8')
 		const newLines = string.split('\r\n')
 
@@ -154,7 +154,7 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 				// attempt to deserialize the response if we can
 				if (deserializer[response.command] && response.data.length) {
-					response.data = deserializer[response.command](response.data)
+					response.data = await deserializer[response.command](response.data)
 				}
 
 				// now do something with response
@@ -191,7 +191,9 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		this._socket = new Socket()
 		this._socket.setEncoding('utf-8')
 
-		this._socket.on('data', (data) => this._processIncomingData(data))
+		this._socket.on('data', (data) => {
+			this._processIncomingData(data).catch((e) => this.emit('error', 'Error while processing incoming data', e))
+		})
 		this._socket.on('connect', () => {
 			this._setConnected(true)
 		})
