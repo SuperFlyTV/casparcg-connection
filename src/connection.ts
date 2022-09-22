@@ -77,6 +77,7 @@ export type ConnectionEvents = {
 	data: [response: Response]
 	connect: []
 	disconnect: []
+	error: [error: Error]
 }
 
 export class Connection extends EventEmitter<ConnectionEvents> {
@@ -192,16 +193,35 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 		this._socket.on('data', (data) => this._processIncomingData(data))
 		this._socket.on('connect', () => {
-			this._connected = true
-			this.emit('connect')
+			this._setConnected(true)
 		})
 		this._socket.on('close', () => {
-			this._connected = false
-			this.emit('disconnect')
+			this._setConnected(false)
 			this._triggerReconnect()
 		})
-		this._socket.on('error', (e) => console.log('error', e)) // do something better here!
+		this._socket.on('error', (e) => {
+			if (`${e}`.match(/ECONNREFUSED/)) {
+				// Unable to connect, no need to handle this error
+				this._setConnected(false)
+			} else {
+				this.emit('error', e)
+			}
+		})
 
 		this._socket.connect(this.port, this.host)
+	}
+
+	private _setConnected(connected: boolean) {
+		if (connected) {
+			if (!this._connected) {
+				this._connected = true
+				this.emit('connect')
+			}
+		} else {
+			if (this._connected) {
+				this._connected = false
+				this.emit('disconnect')
+			}
+		}
 	}
 }
