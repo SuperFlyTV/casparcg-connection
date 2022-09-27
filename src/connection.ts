@@ -104,7 +104,10 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		this._setupSocket()
 	}
 
-	sendCommand(cmd: AMCPCommand, reqId?: string): boolean {
+	async sendCommand(cmd: AMCPCommand, reqId?: string): Promise<boolean> {
+		if (!cmd.command) throw new Error('No command specified')
+		if (!cmd.params) throw new Error('No parameters specified')
+
 		// use a cheeky type assertion here to easen up a bit, TS doesn't let us use just cmd.command
 		const serializer = serializers[cmd.command] as ((
 			c: AMCPCommand['command'],
@@ -117,7 +120,9 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 		if (reqId) payload = 'REQ ' + reqId + ' ' + payload
 
-		return this._socket?.write(payload + '\r\n') || false
+		return new Promise<boolean>((r) => {
+			this._socket?.write(payload + '\r\n', (e) => (e ? r(false) : r(true)))
+		})
 	}
 
 	private async _processIncomingData(data: Buffer) {
@@ -192,7 +197,7 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		this._socket.setEncoding('utf-8')
 
 		this._socket.on('data', (data) => {
-			this._processIncomingData(data).catch((e) => this.emit('error', 'Error while processing incoming data', e))
+			this._processIncomingData(data).catch((e) => this.emit('error', e))
 		})
 		this._socket.on('connect', () => {
 			this._setConnected(true)
