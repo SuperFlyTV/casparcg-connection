@@ -108,7 +108,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 				}
 			}
 
-			this._processQueue().catch(() => null)
+			this._processQueue().catch((e) => this.emit('error', e))
 		})
 
 		this._timeoutTime = options?.timeoutTime || 5000
