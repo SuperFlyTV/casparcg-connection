@@ -7,7 +7,11 @@ export interface Options {
 	host?: string
 	/** Port number to connect to. Defaults to 5250 */
 	port?: number
-	/** If true, the library will not use request id's and instead wait for the command to return before sending the next */
+	/**
+	 * If true, the library will not use request id's and instead wait for the command to return before sending the next.
+	 * This mode is compatible with older CasparCG-versions (<=2.1), but is slower.
+	 * (Defaults to false)
+	 */
 	useSequential?: boolean
 	/** Minimum amount of time before a request is considered to be timed out */
 	timeoutTime?: number
