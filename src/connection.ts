@@ -86,9 +86,9 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	private _reconnectTimeout?: NodeJS.Timeout
 	private _connected = false
 
-	constructor(private host: string, private port = 5250) {
+	constructor(private host: string, private port = 5250, autoConnect: boolean) {
 		super()
-		this._setupSocket()
+		if (autoConnect) this._setupSocket()
 	}
 
 	get connected(): boolean {
@@ -102,6 +102,10 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		this._socket?.end()
 
 		this._setupSocket()
+	}
+
+	disconnect(): void {
+		this._socket?.end()
 	}
 
 	async sendCommand(cmd: AMCPCommand, reqId?: string): Promise<boolean> {

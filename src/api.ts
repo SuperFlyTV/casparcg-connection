@@ -11,6 +11,8 @@ export interface Options {
 	useSequential?: boolean
 	/** Minimum amount of time before a request is considered to be timed out */
 	timeoutTime?: number
+	/** Immediately connects after instantiating the class, defaults to false */
+	autoConnect?: boolean
 }
 
 export interface SendResult {
@@ -133,8 +135,19 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._connection.changeConnection(this._host, this._port)
 	}
 
+	connect(host?: string, port?: number): void {
+		this._host = host ? host : this._host
+		this._port = port ? port : this._port
+		this._connection.changeConnection(this._host, this._port)
+	}
+
+	disconnect(): void {
+		this._connection.disconnect()
+	}
+
 	/** Stops internal timers so that the class is ready for garbage disposal */
 	discard(): void {
+		this._connection.disconnect()
 		clearInterval(this._timeoutTimer)
 	}
 
