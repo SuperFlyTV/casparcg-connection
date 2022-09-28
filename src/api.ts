@@ -90,7 +90,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._port = options?.port || 5250
 		this._useSequential = options?.useSequential || false
 
-		this._connection = new Connection(this._host, this._port)
+		this._connection = new Connection(this._host, this._port, !(options?.autoConnect === false))
 
 		this._connection.on('connect', () => {
 			this.emit('connect')
@@ -147,6 +147,13 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 
 	disconnect(): void {
 		this._connection.disconnect()
+		this._requestQueue.forEach((r) => {
+			if (r.request.response) {
+				r.reject(new Error('Disconnected before response was received'))
+			} else {
+				r.sentResolve({ sentOk: false, error: new Error('Disconnected before response was received') })
+			}
+		})
 	}
 
 	/** Stops internal timers so that the class is ready for garbage disposal */
