@@ -19,34 +19,45 @@ export interface Options {
 	autoConnect?: boolean
 }
 
-export interface SendResult {
-	sentOk: boolean
-	error?: Error
-}
+export type SendResult =
+	| {
+			error: Error
+			request: undefined
+	  }
+	| {
+			error: undefined
+			request: Promise<Response>
+	  }
 
-export interface Request {
-	/**
-	 * The generated request ID
-	 */
-	requestId?: string
-	/**
-	 * Resolves when the request is sent to CasparCG, result is true if it was sent successfully
-	 */
-	sent: Promise<SendResult>
-	/**
-	 * Added to the object after the sent promise has resolved, this resolves when CasparCG has executed the request
-	 */
-	response?: Promise<Response>
-	/**
-	 * Removes the request from the request queue
-	 */
-	cancel: () => void
-}
+// const { error, request } = await ccg.play() // If this throws, its a BAAAAAAAAD error
+// if (error) {
+// 	// not connected or something
+// }
+// const response = await request
+
+// const commandsToSend = []
+
+// const errReq: {err, req}[] = await Promise.all(commandsToSend.map(c => CasparCG.executeCommand(c)))
+
+// const responses = await Promise.all(
+// 	errReq.filter(({err}) => !!err).map(({ req }) => req)
+// )
+
+// export type Request = Promise<Response>
+// {
+// 	/**
+// 	 * The generated request ID
+// 	 */
+// 	requestId: string
+// 	/**
+// 	 * Added to the object after the sent promise has resolved, this resolves when CasparCG has executed the request
+// 	 */
+// 	response: Promise<Response>
+// }
 
 interface InternalRequest {
 	requestId?: string
 	command: AMCPCommand
-	request: Request
 
 	resolve: (response: Response) => void
 	reject: (error: Error) => void
@@ -54,7 +65,6 @@ interface InternalRequest {
 	processed: boolean
 	processedTime?: number
 	sentResolve: (sent: SendResult) => void
-	// sentReject: (error: Error) => void
 }
 
 export interface Response {
@@ -78,7 +88,6 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 	private _host: string
 	private _port: number
 
-	private readonly _useSequential: boolean
 	private _requestQueue: Array<InternalRequest> = []
 	private _timeoutTimer: NodeJS.Timer
 	private _timeoutTime: number
@@ -162,14 +171,18 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		clearInterval(this._timeoutTimer)
 	}
 
-	executeCommand(command: AMCPCommand): Request {
+	/**
+	 * Sends a command to CasparCG
+	 * @return { error: Error } if there was an error when sending the command (such as being disconnected)
+	 * @return { request: Promise<Response> } a Promise that resolves when CasparCG replies after a command has been sent.
+	 * If this throws, there's something seriously wrong :)
+	 */
+	async executeCommand(command: AMCPCommand): Promise<SendResult> {
 		const reqId = Math.random().toString(35).slice(2, 7)
 
 		let outerResolve: InternalRequest['sentResolve'] = () => null
-		// outerReject: InternalRequest['sentReject'] = () => null
 		const s = new Promise<SendResult>((resolve) => {
 			outerResolve = resolve
-			// outerReject = reject
 		})
 
 		const internalRequest: InternalRequest = {
@@ -182,82 +195,46 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 
 			processed: false,
 			sentResolve: outerResolve,
-			// sentReject: outerReject,
-
-			request: {
-				requestId: reqId,
-				cancel: () =>
-					this._requestQueue.splice(
-						this._requestQueue.findIndex((r) => r.requestId === reqId),
-						1
-					),
-
-				sent: s,
-			},
 		}
 
 		this._requestQueue.push(internalRequest)
 		this._processQueue().catch((e) => this.emit('error', e))
 
-		return internalRequest.request
+		return s
 	}
 
 	private async _processQueue(): Promise<void> {
 		if (this._requestQueue.length < 1) return
 
-		if (this._useSequential) {
-			if (!this._requestQueue[0].processed) {
-				this._requestQueue[0].processedTime = Date.now()
-				this._requestQueue[0].processed = true
-
-				const sentOk = await this._connection.sendCommand(this._requestQueue[0].command)
-
-				if (!sentOk) {
-					const req = this._requestQueue.shift()
-					req?.reject(new Error('Error while sending command')) // todo - this promise doesn't exist yet?
-					this._processQueue().catch((e) => this.emit('error', e))
-				} else {
-					this._requestQueue[0].request.response = new Promise<Response>((resolve, reject) => {
-						this._requestQueue[0].resolve = resolve
-						this._requestQueue[0].reject = reject
-					})
-				}
-
-				this._requestQueue[0].sentResolve({ sentOk })
-			}
-		} else {
-			this._requestQueue.forEach((r) => {
-				if (!r.processed) {
-					this._connection
-						.sendCommand(r.command, r.requestId)
-						.then(
-							(sentOk) => {
-								if (!sentOk) {
-									r.reject(new Error('Error while sending command')) // todo - promise doesnt exist yet?
-									this._requestQueue = this._requestQueue.filter((req) => req !== r)
-								} else {
-									this._requestQueue[0].request.response = new Promise<Response>(
-										(resolve, reject) => {
-											this._requestQueue[0].resolve = resolve
-											this._requestQueue[0].reject = reject
-										}
-									)
-								}
-								r.sentResolve({ sentOk })
-							},
-							(e) => {
-								r.sentResolve({ sentOk: false })
-								r.reject(new Error(e))
+		this._requestQueue.forEach((r) => {
+			if (!r.processed) {
+				this._connection
+					.sendCommand(r.command, r.requestId)
+					.then(
+						(sentOk) => {
+							if (!sentOk) {
 								this._requestQueue = this._requestQueue.filter((req) => req !== r)
+								r.sentResolve({ error: new Error('Error while sending command'), request: undefined })
+							} else {
+								const request = new Promise<Response>((resolve, reject) => {
+									this._requestQueue[0].resolve = resolve
+									this._requestQueue[0].reject = reject
+								})
+								r.sentResolve({ error: undefined, request })
 							}
-						)
-						.catch((e) => this.emit('error', e))
+						},
+						(e: string) => {
+							r.sentResolve({ error: Error(e), request: undefined })
+							r.reject(new Error(e))
+							this._requestQueue = this._requestQueue.filter((req) => req !== r)
+						}
+					)
+					.catch((e) => this.emit('error', e))
 
-					r.processed = true
-					r.processedTime = Date.now()
-				}
-			})
-		}
+				r.processed = true
+				r.processedTime = Date.now()
+			}
+		})
 	}
 
 	private _checkTimeouts() {

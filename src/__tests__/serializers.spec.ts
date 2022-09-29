@@ -9,6 +9,12 @@ describe('serializers', () => {
 		}
 	})
 
+	it('should have command for every serializers', () => {
+		for (const c of Object.keys(serializers)) {
+			expect(Object.values(Commands).includes(c as Commands)).toBeTruthy()
+		}
+	})
+
 	it('should serialize a play command', () => {
 		const command: PlayCommand = {
 			command: Commands.Play,
