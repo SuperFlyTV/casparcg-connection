@@ -2,8 +2,9 @@ import { EventEmitter } from 'eventemitter3'
 import { Socket } from 'net'
 import { Response } from './api'
 import { AMCPCommand, Commands } from './commands'
-import { deserializer } from './deserializers'
-import { serializers } from './serializers'
+import { deserializers } from './deserializers'
+import { Version } from './enums'
+import { serializers, serializersV21 } from './serializers'
 
 const RESPONSE_REGEX = /(RES (?<ReqId>.+) )?(?<ResponseCode>\d{3}) ((?<Action>.+) )?(OK|ERROR|FAILED)/i
 
@@ -85,6 +86,7 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	private _unprocessedLines: string[] = []
 	private _reconnectTimeout?: NodeJS.Timeout
 	private _connected = false
+	private _version = Version.V230
 
 	constructor(private host: string, private port = 5250, autoConnect: boolean) {
 		super()
@@ -93,6 +95,10 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 	get connected(): boolean {
 		return this._connected
+	}
+
+	set version(version: Version) {
+		this._version = version
 	}
 
 	changeConnection(host: string, port = 5250): void {
@@ -111,6 +117,7 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	async sendCommand(cmd: AMCPCommand, reqId?: string): Promise<boolean> {
 		if (!cmd.command) throw new Error('No command specified')
 		if (!cmd.params) throw new Error('No parameters specified')
+		const serializers = this._getVersionedSerializers()
 
 		// use a cheeky type assertion here to easen up a bit, TS doesn't let us use just cmd.command
 		const serializer = serializers[cmd.command] as ((
@@ -161,9 +168,10 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 					processedLines++
 				}
 
+				const deserializers = this._getVersionedDeserializers()
 				// attempt to deserialize the response if we can
-				if (deserializer[response.command] && response.data.length) {
-					response.data = await deserializer[response.command](response.data)
+				if (deserializers[response.command] && response.data.length) {
+					response.data = await deserializers[response.command](response.data)
 				}
 
 				// now do something with response
@@ -234,5 +242,17 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 				this.emit('disconnect')
 			}
 		}
+	}
+
+	private _getVersionedSerializers() {
+		if (this._version <= Version.V21x) {
+			return serializersV21
+		}
+
+		return serializers
+	}
+
+	private _getVersionedDeserializers() {
+		return deserializers
 	}
 }

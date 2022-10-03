@@ -24,7 +24,7 @@ const deserializeXML = async (line: string): Promise<any> => {
 	return await parseStringPromise(line)
 }
 
-export const deserializer: Record<string, (data: string[]) => Promise<(Record<string, any> | undefined)[]>> = {
+export const deserializers: Record<string, (data: string[]) => Promise<(Record<string, any> | undefined)[]>> = {
 	[Commands.Cls]: async (data: string[]) => data.map(deserializeClipInfo),
 	[Commands.Cinf]: async (data: string[]) => [deserializeClipInfo(data[0])],
 	[Commands.Info]: async (data: string[]) => Promise.all(data.map(deserializeXML)),

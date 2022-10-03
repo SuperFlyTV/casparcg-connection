@@ -58,6 +58,11 @@ const producerOptionsSerializer = (_: Commands, { vFilter, aFilter }: ProducerOp
 		.filter((p) => p !== undefined)
 		.join(' ')
 }
+const producerV21Serializer = (_: Commands, { channelLayout, vFilter }: ProducerOptions) => {
+	return [vFilter ? 'FILTER ' + vFilter : undefined, channelLayout ? 'CHANNEL_LAYOUT ' + channelLayout : undefined]
+		.filter((p) => p !== undefined)
+		.join(' ')
+}
 
 const transitionOptSerializer = (_command: Commands, { transition }: { transition?: TransitionParameters }) =>
 	(transition && transitionSerializer(transition)) || ''
@@ -458,4 +463,72 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 	[Commands.Bye]: [commandNameSerializer],
 	[Commands.Kill]: [commandNameSerializer],
 	[Commands.Restart]: [commandNameSerializer],
+}
+
+export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
+	...serializers,
+	[Commands.Loadbg]: [
+		commandNameSerializer,
+		channelLayerSerializer,
+		clipCommandSerializer,
+		(_, { auto }) => (auto ? 'AUTO' : ''),
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
+	[Commands.LoadbgDecklink]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		decklinkCommandSerializer,
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
+	[Commands.LoadbgHtml]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		htmlCommandSerializerr,
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
+	[Commands.LoadbgRoute]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		routeCommandSerializer,
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
+	[Commands.Load]: [
+		commandNameSerializer,
+		channelLayerSerializer,
+		clipCommandSerializer,
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
+	[Commands.Play]: [
+		commandNameSerializer,
+		channelLayerSerializer,
+		clipCommandSerializer,
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
+	[Commands.PlayDecklink]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		decklinkCommandSerializer,
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
+	[Commands.PlayHtml]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		htmlCommandSerializerr,
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
+	[Commands.PlayRoute]: [
+		splitCommandKeywordSerializer,
+		channelLayerSerializer,
+		routeCommandSerializer,
+		producerV21Serializer,
+		transitionOptSerializer,
+	],
 }

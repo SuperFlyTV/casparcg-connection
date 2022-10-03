@@ -118,3 +118,12 @@ export enum RouteMode {
 	Background = 'BACKGROUND',
 	Next = 'NEXT',
 }
+
+export enum Version {
+	V2xx = 2000,
+	V207 = 2007,
+	V21x = 2100,
+	V210 = 2110,
+	V220 = 2200,
+	V230 = 2300,
+}

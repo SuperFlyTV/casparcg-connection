@@ -63,8 +63,18 @@ export interface RouteParameters {
 }
 
 export interface ProducerOptions {
+	/**
+	 * Ffmpeg video filter, serialized as vfilter in 2.2+ and filter before 2.2
+	 */
 	vFilter?: string
+	/**
+	 * 2.2+ only option, specifify a channelLayout for backwards compatibility
+	 */
 	aFilter?: string
+	/**
+	 * Channel layout is a 2.1 only option
+	 */
+	channelLayout?: string
 	transition?: TransitionParameters
 }
 

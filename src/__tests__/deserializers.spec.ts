@@ -1,11 +1,11 @@
 import { Commands } from '../commands'
-import { deserializer } from '../deserializers'
+import { deserializers } from '../deserializers'
 
 describe('serializers', () => {
 	it('should deserialize CINF', async () => {
 		const input = '"AMB" MOVIE size datetime frames rate'
 
-		const output = await deserializer[Commands.Cinf]([input])
+		const output = await deserializers[Commands.Cinf]([input])
 
 		expect(output).toHaveLength(1)
 		expect(output[0]).toMatchObject({
@@ -21,7 +21,7 @@ describe('serializers', () => {
 	it('should deserialize CLS', async () => {
 		const input = ['"AMB" MOVIE size datetime frames rate', '"AMB2" MOVIE size2 datetime2 frames2 rate2']
 
-		const output = await deserializer[Commands.Cls](input)
+		const output = await deserializers[Commands.Cls](input)
 
 		expect(output).toHaveLength(2)
 		expect(output[0]).toMatchObject({
