@@ -246,11 +246,9 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 	private _getVersionedSerializers() {
 		if (this._version <= Version.v21x) {
-			console.log('use 2.1.x serializer')
 			return serializersV21
 		}
 
-		console.log('use 2.3.x serializer')
 		return serializers
 	}
 
