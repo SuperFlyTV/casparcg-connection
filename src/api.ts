@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3'
 import { AMCPCommand, Commands } from './commands'
 import { Connection, ResponseTypes } from './connection'
+import { Version } from './enums'
 
 export interface Options {
 	/** Host name of the machine to connect to. Defaults to 127.0.0.1 */
@@ -77,7 +78,9 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 						throw error
 					}
 					const result = await request
-					result.data // todo - use this info to get a Version enum and set it on the connection
+					const version = await result.data[0]
+
+					this._connection.version = version.version as Version
 				})
 				.catch((e) => this.emit('error', e))
 			this._processQueue().catch((e) => this.emit('error', e))

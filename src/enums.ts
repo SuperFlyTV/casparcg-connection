@@ -120,10 +120,8 @@ export enum RouteMode {
 }
 
 export enum Version {
-	V2xx = 2000,
-	V207 = 2007,
-	V21x = 2100,
-	V210 = 2110,
-	V220 = 2200,
-	V230 = 2300,
+	Unsupported = 0,
+	v21x = 20100,
+	v22x = 20200,
+	v23x = 20300,
 }

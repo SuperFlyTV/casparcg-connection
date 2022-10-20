@@ -86,7 +86,7 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	private _unprocessedLines: string[] = []
 	private _reconnectTimeout?: NodeJS.Timeout
 	private _connected = false
-	private _version = Version.V230
+	private _version = Version.v23x
 
 	constructor(private host: string, private port = 5250, autoConnect: boolean) {
 		super()
@@ -245,10 +245,12 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	}
 
 	private _getVersionedSerializers() {
-		if (this._version <= Version.V21x) {
+		if (this._version <= Version.v21x) {
+			console.log('use 2.1.x serializer')
 			return serializersV21
 		}
 
+		console.log('use 2.3.x serializer')
 		return serializers
 	}
 
