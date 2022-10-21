@@ -117,19 +117,8 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	async sendCommand(cmd: AMCPCommand, reqId?: string): Promise<boolean> {
 		if (!cmd.command) throw new Error('No command specified')
 		if (!cmd.params) throw new Error('No parameters specified')
-		const serializers = this._getVersionedSerializers()
 
-		// use a cheeky type assertion here to easen up a bit, TS doesn't let us use just cmd.command
-		const serializer = serializers[cmd.command] as ((
-			c: AMCPCommand['command'],
-			p: AMCPCommand['params']
-		) => string)[]
-		let payload = serializer
-			.map((fn) => fn(cmd.command, cmd.params).trim())
-			.filter((p) => p !== '')
-			.join(' ')
-
-		if (reqId) payload = 'REQ ' + reqId + ' ' + payload
+		const payload = this._serializeCommand(cmd, reqId)
 
 		return new Promise<boolean>((r) => {
 			this._socket?.write(payload + '\r\n', (e) => (e ? r(false) : r(true)))
@@ -242,6 +231,24 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 				this.emit('disconnect')
 			}
 		}
+	}
+
+	private _serializeCommand(cmd: AMCPCommand, reqId?: string): string {
+		const serializers = this._getVersionedSerializers()
+
+		// use a cheeky type assertion here to easen up a bit, TS doesn't let us use just cmd.command
+		const serializer = serializers[cmd.command] as ((
+			c: AMCPCommand['command'],
+			p: AMCPCommand['params']
+		) => string)[]
+		let payload = serializer
+			.map((fn) => fn(cmd.command, cmd.params).trim())
+			.filter((p) => p !== '')
+			.join(' ')
+
+		if (reqId) payload = 'REQ ' + reqId + ' ' + payload
+
+		return payload
 	}
 
 	private _getVersionedSerializers() {

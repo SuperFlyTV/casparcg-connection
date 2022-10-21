@@ -25,14 +25,22 @@ const deserializeXML = async (line: string): Promise<any> => {
 	return await parseStringPromise(line) // todo - this seems to get stuck when we pass it non-xml
 }
 
-const deserializeVersion = async (line: string): Promise<any> => {
+const deserializeVersion = (line: string): any => {
 	let version = Version.Unsupported
+	const v = line.split('.')
+	const major = Number(v[0])
+	const minor = Number(v[1])
 
-	if (line.startsWith('2.1')) {
-		version = Version.v21x
-	} else if (line.startsWith('2.2')) {
-		version = Version.v22x
-	} else if (line.startsWith('2.3')) {
+	if (major <= 2) {
+		if (minor === 1) {
+			version = Version.v21x
+		} else if (minor === 2) {
+			version = Version.v22x
+		} else if (minor >= 3) {
+			// just parse anything newer as v2.3 as it's most likely closest
+			version = Version.v23x
+		}
+	} else {
 		version = Version.v23x
 	}
 
@@ -46,7 +54,5 @@ export const deserializers: Record<string, (data: string[]) => Promise<(Record<s
 	[Commands.Cls]: async (data: string[]) => data.map(deserializeClipInfo),
 	[Commands.Cinf]: async (data: string[]) => [deserializeClipInfo(data[0])],
 	[Commands.Info]: async (data: string[]) => Promise.all(data.map(deserializeXML)),
-	[Commands.Version]: async (data: string[]) => {
-		return [deserializeVersion(data[0])]
-	},
+	[Commands.Version]: async (data: string[]) => [deserializeVersion(data[0])],
 }
