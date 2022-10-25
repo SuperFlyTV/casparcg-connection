@@ -61,7 +61,7 @@
 		"cov-open": "open-cli coverage/lcov-report/index.html",
 		"send-coverage": "codecov",
 		"docs": "yarn typedoc ./src/index.ts",
-		"changelog": "standard-version",
+		"changelog": "sofie-version",
 		"release": "yarn reset && yarn test && yarn changelog",
 		"release:skiptest": "yarn reset && yarn changelog",
 		"reset": "git clean -dfx && git reset --hard && yarn",
@@ -102,7 +102,7 @@
 		"/LICENSE"
 	],
 	"devDependencies": {
-		"@sofie-automation/code-standard-preset": "^2.0.2",
+		"@sofie-automation/code-standard-preset": "^2.1.0",
 		"@types/highland": "^2.10.7",
 		"@types/jest": "^24.0.23",
 		"@types/node": "^16.11.45",
@@ -113,7 +113,6 @@
 		"jest": "^28.1.3",
 		"npm-scripts-info": "^0.3.9",
 		"open-cli": "^5.0.0",
-		"standard-version": "^7.0.1",
 		"trash-cli": "^3.0.0",
 		"ts-jest": "^28.0.7",
 		"typedoc": "^0.23.8",
@@ -139,10 +138,6 @@
 	},
 	"resolutions": {
 		"**/trash": "~6.0.0"
-	},
-	"standard-version": {
-		"message": "chore(release): %s [skip ci]",
-		"tagPrefix": ""
 	},
 	"prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
 	"lint-staged": {
