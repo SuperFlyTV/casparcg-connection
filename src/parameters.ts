@@ -96,7 +96,10 @@ export type LoadParameters = PlayParameters
 export type PauseParameters = ChannelLayer
 export type ResumeParameters = ChannelLayer
 export type StopParameters = ChannelLayer
-export type ClearParameters = ChannelLayer
+export type ClearParameters = {
+	channel: number
+	layer?: number
+}
 
 export interface CallParameters extends ChannelLayer {
 	param: string

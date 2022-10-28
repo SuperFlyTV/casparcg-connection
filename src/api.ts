@@ -120,6 +120,10 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._connection.changeConnection(this._host, this._port)
 	}
 
+	get connected(): boolean {
+		return this._connection.connected
+	}
+
 	connect(host?: string, port?: number): void {
 		this._host = host ? host : this._host
 		this._port = port ? port : this._port
@@ -189,8 +193,8 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 								r.sentResolve({ error: new Error('Error while sending command'), request: undefined })
 							} else {
 								const request = new Promise<Response>((resolve, reject) => {
-									this._requestQueue[0].resolve = resolve
-									this._requestQueue[0].reject = reject
+									r.resolve = resolve
+									r.reject = reject
 								})
 								r.sentTime = Date.now()
 								r.sentResolve({ error: undefined, request })
