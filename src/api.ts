@@ -71,7 +71,6 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._connection = new Connection(this._host, this._port, !(options?.autoConnect === false))
 
 		this._connection.on('connect', () => {
-			this.emit('connect')
 			this.executeCommand({ command: Commands.Version, params: {} })
 				.then(async ({ request, error }) => {
 					if (error) {
@@ -83,6 +82,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 					this._connection.version = version.version as Version
 				})
 				.catch((e) => this.emit('error', e))
+				.finally(() => this.emit('connect'))
 			this._processQueue().catch((e) => this.emit('error', e))
 		})
 		this._connection.on('disconnect', () => this.emit('disconnect'))
@@ -186,27 +186,24 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 			if (!r.processed) {
 				this._connection
 					.sendCommand(r.command, r.requestId)
-					.then(
-						(sentOk) => {
-							if (!sentOk) {
-								this._requestQueue = this._requestQueue.filter((req) => req !== r)
-								r.sentResolve({ error: new Error('Error while sending command'), request: undefined })
-							} else {
-								const request = new Promise<Response>((resolve, reject) => {
-									r.resolve = resolve
-									r.reject = reject
-								})
-								r.sentTime = Date.now()
-								r.sentResolve({ error: undefined, request })
-							}
-						},
-						(e: string) => {
-							r.sentResolve({ error: Error(e), request: undefined })
-							r.reject(new Error(e))
+					.then((sendError) => {
+						if (sendError) {
 							this._requestQueue = this._requestQueue.filter((req) => req !== r)
+							r.sentResolve({ error: sendError, request: undefined })
+						} else {
+							const request = new Promise<Response>((resolve, reject) => {
+								r.resolve = resolve
+								r.reject = reject
+							})
+							r.sentTime = Date.now()
+							r.sentResolve({ error: undefined, request })
 						}
-					)
-					.catch((e) => this.emit('error', e))
+					})
+					.catch((e: string) => {
+						r.sentResolve({ error: Error(e), request: undefined })
+						r.reject(new Error(e))
+						this._requestQueue = this._requestQueue.filter((req) => req !== r)
+					})
 
 				r.processed = true
 				r.processedTime = Date.now()

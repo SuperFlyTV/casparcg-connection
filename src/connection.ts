@@ -114,14 +114,14 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		this._socket?.end()
 	}
 
-	async sendCommand(cmd: AMCPCommand, reqId?: string): Promise<boolean> {
+	async sendCommand(cmd: AMCPCommand, reqId?: string): Promise<Error | undefined> {
 		if (!cmd.command) throw new Error('No command specified')
 		if (!cmd.params) throw new Error('No parameters specified')
 
 		const payload = this._serializeCommand(cmd, reqId)
 
-		return new Promise<boolean>((r) => {
-			this._socket?.write(payload + '\r\n', (e) => (e ? r(false) : r(true)))
+		return new Promise<Error | undefined>((r) => {
+			this._socket?.write(payload + '\r\n', (e) => (e ? r(e) : r(undefined)))
 		})
 	}
 
