@@ -679,10 +679,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sofie-automation/code-standard-preset@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@sofie-automation/code-standard-preset/-/code-standard-preset-2.1.0.tgz#1ab26753caebd0c3178da63c89d04666d0c30079"
-  integrity sha512-+Xq6UCnODToY/nqA5N9Tls5Ot21LItU4XYZCYuoKxjb2JZlu+7W2dBNI5wKaSfBiLbXtdP2/n7475jMCjM3OVQ==
+"@sofie-automation/code-standard-preset@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@sofie-automation/code-standard-preset/-/code-standard-preset-2.2.0.tgz#0b4bb5be1e97c5f0b83d9d4e4b21bf56f88f78c9"
+  integrity sha512-vtvneUyauRjkK9kl+ylKTZwiLqRT0bkNsU81b5xKkrZd/KRbQFcdL40l2eIADmKNCCV+5oseAMVHAwBgZlA3BA==
   dependencies:
     "@typescript-eslint/eslint-plugin" "^5.41.0"
     "@typescript-eslint/parser" "^5.41.0"

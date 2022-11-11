@@ -1,6 +1,6 @@
 {
 	"name": "casparcg-connection",
-	"version": "5.1.0",
+	"version": "6.0.0",
 	"description": "Node.js Javascript/Typescript library for CasparCG connection and commands.",
 	"main": "dist/index.js",
 	"typings": "dist/index.d.ts",
@@ -102,7 +102,7 @@
 		"/LICENSE"
 	],
 	"devDependencies": {
-		"@sofie-automation/code-standard-preset": "^2.1.0",
+		"@sofie-automation/code-standard-preset": "^2.2.0",
 		"@types/highland": "^2.10.7",
 		"@types/jest": "^24.0.23",
 		"@types/node": "^16.11.45",

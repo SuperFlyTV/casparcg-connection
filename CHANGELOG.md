@@ -1,6 +1,31 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
+
+## [6.0.0](http://superfly.tv/compare/5.1.0...v6.0.0) (Fri Nov 11 2022)
+
+## Breaking changes
+
+### Features
+
+* **!** rewrite library [8d23d0d3](http://superfly.tv/commit/8d23d0d32677f86f5e63bf706c9c5967aef80638)
+
+### Fixes
+
+* decklink format should be optional [21bc530e](http://superfly.tv/commit/21bc530e2a8a203aa1f6cfe461a1e2eb047c1974)
+* rework sending API [01c13f68](http://superfly.tv/commit/01c13f6893e869b9c27c2ab4d076ee55a41b741d)
+* disconnect flow closes requests [7e8ec251](http://superfly.tv/commit/7e8ec251ff9b027e1b327a26dc9466bc120d2c58)
+* do not swallow error [e4767c1e](http://superfly.tv/commit/e4767c1ebd88aacb72dec477678158b7b40f400d)
+* add typed events to the basic api [d4613dcf](http://superfly.tv/commit/d4613dcfee624c3b00acc0fd7cdc2d4529677b7b)
+* add some missing params [35beca66](http://superfly.tv/commit/35beca6618d603b8577380e205025e1ab090faa7)
+* improve socket connection handling [a29f690f](http://superfly.tv/commit/a29f690f5ae7b007af01e24c944ac0286bb6bb85)
+
+### Features
+
+* multi version support [6d18b5ca](http://superfly.tv/commit/6d18b5ca4c4dfec6d1741a5890df2775c1bde51f)
+* add disconnect flow [8bc9b7db](http://superfly.tv/commit/8bc9b7dbc2cfebd62f371a057f2bbd369267c9d4)
+* command timeouts [1e28632c](http://superfly.tv/commit/1e28632c844e17880e0c7a93735b2eff6af7a9ea)
+* add xml parsing of responses [f8a83470](http://superfly.tv/commit/f8a83470976fb8506ee7a5ff68405e53088e2809)
 
 ## [5.1.0](https://github.com/SuperFlyTV/casparcg-connection/compare/5.0.1...5.1.0) (2020-11-16)
 
