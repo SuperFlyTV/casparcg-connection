@@ -114,7 +114,7 @@ const mixerTweenSerializer = (_: Commands, { tween, duration }: MixerTween) => (
 const mixerSimpleValueSerializer = (_: Commands, { value }: { value: number | boolean | string }) =>
 	value !== undefined ? (typeof value === 'boolean' ? (value ? '1' : '0') : value + '') : ''
 
-const optional: <T, Y>(fn: (command: T, params: Y) => string) => (command: T, params: Y) => string =
+const optional: <T, Y extends object>(fn: (command: T, params: Y) => string) => (command: T, params: Y) => string =
 	(fn) => (command, params) => {
 		const keys = Object.keys(params)
 
