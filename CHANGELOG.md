@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.0.1](http://superfly.tv/compare/v6.0.0...v6.0.1) (Thu Feb 16 2023)
+
+
+### Fixes
+
+* multi-token PLAY/LOADBG commands serialize incorrectly [2b1bc0cb](http://superfly.tv/commit/2b1bc0cb816ae827f8f877cd321f54a1d81248af)
+
 ## [6.0.0](http://superfly.tv/compare/5.1.0...v6.0.0) (Fri Nov 11 2022)
 
 ## Breaking changes
