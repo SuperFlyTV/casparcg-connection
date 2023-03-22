@@ -231,7 +231,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
-		(_, { template, playOnLoad }) => `${template} ${playOnLoad}`,
+		(_, { template, playOnLoad }) => `${template} ${playOnLoad ? '1' : '0'}`,
 		cgDataSerializer,
 	],
 	[Commands.CgPlay]: [
