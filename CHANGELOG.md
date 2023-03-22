@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.0.2](http://superfly.tv/compare/v6.0.1...v6.0.2) (Wed Mar 22 2023)
+
+
+### Fixes
+
+* playOnLoad serialisation [fa661a38](http://superfly.tv/commit/fa661a38be986e8e43b357efaa4b236474eb716f)
+
 ## [6.0.1](http://superfly.tv/compare/v6.0.0...v6.0.1) (Thu Feb 16 2023)
 
 
