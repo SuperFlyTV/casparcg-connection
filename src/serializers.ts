@@ -438,15 +438,15 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 
 	[Commands.ChannelGrid]: [commandNameSerializer],
 
-	[Commands.ThumbnailList]: [commandNameSerializer, (_, { subDirectory }) => subDirectory],
+	[Commands.ThumbnailList]: [commandNameSerializer, (_, { subDirectory }) => subDirectory ?? ''],
 	[Commands.ThumbnailRetrieve]: [commandNameSerializer, (_, { filename }) => filename],
 	[Commands.ThumbnailGenerate]: [commandNameSerializer, (_, { filename }) => filename],
 	[Commands.ThumbnailGenerateAll]: [commandNameSerializer],
 
 	[Commands.Cinf]: [commandNameSerializer, (_, { filename }) => filename],
-	[Commands.Cls]: [commandNameSerializer, (_, { subDirectory }) => subDirectory],
+	[Commands.Cls]: [commandNameSerializer, (_, { subDirectory }) => subDirectory ?? ''],
 	[Commands.Fls]: [commandNameSerializer],
-	[Commands.Tls]: [commandNameSerializer, (_, { subDirectory }) => subDirectory],
+	[Commands.Tls]: [commandNameSerializer, (_, { subDirectory }) => subDirectory ?? ''],
 	[Commands.Version]: [commandNameSerializer],
 	[Commands.Info]: [commandNameSerializer, channelOptLayerOptSerializer],
 	[Commands.InfoTemplate]: [commandNameSerializer, (_, { template }) => template],

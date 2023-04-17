@@ -392,7 +392,7 @@ export class CasparCG extends BasicCasparCGAPI {
 			params,
 		})
 	}
-	async thumbnailList(params: ThumbnailListParameters): Promise<SendResult> {
+	async thumbnailList(params: ThumbnailListParameters = {}): Promise<SendResult> {
 		return this.executeCommand({
 			command: Commands.ThumbnailList,
 			params,
@@ -422,7 +422,7 @@ export class CasparCG extends BasicCasparCGAPI {
 			params,
 		})
 	}
-	async cls(params: ClsParameters): Promise<SendResult> {
+	async cls(params: ClsParameters = {}): Promise<SendResult> {
 		return this.executeCommand({
 			command: Commands.Cls,
 			params,
@@ -434,7 +434,7 @@ export class CasparCG extends BasicCasparCGAPI {
 			params,
 		})
 	}
-	async tls(params: TlsParameters): Promise<SendResult> {
+	async tls(params: TlsParameters = {}): Promise<SendResult> {
 		return this.executeCommand({
 			command: Commands.Tls,
 			params,

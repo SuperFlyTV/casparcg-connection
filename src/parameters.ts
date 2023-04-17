@@ -268,7 +268,7 @@ export type MixerClearParameters = ChannelLayer
 export type ChannelGridParameters = Empty
 
 export interface ThumbnailListParameters {
-	subDirectory: string
+	subDirectory?: string
 }
 export interface ThumbnailRetrieveParameters {
 	filename: string
@@ -282,11 +282,11 @@ export interface CinfParameters {
 	filename: string
 }
 export interface ClsParameters {
-	subDirectory: string
+	subDirectory?: string
 }
 export type FlsParameters = Empty
 export interface TlsParameters {
-	subDirectory: string
+	subDirectory?: string
 }
 
 export type VersionParameters = Empty
