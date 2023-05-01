@@ -106,7 +106,10 @@ const cgDataSerializer = (_: Commands, { data }: CgUpdateParameters | CgAddParam
 	} else if (typeof data === 'string') {
 		return data
 	} else {
-		return JSON.stringify(data)
+		// Escape the data so that CasparCG can process it and send into templates:
+		// * Escape \, $ and "
+		// * Wrap in "-quotes
+		return `"${JSON.stringify(data).replace(/[\\$"]/g, '\\$&')}"`
 	}
 }
 
@@ -231,7 +234,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
-		(_, { template, playOnLoad }) => `${template} ${playOnLoad ? '1' : '0'}`,
+		(_, { template, playOnLoad }) => `"${template}" ${playOnLoad ? '1' : '0'}`,
 		cgDataSerializer,
 	],
 	[Commands.CgPlay]: [
