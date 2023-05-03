@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.0.3](http://superfly.tv/compare/v6.0.2...v6.0.3) (Wed May 03 2023)
+
+
+### Fixes
+
+* cgAdd didn't serialize data properly [60790958](http://superfly.tv/commit/60790958d3109a23e7121ebc81192a2eae2417d3)
+* make some parameters optional [23d3de2d](http://superfly.tv/commit/23d3de2da5bd3a401882a6ef9c8be81097f92fb3)
+
 ## [6.0.2](http://superfly.tv/compare/v6.0.1...v6.0.2) (Wed Mar 22 2023)
 
 
