@@ -1,5 +1,5 @@
 import { serializers, serializersV21 } from '../serializers'
-import { Commands, LoadbgDecklinkCommand, PlayCommand, PlayHtmlCommand } from '../commands'
+import { CgAddCommand, Commands, LoadbgDecklinkCommand, PlayCommand, PlayHtmlCommand } from '../commands'
 import { TransitionType } from '../enums'
 
 describe('serializers', () => {
@@ -112,5 +112,31 @@ describe('serializers', () => {
 		const result = serialized.filter((l) => l !== '').join(' ')
 
 		expect(result).toBe('PLAY 1-10 [html] http://example.com')
+	})
+
+	it('should serialize a cgAdd command with data', () => {
+		const command: CgAddCommand = {
+			command: Commands.CgAdd,
+			params: {
+				channel: 1,
+				layer: 10,
+				cgLayer: 1,
+				playOnLoad: true,
+				template: 'myFolder/myTemplate',
+				data: {
+					label: `These are difficult: "'&$\\/`,
+				},
+			},
+		}
+
+		const serialized = serializers[Commands.CgAdd].map((fn) => fn(command.command, command.params))
+
+		expect(serialized).toHaveLength(serializers[Commands.CgAdd].length)
+
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe(
+			`CG 1-10 ADD 1 "myFolder/myTemplate" 1 "{\\"label\\":\\"These are difficult: \\\\\\"'&\\$\\\\\\\\/\\"}"`
+		)
 	})
 })
