@@ -1,6 +1,6 @@
 import { CReturnType, Commands } from './commands'
 import { Version } from './enums'
-import { ClipInfo, InfoEntry } from './parameters'
+import { ClipInfo, InfoChannelEntry, InfoEntry, InfoLayerEntry } from './parameters'
 import { parseStringPromise } from 'xml2js'
 
 function deserializeClipInfo(line: string): ClipInfo | undefined {
@@ -68,6 +68,53 @@ const deserializeInfo = (line: string): InfoEntry | undefined => {
 	}
 	return undefined
 }
+function ensureArray<T>(v: T | T[]): T[] {
+	return Array.isArray(v) ? v : [v]
+}
+const deserializeInfoChannel = async (line: string): Promise<InfoChannelEntry | undefined> => {
+	if (!line.startsWith('<?xml')) return undefined
+
+	const parsed = await deserializeXML(line)
+
+	if (!parsed) return undefined
+
+	const channel = ensureArray(parsed.channel)[0]
+	const mixer = ensureArray(channel.mixer)[0]
+	const mixerStage = ensureArray(channel.stage)[0]
+
+	const data: InfoChannelEntry = {
+		channel: {
+			framerate: parseInt(ensureArray(channel.framerate)[0], 10),
+			mixer: {
+				audio: {
+					volumes: ensureArray(mixer.audio)[0].volume.map((v: string) => parseInt(v, 10)),
+				},
+			},
+
+			layers: compact(
+				Object.entries(ensureArray(mixerStage.layer)[0]).map(([layerName, layer0]) => {
+					const m = layerName.match(/layer_(\d+)/)
+					if (!m) return undefined
+
+					const layer = ensureArray(layer0 as any)[0]
+					return {
+						layer: parseInt(m[1], 10),
+						// perhaps parse these later:
+						background: ensureArray(layer.background)[0],
+						foreground: ensureArray(layer.foreground)[0],
+					}
+				})
+			),
+		},
+	}
+
+	return data
+}
+const deserializeInfoLayer = async (line: string): Promise<InfoLayerEntry | undefined> => {
+	// Is this actually correct?
+	// The data seems to be equal to info channel in 2.3.2
+	return deserializeInfoChannel(line)
+}
 
 const deserializeVersion = (
 	line: string
@@ -113,4 +160,8 @@ export const deserializers = {
 	[Commands.Cinf]: deserializer<Commands.Cinf>(async (data: string[]) => deserializeClipInfo(data[0])),
 	[Commands.Version]: deserializer<Commands.Version>(async (data: string[]) => deserializeVersion(data[0])),
 	[Commands.Info]: deserializer<Commands.Info>(async (data: string[]) => compact(data.map(deserializeInfo))),
+	[Commands.InfoChannel]: deserializer<Commands.InfoChannel>(async (data: string[]) =>
+		deserializeInfoChannel(data[0])
+	),
+	[Commands.InfoLayer]: deserializer<Commands.InfoLayer>(async (data: string[]) => deserializeInfoLayer(data[0])),
 }

@@ -124,4 +124,82 @@ describe('serializers', () => {
 			})
 		)
 	})
+	it('should deserialize INFO Channel', async () => {
+		const input = [
+			`<?xml version="1.0" encoding="utf-8"?>
+		<channel>
+		   <framerate>50</framerate>
+		   <framerate>1</framerate>
+		   <mixer>
+			  <audio>
+				 <volume>0</volume>
+				 <volume>0</volume>
+				 <volume>0</volume>
+				 <volume>0</volume>
+				 <volume>0</volume>
+				 <volume>0</volume>
+				 <volume>0</volume>
+				 <volume>0</volume>
+			  </audio>
+		   </mixer>
+		   <stage>
+			  <layer>
+				 <layer_10>
+					<background>
+					   <producer>empty</producer>
+					</background>
+					<foreground>
+					   <file>
+						  <clip>0</clip>
+						  <clip>596.48000000000002</clip>
+						  <name>AMB.mp4</name>
+						  <path>media/AMB.mp4</path>
+						  <streams>
+							 <file>
+								<streams_0>
+								   <fps>0</fps>
+								   <fps>0</fps>
+								</streams_0>
+								<streams_1>
+								   <fps>24</fps>
+								   <fps>1</fps>
+								</streams_1>
+							 </file>
+						  </streams>
+						  <time>288.80000000000001</time>
+						  <time>596.48000000000002</time>
+					   </file>
+					   <loop>false</loop>
+					   <paused>true</paused>
+					   <producer>ffmpeg</producer>
+					</foreground>
+				 </layer_10>
+			  </layer>
+		   </stage>
+		</channel>`,
+		]
+
+		const output = await deserializers[Commands.InfoChannel](input)
+
+		expect(output).toMatchObject(
+			literal<InfoChannelEntry>({
+				channel: {
+					framerate: 50,
+					mixer: {
+						audio: {
+							volumes: [0, 0, 0, 0, 0, 0, 0, 0],
+						},
+					},
+
+					layers: [
+						{
+							layer: 10,
+							background: expect.anything(),
+							foreground: expect.anything(),
+						},
+					],
+				},
+			})
+		)
+	})
 })

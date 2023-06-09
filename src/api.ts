@@ -67,7 +67,17 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._host = options?.host || '127.0.0.1'
 		this._port = options?.port || 5250
 
-		this._connection = new Connection(this._host, this._port, !(options?.autoConnect === false))
+		this._connection = new Connection(
+			this._host,
+			this._port,
+			!(options?.autoConnect === false),
+			(response: Response<any>) => {
+				// Connection asks: "what request does this response belong to?"
+				const request = this.findResponseRequest(response)
+				if (request) return { command: request.command }
+				else return undefined
+			}
+		)
 
 		this._connection.on('connect', () => {
 			this.executeCommand({ command: Commands.Version, params: {} })
@@ -85,9 +95,10 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 			this._processQueue().catch((e) => this.emit('error', e))
 		})
 		this._connection.on('disconnect', () => this.emit('disconnect'))
+		this._connection.on('error', (e) => this.emit('error', e))
 
 		this._connection.on('data', (response) => {
-			const request = this._requestQueue.find((req) => req.requestId === response.reqId)
+			const request = this.findResponseRequest(response)
 
 			if (request) {
 				request.resolve(response)
@@ -221,5 +232,9 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 			req.sentResolve({ request: undefined, error: new Error('Time out') })
 		})
 		this._requestQueue = this._requestQueue.filter((req) => !deadRequests.includes(req))
+	}
+
+	private findResponseRequest(response: Response<any>): InternalRequest | undefined {
+		return this._requestQueue.find((req) => req.requestId === response.reqId)
 	}
 }

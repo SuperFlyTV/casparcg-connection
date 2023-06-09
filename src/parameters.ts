@@ -324,6 +324,30 @@ export interface InfoEntry {
 	status: string
 }
 
+export interface InfoChannelParameters {
+	channel: number
+}
+export interface InfoChannelEntry {
+	channel: {
+		framerate: number
+		mixer: {
+			audio: {
+				/** Current volumes on audio channels  */
+				volumes: number[]
+			}
+		}
+		layers: {
+			layer: number
+			background: unknown
+			foreground: unknown
+		}[]
+	}
+}
+export interface InfoLayerParameters {
+	channel: number
+	layer: number
+}
+export type InfoLayerEntry = InfoChannelEntry
 export interface InfoTemplateParameters {
 	template: string
 }

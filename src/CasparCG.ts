@@ -77,6 +77,8 @@ import {
 	ByeParameters,
 	KillParameters,
 	RestartParameters,
+	InfoChannelParameters,
+	InfoLayerParameters,
 } from './parameters'
 
 export class CasparCG extends BasicCasparCGAPI {
@@ -467,6 +469,18 @@ export class CasparCG extends BasicCasparCGAPI {
 	async info(params: InfoParameters): Promise<SendResult<CReturnType<Commands.Info>>> {
 		return this.executeCommand({
 			command: Commands.Info,
+			params,
+		})
+	}
+	async infoChannel(params: InfoChannelParameters): Promise<SendResult<CReturnType<Commands.InfoChannel>>> {
+		return this.executeCommand({
+			command: Commands.InfoChannel,
+			params,
+		})
+	}
+	async infoLayer(params: InfoLayerParameters): Promise<SendResult<CReturnType<Commands.InfoLayer>>> {
+		return this.executeCommand({
+			command: Commands.InfoLayer,
 			params,
 		})
 	}

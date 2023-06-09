@@ -5,7 +5,7 @@ import { deserializers } from '../deserializers'
 
 describe('connection', () => {
 	function setupConnectionClass(v = Version.v23x) {
-		const conn = new Connection('127.0.0.1', 5250, false)
+		const conn = new Connection('127.0.0.1', 5250, false, () => undefined)
 		conn.version = v
 
 		return conn

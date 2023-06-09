@@ -83,7 +83,11 @@ import {
 	PlayRouteParameters,
 	ClipInfo,
 	VersionInfo,
+	InfoChannelParameters,
+	InfoLayerParameters,
 	InfoEntry,
+	InfoChannelEntry,
+	InfoLayerEntry,
 } from './parameters'
 
 export enum Commands {
@@ -155,6 +159,8 @@ export enum Commands {
 	Tls = 'TLS',
 	Version = 'VERSION',
 	Info = 'INFO',
+	InfoChannel = 'INFO_CHANNEL',
+	InfoLayer = 'INFO_LAYER',
 	InfoTemplate = 'INFO TEMPLATE',
 	InfoConfig = 'INFO CONFIG',
 	InfoPaths = 'INFO PATHS',
@@ -259,6 +265,8 @@ export interface AllInternalCommands {
 	[Commands.Tls]: CommandInternal<Commands.Tls, TlsParameters, string[]>
 	[Commands.Version]: CommandInternal<Commands.Version, VersionParameters, VersionInfo>
 	[Commands.Info]: CommandInternal<Commands.Info, InfoParameters, InfoEntry[]>
+	[Commands.InfoChannel]: CommandInternal<Commands.InfoChannel, InfoChannelParameters, InfoChannelEntry | undefined>
+	[Commands.InfoLayer]: CommandInternal<Commands.InfoLayer, InfoLayerParameters, InfoLayerEntry | undefined>
 	[Commands.InfoTemplate]: CommandInternal<Commands.InfoTemplate, InfoTemplateParameters, undefined>
 	[Commands.InfoConfig]: CommandInternal<Commands.InfoConfig, InfoConfigParameters, undefined>
 	[Commands.InfoPaths]: CommandInternal<Commands.InfoPaths, InfoPathsParameters, undefined>
@@ -343,6 +351,8 @@ export type FlsCommand = AllInternalCommands[Commands.Fls]['command']
 export type TlsCommand = AllInternalCommands[Commands.Tls]['command']
 export type VersionCommand = AllInternalCommands[Commands.Version]['command']
 export type InfoCommand = AllInternalCommands[Commands.Info]['command']
+export type InfoChannelCommand = AllInternalCommands[Commands.InfoChannel]['command']
+export type InfoLayerCommand = AllInternalCommands[Commands.InfoLayer]['command']
 export type InfoTemplateCommand = AllInternalCommands[Commands.InfoTemplate]['command']
 export type InfoConfigCommand = AllInternalCommands[Commands.InfoConfig]['command']
 export type InfoPathsCommand = AllInternalCommands[Commands.InfoPaths]['command']
@@ -427,6 +437,8 @@ export type AMCPCommand =
 	| TlsCommand
 	| VersionCommand
 	| InfoCommand
+	| InfoChannelCommand
+	| InfoLayerCommand
 	| InfoTemplateCommand
 	| InfoConfigCommand
 	| InfoPathsCommand

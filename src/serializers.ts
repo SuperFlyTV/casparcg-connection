@@ -21,6 +21,11 @@ const commandNameSerializer = (command: Commands): string => command
 const splitCommandSerializer = (command: Commands): string => command.split(' ')[0]
 const splitCommandKeywordSerializer = (command: Commands): string => command.split(' ')[1]
 
+function customCommandNameSerializer(keyword: string) {
+	// Instead of using the command name, use a custom keyword
+	return (_command: Commands): string => keyword
+}
+
 const channelSerializer = (_command: Commands, { channel }: { channel: number }): string => channel + ''
 const channelLayerSerializer = (_command: Commands, { channel, layer }: { channel: number; layer: number }): string =>
 	`${channel}-${layer}`
@@ -32,10 +37,6 @@ const channelLayerOptSerializer = (
 	_command: Commands,
 	{ channel, layer }: { channel: number; layer?: number }
 ): string => channel + (layer ? '-' + layer : '')
-const channelOptLayerOptSerializer = (
-	_command: Commands,
-	{ channel, layer }: { channel?: number; layer?: number }
-): string => (channel ? channel + (layer ? '-' + layer : '') : '')
 
 const clipCommandSerializer = (_command: Commands, { clip, loop, inPoint, seek, length, clearOn404 }: ClipParameters) =>
 	(clip ? `"${clip}"` : '') +
@@ -451,7 +452,9 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 	[Commands.Fls]: [commandNameSerializer],
 	[Commands.Tls]: [commandNameSerializer, (_, { subDirectory }) => subDirectory ?? ''],
 	[Commands.Version]: [commandNameSerializer],
-	[Commands.Info]: [commandNameSerializer, channelOptLayerOptSerializer],
+	[Commands.Info]: [commandNameSerializer],
+	[Commands.InfoChannel]: [customCommandNameSerializer('INFO'), channelSerializer],
+	[Commands.InfoLayer]: [customCommandNameSerializer('INFO'), channelLayerSerializer],
 	[Commands.InfoTemplate]: [commandNameSerializer, (_, { template }) => template],
 	[Commands.InfoConfig]: [commandNameSerializer],
 	[Commands.InfoPaths]: [commandNameSerializer],

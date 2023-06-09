@@ -1,5 +1,14 @@
 import { serializers, serializersV21 } from '../serializers'
-import { CgAddCommand, Commands, LoadbgDecklinkCommand, PlayCommand, PlayHtmlCommand } from '../commands'
+import {
+	CgAddCommand,
+	Commands,
+	InfoChannelCommand,
+	InfoCommand,
+	InfoLayerCommand,
+	LoadbgDecklinkCommand,
+	PlayCommand,
+	PlayHtmlCommand,
+} from '../commands'
 import { TransitionType } from '../enums'
 
 describe('serializers', () => {
@@ -138,5 +147,43 @@ describe('serializers', () => {
 		expect(result).toBe(
 			`CG 1-10 ADD 1 "myFolder/myTemplate" 1 "{\\"label\\":\\"These are difficult: \\\\\\"'&\\$\\\\\\\\/\\"}"`
 		)
+	})
+	it('should serialize a INFO command', () => {
+		const command: InfoCommand = {
+			command: Commands.Info,
+			params: {},
+		}
+		const serialized = serializers[Commands.Info].map((fn) => fn(command.command, command.params))
+		expect(serialized).toHaveLength(serializers[Commands.Info].length)
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe(`INFO`)
+	})
+	it('should serialize a INFO Channel command', () => {
+		const command: InfoChannelCommand = {
+			command: Commands.InfoChannel,
+			params: {
+				channel: 1,
+			},
+		}
+		const serialized = serializers[Commands.InfoChannel].map((fn) => fn(command.command, command.params))
+		expect(serialized).toHaveLength(serializers[Commands.InfoChannel].length)
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe(`INFO 1`)
+	})
+	it('should serialize a INFO Channel Layer command', () => {
+		const command: InfoLayerCommand = {
+			command: Commands.InfoLayer,
+			params: {
+				channel: 1,
+				layer: 10,
+			},
+		}
+		const serialized = serializers[Commands.InfoLayer].map((fn) => fn(command.command, command.params))
+		expect(serialized).toHaveLength(serializers[Commands.InfoLayer].length)
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe(`INFO 1-10`)
 	})
 })

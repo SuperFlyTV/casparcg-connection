@@ -91,7 +91,12 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	private _connected = false
 	private _version = Version.v23x
 
-	constructor(private host: string, private port = 5250, autoConnect: boolean) {
+	constructor(
+		private host: string,
+		private port = 5250,
+		autoConnect: boolean,
+		private _getRequestForResponse: (response: Response<any>) => SentRequest | undefined
+	) {
 		super()
 		if (autoConnect) this._setupSocket()
 	}
@@ -161,17 +166,19 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 				}
 
 				// Ask what the request was for this response:
-
-				const deserializers = this._getVersionedDeserializers() as {
-					[key: string]: ((input: string[]) => Promise<any>) | undefined
-				}
-				const deserializer = deserializers[response.command]
-				// attempt to deserialize the response if we can
-				if (deserializer && response.data.length) {
-					try {
-						response.data = await deserializer(response.data)
-					} catch (e) {
-						this.emit('error', e as Error)
+				const sentRequest = this._getRequestForResponse(response)
+				if (sentRequest) {
+					const deserializers = this._getVersionedDeserializers() as {
+						[key: string]: ((input: string[]) => Promise<any>) | undefined
+					}
+					const deserializer = deserializers[sentRequest.command.command]
+					// attempt to deserialize the response if we can
+					if (deserializer && response.data.length) {
+						try {
+							response.data = await deserializer(response.data)
+						} catch (e) {
+							this.emit('error', e as Error)
+						}
 					}
 				}
 
