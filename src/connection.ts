@@ -75,10 +75,13 @@ const RESPONSES = {
 }
 
 export type ConnectionEvents = {
-	data: [response: Response]
+	data: [response: Response<any>]
 	connect: []
 	disconnect: []
 	error: [error: Error]
+}
+export interface SentRequest {
+	command: AMCPCommand
 }
 
 export class Connection extends EventEmitter<ConnectionEvents> {
@@ -138,11 +141,11 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 			if (result && result.groups?.['ResponseCode']) {
 				// create a response object
 				const responseCode = parseInt(result?.groups?.['ResponseCode'])
-				const response = {
+				const response: Response<any> = {
 					reqId: result?.groups?.['ReqId'],
 					command: result?.groups?.['Action'] as Commands,
 					responseCode,
-					data: [] as any[],
+					data: undefined,
 					...RESPONSES[responseCode as keyof typeof RESPONSES],
 				}
 				processedLines++
@@ -157,10 +160,19 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 					processedLines++
 				}
 
-				const deserializers = this._getVersionedDeserializers()
+				// Ask what the request was for this response:
+
+				const deserializers = this._getVersionedDeserializers() as {
+					[key: string]: ((input: string[]) => Promise<any>) | undefined
+				}
+				const deserializer = deserializers[response.command]
 				// attempt to deserialize the response if we can
-				if (deserializers[response.command] && response.data.length) {
-					response.data = await deserializers[response.command](response.data)
+				if (deserializer && response.data.length) {
+					try {
+						response.data = await deserializer(response.data)
+					} catch (e) {
+						this.emit('error', e as Error)
+					}
 				}
 
 				// now do something with response

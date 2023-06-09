@@ -8,6 +8,7 @@ import {
 	LockAction,
 	BlendMode,
 	RouteMode,
+	Version,
 } from './enums'
 
 export type Empty = Record<string, never>
@@ -284,17 +285,45 @@ export interface CinfParameters {
 export interface ClsParameters {
 	subDirectory?: string
 }
+export interface ClipInfo {
+	/** Clip filename, eg "myFolder/AMB" */
+	clip: string
+	/** Type of media  */
+	type: 'MOVIE' | 'STILL' | 'AUDIO' // | 'HTML' | 'ROUTE'
+	/** Size, in bytes */
+	size: number
+	/** Datetime (unix timestamp) */
+	datetime: number
+	/** Number of frames */
+	frames: number
+	/** Number of frames per second, eg 25 */
+	framerate: number
+}
 export type FlsParameters = Empty
 export interface TlsParameters {
 	subDirectory?: string
 }
 
 export type VersionParameters = Empty
-
-export interface InfoParameters {
-	channel?: number
-	layer?: number
+export interface VersionInfo {
+	/** The version of the CasparCG server */
+	version: Version
+	/** Unparsed version as string */
+	fullVersion: string
 }
+
+export type InfoParameters = Empty
+export interface InfoEntry {
+	channel: number
+	format: number
+	channelRate: number
+	frameRate: number
+	interlaced: boolean
+
+	/** eg "PLAYING" */
+	status: string
+}
+
 export interface InfoTemplateParameters {
 	template: string
 }

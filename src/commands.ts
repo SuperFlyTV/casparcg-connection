@@ -81,6 +81,9 @@ import {
 	LoadbgRouteParameters,
 	PlayHtmlParameters,
 	PlayRouteParameters,
+	ClipInfo,
+	VersionInfo,
+	InfoEntry,
 } from './parameters'
 
 export enum Commands {
@@ -168,96 +171,192 @@ export enum Commands {
 	Restart = 'RESTART',
 }
 
-export interface Command<T extends Commands, V> {
-	readonly command: T
-	params: V
+export interface Command<Cmd extends Commands, Params> {
+	readonly command: Cmd
+	params: Params
+}
+export interface CommandInternal<CMD extends Commands, Params, ReturnType> {
+	command: Command<CMD, Params>
+	returnType: ReturnType
 }
 
-export type LoadbgCommand = Command<Commands.Loadbg, LoadbgParameters>
-export type LoadbgDecklinkCommand = Command<Commands.LoadbgDecklink, LoadbgDecklinkParameters>
-export type LoadbgHtmlCommand = Command<Commands.LoadbgHtml, LoadbgHtmlParameters>
-export type LoadbgRouteCommand = Command<Commands.LoadbgRoute, LoadbgRouteParameters>
-export type LoadCommand = Command<Commands.Load, LoadParameters>
-export type PlayCommand = Command<Commands.Play, PlayParameters>
-export type PlayDecklinkCommand = Command<Commands.PlayDecklink, PlayDecklinkParameters>
-export type PlayHtmlCommand = Command<Commands.PlayHtml, PlayHtmlParameters>
-export type PlayRouteCommand = Command<Commands.PlayRoute, PlayRouteParameters>
-export type PauseCommand = Command<Commands.Pause, PauseParameters>
-export type ResumeCommand = Command<Commands.Resume, ResumeParameters>
-export type StopCommand = Command<Commands.Stop, StopParameters>
-export type ClearCommand = Command<Commands.Clear, ClearParameters>
-export type CallCommand = Command<Commands.Call, CallParameters>
-export type SwapCommand = Command<Commands.Swap, SwapParameters>
-export type AddCommand = Command<Commands.Add, AddParameters>
-export type RemoveCommand = Command<Commands.Remove, RemoveParameters>
-export type PrintCommand = Command<Commands.Print, PrintParameters>
-export type LogLevelCommand = Command<Commands.LogLevel, LogLevelParameters>
-export type LogCategoryCommand = Command<Commands.LogCategory, LogCategoryParameters>
-export type SetCommand = Command<Commands.Set, SetParameters>
-export type LockCommand = Command<Commands.Lock, LockParameters>
-export type DataStoreCommand = Command<Commands.DataStore, DataStoreParameters>
-export type DataRetrieveCommand = Command<Commands.DataRetrieve, DataRetrieveParameters>
-export type DataListCommand = Command<Commands.DataList, DataListParameters>
-export type DataRemoveCommand = Command<Commands.DataRemove, DataRemoveParameters>
-export type CgAddCommand = Command<Commands.CgAdd, CgAddParameters>
-export type CgPlayCommand = Command<Commands.CgPlay, CgPlayParameters>
-export type CgStopCommand = Command<Commands.CgStop, CgStopParameters>
-export type CgNextCommand = Command<Commands.CgNext, CgNextParameters>
-export type CgRemoveCommand = Command<Commands.CgRemove, CgRemoveParameters>
-export type CgClearCommand = Command<Commands.CgClear, CgClearParameters>
-export type CgUpdateCommand = Command<Commands.CgUpdate, CgUpdateParameters>
-export type CgInvokeCommand = Command<Commands.CgInvoke, CgInvokeParameters>
-export type CgInfoCommand = Command<Commands.CgInfo, CgInfoParameters>
-export type MixerKeyerCommand = Command<Commands.MixerKeyer, MixerKeyerParameters>
-export type MixerChromaCommand = Command<Commands.MixerChroma, MixerChromaParameters>
-export type MixerBlendCommand = Command<Commands.MixerBlend, MixerBlendParameters>
-export type MixerInvertCommand = Command<Commands.MixerInvert, MixerInvertParameters>
-export type MixerOpacityCommand = Command<Commands.MixerOpacity, MixerOpacityParameters>
-export type MixerBrightnessCommand = Command<Commands.MixerBrightness, MixerBrightnessParameters>
-export type MixerSaturationCommand = Command<Commands.MixerSaturation, MixerSaturationParameters>
-export type MixerContrastCommand = Command<Commands.MixerContrast, MixerContrastParameters>
-export type MixerLevelsCommand = Command<Commands.MixerLevels, MixerLevelsParameters>
-export type MixerFillCommand = Command<Commands.MixerFill, MixerFillParameters>
-export type MixerClipCommand = Command<Commands.MixerClip, MixerClipParameters>
-export type MixerAnchorCommand = Command<Commands.MixerAnchor, MixerAnchorParameters>
-export type MixerCropCommand = Command<Commands.MixerCrop, MixerCropParameters>
-export type MixerRotationCommand = Command<Commands.MixerRotation, MixerRotationParameters>
-export type MixerPerspectiveCommand = Command<Commands.MixerPerspective, MixerPerspectiveParameters>
-export type MixerMipmapCommand = Command<Commands.MixerMipmap, MixerMipmapParameters>
-export type MixerVolumeCommand = Command<Commands.MixerVolume, MixerVolumeParameters>
-export type MixerMastervolumeCommand = Command<Commands.MixerMastervolume, MixerMastervolumeParameters>
-export type MixerStraightAlphaOutputCommand = Command<
-	Commands.MixerStraightAlphaOutput,
-	MixerStraightAlphaOutputParameters
->
-export type MixerGridCommand = Command<Commands.MixerGrid, MixerGridParameters>
-export type MixerCommitCommand = Command<Commands.MixerCommit, MixerCommitParameters>
-export type MixerClearCommand = Command<Commands.MixerClear, MixerClearParameters>
-export type Channel_gridCommand = Command<Commands.ChannelGrid, ChannelGridParameters>
-export type ThumbnailListCommand = Command<Commands.ThumbnailList, ThumbnailListParameters>
-export type ThumbnailRetrieveCommand = Command<Commands.ThumbnailRetrieve, ThumbnailRetrieveParameters>
-export type ThumbnailGenerateCommand = Command<Commands.ThumbnailGenerate, ThumbnailGenerateParameters>
-export type ThumbnailGenerate_allCommand = Command<Commands.ThumbnailGenerateAll, ThumbnailGenerateAllParameters>
-export type CinfCommand = Command<Commands.Cinf, CinfParameters>
-export type ClsCommand = Command<Commands.Cls, ClsParameters>
-export type FlsCommand = Command<Commands.Fls, FlsParameters>
-export type TlsCommand = Command<Commands.Tls, TlsParameters>
-export type VersionCommand = Command<Commands.Version, VersionParameters>
-export type InfoCommand = Command<Commands.Info, InfoParameters>
-export type InfoTemplateCommand = Command<Commands.InfoTemplate, InfoTemplateParameters>
-export type InfoConfigCommand = Command<Commands.InfoConfig, InfoConfigParameters>
-export type InfoPathsCommand = Command<Commands.InfoPaths, InfoPathsParameters>
-export type InfoSystemCommand = Command<Commands.InfoSystem, InfoSystemParameters>
-export type InfoServerCommand = Command<Commands.InfoServer, InfoServerParameters>
-export type InfoQueuesCommand = Command<Commands.InfoQueues, InfoQueuesParameters>
-export type InfoThreadsCommand = Command<Commands.InfoThreads, InfoThreadsParameters>
-export type InfoDelayCommand = Command<Commands.InfoDelay, InfoDelayParameters>
-export type DiagCommand = Command<Commands.Diag, DiagParameters>
-export type GlInfoCommand = Command<Commands.GlInfo, GlInfoParameters>
-export type GlGcCommand = Command<Commands.GlGc, GlGcParameters>
-export type ByeCommand = Command<Commands.Bye, ByeParameters>
-export type KillCommand = Command<Commands.Kill, KillParameters>
-export type RestartCommand = Command<Commands.Restart, RestartParameters>
+export type CReturnType<C extends Commands> = AllInternalCommands[C]['returnType']
+
+export interface AllInternalCommands {
+	[Commands.Loadbg]: CommandInternal<Commands.Loadbg, LoadbgParameters, undefined>
+	[Commands.LoadbgDecklink]: CommandInternal<Commands.LoadbgDecklink, LoadbgDecklinkParameters, undefined>
+	[Commands.LoadbgHtml]: CommandInternal<Commands.LoadbgHtml, LoadbgHtmlParameters, undefined>
+	[Commands.LoadbgRoute]: CommandInternal<Commands.LoadbgRoute, LoadbgRouteParameters, undefined>
+	[Commands.Load]: CommandInternal<Commands.Load, LoadParameters, undefined>
+	[Commands.Play]: CommandInternal<Commands.Play, PlayParameters, undefined>
+	[Commands.PlayDecklink]: CommandInternal<Commands.PlayDecklink, PlayDecklinkParameters, undefined>
+	[Commands.PlayHtml]: CommandInternal<Commands.PlayHtml, PlayHtmlParameters, undefined>
+	[Commands.PlayRoute]: CommandInternal<Commands.PlayRoute, PlayRouteParameters, undefined>
+	[Commands.Pause]: CommandInternal<Commands.Pause, PauseParameters, undefined>
+	[Commands.Resume]: CommandInternal<Commands.Resume, ResumeParameters, undefined>
+	[Commands.Stop]: CommandInternal<Commands.Stop, StopParameters, undefined>
+	[Commands.Clear]: CommandInternal<Commands.Clear, ClearParameters, undefined>
+	[Commands.Call]: CommandInternal<Commands.Call, CallParameters, undefined>
+	[Commands.Swap]: CommandInternal<Commands.Swap, SwapParameters, undefined>
+	[Commands.Add]: CommandInternal<Commands.Add, AddParameters, undefined>
+	[Commands.Remove]: CommandInternal<Commands.Remove, RemoveParameters, undefined>
+	[Commands.Print]: CommandInternal<Commands.Print, PrintParameters, undefined>
+	[Commands.LogLevel]: CommandInternal<Commands.LogLevel, LogLevelParameters, undefined>
+	[Commands.LogCategory]: CommandInternal<Commands.LogCategory, LogCategoryParameters, undefined>
+	[Commands.Set]: CommandInternal<Commands.Set, SetParameters, undefined>
+	[Commands.Lock]: CommandInternal<Commands.Lock, LockParameters, undefined>
+	[Commands.DataStore]: CommandInternal<Commands.DataStore, DataStoreParameters, undefined>
+	[Commands.DataRetrieve]: CommandInternal<Commands.DataRetrieve, DataRetrieveParameters, undefined>
+	[Commands.DataList]: CommandInternal<Commands.DataList, DataListParameters, undefined>
+	[Commands.DataRemove]: CommandInternal<Commands.DataRemove, DataRemoveParameters, undefined>
+	[Commands.CgAdd]: CommandInternal<Commands.CgAdd, CgAddParameters, undefined>
+	[Commands.CgPlay]: CommandInternal<Commands.CgPlay, CgPlayParameters, undefined>
+	[Commands.CgStop]: CommandInternal<Commands.CgStop, CgStopParameters, undefined>
+	[Commands.CgNext]: CommandInternal<Commands.CgNext, CgNextParameters, undefined>
+	[Commands.CgRemove]: CommandInternal<Commands.CgRemove, CgRemoveParameters, undefined>
+	[Commands.CgClear]: CommandInternal<Commands.CgClear, CgClearParameters, undefined>
+	[Commands.CgUpdate]: CommandInternal<Commands.CgUpdate, CgUpdateParameters, undefined>
+	[Commands.CgInvoke]: CommandInternal<Commands.CgInvoke, CgInvokeParameters, undefined>
+	[Commands.CgInfo]: CommandInternal<Commands.CgInfo, CgInfoParameters, undefined>
+	[Commands.MixerKeyer]: CommandInternal<Commands.MixerKeyer, MixerKeyerParameters, undefined>
+	[Commands.MixerChroma]: CommandInternal<Commands.MixerChroma, MixerChromaParameters, undefined>
+	[Commands.MixerBlend]: CommandInternal<Commands.MixerBlend, MixerBlendParameters, undefined>
+	[Commands.MixerInvert]: CommandInternal<Commands.MixerInvert, MixerInvertParameters, undefined>
+	[Commands.MixerOpacity]: CommandInternal<Commands.MixerOpacity, MixerOpacityParameters, undefined>
+	[Commands.MixerBrightness]: CommandInternal<Commands.MixerBrightness, MixerBrightnessParameters, undefined>
+	[Commands.MixerSaturation]: CommandInternal<Commands.MixerSaturation, MixerSaturationParameters, undefined>
+	[Commands.MixerContrast]: CommandInternal<Commands.MixerContrast, MixerContrastParameters, undefined>
+	[Commands.MixerLevels]: CommandInternal<Commands.MixerLevels, MixerLevelsParameters, undefined>
+	[Commands.MixerFill]: CommandInternal<Commands.MixerFill, MixerFillParameters, undefined>
+	[Commands.MixerClip]: CommandInternal<Commands.MixerClip, MixerClipParameters, undefined>
+	[Commands.MixerAnchor]: CommandInternal<Commands.MixerAnchor, MixerAnchorParameters, undefined>
+	[Commands.MixerCrop]: CommandInternal<Commands.MixerCrop, MixerCropParameters, undefined>
+	[Commands.MixerRotation]: CommandInternal<Commands.MixerRotation, MixerRotationParameters, undefined>
+	[Commands.MixerPerspective]: CommandInternal<Commands.MixerPerspective, MixerPerspectiveParameters, undefined>
+	[Commands.MixerMipmap]: CommandInternal<Commands.MixerMipmap, MixerMipmapParameters, undefined>
+	[Commands.MixerVolume]: CommandInternal<Commands.MixerVolume, MixerVolumeParameters, undefined>
+	[Commands.MixerMastervolume]: CommandInternal<Commands.MixerMastervolume, MixerMastervolumeParameters, undefined>
+	[Commands.MixerStraightAlphaOutput]: CommandInternal<
+		Commands.MixerStraightAlphaOutput,
+		MixerStraightAlphaOutputParameters,
+		undefined
+	>
+	[Commands.MixerGrid]: CommandInternal<Commands.MixerGrid, MixerGridParameters, undefined>
+	[Commands.MixerCommit]: CommandInternal<Commands.MixerCommit, MixerCommitParameters, undefined>
+	[Commands.MixerClear]: CommandInternal<Commands.MixerClear, MixerClearParameters, undefined>
+	[Commands.ChannelGrid]: CommandInternal<Commands.ChannelGrid, ChannelGridParameters, undefined>
+	[Commands.ThumbnailList]: CommandInternal<Commands.ThumbnailList, ThumbnailListParameters, undefined>
+	[Commands.ThumbnailRetrieve]: CommandInternal<Commands.ThumbnailRetrieve, ThumbnailRetrieveParameters, undefined>
+	[Commands.ThumbnailGenerate]: CommandInternal<Commands.ThumbnailGenerate, ThumbnailGenerateParameters, undefined>
+	[Commands.ThumbnailGenerateAll]: CommandInternal<
+		Commands.ThumbnailGenerateAll,
+		ThumbnailGenerateAllParameters,
+		undefined
+	>
+	[Commands.Cinf]: CommandInternal<Commands.Cinf, CinfParameters, ClipInfo | undefined>
+	[Commands.Cls]: CommandInternal<Commands.Cls, ClsParameters, ClipInfo[]>
+	[Commands.Fls]: CommandInternal<Commands.Fls, FlsParameters, undefined>
+	[Commands.Tls]: CommandInternal<Commands.Tls, TlsParameters, string[]>
+	[Commands.Version]: CommandInternal<Commands.Version, VersionParameters, VersionInfo>
+	[Commands.Info]: CommandInternal<Commands.Info, InfoParameters, InfoEntry[]>
+	[Commands.InfoTemplate]: CommandInternal<Commands.InfoTemplate, InfoTemplateParameters, undefined>
+	[Commands.InfoConfig]: CommandInternal<Commands.InfoConfig, InfoConfigParameters, undefined>
+	[Commands.InfoPaths]: CommandInternal<Commands.InfoPaths, InfoPathsParameters, undefined>
+	[Commands.InfoSystem]: CommandInternal<Commands.InfoSystem, InfoSystemParameters, undefined>
+	[Commands.InfoServer]: CommandInternal<Commands.InfoServer, InfoServerParameters, undefined>
+	[Commands.InfoQueues]: CommandInternal<Commands.InfoQueues, InfoQueuesParameters, undefined>
+	[Commands.InfoThreads]: CommandInternal<Commands.InfoThreads, InfoThreadsParameters, undefined>
+	[Commands.InfoDelay]: CommandInternal<Commands.InfoDelay, InfoDelayParameters, undefined>
+	[Commands.Diag]: CommandInternal<Commands.Diag, DiagParameters, undefined>
+	[Commands.GlInfo]: CommandInternal<Commands.GlInfo, GlInfoParameters, undefined>
+	[Commands.GlGc]: CommandInternal<Commands.GlGc, GlGcParameters, undefined>
+	[Commands.Bye]: CommandInternal<Commands.Bye, ByeParameters, undefined>
+	[Commands.Kill]: CommandInternal<Commands.Kill, KillParameters, undefined>
+	[Commands.Restart]: CommandInternal<Commands.Restart, RestartParameters, undefined>
+}
+
+export type LoadbgCommand = AllInternalCommands[Commands.Loadbg]['command']
+export type LoadbgDecklinkCommand = AllInternalCommands[Commands.LoadbgDecklink]['command']
+export type LoadbgHtmlCommand = AllInternalCommands[Commands.LoadbgHtml]['command']
+export type LoadbgRouteCommand = AllInternalCommands[Commands.LoadbgRoute]['command']
+export type LoadCommand = AllInternalCommands[Commands.Load]['command']
+export type PlayCommand = AllInternalCommands[Commands.Play]['command']
+export type PlayDecklinkCommand = AllInternalCommands[Commands.PlayDecklink]['command']
+export type PlayHtmlCommand = AllInternalCommands[Commands.PlayHtml]['command']
+export type PlayRouteCommand = AllInternalCommands[Commands.PlayRoute]['command']
+export type PauseCommand = AllInternalCommands[Commands.Pause]['command']
+export type ResumeCommand = AllInternalCommands[Commands.Resume]['command']
+export type StopCommand = AllInternalCommands[Commands.Stop]['command']
+export type ClearCommand = AllInternalCommands[Commands.Clear]['command']
+export type CallCommand = AllInternalCommands[Commands.Call]['command']
+export type SwapCommand = AllInternalCommands[Commands.Swap]['command']
+export type AddCommand = AllInternalCommands[Commands.Add]['command']
+export type RemoveCommand = AllInternalCommands[Commands.Remove]['command']
+export type PrintCommand = AllInternalCommands[Commands.Print]['command']
+export type LogLevelCommand = AllInternalCommands[Commands.LogLevel]['command']
+export type LogCategoryCommand = AllInternalCommands[Commands.LogCategory]['command']
+export type SetCommand = AllInternalCommands[Commands.Set]['command']
+export type LockCommand = AllInternalCommands[Commands.Lock]['command']
+export type DataStoreCommand = AllInternalCommands[Commands.DataStore]['command']
+export type DataRetrieveCommand = AllInternalCommands[Commands.DataRetrieve]['command']
+export type DataListCommand = AllInternalCommands[Commands.DataList]['command']
+export type DataRemoveCommand = AllInternalCommands[Commands.DataRemove]['command']
+export type CgAddCommand = AllInternalCommands[Commands.CgAdd]['command']
+export type CgPlayCommand = AllInternalCommands[Commands.CgPlay]['command']
+export type CgStopCommand = AllInternalCommands[Commands.CgStop]['command']
+export type CgNextCommand = AllInternalCommands[Commands.CgNext]['command']
+export type CgRemoveCommand = AllInternalCommands[Commands.CgRemove]['command']
+export type CgClearCommand = AllInternalCommands[Commands.CgClear]['command']
+export type CgUpdateCommand = AllInternalCommands[Commands.CgUpdate]['command']
+export type CgInvokeCommand = AllInternalCommands[Commands.CgInvoke]['command']
+export type CgInfoCommand = AllInternalCommands[Commands.CgInfo]['command']
+export type MixerKeyerCommand = AllInternalCommands[Commands.MixerKeyer]['command']
+export type MixerChromaCommand = AllInternalCommands[Commands.MixerChroma]['command']
+export type MixerBlendCommand = AllInternalCommands[Commands.MixerBlend]['command']
+export type MixerInvertCommand = AllInternalCommands[Commands.MixerInvert]['command']
+export type MixerOpacityCommand = AllInternalCommands[Commands.MixerOpacity]['command']
+export type MixerBrightnessCommand = AllInternalCommands[Commands.MixerBrightness]['command']
+export type MixerSaturationCommand = AllInternalCommands[Commands.MixerSaturation]['command']
+export type MixerContrastCommand = AllInternalCommands[Commands.MixerContrast]['command']
+export type MixerLevelsCommand = AllInternalCommands[Commands.MixerLevels]['command']
+export type MixerFillCommand = AllInternalCommands[Commands.MixerFill]['command']
+export type MixerClipCommand = AllInternalCommands[Commands.MixerClip]['command']
+export type MixerAnchorCommand = AllInternalCommands[Commands.MixerAnchor]['command']
+export type MixerCropCommand = AllInternalCommands[Commands.MixerCrop]['command']
+export type MixerRotationCommand = AllInternalCommands[Commands.MixerRotation]['command']
+export type MixerPerspectiveCommand = AllInternalCommands[Commands.MixerPerspective]['command']
+export type MixerMipmapCommand = AllInternalCommands[Commands.MixerMipmap]['command']
+export type MixerVolumeCommand = AllInternalCommands[Commands.MixerVolume]['command']
+export type MixerMastervolumeCommand = AllInternalCommands[Commands.MixerMastervolume]['command']
+export type MixerStraightAlphaOutputCommand = AllInternalCommands[Commands.MixerStraightAlphaOutput]['command']
+export type MixerGridCommand = AllInternalCommands[Commands.MixerGrid]['command']
+export type MixerCommitCommand = AllInternalCommands[Commands.MixerCommit]['command']
+export type MixerClearCommand = AllInternalCommands[Commands.MixerClear]['command']
+export type Channel_gridCommand = AllInternalCommands[Commands.ChannelGrid]['command']
+export type ThumbnailListCommand = AllInternalCommands[Commands.ThumbnailList]['command']
+export type ThumbnailRetrieveCommand = AllInternalCommands[Commands.ThumbnailRetrieve]['command']
+export type ThumbnailGenerateCommand = AllInternalCommands[Commands.ThumbnailGenerate]['command']
+export type ThumbnailGenerate_allCommand = AllInternalCommands[Commands.ThumbnailGenerateAll]['command']
+export type CinfCommand = AllInternalCommands[Commands.Cinf]['command']
+export type ClsCommand = AllInternalCommands[Commands.Cls]['command']
+export type FlsCommand = AllInternalCommands[Commands.Fls]['command']
+export type TlsCommand = AllInternalCommands[Commands.Tls]['command']
+export type VersionCommand = AllInternalCommands[Commands.Version]['command']
+export type InfoCommand = AllInternalCommands[Commands.Info]['command']
+export type InfoTemplateCommand = AllInternalCommands[Commands.InfoTemplate]['command']
+export type InfoConfigCommand = AllInternalCommands[Commands.InfoConfig]['command']
+export type InfoPathsCommand = AllInternalCommands[Commands.InfoPaths]['command']
+export type InfoSystemCommand = AllInternalCommands[Commands.InfoSystem]['command']
+export type InfoServerCommand = AllInternalCommands[Commands.InfoServer]['command']
+export type InfoQueuesCommand = AllInternalCommands[Commands.InfoQueues]['command']
+export type InfoThreadsCommand = AllInternalCommands[Commands.InfoThreads]['command']
+export type InfoDelayCommand = AllInternalCommands[Commands.InfoDelay]['command']
+export type DiagCommand = AllInternalCommands[Commands.Diag]['command']
+export type GlInfoCommand = AllInternalCommands[Commands.GlInfo]['command']
+export type GlGcCommand = AllInternalCommands[Commands.GlGc]['command']
+export type ByeCommand = AllInternalCommands[Commands.Bye]['command']
+export type KillCommand = AllInternalCommands[Commands.Kill]['command']
+export type RestartCommand = AllInternalCommands[Commands.Restart]['command']
 
 export type AMCPCommand =
 	| LoadbgCommand
