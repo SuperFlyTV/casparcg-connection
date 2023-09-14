@@ -73,7 +73,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 			!(options?.autoConnect === false),
 			(response: Response<any>) => {
 				// Connection asks: "what request does this response belong to?"
-				const request = this.findResponseRequest(response)
+				const request = this.findRequestFromResponse(response)
 				if (request) return { command: request.command }
 				else return undefined
 			}
@@ -98,7 +98,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._connection.on('error', (e) => this.emit('error', e))
 
 		this._connection.on('data', (response) => {
-			const request = this.findResponseRequest(response)
+			const request = this.findRequestFromResponse(response)
 
 			if (request) {
 				request.resolve(response)
@@ -234,7 +234,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._requestQueue = this._requestQueue.filter((req) => !deadRequests.includes(req))
 	}
 
-	private findResponseRequest(response: Response<any>): InternalRequest | undefined {
+	private findRequestFromResponse(response: Response<any>): InternalRequest | undefined {
 		return this._requestQueue.find((req) => req.requestId === response.reqId)
 	}
 }

@@ -146,7 +146,7 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 			if (result && result.groups?.['ResponseCode']) {
 				// create a response object
 				const responseCode = parseInt(result?.groups?.['ResponseCode'])
-				const response: Response<any> = {
+				const response: Response<unknown> = {
 					reqId: result?.groups?.['ReqId'],
 					command: result?.groups?.['Action'] as Commands,
 					responseCode,
@@ -155,27 +155,31 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 				}
 				processedLines++
 
+				let responseData: string[] | undefined = undefined
 				// parse additional lines if needed
 				if (response.responseCode === 200) {
 					// multiple lines of data
-					response.data = this._unprocessedLines.slice(1, this._unprocessedLines.indexOf(''))
-					processedLines += response.data.length + 1 // data lines + 1 empty line
+					responseData = this._unprocessedLines.slice(1, this._unprocessedLines.indexOf(''))
+					processedLines += responseData.length + 1 // data lines + 1 empty line
 				} else if (response.responseCode === 201 || response.responseCode === 400) {
-					response.data = [this._unprocessedLines[1]]
+					responseData = [this._unprocessedLines[1]]
 					processedLines++
 				}
 
+				// Assign the preliminary data, to be possibly deserialized later:
+				response.data = responseData
+
 				// Ask what the request was for this response:
-				const sentRequest = this._getRequestForResponse(response)
-				if (sentRequest) {
-					const deserializers = this._getVersionedDeserializers() as {
-						[key: string]: ((input: string[]) => Promise<any>) | undefined
-					}
-					const deserializer = deserializers[sentRequest.command.command]
+				const previouslySentRequest = this._getRequestForResponse(response)
+				if (previouslySentRequest) {
+					const deserializers = this._getVersionedDeserializers()
+					const deserializer = deserializers[previouslySentRequest.command.command] as
+						| ((input: string[]) => Promise<any>)
+						| undefined
 					// attempt to deserialize the response if we can
-					if (deserializer && response.data.length) {
+					if (deserializer && responseData?.length) {
 						try {
-							response.data = await deserializer(response.data)
+							response.data = await deserializer(responseData)
 						} catch (e) {
 							this.emit('error', e as Error)
 						}
@@ -278,7 +282,9 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		return serializers
 	}
 
-	private _getVersionedDeserializers() {
+	private _getVersionedDeserializers(): {
+		[key: string]: (input: string[]) => Promise<any>
+	} {
 		return deserializers
 	}
 }
