@@ -287,7 +287,7 @@ export interface AllTypedCommands {
 	>
 	[Commands.InfoLayer]: TypedResponseCommand<Commands.InfoLayer, InfoLayerParameters, InfoLayerEntry | undefined>
 	[Commands.InfoTemplate]: TypedResponseCommand<Commands.InfoTemplate, InfoTemplateParameters, undefined>
-	[Commands.InfoConfig]: TypedResponseCommand<Commands.InfoConfig, InfoConfigParameters, undefined>
+	[Commands.InfoConfig]: TypedResponseCommand<Commands.InfoConfig, InfoConfigParameters, unknown>
 	[Commands.InfoPaths]: TypedResponseCommand<Commands.InfoPaths, InfoPathsParameters, undefined>
 	[Commands.InfoSystem]: TypedResponseCommand<Commands.InfoSystem, InfoSystemParameters, undefined>
 	[Commands.InfoServer]: TypedResponseCommand<Commands.InfoServer, InfoServerParameters, undefined>

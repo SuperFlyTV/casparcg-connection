@@ -115,6 +115,12 @@ const deserializeInfoLayer = async (line: string): Promise<InfoLayerEntry | unde
 	// The data seems to be equal to info channel in 2.3.2
 	return deserializeInfoChannel(line)
 }
+const deserializeInfoConfig = async (line: string): Promise<unknown> => {
+	if (!line.startsWith('<?xml')) return undefined
+
+	const parsed = await deserializeXML(line)
+	return parsed
+}
 
 const deserializeVersion = (
 	line: string
@@ -164,4 +170,5 @@ export const deserializers = {
 		deserializeInfoChannel(data[0])
 	),
 	[Commands.InfoLayer]: deserializer<Commands.InfoLayer>(async (data: string[]) => deserializeInfoLayer(data[0])),
+	[Commands.InfoConfig]: deserializer<Commands.InfoConfig>(async (data: string[]) => deserializeInfoConfig(data[0])),
 }
