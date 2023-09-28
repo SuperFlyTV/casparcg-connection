@@ -192,5 +192,165 @@ describe('connection', () => {
 				conn.disconnect()
 			}
 		})
+
+		it('receive fast responses', async () => {
+			const conn = new Connection('127.0.0.1', 5250, true)
+			try {
+				expect(conn).toBeTruthy()
+
+				const onConnError = jest.fn()
+				const onConnData = jest.fn()
+				conn.on('error', onConnError)
+				conn.on('data', onConnData)
+
+				const sockets = SocketMock.openSockets()
+				expect(sockets).toHaveLength(1)
+
+				// Dispatch a command
+				const sendError = await conn.sendCommand(
+					{
+						command: Commands.Info,
+						params: {},
+					},
+					'cmd1'
+				)
+				expect(sendError).toBeFalsy()
+				const sendError2 = await conn.sendCommand(
+					{
+						command: Commands.Play,
+						params: {
+							channel: 1,
+							layer: 10,
+						},
+					},
+					'cmd2'
+				)
+				expect(sendError2).toBeFalsy()
+				expect(onConnError).toHaveBeenCalledTimes(0)
+				expect(onConnData).toHaveBeenCalledTimes(0)
+
+				// Info was sent
+				expect(onSocketWrite).toHaveBeenCalledTimes(2)
+				expect(onSocketWrite).toHaveBeenNthCalledWith(1, 'REQ cmd1 INFO\r\n', 'utf-8')
+				expect(onSocketWrite).toHaveBeenNthCalledWith(2, 'REQ cmd2 PLAY 1-10\r\n', 'utf-8')
+
+				// Send replies
+				sockets[0].mockData(
+					Buffer.from(
+						`RES cmd1 201 INFO OK\r\n<?xml version="1.0" encoding="utf-8"?>\n<channel><test/></channel>\r\n\r\n`
+					)
+				)
+				sockets[0].mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
+
+				// Wait for deserializer to run
+				await new Promise(process.nextTick.bind(process))
+				await new Promise(process.nextTick.bind(process))
+				await new Promise(process.nextTick.bind(process))
+
+				expect(onConnError).toHaveBeenCalledTimes(0)
+				expect(onConnData).toHaveBeenCalledTimes(2)
+
+				// Check result looks good
+				expect(onConnData).toHaveBeenNthCalledWith(1, {
+					command: 'INFO',
+					data: [
+						{
+							channel: {
+								test: [''],
+							},
+						},
+					],
+					message: 'The command has been executed and data is being returned.',
+					reqId: 'cmd1',
+					responseCode: 201,
+					type: 'OK',
+				})
+				expect(onConnData).toHaveBeenNthCalledWith(2, {
+					command: 'PLAY',
+					data: [],
+					message: 'The command has been executed.',
+					reqId: 'cmd2',
+					responseCode: 202,
+					type: 'OK',
+				})
+			} finally {
+				// Ensure cleaned up
+				conn.disconnect()
+			}
+		})
+
+		it('receive broken response', async () => {
+			const conn = new Connection('127.0.0.1', 5250, true)
+			try {
+				expect(conn).toBeTruthy()
+
+				const onConnError = jest.fn()
+				const onConnData = jest.fn()
+				conn.on('error', onConnError)
+				conn.on('data', onConnData)
+
+				const sockets = SocketMock.openSockets()
+				expect(sockets).toHaveLength(1)
+
+				// Dispatch a command
+				const sendError = await conn.sendCommand(
+					{
+						command: Commands.Info,
+						params: {},
+					},
+					'cmd1'
+				)
+				expect(sendError).toBeFalsy()
+				const sendError2 = await conn.sendCommand(
+					{
+						command: Commands.Play,
+						params: {
+							channel: 1,
+							layer: 10,
+						},
+					},
+					'cmd2'
+				)
+				expect(sendError2).toBeFalsy()
+				expect(onConnError).toHaveBeenCalledTimes(0)
+				expect(onConnData).toHaveBeenCalledTimes(0)
+
+				// Info was sent
+				expect(onSocketWrite).toHaveBeenCalledTimes(2)
+				expect(onSocketWrite).toHaveBeenNthCalledWith(1, 'REQ cmd1 INFO\r\n', 'utf-8')
+				expect(onSocketWrite).toHaveBeenNthCalledWith(2, 'REQ cmd2 PLAY 1-10\r\n', 'utf-8')
+
+				// Reply with a blob designed to crash the xml parser
+				sockets[0].mockData(Buffer.from(`201 INFO OK\r\n<?xml\r\n\r\n`))
+				await new Promise(process.nextTick.bind(process))
+
+				// TODO - should the invalid xml cause an error here, or propogate as response?
+				expect(onConnError).toHaveBeenCalledTimes(1)
+				expect(onConnData).toHaveBeenCalledTimes(0)
+				onConnError.mockClear()
+
+				// TODO - verify the response of the INFO matches what we expect
+
+				// Reply with successful PLAY
+				sockets[0].mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
+				await new Promise(process.nextTick.bind(process))
+
+				expect(onConnError).toHaveBeenCalledTimes(0)
+				expect(onConnData).toHaveBeenCalledTimes(1)
+
+				// Check result looks good
+				expect(onConnData).toHaveBeenNthCalledWith(1, {
+					command: 'PLAY',
+					data: [],
+					message: 'The command has been executed.',
+					reqId: 'cmd2',
+					responseCode: 202,
+					type: 'OK',
+				})
+			} finally {
+				// Ensure cleaned up
+				conn.disconnect()
+			}
+		})
 	})
 })
