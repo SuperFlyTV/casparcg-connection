@@ -231,12 +231,19 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		})
 		this._socket.on('connect', () => {
 			this._setConnected(true)
+
+			// Any data which hasn't been parsed yet is now incomplete, and can be discarded
+			this._discardUnprocessed()
 		})
 		this._socket.on('close', () => {
+			this._discardUnprocessed()
+
 			this._setConnected(false)
 			this._triggerReconnect()
 		})
 		this._socket.on('error', (e) => {
+			this._discardUnprocessed()
+
 			if (`${e}`.match(/ECONNREFUSED/)) {
 				// Unable to connect, no need to handle this error
 				this._setConnected(false)
@@ -246,6 +253,11 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		})
 
 		this._socket.connect(this.port, this.host)
+	}
+
+	private _discardUnprocessed() {
+		this._unprocessedData = ''
+		this._unprocessedLines = []
 	}
 
 	private _setConnected(connected: boolean) {
