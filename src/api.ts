@@ -38,7 +38,7 @@ interface InternalRequest {
 }
 
 export interface Response {
-	reqId?: string
+	reqId: string | undefined
 	command: Commands
 	responseCode: number
 	data: any[]

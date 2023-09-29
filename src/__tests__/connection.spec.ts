@@ -5,6 +5,7 @@ import { deserializers } from '../deserializers'
 import { Socket as OrgSocket } from 'net'
 import { Socket as MockSocket } from '../__mocks__/net'
 import { Commands } from '../commands'
+import { BasicCasparCGAPI } from '../api'
 
 jest.mock('net')
 
@@ -56,6 +57,14 @@ describe('connection', () => {
 				socket.onClose = onSocketClose
 			})
 		}
+
+		function extractReqId(index: number) {
+			const str = onSocketWrite.mock.calls[index - 1][0]
+			const match = str.match(/REQ (\w+) /)
+			if (!match) throw new Error(`Failed to find REQ id in "${str}"`)
+			return match[1]
+		}
+
 		beforeEach(() => {
 			setupSocketMock()
 		})
@@ -110,7 +119,7 @@ describe('connection', () => {
 				)
 
 				// Wait for deserializer to run
-				await new Promise(process.nextTick.bind(process))
+				await new Promise(setImmediate)
 
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(1)
@@ -167,7 +176,7 @@ describe('connection', () => {
 				sockets[0].mockData(Buffer.from(`<test/></channel>\r\n\r\n`))
 
 				// Wait for deserializer to run
-				await new Promise(process.nextTick.bind(process))
+				await new Promise(setImmediate)
 
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(1)
@@ -243,9 +252,7 @@ describe('connection', () => {
 				sockets[0].mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
 
 				// Wait for deserializer to run
-				await new Promise(process.nextTick.bind(process))
-				await new Promise(process.nextTick.bind(process))
-				await new Promise(process.nextTick.bind(process))
+				await new Promise(setImmediate)
 
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(2)
@@ -321,19 +328,26 @@ describe('connection', () => {
 				expect(onSocketWrite).toHaveBeenNthCalledWith(2, 'REQ cmd2 PLAY 1-10\r\n', 'utf-8')
 
 				// Reply with a blob designed to crash the xml parser
-				sockets[0].mockData(Buffer.from(`201 INFO OK\r\n<?xml\r\n\r\n`))
-				await new Promise(process.nextTick.bind(process))
+				sockets[0].mockData(Buffer.from(`RES cmd1 201 INFO OK\r\n<?xml\r\n\r\n`))
+				await new Promise(setImmediate)
 
-				// TODO - should the invalid xml cause an error here, or propogate as response?
-				expect(onConnError).toHaveBeenCalledTimes(1)
-				expect(onConnData).toHaveBeenCalledTimes(0)
-				onConnError.mockClear()
+				expect(onConnError).toHaveBeenCalledTimes(0)
+				expect(onConnData).toHaveBeenCalledTimes(1)
 
-				// TODO - verify the response of the INFO matches what we expect
+				// Check result looks good
+				expect(onConnData).toHaveBeenNthCalledWith(1, {
+					command: 'INFO',
+					data: ['<?xml'],
+					message: 'Invalid response received.',
+					reqId: 'cmd1',
+					responseCode: 500,
+					type: 'FAILED',
+				})
+				onConnData.mockClear()
 
 				// Reply with successful PLAY
 				sockets[0].mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
-				await new Promise(process.nextTick.bind(process))
+				await new Promise(setImmediate)
 
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(1)
@@ -350,6 +364,98 @@ describe('connection', () => {
 			} finally {
 				// Ensure cleaned up
 				conn.disconnect()
+			}
+		})
+
+		it('test with full connection', async () => {
+			const client = new BasicCasparCGAPI({
+				host: '127.0.0.1',
+				port: 5250,
+				autoConnect: true,
+			})
+			try {
+				expect(client).toBeTruthy()
+
+				const onConnError = jest.fn()
+				// const onConnData = jest.fn()
+				client.on('error', onConnError)
+				// client.on('data', onConnData)
+
+				const onCommandOk = jest.fn()
+				const onCommandError = jest.fn()
+
+				const sockets = SocketMock.openSockets()
+				expect(sockets).toHaveLength(1)
+
+				// Dispatch a command
+				const sendError = await client.executeCommand({
+					command: Commands.Info,
+					params: {},
+				})
+				sendError.request?.then(onCommandOk, onCommandError)
+				const sendError2 = await client.executeCommand({
+					command: Commands.Play,
+					params: {
+						channel: 1,
+						layer: 10,
+					},
+				})
+				sendError2.request?.then(onCommandOk, onCommandError)
+				expect(onConnError).toHaveBeenCalledTimes(0)
+				expect(onCommandOk).toHaveBeenCalledTimes(0)
+				expect(onCommandError).toHaveBeenCalledTimes(0)
+
+				// Info was sent
+				expect(onSocketWrite).toHaveBeenCalledTimes(2)
+				expect(onSocketWrite).toHaveBeenNthCalledWith(1, expect.stringMatching(/REQ (\w+) INFO\r\n/), 'utf-8')
+				expect(onSocketWrite).toHaveBeenNthCalledWith(
+					2,
+					expect.stringMatching(/REQ (\w+) PLAY 1-10\r\n/),
+					'utf-8'
+				)
+
+				// Reply with a blob designed to crash the xml parser
+				const infoReqId = extractReqId(1)
+				sockets[0].mockData(Buffer.from(`RES ${infoReqId} 201 INFO OK\r\n<?xml\r\n\r\n`))
+				await new Promise(setImmediate)
+
+				expect(onConnError).toHaveBeenCalledTimes(0)
+				// expect(onConnData).toHaveBeenCalledTimes(1)
+				expect(onCommandOk).toHaveBeenCalledTimes(1)
+				expect(onCommandError).toHaveBeenCalledTimes(0)
+
+				// Check result looks good
+				expect(onCommandOk).toHaveBeenNthCalledWith(1, {
+					command: 'INFO',
+					data: ['<?xml'],
+					message: 'Invalid response received.',
+					reqId: infoReqId,
+					responseCode: 500,
+					type: 'FAILED',
+				})
+				onCommandOk.mockClear()
+
+				// Reply with successful PLAY
+				const playReqId = extractReqId(2)
+				sockets[0].mockData(Buffer.from(`RES ${playReqId} 202 PLAY OK\r\n`))
+				await new Promise(setImmediate)
+
+				expect(onConnError).toHaveBeenCalledTimes(0)
+				expect(onCommandOk).toHaveBeenCalledTimes(1)
+				expect(onCommandError).toHaveBeenCalledTimes(0)
+
+				// Check result looks good
+				expect(onCommandOk).toHaveBeenNthCalledWith(1, {
+					command: 'PLAY',
+					data: [],
+					message: 'The command has been executed.',
+					reqId: playReqId,
+					responseCode: 202,
+					type: 'OK',
+				})
+			} finally {
+				// Ensure cleaned up
+				client.disconnect()
 			}
 		})
 	})
