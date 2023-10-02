@@ -81,7 +81,8 @@ export type ConnectionEvents = {
 	error: [error: Error]
 }
 export interface SentRequest {
-	command: AMCPCommand
+	reqId: string | undefined
+	deserializer: (input: string[]) => Promise<any>
 }
 
 export class Connection extends EventEmitter<ConnectionEvents> {
@@ -91,12 +92,9 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	private _connected = false
 	private _version = Version.v23x
 
-	constructor(
-		private host: string,
-		private port = 5250,
-		autoConnect: boolean,
-		private _getRequestForResponse: (response: Response<any>) => SentRequest | undefined
-	) {
+	private _inFlight = new Map<string, SentRequest>()
+
+	constructor(private host: string, private port = 5250, autoConnect: boolean) {
 		super()
 		if (autoConnect) this._setupSocket()
 	}
@@ -129,7 +127,16 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		const payload = this._serializeCommand(cmd, reqId)
 
 		return new Promise<Error | undefined>((r) => {
-			this._socket?.write(payload + '\r\n', (e) => (e ? r(e) : r(undefined)))
+			this._socket?.write(payload + '\r\n', (e) => {
+				if (e) {
+					r(e)
+				} else if (reqId) {
+					this._inFlight.set(reqId, {
+						reqId,
+						deserializer: this._getVersionedDeserializers()[cmd.command],
+					})
+				}
+			})
 		})
 	}
 
@@ -169,22 +176,16 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 				// Assign the preliminary data, to be possibly deserialized later:
 				response.data = responseData
 
-				// Ask what the request was for this response:
-				const previouslySentRequest = this._getRequestForResponse(response)
-				if (previouslySentRequest) {
-					const deserializers = this._getVersionedDeserializers()
-					const deserializer = deserializers[previouslySentRequest.command.command] as
-						| ((input: string[]) => Promise<any>)
-						| undefined
-					// attempt to deserialize the response if we can
-					if (deserializer && responseData?.length) {
-						try {
-							response.data = await deserializer(responseData)
-						} catch (e) {
-							this.emit('error', e as Error)
-						}
+				const deserializer = response.reqId ? this._inFlight.get(response.reqId)?.deserializer : undefined
+				// attempt to deserialize the response if we can
+				if (deserializer && responseData?.length) {
+					try {
+						response.data = await deserializer(responseData)
+					} catch (e) {
+						this.emit('error', e as Error)
 					}
 				}
+				if (response.reqId) this._inFlight.delete(response.reqId)
 
 				// now do something with response
 				this.emit('data', response)
