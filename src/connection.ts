@@ -75,7 +75,7 @@ const RESPONSES = {
 }
 
 export type ConnectionEvents = {
-	data: [response: Response]
+	data: [response: Response, error: Error | undefined]
 	connect: []
 	disconnect: []
 	error: [error: Error]
@@ -83,6 +83,7 @@ export type ConnectionEvents = {
 
 export class Connection extends EventEmitter<ConnectionEvents> {
 	private _socket?: Socket
+	private _unprocessedData = ''
 	private _unprocessedLines: string[] = []
 	private _reconnectTimeout?: NodeJS.Timeout
 	private _connected = false
@@ -125,38 +126,64 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		})
 	}
 
-	private async _processIncomingData(data: Buffer) {
-		const string = data.toString('utf-8')
-		const newLines = string.split('\r\n')
-
+	private _processIncomingData(data: Buffer) {
+		/**
+		 * This is a simple strategy to handle receiving newline separated data, factoring in arbitrary TCP fragmentation.
+		 * It is common for a long response to be split across multiple packets, most likely with the split happening in the middle of a line.
+		 */
+		this._unprocessedData += data.toString('utf-8')
+		const newLines = this._unprocessedData.split('\r\n')
+		// Pop and preserve the last fragment as unprocessed. In most cases this will be an empty string, but it could be the first portion of a line
+		this._unprocessedData = newLines.pop() ?? ''
 		this._unprocessedLines.push(...newLines)
 
 		while (this._unprocessedLines.length > 0) {
 			const result = RESPONSE_REGEX.exec(this._unprocessedLines[0])
-			let processedLines = 0
 
-			if (result && result.groups?.['ResponseCode']) {
+			if (result?.groups?.['ResponseCode']) {
+				let processedLines = 1
+
 				// create a response object
 				const responseCode = parseInt(result?.groups?.['ResponseCode'])
-				const response = {
+				const response: Response = {
 					reqId: result?.groups?.['ReqId'],
 					command: result?.groups?.['Action'] as Commands,
 					responseCode,
 					data: [] as any[],
 					...RESPONSES[responseCode as keyof typeof RESPONSES],
 				}
-				processedLines++
 
 				// parse additional lines if needed
 				if (response.responseCode === 200) {
+					const indexOfTerminationLine = this._unprocessedLines.indexOf('')
+					if (indexOfTerminationLine === -1) break // No termination yet, try again later
+
 					// multiple lines of data
-					response.data = this._unprocessedLines.slice(1, this._unprocessedLines.indexOf(''))
+					response.data = this._unprocessedLines.slice(1, indexOfTerminationLine)
 					processedLines += response.data.length + 1 // data lines + 1 empty line
 				} else if (response.responseCode === 201 || response.responseCode === 400) {
+					if (this._unprocessedLines.length < 2) break // No data line, try again later
+
 					response.data = [this._unprocessedLines[1]]
 					processedLines++
 				}
 
+				// remove processed lines
+				this._unprocessedLines.splice(0, processedLines)
+
+				// Deserialize the response
+				this._deserializeAndEmitResponse(response)
+			} else {
+				// well this is not happy, do we do something?
+				// perhaps this is the infamous 100 or 101 response code, although that doesn't appear in casparcg source code
+				this._unprocessedLines.splice(0, 1)
+			}
+		}
+	}
+
+	private _deserializeAndEmitResponse(response: Response) {
+		Promise.resolve()
+			.then(async () => {
 				const deserializers = this._getVersionedDeserializers()
 				// attempt to deserialize the response if we can
 				if (deserializers[response.command] && response.data.length) {
@@ -164,16 +191,11 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 				}
 
 				// now do something with response
-				this.emit('data', response)
-			} else {
-				// well this is not happy, do we do something?
-				// perhaps this is the infamous 100 or 101 response code, although that doesn't appear in casparcg source code
-				processedLines++
-			}
-
-			// remove processed lines
-			this._unprocessedLines.splice(0, processedLines)
-		}
+				this.emit('data', response, undefined)
+			})
+			.catch((e) => {
+				this.emit('data', response, e)
+			})
 	}
 
 	private _triggerReconnect() {
@@ -198,16 +220,27 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		this._socket.setEncoding('utf-8')
 
 		this._socket.on('data', (data) => {
-			this._processIncomingData(data).catch((e) => this.emit('error', e))
+			try {
+				this._processIncomingData(data)
+			} catch (e: any) {
+				this.emit('error', e)
+			}
 		})
 		this._socket.on('connect', () => {
 			this._setConnected(true)
+
+			// Any data which hasn't been parsed yet is now incomplete, and can be discarded
+			this._discardUnprocessed()
 		})
 		this._socket.on('close', () => {
+			this._discardUnprocessed()
+
 			this._setConnected(false)
 			this._triggerReconnect()
 		})
 		this._socket.on('error', (e) => {
+			this._discardUnprocessed()
+
 			if (`${e}`.match(/ECONNREFUSED/)) {
 				// Unable to connect, no need to handle this error
 				this._setConnected(false)
@@ -217,6 +250,11 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		})
 
 		this._socket.connect(this.port, this.host)
+	}
+
+	private _discardUnprocessed() {
+		this._unprocessedData = ''
+		this._unprocessedLines = []
 	}
 
 	private _setConnected(connected: boolean) {

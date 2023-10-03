@@ -38,7 +38,7 @@ interface InternalRequest {
 }
 
 export interface Response {
-	reqId?: string
+	reqId: string | undefined
 	command: Commands
 	responseCode: number
 	data: any[]
@@ -51,6 +51,12 @@ export type ConnectionEvents = {
 	connect: []
 	disconnect: []
 	error: [error: Error]
+}
+
+export class ResponseError extends Error {
+	constructor(public readonly deserializeError: Error, public readonly response: Response) {
+		super('Failed to deserialize response')
+	}
 }
 
 export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
@@ -87,11 +93,15 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		})
 		this._connection.on('disconnect', () => this.emit('disconnect'))
 
-		this._connection.on('data', (response) => {
+		this._connection.on('data', (response, error) => {
 			const request = this._requestQueue.find((req) => req.requestId === response.reqId)
 
 			if (request) {
-				request.resolve(response)
+				if (error) {
+					request.reject(new ResponseError(error, response))
+				} else {
+					request.resolve(response)
+				}
 				this._requestQueue = this._requestQueue.filter((req) => req.requestId !== response.reqId)
 			}
 
