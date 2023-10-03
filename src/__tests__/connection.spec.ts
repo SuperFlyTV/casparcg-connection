@@ -85,7 +85,14 @@ describe('connection', () => {
 			expect(sockets).toHaveLength(0)
 		})
 
-		it('receive whole response', async () => {
+		async function runWithConnection(
+			fn: (
+				connection: Connection,
+				socket: MockSocket,
+				onConnError: jest.Mock,
+				onConnData: jest.Mock
+			) => Promise<void>
+		) {
 			const conn = new Connection('127.0.0.1', 5250, true)
 			try {
 				expect(conn).toBeTruthy()
@@ -98,6 +105,15 @@ describe('connection', () => {
 				const sockets = SocketMock.openSockets()
 				expect(sockets).toHaveLength(1)
 
+				await fn(conn, sockets[0], onConnError, onConnData)
+			} finally {
+				// Ensure cleaned up
+				conn.disconnect()
+			}
+		}
+
+		it('receive whole response', async () => {
+			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
 				// Dispatch a command
 				const sendError = await conn.sendCommand({
 					command: Commands.Info,
@@ -112,7 +128,7 @@ describe('connection', () => {
 				expect(onSocketWrite).toHaveBeenLastCalledWith('INFO\r\n', 'utf-8')
 
 				// Reply with a single blob
-				sockets[0].mockData(
+				socket.mockData(
 					Buffer.from(
 						`201 INFO OK\r\n<?xml version="1.0" encoding="utf-8"?>\n<channel><test/></channel>\r\n\r\n`
 					)
@@ -142,25 +158,11 @@ describe('connection', () => {
 					},
 					undefined
 				)
-			} finally {
-				// Ensure cleaned up
-				conn.disconnect()
-			}
+			})
 		})
 
 		it('receive fragmented response', async () => {
-			const conn = new Connection('127.0.0.1', 5250, true)
-			try {
-				expect(conn).toBeTruthy()
-
-				const onConnError = jest.fn()
-				const onConnData = jest.fn()
-				conn.on('error', onConnError)
-				conn.on('data', onConnData)
-
-				const sockets = SocketMock.openSockets()
-				expect(sockets).toHaveLength(1)
-
+			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
 				// Dispatch a command
 				const sendError = await conn.sendCommand({
 					command: Commands.Info,
@@ -175,8 +177,8 @@ describe('connection', () => {
 				expect(onSocketWrite).toHaveBeenLastCalledWith('INFO\r\n', 'utf-8')
 
 				// Reply with a fragmented message
-				sockets[0].mockData(Buffer.from(`201 INFO OK\r\n<?xml version="1.0" encoding="utf-8"?>\n<channel>`))
-				sockets[0].mockData(Buffer.from(`<test/></channel>\r\n\r\n`))
+				socket.mockData(Buffer.from(`201 INFO OK\r\n<?xml version="1.0" encoding="utf-8"?>\n<channel>`))
+				socket.mockData(Buffer.from(`<test/></channel>\r\n\r\n`))
 
 				// Wait for deserializer to run
 				await new Promise(setImmediate)
@@ -202,25 +204,11 @@ describe('connection', () => {
 					},
 					undefined
 				)
-			} finally {
-				// Ensure cleaned up
-				conn.disconnect()
-			}
+			})
 		})
 
 		it('receive fast responses', async () => {
-			const conn = new Connection('127.0.0.1', 5250, true)
-			try {
-				expect(conn).toBeTruthy()
-
-				const onConnError = jest.fn()
-				const onConnData = jest.fn()
-				conn.on('error', onConnError)
-				conn.on('data', onConnData)
-
-				const sockets = SocketMock.openSockets()
-				expect(sockets).toHaveLength(1)
-
+			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
 				// Dispatch a command
 				const sendError = await conn.sendCommand(
 					{
@@ -250,12 +238,12 @@ describe('connection', () => {
 				expect(onSocketWrite).toHaveBeenNthCalledWith(2, 'REQ cmd2 PLAY 1-10\r\n', 'utf-8')
 
 				// Send replies
-				sockets[0].mockData(
+				socket.mockData(
 					Buffer.from(
 						`RES cmd1 201 INFO OK\r\n<?xml version="1.0" encoding="utf-8"?>\n<channel><test/></channel>\r\n\r\n`
 					)
 				)
-				sockets[0].mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
+				socket.mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
 
 				// Wait for deserializer to run
 				await new Promise(setImmediate)
@@ -294,25 +282,11 @@ describe('connection', () => {
 					},
 					undefined
 				)
-			} finally {
-				// Ensure cleaned up
-				conn.disconnect()
-			}
+			})
 		})
 
 		it('receive broken response', async () => {
-			const conn = new Connection('127.0.0.1', 5250, true)
-			try {
-				expect(conn).toBeTruthy()
-
-				const onConnError = jest.fn()
-				const onConnData = jest.fn()
-				conn.on('error', onConnError)
-				conn.on('data', onConnData)
-
-				const sockets = SocketMock.openSockets()
-				expect(sockets).toHaveLength(1)
-
+			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
 				// Dispatch a command
 				const sendError = await conn.sendCommand(
 					{
@@ -342,7 +316,7 @@ describe('connection', () => {
 				expect(onSocketWrite).toHaveBeenNthCalledWith(2, 'REQ cmd2 PLAY 1-10\r\n', 'utf-8')
 
 				// Reply with a blob designed to crash the xml parser
-				sockets[0].mockData(Buffer.from(`RES cmd1 201 INFO OK\r\n<?xml\r\n\r\n`))
+				socket.mockData(Buffer.from(`RES cmd1 201 INFO OK\r\n<?xml\r\n\r\n`))
 				await new Promise(setImmediate)
 
 				expect(onConnError).toHaveBeenCalledTimes(0)
@@ -365,7 +339,7 @@ describe('connection', () => {
 				onConnData.mockClear()
 
 				// Reply with successful PLAY
-				sockets[0].mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
+				socket.mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
 				await new Promise(setImmediate)
 
 				expect(onConnError).toHaveBeenCalledTimes(0)
@@ -384,10 +358,7 @@ describe('connection', () => {
 					},
 					undefined
 				)
-			} finally {
-				// Ensure cleaned up
-				conn.disconnect()
-			}
+			})
 		})
 
 		it('test with full client', async () => {
@@ -486,18 +457,7 @@ describe('connection', () => {
 		})
 
 		it('connection loss midway through response', async () => {
-			const conn = new Connection('127.0.0.1', 5250, true)
-			try {
-				expect(conn).toBeTruthy()
-
-				const onConnError = jest.fn()
-				const onConnData = jest.fn()
-				conn.on('error', onConnError)
-				conn.on('data', onConnData)
-
-				const sockets = SocketMock.openSockets()
-				expect(sockets).toHaveLength(1)
-
+			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
 				// Dispatch a command
 				const sendError = await conn.sendCommand(
 					{
@@ -517,7 +477,7 @@ describe('connection', () => {
 				onSocketWrite.mockClear()
 
 				// Reply with a part of a fragmented message
-				sockets[0].mockData(Buffer.from(`RES cmd1 201 INFO OK\r\n<?xml`))
+				socket.mockData(Buffer.from(`RES cmd1 201 INFO OK\r\n<?xml`))
 				await new Promise(setImmediate)
 
 				expect(conn.connected).toBeTruthy()
@@ -525,7 +485,7 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(0)
 
 				// Simulate connection failure
-				sockets[0].emit('close', new Error('Connection lost'))
+				socket.emit('close', new Error('Connection lost'))
 				await new Promise(setImmediate)
 
 				expect(conn.connected).toBeFalsy()
@@ -533,7 +493,7 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(0)
 
 				// Reconnect
-				sockets[0].emit('connect')
+				socket.emit('connect')
 				await new Promise(setImmediate)
 
 				expect(conn.connected).toBeTruthy()
@@ -562,7 +522,7 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(0)
 
 				// Reply with successful PLAY
-				sockets[0].mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
+				socket.mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
 				await new Promise(setImmediate)
 
 				expect(onConnError).toHaveBeenCalledTimes(0)
@@ -581,10 +541,7 @@ describe('connection', () => {
 					},
 					undefined
 				)
-			} finally {
-				// Ensure cleaned up
-				conn.disconnect()
-			}
+			})
 		})
 	})
 })
