@@ -155,11 +155,11 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 				// parse additional lines if needed
 				if (response.responseCode === 200) {
-					const indexOfBlankLine = this._unprocessedLines.indexOf('')
-					if (indexOfBlankLine === -1) break // No termination yet, try again later
+					const indexOfTerminationLine = this._unprocessedLines.indexOf('')
+					if (indexOfTerminationLine === -1) break // No termination yet, try again later
 
 					// multiple lines of data
-					response.data = this._unprocessedLines.slice(1, indexOfBlankLine)
+					response.data = this._unprocessedLines.slice(1, indexOfTerminationLine)
 					processedLines += response.data.length + 1 // data lines + 1 empty line
 				} else if (response.responseCode === 201 || response.responseCode === 400) {
 					if (this._unprocessedLines.length < 2) break // No data line, try again later
@@ -176,7 +176,6 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 			} else {
 				// well this is not happy, do we do something?
 				// perhaps this is the infamous 100 or 101 response code, although that doesn't appear in casparcg source code
-				// processedLines++
 				this._unprocessedLines.splice(0, 1)
 			}
 		}
@@ -196,12 +195,6 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 			})
 			.catch((e) => {
 				this.emit('data', response, e)
-				// {
-				// 	...response,
-				// 	responseCode: 500, // TODO better value?
-				// 	type: ResponseTypes.ServerError,
-				// 	message: 'Invalid response received.',
-				// })
 			})
 	}
 
