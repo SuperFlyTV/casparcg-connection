@@ -125,20 +125,23 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(1)
 
 				// Check result looks good
-				expect(onConnData).toHaveBeenLastCalledWith({
-					command: 'INFO',
-					data: [
-						{
-							channel: {
-								test: [''],
+				expect(onConnData).toHaveBeenLastCalledWith(
+					{
+						command: 'INFO',
+						data: [
+							{
+								channel: {
+									test: [''],
+								},
 							},
-						},
-					],
-					message: 'The command has been executed and data is being returned.',
-					reqId: undefined,
-					responseCode: 201,
-					type: 'OK',
-				})
+						],
+						message: 'The command has been executed and data is being returned.',
+						reqId: undefined,
+						responseCode: 201,
+						type: 'OK',
+					},
+					undefined
+				)
 			} finally {
 				// Ensure cleaned up
 				conn.disconnect()
@@ -182,20 +185,23 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(1)
 
 				// Check result looks good
-				expect(onConnData).toHaveBeenLastCalledWith({
-					command: 'INFO',
-					data: [
-						{
-							channel: {
-								test: [''],
+				expect(onConnData).toHaveBeenLastCalledWith(
+					{
+						command: 'INFO',
+						data: [
+							{
+								channel: {
+									test: [''],
+								},
 							},
-						},
-					],
-					message: 'The command has been executed and data is being returned.',
-					reqId: undefined,
-					responseCode: 201,
-					type: 'OK',
-				})
+						],
+						message: 'The command has been executed and data is being returned.',
+						reqId: undefined,
+						responseCode: 201,
+						type: 'OK',
+					},
+					undefined
+				)
 			} finally {
 				// Ensure cleaned up
 				conn.disconnect()
@@ -258,28 +264,36 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(2)
 
 				// Check result looks good
-				expect(onConnData).toHaveBeenNthCalledWith(1, {
-					command: 'PLAY',
-					data: [],
-					message: 'The command has been executed.',
-					reqId: 'cmd2',
-					responseCode: 202,
-					type: 'OK',
-				})
-				expect(onConnData).toHaveBeenNthCalledWith(2, {
-					command: 'INFO',
-					data: [
-						{
-							channel: {
-								test: [''],
+				expect(onConnData).toHaveBeenNthCalledWith(
+					1,
+					{
+						command: 'PLAY',
+						data: [],
+						message: 'The command has been executed.',
+						reqId: 'cmd2',
+						responseCode: 202,
+						type: 'OK',
+					},
+					undefined
+				)
+				expect(onConnData).toHaveBeenNthCalledWith(
+					2,
+					{
+						command: 'INFO',
+						data: [
+							{
+								channel: {
+									test: [''],
+								},
 							},
-						},
-					],
-					message: 'The command has been executed and data is being returned.',
-					reqId: 'cmd1',
-					responseCode: 201,
-					type: 'OK',
-				})
+						],
+						message: 'The command has been executed and data is being returned.',
+						reqId: 'cmd1',
+						responseCode: 201,
+						type: 'OK',
+					},
+					undefined
+				)
 			} finally {
 				// Ensure cleaned up
 				conn.disconnect()
@@ -334,15 +348,20 @@ describe('connection', () => {
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(1)
 
-				// Check result looks good
-				expect(onConnData).toHaveBeenNthCalledWith(1, {
-					command: 'INFO',
-					data: ['<?xml'],
-					message: 'Invalid response received.',
-					reqId: 'cmd1',
-					responseCode: 500,
-					type: 'FAILED',
-				})
+				// Check result looks correct
+				expect(onConnData).toHaveBeenNthCalledWith(
+					1,
+					{
+						command: 'INFO',
+						data: ['<?xml'],
+						message: 'The command has been executed and data is being returned.',
+						reqId: 'cmd1',
+						responseCode: 201,
+						type: 'OK',
+					},
+					expect.any(Error)
+				)
+				expect(onConnData.mock.calls[0][1].toString()).toMatch(/Unexpected end/)
 				onConnData.mockClear()
 
 				// Reply with successful PLAY
@@ -353,14 +372,18 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(1)
 
 				// Check result looks good
-				expect(onConnData).toHaveBeenNthCalledWith(1, {
-					command: 'PLAY',
-					data: [],
-					message: 'The command has been executed.',
-					reqId: 'cmd2',
-					responseCode: 202,
-					type: 'OK',
-				})
+				expect(onConnData).toHaveBeenNthCalledWith(
+					1,
+					{
+						command: 'PLAY',
+						data: [],
+						message: 'The command has been executed.',
+						reqId: 'cmd2',
+						responseCode: 202,
+						type: 'OK',
+					},
+					undefined
+				)
 			} finally {
 				// Ensure cleaned up
 				conn.disconnect()
@@ -421,19 +444,12 @@ describe('connection', () => {
 
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				// expect(onConnData).toHaveBeenCalledTimes(1)
-				expect(onCommandOk).toHaveBeenCalledTimes(1)
-				expect(onCommandError).toHaveBeenCalledTimes(0)
+				expect(onCommandOk).toHaveBeenCalledTimes(0)
+				expect(onCommandError).toHaveBeenCalledTimes(1)
 
 				// Check result looks good
-				expect(onCommandOk).toHaveBeenNthCalledWith(1, {
-					command: 'INFO',
-					data: ['<?xml'],
-					message: 'Invalid response received.',
-					reqId: infoReqId,
-					responseCode: 500,
-					type: 'FAILED',
-				})
-				onCommandOk.mockClear()
+				expect(onCommandError.mock.calls[0][0].toString()).toMatch(/Unexpected end/)
+				onCommandError.mockClear()
 
 				// Reply with successful PLAY
 				const playReqId = extractReqId(2)
@@ -543,14 +559,18 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(1)
 
 				// Check result looks good
-				expect(onConnData).toHaveBeenNthCalledWith(1, {
-					command: 'PLAY',
-					data: [],
-					message: 'The command has been executed.',
-					reqId: 'cmd2',
-					responseCode: 202,
-					type: 'OK',
-				})
+				expect(onConnData).toHaveBeenNthCalledWith(
+					1,
+					{
+						command: 'PLAY',
+						data: [],
+						message: 'The command has been executed.',
+						reqId: 'cmd2',
+						responseCode: 202,
+						type: 'OK',
+					},
+					undefined
+				)
 			} finally {
 				// Ensure cleaned up
 				conn.disconnect()

@@ -75,7 +75,7 @@ const RESPONSES = {
 }
 
 export type ConnectionEvents = {
-	data: [response: Response]
+	data: [response: Response, error: Error | undefined]
 	connect: []
 	disconnect: []
 	error: [error: Error]
@@ -192,15 +192,16 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 				}
 
 				// now do something with response
-				this.emit('data', response)
+				this.emit('data', response, undefined)
 			})
-			.catch(() => {
-				this.emit('data', {
-					...response,
-					responseCode: 500, // TODO better value?
-					type: ResponseTypes.ServerError,
-					message: 'Invalid response received.',
-				})
+			.catch((e) => {
+				this.emit('data', response, e)
+				// {
+				// 	...response,
+				// 	responseCode: 500, // TODO better value?
+				// 	type: ResponseTypes.ServerError,
+				// 	message: 'Invalid response received.',
+				// })
 			})
 	}
 

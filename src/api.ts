@@ -87,11 +87,15 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		})
 		this._connection.on('disconnect', () => this.emit('disconnect'))
 
-		this._connection.on('data', (response) => {
+		this._connection.on('data', (response, error) => {
 			const request = this._requestQueue.find((req) => req.requestId === response.reqId)
 
 			if (request) {
-				request.resolve(response)
+				if (error) {
+					request.reject(error)
+				} else {
+					request.resolve(response)
+				}
 				this._requestQueue = this._requestQueue.filter((req) => req.requestId !== response.reqId)
 			}
 
