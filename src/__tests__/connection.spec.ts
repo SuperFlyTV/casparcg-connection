@@ -5,7 +5,7 @@ import { deserializers } from '../deserializers'
 import { Socket as OrgSocket } from 'net'
 import { Socket as MockSocket } from '../__mocks__/net'
 import { Commands } from '../commands'
-import { BasicCasparCGAPI } from '../api'
+import { BasicCasparCGAPI, ResponseError } from '../api'
 
 jest.mock('net')
 
@@ -447,8 +447,18 @@ describe('connection', () => {
 				expect(onCommandOk).toHaveBeenCalledTimes(0)
 				expect(onCommandError).toHaveBeenCalledTimes(1)
 
-				// Check result looks good
-				expect(onCommandError.mock.calls[0][0].toString()).toMatch(/Unexpected end/)
+				// Check result looks correct
+				const commandError = onCommandError.mock.calls[0][0] as ResponseError
+				expect(commandError.toString()).toMatch(/Failed to deserialize/)
+				expect(commandError.deserializeError.toString()).toMatch(/Unexpected end/)
+				expect(commandError.response).toMatchObject({
+					command: 'INFO',
+					data: ['<?xml'],
+					message: 'The command has been executed and data is being returned.',
+					reqId: infoReqId,
+					responseCode: 201,
+					type: 'OK',
+				})
 				onCommandError.mockClear()
 
 				// Reply with successful PLAY

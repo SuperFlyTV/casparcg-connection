@@ -53,6 +53,12 @@ export type ConnectionEvents = {
 	error: [error: Error]
 }
 
+export class ResponseError extends Error {
+	constructor(public readonly deserializeError: Error, public readonly response: Response) {
+		super('Failed to deserialize response')
+	}
+}
+
 export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 	private _connection: Connection
 	private _host: string
@@ -92,7 +98,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 
 			if (request) {
 				if (error) {
-					request.reject(error)
+					request.reject(new ResponseError(error, response))
 				} else {
 					request.resolve(response)
 				}
