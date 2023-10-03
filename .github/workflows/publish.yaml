@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [16.x, 14.x]
+        node-version: [16.x, 14.x, 18.x, 20.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -44,10 +44,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Use Node.js 16.x
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
       - name: Check release is desired
         id: do-publish
         run: |
@@ -55,10 +55,10 @@ jobs:
             echo "No Token"
           elif [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
             echo "Publish nightly"
-            echo ::set-output name=publish::"nightly"
+            echo "publish=nightly" >> $GITHUB_OUTPUT
           else
             echo "Publish experimental"
-            echo ::set-output name=publish::"experimental"
+            echo "publish=experimental" >> $GITHUB_OUTPUT
           fi
       - name: Prepare Environment
         if: ${{ steps.do-publish.outputs.publish }}
@@ -66,15 +66,10 @@ jobs:
           yarn install
         env:
           CI: true
-      - name: Get the Prerelease tag
-        id: prerelease-tag
-        uses: yuya-takeyama/docker-tag-from-github-ref-action@2b0614b1338c8f19dd9d3ea433ca9bc0cc7057ba
-        with:
-          remove-version-tag-prefix: false
       - name: Bump version and build
         if: ${{ steps.do-publish.outputs.publish }}
         run: |
-          PRERELEASE_TAG=nightly-${{ steps.prerelease-tag.outputs.tag }}
+          PRERELEASE_TAG=nightly-$(echo "${{ github.ref_name }}" | sed -r 's/[^a-z0-9]+/-/gi')
           yarn release --prerelease $PRERELEASE_TAG
           yarn build
         env:
