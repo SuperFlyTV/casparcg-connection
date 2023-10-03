@@ -63,9 +63,6 @@ jobs:
       - name: Send coverage
         uses: codecov/codecov-action@v2
         if: matrix.node-version == '16.x'
-        with:
-          fail_ci_if_error: true
-          # name: codecov-umbrella
       - name: Check docs generation
         if: matrix.node-version == '16.x'
         run: |
