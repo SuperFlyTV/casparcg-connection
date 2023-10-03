@@ -259,6 +259,14 @@ describe('connection', () => {
 
 				// Check result looks good
 				expect(onConnData).toHaveBeenNthCalledWith(1, {
+					command: 'PLAY',
+					data: [],
+					message: 'The command has been executed.',
+					reqId: 'cmd2',
+					responseCode: 202,
+					type: 'OK',
+				})
+				expect(onConnData).toHaveBeenNthCalledWith(2, {
 					command: 'INFO',
 					data: [
 						{
@@ -270,14 +278,6 @@ describe('connection', () => {
 					message: 'The command has been executed and data is being returned.',
 					reqId: 'cmd1',
 					responseCode: 201,
-					type: 'OK',
-				})
-				expect(onConnData).toHaveBeenNthCalledWith(2, {
-					command: 'PLAY',
-					data: [],
-					message: 'The command has been executed.',
-					reqId: 'cmd2',
-					responseCode: 202,
 					type: 'OK',
 				})
 			} finally {

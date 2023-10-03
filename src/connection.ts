@@ -139,9 +139,10 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 		while (this._unprocessedLines.length > 0) {
 			const result = RESPONSE_REGEX.exec(this._unprocessedLines[0])
-			let processedLines = 0
 
 			if (result?.groups?.['ResponseCode']) {
+				let processedLines = 1
+
 				// create a response object
 				const responseCode = parseInt(result?.groups?.['ResponseCode'])
 				const response: Response = {
@@ -151,7 +152,6 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 					data: [] as any[],
 					...RESPONSES[responseCode as keyof typeof RESPONSES],
 				}
-				processedLines++
 
 				// parse additional lines if needed
 				if (response.responseCode === 200) {
@@ -168,37 +168,40 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 					processedLines++
 				}
 
-				// Parse the command after `this._unprocessedLines` has been updated
-				setImmediate(() => {
-					Promise.resolve()
-						.then(async () => {
-							const deserializers = this._getVersionedDeserializers()
-							// attempt to deserialize the response if we can
-							if (deserializers[response.command] && response.data.length) {
-								response.data = await deserializers[response.command](response.data)
-							}
+				// remove processed lines
+				this._unprocessedLines.splice(0, processedLines)
 
-							// now do something with response
-							this.emit('data', response)
-						})
-						.catch(() => {
-							this.emit('data', {
-								...response,
-								responseCode: 500, // TODO better value?
-								type: ResponseTypes.ServerError,
-								message: 'Invalid response received.',
-							})
-						})
-				})
+				// Deserialize the response
+				this._deserializeAndEmitResponse(response)
 			} else {
 				// well this is not happy, do we do something?
 				// perhaps this is the infamous 100 or 101 response code, although that doesn't appear in casparcg source code
-				processedLines++
+				// processedLines++
+				this._unprocessedLines.splice(0, 1)
 			}
-
-			// remove processed lines
-			this._unprocessedLines.splice(0, processedLines)
 		}
+	}
+
+	private _deserializeAndEmitResponse(response: Response) {
+		Promise.resolve()
+			.then(async () => {
+				const deserializers = this._getVersionedDeserializers()
+				// attempt to deserialize the response if we can
+				if (deserializers[response.command] && response.data.length) {
+					response.data = await deserializers[response.command](response.data)
+				}
+
+				// now do something with response
+				this.emit('data', response)
+			})
+			.catch(() => {
+				this.emit('data', {
+					...response,
+					responseCode: 500, // TODO better value?
+					type: ResponseTypes.ServerError,
+					message: 'Invalid response received.',
+				})
+			})
 	}
 
 	private _triggerReconnect() {
