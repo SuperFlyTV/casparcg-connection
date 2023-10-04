@@ -351,7 +351,157 @@ export type InfoLayerEntry = InfoChannelEntry
 export interface InfoTemplateParameters {
 	template: string
 }
+
 export type InfoConfigParameters = Empty
+export const enum ConsumerType {
+	DECKLINK = 'decklink',
+	BLUEFISH = 'bluefish',
+	SYSTEM_AUDIO = 'system-audio',
+	SCREEN = 'screen',
+	NEWTEK_IVGA = 'newtek-ivga',
+	NDI = 'ndi',
+	FFMPEG = 'ffmpeg',
+}
+export interface ConsumerConfig {
+	type: ConsumerType
+}
+export interface DeckLinkConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.DECKLINK
+	device: number
+	keyDevice?: number
+	embeddedAudio?: boolean
+	latency?: string
+	keyer?: string
+	keyOnly?: string
+	bufferDepth?: number
+	videoMode?: string
+	subregion?: {
+		srcX: number
+		srcY: number
+		destX: number
+		destY: number
+		width: number
+		height: number
+	}
+}
+export interface BluefishConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.BLUEFISH
+	device: number
+	sdiStream?: number
+	embeddedAudio?: boolean
+	keyer?: string
+	internalKeyerAudioSource?: string
+	watchdog?: number
+	uhdMode?: number
+}
+export interface SystemAudioConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.SYSTEM_AUDIO
+	channelLayout?: string
+	latency?: number
+}
+export interface ScreenConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.SCREEN
+	device?: number
+	aspectRatio?: string
+	stretch?: number
+	windowed?: boolean
+	keyOnly?: boolean
+	vsync?: boolean
+	borderless?: string
+	interactive?: boolean
+	alwaysOnTop?: boolean
+	x?: number
+	y?: number
+	width?: number
+	height?: number
+	sbsKey?: boolean
+	colourSpace?: string
+}
+export interface IVgaConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.NEWTEK_IVGA
+}
+export interface NdiConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.NDI
+	name?: string
+	allowFields?: boolean
+}
+export interface FFmpegConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.FFMPEG
+	path?: string
+	args?: string
+}
+export type ConsumerConfigAny =
+	| DeckLinkConsumerConfig
+	| BluefishConsumerConfig
+	| SystemAudioConsumerConfig
+	| ScreenConsumerConfig
+	| IVgaConsumerConfig
+	| NdiConsumerConfig
+	| FFmpegConsumerConfig
+export interface InfoChannelConfig {
+	videoMode: string
+	consumers: ConsumerConfigAny[]
+}
+export interface TemplateHostConfig {
+	videoMode?: string
+	fileName?: string
+	width?: number
+	height?: number
+}
+export interface InfoVideoModeConfig {
+	id: string
+	width: number
+	height: number
+	timeScale: number
+	duration: number
+	cadence: number
+}
+export interface InfoConfig {
+	logLevel?: LogLevel
+	paths: {
+		media: string
+		log: string
+		data: string
+		template: string
+	}
+	lockClearPhrase?: string
+	channels: InfoChannelConfig[]
+	templateHosts?: TemplateHostConfig[]
+	ffmpeg?: {
+		producer?: {
+			autoDeinterlace?: string
+			threads?: number
+		}
+	}
+	html?: {
+		remoteDebuggingPort?: number
+		enableGpu?: boolean
+	}
+	ndi?: {
+		autoLoad?: boolean
+	}
+	osc?: {
+		defaulPort?: number
+		disableSendToAmcpClients?: boolean
+		predefinedClients?: Array<{ address: string; port: number }>
+	}
+	controllers?: {
+		tcp?: {
+			port?: number
+			protocol?: string
+		}
+	}
+	amcp?: {
+		mediaServer?: {
+			host?: string
+			port?: number
+		}
+	}
+	videoModes?: InfoVideoModeConfig[]
+	// Unparsed contents of the config file
+	rawXml: string
+}
+
 export type InfoPathsParameters = Empty
 export type InfoSystemParameters = Empty
 export type InfoServerParameters = Empty

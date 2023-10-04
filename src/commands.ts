@@ -88,7 +88,7 @@ import {
 	InfoEntry,
 	InfoChannelEntry,
 	InfoLayerEntry,
-} from './parameters'
+} from './parameterAndReturnTypes'
 
 export enum Commands {
 	Loadbg = 'LOADBG',

@@ -1,11 +1,11 @@
 // import { Version } from '../enums'
 import { Commands } from '../commands'
 import { deserializers } from '../deserializers'
-import { Version } from '../enums'
+import { LogLevel, Version } from '../enums'
 import { literal } from '../lib'
-import { InfoChannelEntry, InfoEntry } from '../parameters'
+import { ConsumerType, InfoChannelEntry, InfoConfig, InfoEntry } from '../parameterAndReturnTypes'
 
-describe('serializers', () => {
+describe('deserializers', () => {
 	it('should deserialize CINF', async () => {
 		// "AMB" MOVIE size datetime frames rate
 		const input = '"AMB" MOVIE 1234 20230609070542 12 1/25'
@@ -199,6 +199,106 @@ describe('serializers', () => {
 						},
 					],
 				},
+			})
+		)
+	})
+	it('should deserialize INFO Config', async () => {
+		const input = [
+			`<?xml version="1.0" encoding="utf-8"?>
+
+			<configuration>
+				<log-level>debug</log-level>
+				<paths>
+					<media-path>media/</media-path>
+					<log-path>log/</log-path>
+					<data-path>data/</data-path>
+					<template-path>templates/</template-path>
+				</paths>
+				<lock-clear-phrase>secret</lock-clear-phrase>
+				<channels>
+					<channel>
+						<video-mode>1080p5000</video-mode>
+						<consumers>
+							<screen>
+								<device>1</device>
+								<aspect-ratio>default</aspect-ratio>
+								<stretch>fill</stretch>
+								<windowed>true</windowed>
+							</screen>
+						</consumers>
+					</channel>
+					<channel>
+						<video-mode>1080p2500</video-mode>
+						<consumers>
+							<decklink>
+								<device>1</device>
+								<latency>normal</latency>
+							</screen>
+						</consumers>
+					</channel>
+				</channels>
+				<controllers>
+					<tcp>
+						<port>5250</port>
+						<protocol>AMCP</protocol>
+					</tcp>
+				</controllers>
+				<amcp>
+					<media-server>
+						<host>localhost</host>
+						<port>8000</port>
+					</media-server>
+				</amcp>
+			</configuration>`,
+		]
+
+		const output = await deserializers[Commands.InfoConfig](input)
+
+		expect(output).toMatchObject(
+			literal<InfoConfig>({
+				logLevel: LogLevel.Debug,
+				paths: {
+					media: 'media/',
+					data: 'data/',
+					log: 'log/',
+					template: 'template/',
+				},
+				channels: [
+					{
+						videoMode: '1080p5000',
+						consumers: [
+							{
+								type: ConsumerType.SCREEN,
+								device: 1,
+								aspectRatio: 'default',
+								windowed: true,
+							},
+						],
+					},
+					{
+						videoMode: '1080p2500',
+						consumers: [
+							{
+								type: ConsumerType.DECKLINK,
+								device: 1,
+								latency: 'normal',
+							},
+						],
+					},
+				],
+				controllers: {
+					tcp: {
+						port: 5250,
+						protocol: 'AMCP',
+					},
+				},
+				amcp: {
+					mediaServer: {
+						host: 'localhost',
+						port: 8000,
+					},
+				},
+				rawXml: input[0],
 			})
 		)
 	})

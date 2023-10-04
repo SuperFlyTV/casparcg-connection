@@ -1,6 +1,6 @@
 import { CReturnType, Commands } from './commands'
 import { Version } from './enums'
-import { ClipInfo, InfoChannelEntry, InfoEntry, InfoLayerEntry } from './parameters'
+import { ClipInfo, InfoChannelEntry, InfoEntry, InfoLayerEntry } from './parameterAndReturnTypes'
 import { parseStringPromise } from 'xml2js'
 
 function deserializeClipInfo(line: string): ClipInfo | undefined {
