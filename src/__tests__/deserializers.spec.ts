@@ -288,8 +288,8 @@ describe('deserializers', () => {
 					paths: {
 						media: 'media/',
 						data: 'data/',
-						log: 'log/',
-						template: 'templates/',
+						logs: 'log/',
+						templates: 'templates/',
 					},
 					channels: [
 						{

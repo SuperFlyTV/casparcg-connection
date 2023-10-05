@@ -154,9 +154,9 @@ function parseConfigPaths(config: any): InfoConfig['paths'] | undefined {
 	return paths
 		? {
 				media: parseString(paths, 'media-path'),
-				log: parseString(paths, 'log-path'),
+				logs: parseString(paths, 'log-path'),
 				data: parseString(paths, 'data-path'),
-				template: parseString(paths, 'template-path'),
+				templates: parseString(paths, 'template-path'),
 		  }
 		: undefined
 }

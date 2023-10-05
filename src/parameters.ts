@@ -465,9 +465,9 @@ export interface InfoConfig {
 	logLevel?: LogLevel
 	paths?: {
 		media?: string
-		log?: string
+		logs?: string
 		data?: string
-		template?: string
+		templates?: string
 	}
 	lockClearPhrase?: string
 	channels?: InfoChannelConfig[]
