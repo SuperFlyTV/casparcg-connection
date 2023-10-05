@@ -54,7 +54,7 @@ const routeCommandSerializer = (_: Commands, { route, mode, framesDelay }: Route
 	(mode ? '  ' + mode : '') +
 	(framesDelay ? 'BUFFER ' + framesDelay : '')
 const producerOptionsSerializer = (_: Commands, { vFilter, aFilter }: ProducerOptions) => {
-	return [vFilter ? 'VFILTER ' + vFilter : undefined, aFilter ? 'AFILTER ' + aFilter : undefined]
+	return [vFilter ? `VF "${vFilter}"` : undefined, aFilter ? `AF "${aFilter}"` : undefined]
 		.filter((p) => p !== undefined)
 		.join(' ')
 }
