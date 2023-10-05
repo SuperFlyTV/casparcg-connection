@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.0.6](http://superfly.tv/compare/v6.0.5...v6.0.6) (Thu Oct 05 2023)
+
+
+### Fixes
+
+* aFilter and vFilter serialized incorrectly SOFIE-2706 [0765fed5](http://superfly.tv/commit/0765fed57d649c76af101ea364f9a7b8a196f471)
+
 ## [6.0.5](http://superfly.tv/compare/v6.0.4...v6.0.5) (Tue Oct 03 2023)
 
 
