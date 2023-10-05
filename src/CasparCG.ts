@@ -79,7 +79,7 @@ import {
 	RestartParameters,
 	InfoChannelParameters,
 	InfoLayerParameters,
-} from './parameterAndReturnTypes'
+} from './parameters'
 
 export class CasparCG extends BasicCasparCGAPI {
 	async loadbg(params: LoadbgParameters): Promise<APIRequest<Commands.Loadbg>> {

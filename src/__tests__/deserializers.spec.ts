@@ -3,7 +3,7 @@ import { Commands } from '../commands'
 import { deserializers } from '../deserializers'
 import { LogLevel, Version } from '../enums'
 import { literal } from '../lib'
-import { ConsumerType, InfoChannelEntry, InfoConfig, InfoEntry } from '../parameterAndReturnTypes'
+import { ConsumerType, InfoChannelEntry, InfoConfig, InfoEntry } from '../parameters'
 
 describe('deserializers', () => {
 	it('should deserialize CINF', async () => {
@@ -202,9 +202,10 @@ describe('deserializers', () => {
 			})
 		)
 	})
-	it('should deserialize INFO Config', async () => {
-		const input = [
-			`<?xml version="1.0" encoding="utf-8"?>
+	describe('INFO Config', () => {
+		it('should deserialize correctly formed config', async () => {
+			const input = [
+				`<?xml version="1.0" encoding="utf-8"?>
 
 			<configuration>
 				<log-level>debug</log-level>
@@ -231,10 +232,14 @@ describe('deserializers', () => {
 						<video-mode>1080p2500</video-mode>
 						<consumers>
 							<decklink>
-								<device>1</device>
+								<device>2</device>
 								<latency>normal</latency>
-							</screen>
+							</decklink>
 						</consumers>
+						<producers>
+							<producer id="0">AMB LOOP</producer>
+							<producer id="10">DECKLINK DEVICE 2</producer>
+						</producers>
 					</channel>
 				</channels>
 				<controllers>
@@ -249,57 +254,138 @@ describe('deserializers', () => {
 						<port>8000</port>
 					</media-server>
 				</amcp>
+				<ffmpeg>
+					<producer>
+						<auto-deinterlace>interlaced</auto-deinterlace>
+						<threads>4</threads>
+					</producer>
+				</ffmpeg>
+				<html>
+					<remote-debugging-port>0</remote-debugging-port>
+					<enable-gpu> true </enable-gpu>
+				</html>
+				<ndi>
+					<auto-load>false</auto-load>
+				</ndi>
+				<video-modes>
+					<video-mode>
+						<id>1024x768p60</id>
+						<width>1024</width>
+						<height>768</height>
+						<time-scale>60000</time-scale>
+						<duration>1000</duration>
+						<cadence>800</cadence>
+					</video-mode>
+				</video-modes>
 			</configuration>`,
-		]
+			]
 
-		const output = await deserializers[Commands.InfoConfig](input)
+			const output = await deserializers[Commands.InfoConfig](input)
 
-		expect(output).toMatchObject(
-			literal<InfoConfig>({
-				logLevel: LogLevel.Debug,
-				paths: {
-					media: 'media/',
-					data: 'data/',
-					log: 'log/',
-					template: 'template/',
-				},
-				channels: [
-					{
-						videoMode: '1080p5000',
-						consumers: [
-							{
-								type: ConsumerType.SCREEN,
-								device: 1,
-								aspectRatio: 'default',
-								windowed: true,
-							},
-						],
+			expect(output).toMatchObject(
+				literal<InfoConfig>({
+					logLevel: LogLevel.Debug,
+					paths: {
+						media: 'media/',
+						data: 'data/',
+						log: 'log/',
+						template: 'templates/',
 					},
-					{
-						videoMode: '1080p2500',
-						consumers: [
-							{
-								type: ConsumerType.DECKLINK,
-								device: 1,
-								latency: 'normal',
-							},
-						],
+					channels: [
+						{
+							videoMode: '1080p5000',
+							consumers: [
+								{
+									type: ConsumerType.SCREEN,
+									device: 1,
+									aspectRatio: 'default',
+									windowed: true,
+								},
+							],
+							producers: [],
+						},
+						{
+							videoMode: '1080p2500',
+							consumers: [
+								{
+									type: ConsumerType.DECKLINK,
+									device: 2,
+									latency: 'normal',
+								},
+							],
+							producers: [
+								{
+									id: 0,
+									producer: 'AMB LOOP',
+								},
+								{
+									id: 10,
+									producer: 'DECKLINK DEVICE 2',
+								},
+							],
+						},
+					],
+					controllers: {
+						tcp: {
+							port: 5250,
+							protocol: 'AMCP',
+						},
 					},
-				],
-				controllers: {
-					tcp: {
-						port: 5250,
-						protocol: 'AMCP',
+					amcp: {
+						mediaServer: {
+							host: 'localhost',
+							port: 8000,
+						},
 					},
-				},
-				amcp: {
-					mediaServer: {
-						host: 'localhost',
-						port: 8000,
+					ffmpeg: {
+						producer: {
+							autoDeinterlace: 'interlaced',
+							threads: 4,
+						},
 					},
-				},
-				rawXml: input[0],
-			})
-		)
+					html: {
+						enableGpu: true,
+						remoteDebuggingPort: 0,
+					},
+					videoModes: [
+						{ cadence: 800, duration: 1000, height: 768, id: '1024x768p60', timeScale: 60000, width: 1024 },
+					],
+					ndi: {
+						autoLoad: false,
+					},
+					raw: {},
+					rawXml: input[0],
+				})
+			)
+		})
+		it('should not crash on non-xml', async () => {
+			const input = [`NOT XML`]
+
+			const output = await deserializers[Commands.InfoConfig](input)
+
+			expect(output).toEqual(
+				literal<InfoConfig>({
+					rawXml: input[0],
+				})
+			)
+		})
+		it('should not crash on non-config', async () => {
+			const input = [
+				`<?xml version="1.0" encoding="utf-8"?>
+
+			<something-else></something-else>`,
+			]
+
+			const output = await deserializers[Commands.InfoConfig](input)
+
+			expect(output).toEqual(
+				literal<InfoConfig>({
+					raw: {
+						'something-else': '',
+					},
+					rawXml: input[0],
+				})
+			)
+		})
 	})
 })

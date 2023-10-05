@@ -15,7 +15,7 @@ import {
 	RemoveParameters,
 	RouteParameters,
 	TransitionParameters,
-} from './parameterAndReturnTypes'
+} from './parameters'
 
 const commandNameSerializer = (command: Commands): string => command
 const splitCommandSerializer = (command: Commands): string => command.split(' ')[0]

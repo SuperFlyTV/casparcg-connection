@@ -88,7 +88,8 @@ import {
 	InfoEntry,
 	InfoChannelEntry,
 	InfoLayerEntry,
-} from './parameterAndReturnTypes'
+	InfoConfig,
+} from './parameters'
 
 export enum Commands {
 	Loadbg = 'LOADBG',
@@ -287,7 +288,7 @@ export interface AllTypedCommands {
 	>
 	[Commands.InfoLayer]: TypedResponseCommand<Commands.InfoLayer, InfoLayerParameters, InfoLayerEntry | undefined>
 	[Commands.InfoTemplate]: TypedResponseCommand<Commands.InfoTemplate, InfoTemplateParameters, undefined>
-	[Commands.InfoConfig]: TypedResponseCommand<Commands.InfoConfig, InfoConfigParameters, unknown>
+	[Commands.InfoConfig]: TypedResponseCommand<Commands.InfoConfig, InfoConfigParameters, InfoConfig>
 	[Commands.InfoPaths]: TypedResponseCommand<Commands.InfoPaths, InfoPathsParameters, undefined>
 	[Commands.InfoSystem]: TypedResponseCommand<Commands.InfoSystem, InfoSystemParameters, undefined>
 	[Commands.InfoServer]: TypedResponseCommand<Commands.InfoServer, InfoServerParameters, undefined>

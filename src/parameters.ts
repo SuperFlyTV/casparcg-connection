@@ -367,26 +367,26 @@ export interface ConsumerConfig {
 }
 export interface DeckLinkConsumerConfig extends ConsumerConfig {
 	type: ConsumerType.DECKLINK
-	device: number
+	device?: number
 	keyDevice?: number
 	embeddedAudio?: boolean
 	latency?: string
 	keyer?: string
-	keyOnly?: string
+	keyOnly?: boolean
 	bufferDepth?: number
 	videoMode?: string
 	subregion?: {
-		srcX: number
-		srcY: number
-		destX: number
-		destY: number
-		width: number
-		height: number
+		srcX?: number
+		srcY?: number
+		destX?: number
+		destY?: number
+		width?: number
+		height?: number
 	}
 }
 export interface BluefishConsumerConfig extends ConsumerConfig {
 	type: ConsumerType.BLUEFISH
-	device: number
+	device?: number
 	sdiStream?: number
 	embeddedAudio?: boolean
 	keyer?: string
@@ -403,11 +403,11 @@ export interface ScreenConsumerConfig extends ConsumerConfig {
 	type: ConsumerType.SCREEN
 	device?: number
 	aspectRatio?: string
-	stretch?: number
+	stretch?: string
 	windowed?: boolean
 	keyOnly?: boolean
 	vsync?: boolean
-	borderless?: string
+	borderless?: boolean
 	interactive?: boolean
 	alwaysOnTop?: boolean
 	x?: number
@@ -438,9 +438,14 @@ export type ConsumerConfigAny =
 	| IVgaConsumerConfig
 	| NdiConsumerConfig
 	| FFmpegConsumerConfig
+export interface ProducerConfig {
+	id: number
+	producer: string
+}
 export interface InfoChannelConfig {
-	videoMode: string
+	videoMode?: string
 	consumers: ConsumerConfigAny[]
+	producers: ProducerConfig[]
 }
 export interface TemplateHostConfig {
 	videoMode?: string
@@ -449,23 +454,23 @@ export interface TemplateHostConfig {
 	height?: number
 }
 export interface InfoVideoModeConfig {
-	id: string
-	width: number
-	height: number
-	timeScale: number
-	duration: number
-	cadence: number
+	id?: string
+	width?: number
+	height?: number
+	timeScale?: number
+	duration?: number
+	cadence?: number
 }
 export interface InfoConfig {
 	logLevel?: LogLevel
-	paths: {
-		media: string
-		log: string
-		data: string
-		template: string
+	paths?: {
+		media?: string
+		log?: string
+		data?: string
+		template?: string
 	}
 	lockClearPhrase?: string
-	channels: InfoChannelConfig[]
+	channels?: InfoChannelConfig[]
 	templateHosts?: TemplateHostConfig[]
 	ffmpeg?: {
 		producer?: {
@@ -483,7 +488,7 @@ export interface InfoConfig {
 	osc?: {
 		defaulPort?: number
 		disableSendToAmcpClients?: boolean
-		predefinedClients?: Array<{ address: string; port: number }>
+		predefinedClients?: Array<{ address?: string; port?: number }>
 	}
 	controllers?: {
 		tcp?: {
@@ -498,6 +503,9 @@ export interface InfoConfig {
 		}
 	}
 	videoModes?: InfoVideoModeConfig[]
+
+	// Contents of the config file, parsed with xml2js. It might contain elements present in the config, but not typed in the InfoConfig interface.
+	raw?: unknown
 	// Unparsed contents of the config file
 	rawXml: string
 }
