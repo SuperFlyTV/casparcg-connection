@@ -35,11 +35,11 @@ const channelLayerOptSerializer = (
 
 const clipCommandSerializer = (_command: Commands, { clip, loop, inPoint, seek, length, clearOn404 }: ClipParameters) =>
 	(clip ? `"${clip}"` : '') +
-	(loop ? ' LOOP' : '') +
-	(inPoint ? ' IN ' + inPoint : '') +
-	(seek ? ' SEEK ' + seek : '') +
-	(length ? ' LENGTH ' + length : '') +
-	(clearOn404 ? ' CLEAR_ON_404' : '')
+	(loop === true ? ' LOOP' : '') +
+	(inPoint !== undefined ? ' IN ' + inPoint : '') +
+	(seek !== undefined ? ' SEEK ' + seek : '') +
+	(length !== undefined ? ' LENGTH ' + length : '') +
+	(clearOn404 === true ? ' CLEAR_ON_404' : '')
 const decklinkCommandSerializer = (_: Commands, { device, format }: DecklinkParameters) =>
 	'DECKLINK ' + device + (format ? ' FORMAT ' + format : '')
 const htmlCommandSerializerr = (_: Commands, { url }: HtmlParameters) => '[html] ' + url
@@ -50,7 +50,7 @@ const routeCommandSerializer = (_: Commands, { route, mode, framesDelay }: Route
 	(mode ? '  ' + mode : '') +
 	(framesDelay ? 'BUFFER ' + framesDelay : '')
 const producerOptionsSerializer = (_: Commands, { vFilter, aFilter }: ProducerOptions) => {
-	return [vFilter ? 'VFILTER ' + vFilter : undefined, aFilter ? 'AFILTER ' + aFilter : undefined]
+	return [vFilter ? `VF "${vFilter}"` : undefined, aFilter ? `AF "${aFilter}"` : undefined]
 		.filter((p) => p !== undefined)
 		.join(' ')
 }

@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.0.6](http://superfly.tv/compare/v6.0.5...v6.0.6) (Thu Oct 05 2023)
+
+
+### Fixes
+
+* aFilter and vFilter serialized incorrectly SOFIE-2706 [0765fed5](http://superfly.tv/commit/0765fed57d649c76af101ea364f9a7b8a196f471)
+
+## [6.0.5](http://superfly.tv/compare/v6.0.4...v6.0.5) (Tue Oct 03 2023)
+
+
+## [6.0.4](http://superfly.tv/compare/v6.0.3...v6.0.4) (Tue Oct 03 2023)
+
+
+### Fixes
+
+* receiving fragmented message gets stuck SOFIE-2680 (#188) [15739ae7](http://superfly.tv/commit/15739ae7bf50ff2f67f4778afc7dc73d0674433d)
+* allow lenght of 0 [02d082da](http://superfly.tv/commit/02d082da9e992364398cf241faa57a9c0fae9f50)
+
 ## [6.0.3](http://superfly.tv/compare/v6.0.2...v6.0.3) (Wed May 03 2023)
 
 
