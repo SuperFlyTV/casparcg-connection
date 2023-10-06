@@ -43,6 +43,27 @@ describe('serializers', () => {
 		expect(result).toBe('PLAY 1-10 "AMB"')
 	})
 
+	it('should serialize a play command with filters', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				vFilter: 'A B C',
+				aFilter: 'D E F',
+			},
+		}
+
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+
+		expect(serialized).toHaveLength(serializers[Commands.Play].length)
+
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe('PLAY 1-10 "AMB" VF "A B C" AF "D E F"')
+	})
+
 	it('should serialize a play command with transition', () => {
 		const command: PlayCommand = {
 			command: Commands.Play,

@@ -17,11 +17,11 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js 16.x
+      - uses: actions/checkout@v4
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
       - name: Prepare Environment
         run: |
           yarn install
@@ -45,7 +45,7 @@ jobs:
         node-version: [14.x, 16.x, 18.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
@@ -61,13 +61,10 @@ jobs:
         env:
           CI: true
       - name: Send coverage
-        uses: codecov/codecov-action@v2
-        if: matrix.node-version == '16.x'
-        with:
-          fail_ci_if_error: true
-          # name: codecov-umbrella
+        uses: codecov/codecov-action@v3
+        if: matrix.node-version == '18.x'
       - name: Check docs generation
-        if: matrix.node-version == '16.x'
+        if: matrix.node-version == '18.x'
         run: |
           yarn docs
         env:
@@ -86,13 +83,13 @@ jobs:
       # - validate-dependencies
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Use Node.js 14.x
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 18.x
       - name: Check release is desired
         id: do-publish
         run: |
@@ -112,10 +109,10 @@ jobs:
             if verlt $PUBLISHED_VERSION $THIS_VERSION
             then
               echo "Publishing latest"
-              echo ::set-output name=tag::"latest"
+              echo "tag=latest" >> $GITHUB_OUTPUT
             else
               echo "Publishing hotfix"
-              echo ::set-output name=tag::"hotfix"
+              echo "tag=hotfix" >> $GITHUB_OUTPUT
             fi
           fi
       - name: Prepare build
