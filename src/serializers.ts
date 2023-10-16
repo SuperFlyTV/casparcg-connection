@@ -32,10 +32,6 @@ const channelLayerOptSerializer = (
 	_command: Commands,
 	{ channel, layer }: { channel: number; layer?: number }
 ): string => channel + (layer ? '-' + layer : '')
-const channelOptLayerOptSerializer = (
-	_command: Commands,
-	{ channel, layer }: { channel?: number; layer?: number }
-): string => (channel ? channel + (layer ? '-' + layer : '') : '')
 
 const clipCommandSerializer = (_command: Commands, { clip, loop, inPoint, seek, length, clearOn404 }: ClipParameters) =>
 	(clip ? `"${clip}"` : '') +
@@ -451,7 +447,9 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 	[Commands.Fls]: [commandNameSerializer],
 	[Commands.Tls]: [commandNameSerializer, (_, { subDirectory }) => subDirectory ?? ''],
 	[Commands.Version]: [commandNameSerializer],
-	[Commands.Info]: [commandNameSerializer, channelOptLayerOptSerializer],
+	[Commands.Info]: [commandNameSerializer],
+	[Commands.InfoChannel]: [splitCommandSerializer, channelSerializer],
+	[Commands.InfoLayer]: [splitCommandSerializer, channelLayerSerializer],
 	[Commands.InfoTemplate]: [commandNameSerializer, (_, { template }) => template],
 	[Commands.InfoConfig]: [commandNameSerializer],
 	[Commands.InfoPaths]: [commandNameSerializer],

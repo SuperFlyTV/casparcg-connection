@@ -11,3 +11,4 @@ src/**.js
 wallaby.conf.js
 
 .DS_Store
+.vscode/settings.json

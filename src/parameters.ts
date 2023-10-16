@@ -8,6 +8,7 @@ import {
 	LockAction,
 	BlendMode,
 	RouteMode,
+	Version,
 } from './enums'
 
 export type Empty = Record<string, never>
@@ -284,21 +285,231 @@ export interface CinfParameters {
 export interface ClsParameters {
 	subDirectory?: string
 }
+export interface ClipInfo {
+	/** Clip filename, eg "myFolder/AMB" */
+	clip: string
+	/** Type of media  */
+	type: 'MOVIE' | 'STILL' | 'AUDIO' // | 'HTML' | 'ROUTE'
+	/** Size, in bytes */
+	size: number
+	/** Datetime (unix timestamp) */
+	datetime: number
+	/** Number of frames */
+	frames: number
+	/** Number of frames per second, eg 25 */
+	framerate: number
+}
 export type FlsParameters = Empty
 export interface TlsParameters {
 	subDirectory?: string
 }
 
 export type VersionParameters = Empty
-
-export interface InfoParameters {
-	channel?: number
-	layer?: number
+export interface VersionInfo {
+	/** The version of the CasparCG server */
+	version: Version
+	/** Unparsed version as string */
+	fullVersion: string
 }
+
+export type InfoParameters = Empty
+export interface InfoEntry {
+	channel: number
+	format: number
+	channelRate: number
+	frameRate: number
+	interlaced: boolean
+
+	/** eg "PLAYING" */
+	status: string
+}
+
+export interface InfoChannelParameters {
+	channel: number
+}
+export interface InfoChannelEntry {
+	channel: {
+		framerate: number
+		mixer: {
+			audio: {
+				/** Current volumes on audio channels  */
+				volumes: number[]
+			}
+		}
+		layers: {
+			layer: number
+			background: unknown
+			foreground: unknown
+		}[]
+	}
+}
+export interface InfoLayerParameters {
+	channel: number
+	layer: number
+}
+export type InfoLayerEntry = InfoChannelEntry
 export interface InfoTemplateParameters {
 	template: string
 }
+
 export type InfoConfigParameters = Empty
+export const enum ConsumerType {
+	DECKLINK = 'decklink',
+	BLUEFISH = 'bluefish',
+	SYSTEM_AUDIO = 'system-audio',
+	SCREEN = 'screen',
+	NEWTEK_IVGA = 'newtek-ivga',
+	NDI = 'ndi',
+	FFMPEG = 'ffmpeg',
+}
+export interface ConsumerConfig {
+	type: ConsumerType
+}
+export interface DeckLinkConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.DECKLINK
+	device?: number
+	keyDevice?: number
+	embeddedAudio?: boolean
+	latency?: string
+	keyer?: string
+	keyOnly?: boolean
+	bufferDepth?: number
+	videoMode?: string
+	subregion?: {
+		srcX?: number
+		srcY?: number
+		destX?: number
+		destY?: number
+		width?: number
+		height?: number
+	}
+}
+export interface BluefishConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.BLUEFISH
+	device?: number
+	sdiStream?: number
+	embeddedAudio?: boolean
+	keyer?: string
+	internalKeyerAudioSource?: string
+	watchdog?: number
+	uhdMode?: number
+}
+export interface SystemAudioConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.SYSTEM_AUDIO
+	channelLayout?: string
+	latency?: number
+}
+export interface ScreenConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.SCREEN
+	device?: number
+	aspectRatio?: string
+	stretch?: string
+	windowed?: boolean
+	keyOnly?: boolean
+	vsync?: boolean
+	borderless?: boolean
+	interactive?: boolean
+	alwaysOnTop?: boolean
+	x?: number
+	y?: number
+	width?: number
+	height?: number
+	sbsKey?: boolean
+	colourSpace?: string
+}
+export interface IVgaConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.NEWTEK_IVGA
+}
+export interface NdiConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.NDI
+	name?: string
+	allowFields?: boolean
+}
+export interface FFmpegConsumerConfig extends ConsumerConfig {
+	type: ConsumerType.FFMPEG
+	path?: string
+	args?: string
+}
+export type ConsumerConfigAny =
+	| DeckLinkConsumerConfig
+	| BluefishConsumerConfig
+	| SystemAudioConsumerConfig
+	| ScreenConsumerConfig
+	| IVgaConsumerConfig
+	| NdiConsumerConfig
+	| FFmpegConsumerConfig
+export interface ProducerConfig {
+	id: number
+	producer: string
+}
+export interface InfoChannelConfig {
+	videoMode?: string
+	consumers: ConsumerConfigAny[]
+	producers: ProducerConfig[]
+}
+export interface TemplateHostConfig {
+	videoMode?: string
+	fileName?: string
+	width?: number
+	height?: number
+}
+export interface InfoVideoModeConfig {
+	id?: string
+	width?: number
+	height?: number
+	timeScale?: number
+	duration?: number
+	cadence?: number
+}
+export interface InfoConfig {
+	logLevel?: LogLevel
+	paths?: {
+		media?: string
+		logs?: string
+		data?: string
+		templates?: string
+	}
+	lockClearPhrase?: string
+	channels?: InfoChannelConfig[]
+	templateHosts?: TemplateHostConfig[]
+	ffmpeg?: {
+		producer?: {
+			autoDeinterlace?: string
+			threads?: number
+		}
+	}
+	html?: {
+		remoteDebuggingPort?: number
+		enableGpu?: boolean
+	}
+	ndi?: {
+		autoLoad?: boolean
+	}
+	osc?: {
+		defaulPort?: number
+		disableSendToAmcpClients?: boolean
+		predefinedClients?: Array<{ address?: string; port?: number }>
+	}
+	controllers?: {
+		tcp?: {
+			port?: number
+			protocol?: string
+		}
+	}
+	amcp?: {
+		mediaServer?: {
+			host?: string
+			port?: number
+		}
+	}
+	videoModes?: InfoVideoModeConfig[]
+
+	// Contents of the config file, parsed with xml2js. It might contain elements present in the config, but not typed in the InfoConfig interface.
+	raw?: unknown
+	// Unparsed contents of the config file
+	rawXml: string
+}
+
 export type InfoPathsParameters = Empty
 export type InfoSystemParameters = Empty
 export type InfoServerParameters = Empty

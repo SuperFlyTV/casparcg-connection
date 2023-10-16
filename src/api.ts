@@ -1,7 +1,6 @@
 import { EventEmitter } from 'eventemitter3'
-import { AMCPCommand, Commands } from './commands'
+import { AMCPCommand, CReturnType, Commands } from './commands'
 import { Connection, ResponseTypes } from './connection'
-import { Version } from './enums'
 
 export interface Options {
 	/** Host name of the machine to connect to. Defaults to 127.0.0.1 */
@@ -14,34 +13,34 @@ export interface Options {
 	autoConnect?: boolean
 }
 
-export type SendResult =
+export type SendResult<ReturnData> =
 	| {
 			error: Error
 			request: undefined
 	  }
 	| {
 			error: undefined
-			request: Promise<Response>
+			request: Promise<Response<ReturnData>>
 	  }
 
 interface InternalRequest {
 	requestId?: string
 	command: AMCPCommand
 
-	resolve: (response: Response) => void
+	resolve: (response: Response<any>) => void
 	reject: (error: Error) => void
 
 	processed: boolean
 	processedTime?: number
-	sentResolve: (sent: SendResult) => void
+	sentResolve: (sent: SendResult<any>) => void
 	sentTime?: number
 }
 
-export interface Response {
+export interface Response<ReturnData> {
 	reqId: string | undefined
 	command: Commands
 	responseCode: number
-	data: any[]
+	data: ReturnData
 
 	type: ResponseTypes
 	message: string
@@ -54,7 +53,7 @@ export type ConnectionEvents = {
 }
 
 export class ResponseError extends Error {
-	constructor(public readonly deserializeError: Error, public readonly response: Response) {
+	constructor(public readonly deserializeError: Error, public readonly response: Response<unknown>) {
 		super('Failed to deserialize response')
 	}
 }
@@ -74,7 +73,17 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._host = options?.host || '127.0.0.1'
 		this._port = options?.port || 5250
 
-		this._connection = new Connection(this._host, this._port, !(options?.autoConnect === false))
+		this._connection = new Connection(
+			this._host,
+			this._port,
+			!(options?.autoConnect === false),
+			(response: Response<any>) => {
+				// Connection asks: "what request does this response belong to?"
+				const request = this.findRequestFromResponse(response)
+				if (request) return { command: request.command }
+				else return undefined
+			}
+		)
 
 		this._connection.on('connect', () => {
 			this.executeCommand({ command: Commands.Version, params: {} })
@@ -83,18 +92,19 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 						throw error
 					}
 					const result = await request
-					const version = await result.data[0]
+					const version = result.data
 
-					this._connection.version = version.version as Version
+					this._connection.version = version.version
 				})
 				.catch((e) => this.emit('error', e))
 				.finally(() => this.emit('connect'))
 			this._processQueue().catch((e) => this.emit('error', e))
 		})
 		this._connection.on('disconnect', () => this.emit('disconnect'))
+		this._connection.on('error', (e) => this.emit('error', e))
 
 		this._connection.on('data', (response, error) => {
-			const request = this._requestQueue.find((req) => req.requestId === response.reqId)
+			const request = this.findRequestFromResponse(response)
 
 			if (request) {
 				if (error) {
@@ -163,11 +173,13 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 	 * @return { request: Promise<Response> } a Promise that resolves when CasparCG replies after a command has been sent.
 	 * If this throws, there's something seriously wrong :)
 	 */
-	async executeCommand(command: AMCPCommand): Promise<SendResult> {
+	async executeCommand<Command extends AMCPCommand>(
+		command: Command
+	): Promise<SendResult<CReturnType<Command['command']>>> {
 		const reqId = Math.random().toString(35).slice(2, 7)
 
 		let outerResolve: InternalRequest['sentResolve'] = () => null
-		const s = new Promise<SendResult>((resolve) => {
+		const s = new Promise<SendResult<any>>((resolve) => {
 			outerResolve = resolve
 		})
 
@@ -201,7 +213,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 							this._requestQueue = this._requestQueue.filter((req) => req !== r)
 							r.sentResolve({ error: sendError, request: undefined })
 						} else {
-							const request = new Promise<Response>((resolve, reject) => {
+							const request = new Promise<Response<any>>((resolve, reject) => {
 								r.resolve = resolve
 								r.reject = reject
 							})
@@ -230,5 +242,9 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 			req.sentResolve({ request: undefined, error: new Error('Time out') })
 		})
 		this._requestQueue = this._requestQueue.filter((req) => !deadRequests.includes(req))
+	}
+
+	private findRequestFromResponse(response: Response<any>): InternalRequest | undefined {
+		return this._requestQueue.find((req) => req.requestId === response.reqId)
 	}
 }

@@ -1,20 +1,28 @@
 import { Version } from '../enums'
-import { Connection } from '../connection'
+import { Connection, SentRequest } from '../connection'
 import { serializersV21, serializers } from '../serializers'
 import { deserializers } from '../deserializers'
 import { Socket as OrgSocket } from 'net'
 import { Socket as MockSocket } from '../__mocks__/net'
-import { Commands } from '../commands'
+import { AMCPCommand, Commands } from '../commands'
 import { BasicCasparCGAPI, ResponseError } from '../api'
 
 jest.mock('net')
 
 const SocketMock = OrgSocket as any as typeof MockSocket
+const PARSED_INFO_CHANNEL_720p50 = {
+	channel: 1,
+	format: 720,
+	frameRate: 50,
+	channelRate: 50,
+	interlaced: false,
+	status: 'PLAYING',
+}
 
 describe('connection', () => {
 	describe('version handing', () => {
 		function setupConnectionClass(v = Version.v23x) {
-			const conn = new Connection('127.0.0.1', 5250, false)
+			const conn = new Connection('127.0.0.1', 5250, false, () => undefined)
 			conn.version = v
 
 			return conn
@@ -90,10 +98,12 @@ describe('connection', () => {
 				connection: Connection,
 				socket: MockSocket,
 				onConnError: jest.Mock,
-				onConnData: jest.Mock
+				onConnData: jest.Mock,
+				getRequestForResponse: jest.Mock<SentRequest | undefined>
 			) => Promise<void>
 		) {
-			const conn = new Connection('127.0.0.1', 5250, true)
+			const getRequestForResponse = jest.fn()
+			const conn = new Connection('127.0.0.1', 5250, true, getRequestForResponse)
 			try {
 				expect(conn).toBeTruthy()
 
@@ -105,7 +115,7 @@ describe('connection', () => {
 				const sockets = SocketMock.openSockets()
 				expect(sockets).toHaveLength(1)
 
-				await fn(conn, sockets[0], onConnError, onConnData)
+				await fn(conn, sockets[0], onConnError, onConnData, getRequestForResponse)
 			} finally {
 				// Ensure cleaned up
 				conn.disconnect()
@@ -113,26 +123,23 @@ describe('connection', () => {
 		}
 
 		it('receive whole response', async () => {
-			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
+			await runWithConnection(async (conn, socket, onConnError, onConnData, getRequestForResponse) => {
 				// Dispatch a command
-				const sendError = await conn.sendCommand({
+				const command: AMCPCommand = {
 					command: Commands.Info,
 					params: {},
-				})
+				}
+				const sendError = await conn.sendCommand(command)
 				expect(sendError).toBeFalsy()
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(0)
-
+				getRequestForResponse.mockReturnValue({ command })
 				// Info was sent
 				expect(onSocketWrite).toHaveBeenCalledTimes(1)
 				expect(onSocketWrite).toHaveBeenLastCalledWith('INFO\r\n', 'utf-8')
 
 				// Reply with a single blob
-				socket.mockData(
-					Buffer.from(
-						`201 INFO OK\r\n<?xml version="1.0" encoding="utf-8"?>\n<channel><test/></channel>\r\n\r\n`
-					)
-				)
+				socket.mockData(Buffer.from(`201 INFO OK\r\n1 720p5000 PLAYING\r\n\r\n`))
 
 				// Wait for deserializer to run
 				await new Promise(setImmediate)
@@ -144,13 +151,7 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenLastCalledWith(
 					{
 						command: 'INFO',
-						data: [
-							{
-								channel: {
-									test: [''],
-								},
-							},
-						],
+						data: [PARSED_INFO_CHANNEL_720p50],
 						message: 'The command has been executed and data is being returned.',
 						reqId: undefined,
 						responseCode: 201,
@@ -162,23 +163,25 @@ describe('connection', () => {
 		})
 
 		it('receive fragmented response', async () => {
-			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
+			await runWithConnection(async (conn, socket, onConnError, onConnData, getRequestForResponse) => {
 				// Dispatch a command
-				const sendError = await conn.sendCommand({
+				const command: AMCPCommand = {
 					command: Commands.Info,
 					params: {},
-				})
+				}
+				const sendError = await conn.sendCommand(command)
 				expect(sendError).toBeFalsy()
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(0)
+				getRequestForResponse.mockReturnValue({ command })
 
 				// Info was sent
 				expect(onSocketWrite).toHaveBeenCalledTimes(1)
 				expect(onSocketWrite).toHaveBeenLastCalledWith('INFO\r\n', 'utf-8')
 
 				// Reply with a fragmented message
-				socket.mockData(Buffer.from(`201 INFO OK\r\n<?xml version="1.0" encoding="utf-8"?>\n<channel>`))
-				socket.mockData(Buffer.from(`<test/></channel>\r\n\r\n`))
+				socket.mockData(Buffer.from(`201 INFO OK\r\n1 720p`))
+				socket.mockData(Buffer.from(`5000 PLAYING\r\n\r\n`))
 
 				// Wait for deserializer to run
 				await new Promise(setImmediate)
@@ -190,13 +193,7 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenLastCalledWith(
 					{
 						command: 'INFO',
-						data: [
-							{
-								channel: {
-									test: [''],
-								},
-							},
-						],
+						data: [PARSED_INFO_CHANNEL_720p50],
 						message: 'The command has been executed and data is being returned.',
 						reqId: undefined,
 						responseCode: 201,
@@ -208,26 +205,24 @@ describe('connection', () => {
 		})
 
 		it('receive fast responses', async () => {
-			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
+			await runWithConnection(async (conn, socket, onConnError, onConnData, getRequestForResponse) => {
 				// Dispatch a command
-				const sendError = await conn.sendCommand(
-					{
-						command: Commands.Info,
-						params: {},
-					},
-					'cmd1'
-				)
+				const command1: AMCPCommand = {
+					command: Commands.Info,
+					params: {},
+				}
+				const reqId1 = 'cmd1'
+				const sendError = await conn.sendCommand(command1, reqId1)
 				expect(sendError).toBeFalsy()
-				const sendError2 = await conn.sendCommand(
-					{
-						command: Commands.Play,
-						params: {
-							channel: 1,
-							layer: 10,
-						},
+				const command2: AMCPCommand = {
+					command: Commands.Play,
+					params: {
+						channel: 1,
+						layer: 10,
 					},
-					'cmd2'
-				)
+				}
+				const reqId2 = 'cmd2'
+				const sendError2 = await conn.sendCommand(command2, reqId2)
 				expect(sendError2).toBeFalsy()
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(0)
@@ -237,13 +232,13 @@ describe('connection', () => {
 				expect(onSocketWrite).toHaveBeenNthCalledWith(1, 'REQ cmd1 INFO\r\n', 'utf-8')
 				expect(onSocketWrite).toHaveBeenNthCalledWith(2, 'REQ cmd2 PLAY 1-10\r\n', 'utf-8')
 
+				getRequestForResponse.mockImplementation((arg) => {
+					if (arg.reqId === reqId1) return { command: command1 }
+					return { command: command2 }
+				})
 				// Send replies
-				socket.mockData(
-					Buffer.from(
-						`RES cmd1 201 INFO OK\r\n<?xml version="1.0" encoding="utf-8"?>\n<channel><test/></channel>\r\n\r\n`
-					)
-				)
-				socket.mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
+				socket.mockData(Buffer.from(`RES ${reqId1} 201 INFO OK\r\n1 720p5000 PLAYING\r\n\r\n`))
+				socket.mockData(Buffer.from(`RES ${reqId2} 202 PLAY OK\r\n`))
 
 				// Wait for deserializer to run
 				await new Promise(setImmediate)
@@ -253,31 +248,25 @@ describe('connection', () => {
 
 				// Check result looks good
 				expect(onConnData).toHaveBeenNthCalledWith(
-					1,
+					2,
 					{
-						command: 'PLAY',
-						data: [],
-						message: 'The command has been executed.',
-						reqId: 'cmd2',
-						responseCode: 202,
+						command: 'INFO',
+						data: [PARSED_INFO_CHANNEL_720p50],
+						message: 'The command has been executed and data is being returned.',
+						reqId: reqId1,
+						responseCode: 201,
 						type: 'OK',
 					},
 					undefined
 				)
 				expect(onConnData).toHaveBeenNthCalledWith(
-					2,
+					1,
 					{
-						command: 'INFO',
-						data: [
-							{
-								channel: {
-									test: [''],
-								},
-							},
-						],
-						message: 'The command has been executed and data is being returned.',
-						reqId: 'cmd1',
-						responseCode: 201,
+						command: 'PLAY',
+						data: undefined,
+						message: 'The command has been executed.',
+						reqId: reqId2,
+						responseCode: 202,
 						type: 'OK',
 					},
 					undefined
@@ -286,35 +275,32 @@ describe('connection', () => {
 		})
 
 		it('receive broken response', async () => {
-			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
+			await runWithConnection(async (conn, socket, onConnError, onConnData, getRequestForResponse) => {
 				// Dispatch a command
-				const sendError = await conn.sendCommand(
-					{
-						command: Commands.Info,
-						params: {},
-					},
-					'cmd1'
-				)
+				const command1: AMCPCommand = {
+					command: Commands.InfoChannel,
+					params: { channel: 1 },
+				}
+				const sendError = await conn.sendCommand(command1, 'cmd1')
 				expect(sendError).toBeFalsy()
-				const sendError2 = await conn.sendCommand(
-					{
-						command: Commands.Play,
-						params: {
-							channel: 1,
-							layer: 10,
-						},
+				const command2: AMCPCommand = {
+					command: Commands.Play,
+					params: {
+						channel: 1,
+						layer: 10,
 					},
-					'cmd2'
-				)
+				}
+				const sendError2 = await conn.sendCommand(command2, 'cmd2')
 				expect(sendError2).toBeFalsy()
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(0)
 
 				// Info was sent
 				expect(onSocketWrite).toHaveBeenCalledTimes(2)
-				expect(onSocketWrite).toHaveBeenNthCalledWith(1, 'REQ cmd1 INFO\r\n', 'utf-8')
+				expect(onSocketWrite).toHaveBeenNthCalledWith(1, 'REQ cmd1 INFO 1\r\n', 'utf-8')
 				expect(onSocketWrite).toHaveBeenNthCalledWith(2, 'REQ cmd2 PLAY 1-10\r\n', 'utf-8')
 
+				getRequestForResponse.mockReturnValueOnce({ command: command1 })
 				// Reply with a blob designed to crash the xml parser
 				socket.mockData(Buffer.from(`RES cmd1 201 INFO OK\r\n<?xml\r\n\r\n`))
 				await new Promise(setImmediate)
@@ -338,6 +324,7 @@ describe('connection', () => {
 				expect(onConnData.mock.calls[0][1].toString()).toMatch(/Unexpected end/)
 				onConnData.mockClear()
 
+				getRequestForResponse.mockReturnValueOnce({ command: command2 })
 				// Reply with successful PLAY
 				socket.mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
 				await new Promise(setImmediate)
@@ -350,7 +337,7 @@ describe('connection', () => {
 					1,
 					{
 						command: 'PLAY',
-						data: [],
+						data: undefined,
 						message: 'The command has been executed.',
 						reqId: 'cmd2',
 						responseCode: 202,
@@ -383,8 +370,8 @@ describe('connection', () => {
 
 				// Dispatch a command
 				const sendError = await client.executeCommand({
-					command: Commands.Info,
-					params: {},
+					command: Commands.InfoChannel,
+					params: { channel: 1 },
 				})
 				sendError.request?.then(onCommandOk, onCommandError)
 				const sendError2 = await client.executeCommand({
@@ -401,7 +388,7 @@ describe('connection', () => {
 
 				// Info was sent
 				expect(onSocketWrite).toHaveBeenCalledTimes(2)
-				expect(onSocketWrite).toHaveBeenNthCalledWith(1, expect.stringMatching(/REQ (\w+) INFO\r\n/), 'utf-8')
+				expect(onSocketWrite).toHaveBeenNthCalledWith(1, expect.stringMatching(/REQ (\w+) INFO 1\r\n/), 'utf-8')
 				expect(onSocketWrite).toHaveBeenNthCalledWith(
 					2,
 					expect.stringMatching(/REQ (\w+) PLAY 1-10\r\n/),
@@ -444,7 +431,7 @@ describe('connection', () => {
 				// Check result looks good
 				expect(onCommandOk).toHaveBeenNthCalledWith(1, {
 					command: 'PLAY',
-					data: [],
+					data: undefined,
 					message: 'The command has been executed.',
 					reqId: playReqId,
 					responseCode: 202,
@@ -457,25 +444,24 @@ describe('connection', () => {
 		})
 
 		it('connection loss midway through response', async () => {
-			await runWithConnection(async (conn, socket, onConnError, onConnData) => {
+			await runWithConnection(async (conn, socket, onConnError, onConnData, getRequestForResponse) => {
 				// Dispatch a command
-				const sendError = await conn.sendCommand(
-					{
-						command: Commands.Info,
-						params: {},
-					},
-					'cmd1'
-				)
+				const command1: AMCPCommand = {
+					command: Commands.InfoChannel,
+					params: { channel: 1 },
+				}
+				const sendError = await conn.sendCommand(command1, 'cmd1')
 				expect(sendError).toBeFalsy()
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(0)
 
 				// Info was sent
 				expect(onSocketWrite).toHaveBeenCalledTimes(1)
-				expect(onSocketWrite).toHaveBeenNthCalledWith(1, 'REQ cmd1 INFO\r\n', 'utf-8')
+				expect(onSocketWrite).toHaveBeenNthCalledWith(1, 'REQ cmd1 INFO 1\r\n', 'utf-8')
 				// expect(onSocketWrite).toHaveBeenNthCalledWith(2, 'REQ cmd2 PLAY 1-10\r\n', 'utf-8')
 				onSocketWrite.mockClear()
 
+				getRequestForResponse.mockReturnValue({ command: command1 })
 				// Reply with a part of a fragmented message
 				socket.mockData(Buffer.from(`RES cmd1 201 INFO OK\r\n<?xml`))
 				await new Promise(setImmediate)
@@ -501,16 +487,14 @@ describe('connection', () => {
 				expect(onConnData).toHaveBeenCalledTimes(0)
 
 				// Send a command in the new connection
-				const sendError2 = await conn.sendCommand(
-					{
-						command: Commands.Play,
-						params: {
-							channel: 1,
-							layer: 10,
-						},
+				const command2: AMCPCommand = {
+					command: Commands.Play,
+					params: {
+						channel: 1,
+						layer: 10,
 					},
-					'cmd2'
-				)
+				}
+				const sendError2 = await conn.sendCommand(command2, 'cmd2')
 				expect(sendError2).toBeFalsy()
 
 				// Check was sent
@@ -521,6 +505,7 @@ describe('connection', () => {
 				expect(onConnError).toHaveBeenCalledTimes(0)
 				expect(onConnData).toHaveBeenCalledTimes(0)
 
+				getRequestForResponse.mockReturnValue({ command: command2 })
 				// Reply with successful PLAY
 				socket.mockData(Buffer.from(`RES cmd2 202 PLAY OK\r\n`))
 				await new Promise(setImmediate)
@@ -533,7 +518,7 @@ describe('connection', () => {
 					1,
 					{
 						command: 'PLAY',
-						data: [],
+						data: undefined,
 						message: 'The command has been executed.',
 						reqId: 'cmd2',
 						responseCode: 202,

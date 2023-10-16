@@ -75,10 +75,13 @@ const RESPONSES = {
 }
 
 export type ConnectionEvents = {
-	data: [response: Response, error: Error | undefined]
+	data: [response: Response<any>, error: Error | undefined]
 	connect: []
 	disconnect: []
 	error: [error: Error]
+}
+export interface SentRequest {
+	command: AMCPCommand
 }
 
 export class Connection extends EventEmitter<ConnectionEvents> {
@@ -89,7 +92,12 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	private _connected = false
 	private _version = Version.v23x
 
-	constructor(private host: string, private port = 5250, autoConnect: boolean) {
+	constructor(
+		private host: string,
+		private port = 5250,
+		autoConnect: boolean,
+		private _getRequestForResponse: (response: Response<any>) => SentRequest | undefined
+	) {
 		super()
 		if (autoConnect) this._setupSocket()
 	}
@@ -145,34 +153,38 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 				// create a response object
 				const responseCode = parseInt(result?.groups?.['ResponseCode'])
-				const response: Response = {
+				const response: Response<unknown> = {
 					reqId: result?.groups?.['ReqId'],
 					command: result?.groups?.['Action'] as Commands,
 					responseCode,
-					data: [] as any[],
+					data: undefined,
 					...RESPONSES[responseCode as keyof typeof RESPONSES],
 				}
 
+				let responseData: string[] | undefined = undefined
 				// parse additional lines if needed
 				if (response.responseCode === 200) {
 					const indexOfTerminationLine = this._unprocessedLines.indexOf('')
 					if (indexOfTerminationLine === -1) break // No termination yet, try again later
 
 					// multiple lines of data
-					response.data = this._unprocessedLines.slice(1, indexOfTerminationLine)
-					processedLines += response.data.length + 1 // data lines + 1 empty line
+					responseData = this._unprocessedLines.slice(1, indexOfTerminationLine)
+					processedLines += responseData.length + 1 // data lines + 1 empty line
 				} else if (response.responseCode === 201 || response.responseCode === 400) {
 					if (this._unprocessedLines.length < 2) break // No data line, try again later
 
-					response.data = [this._unprocessedLines[1]]
+					responseData = [this._unprocessedLines[1]]
 					processedLines++
 				}
+
+				// Assign the preliminary data, to be possibly deserialized later:
+				response.data = responseData
 
 				// remove processed lines
 				this._unprocessedLines.splice(0, processedLines)
 
 				// Deserialize the response
-				this._deserializeAndEmitResponse(response)
+				this._deserializeAndEmitResponse(response, responseData)
 			} else {
 				// well this is not happy, do we do something?
 				// perhaps this is the infamous 100 or 101 response code, although that doesn't appear in casparcg source code
@@ -181,13 +193,20 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		}
 	}
 
-	private _deserializeAndEmitResponse(response: Response) {
+	private _deserializeAndEmitResponse(response: Response<unknown>, responseData: string[] | undefined) {
 		Promise.resolve()
 			.then(async () => {
-				const deserializers = this._getVersionedDeserializers()
-				// attempt to deserialize the response if we can
-				if (deserializers[response.command] && response.data.length) {
-					response.data = await deserializers[response.command](response.data)
+				// Ask what the request was for this response:
+				const previouslySentRequest = this._getRequestForResponse(response)
+				if (previouslySentRequest) {
+					const deserializers = this._getVersionedDeserializers()
+					const deserializer = deserializers[previouslySentRequest.command.command] as
+						| ((input: string[]) => Promise<any>)
+						| undefined
+					// attempt to deserialize the response if we can
+					if (deserializer && responseData?.length) {
+						response.data = await deserializer(responseData)
+					}
 				}
 
 				// now do something with response
@@ -297,7 +316,9 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		return serializers
 	}
 
-	private _getVersionedDeserializers() {
+	private _getVersionedDeserializers(): {
+		[key: string]: (input: string[]) => Promise<any>
+	} {
 		return deserializers
 	}
 }
