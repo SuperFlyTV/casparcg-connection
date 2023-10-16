@@ -107,9 +107,9 @@
 		"remote"
 	],
 	"dependencies": {
-		"eventemitter3": "^4.0.7",
+		"eventemitter3": "^5.0.1",
 		"tslib": "^2.5.0",
-		"xml2js": "^0.4.23"
+		"xml2js": "^0.6.2"
 	},
 	"prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
 	"lint-staged": {
