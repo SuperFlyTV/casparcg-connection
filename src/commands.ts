@@ -88,6 +88,7 @@ import {
 	InfoEntry,
 	InfoChannelEntry,
 	InfoLayerEntry,
+	InfoConfig,
 } from './parameters'
 
 export enum Commands {
@@ -275,7 +276,7 @@ export interface AllTypedCommands {
 	>
 	[Commands.InfoLayer]: TypedResponseCommand<Commands.InfoLayer, InfoLayerParameters, InfoLayerEntry | undefined>
 	[Commands.InfoTemplate]: TypedResponseCommand<Commands.InfoTemplate, InfoTemplateParameters, unknown>
-	[Commands.InfoConfig]: TypedResponseCommand<Commands.InfoConfig, InfoConfigParameters, unknown>
+	[Commands.InfoConfig]: TypedResponseCommand<Commands.InfoConfig, InfoConfigParameters, InfoConfig>
 	[Commands.InfoPaths]: TypedResponseCommand<Commands.InfoPaths, InfoPathsParameters, unknown>
 	[Commands.InfoSystem]: TypedResponseCommand<Commands.InfoSystem, InfoSystemParameters, unknown>
 	[Commands.InfoServer]: TypedResponseCommand<Commands.InfoServer, InfoServerParameters, unknown>
