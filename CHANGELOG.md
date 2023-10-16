@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.1.0](http://superfly.tv/compare/v6.0.6...v6.1.0) (Mon Oct 16 2023)
+
+
+### Features
+
+* add INFO Config deserializer [9af33b11](http://superfly.tv/commit/9af33b11b7234a52dd4bdca61e2dce6938443332)
+* add separate commands for INFO, INFO channel and INFO channel-layer, and handle return data properly [19997ce9](http://superfly.tv/commit/19997ce97c3781ca7defb407ac04bc8c260d6ae0)
+* Add strict types for the deserialized return-data of some of the commands [f1c67b4d](http://superfly.tv/commit/f1c67b4d63e2465f1751e4134aa0a4c4e35d88f2)
+
+### Fixes
+
+* set all default return-data to be unknown instead of undefined [7622c142](http://superfly.tv/commit/7622c142cbfe8c988e39a2eb634e4d68cdfd5f94)
+
 ## [6.0.6](http://superfly.tv/compare/v6.0.5...v6.0.6) (Thu Oct 05 2023)
 
 
