@@ -124,6 +124,38 @@ describe('deserializers', () => {
 			})
 		)
 	})
+	it('should deserialize INFO Channel (empty channel)', async () => {
+		const input = [
+			`<?xml version="1.0" encoding="utf-8"?>
+		<channel>
+		   <framerate>50</framerate>
+		   <framerate>1</framerate>
+		   <mixer>
+			  <audio>
+				 <volume>0</volume>
+				 <volume>0</volume>
+			  </audio>
+		   </mixer>
+		</channel>`,
+		]
+
+		const output = await deserializers[Commands.InfoChannel](input)
+
+		expect(output).toMatchObject(
+			literal<InfoChannelEntry>({
+				channel: {
+					framerate: 50,
+					mixer: {
+						audio: {
+							volumes: [0, 0],
+						},
+					},
+
+					layers: [],
+				},
+			})
+		)
+	})
 	it('should deserialize INFO Channel', async () => {
 		const input = [
 			`<?xml version="1.0" encoding="utf-8"?>
