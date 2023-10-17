@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.1.1](http://superfly.tv/compare/v6.1.0...v6.1.1) (Tue Oct 17 2023)
+
+
+### Fixes
+
+* bug fix in INFO CHANNEL deserializer [985417bd](http://superfly.tv/commit/985417bd91d6b699a8d677b97a4bec105a6738f5)
+
 ## [6.1.0](http://superfly.tv/compare/v6.0.6...v6.1.0) (Mon Oct 16 2023)
 
 
