@@ -12,6 +12,7 @@ export const deserializeInfoChannel = async (line: string): Promise<InfoChannelE
 	const channel = ensureArray(parsed.channel)[0]
 	const mixer = ensureArray(channel.mixer)[0]
 	const mixerStage = ensureArray(channel.stage)[0]
+	const mixerLayer = ensureArray(mixerStage?.layer)[0] ?? {}
 
 	const data: InfoChannelEntry = {
 		channel: {
@@ -23,7 +24,7 @@ export const deserializeInfoChannel = async (line: string): Promise<InfoChannelE
 			},
 
 			layers: compact(
-				Object.entries(ensureArray(mixerStage.layer)[0]).map(([layerName, layer0]) => {
+				Object.entries(mixerLayer).map(([layerName, layer0]) => {
 					const m = layerName.match(/layer_(\d+)/)
 					if (!m) return undefined
 
