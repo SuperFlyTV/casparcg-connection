@@ -525,3 +525,6 @@ export type GlGcParameters = Empty
 export type ByeParameters = Empty
 export type KillParameters = Empty
 export type RestartParameters = Empty
+export type PingParameters = Empty
+export type BeginParameters = Empty
+export type CommitParameters = Empty
