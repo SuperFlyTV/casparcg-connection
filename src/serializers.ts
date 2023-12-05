@@ -464,6 +464,10 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 	[Commands.Bye]: [commandNameSerializer],
 	[Commands.Kill]: [commandNameSerializer],
 	[Commands.Restart]: [commandNameSerializer],
+	[Commands.Ping]: [commandNameSerializer],
+	[Commands.Begin]: [commandNameSerializer],
+	[Commands.Commit]: [commandNameSerializer],
+	[Commands.Discard]: [commandNameSerializer],
 }
 
 export const serializersV21: Readonly<Serializers<AMCPCommand>> = {

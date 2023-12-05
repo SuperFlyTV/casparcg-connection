@@ -82,6 +82,7 @@ import {
 	PingParameters,
 	BeginParameters,
 	CommitParameters,
+	DiscardParameters,
 } from './parameters'
 
 export class CasparCG extends BasicCasparCGAPI {
@@ -572,6 +573,12 @@ export class CasparCG extends BasicCasparCGAPI {
 	async commit(params: CommitParameters = {}): Promise<APIRequest<Commands.Commit>> {
 		return this.executeCommand({
 			command: Commands.Commit,
+			params,
+		})
+	}
+	async discard(params: DiscardParameters = {}): Promise<APIRequest<Commands.Discard>> {
+		return this.executeCommand({
+			command: Commands.Discard,
 			params,
 		})
 	}
