@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.2.0](http://superfly.tv/compare/v6.1.1...v6.2.0) (Tue Jan 02 2024)
+
+
+### Fixes
+
+* info format should be string [2fe75295](http://superfly.tv/commit/2fe752958a0e7352d7b3f1d9b500fea308736815)
+
+### Features
+
+* add discard [d531a7d3](http://superfly.tv/commit/d531a7d34141ae86cd815b50a4661a5d846610b7)
+* add ping, begin and commit [29a72688](http://superfly.tv/commit/29a726881aeb0ffa4e605dc49ca346e0e0503d5c)
+
 ## [6.1.1](http://superfly.tv/compare/v6.1.0...v6.1.1) (Tue Oct 17 2023)
 
 
