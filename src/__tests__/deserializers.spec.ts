@@ -106,7 +106,7 @@ describe('deserializers', () => {
 		expect(output[0]).toMatchObject(
 			literal<InfoEntry>({
 				channel: 1,
-				format: 720,
+				format: '720p5000',
 				channelRate: 50,
 				frameRate: 50,
 				interlaced: false,
@@ -116,7 +116,7 @@ describe('deserializers', () => {
 		expect(output[1]).toMatchObject(
 			literal<InfoEntry>({
 				channel: 2,
-				format: 1080,
+				format: '1080i5000',
 				channelRate: 50,
 				frameRate: 50,
 				interlaced: true,

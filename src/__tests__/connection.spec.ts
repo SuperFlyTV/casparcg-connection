@@ -12,7 +12,7 @@ jest.mock('net')
 const SocketMock = OrgSocket as any as typeof MockSocket
 const PARSED_INFO_CHANNEL_720p50 = {
 	channel: 1,
-	format: 720,
+	format: '720p5000',
 	frameRate: 50,
 	channelRate: 50,
 	interlaced: false,

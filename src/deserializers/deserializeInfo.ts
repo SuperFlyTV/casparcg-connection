@@ -6,7 +6,7 @@ export const deserializeInfo = (line: string): InfoEntry | undefined => {
 	if (info && info.groups) {
 		return {
 			channel: parseInt(info.groups.ChannelNo, 10),
-			format: parseInt(info.groups.Format, 10),
+			format: info.groups.Format,
 			channelRate: parseInt(info.groups.Channelrate || '', 10) / 100,
 			frameRate: parseInt(info.groups.Channelrate || '', 10) / 100,
 			interlaced: info.groups.Interlaced === 'i',

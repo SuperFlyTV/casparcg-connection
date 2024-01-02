@@ -315,7 +315,7 @@ export interface VersionInfo {
 export type InfoParameters = Empty
 export interface InfoEntry {
 	channel: number
-	format: number
+	format: string
 	channelRate: number
 	frameRate: number
 	interlaced: boolean
