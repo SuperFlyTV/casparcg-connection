@@ -109,7 +109,8 @@ const cgDataSerializer = (_: Commands, { data }: CgUpdateParameters | CgAddParam
 	}
 }
 
-const mixerTweenSerializer = (_: Commands, { tween, duration }: MixerTween) => (tween ? tween + ' ' + duration : '')
+const mixerTweenSerializer = (_: Commands, { tween, duration }: MixerTween) =>
+	(duration || '') + (tween ? ' ' + tween : '')
 const mixerSimpleValueSerializer = (_: Commands, { value }: { value: number | boolean | string }) =>
 	value !== undefined ? (typeof value === 'boolean' ? (value ? '1' : '0') : value + '') : ''
 
