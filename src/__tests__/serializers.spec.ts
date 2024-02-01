@@ -6,10 +6,11 @@ import {
 	InfoCommand,
 	InfoLayerCommand,
 	LoadbgDecklinkCommand,
+	MixerFillCommand,
 	PlayCommand,
 	PlayHtmlCommand,
 } from '../commands'
-import { TransitionType } from '../enums'
+import { TransitionTween, TransitionType } from '../enums'
 
 describe('serializers', () => {
 	it('should have serializers for every command', () => {
@@ -206,5 +207,48 @@ describe('serializers', () => {
 		const result = serialized.filter((l) => l !== '').join(' ')
 
 		expect(result).toBe(`INFO 1-10`)
+	})
+
+	it('should serialize a MIXER FILL with tweening properties', () => {
+		const command: MixerFillCommand = {
+			command: Commands.MixerFill,
+			params: {
+				channel: 1,
+				layer: 10,
+				x: 0.1,
+				y: 0.2,
+				xScale: 0.7,
+				yScale: 0.8,
+
+				duration: 20,
+				tween: TransitionTween.IN_CIRC,
+			},
+		}
+		const serialized = serializers[Commands.MixerFill].map((fn) => fn(command.command, command.params))
+		expect(serialized).toHaveLength(serializers[Commands.MixerFill].length)
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe(`MIXER 1-10 FILL 0.1 0.2 0.7 0.8 20 EASEINCIRC`)
+	})
+
+	it('should serialize a MIXER FILL with duration', () => {
+		const command: MixerFillCommand = {
+			command: Commands.MixerFill,
+			params: {
+				channel: 1,
+				layer: 10,
+				x: 0.1,
+				y: 0.2,
+				xScale: 0.7,
+				yScale: 0.8,
+
+				duration: 20,
+			},
+		}
+		const serialized = serializers[Commands.MixerFill].map((fn) => fn(command.command, command.params))
+		expect(serialized).toHaveLength(serializers[Commands.MixerFill].length)
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe(`MIXER 1-10 FILL 0.1 0.2 0.7 0.8 20`)
 	})
 })
