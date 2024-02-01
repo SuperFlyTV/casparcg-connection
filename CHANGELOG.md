@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.2.1](http://superfly.tv/compare/v6.2.0...v6.2.1) (Thu Feb 01 2024)
+
+
+### Fixes
+
+* mixer tween parameters #199 (#200) [cd573113](http://superfly.tv/commit/cd573113ac9286ef1fc4b7a1c02f2c2c1ecc2eaf)
+
 ## [6.2.0](http://superfly.tv/compare/v6.1.1...v6.2.0) (Tue Jan 02 2024)
 
 
