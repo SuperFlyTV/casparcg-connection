@@ -314,10 +314,15 @@ export interface VersionInfo {
 
 export type InfoParameters = Empty
 export interface InfoEntry {
+	/** Channel number, eg 1,2,3 */
 	channel: number
+	/** Channel format, eg "720p5000" */
 	format: string
+	/** Channel frame rate, eg 50 */
 	channelRate: number
+	/** Channel frame rate, eg 50 */
 	frameRate: number
+	/** If interlaced or not */
 	interlaced: boolean
 
 	/** eg "PLAYING" */
