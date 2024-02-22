@@ -156,11 +156,13 @@ export interface DataRemoveParameters {
 }
 
 export interface CGLayer {
-	cgLayer: number
+	/** cgLayer (defaults to 1) */
+	cgLayer?: number
 }
 
 export interface CgAddParameters extends ChannelLayer, CGLayer {
 	template: string
+	/** If true, CasparCG will call play() in the template after load. */
 	playOnLoad: boolean
 	data?: Record<string, any> | string
 }

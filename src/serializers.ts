@@ -95,7 +95,7 @@ const callAttributeSerializer = (_: Commands, { param, value }: CallParameters) 
 const consumerSerializer = (_: Commands, { consumer, parameters }: AddParameters) => consumer + ' ' + parameters
 const removeSerializer = (_: Commands, { consumer }: RemoveParameters) => consumer + ''
 
-const cgLayerSerializer = (_: Commands, { cgLayer }: CGLayer) => cgLayer + ''
+const cgLayerSerializer = (_: Commands, { cgLayer }: CGLayer) => (cgLayer === undefined ? '1' : `${cgLayer}`)
 const cgDataSerializer = (_: Commands, { data }: CgUpdateParameters | CgAddParameters) => {
 	if (!data) {
 		return ''

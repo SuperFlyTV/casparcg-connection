@@ -251,4 +251,46 @@ describe('serializers', () => {
 
 		expect(result).toBe(`MIXER 1-10 FILL 0.1 0.2 0.7 0.8 20`)
 	})
+	it('should serialize a cgAdd command with minimum params', () => {
+		const command: CgAddCommand = {
+			command: Commands.CgAdd,
+			params: {
+				channel: 1,
+				layer: 10,
+				template: 'myFolder/myTemplate',
+				playOnLoad: false,
+			},
+		}
+
+		const serialized = serializers[Commands.CgAdd].map((fn) => fn(command.command, command.params))
+
+		expect(serialized).toHaveLength(serializers[Commands.CgAdd].length)
+
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe(`CG 1-10 ADD 1 "myFolder/myTemplate" 0`)
+	})
+	it('should serialize a cgAdd command with all params defined', () => {
+		const command: CgAddCommand = {
+			command: Commands.CgAdd,
+			params: {
+				channel: 1,
+				layer: 10,
+				template: 'myFolder/myTemplate',
+				playOnLoad: true,
+				cgLayer: 2,
+				data: {
+					hello: 'world',
+				},
+			},
+		}
+
+		const serialized = serializers[Commands.CgAdd].map((fn) => fn(command.command, command.params))
+
+		expect(serialized).toHaveLength(serializers[Commands.CgAdd].length)
+
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe(`CG 1-10 ADD 2 "myFolder/myTemplate" 1 "{\\"hello\\":\\"world\\"}"`)
+	})
 })
