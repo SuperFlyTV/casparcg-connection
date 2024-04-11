@@ -2,6 +2,7 @@ import { serializers, serializersV21 } from '../serializers'
 import {
 	CgAddCommand,
 	Commands,
+	CustomCommand,
 	InfoChannelCommand,
 	InfoCommand,
 	InfoLayerCommand,
@@ -250,5 +251,22 @@ describe('serializers', () => {
 		const result = serialized.filter((l) => l !== '').join(' ')
 
 		expect(result).toBe(`MIXER 1-10 FILL 0.1 0.2 0.7 0.8 20`)
+	})
+
+	it('should serialize a custom', () => {
+		const command: CustomCommand = {
+			command: Commands.Custom,
+			params: {
+				command: 'INFO 1',
+			},
+		}
+
+		const serialized = serializers[Commands.Custom].map((fn) => fn(command.command, command.params))
+
+		expect(serialized).toHaveLength(serializers[Commands.Custom].length)
+
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe('INFO 1')
 	})
 })

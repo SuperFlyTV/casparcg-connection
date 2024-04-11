@@ -8,6 +8,7 @@ import {
 	CGLayer,
 	CgUpdateParameters,
 	ClipParameters,
+	CustomCommandParameters,
 	DecklinkParameters,
 	HtmlParameters,
 	MixerTween,
@@ -113,6 +114,8 @@ const mixerTweenSerializer = (_: Commands, { tween, duration }: MixerTween) =>
 	(duration || '') + (tween ? ' ' + tween : '')
 const mixerSimpleValueSerializer = (_: Commands, { value }: { value: number | boolean | string }) =>
 	value !== undefined ? (typeof value === 'boolean' ? (value ? '1' : '0') : value + '') : ''
+
+const customCommandSerializer = (_: Commands, { command }: CustomCommandParameters) => command
 
 const optional: <T, Y extends object>(fn: (command: T, params: Y) => string) => (command: T, params: Y) => string =
 	(fn) => (command, params) => {
@@ -469,6 +472,8 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 	[Commands.Begin]: [commandNameSerializer],
 	[Commands.Commit]: [commandNameSerializer],
 	[Commands.Discard]: [commandNameSerializer],
+
+	[Commands.Custom]: [customCommandSerializer],
 }
 
 export const serializersV21: Readonly<Serializers<AMCPCommand>> = {

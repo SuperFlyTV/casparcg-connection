@@ -83,6 +83,7 @@ import {
 	BeginParameters,
 	CommitParameters,
 	DiscardParameters,
+	CustomCommandParameters,
 } from './parameters'
 
 export class CasparCG extends BasicCasparCGAPI {
@@ -579,6 +580,12 @@ export class CasparCG extends BasicCasparCGAPI {
 	async discard(params: DiscardParameters = {}): Promise<APIRequest<Commands.Discard>> {
 		return this.executeCommand({
 			command: Commands.Discard,
+			params,
+		})
+	}
+	async sendCustom(params: CustomCommandParameters): Promise<APIRequest<Commands.Custom>> {
+		return this.executeCommand({
+			command: Commands.Custom,
 			params,
 		})
 	}
