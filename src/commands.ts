@@ -93,6 +93,7 @@ import {
 	CommitParameters,
 	PingParameters,
 	DiscardParameters,
+	CustomCommandParameters,
 } from './parameters'
 
 export enum Commands {
@@ -184,6 +185,8 @@ export enum Commands {
 	Begin = 'BEGIN',
 	Commit = 'COMMIT',
 	Discard = 'DISCARD',
+
+	Custom = 'CUSTOM',
 }
 
 export interface Command<Cmd extends Commands, Params> {
@@ -301,6 +304,8 @@ export interface AllTypedCommands {
 	[Commands.Begin]: TypedResponseCommand<Commands.Begin, BeginParameters, unknown>
 	[Commands.Commit]: TypedResponseCommand<Commands.Commit, CommitParameters, unknown>
 	[Commands.Discard]: TypedResponseCommand<Commands.Discard, DiscardParameters, unknown>
+
+	[Commands.Custom]: TypedResponseCommand<Commands.Custom, CustomCommandParameters, unknown>
 }
 
 export type LoadbgCommand = AllTypedCommands[Commands.Loadbg]['command']
@@ -391,6 +396,7 @@ export type PingCommand = AllTypedCommands[Commands.Ping]['command']
 export type BeginCommand = AllTypedCommands[Commands.Begin]['command']
 export type CommitCommand = AllTypedCommands[Commands.Commit]['command']
 export type DiscardCommand = AllTypedCommands[Commands.Discard]['command']
+export type CustomCommand = AllTypedCommands[Commands.Custom]['command']
 
 export type AMCPCommand =
 	| LoadbgCommand
@@ -481,3 +487,4 @@ export type AMCPCommand =
 	| BeginCommand
 	| CommitCommand
 	| DiscardCommand
+	| CustomCommand
