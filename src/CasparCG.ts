@@ -84,12 +84,20 @@ import {
 	CommitParameters,
 	DiscardParameters,
 	CustomCommandParameters,
+	PlayHtmlParameters,
+	LoadbgHtmlParameters,
 } from './parameters'
 
 export class CasparCG extends BasicCasparCGAPI {
 	async loadbg(params: LoadbgParameters): Promise<APIRequest<Commands.Loadbg>> {
 		return this.executeCommand({
 			command: Commands.Loadbg,
+			params,
+		})
+	}
+	async loadbgHtml(params: LoadbgHtmlParameters): Promise<APIRequest<Commands.LoadbgHtml>> {
+		return this.executeCommand({
+			command: Commands.LoadbgHtml,
 			params,
 		})
 	}
@@ -102,6 +110,12 @@ export class CasparCG extends BasicCasparCGAPI {
 	async play(params: PlayParameters): Promise<APIRequest<Commands.Play>> {
 		return this.executeCommand({
 			command: Commands.Play,
+			params,
+		})
+	}
+	async playHtml(params: PlayHtmlParameters): Promise<APIRequest<Commands.PlayHtml>> {
+		return this.executeCommand({
+			command: Commands.PlayHtml,
 			params,
 		})
 	}
