@@ -43,7 +43,7 @@ In your code, include and use the CasparCG object from this library with a code 
 const { CasparCG } = require('casparcg-connection')
 
 const connection = new CasparCG()
-const { error, request } = connection.play({ channel: 1, layer: 1, clip: 'amb' })
+const { error, request } = await connection.play({ channel: 1, layer: 1, clip: 'amb' })
 if (error) {
 	console.log('Error when sending', error)
 } else {
