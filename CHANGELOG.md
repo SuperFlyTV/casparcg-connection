@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.3.0](http://superfly.tv/compare/v6.2.1...v6.3.0) (Tue Jul 30 2024)
+
+
+### Features
+
+* add custom commands [9763f84f](http://superfly.tv/commit/9763f84fcbd7288f9b6933d55d53cd90e4b6d7c9)
+
 ## [6.2.1](http://superfly.tv/compare/v6.2.0...v6.2.1) (Thu Feb 01 2024)
 
 
