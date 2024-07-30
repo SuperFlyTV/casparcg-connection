@@ -51,26 +51,29 @@
 	],
 	"scripts": {
 		"info": "npm-scripts-info",
-		"build": "rimraf dist && yarn build:main",
+		"build": "rimraf dist && run build:main",
 		"build:main": "tsc -p tsconfig.build.json",
 		"unit": "jest --forceExit",
-		"test": "yarn lint && yarn unit",
-		"test:integration": "yarn lint && jest --config=jest-integration.config.js",
+		"test": "run lint && run unit",
+		"test:integration": "run lint && jest --config=jest-integration.config.js",
 		"watch": "jest --watch",
 		"cov": "jest --coverage; open-cli coverage/lcov-report/index.html",
 		"cov-open": "open-cli coverage/lcov-report/index.html",
-		"docs": "yarn typedoc ./src/index.ts",
+		"docs": "typedoc ./src/index.ts",
 		"changelog": "sofie-version",
-		"release": "yarn reset && yarn test && yarn changelog",
-		"release:skiptest": "yarn reset && yarn changelog",
+		"release": "run reset && run test && run changelog",
+		"release:skiptest": "run reset && run changelog",
 		"reset": "git clean -dfx && git reset --hard && yarn",
-		"validate:dependencies": "yarn audit --groups dependencies && yarn license-validate",
-		"validate:dev-dependencies": "yarn audit --groups devDependencies",
+		"validate:dependencies": "yarn npm audit --environment production && run license-validate",
+		"validate:dev-dependencies": "yarn npm audit --environment development",
 		"prepare": "husky install",
-		"lint:raw": "eslint --ext .ts --ext .js --ext .tsx --ext .jsx --ignore-pattern dist",
-		"lint": "yarn lint:raw .",
-		"lint-fix": "yarn lint --fix",
-		"license-validate": "yarn sofie-licensecheck"
+		"lint:raw": "run eslint --ext .ts --ext .js --ext .tsx --ext .jsx --ignore-pattern dist",
+		"lint": "run lint:raw .",
+		"lint-fix": "run lint --fix",
+		"license-validate": "sofie-licensecheck",
+		"eslint": "./node_modules/.bin/eslint",
+		"prettier": "./node_modules/.bin/prettier",
+		"lint-staged": "./node_modules/.bin/lint-staged"
 	},
 	"engines": {
 		"node": ">=14.18"
@@ -88,7 +91,7 @@
 		"@types/xml2js": "^0.4.11",
 		"jest": "^29.4.3",
 		"open-cli": "^7.1.0",
-		"rimraf": "^4.1.2",
+		"rimraf": "^4.3.1",
 		"ts-jest": "^29.0.5",
 		"typedoc": "^0.23.25",
 		"typescript": "~4.9"
@@ -108,17 +111,17 @@
 	],
 	"dependencies": {
 		"eventemitter3": "^5.0.1",
-		"tslib": "^2.5.0",
+		"tslib": "^2.6.3",
 		"xml2js": "^0.6.2"
 	},
 	"prettier": "@sofie-automation/code-standard-preset/.prettierrc.json",
 	"lint-staged": {
 		"*.{css,json,md,scss}": [
-			"prettier --write"
+			"run prettier --write"
 		],
 		"*.{ts,tsx,js,jsx}": [
-			"yarn lint:raw --fix"
+			"run lint:raw --fix"
 		]
 	},
-	"packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+	"packageManager": "yarn@4.3.1"
 }

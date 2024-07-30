@@ -12,3 +12,10 @@ wallaby.conf.js
 
 .DS_Store
 .vscode/settings.json
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
