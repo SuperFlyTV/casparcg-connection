@@ -82,7 +82,7 @@
 		"/LICENSE"
 	],
 	"devDependencies": {
-		"@sofie-automation/code-standard-preset": "~2.3.0",
+		"@sofie-automation/code-standard-preset": "~2.5.2",
 		"@types/jest": "^29.4.0",
 		"@types/node": "^16.11.45",
 		"@types/xml2js": "^0.4.11",
@@ -119,5 +119,6 @@
 		"*.{ts,tsx,js,jsx}": [
 			"yarn lint:raw --fix"
 		]
-	}
+	},
+	"packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
 }

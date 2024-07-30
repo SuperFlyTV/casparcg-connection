@@ -24,11 +24,11 @@ export const deserializeInfoChannel = async (line: string): Promise<InfoChannelE
 			},
 
 			layers: compact(
-				Object.entries(mixerLayer).map(([layerName, layer0]) => {
+				Object.entries<any>(mixerLayer).map(([layerName, layer0]) => {
 					const m = layerName.match(/layer_(\d+)/)
 					if (!m) return undefined
 
-					const layer = ensureArray(layer0 as any)[0]
+					const layer = ensureArray(layer0)[0]
 					return {
 						layer: parseInt(m[1], 10),
 						// perhaps parse these later:

@@ -15,14 +15,14 @@ import { TransitionTween, TransitionType } from '../enums'
 
 describe('serializers', () => {
 	it('should have serializers for every command', () => {
-		for (const c of Object.values(Commands)) {
+		for (const c of Object.values<Commands>(Commands)) {
 			expect(serializers[c]).toBeDefined()
 		}
 	})
 
 	it('should have command for every serializers', () => {
 		for (const c of Object.keys(serializers)) {
-			expect(Object.values(Commands).includes(c as Commands)).toBeTruthy()
+			expect(Object.values<Commands>(Commands).includes(c as Commands)).toBeTruthy()
 		}
 	})
 

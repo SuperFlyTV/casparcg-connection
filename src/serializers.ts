@@ -81,7 +81,7 @@ const transitionSerializer = ({
 
 		return (
 			'STING (' +
-			Object.entries(params)
+			Object.entries<string | number | undefined>(params)
 				.filter(([_, v]) => v !== undefined && v !== null)
 				.map(([k, v]) => k + '=' + v)
 				.join(' ') +
