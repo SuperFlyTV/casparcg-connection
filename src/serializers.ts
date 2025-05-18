@@ -117,12 +117,15 @@ const mixerSimpleValueSerializer = (_: Commands, { value }: { value: number | bo
 
 const customCommandSerializer = (_: Commands, { command }: CustomCommandParameters) => command
 
-const customParamsSerializer = (_: Commands, params: { customParams?: Record<string, string | number | boolean | undefined> }): string => {
+const customParamsSerializer = (
+	_: Commands,
+	params: { customParams?: Record<string, string | number | boolean | undefined> }
+): string => {
 	if (!params.customParams) {
 		return ''
 	}
 
-	return Object.entries(params.customParams)
+	return Object.entries<string | number | boolean | undefined>(params.customParams)
 		.map(([key, value]) => {
 			if (value === undefined) {
 				// For undefined values, just return the key name
