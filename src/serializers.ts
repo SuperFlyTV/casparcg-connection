@@ -117,6 +117,24 @@ const mixerSimpleValueSerializer = (_: Commands, { value }: { value: number | bo
 
 const customCommandSerializer = (_: Commands, { command }: CustomCommandParameters) => command
 
+const customParamsSerializer = (_: Commands, params: { customParams?: Record<string, string | number | boolean | undefined> }): string => {
+	if (!params.customParams) {
+		return ''
+	}
+
+	return Object.entries(params.customParams)
+		.map(([key, value]) => {
+			if (value === undefined) {
+				// For undefined values, just return the key name
+				return key
+			}
+			// Quote string values, leave others as is
+			const paramValue = typeof value === 'string' ? `"${value}"` : value
+			return `${key} ${paramValue}`
+		})
+		.join(' ')
+}
+
 const optional: <T, Y extends object>(fn: (command: T, params: Y) => string) => (command: T, params: Y) => string =
 	(fn) => (command, params) => {
 		const keys = Object.keys(params)
@@ -140,6 +158,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		(_, { auto }) => (auto ? 'AUTO' : ''),
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.LoadbgDecklink]: [
 		splitCommandSerializer,
@@ -147,6 +166,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		decklinkCommandSerializer,
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.LoadbgHtml]: [
 		splitCommandSerializer,
@@ -154,6 +174,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		htmlCommandSerializerr,
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.LoadbgRoute]: [
 		splitCommandSerializer,
@@ -161,6 +182,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		routeCommandSerializer,
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.Load]: [
 		commandNameSerializer,
@@ -168,6 +190,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		clipCommandSerializer,
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.Play]: [
 		commandNameSerializer,
@@ -175,6 +198,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		clipCommandSerializer,
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.PlayDecklink]: [
 		splitCommandSerializer,
@@ -182,6 +206,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		decklinkCommandSerializer,
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.PlayHtml]: [
 		splitCommandSerializer,
@@ -189,6 +214,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		htmlCommandSerializerr,
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.PlayRoute]: [
 		splitCommandSerializer,
@@ -196,6 +222,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		routeCommandSerializer,
 		producerOptionsSerializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.Pause]: [commandNameSerializer, channelLayerSerializer],
 	[Commands.Resume]: [commandNameSerializer, channelLayerSerializer],
@@ -236,30 +263,35 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		cgLayerSerializer,
 		(_, { template, playOnLoad }) => `"${template}" ${playOnLoad ? '1' : '0'}`,
 		cgDataSerializer,
+		customParamsSerializer,
 	],
 	[Commands.CgPlay]: [
 		splitCommandSerializer,
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
+		customParamsSerializer,
 	],
 	[Commands.CgStop]: [
 		splitCommandSerializer,
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
+		customParamsSerializer,
 	],
 	[Commands.CgNext]: [
 		splitCommandSerializer,
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
+		customParamsSerializer,
 	],
 	[Commands.CgRemove]: [
 		splitCommandSerializer,
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
+		customParamsSerializer,
 	],
 	[Commands.CgClear]: [splitCommandSerializer, channelLayerSerializer, splitCommandKeywordSerializer],
 	[Commands.CgUpdate]: [
@@ -268,6 +300,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
 		cgDataSerializer,
+		customParamsSerializer,
 	],
 	[Commands.CgInvoke]: [
 		splitCommandSerializer,
@@ -275,12 +308,14 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
 		(_, { method }) => method,
+		customParamsSerializer,
 	],
 	[Commands.CgInfo]: [
 		splitCommandSerializer,
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		cgLayerSerializer,
+		customParamsSerializer,
 	],
 
 	[Commands.MixerKeyer]: [
@@ -288,6 +323,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		(_, { keyer }) => (keyer ? '1' : '0'),
+		customParamsSerializer,
 	],
 	[Commands.MixerChroma]: [
 		splitCommandSerializer,
@@ -300,18 +336,21 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 				} ${params.softness} ${params.spillSuppress} ${params.spillSuppressSaturation} ${params.showMask}`
 		),
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerBlend]: [
 		splitCommandSerializer,
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerInvert]: [
 		splitCommandSerializer,
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerOpacity]: [
 		splitCommandSerializer,
@@ -319,6 +358,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerBrightness]: [
 		splitCommandSerializer,
@@ -326,6 +366,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerSaturation]: [
 		splitCommandSerializer,
@@ -333,6 +374,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerContrast]: [
 		splitCommandSerializer,
@@ -340,6 +382,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerLevels]: [
 		splitCommandSerializer,
@@ -349,6 +392,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 			[params.minInput, params.maxInput, params.gamma, params.minOutput, params.maxOutput].join(' ')
 		),
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerFill]: [
 		splitCommandSerializer,
@@ -356,6 +400,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		optional((_, params) => [params.x, params.y, params.xScale, params.yScale].join(' ')),
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerClip]: [
 		splitCommandSerializer,
@@ -363,6 +408,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		optional((_, params) => [params.x, params.y, params.width, params.height].join(' ')),
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerAnchor]: [
 		splitCommandSerializer,
@@ -370,6 +416,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		optional((_, params) => [params.x, params.y].join(' ')),
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerCrop]: [
 		splitCommandSerializer,
@@ -377,6 +424,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		optional((_, params) => [params.left, params.top, params.right, params.bottom].join(' ')),
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerRotation]: [
 		splitCommandSerializer,
@@ -384,6 +432,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerPerspective]: [
 		splitCommandSerializer,
@@ -402,12 +451,14 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 			].join(' ')
 		),
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerMipmap]: [
 		splitCommandSerializer,
 		channelLayerSerializer,
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerVolume]: [
 		splitCommandSerializer,
@@ -415,6 +466,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerMastervolume]: [
 		splitCommandSerializer,
@@ -422,12 +474,14 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerStraightAlphaOutput]: [
 		splitCommandSerializer,
 		channelSerializer,
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerGrid]: [
 		splitCommandSerializer,
@@ -435,6 +489,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 		splitCommandKeywordSerializer,
 		mixerSimpleValueSerializer,
 		mixerTweenSerializer,
+		customParamsSerializer,
 	],
 	[Commands.MixerCommit]: [splitCommandSerializer, channelSerializer, splitCommandKeywordSerializer],
 	[Commands.MixerClear]: [splitCommandSerializer, channelLayerOptSerializer, splitCommandKeywordSerializer],
@@ -473,7 +528,7 @@ export const serializers: Readonly<Serializers<AMCPCommand>> = {
 	[Commands.Commit]: [commandNameSerializer],
 	[Commands.Discard]: [commandNameSerializer],
 
-	[Commands.Custom]: [customCommandSerializer],
+	[Commands.Custom]: [customCommandSerializer, customParamsSerializer],
 }
 
 export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
@@ -485,6 +540,7 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		(_, { auto }) => (auto ? 'AUTO' : ''),
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.LoadbgDecklink]: [
 		splitCommandSerializer,
@@ -492,6 +548,7 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		decklinkCommandSerializer,
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.LoadbgHtml]: [
 		splitCommandSerializer,
@@ -499,6 +556,7 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		htmlCommandSerializerr,
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.LoadbgRoute]: [
 		splitCommandSerializer,
@@ -506,6 +564,7 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		routeCommandSerializer,
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.Load]: [
 		commandNameSerializer,
@@ -513,6 +572,7 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		clipCommandSerializer,
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.Play]: [
 		commandNameSerializer,
@@ -520,6 +580,7 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		clipCommandSerializer,
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.PlayDecklink]: [
 		splitCommandSerializer,
@@ -527,6 +588,7 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		decklinkCommandSerializer,
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.PlayHtml]: [
 		splitCommandSerializer,
@@ -534,6 +596,7 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		htmlCommandSerializerr,
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 	[Commands.PlayRoute]: [
 		splitCommandSerializer,
@@ -541,5 +604,6 @@ export const serializersV21: Readonly<Serializers<AMCPCommand>> = {
 		routeCommandSerializer,
 		producerV21Serializer,
 		transitionOptSerializer,
+		customParamsSerializer,
 	],
 }

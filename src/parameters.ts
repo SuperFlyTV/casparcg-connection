@@ -11,18 +11,23 @@ import {
 	Version,
 } from './enums'
 
-export type Empty = Record<string, never>
+export interface CustomParams {
+	/** Optional custom parameters that will be appended to any command */
+	customParams?: Record<string, string | number | boolean | undefined>
+}
 
-export interface Channel {
+export type Empty = CustomParams & Record<string, never>
+
+export interface Channel extends CustomParams {
 	channel: number
 }
 
-export interface ChannelLayer {
+export interface ChannelLayer extends CustomParams {
 	channel: number
 	layer: number
 }
 
-export interface TransitionParameters {
+export interface TransitionParameters extends CustomParams {
 	transitionType: TransitionType
 	duration: number
 	tween?: TransitionTween
@@ -537,6 +542,6 @@ export type BeginParameters = Empty
 export type CommitParameters = Empty
 export type DiscardParameters = Empty
 
-export interface CustomCommandParameters {
+export interface CustomCommandParameters extends CustomParams {
 	command: string
 }

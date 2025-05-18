@@ -313,4 +313,49 @@ describe('serializers', () => {
 
 		expect(result).toBe(`CG 1-10 ADD 2 "myFolder/myTemplate" 1 "{\\"hello\\":\\"world\\"}"`)
 	})
+
+	it('should serialize a custom command with custom parameters', () => {
+		const command: CustomCommand = {
+			command: Commands.Custom,
+			params: {
+				command: 'MYCOMMAND',
+				customParams: {
+					channel: 1,
+					layer: 10,
+					name: 'test',
+					enabled: true,
+					loop: undefined,
+					optional: undefined,
+				},
+			},
+		}
+
+		const serialized = serializers[Commands.Custom].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe('MYCOMMAND channel 1 layer 10 name "test" enabled true loop optional')
+	})
+
+	it('should serialize a regular command with custom parameters', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'test',
+				customParams: {
+					loop: undefined,
+					seek: 1000,
+					length: 5000,
+					note: 'test clip',
+					optional: undefined,
+				},
+			},
+		}
+
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+
+		expect(result).toBe('PLAY 1-10 "test" loop seek 1000 length 5000 note "test clip" optional')
+	})
 })
