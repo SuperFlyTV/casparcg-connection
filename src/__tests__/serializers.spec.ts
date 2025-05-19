@@ -324,8 +324,8 @@ describe('serializers', () => {
 					layer: 10,
 					name: 'test',
 					enabled: true,
-					loop: undefined,
-					optional: undefined,
+					loop: null,
+					optional: null,
 				},
 			},
 		}
@@ -344,11 +344,11 @@ describe('serializers', () => {
 				layer: 10,
 				clip: 'test',
 				customParams: {
-					loop: undefined,
+					loop: null,
 					seek: 1000,
 					length: 5000,
 					note: 'test clip',
-					optional: undefined,
+					optional: null,
 				},
 			},
 		}
