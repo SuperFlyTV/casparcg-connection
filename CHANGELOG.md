@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.3.1](http://superfly.tv/compare/v6.3.0...v6.3.1) (Thu May 22 2025)
+
+
+### Fixes
+
+* fix lint [67c93d99](http://superfly.tv/commit/67c93d99e1b11112837cc955208691ffb0083b0b)
+* in cgAdd: make cgLayer be optional [3066ee35](http://superfly.tv/commit/3066ee355e1bfa628602e3707ec980ad616b2502)
+
 ## [6.3.0](http://superfly.tv/compare/v6.2.1...v6.3.0) (Tue Jul 30 2024)
 
 
