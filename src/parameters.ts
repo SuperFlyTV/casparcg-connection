@@ -177,7 +177,7 @@ export interface CgNextParameters extends ChannelLayer, CGLayer {}
 export interface CgRemoveParameters extends ChannelLayer, CGLayer {}
 export type CgClearParameters = ChannelLayer
 export interface CgUpdateParameters extends ChannelLayer, CGLayer {
-	data: Record<string, any> | string;
+	data: Record<string, any> | string
 }
 export interface CgInvokeParameters extends ChannelLayer, CGLayer {
 	method: string
