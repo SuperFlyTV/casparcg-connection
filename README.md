@@ -66,7 +66,10 @@ Installing with yarn adds the dev-dependencies needed to compile TypeScript. A s
 
 ## Doing a release
 
-Run `yarn changelog` to generate the changelog, tags and commit. Push these changes and the newly made tag.
+* Run `yarn changelog` to generate the changelog, tags and commit.
+* Push these changes and the newly made tag.
+* Trigger a run of the [Publish to NPM](https://github.com/SuperFlyTV/casparcg-connection/actions/workflows/publish.yaml) workflow in GitHub Actions.
+
 
 ## Documentation
 
