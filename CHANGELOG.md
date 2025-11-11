@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
 
+## [6.3.2](http://superfly.tv/compare/v6.3.1...v6.3.2) (Tue Nov 11 2025)
+
+
+### Fixes
+
+* CgUpdateParameters should support Record<string, any> | string [3d70e01f](http://superfly.tv/commit/3d70e01f111980157d6e23d5508d62e6fa4791dc)
+
 ## [6.3.1](http://superfly.tv/compare/v6.3.0...v6.3.1) (Thu May 22 2025)
 
 
