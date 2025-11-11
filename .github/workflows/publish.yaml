@@ -25,10 +25,11 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
       - name: Prepare Environment
         run: |
           corepack enable
-          yarn install
+          yarn install --immutable
         env:
           CI: true
       - name: Run tests
@@ -52,13 +53,13 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          package-manager-cache: false
+          cache: 'yarn'
           registry-url: "https://registry.npmjs.org"
 
       - name: Prepare Environment
         run: |
           corepack enable
-          yarn install --frozen-lockfile
+          yarn install --immutable
         env:
           CI: true
 

@@ -22,10 +22,11 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 18.x
+          cache: 'yarn'
       - name: Prepare Environment
         run: |
           corepack enable
-          yarn install
+          yarn install --immutable
           yarn build
         env:
           CI: true
@@ -51,10 +52,11 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
       - name: Prepare Environment
         run: |
           corepack enable
-          yarn install
+          yarn install --immutable
         env:
           CI: true
       - name: Run tests
