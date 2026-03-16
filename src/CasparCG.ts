@@ -1,5 +1,5 @@
-import { BasicCasparCGAPI, SendResult } from './api'
-import { CReturnType, Commands } from './commands'
+import { BasicCasparCGAPI, SendResult } from './api.js'
+import { CReturnType, Commands } from './commands.js'
 import {
 	LoadbgParameters,
 	LoadParameters,
@@ -86,7 +86,7 @@ import {
 	CustomCommandParameters,
 	PlayHtmlParameters,
 	LoadbgHtmlParameters,
-} from './parameters'
+} from './parameters.js'
 
 export class CasparCG extends BasicCasparCGAPI {
 	async loadbg(params: LoadbgParameters): Promise<APIRequest<Commands.Loadbg>> {

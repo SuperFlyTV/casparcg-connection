@@ -1,10 +1,10 @@
 import { EventEmitter } from 'node:events'
 import { Socket } from 'net'
-import { Response } from './api'
-import { AMCPCommand, Commands } from './commands'
-import { deserializers } from './deserializers'
-import { Version } from './enums'
-import { serializers, serializersV21 } from './serializers'
+import { Response } from './api.js'
+import { AMCPCommand, Commands } from './commands.js'
+import { deserializers } from './deserializers/index.js'
+import { Version } from './enums.js'
+import { serializers, serializersV21 } from './serializers.js'
 
 const RESPONSE_REGEX = /(RES (?<ReqId>.+) )?(?<ResponseCode>\d{3}) ((?<Action>.+) )?(OK|ERROR|FAILED)/i
 

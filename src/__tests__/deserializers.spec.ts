@@ -1,9 +1,9 @@
 // import { Version } from '../enums'
-import { Commands } from '../commands'
-import { deserializers } from '../deserializers'
-import { LogLevel, Version } from '../enums'
-import { literal } from '../lib'
-import { ConsumerType, InfoChannelEntry, InfoConfig, InfoEntry } from '../parameters'
+import { Commands } from '../commands.js'
+import { deserializers } from '../deserializers/index.js'
+import { LogLevel, Version } from '../enums.js'
+import { literal } from '../lib.js'
+import { ConsumerType, InfoChannelEntry, InfoConfig, InfoEntry } from '../parameters.js'
 
 describe('deserializers', () => {
 	it('should deserialize CINF', async () => {

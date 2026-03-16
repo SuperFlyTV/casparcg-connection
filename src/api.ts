@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events'
-import { AMCPCommand, CReturnType, Commands } from './commands'
-import { Connection, ResponseTypes } from './connection'
+import { AMCPCommand, CReturnType, Commands } from './commands.js'
+import { Connection, ResponseTypes } from './connection.js'
 
 export interface Options {
 	/** Host name of the machine to connect to. Defaults to 127.0.0.1 */
@@ -53,7 +53,10 @@ export type ConnectionEvents = {
 }
 
 export class ResponseError extends Error {
-	constructor(public readonly deserializeError: Error, public readonly response: Response<unknown>) {
+	constructor(
+		public readonly deserializeError: Error,
+		public readonly response: Response<unknown>
+	) {
 		super('Failed to deserialize response')
 	}
 }

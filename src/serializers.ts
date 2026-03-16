@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { AMCPCommand, Commands } from './commands'
-import { TransitionType } from './enums'
+import { AMCPCommand, Commands } from './commands.js'
+import { TransitionType } from './enums.js'
 import {
 	AddParameters,
 	CallParameters,
@@ -16,7 +16,7 @@ import {
 	RemoveParameters,
 	RouteParameters,
 	TransitionParameters,
-} from './parameters'
+} from './parameters.js'
 
 const commandNameSerializer = (command: Commands): string => command
 const splitCommandSerializer = (command: Commands): string => command.split(' ')[0]

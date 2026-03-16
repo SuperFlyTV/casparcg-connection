@@ -126,7 +126,7 @@
 			"prettier --write"
 		],
 		"*.{ts,tsx,js,jsx}": [
-			"run lint:raw --fix"
+			"yarn lint:raw --fix"
 		]
 	},
 	"packageManager": "yarn@4.13.0"

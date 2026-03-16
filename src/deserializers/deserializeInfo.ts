@@ -1,4 +1,4 @@
-import { InfoEntry } from '../parameters'
+import { InfoEntry } from '../parameters.js'
 
 export const deserializeInfo = (line: string): InfoEntry | undefined => {
 	// 1 720p5000 PLAYING

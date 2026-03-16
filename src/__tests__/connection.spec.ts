@@ -1,11 +1,11 @@
-import { Version } from '../enums'
-import { Connection, SentRequest } from '../connection'
-import { serializersV21, serializers } from '../serializers'
-import { deserializers } from '../deserializers'
+import { Version } from '../enums.js'
+import { Connection, SentRequest } from '../connection.js'
+import { serializersV21, serializers } from '../serializers.js'
+import { deserializers } from '../deserializers/index.js'
 import { Socket as OrgSocket } from 'net'
-import { Socket as MockSocket } from '../__mocks__/net'
-import { AMCPCommand, Commands } from '../commands'
-import { BasicCasparCGAPI, ResponseError } from '../api'
+import { Socket as MockSocket } from '../__mocks__/net.js'
+import { AMCPCommand, Commands } from '../commands.js'
+import { BasicCasparCGAPI, ResponseError } from '../api.js'
 
 jest.mock('net')
 
