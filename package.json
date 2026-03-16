@@ -116,7 +116,6 @@
 		"remote"
 	],
 	"dependencies": {
-		"eventemitter3": "^5.0.4",
 		"tslib": "^2.8.1",
 		"xml2js": "^0.6.2"
 	},

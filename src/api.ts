@@ -1,4 +1,4 @@
-import { EventEmitter } from 'eventemitter3'
+import { EventEmitter } from 'node:events'
 import { AMCPCommand, CReturnType, Commands } from './commands'
 import { Connection, ResponseTypes } from './connection'
 

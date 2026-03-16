@@ -1,4 +1,4 @@
-import { EventEmitter } from 'eventemitter3'
+import { EventEmitter } from 'node:events'
 import { Socket } from 'net'
 import { Response } from './api'
 import { AMCPCommand, Commands } from './commands'
