@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-      - name: Use Node.js 18.x
+      - name: Use Node.js 22.x
         uses: actions/setup-node@v6
         with:
-          node-version: 18.x
+          node-version: 22.x
 
       - name: Prepare Environment
         run: |
@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [14, 16, 18, 20, 22, 24]
+        node-version: [22, 24]
 
     steps:
       - uses: actions/checkout@v6
@@ -65,9 +65,9 @@ jobs:
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        if: matrix.node-version == '18.x'
+        if: matrix.node-version == '22.x'
       - name: Check docs generation
-        if: matrix.node-version == '18.x'
+        if: matrix.node-version == '22.x'
         run: |
           yarn docs
         env:
