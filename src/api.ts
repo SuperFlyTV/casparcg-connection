@@ -64,7 +64,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 	private _port: number
 
 	private _requestQueue: Array<InternalRequest> = []
-	private _timeoutTimer: NodeJS.Timer
+	private _timeoutTimer: NodeJS.Timeout | undefined
 	private _timeoutTime: number
 
 	constructor(options?: Options) {
@@ -119,7 +119,9 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		})
 
 		this._timeoutTime = options?.timeoutTime || 5000
-		this._timeoutTimer = setInterval(() => this._checkTimeouts(), this._timeoutTime)
+		if (options?.autoConnect) {
+			this._timeoutTimer = setInterval(() => this._checkTimeouts(), this._timeoutTime)
+		}
 	}
 
 	get host(): string {
@@ -148,6 +150,10 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 		this._host = host ? host : this._host
 		this._port = port ? port : this._port
 		this._connection.changeConnection(this._host, this._port)
+
+		if (!this._timeoutTimer) {
+			this._timeoutTimer = setInterval(() => this._checkTimeouts(), this._timeoutTime)
+		}
 	}
 
 	disconnect(): void {
@@ -159,12 +165,11 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 				r.sentResolve({ request: undefined, error: new Error('Disconnected before response was received') })
 			}
 		})
-	}
 
-	/** Stops internal timers so that the class is ready for garbage disposal */
-	discard(): void {
-		this._connection.disconnect()
-		clearInterval(this._timeoutTimer)
+		if (this._timeoutTimer) {
+			clearInterval(this._timeoutTimer)
+			this._timeoutTimer = undefined
+		}
 	}
 
 	/**
