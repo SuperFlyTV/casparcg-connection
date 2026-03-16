@@ -9,6 +9,7 @@ import {
 	BlendMode,
 	RouteMode,
 	Version,
+	ProducerScaleMode,
 } from './enums.js'
 
 export interface CustomParams {
@@ -82,6 +83,10 @@ export interface ProducerOptions {
 	 */
 	channelLayout?: string
 	transition?: TransitionParameters
+	/**
+	 * FFmpeg and image producer scale mode. Since 2.5.0
+	 */
+	scaleMode?: ProducerScaleMode
 }
 
 export interface PlayParameters extends ChannelLayer, ClipParameters, ProducerOptions {}
