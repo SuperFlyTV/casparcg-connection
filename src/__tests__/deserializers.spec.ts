@@ -4,6 +4,7 @@ import { deserializers } from '../deserializers/index.js'
 import { LogLevel, Version } from '../enums.js'
 import { literal } from '../lib.js'
 import { ConsumerType, InfoChannelEntry, InfoConfig, InfoEntry } from '../parameters.js'
+import { describe, it, expect } from 'vitest'
 
 describe('deserializers', () => {
 	it('should deserialize CINF', async () => {

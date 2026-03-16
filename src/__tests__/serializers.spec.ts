@@ -12,6 +12,7 @@ import {
 	PlayHtmlCommand,
 } from '../commands.js'
 import { TransitionTween, TransitionType } from '../enums.js'
+import { describe, it, expect } from 'vitest'
 
 describe('serializers', () => {
 	it('should have serializers for every command', () => {
