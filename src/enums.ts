@@ -125,3 +125,12 @@ export enum Version {
 	v22x = 20200,
 	v23x = 20300,
 }
+
+export enum ProducerScaleMode {
+	STRETCH = 'STRETCH',
+	FIT = 'FIT',
+	FILL = 'FILL',
+	ORIGINAL = 'ORIGINAL',
+	HFILL = 'HFILL',
+	VFILL = 'VFILL',
+}

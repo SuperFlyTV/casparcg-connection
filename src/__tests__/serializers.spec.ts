@@ -11,7 +11,7 @@ import {
 	PlayCommand,
 	PlayHtmlCommand,
 } from '../commands.js'
-import { TransitionTween, TransitionType } from '../enums.js'
+import { ProducerScaleMode, TransitionTween, TransitionType } from '../enums.js'
 import { describe, it, expect } from 'vitest'
 
 describe('serializers', () => {
@@ -358,5 +358,142 @@ describe('serializers', () => {
 		const result = serialized.filter((l) => l !== '').join(' ')
 
 		expect(result).toBe('PLAY 1-10 "test" loop seek 1000 length 5000 note "test clip" optional')
+	})
+
+	it('should serialize a play command with scaleMode STRETCH', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				scaleMode: ProducerScaleMode.STRETCH,
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).toBe('PLAY 1-10 "AMB" SCALE_MODE STRETCH')
+	})
+
+	it('should serialize a play command with scaleMode FIT', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				scaleMode: ProducerScaleMode.FIT,
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).toBe('PLAY 1-10 "AMB" SCALE_MODE FIT')
+	})
+
+	it('should serialize a play command with scaleMode FILL', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				scaleMode: ProducerScaleMode.FILL,
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).toBe('PLAY 1-10 "AMB" SCALE_MODE FILL')
+	})
+
+	it('should serialize a play command with scaleMode ORIGINAL', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				scaleMode: ProducerScaleMode.ORIGINAL,
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).toBe('PLAY 1-10 "AMB" SCALE_MODE ORIGINAL')
+	})
+
+	it('should serialize a play command with scaleMode HFILL', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				scaleMode: ProducerScaleMode.HFILL,
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).toBe('PLAY 1-10 "AMB" SCALE_MODE HFILL')
+	})
+
+	it('should serialize a play command with scaleMode VFILL', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				scaleMode: ProducerScaleMode.VFILL,
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).toBe('PLAY 1-10 "AMB" SCALE_MODE VFILL')
+	})
+
+	it('should serialize a play command with scaleMode and vFilter', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				vFilter: 'scale=1920:1080',
+				scaleMode: ProducerScaleMode.FIT,
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).toBe('PLAY 1-10 "AMB" VF "scale=1920:1080" SCALE_MODE FIT')
+	})
+
+	it('should serialize a play command with scaleMode, vFilter and aFilter', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+				vFilter: 'scale=1920:1080',
+				aFilter: 'volume=0.5',
+				scaleMode: ProducerScaleMode.FILL,
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).toBe('PLAY 1-10 "AMB" VF "scale=1920:1080" AF "volume=0.5" SCALE_MODE FILL')
+	})
+
+	it('should omit SCALE_MODE when scaleMode is not set', () => {
+		const command: PlayCommand = {
+			command: Commands.Play,
+			params: {
+				channel: 1,
+				layer: 10,
+				clip: 'AMB',
+			},
+		}
+		const serialized = serializers[Commands.Play].map((fn) => fn(command.command, command.params))
+		const result = serialized.filter((l) => l !== '').join(' ')
+		expect(result).not.toContain('SCALE_MODE')
 	})
 })

@@ -18,6 +18,9 @@ import {
 	TransitionParameters,
 } from './parameters.js'
 
+const joinTokens = (tokens: (string | undefined)[]): string =>
+	tokens.filter((t) => t !== undefined && t !== '').join(' ')
+
 const commandNameSerializer = (command: Commands): string => command
 const splitCommandSerializer = (command: Commands): string => command.split(' ')[0]
 const splitCommandKeywordSerializer = (command: Commands): string => command.split(' ')[1]
@@ -50,15 +53,18 @@ const routeCommandSerializer = (_: Commands, { route, mode, framesDelay }: Route
 	(route.layer !== undefined ? '-' + route.layer : '') +
 	(mode ? '  ' + mode : '') +
 	(framesDelay ? 'BUFFER ' + framesDelay : '')
-const producerOptionsSerializer = (_: Commands, { vFilter, aFilter }: ProducerOptions) => {
-	return [vFilter ? `VF "${vFilter}"` : undefined, aFilter ? `AF "${aFilter}"` : undefined]
-		.filter((p) => p !== undefined)
-		.join(' ')
+const producerOptionsSerializer = (_: Commands, { vFilter, aFilter, scaleMode }: ProducerOptions) => {
+	return joinTokens([
+		vFilter ? `VF "${vFilter}"` : undefined,
+		aFilter ? `AF "${aFilter}"` : undefined,
+		scaleMode ? `SCALE_MODE ${scaleMode}` : undefined,
+	])
 }
 const producerV21Serializer = (_: Commands, { channelLayout, vFilter }: ProducerOptions) => {
-	return [vFilter ? 'FILTER ' + vFilter : undefined, channelLayout ? 'CHANNEL_LAYOUT ' + channelLayout : undefined]
-		.filter((p) => p !== undefined)
-		.join(' ')
+	return joinTokens([
+		vFilter ? 'FILTER ' + vFilter : undefined,
+		channelLayout ? 'CHANNEL_LAYOUT ' + channelLayout : undefined,
+	])
 }
 
 const transitionOptSerializer = (_command: Commands, { transition }: { transition?: TransitionParameters }) =>
@@ -88,7 +94,7 @@ const transitionSerializer = ({
 			')'
 		)
 	} else {
-		return [transitionType, duration, tween, direction].filter((p) => p !== undefined).join(' ')
+		return joinTokens([transitionType, duration + '', tween, direction])
 	}
 }
 const callAttributeSerializer = (_: Commands, { param, value }: CallParameters) =>
