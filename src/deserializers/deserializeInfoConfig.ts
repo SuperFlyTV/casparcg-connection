@@ -1,8 +1,8 @@
-import { deserializeXML } from './deserializeXML'
+import { deserializeXML } from './deserializeXML.js'
 
-import { LogLevel } from '../enums'
-import { InfoConfig, ConsumerConfigAny, ConsumerType, ProducerConfig } from '../parameters'
-import { parseString, parseNumber, parseBoolean } from './deserializeXML'
+import { LogLevel } from '../enums.js'
+import { InfoConfig, ConsumerConfigAny, ConsumerType, ProducerConfig } from '../parameters.js'
+import { parseString, parseNumber, parseBoolean } from './deserializeXML.js'
 
 export const deserializeInfoConfig = async (line: string): Promise<InfoConfig> => {
 	if (!line.startsWith('<?xml')) return { rawXml: line }
@@ -38,7 +38,7 @@ function parseConfigPaths(config: any): InfoConfig['paths'] | undefined {
 				logs: parseString(paths, 'log-path'),
 				data: parseString(paths, 'data-path'),
 				templates: parseString(paths, 'template-path'),
-		  }
+			}
 		: undefined
 }
 
@@ -91,7 +91,7 @@ function parseConsumer(type: ConsumerType, consumer: any): ConsumerConfigAny {
 							destY: parseNumber(consumer, 'dest-y'),
 							width: parseNumber(consumer, 'width'),
 							height: parseNumber(consumer, 'height'),
-					  }
+						}
 					: undefined,
 				videoMode: parseString(consumer, 'video-mode'),
 			}
@@ -167,7 +167,7 @@ function parseAmcp(config: any): InfoConfig['amcp'] | undefined {
 					host: parseString(mediaServer, 'host'),
 					port: parseNumber(mediaServer, 'port'),
 				},
-		  }
+			}
 		: undefined
 }
 
@@ -179,7 +179,7 @@ function parseControllers(config: any): InfoConfig['controllers'] | undefined {
 					port: parseNumber(tcp, 'port'),
 					protocol: parseString(tcp, 'protocol'),
 				},
-		  }
+			}
 		: undefined
 }
 
@@ -191,7 +191,7 @@ function parseFFmpeg(config: any): InfoConfig['ffmpeg'] | undefined {
 					threads: parseNumber(producer, 'threads'),
 					autoDeinterlace: parseString(producer, 'auto-deinterlace'),
 				},
-		  }
+			}
 		: undefined
 }
 
@@ -201,7 +201,7 @@ function parseHtml(config: any): InfoConfig['html'] | undefined {
 		? {
 				enableGpu: parseBoolean(html, 'enable-gpu'),
 				remoteDebuggingPort: parseNumber(html, 'remote-debugging-port'),
-		  }
+			}
 		: undefined
 }
 
@@ -210,7 +210,7 @@ function parseNdi(config: any): InfoConfig['ndi'] | undefined {
 	return ndi
 		? {
 				autoLoad: parseBoolean(ndi, 'auto-load'),
-		  }
+			}
 		: undefined
 }
 
@@ -225,9 +225,9 @@ function parseOsc(config: any): InfoConfig['osc'] | undefined {
 					? clients.map((client) => ({
 							address: parseString(client, 'address'),
 							port: parseNumber(client, 'port'),
-					  }))
+						}))
 					: undefined,
-		  }
+			}
 		: undefined
 }
 
@@ -239,7 +239,7 @@ function parseTemplateHosts(config: any): InfoConfig['templateHosts'] | undefine
 				fileName: parseString(host, 'filename'),
 				width: parseNumber(host, 'width'),
 				height: parseNumber(host, 'height'),
-		  }))
+			}))
 		: undefined
 }
 
@@ -253,6 +253,6 @@ function parseVideoModes(config: any): InfoConfig['videoModes'] | undefined {
 				timeScale: parseNumber(mode, 'time-scale'),
 				duration: parseNumber(mode, 'duration'),
 				cadence: parseNumber(mode, 'cadence'),
-		  }))
+			}))
 		: undefined
 }

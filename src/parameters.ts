@@ -9,7 +9,7 @@ import {
 	BlendMode,
 	RouteMode,
 	Version,
-} from './enums'
+} from './enums.js'
 
 export interface CustomParams {
 	/** Optional custom parameters that will be appended to any command */

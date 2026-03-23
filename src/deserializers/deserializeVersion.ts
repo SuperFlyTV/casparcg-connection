@@ -1,4 +1,4 @@
-import { Version } from '../enums'
+import { Version } from '../enums.js'
 
 export const deserializeVersion = (
 	line: string

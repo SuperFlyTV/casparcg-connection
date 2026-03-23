@@ -1,6 +1,6 @@
-import { deserializeXML } from './deserializeXML'
-import { InfoChannelEntry } from '../parameters'
-import { ensureArray, compact } from '../lib'
+import { deserializeXML } from './deserializeXML.js'
+import { InfoChannelEntry } from '../parameters.js'
+import { ensureArray, compact } from '../lib.js'
 
 export const deserializeInfoChannel = async (line: string): Promise<InfoChannelEntry | undefined> => {
 	if (!line.startsWith('<?xml')) return undefined

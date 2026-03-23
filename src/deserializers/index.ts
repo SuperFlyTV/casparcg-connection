@@ -1,11 +1,11 @@
-import { CReturnType, Commands } from '../commands'
-import { deserializeInfoConfig } from './deserializeInfoConfig'
-import { deserializeInfoChannel } from './deserializeInfoChannel'
-import { deserializeInfoLayer } from './deserializeInfoLayer'
-import { deserializeInfo } from './deserializeInfo'
-import { deserializeClipInfo } from './deserializeClipInfo'
-import { deserializeVersion } from './deserializeVersion'
-import { compact } from '../lib'
+import { CReturnType, Commands } from '../commands.js'
+import { deserializeInfoConfig } from './deserializeInfoConfig.js'
+import { deserializeInfoChannel } from './deserializeInfoChannel.js'
+import { deserializeInfoLayer } from './deserializeInfoLayer.js'
+import { deserializeInfo } from './deserializeInfo.js'
+import { deserializeClipInfo } from './deserializeClipInfo.js'
+import { deserializeVersion } from './deserializeVersion.js'
+import { compact } from '../lib.js'
 
 export type Deserializer<C extends Commands> = (data: string[]) => Promise<CReturnType<C>>
 /** Just a type guard to ensure that the inner function returns a value as defined in AllInternalCommands */

@@ -1,5 +1,5 @@
-import { InfoLayerEntry } from '../parameters'
-import { deserializeInfoChannel } from './deserializeInfoChannel'
+import { InfoLayerEntry } from '../parameters.js'
+import { deserializeInfoChannel } from './deserializeInfoChannel.js'
 
 export const deserializeInfoLayer = async (line: string): Promise<InfoLayerEntry | undefined> => {
 	// Is this actually correct?

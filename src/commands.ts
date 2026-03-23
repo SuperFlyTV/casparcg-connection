@@ -94,7 +94,7 @@ import {
 	PingParameters,
 	DiscardParameters,
 	CustomCommandParameters,
-} from './parameters'
+} from './parameters.js'
 
 export enum Commands {
 	Loadbg = 'LOADBG',

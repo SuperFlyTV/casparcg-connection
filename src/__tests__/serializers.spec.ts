@@ -1,4 +1,4 @@
-import { serializers, serializersV21 } from '../serializers'
+import { serializers, serializersV21 } from '../serializers.js'
 import {
 	CgAddCommand,
 	Commands,
@@ -10,8 +10,9 @@ import {
 	MixerFillCommand,
 	PlayCommand,
 	PlayHtmlCommand,
-} from '../commands'
-import { TransitionTween, TransitionType } from '../enums'
+} from '../commands.js'
+import { TransitionTween, TransitionType } from '../enums.js'
+import { describe, it, expect } from 'vitest'
 
 describe('serializers', () => {
 	it('should have serializers for every command', () => {

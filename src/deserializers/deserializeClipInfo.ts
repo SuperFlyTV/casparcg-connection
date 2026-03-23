@@ -1,4 +1,4 @@
-import { ClipInfo } from '../parameters'
+import { ClipInfo } from '../parameters.js'
 
 export function deserializeClipInfo(line: string): ClipInfo | undefined {
 	const groups = line.match(/"([\s\S]*)" +(MOVIE|STILL|AUDIO) +([\s\S]*)/i)

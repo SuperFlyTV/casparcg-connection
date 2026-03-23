@@ -1,15 +1,14 @@
-import { Version } from '../enums'
-import { Connection, SentRequest } from '../connection'
-import { serializersV21, serializers } from '../serializers'
-import { deserializers } from '../deserializers'
-import { Socket as OrgSocket } from 'net'
-import { Socket as MockSocket } from '../__mocks__/net'
-import { AMCPCommand, Commands } from '../commands'
-import { BasicCasparCGAPI, ResponseError } from '../api'
+import { Version } from '../enums.js'
+import { Connection, SentRequest } from '../connection.js'
+import { serializersV21, serializers } from '../serializers.js'
+import { deserializers } from '../deserializers/index.js'
+import { AMCPCommand, Commands } from '../commands.js'
+import { BasicCasparCGAPI, ResponseError, Response } from '../api.js'
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest'
 
-jest.mock('net')
+const { Socket: SocketMock } = await vi.hoisted(async () => vi.importActual('../__mocks__/net.js'))
+vi.mock('net', () => ({ Socket: SocketMock }))
 
-const SocketMock = OrgSocket as any as typeof MockSocket
 const PARSED_INFO_CHANNEL_720p50 = {
 	channel: 1,
 	format: '720p5000',
@@ -50,11 +49,11 @@ describe('connection', () => {
 	})
 
 	describe('receiving', () => {
-		const onSocketCreate = jest.fn()
-		const onConnection = jest.fn()
-		const onSocketClose = jest.fn()
-		const onSocketWrite = jest.fn()
-		const onConnectionChanged = jest.fn()
+		const onSocketCreate = vi.fn()
+		const onConnection = vi.fn()
+		const onSocketClose = vi.fn()
+		const onSocketWrite = vi.fn()
+		const onConnectionChanged = vi.fn()
 
 		function setupSocketMock() {
 			SocketMock.mockOnNextSocket((socket: any) => {
@@ -89,7 +88,7 @@ describe('connection', () => {
 			onConnectionChanged.mockClear()
 
 			// Just a check to ensure that the unit tests cleaned up the socket after themselves:
-			// eslint-disable-next-line jest/no-standalone-expect
+			// eslint-disable-next-line vitest/no-standalone-expect
 			expect(sockets).toHaveLength(0)
 		})
 
@@ -97,18 +96,18 @@ describe('connection', () => {
 			fn: (
 				connection: Connection,
 				socket: MockSocket,
-				onConnError: jest.Mock,
-				onConnData: jest.Mock,
-				getRequestForResponse: jest.Mock<SentRequest | undefined>
+				onConnError: Mock,
+				onConnData: Mock,
+				getRequestForResponse: Mock<(response: Response<any>) => SentRequest | undefined>
 			) => Promise<void>
 		) {
-			const getRequestForResponse = jest.fn()
+			const getRequestForResponse = vi.fn()
 			const conn = new Connection('127.0.0.1', 5250, true, getRequestForResponse)
 			try {
 				expect(conn).toBeTruthy()
 
-				const onConnError = jest.fn()
-				const onConnData = jest.fn()
+				const onConnError = vi.fn()
+				const onConnData = vi.fn()
 				conn.on('error', onConnError)
 				conn.on('data', onConnData)
 
@@ -357,13 +356,13 @@ describe('connection', () => {
 			try {
 				expect(client).toBeTruthy()
 
-				const onConnError = jest.fn()
-				// const onConnData = jest.fn()
+				const onConnError = vi.fn()
+				// const onConnData = vi.fn()
 				client.on('error', onConnError)
 				// client.on('data', onConnData)
 
-				const onCommandOk = jest.fn()
-				const onCommandError = jest.fn()
+				const onCommandOk = vi.fn()
+				const onCommandError = vi.fn()
 
 				const sockets = SocketMock.openSockets()
 				expect(sockets).toHaveLength(1)
