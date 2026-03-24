@@ -91,7 +91,6 @@ import {
 	InfoConfig,
 	BeginParameters,
 	CommitParameters,
-	PingParameters,
 	DiscardParameters,
 	CustomCommandParameters,
 } from './parameters.js'
@@ -181,7 +180,6 @@ export enum Commands {
 	Bye = 'BYE',
 	Kill = 'KILL',
 	Restart = 'RESTART',
-	Ping = 'PING',
 	Begin = 'BEGIN',
 	Commit = 'COMMIT',
 	Discard = 'DISCARD',
@@ -300,7 +298,6 @@ export interface AllTypedCommands {
 	[Commands.Bye]: TypedResponseCommand<Commands.Bye, ByeParameters, unknown>
 	[Commands.Kill]: TypedResponseCommand<Commands.Kill, KillParameters, unknown>
 	[Commands.Restart]: TypedResponseCommand<Commands.Restart, RestartParameters, unknown>
-	[Commands.Ping]: TypedResponseCommand<Commands.Ping, PingParameters, unknown>
 	[Commands.Begin]: TypedResponseCommand<Commands.Begin, BeginParameters, unknown>
 	[Commands.Commit]: TypedResponseCommand<Commands.Commit, CommitParameters, unknown>
 	[Commands.Discard]: TypedResponseCommand<Commands.Discard, DiscardParameters, unknown>
@@ -392,7 +389,6 @@ export type GlGcCommand = AllTypedCommands[Commands.GlGc]['command']
 export type ByeCommand = AllTypedCommands[Commands.Bye]['command']
 export type KillCommand = AllTypedCommands[Commands.Kill]['command']
 export type RestartCommand = AllTypedCommands[Commands.Restart]['command']
-export type PingCommand = AllTypedCommands[Commands.Ping]['command']
 export type BeginCommand = AllTypedCommands[Commands.Begin]['command']
 export type CommitCommand = AllTypedCommands[Commands.Commit]['command']
 export type DiscardCommand = AllTypedCommands[Commands.Discard]['command']
@@ -483,7 +479,6 @@ export type AMCPCommand =
 	| ByeCommand
 	| KillCommand
 	| RestartCommand
-	| PingCommand
 	| BeginCommand
 	| CommitCommand
 	| DiscardCommand
