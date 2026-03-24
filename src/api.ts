@@ -11,6 +11,8 @@ export interface Options {
 	timeoutTime?: number
 	/** Immediately connects after instantiating the class, defaults to false */
 	autoConnect?: boolean
+	/** Interval to send PING:s to CasparCG (milliseconds) . Set to 0 to disable. Defaults to 30000 */
+	pingInterval?: number
 }
 
 export type SendResult<ReturnData> =
@@ -77,6 +79,7 @@ export class BasicCasparCGAPI extends EventEmitter<ConnectionEvents> {
 			this._host,
 			this._port,
 			!(options?.autoConnect === false),
+			options?.pingInterval ?? 30000,
 			(response: Response<any>) => {
 				// Connection asks: "what request does this response belong to?"
 				const request = this.findRequestFromResponse(response)

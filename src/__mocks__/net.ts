@@ -85,6 +85,9 @@ export class Socket extends EventEmitter {
 		// noop
 	}
 
+	public setKeepAlive(): void {
+		// noop
+	}
 	public destroy(): void {
 		this.destroyed = true
 	}
