@@ -21,7 +21,7 @@ const PARSED_INFO_CHANNEL_720p50 = {
 describe('connection', () => {
 	describe('version handing', () => {
 		function setupConnectionClass(v = Version.v23x) {
-			const conn = new Connection('127.0.0.1', 5250, false, () => undefined)
+			const conn = new Connection('127.0.0.1', 5250, false, 0, () => undefined)
 			conn.version = v
 
 			return conn
@@ -102,7 +102,7 @@ describe('connection', () => {
 			) => Promise<void>
 		) {
 			const getRequestForResponse = vi.fn()
-			const conn = new Connection('127.0.0.1', 5250, true, getRequestForResponse)
+			const conn = new Connection('127.0.0.1', 5250, true, 0, getRequestForResponse)
 			try {
 				expect(conn).toBeTruthy()
 
