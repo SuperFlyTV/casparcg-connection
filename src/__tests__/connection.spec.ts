@@ -21,7 +21,7 @@ const PARSED_INFO_CHANNEL_720p50 = {
 describe('connection', () => {
 	describe('version handing', () => {
 		function setupConnectionClass(v = Version.v23x) {
-			const conn = new Connection('127.0.0.1', 5250, false, () => undefined)
+			const conn = new Connection('127.0.0.1', 5250, false, 0, () => undefined)
 			conn.version = v
 
 			return conn
@@ -102,7 +102,7 @@ describe('connection', () => {
 			) => Promise<void>
 		) {
 			const getRequestForResponse = vi.fn()
-			const conn = new Connection('127.0.0.1', 5250, true, getRequestForResponse)
+			const conn = new Connection('127.0.0.1', 5250, true, 0, getRequestForResponse)
 			try {
 				expect(conn).toBeTruthy()
 
@@ -528,4 +528,239 @@ describe('connection', () => {
 			})
 		})
 	})
+	describe('connection management', () => {
+		let enablePingReplies = true
+		const PING_INTERVAL = 10 // [ms] Something short to make the test run fast, but not too short to cause flakiness
+		const RECONNECT_TIME = PING_INTERVAL * 3 // something short, but distinctly longer than the ping interval
+
+		const onSocketCreate = vi.fn()
+		const onConnection = vi.fn()
+		const onSocketClose = vi.fn()
+		const onSocketWrite = vi.fn((data) => {
+			if (data === 'PING\r\n') {
+				// Reply to ping
+				const sockets = SocketMock.openSockets()
+				if (sockets.length !== 1) throw new Error(`Expected 1 socket, got ${sockets.length}`)
+				const socket = sockets[0]
+
+				if (enablePingReplies) socket.mockData(Buffer.from(`PONG\r\n\r\n`)) // reply to PING
+			}
+		})
+		const onConnectionChanged = vi.fn()
+		const getRequestForResponse = vi.fn(() => {
+			return undefined
+		})
+		function getPingCount() {
+			return onSocketWrite.mock.calls.filter((call) => call[0] === 'PING\r\n').length
+		}
+
+		beforeEach(() => {
+			for (let i = 0; i < 2; i++) {
+				SocketMock.mockOnNextSocket((socket: any) => {
+					onSocketCreate()
+
+					socket.onConnect = onConnection
+					socket.onWrite = onSocketWrite
+					socket.onClose = onSocketClose
+				})
+			}
+		})
+		afterEach(() => {
+			const sockets = SocketMock.openSockets()
+			// Destroy any lingering sockets, to prevent a failing test from affecting other tests:
+			sockets.forEach((s) => s.destroy())
+
+			SocketMock.clearMockOnNextSocket()
+			onSocketCreate.mockClear()
+			onConnection.mockClear()
+			onSocketClose.mockClear()
+			onSocketWrite.mockClear()
+			onConnectionChanged.mockClear()
+
+			// Just a check to ensure that the unit tests cleaned up the socket after themselves:
+			if (sockets.length !== 0) throw new Error(`Expected 0 sockets, got ${sockets.length}`)
+		})
+		it('reconnects after socket close', async () => {
+			const conn = new Connection('127.0.0.1', 5250, true, 0, getRequestForResponse, RECONNECT_TIME)
+			try {
+				expect(conn).toBeTruthy()
+
+				const onConnError = vi.fn()
+				const onConnConnect = vi.fn()
+				const onConnDisconnect = vi.fn()
+				conn.on('error', onConnError)
+				conn.on('connect', onConnConnect)
+				conn.on('disconnect', onConnDisconnect)
+
+				expect(onSocketCreate).toHaveBeenCalledTimes(1)
+				onSocketCreate.mockClear()
+
+				const sockets = SocketMock.openSockets()
+				expect(sockets).toHaveLength(1)
+				const socket = sockets[0]
+
+				// Wait for connection to be established:
+				await new Promise<void>((resolve, reject) => {
+					conn.once('connect', () => resolve())
+					setTimeout(() => reject(new Error('Connection timeout in test')), 1000)
+				})
+
+				expect(conn.connected).toBeTruthy()
+				expect(onConnConnect).toHaveBeenCalledTimes(1)
+				onConnConnect.mockClear()
+				expect(onConnDisconnect).toHaveBeenCalledTimes(0)
+				onConnDisconnect.mockClear()
+				expect(onSocketCreate).toHaveBeenCalledTimes(0)
+
+				// Close socket and wait for 'disconnect' event to be emitted:
+				await new Promise<void>((resolve, reject) => {
+					conn.once('disconnect', () => resolve())
+					setTimeout(() => reject(new Error('Disconnection timeout in test')), 1000)
+					// Close socket:
+					socket.mockClose()
+				})
+
+				expect(conn.connected).toBeFalsy()
+				expect(onConnConnect).toHaveBeenCalledTimes(0)
+				expect(onConnDisconnect).toHaveBeenCalledTimes(1)
+				expect(onSocketCreate).toHaveBeenCalledTimes(0)
+				onConnConnect.mockClear()
+				onConnDisconnect.mockClear()
+				onSocketCreate.mockClear()
+
+				// Now, a reconnect should be attempted by the Connection:
+
+				await waitFor(() => {
+					expect(onSocketCreate).toHaveBeenCalledTimes(1)
+					expect(onConnConnect).toHaveBeenCalledTimes(1)
+				}, RECONNECT_TIME * 2.5)
+				onSocketCreate.mockClear()
+				onConnConnect.mockClear()
+
+				expect(onConnDisconnect).toHaveBeenCalledTimes(0)
+				onConnDisconnect.mockClear()
+
+				// Last:
+				expect(onConnError).toHaveBeenCalledTimes(0)
+			} finally {
+				// Ensure cleaned up
+				conn.disconnect()
+			}
+		})
+		it('reconnects after PING loss', async () => {
+			const conn = new Connection('127.0.0.1', 5250, true, PING_INTERVAL, getRequestForResponse, RECONNECT_TIME)
+			try {
+				expect(conn).toBeTruthy()
+
+				const onConnError = vi.fn()
+				const onConnConnect = vi.fn()
+				const onConnDisconnect = vi.fn()
+				conn.on('error', onConnError)
+				conn.on('connect', onConnConnect)
+				conn.on('disconnect', onConnDisconnect)
+
+				expect(onSocketCreate).toHaveBeenCalledTimes(1)
+				onSocketCreate.mockClear()
+
+				const sockets = SocketMock.openSockets()
+				expect(sockets).toHaveLength(1)
+
+				// Wait for connection to be established:
+				await new Promise<void>((resolve, reject) => {
+					conn.once('connect', () => resolve())
+					setTimeout(() => reject(new Error('Connection timeout in test')), 1000)
+				})
+
+				// PING should have been sent by now:
+				expect(getPingCount()).toBeGreaterThanOrEqual(1)
+				onSocketWrite.mockClear()
+
+				expect(conn.connected).toBeTruthy()
+				expect(onConnConnect).toHaveBeenCalledTimes(1)
+				onConnConnect.mockClear()
+				expect(onConnDisconnect).toHaveBeenCalledTimes(0)
+				onConnDisconnect.mockClear()
+				expect(onSocketCreate).toHaveBeenCalledTimes(0)
+
+				// Ensure that more PINGs are sent:
+				await waitFor(() => {
+					expect(getPingCount()).toBeGreaterThanOrEqual(2)
+				}, PING_INTERVAL * 3)
+
+				onSocketWrite.mockClear()
+
+				// Now, stop replying to PINGs:
+				enablePingReplies = false
+
+				// Wait for disconnect to be emitted, which should happen after a PING is sent and not replied to:
+				await new Promise<void>((resolve, reject) => {
+					conn.once('disconnect', () => resolve())
+					setTimeout(() => reject(new Error('Disconnection timeout in test')), 1000)
+				})
+
+				expect(getPingCount()).toBeGreaterThanOrEqual(1) // Ensure PING's has been sent
+
+				expect(conn.connected).toBeFalsy()
+				expect(onConnConnect).toHaveBeenCalledTimes(0)
+				expect(onConnDisconnect).toHaveBeenCalledTimes(1)
+				expect(onSocketCreate).toHaveBeenCalledTimes(0)
+				onConnConnect.mockClear()
+				onConnDisconnect.mockClear()
+				onSocketCreate.mockClear()
+
+				// Now, a reconnect should be attempted by the Connection:
+
+				await waitFor(() => {
+					expect(onSocketCreate).toHaveBeenCalledTimes(1)
+				}, RECONNECT_TIME * 2.5)
+
+				onSocketCreate.mockClear()
+
+				// Allow PING replies again, so that the reconnect can succeed:
+				enablePingReplies = true
+
+				// Wait for the new connection to be established:
+				await new Promise<void>((resolve, reject) => {
+					conn.once('connect', () => resolve())
+					setTimeout(() => reject(new Error('Connection timeout in test')), 1000)
+				})
+
+				expect(onConnConnect).toHaveBeenCalledTimes(1)
+				expect(onConnDisconnect).toHaveBeenCalledTimes(0)
+				onConnConnect.mockClear()
+				onConnDisconnect.mockClear()
+
+				// Last:
+				expect(onConnError).toHaveBeenCalledTimes(0)
+			} finally {
+				// Ensure cleaned up
+				conn.disconnect()
+			}
+		})
+	})
 })
+
+/** Wait for a condition to be fulfilled, ie the callback to not throw anymore. */
+async function waitFor(cb: () => void, timeout = 1000, testInterval?: number): Promise<void> {
+	if (timeout <= 0) throw new Error('Timeout must be greater than 0')
+
+	if (testInterval === undefined) testInterval = Math.max(1, Math.floor(timeout / 10))
+
+	const startTime = Date.now()
+	let lastError: any = undefined
+	do {
+		try {
+			cb()
+			return
+		} catch (err) {
+			lastError = err
+			// Wait a bit and try again:
+			await new Promise((resolve) => setTimeout(resolve, testInterval))
+		}
+	} while (Date.now() - startTime < timeout)
+
+	console.error(`waitFor timed out after ${Date.now() - startTime}ms (limit: ${timeout}).`)
+
+	if (lastError) throw lastError
+	else throw new Error('waitFor timed out without throwing an error')
+}

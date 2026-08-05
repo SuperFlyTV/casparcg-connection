@@ -89,21 +89,51 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	private _unprocessedData = ''
 	private _unprocessedLines: string[] = []
 	private _reconnectTimeout?: NodeJS.Timeout
-	private _connected = false
+	private _socketConnected = false
+	private _emittedConnected = false
 	private _version = Version.v23x
+
+	private _pingTimeout?: NodeJS.Timeout
+	/**
+	 * Timestamp when last PING (in reply to PING) was received.
+	 * Is set to -1 before first PING is sent
+	 */
+	private _lastPongReceivedTime: number = -1
+
+	/** Whether the Connection should be reconnecting or not */
+	private _shouldBeConnected = false
 
 	constructor(
 		private host: string,
 		private port = 5250,
+		/** Set to true to initialize connection. (If set to false, changeConnection() must be called to connect later.) */
 		autoConnect: boolean,
-		private _getRequestForResponse: (response: Response<any>) => SentRequest | undefined
+		/** Set to 0 to disable */
+		private pingInterval: number,
+		private _getRequestForResponse: (response: Response<any>) => SentRequest | undefined,
+		/** Time until a reconnection is attempted[ms] */
+		private reconnectTime = 5000
 	) {
 		super()
-		if (autoConnect) this._setupSocket()
+		if (autoConnect) this.changeConnection(host, port)
 	}
 
 	get connected(): boolean {
-		return this._connected
+		if (!this._socketConnected) return false
+		if (
+			// Pinging is enabled:
+			this.pingInterval > 0
+		) {
+			// If we haven't sent first PING yet, we consider the connection to be disconnected,
+			// otherwise connection status will flicker on -> off -> on upon startup:
+			if (this._lastPongReceivedTime === -1) return false
+
+			// Ping connectivity is NOT established,
+			// ie a PONG has not been received within 2x the ping interval, which is a reasonable time to expect a reply:
+
+			if (Date.now() - this._lastPongReceivedTime > this.pingInterval * 2) return false
+		}
+		return true
 	}
 
 	set version(version: Version) {
@@ -116,11 +146,16 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 		this._socket?.end()
 
+		this._shouldBeConnected = true
 		this._setupSocket()
 	}
 
 	disconnect(): void {
+		this._shouldBeConnected = false
+
 		this._socket?.end()
+		clearInterval(this._pingTimeout)
+		this._pingTimeout = undefined
 	}
 
 	async sendCommand(cmd: AMCPCommand, reqId?: string): Promise<Error | undefined> {
@@ -146,7 +181,20 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		this._unprocessedLines.push(...newLines)
 
 		while (this._unprocessedLines.length > 0) {
-			const result = RESPONSE_REGEX.exec(this._unprocessedLines[0])
+			const line = this._unprocessedLines[0]
+
+			// Special case: "PONG" reply:
+			if (line === 'PONG') {
+				// Note: "PONG" doesn't follow the usual response format,
+				// and is sent by CasparCG in response to a PING command.
+
+				this._lastPongReceivedTime = Date.now()
+				this._handleChangedConnectionStatus()
+				// remove processed lines
+				this._unprocessedLines.splice(0, 1)
+				continue
+			}
+			const result = RESPONSE_REGEX.exec(line)
 
 			if (result?.groups?.['ResponseCode']) {
 				let processedLines = 1
@@ -217,16 +265,6 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 			})
 	}
 
-	private _triggerReconnect() {
-		if (!this._reconnectTimeout) {
-			this._reconnectTimeout = setTimeout(() => {
-				this._reconnectTimeout = undefined
-
-				if (!this._connected) this._setupSocket()
-			}, 5000)
-		}
-	}
-
 	private _setupSocket() {
 		if (this._socket) {
 			this._socket.removeAllListeners()
@@ -237,6 +275,7 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 
 		this._socket = new Socket()
 		this._socket.setEncoding('utf-8')
+		this._socket.setKeepAlive(true)
 
 		this._socket.on('data', (data) => {
 			try {
@@ -246,26 +285,37 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 			}
 		})
 		this._socket.on('connect', () => {
-			this._setConnected(true)
+			this._socketConnected = true
+			this._handleChangedConnectionStatus()
 
 			// Any data which hasn't been parsed yet is now incomplete, and can be discarded
 			this._discardUnprocessed()
+
+			this.setupPing()
 		})
 		this._socket.on('close', () => {
 			this._discardUnprocessed()
 
-			this._setConnected(false)
-			this._triggerReconnect()
+			this._socketConnected = false
+			this._handleChangedConnectionStatus()
 		})
 		this._socket.on('error', (e) => {
 			this._discardUnprocessed()
 
-			if (`${e}`.match(/ECONNREFUSED/)) {
-				// Unable to connect, no need to handle this error
-				this._setConnected(false)
-			} else {
-				this.emit('error', e)
+			const errorString =
+				// Simple Error:
+				`${e}` +
+					// Error object with code property (such as AggregateError):
+					(e instanceof Error && (e as any).code) || ''
+
+			if (errorString.match(/ECONNREFUSED/) || errorString.match(/ECONNRESET/)) {
+				// Unable to connect, handle this as a disconnect event:
+				this._socketConnected = false
+				this._handleChangedConnectionStatus()
+				return
 			}
+
+			this.emit('error', e)
 		})
 
 		this._socket.connect(this.port, this.host)
@@ -276,17 +326,32 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		this._unprocessedLines = []
 	}
 
-	private _setConnected(connected: boolean) {
-		if (connected) {
-			if (!this._connected) {
-				this._connected = true
-				this.emit('connect')
+	private _handleChangedConnectionStatus() {
+		const actuallyConnected = this.connected
+
+		// If the status has changed, emit the appropriate event:
+		if (actuallyConnected !== this._emittedConnected) {
+			this._emittedConnected = actuallyConnected
+			if (actuallyConnected) this.emit('connect')
+			else this.emit('disconnect')
+		}
+
+		// Handle reconnection logic:
+		if (actuallyConnected) {
+			// Is connected, so cancel any pending reconnections:
+			if (this._reconnectTimeout) {
+				clearTimeout(this._reconnectTimeout)
+				this._reconnectTimeout = undefined
 			}
-		} else {
-			if (this._connected) {
-				this._connected = false
-				this.emit('disconnect')
-			}
+		} else if (this._shouldBeConnected && !this._reconnectTimeout) {
+			// Is disconnected, so schedule a reconnect if not already scheduled
+			this._reconnectTimeout = setTimeout(() => {
+				this._reconnectTimeout = undefined
+				if (!this._shouldBeConnected) return
+
+				// Check if we're already connected, in which case we don't need to reconnect:
+				if (!this.connected) this._setupSocket()
+			}, this.reconnectTime)
 		}
 	}
 
@@ -320,5 +385,36 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 		[key: string]: (input: string[]) => Promise<any>
 	} {
 		return deserializers
+	}
+	private setupPing() {
+		if (this._pingTimeout !== undefined) {
+			clearInterval(this._pingTimeout)
+			this._pingTimeout = undefined
+		}
+
+		if (this.pingInterval > 0) {
+			const sendPing = () => {
+				if (!this._socketConnected) {
+					// Socket not connected, setupPing() will be called when the socket connects, so we can just return here.
+					this._lastPongReceivedTime = -1 // reset
+					return
+				}
+				// Trigger _maybeEmitConnectionEvent() to update connection status based on last pong received time:
+				this._handleChangedConnectionStatus()
+
+				if (this._lastPongReceivedTime === -1) this._lastPongReceivedTime = 0 // Signal that first ping has been sent
+
+				// Send PING command:
+				// Note: We're bypassing the normal sendCommand function here,
+				// because in CasparCG the PING command is parsed and handled before the normal command queue,
+				// therefore it doesn't support the usual REQ/RES-wrapping.
+				this._socket?.write('PING' + '\r\n', (e) => {
+					if (e) this.emit('error', e)
+				})
+			}
+
+			this._pingTimeout = setInterval(sendPing, this.pingInterval)
+			sendPing()
+		}
 	}
 }
