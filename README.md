@@ -66,9 +66,12 @@ Installing with yarn adds the dev-dependencies needed to compile TypeScript. A s
 
 ## Doing a release
 
-- Run `yarn changelog` to generate the changelog, tags and commit.
-- Push these changes and the newly made tag.
-- Trigger a run of the [Publish to NPM](https://github.com/SuperFlyTV/casparcg-connection/actions/workflows/publish.yaml) workflow in GitHub Actions.
+- Run `yarn changelog` to generate the changelog, tags and commit. Push to Github.
+- A Github Action will automatically build and publish to npm.
+
+### Prerelease / nightly
+
+You can manually trigger publishing a nightly built at https://github.com/SuperFlyTV/casparcg-connection/actions/workflows/publish.yaml
 
 ## Documentation
 
