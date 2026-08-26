@@ -64,7 +64,7 @@
 		"watch": "vitest --watch",
 		"cov": "vitest --run --coverage; open-cli coverage/lcov-report/index.html",
 		"cov-open": "open-cli coverage/lcov-report/index.html",
-		"docs": "typedoc ./src/index.ts",
+		"docs": "typedoc --tsconfig tsconfig.build.json ./src/index.ts",
 		"changelog": "sofie-version",
 		"release": "run reset && run test && run changelog",
 		"release:skiptest": "run reset && run changelog",

@@ -6,7 +6,14 @@ import { AMCPCommand, Commands } from '../commands.js'
 import { BasicCasparCGAPI, ResponseError, Response } from '../api.js'
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest'
 
-const { Socket: SocketMock } = await vi.hoisted(async () => vi.importActual('../__mocks__/net.js'))
+// eslint-disable-next-line vitest/no-mocks-import
+import type { Socket as S0 } from '../__mocks__/net.js'
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+const { Socket: SocketMock } = (await vi.hoisted(async () => vi.importActual('../__mocks__/net.js'))) as {
+	Socket: typeof S0
+}
+type SocketMock = S0
+
 vi.mock('net', () => ({ Socket: SocketMock }))
 
 const PARSED_INFO_CHANNEL_720p50 = {
@@ -95,7 +102,7 @@ describe('connection', () => {
 		async function runWithConnection(
 			fn: (
 				connection: Connection,
-				socket: MockSocket,
+				socket: SocketMock,
 				onConnError: Mock,
 				onConnData: Mock,
 				getRequestForResponse: Mock<(response: Response<any>) => SentRequest | undefined>
