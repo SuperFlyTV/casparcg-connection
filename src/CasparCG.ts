@@ -79,7 +79,6 @@ import {
 	RestartParameters,
 	InfoChannelParameters,
 	InfoLayerParameters,
-	PingParameters,
 	BeginParameters,
 	CommitParameters,
 	DiscardParameters,
@@ -570,12 +569,6 @@ export class CasparCG extends BasicCasparCGAPI {
 	async restart(params: RestartParameters = {}): Promise<APIRequest<Commands.Restart>> {
 		return this.executeCommand({
 			command: Commands.Restart,
-			params,
-		})
-	}
-	async ping(params: PingParameters = {}): Promise<APIRequest<Commands.Ping>> {
-		return this.executeCommand({
-			command: Commands.Ping,
 			params,
 		})
 	}

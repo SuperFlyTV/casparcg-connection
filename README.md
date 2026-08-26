@@ -42,7 +42,7 @@ In your code, include and use the CasparCG object from this library with a code 
 ```javascript
 const { CasparCG } = require('casparcg-connection')
 
-const connection = new CasparCG()
+const connection = new CasparCG({ host: 'localhost', port: 5250 })
 const { error, request } = await connection.play({ channel: 1, layer: 1, clip: 'amb' })
 if (error) {
 	console.log('Error when sending', error)
@@ -62,14 +62,16 @@ Installing with yarn adds the dev-dependencies needed to compile TypeScript. A s
 - **`yarn build`** Runs a single build command without watching for changes.
 - **`yarn build -w`** Rebuilds on every change.
 - **`yarn lint`** Runs code linting. Pull Requests won't be accepted without lint compliance.
-- **`yarn test`** Runs code tests through Jest.
+- **`yarn test`** Runs code tests through vitest.
 
 ## Doing a release
 
-* Run `yarn changelog` to generate the changelog, tags and commit.
-* Push these changes and the newly made tag.
-* Trigger a run of the [Publish to NPM](https://github.com/SuperFlyTV/casparcg-connection/actions/workflows/publish.yaml) workflow in GitHub Actions.
+- Run `yarn changelog` to generate the changelog, tags and commit. Push to Github.
+- A Github Action will automatically build and publish to npm.
 
+### Prerelease / nightly
+
+You can manually trigger publishing a nightly built at https://github.com/SuperFlyTV/casparcg-connection/actions/workflows/publish.yaml
 
 ## Documentation
 
