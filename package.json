@@ -1,6 +1,6 @@
 {
 	"name": "casparcg-connection",
-	"version": "7.0.0-0",
+	"version": "7.0.0",
 	"description": "Node.js Javascript/Typescript library for CasparCG connection and commands.",
 	"license": "MIT",
 	"repository": {

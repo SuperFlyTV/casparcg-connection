@@ -1,6 +1,23 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [Convential Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
+All notable changes to this project will be documented in this file. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification) for commit guidelines.
+
+## [7.0.0](http://superfly.tv/compare/v6.3.3...v7.0.0) (Wed Aug 26 2026)
+
+## Breaking changes
+
+### Fixes
+
+* **!** leaking timeout timer [0d2556ae](http://superfly.tv/commit/0d2556ae94349b99ad4fdcf7c6875ce233ed2805)
+
+### Features
+
+* add `pingInterval` option, defaults to 30 seconds. casparcg-connection will now send PING commands to CasparCG, to ensure connectivity. [80ada38e](http://superfly.tv/commit/80ada38ee6b5e4da802a122066f55f026ec498c7)
+* add SCALE_MODE for ffmpeg and image producers (#224) [1ece6cfc](http://superfly.tv/commit/1ece6cfc0e255c42e6669bc5d96579287d4e5e0e)
+
+### Other
+
+*  require node 22 and yarn4 [cfd944ff](https://github.com/SuperFlyTV/casparcg-connection/commit/cfd944ff1de8c95f1b78d45fb8c0afbe3d04a8d8)
 
 ## [6.3.3](http://superfly.tv/compare/v6.3.2...v6.3.3) (Tue Nov 11 2025)
 
