@@ -249,11 +249,11 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 				if (previouslySentRequest) {
 					const deserializers = this._getVersionedDeserializers()
 					const deserializer = deserializers[previouslySentRequest.command.command] as
-						| ((input: string[]) => Promise<any>)
+						| ((input: string[], command?: AMCPCommand) => Promise<any>)
 						| undefined
 					// attempt to deserialize the response if we can
 					if (deserializer && responseData?.length) {
-						response.data = await deserializer(responseData)
+						response.data = await deserializer(responseData, previouslySentRequest.command)
 					}
 				}
 
