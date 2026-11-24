@@ -744,6 +744,45 @@ describe('connection', () => {
 				conn.disconnect()
 			}
 		})
+		it('stays disconnected when a PONG arrives after disconnect()', async () => {
+			const conn = new Connection('127.0.0.1', 5250, true, PING_INTERVAL, getRequestForResponse, RECONNECT_TIME)
+			const sockets = SocketMock.openSockets()
+			expect(sockets).toHaveLength(1)
+			const socket = sockets[0]
+			try {
+				const onConnConnect = vi.fn()
+				conn.on('error', vi.fn())
+				conn.on('connect', onConnConnect)
+
+				// Wait for connection to be established:
+				await new Promise<void>((resolve, reject) => {
+					conn.once('connect', () => resolve())
+					setTimeout(() => reject(new Error('Connection timeout in test')), 1000)
+				})
+				onConnConnect.mockClear()
+
+				// The server hangs: PINGs go unanswered until the connection is considered lost:
+				enablePingReplies = false
+				await new Promise<void>((resolve, reject) => {
+					conn.once('disconnect', () => resolve())
+					setTimeout(() => reject(new Error('Disconnection timeout in test')), 1000)
+				})
+
+				// Like a real socket, end() only half-closes: data can still arrive until the server closes its side.
+				socket.end = () => undefined
+				conn.disconnect()
+
+				// The server recovers and answers a PING that was sent before disconnect():
+				socket.mockData(Buffer.from('PONG\r\n'))
+
+				expect(conn.connected).toBeFalsy()
+				expect(onConnConnect).toHaveBeenCalledTimes(0)
+			} finally {
+				enablePingReplies = true
+				conn.disconnect()
+				socket.destroy()
+			}
+		})
 	})
 })
 

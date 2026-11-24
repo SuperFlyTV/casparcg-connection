@@ -119,6 +119,9 @@ export class Connection extends EventEmitter<ConnectionEvents> {
 	}
 
 	get connected(): boolean {
+		// After disconnect(), the socket is only half-closed and can still receive data (such as a late PONG),
+		// which must not make us appear connected again:
+		if (!this._shouldBeConnected) return false
 		if (!this._socketConnected) return false
 		if (
 			// Pinging is enabled:
