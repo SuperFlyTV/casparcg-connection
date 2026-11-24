@@ -235,6 +235,107 @@ describe('deserializers', () => {
 			})
 		)
 	})
+	it('should deserialize INFO Channel without a mixer section (CasparCG 2.5+)', async () => {
+		const input = [
+			`<?xml version="1.0" encoding="utf-8"?>
+		<channel>
+		   <format>1080p5000</format>
+		   <framerate>50</framerate>
+		   <framerate>1</framerate>
+		   <stage>
+			  <layer>
+				 <layer_10>
+					<background>
+					   <producer>empty</producer>
+					</background>
+					<foreground>
+					   <color>#FF0000</color>
+					   <paused>false</paused>
+					   <producer>color</producer>
+					</foreground>
+				 </layer_10>
+			  </layer>
+		   </stage>
+		</channel>`,
+		]
+
+		const output = await deserializers[Commands.InfoChannel](input)
+
+		expect(output?.channel.framerate).toBe(50)
+		expect(output?.channel.mixer.audio.volumes).toEqual([])
+		expect(output?.channel.layers).toHaveLength(1)
+		expect(output?.channel.layers[0].layer).toBe(10)
+	})
+	describe('INFO Layer', () => {
+		// The server replies to INFO <ch>-<layer> with the whole channel's
+		// state; the deserializer must narrow it to the requested layer.
+		const twoLayerChannel = [
+			`<?xml version="1.0" encoding="utf-8"?>
+		<channel>
+		   <framerate>50</framerate>
+		   <framerate>1</framerate>
+		   <mixer>
+			  <audio>
+				 <volume>0</volume>
+				 <volume>0</volume>
+			  </audio>
+		   </mixer>
+		   <stage>
+			  <layer>
+				 <layer_10>
+					<background>
+					   <producer>empty</producer>
+					</background>
+					<foreground>
+					   <color>#FF0000</color>
+					   <paused>false</paused>
+					   <producer>color</producer>
+					</foreground>
+				 </layer_10>
+				 <layer_20>
+					<background>
+					   <producer>empty</producer>
+					</background>
+					<foreground>
+					   <color>#00FF00</color>
+					   <paused>false</paused>
+					   <producer>color</producer>
+					</foreground>
+				 </layer_20>
+			  </layer>
+		   </stage>
+		</channel>`,
+		]
+
+		it('should return only the requested layer', async () => {
+			const output = await deserializers[Commands.InfoLayer](twoLayerChannel, {
+				command: Commands.InfoLayer,
+				params: { channel: 1, layer: 20 },
+			})
+
+			expect(output?.channel.layers).toHaveLength(1)
+			expect(output?.channel.layers[0]).toMatchObject({
+				layer: 20,
+				background: expect.anything(),
+				foreground: expect.anything(),
+			})
+		})
+
+		it('should return an empty layer list when the requested layer is not in the reply', async () => {
+			const output = await deserializers[Commands.InfoLayer](twoLayerChannel, {
+				command: Commands.InfoLayer,
+				params: { channel: 1, layer: 42 },
+			})
+
+			expect(output?.channel.layers).toHaveLength(0)
+		})
+
+		it('should keep every layer when the sent command is unknown', async () => {
+			const output = await deserializers[Commands.InfoLayer](twoLayerChannel)
+
+			expect(output?.channel.layers).toHaveLength(2)
+		})
+	})
 	describe('INFO Config', () => {
 		it('should deserialize correctly formed config', async () => {
 			const input = [

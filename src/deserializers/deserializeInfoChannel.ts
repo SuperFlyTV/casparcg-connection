@@ -10,7 +10,11 @@ export const deserializeInfoChannel = async (line: string): Promise<InfoChannelE
 	if (!parsed) return undefined
 
 	const channel = ensureArray(parsed.channel)[0]
+	// CasparCG 2.5+ omits <mixer> from the reply when it has no state to
+	// report (e.g. a channel without consumers), so none of this can be
+	// assumed to be present.
 	const mixer = ensureArray(channel.mixer)[0]
+	const audio = mixer ? ensureArray(mixer.audio)[0] : undefined
 	const mixerStage = ensureArray(channel.stage)[0]
 	const mixerLayer = ensureArray(mixerStage?.layer)[0] ?? {}
 
@@ -19,7 +23,7 @@ export const deserializeInfoChannel = async (line: string): Promise<InfoChannelE
 			framerate: parseInt(ensureArray(channel.framerate)[0], 10),
 			mixer: {
 				audio: {
-					volumes: ensureArray(mixer.audio)[0].volume.map((v: string) => parseInt(v, 10)),
+					volumes: audio?.volume ? ensureArray(audio.volume).map((v: string) => parseInt(v, 10)) : [],
 				},
 			},
 

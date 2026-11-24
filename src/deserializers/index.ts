@@ -1,4 +1,4 @@
-import { CReturnType, Commands } from '../commands.js'
+import { AMCPCommand, CReturnType, Commands } from '../commands.js'
 import { deserializeInfoConfig } from './deserializeInfoConfig.js'
 import { deserializeInfoChannel } from './deserializeInfoChannel.js'
 import { deserializeInfoLayer } from './deserializeInfoLayer.js'
@@ -7,7 +7,7 @@ import { deserializeClipInfo } from './deserializeClipInfo.js'
 import { deserializeVersion } from './deserializeVersion.js'
 import { compact } from '../lib.js'
 
-export type Deserializer<C extends Commands> = (data: string[]) => Promise<CReturnType<C>>
+export type Deserializer<C extends Commands> = (data: string[], command?: AMCPCommand) => Promise<CReturnType<C>>
 /** Just a type guard to ensure that the inner function returns a value as defined in AllInternalCommands */
 function deserializer<C extends Commands>(fcn: Deserializer<C>): Deserializer<C> {
 	return fcn
@@ -21,6 +21,8 @@ export const deserializers = {
 	[Commands.InfoChannel]: deserializer<Commands.InfoChannel>(async (data: string[]) =>
 		deserializeInfoChannel(data[0])
 	),
-	[Commands.InfoLayer]: deserializer<Commands.InfoLayer>(async (data: string[]) => deserializeInfoLayer(data[0])),
+	[Commands.InfoLayer]: deserializer<Commands.InfoLayer>(async (data: string[], command?: AMCPCommand) =>
+		deserializeInfoLayer(data[0], command?.command === Commands.InfoLayer ? command.params.layer : undefined)
+	),
 	[Commands.InfoConfig]: deserializer<Commands.InfoConfig>(async (data: string[]) => deserializeInfoConfig(data[0])),
 }
